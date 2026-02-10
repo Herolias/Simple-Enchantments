@@ -1,0 +1,454 @@
+﻿﻿benchCategories.enchantingArmor = ชุดเกราะ
+
+benchCategories.enchantingTools = เครื่องมือ
+
+benchCategories.enchantingMelee = ระยะประชิด
+
+benchCategories.enchantingRanged = ระยะไกล
+
+benchCategories.enchantingStaff = เวทมนตร์
+
+benchCategories.enchantingShield = โล่
+
+
+
+customUI.enchantScrollPage.title = เสริมพลังไอเทม
+
+customUI.enchantScrollPage.noItems = ไม่มีไอเทมที่สามารถเสริมพลังได้
+
+customUI.enchantScrollPage.item = ไอเทม
+
+customUI.enchantScrollPage.enchantment = การเสริมพลัง
+
+
+
+items.Enchanting_Table.name = โต๊ะเสริมพลัง
+
+items.Enchanting_Table.description = โต๊ะที่ใช้สำหรับสร้างม้วนคัมภีร์เสริมพลัง
+
+
+
+items.Scroll_Sharpness_I.name = ม้วนคัมภีร์แห่งความคม I
+
+items.Scroll_Sharpness_I.description = เพิ่มความเสียหายระยะประชิด 10%
+
+items.Scroll_Sharpness_II.name = ม้วนคัมภีร์แห่งความคม II
+
+items.Scroll_Sharpness_II.description = เพิ่มความเสียหายระยะประชิด 20%
+
+items.Scroll_Sharpness_III.name = ม้วนคัมภีร์แห่งความคม III
+
+items.Scroll_Sharpness_III.description = เพิ่มความเสียหายระยะประชิด 30%
+
+
+
+items.Scroll_Durability_I.name = ม้วนคัมภีร์แห่งความทนทาน I
+
+items.Scroll_Durability_I.description = ลดโอกาสสูญเสียความทนทานลง 25%
+
+items.Scroll_Durability_II.name = ม้วนคัมภีร์แห่งความทนทาน II
+
+items.Scroll_Durability_II.description = ลดโอกาสสูญเสียความทนทานลง 50%
+
+items.Scroll_Durability_III.name = ม้วนคัมภีร์แห่งความทนทาน III
+
+items.Scroll_Durability_III.description = ลดโอกาสสูญเสียความทนทานลง 75%
+
+
+
+items.Scroll_Protection_I.name = ม้วนคัมภีร์แห่งการปกป้อง I
+
+items.Scroll_Protection_I.description = ลดความเสียหายทางกายภาพที่ได้รับ 4% ต่อชิ้นส่วนชุดเกราะ
+
+items.Scroll_Protection_II.name = ม้วนคัมภีร์แห่งการปกป้อง II
+
+items.Scroll_Protection_II.description = ลดความเสียหายทางกายภาพที่ได้รับ 8% ต่อชิ้นส่วนชุดเกราะ
+
+items.Scroll_Protection_III.name = ม้วนคัมภีร์แห่งการปกป้อง III
+
+items.Scroll_Protection_III.description = ลดความเสียหายทางกายภาพที่ได้รับ 12% ต่อชิ้นส่วนชุดเกราะ
+
+
+
+items.Scroll_Efficiency_I.name = ม้วนคัมภีร์แห่งประสิทธิภาพ I
+
+items.Scroll_Efficiency_I.description = เพิ่มความเร็วในการขุด 20%
+
+items.Scroll_Efficiency_II.name = ม้วนคัมภีร์แห่งประสิทธิภาพ II
+
+items.Scroll_Efficiency_II.description = เพิ่มความเร็วในการขุด 40%
+
+items.Scroll_Efficiency_III.name = ม้วนคัมภีร์แห่งประสิทธิภาพ III
+
+items.Scroll_Efficiency_III.description = เพิ่มความเร็วในการขุด 60%
+
+
+
+items.Scroll_Fortune_I.name = ม้วนคัมภีร์แห่งโชคลาภ I
+
+items.Scroll_Fortune_I.description = เพิ่มโอกาสได้รับแร่/คริสตัลเพิ่มเติม 25%
+
+items.Scroll_Fortune_II.name = ม้วนคัมภีร์แห่งโชคลาภ II
+
+items.Scroll_Fortune_II.description = เพิ่มโอกาสได้รับแร่/คริสตัลเพิ่มเติม 50%
+
+items.Scroll_Fortune_III.name = ม้วนคัมภีร์แห่งโชคลาภ III
+
+items.Scroll_Fortune_III.description = เพิ่มโอกาสได้รับแร่/คริสตัลเพิ่มเติม 75%
+
+
+
+items.Scroll_Smelting_I.name = ม้วนคัมภีร์แห่งการหลอม
+
+items.Scroll_Smelting_I.description = หลอมบล็อกที่ขุดได้โดยอัตโนมัติ
+
+
+
+items.Scroll_Life_Leech_I.name = ม้วนคัมภีร์สูบชีวิต I
+
+items.Scroll_Life_Leech_I.description = รักษาผู้โจมตี 10% ของความเสียหายที่ทำได้
+
+items.Scroll_Life_Leech_II.name = ม้วนคัมภีร์สูบชีวิต II
+
+items.Scroll_Life_Leech_II.description = รักษาผู้โจมตี 20% ของความเสียหายที่ทำได้
+
+items.Scroll_Life_Leech_III.name = ม้วนคัมภีร์สูบชีวิต III
+
+items.Scroll_Life_Leech_III.description = รักษาผู้โจมตี 30% ของความเสียหายที่ทำได้
+
+
+
+items.Scroll_Dexterity_I.name = ม้วนคัมภีร์แห่งความคล่องแคล่ว I
+
+items.Scroll_Dexterity_I.description = ลดการใช้สตามินา 20%
+
+items.Scroll_Dexterity_II.name = ม้วนคัมภีร์แห่งความคล่องแคล่ว II
+
+items.Scroll_Dexterity_II.description = ลดการใช้สตามินา 40%
+
+items.Scroll_Dexterity_III.name = ม้วนคัมภีร์แห่งความคล่องแคล่ว III
+
+items.Scroll_Dexterity_III.description = ลดการใช้สตามินา 60%
+
+
+
+items.Scroll_Looting_I.name = ม้วนคัมภีร์แห่งการชิงทรัพย์ I
+
+items.Scroll_Looting_I.description = เพิ่มอัตราการดรอปของมอนสเตอร์ 25% และเพิ่มโอกาสได้รับไอเทมหายาก
+
+items.Scroll_Looting_II.name = ม้วนคัมภีร์แห่งการชิงทรัพย์ II
+
+items.Scroll_Looting_II.description = เพิ่มอัตราการดรอปของมอนสเตอร์ 50% และเพิ่มโอกาสได้รับไอเทมหายาก
+
+items.Scroll_Looting_III.name = ม้วนคัมภีร์แห่งการชิงทรัพย์ III
+
+items.Scroll_Looting_III.description = เพิ่มอัตราการดรอปของมอนสเตอร์ 75% และเพิ่มโอกาสได้รับไอเทมหายาก
+
+
+
+items.Scroll_Sturdy_I.name = ม้วนคัมภีร์แห่งความแข็งแกร่ง
+
+items.Scroll_Sturdy_I.description = ป้องกันการสูญเสียความทนทานสูงสุดเมื่อซ่อมแซม
+
+
+
+items.Scroll_Strength_I.name = ม้วนคัมภีร์แห่งพละกำลัง I
+
+items.Scroll_Strength_I.description = เพิ่มความเสียหายของโพรเจกไทล์ 10%
+
+items.Scroll_Strength_II.name = ม้วนคัมภีร์แห่งพละกำลัง II
+
+items.Scroll_Strength_II.description = เพิ่มความเสียหายของโพรเจกไทล์ 20%
+
+items.Scroll_Strength_III.name = ม้วนคัมภีร์แห่งพละกำลัง III
+
+items.Scroll_Strength_III.description = เพิ่มความเสียหายของโพรเจกไทล์ 30%
+
+
+
+items.Scroll_Eagles_Eye_I.name = ม้วนคัมภีร์ตาเหยี่ยว I
+
+items.Scroll_Eagles_Eye_I.description = เพิ่มความเสียหายของโพรเจกไทล์สูงสุด 15% ตามระยะทาง
+
+items.Scroll_Eagles_Eye_II.name = ม้วนคัมภีร์ตาเหยี่ยว II
+
+items.Scroll_Eagles_Eye_II.description = เพิ่มความเสียหายของโพรเจกไทล์สูงสุด 30% ตามระยะทาง
+
+items.Scroll_Eagles_Eye_III.name = ม้วนคัมภีร์ตาเหยี่ยว III
+
+items.Scroll_Eagles_Eye_III.description = เพิ่มความเสียหายของโพรเจกไทล์สูงสุด 45% ตามระยะทาง
+
+
+
+items.Scroll_Feather_Falling_I.name = ม้วนคัมภีร์ขนนกพลิ้ว I
+
+items.Scroll_Feather_Falling_I.description = ลดความเสียหายจากการตกจากที่สูง 20%
+
+items.Scroll_Feather_Falling_II.name = ม้วนคัมภีร์ขนนกพลิ้ว II
+
+items.Scroll_Feather_Falling_II.description = ลดความเสียหายจากการตกจากที่สูง 40%
+
+items.Scroll_Feather_Falling_III.name = ม้วนคัมภีร์ขนนกพลิ้ว III
+
+items.Scroll_Feather_Falling_III.description = ลดความเสียหายจากการตกจากที่สูง 60%
+
+
+
+items.Scroll_Waterbreathing_I.name = ม้วนคัมภีร์หายใจใต้น้ำ I
+
+items.Scroll_Waterbreathing_I.description = ลดการใช้ออกซิเจน 20%
+
+items.Scroll_Waterbreathing_II.name = ม้วนคัมภีร์หายใจใต้น้ำ II
+
+items.Scroll_Waterbreathing_II.description = ลดการใช้ออกซิเจน 40%
+
+items.Scroll_Waterbreathing_III.name = ม้วนคัมภีร์หายใจใต้น้ำ III
+
+items.Scroll_Waterbreathing_III.description = ลดการใช้ออกซิเจน 60%
+
+
+
+items.Scroll_Burn_I.name = ม้วนคัมภีร์เผาไหม้
+
+items.Scroll_Burn_I.description = จุดไฟเผาเป้าหมายและทำให้ดรอปเนื้อสุก ไม่สามารถใช้ร่วมกับการแช่แข็ง
+
+
+
+items.Scroll_Freeze_I.name = ม้วนคัมภีร์แช่แข็ง
+
+items.Scroll_Freeze_I.description = ทำให้เป้าหมายเคลื่อนที่ช้าลงอย่างมาก (50%) เมื่อโจมตี ไม่สามารถใช้ร่วมกับการเผาไหม้
+
+
+
+items.Scroll_Eternal_Shot_I.name = ม้วนคัมภีร์กระสุนนิรันดร์
+
+items.Scroll_Eternal_Shot_I.description = ช่วยให้ยิงธนูได้โดยไม่เสียลูกธนู
+
+
+
+items.Scroll_Silktouch_I.name = ม้วนคัมภีร์สัมผัสไหม
+
+items.Scroll_Silktouch_I.description = บล็อกที่ขุดได้จะดรอปเป็นตัวเองแทนที่จะเป็นทรัพยากรปกติ ไม่สามารถใช้ร่วมกับโชคลาภหรือการหลอม
+
+
+
+items.Scroll_Thrift_I.name = ม้วนคัมภีร์ประหยัด I
+
+items.Scroll_Thrift_I.description = คืนมานาที่ใช้ไป 20% เมื่อโจมตี
+
+items.Scroll_Thrift_II.name = ม้วนคัมภีร์ประหยัด II
+
+items.Scroll_Thrift_II.description = คืนมานาที่ใช้ไป 40% เมื่อโจมตี
+
+items.Scroll_Thrift_III.name = ม้วนคัมภีร์ประหยัด III
+
+items.Scroll_Thrift_III.description = คืนมานาที่ใช้ไป 60% เมื่อโจมตี
+
+
+
+items.Scroll_ElementalHeart_I.name = ม้วนคัมภีร์หัวใจธาตุ
+
+items.Scroll_ElementalHeart_I.description = คทาธาตุจะไม่ใช้พลังงานเมื่อร่ายเวท
+
+
+
+items.Scroll_Knockback_I.name = ม้วนคัมภีร์ผลักดัน I
+
+items.Scroll_Knockback_I.description = ผลักเป้าหมายถอยหลังเมื่อโจมตี
+
+items.Scroll_Knockback_II.name = ม้วนคัมภีร์ผลักดัน II
+
+items.Scroll_Knockback_II.description = ผลักเป้าหมายถอยหลังไกลขึ้นเมื่อโจมตี
+
+items.Scroll_Knockback_III.name = ม้วนคัมภีร์ผลักดัน III
+
+items.Scroll_Knockback_III.description = ผลักเป้าหมายถอยหลังไกลมากเมื่อโจมตี
+
+
+
+items.Scroll_Reflection_I.name = ม้วนคัมภีร์สะท้อนกลับ I
+
+items.Scroll_Reflection_I.description = สะท้อนความเสียหายที่ป้องกันได้ 10% กลับไปยังผู้โจมตี ไม่สามารถใช้ร่วมกับการดูดซับ
+
+items.Scroll_Reflection_II.name = ม้วนคัมภีร์สะท้อนกลับ II
+
+items.Scroll_Reflection_II.description = สะท้อนความเสียหายที่ป้องกันได้ 20% กลับไปยังผู้โจมตี ไม่สามารถใช้ร่วมกับการดูดซับ
+
+items.Scroll_Reflection_III.name = ม้วนคัมภีร์สะท้อนกลับ III
+
+items.Scroll_Reflection_III.description = สะท้อนความเสียหายที่ป้องกันได้ 30% กลับไปยังผู้โจมตี ไม่สามารถใช้ร่วมกับการดูดซับ
+
+
+
+items.Scroll_Absorption_I.name = ม้วนคัมภีร์ดูดซับ I
+
+items.Scroll_Absorption_I.description = รักษาผู้ป้องกัน 10% ของความเสียหายที่ป้องกันได้ ไม่สามารถใช้ร่วมกับการสะท้อนกลับ
+
+items.Scroll_Absorption_II.name = ม้วนคัมภีร์ดูดซับ II
+
+items.Scroll_Absorption_II.description = รักษาผู้ป้องกัน 20% ของความเสียหายที่ป้องกันได้ ไม่สามารถใช้ร่วมกับการสะท้อนกลับ
+
+items.Scroll_Absorption_III.name = ม้วนคัมภีร์ดูดซับ III
+
+items.Scroll_Absorption_III.description = รักษาผู้ป้องกัน 30% ของความเสียหายที่ป้องกันได้ ไม่สามารถใช้ร่วมกับการสะท้อนกลับ
+
+
+
+items.Scroll_FastSwim_I.name = ม้วนคัมภีร์ว่ายน้ำเร็ว I
+
+items.Scroll_FastSwim_I.description = เพิ่มความเร็วในการว่ายน้ำ 25%
+
+items.Scroll_FastSwim_II.name = ม้วนคัมภีร์ว่ายน้ำเร็ว II
+
+items.Scroll_FastSwim_II.description = เพิ่มความเร็วในการว่ายน้ำ 50%
+
+items.Scroll_FastSwim_III.name = ม้วนคัมภีร์ว่ายน้ำเร็ว III
+
+items.Scroll_FastSwim_III.description = เพิ่มความเร็วในการว่ายน้ำ 75%
+
+
+
+commands.enchantconfig.desc = เปิดตัวแก้ไขการตั้งค่าการเสริมพลังในเกม
+
+
+
+customUI.enchantConfigPage.title = การตั้งค่าการเสริมพลัง
+
+customUI.enchantConfigPage.tabGeneral = ทั่วไป
+
+customUI.enchantConfigPage.tabEnchantments = การเสริมพลัง
+
+customUI.enchantConfigPage.tabRecipes = สูตร
+
+customUI.enchantConfigPage.save = บันทึก
+
+customUI.enchantConfigPage.cancel = ยกเลิก
+
+
+
+items.Scroll_Cleansing.name = ม้วนคัมภีร์ล้างมลทิน
+
+items.Scroll_Cleansing.description = ลบการเสริมพลังหนึ่งอย่างออกจากไอเทมใดก็ได้
+
+
+
+customUI.cleansingScrollPage.title = ลบการเสริมพลัง
+
+customUI.cleansingScrollPage.noItems = ไม่พบไอเทมที่เสริมพลัง
+
+customUI.cleansingScrollPage.item = ไอเทม
+
+customUI.cleansingScrollPage.enchantments = การเสริมพลัง
+
+
+
+customUI.cleansingEnchantmentPage.title = เลือกการเสริมพลังที่จะลบ
+
+customUI.cleansingEnchantmentPage.selectHint = คลิกที่การเสริมพลังเพื่อลบออก
+
+
+
+
+
+
+
+
+
+# Enchantment Localizations (Auto-generated)
+
+enchantment.sharpness.name = ความคม
+
+enchantment.sharpness.description = เพิ่มความเสียหายระยะประชิด 10%
+
+enchantment.life_leech.name = สูบชีวิต
+
+enchantment.life_leech.description = รักษาผู้โจมตี 10% ของความเสียหายที่ทำได้
+
+enchantment.durability.name = ความทนทาน
+
+enchantment.durability.description = ลดโอกาสสูญเสียความทนทานลง 25%
+
+enchantment.sturdy.name = ความแข็งแกร่ง
+
+enchantment.sturdy.description = ป้องกันการสูญเสียความทนทานสูงสุดเมื่อซ่อมแซม
+
+enchantment.dexterity.name = ความคล่องแคล่ว
+
+enchantment.dexterity.description = ลดการใช้สตามินา 20%
+
+enchantment.protection.name = การปกป้อง
+
+enchantment.protection.description = ลดความเสียหายทางกายภาพที่ได้รับ 4% ต่อชิ้นส่วนชุดเกราะ
+
+enchantment.efficiency.name = ประสิทธิภาพ
+
+enchantment.efficiency.description = เพิ่มความเร็วในการขุด 20%
+
+enchantment.fortune.name = โชคลาภ
+
+enchantment.fortune.description = เพิ่มโอกาสได้รับแร่/คริสตัลเพิ่มเติม 25%
+
+enchantment.smelting.name = การหลอม
+
+enchantment.smelting.description = หลอมบล็อกที่ขุดได้โดยอัตโนมัติ
+
+enchantment.strength.name = พละกำลัง
+
+enchantment.strength.description = เพิ่มความเสียหายของโพรเจกไทล์ 10%
+
+enchantment.eagles_eye.name = ตาเหยี่ยว
+
+enchantment.eagles_eye.description = เพิ่มความเสียหายของโพรเจกไทล์สูงสุด 15% ตามระยะทาง
+
+enchantment.looting.name = การชิงทรัพย์
+
+enchantment.looting.description = เพิ่มอัตราการดรอปของมอนสเตอร์ 25% และเพิ่มโอกาสได้รับไอเทมหายาก
+
+enchantment.feather_falling.name = ขนนกพลิ้ว
+
+enchantment.feather_falling.description = ลดความเสียหายจากการตกจากที่สูง 20%
+
+enchantment.waterbreathing.name = หายใจใต้น้ำ
+
+enchantment.waterbreathing.description = ลดการใช้ออกซิเจน 20%
+
+enchantment.burn.name = เผาไหม้
+
+enchantment.burn.description = จุดไฟเผาเป้าหมายและทำให้ดรอปเนื้อสุก ไม่สามารถใช้ร่วมกับการแช่แข็ง
+
+enchantment.freeze.name = แช่แข็ง
+
+enchantment.freeze.description = ทำให้เป้าหมายเคลื่อนที่ช้าลงอย่างมาก (50%) เมื่อโจมตี ไม่สามารถใช้ร่วมกับการเผาไหม้
+
+enchantment.eternal_shot.name = กระสุนนิรันดร์
+
+enchantment.eternal_shot.description = ช่วยให้ยิงธนูได้โดยไม่เสียลูกธนู
+
+enchantment.pick_perfect.name = สัมผัสไหม
+
+enchantment.pick_perfect.description = บล็อกที่ขุดได้จะดรอปเป็นตัวเองแทนที่จะเป็นทรัพยากรปกติ ไม่สามารถใช้ร่วมกับโชคลาภหรือการหลอม
+
+enchantment.thrift.name = ประหยัด
+
+enchantment.thrift.description = คืนมานาที่ใช้ไป 20% เมื่อโจมตี
+
+enchantment.elemental_heart.name = หัวใจธาตุ
+
+enchantment.elemental_heart.description = คทาธาตุจะไม่ใช้พลังงานเมื่อร่ายเวท
+
+enchantment.knockback.name = ผลักดัน
+
+enchantment.knockback.description = ผลักเป้าหมายถอยหลังเมื่อโจมตี
+
+enchantment.reflection.name = สะท้อนกลับ
+
+enchantment.reflection.description = สะท้อนความเสียหายที่ป้องกันได้ 10% กลับไปยังผู้โจมตี ไม่สามารถใช้ร่วมกับการดูดซับ
+
+enchantment.absorption.name = ดูดซับ
+
+enchantment.absorption.description = รักษาผู้ป้องกัน 10% ของความเสียหายที่ป้องกันได้ ไม่สามารถใช้ร่วมกับการสะท้อนกลับ
+
+enchantment.fast_swim.name = ว่ายน้ำเร็ว
+
+enchantment.fast_swim.description = เพิ่มความเร็วในการว่ายน้ำ 25%
+

@@ -1,0 +1,454 @@
+﻿﻿benchCategories.enchantingArmor = 盔甲
+
+benchCategories.enchantingTools = 工具
+
+benchCategories.enchantingMelee = 近战
+
+benchCategories.enchantingRanged = 远程
+
+benchCategories.enchantingStaff = 魔法
+
+benchCategories.enchantingShield = 盾牌
+
+
+
+customUI.enchantScrollPage.title = 附魔物品
+
+customUI.enchantScrollPage.noItems = 没有可附魔的物品
+
+customUI.enchantScrollPage.item = 物品
+
+customUI.enchantScrollPage.enchantment = 附魔
+
+
+
+items.Enchanting_Table.name = 附魔台
+
+items.Enchanting_Table.description = 用于制作附魔卷轴的工作台。
+
+
+
+items.Scroll_Sharpness_I.name = 锋利卷轴 I
+
+items.Scroll_Sharpness_I.description = 增加10%近战伤害。
+
+items.Scroll_Sharpness_II.name = 锋利卷轴 II
+
+items.Scroll_Sharpness_II.description = 增加20%近战伤害。
+
+items.Scroll_Sharpness_III.name = 锋利卷轴 III
+
+items.Scroll_Sharpness_III.description = 增加30%近战伤害。
+
+
+
+items.Scroll_Durability_I.name = 耐久卷轴 I
+
+items.Scroll_Durability_I.description = 减少25%耐久度损失几率。
+
+items.Scroll_Durability_II.name = 耐久卷轴 II
+
+items.Scroll_Durability_II.description = 减少50%耐久度损失几率。
+
+items.Scroll_Durability_III.name = 耐久卷轴 III
+
+items.Scroll_Durability_III.description = 减少75%耐久度损失几率。
+
+
+
+items.Scroll_Protection_I.name = 保护卷轴 I
+
+items.Scroll_Protection_I.description = 每件盔甲减少4%受到的物理伤害。
+
+items.Scroll_Protection_II.name = 保护卷轴 II
+
+items.Scroll_Protection_II.description = 每件盔甲减少8%受到的物理伤害。
+
+items.Scroll_Protection_III.name = 保护卷轴 III
+
+items.Scroll_Protection_III.description = 每件盔甲减少12%受到的物理伤害。
+
+
+
+items.Scroll_Efficiency_I.name = 效率卷轴 I
+
+items.Scroll_Efficiency_I.description = 增加20%挖掘速度。
+
+items.Scroll_Efficiency_II.name = 效率卷轴 II
+
+items.Scroll_Efficiency_II.description = 增加40%挖掘速度。
+
+items.Scroll_Efficiency_III.name = 效率卷轴 III
+
+items.Scroll_Efficiency_III.description = 增加60%挖掘速度。
+
+
+
+items.Scroll_Fortune_I.name = 时运卷轴 I
+
+items.Scroll_Fortune_I.description = 增加25%获得额外矿石/水晶的几率。
+
+items.Scroll_Fortune_II.name = 时运卷轴 II
+
+items.Scroll_Fortune_II.description = 增加50%获得额外矿石/水晶的几率。
+
+items.Scroll_Fortune_III.name = 时运卷轴 III
+
+items.Scroll_Fortune_III.description = 增加75%获得额外矿石/水晶的几率。
+
+
+
+items.Scroll_Smelting_I.name = 冶炼卷轴
+
+items.Scroll_Smelting_I.description = 自动冶炼挖掘出的方块。
+
+
+
+items.Scroll_Life_Leech_I.name = 吸血卷轴 I
+
+items.Scroll_Life_Leech_I.description = 攻击者恢复造成伤害的10%生命值。
+
+items.Scroll_Life_Leech_II.name = 吸血卷轴 II
+
+items.Scroll_Life_Leech_II.description = 攻击者恢复造成伤害的20%生命值。
+
+items.Scroll_Life_Leech_III.name = 吸血卷轴 III
+
+items.Scroll_Life_Leech_III.description = 攻击者恢复造成伤害的30%生命值。
+
+
+
+items.Scroll_Dexterity_I.name = 灵巧卷轴 I
+
+items.Scroll_Dexterity_I.description = 减少20%体力消耗。
+
+items.Scroll_Dexterity_II.name = 灵巧卷轴 II
+
+items.Scroll_Dexterity_II.description = 减少40%体力消耗。
+
+items.Scroll_Dexterity_III.name = 灵巧卷轴 III
+
+items.Scroll_Dexterity_III.description = 减少60%体力消耗。
+
+
+
+items.Scroll_Looting_I.name = 抢夺卷轴 I
+
+items.Scroll_Looting_I.description = 增加25%怪物掉落率并提高稀有物品掉落几率。
+
+items.Scroll_Looting_II.name = 抢夺卷轴 II
+
+items.Scroll_Looting_II.description = 增加50%怪物掉落率并提高稀有物品掉落几率。
+
+items.Scroll_Looting_III.name = 抢夺卷轴 III
+
+items.Scroll_Looting_III.description = 增加75%怪物掉落率并提高稀有物品掉落几率。
+
+
+
+items.Scroll_Sturdy_I.name = 坚固卷轴
+
+items.Scroll_Sturdy_I.description = 修复时防止最大耐久度损失。
+
+
+
+items.Scroll_Strength_I.name = 力量卷轴 I
+
+items.Scroll_Strength_I.description = 增加10%投射物伤害。
+
+items.Scroll_Strength_II.name = 力量卷轴 II
+
+items.Scroll_Strength_II.description = 增加20%投射物伤害。
+
+items.Scroll_Strength_III.name = 力量卷轴 III
+
+items.Scroll_Strength_III.description = 增加30%投射物伤害。
+
+
+
+items.Scroll_Eagles_Eye_I.name = 鹰眼卷轴 I
+
+items.Scroll_Eagles_Eye_I.description = 根据距离最多增加15%投射物伤害。
+
+items.Scroll_Eagles_Eye_II.name = 鹰眼卷轴 II
+
+items.Scroll_Eagles_Eye_II.description = 根据距离最多增加30%投射物伤害。
+
+items.Scroll_Eagles_Eye_III.name = 鹰眼卷轴 III
+
+items.Scroll_Eagles_Eye_III.description = 根据距离最多增加45%投射物伤害。
+
+
+
+items.Scroll_Feather_Falling_I.name = 摔落缓冲卷轴 I
+
+items.Scroll_Feather_Falling_I.description = 减少20%摔落伤害。
+
+items.Scroll_Feather_Falling_II.name = 摔落缓冲卷轴 II
+
+items.Scroll_Feather_Falling_II.description = 减少40%摔落伤害。
+
+items.Scroll_Feather_Falling_III.name = 摔落缓冲卷轴 III
+
+items.Scroll_Feather_Falling_III.description = 减少60%摔落伤害。
+
+
+
+items.Scroll_Waterbreathing_I.name = 水下呼吸卷轴 I
+
+items.Scroll_Waterbreathing_I.description = 减少20%氧气消耗。
+
+items.Scroll_Waterbreathing_II.name = 水下呼吸卷轴 II
+
+items.Scroll_Waterbreathing_II.description = 减少40%氧气消耗。
+
+items.Scroll_Waterbreathing_III.name = 水下呼吸卷轴 III
+
+items.Scroll_Waterbreathing_III.description = 减少60%氧气消耗。
+
+
+
+items.Scroll_Burn_I.name = 燃烧卷轴
+
+items.Scroll_Burn_I.description = 点燃目标并使其掉落熟肉。不能与冰冻共存。
+
+
+
+items.Scroll_Freeze_I.name = 冰冻卷轴
+
+items.Scroll_Freeze_I.description = 击中时严重减缓目标速度（50%）。不能与燃烧共存。
+
+
+
+items.Scroll_Eternal_Shot_I.name = 永恒之射卷轴
+
+items.Scroll_Eternal_Shot_I.description = 允许射箭而不消耗箭矢。
+
+
+
+items.Scroll_Silktouch_I.name = 精准采集卷轴
+
+items.Scroll_Silktouch_I.description = 开采的方块掉落其本体而不是常规资源。不能与时运或冶炼共存。
+
+
+
+items.Scroll_Thrift_I.name = 节俭卷轴 I
+
+items.Scroll_Thrift_I.description = 击中时恢复20%消耗的法力。
+
+items.Scroll_Thrift_II.name = 节俭卷轴 II
+
+items.Scroll_Thrift_II.description = 击中时恢复40%消耗的法力。
+
+items.Scroll_Thrift_III.name = 节俭卷轴 III
+
+items.Scroll_Thrift_III.description = 击中时恢复60%消耗的法力。
+
+
+
+items.Scroll_ElementalHeart_I.name = 元素之心卷轴
+
+items.Scroll_ElementalHeart_I.description = 元素法杖施法时不消耗精华。
+
+
+
+items.Scroll_Knockback_I.name = 击退卷轴 I
+
+items.Scroll_Knockback_I.description = 击中时击退目标。
+
+items.Scroll_Knockback_II.name = 击退卷轴 II
+
+items.Scroll_Knockback_II.description = 击中时将目标击退更远。
+
+items.Scroll_Knockback_III.name = 击退卷轴 III
+
+items.Scroll_Knockback_III.description = 击中时将目标击退极远。
+
+
+
+items.Scroll_Reflection_I.name = 反射卷轴 I
+
+items.Scroll_Reflection_I.description = 将10%被格挡的伤害反射回攻击者。不能与吸收共存。
+
+items.Scroll_Reflection_II.name = 反射卷轴 II
+
+items.Scroll_Reflection_II.description = 将20%被格挡的伤害反射回攻击者。不能与吸收共存。
+
+items.Scroll_Reflection_III.name = 反射卷轴 III
+
+items.Scroll_Reflection_III.description = 将30%被格挡的伤害反射回攻击者。不能与吸收共存。
+
+
+
+items.Scroll_Absorption_I.name = 吸收卷轴 I
+
+items.Scroll_Absorption_I.description = 治疗防御者10%被格挡的伤害。不能与反射共存。
+
+items.Scroll_Absorption_II.name = 吸收卷轴 II
+
+items.Scroll_Absorption_II.description = 治疗防御者20%被格挡的伤害。不能与反射共存。
+
+items.Scroll_Absorption_III.name = 吸收卷轴 III
+
+items.Scroll_Absorption_III.description = 治疗防御者30%被格挡的伤害。不能与反射共存。
+
+
+
+items.Scroll_FastSwim_I.name = 快速游泳卷轴 I
+
+items.Scroll_FastSwim_I.description = 增加25%游泳速度。
+
+items.Scroll_FastSwim_II.name = 快速游泳卷轴 II
+
+items.Scroll_FastSwim_II.description = 增加50%游泳速度。
+
+items.Scroll_FastSwim_III.name = 快速游泳卷轴 III
+
+items.Scroll_FastSwim_III.description = 增加75%游泳速度。
+
+
+
+commands.enchantconfig.desc = 打开游戏内附魔配置编辑器。
+
+
+
+customUI.enchantConfigPage.title = 附魔配置
+
+customUI.enchantConfigPage.tabGeneral = 常规
+
+customUI.enchantConfigPage.tabEnchantments = 附魔
+
+customUI.enchantConfigPage.tabRecipes = 配方
+
+customUI.enchantConfigPage.save = 保存
+
+customUI.enchantConfigPage.cancel = 取消
+
+
+
+items.Scroll_Cleansing.name = 净化卷轴
+
+items.Scroll_Cleansing.description = 从任何物品上移除一个附魔。
+
+
+
+customUI.cleansingScrollPage.title = 移除附魔
+
+customUI.cleansingScrollPage.noItems = 未找到附魔物品
+
+customUI.cleansingScrollPage.item = 物品
+
+customUI.cleansingScrollPage.enchantments = 附魔
+
+
+
+customUI.cleansingEnchantmentPage.title = 选择要移除的附魔
+
+customUI.cleansingEnchantmentPage.selectHint = 点击附魔以移除
+
+
+
+
+
+
+
+
+
+# Enchantment Localizations (Auto-generated)
+
+enchantment.sharpness.name = 锋利
+
+enchantment.sharpness.description = 增加10%近战伤害。
+
+enchantment.life_leech.name = 吸血
+
+enchantment.life_leech.description = 攻击者恢复造成伤害的10%生命值。
+
+enchantment.durability.name = 耐久
+
+enchantment.durability.description = 减少25%耐久度损失几率。
+
+enchantment.sturdy.name = 坚固
+
+enchantment.sturdy.description = 修复时防止最大耐久度损失。
+
+enchantment.dexterity.name = 灵巧
+
+enchantment.dexterity.description = 减少20%体力消耗。
+
+enchantment.protection.name = 保护
+
+enchantment.protection.description = 每件盔甲减少4%受到的物理伤害。
+
+enchantment.efficiency.name = 效率
+
+enchantment.efficiency.description = 增加20%挖掘速度。
+
+enchantment.fortune.name = 时运
+
+enchantment.fortune.description = 增加25%获得额外矿石/水晶的几率。
+
+enchantment.smelting.name = 冶炼
+
+enchantment.smelting.description = 自动冶炼挖掘出的方块。
+
+enchantment.strength.name = 力量
+
+enchantment.strength.description = 增加10%投射物伤害。
+
+enchantment.eagles_eye.name = 鹰眼
+
+enchantment.eagles_eye.description = 根据距离最多增加15%投射物伤害。
+
+enchantment.looting.name = 抢夺
+
+enchantment.looting.description = 增加25%怪物掉落率并提高稀有物品掉落几率。
+
+enchantment.feather_falling.name = 摔落缓冲
+
+enchantment.feather_falling.description = 减少20%摔落伤害。
+
+enchantment.waterbreathing.name = 水下呼吸
+
+enchantment.waterbreathing.description = 减少20%氧气消耗。
+
+enchantment.burn.name = 燃烧
+
+enchantment.burn.description = 点燃目标并使其掉落熟肉。不能与冰冻共存。
+
+enchantment.freeze.name = 冰冻
+
+enchantment.freeze.description = 击中时严重减缓目标速度（50%）。不能与燃烧共存。
+
+enchantment.eternal_shot.name = 永恒之射
+
+enchantment.eternal_shot.description = 允许射箭而不消耗箭矢。
+
+enchantment.pick_perfect.name = 精准采集
+
+enchantment.pick_perfect.description = 开采的方块掉落其本体而不是常规资源。不能与时运或冶炼共存。
+
+enchantment.thrift.name = 节俭
+
+enchantment.thrift.description = 击中时恢复20%消耗的法力。
+
+enchantment.elemental_heart.name = 元素之心
+
+enchantment.elemental_heart.description = 元素法杖施法时不消耗精华。
+
+enchantment.knockback.name = 击退
+
+enchantment.knockback.description = 击中时击退目标。
+
+enchantment.reflection.name = 反射
+
+enchantment.reflection.description = 将10%被格挡的伤害反射回攻击者。不能与吸收共存。
+
+enchantment.absorption.name = 吸收
+
+enchantment.absorption.description = 治疗防御者10%被格挡的伤害。不能与反射共存。
+
+enchantment.fast_swim.name = 快速游泳
+
+enchantment.fast_swim.description = 增加25%游泳速度。
+

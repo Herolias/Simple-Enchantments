@@ -1,0 +1,454 @@
+﻿﻿benchCategories.enchantingArmor = دروع
+
+benchCategories.enchantingTools = أدوات
+
+benchCategories.enchantingMelee = قتال قريب
+
+benchCategories.enchantingRanged = قتال بعيد
+
+benchCategories.enchantingStaff = سحر
+
+benchCategories.enchantingShield = درع
+
+
+
+customUI.enchantScrollPage.title = سحر العنصر
+
+customUI.enchantScrollPage.noItems = لا توجد عناصر يمكن سحرها
+
+customUI.enchantScrollPage.item = عنصر
+
+customUI.enchantScrollPage.enchantment = سحر
+
+
+
+items.Enchanting_Table.name = طاولة السحر
+
+items.Enchanting_Table.description = طاولة تستخدم لصياغة لفائف السحر.
+
+
+
+items.Scroll_Sharpness_I.name = لفيفة الحدة I
+
+items.Scroll_Sharpness_I.description = تزيد ضرر القتال القريب بنسبة 10%.
+
+items.Scroll_Sharpness_II.name = لفيفة الحدة II
+
+items.Scroll_Sharpness_II.description = تزيد ضرر القتال القريب بنسبة 20%.
+
+items.Scroll_Sharpness_III.name = لفيفة الحدة III
+
+items.Scroll_Sharpness_III.description = تزيد ضرر القتال القريب بنسبة 30%.
+
+
+
+items.Scroll_Durability_I.name = لفيفة المتانة I
+
+items.Scroll_Durability_I.description = تقلل فرصة فقدان المتانة بنسبة 25%.
+
+items.Scroll_Durability_II.name = لفيفة المتانة II
+
+items.Scroll_Durability_II.description = تقلل فرصة فقدان المتانة بنسبة 50%.
+
+items.Scroll_Durability_III.name = لفيفة المتانة III
+
+items.Scroll_Durability_III.description = تقلل فرصة فقدان المتانة بنسبة 75%.
+
+
+
+items.Scroll_Protection_I.name = لفيفة الحماية I
+
+items.Scroll_Protection_I.description = تقلل الضرر الجسدي المتلقى بنسبة 4% لكل قطعة درع.
+
+items.Scroll_Protection_II.name = لفيفة الحماية II
+
+items.Scroll_Protection_II.description = تقلل الضرر الجسدي المتلقى بنسبة 8% لكل قطعة درع.
+
+items.Scroll_Protection_III.name = لفيفة الحماية III
+
+items.Scroll_Protection_III.description = تقلل الضرر الجسدي المتلقى بنسبة 12% لكل قطعة درع.
+
+
+
+items.Scroll_Efficiency_I.name = لفيفة الكفاءة I
+
+items.Scroll_Efficiency_I.description = تزيد سرعة التعدين بنسبة 20%.
+
+items.Scroll_Efficiency_II.name = لفيفة الكفاءة II
+
+items.Scroll_Efficiency_II.description = تزيد سرعة التعدين بنسبة 40%.
+
+items.Scroll_Efficiency_III.name = لفيفة الكفاءة III
+
+items.Scroll_Efficiency_III.description = تزيد سرعة التعدين بنسبة 60%.
+
+
+
+items.Scroll_Fortune_I.name = لفيفة الحظ I
+
+items.Scroll_Fortune_I.description = تزيد فرصة الحصول على خامات/بلورات إضافية بنسبة 25%.
+
+items.Scroll_Fortune_II.name = لفيفة الحظ II
+
+items.Scroll_Fortune_II.description = تزيد فرصة الحصول على خامات/بلورات إضافية بنسبة 50%.
+
+items.Scroll_Fortune_III.name = لفيفة الحظ III
+
+items.Scroll_Fortune_III.description = تزيد فرصة الحصول على خامات/بلورات إضافية بنسبة 75%.
+
+
+
+items.Scroll_Smelting_I.name = لفيفة الصهر
+
+items.Scroll_Smelting_I.description = تصهر الكتل المعدنة تلقائياً.
+
+
+
+items.Scroll_Life_Leech_I.name = لفيفة سرقة الحياة I
+
+items.Scroll_Life_Leech_I.description = تشفي المهاجم بنسبة 10% من الضرر المسبب.
+
+items.Scroll_Life_Leech_II.name = لفيفة سرقة الحياة II
+
+items.Scroll_Life_Leech_II.description = تشفي المهاجم بنسبة 20% من الضرر المسبب.
+
+items.Scroll_Life_Leech_III.name = لفيفة سرقة الحياة III
+
+items.Scroll_Life_Leech_III.description = تشفي المهاجم بنسبة 30% من الضرر المسبب.
+
+
+
+items.Scroll_Dexterity_I.name = لفيفة الخفة I
+
+items.Scroll_Dexterity_I.description = تقلل تكلفة القدرة على التحمل بنسبة 20%.
+
+items.Scroll_Dexterity_II.name = لفيفة الخفة II
+
+items.Scroll_Dexterity_II.description = تقلل تكلفة القدرة على التحمل بنسبة 40%.
+
+items.Scroll_Dexterity_III.name = لفيفة الخفة III
+
+items.Scroll_Dexterity_III.description = تقلل تكلفة القدرة على التحمل بنسبة 60%.
+
+
+
+items.Scroll_Looting_I.name = لفيفة الغنيمة I
+
+items.Scroll_Looting_I.description = تزيد معدلات إسقاط الوحوش بنسبة 25% وتعزز فرصة الحصول على عناصر نادرة.
+
+items.Scroll_Looting_II.name = لفيفة الغنيمة II
+
+items.Scroll_Looting_II.description = تزيد معدلات إسقاط الوحوش بنسبة 50% وتعزز فرصة الحصول على عناصر نادرة.
+
+items.Scroll_Looting_III.name = لفيفة الغنيمة III
+
+items.Scroll_Looting_III.description = تزيد معدلات إسقاط الوحوش بنسبة 75% وتعزز فرصة الحصول على عناصر نادرة.
+
+
+
+items.Scroll_Sturdy_I.name = لفيفة الصلابة
+
+items.Scroll_Sturdy_I.description = تمنع فقدان أقصى قدرة تحمل عند الإصلاح.
+
+
+
+items.Scroll_Strength_I.name = لفيفة القوة I
+
+items.Scroll_Strength_I.description = تزيد ضرر المقذوفات بنسبة 10%.
+
+items.Scroll_Strength_II.name = لفيفة القوة II
+
+items.Scroll_Strength_II.description = تزيد ضرر المقذوفات بنسبة 20%.
+
+items.Scroll_Strength_III.name = لفيفة القوة III
+
+items.Scroll_Strength_III.description = تزيد ضرر المقذوفات بنسبة 30%.
+
+
+
+items.Scroll_Eagles_Eye_I.name = لفيفة عين الصقر I
+
+items.Scroll_Eagles_Eye_I.description = تزيد ضرر المقذوفات بنسبة تصل إلى 15% بناءً على المسافة.
+
+items.Scroll_Eagles_Eye_II.name = لفيفة عين الصقر II
+
+items.Scroll_Eagles_Eye_II.description = تزيد ضرر المقذوفات بنسبة تصل إلى 30% بناءً على المسافة.
+
+items.Scroll_Eagles_Eye_III.name = لفيفة عين الصقر III
+
+items.Scroll_Eagles_Eye_III.description = تزيد ضرر المقذوفات بنسبة تصل إلى 45% بناءً على المسافة.
+
+
+
+items.Scroll_Feather_Falling_I.name = لفيفة الهبوط الريشي I
+
+items.Scroll_Feather_Falling_I.description = تقلل ضرر السقوط بنسبة 20%.
+
+items.Scroll_Feather_Falling_II.name = لفيفة الهبوط الريشي II
+
+items.Scroll_Feather_Falling_II.description = تقلل ضرر السقوط بنسبة 40%.
+
+items.Scroll_Feather_Falling_III.name = لفيفة الهبوط الريشي III
+
+items.Scroll_Feather_Falling_III.description = تقلل ضرر السقوط بنسبة 60%.
+
+
+
+items.Scroll_Waterbreathing_I.name = لفيفة التنفس تحت الماء I
+
+items.Scroll_Waterbreathing_I.description = تقلل استهلاك الأكسجين بنسبة 20%.
+
+items.Scroll_Waterbreathing_II.name = لفيفة التنفس تحت الماء II
+
+items.Scroll_Waterbreathing_II.description = تقلل استهلاك الأكسجين بنسبة 40%.
+
+items.Scroll_Waterbreathing_III.name = لفيفة التنفس تحت الماء III
+
+items.Scroll_Waterbreathing_III.description = تقلل استهلاك الأكسجين بنسبة 60%.
+
+
+
+items.Scroll_Burn_I.name = لفيفة الحرق
+
+items.Scroll_Burn_I.description = تشعل الهدف وتجعله يسقط نسخًا مطبوخة من موارده. لا يمكن دمجه مع التجميد.
+
+
+
+items.Scroll_Freeze_I.name = لفيفة التجميد
+
+items.Scroll_Freeze_I.description = تطبق تباطؤًا شديدًا (50%) على الهدف عند الضربة. لا يمكن دمجه مع الحرق.
+
+
+
+items.Scroll_Eternal_Shot_I.name = لفيفة الرمية الأبدية
+
+items.Scroll_Eternal_Shot_I.description = تسمح بإطلاق الأسهم دون استهلاكها.
+
+
+
+items.Scroll_Silktouch_I.name = لفيفة اللمسة الحريرية
+
+items.Scroll_Silktouch_I.description = تسقط الكتل المعدنة كما هي بدلاً من مواردها المعتادة. لا يمكن دمجه مع الحظ أو الصهر.
+
+
+
+items.Scroll_Thrift_I.name = لفيفة التوفير I
+
+items.Scroll_Thrift_I.description = تستعيد 20% من المانا المستهلكة عند الضربة.
+
+items.Scroll_Thrift_II.name = لفيفة التوفير II
+
+items.Scroll_Thrift_II.description = تستعيد 40% من المانا المستهلكة عند الضربة.
+
+items.Scroll_Thrift_III.name = لفيفة التوفير III
+
+items.Scroll_Thrift_III.description = تستعيد 60% من المانا المستهلكة عند الضربة.
+
+
+
+items.Scroll_ElementalHeart_I.name = لفيفة القلب العنصري
+
+items.Scroll_ElementalHeart_I.description = العصي السحرية لا تستهلك الجوهر عند الإطلاق.
+
+
+
+items.Scroll_Knockback_I.name = لفيفة الدفع I
+
+items.Scroll_Knockback_I.description = تدفع الأهداف للخلف عند الضربة.
+
+items.Scroll_Knockback_II.name = لفيفة الدفع II
+
+items.Scroll_Knockback_II.description = تدفع الأهداف للخلف بشكل أكبر عند الضربة.
+
+items.Scroll_Knockback_III.name = لفيفة الدفع III
+
+items.Scroll_Knockback_III.description = تدفع الأهداف للخلف بشكل كبير عند الضربة.
+
+
+
+items.Scroll_Reflection_I.name = لفيفة الانعكاس I
+
+items.Scroll_Reflection_I.description = تعكس 10% من الضرر المصدود إلى المهاجم. لا يمكن دمجه مع الامتصاص.
+
+items.Scroll_Reflection_II.name = لفيفة الانعكاس II
+
+items.Scroll_Reflection_II.description = تعكس 20% من الضرر المصدود إلى المهاجم. لا يمكن دمجه مع الامتصاص.
+
+items.Scroll_Reflection_III.name = لفيفة الانعكاس III
+
+items.Scroll_Reflection_III.description = تعكس 30% من الضرر المصدود إلى المهاجم. لا يمكن دمجه مع الامتصاص.
+
+
+
+items.Scroll_Absorption_I.name = لفيفة الامتصاص I
+
+items.Scroll_Absorption_I.description = تشفي المدافع بنسبة 10% من الضرر المصدود. لا يمكن دمجه مع الانعكاس.
+
+items.Scroll_Absorption_II.name = لفيفة الامتصاص II
+
+items.Scroll_Absorption_II.description = تشفي المدافع بنسبة 20% من الضرر المصدود. لا يمكن دمجه مع الانعكاس.
+
+items.Scroll_Absorption_III.name = لفيفة الامتصاص III
+
+items.Scroll_Absorption_III.description = تشفي المدافع بنسبة 30% من الضرر المصدود. لا يمكن دمجه مع الانعكاس.
+
+
+
+items.Scroll_FastSwim_I.name = لفيفة السباحة السريعة I
+
+items.Scroll_FastSwim_I.description = تزيد سرعة السباحة بنسبة 25%.
+
+items.Scroll_FastSwim_II.name = لفيفة السباحة السريعة II
+
+items.Scroll_FastSwim_II.description = تزيد سرعة السباحة بنسبة 50%.
+
+items.Scroll_FastSwim_III.name = لفيفة السباحة السريعة III
+
+items.Scroll_FastSwim_III.description = تزيد سرعة السباحة بنسبة 75%.
+
+
+
+commands.enchantconfig.desc = يفتح محرر تكوين السحر داخل اللعبة.
+
+
+
+customUI.enchantConfigPage.title = إعدادات السحر
+
+customUI.enchantConfigPage.tabGeneral = عام
+
+customUI.enchantConfigPage.tabEnchantments = السحر
+
+customUI.enchantConfigPage.tabRecipes = الوصفات
+
+customUI.enchantConfigPage.save = حفظ
+
+customUI.enchantConfigPage.cancel = إلغاء
+
+
+
+items.Scroll_Cleansing.name = لفيفة التطهير
+
+items.Scroll_Cleansing.description = تزيل سحراً واحداً من أي عنصر.
+
+
+
+customUI.cleansingScrollPage.title = إزالة السحر
+
+customUI.cleansingScrollPage.noItems = لم يتم العثور على عناصر مسحورة
+
+customUI.cleansingScrollPage.item = عنصر
+
+customUI.cleansingScrollPage.enchantments = السحر
+
+
+
+customUI.cleansingEnchantmentPage.title = اختر سحراً لإزالته
+
+customUI.cleansingEnchantmentPage.selectHint = انقر على سحر لإزالته
+
+
+
+
+
+
+
+
+
+# Enchantment Localizations (Auto-generated)
+
+enchantment.sharpness.name = الحدة
+
+enchantment.sharpness.description = تزيد ضرر القتال القريب بنسبة 10%.
+
+enchantment.life_leech.name = سرقة الحياة
+
+enchantment.life_leech.description = تشفي المهاجم بنسبة 10% من الضرر المسبب.
+
+enchantment.durability.name = المتانة
+
+enchantment.durability.description = تقلل فرصة فقدان المتانة بنسبة 25%.
+
+enchantment.sturdy.name = الصلابة
+
+enchantment.sturdy.description = تمنع فقدان أقصى قدرة تحمل عند الإصلاح.
+
+enchantment.dexterity.name = الخفة
+
+enchantment.dexterity.description = تقلل تكلفة القدرة على التحمل بنسبة 20%.
+
+enchantment.protection.name = الحماية
+
+enchantment.protection.description = تقلل الضرر الجسدي المتلقى بنسبة 4% لكل قطعة درع.
+
+enchantment.efficiency.name = الكفاءة
+
+enchantment.efficiency.description = تزيد سرعة التعدين بنسبة 20%.
+
+enchantment.fortune.name = الحظ
+
+enchantment.fortune.description = تزيد فرصة الحصول على خامات/بلورات إضافية بنسبة 25%.
+
+enchantment.smelting.name = الصهر
+
+enchantment.smelting.description = تصهر الكتل المعدنة تلقائياً.
+
+enchantment.strength.name = القوة
+
+enchantment.strength.description = تزيد ضرر المقذوفات بنسبة 10%.
+
+enchantment.eagles_eye.name = عين الصقر
+
+enchantment.eagles_eye.description = تزيد ضرر المقذوفات بنسبة تصل إلى 15% بناءً على المسافة.
+
+enchantment.looting.name = الغنيمة
+
+enchantment.looting.description = تزيد معدلات إسقاط الوحوش بنسبة 25% وتعزز فرصة الحصول على عناصر نادرة.
+
+enchantment.feather_falling.name = الهبوط الريشي
+
+enchantment.feather_falling.description = تقلل ضرر السقوط بنسبة 20%.
+
+enchantment.waterbreathing.name = التنفس تحت الماء
+
+enchantment.waterbreathing.description = تقلل استهلاك الأكسجين بنسبة 20%.
+
+enchantment.burn.name = الحرق
+
+enchantment.burn.description = تشعل الهدف وتجعله يسقط نسخًا مطبوخة من موارده. لا يمكن دمجه مع التجميد.
+
+enchantment.freeze.name = التجميد
+
+enchantment.freeze.description = تطبق تباطؤًا شديدًا (50%) على الهدف عند الضربة. لا يمكن دمجه مع الحرق.
+
+enchantment.eternal_shot.name = الرمية الأبدية
+
+enchantment.eternal_shot.description = تسمح بإطلاق الأسهم دون استهلاكها.
+
+enchantment.pick_perfect.name = اللمسة الحريرية
+
+enchantment.pick_perfect.description = تسقط الكتل المعدنة كما هي بدلاً من مواردها المعتادة. لا يمكن دمجه مع الحظ أو الصهر.
+
+enchantment.thrift.name = التوفير
+
+enchantment.thrift.description = تستعيد 20% من المانا المستهلكة عند الضربة.
+
+enchantment.elemental_heart.name = القلب العنصري
+
+enchantment.elemental_heart.description = العصي السحرية لا تستهلك الجوهر عند الإطلاق.
+
+enchantment.knockback.name = الدفع
+
+enchantment.knockback.description = تدفع الأهداف للخلف عند الضربة.
+
+enchantment.reflection.name = الانعكاس
+
+enchantment.reflection.description = تعكس 10% من الضرر المصدود إلى المهاجم. لا يمكن دمجه مع الامتصاص.
+
+enchantment.absorption.name = الامتصاص
+
+enchantment.absorption.description = تشفي المدافع بنسبة 10% من الضرر المصدود. لا يمكن دمجه مع الانعكاس.
+
+enchantment.fast_swim.name = السباحة السريعة
+
+enchantment.fast_swim.description = تزيد سرعة السباحة بنسبة 25%.
+

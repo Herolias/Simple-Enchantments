@@ -1,0 +1,91 @@
+{
+    "TranslationProperties": {
+        "Name": "server.items.Scroll_Waterbreathing_III.name",
+        "Description": "server.items.Scroll_Waterbreathing_III.description"
+    },
+    "Icon": "Icons/ItemsGenerated/Scroll.png",
+    "Categories": [
+        "Items.Magic"
+    ],
+    "Model": "Items/Scrolls/EnchantmentScroll.blockymodel",
+    "Texture": "Items/Scrolls/EnchScroll.png",
+    "Interactions": {
+        "Primary": {
+            "Interactions": [
+                {
+                    "Type": "OpenCustomUI",
+                    "Page": {
+                        "Id": "EnchantScroll",
+                        "EnchantmentId": "waterbreathing",
+                        "Level": 3
+                    }
+                }
+            ]
+        },
+        "Secondary": {
+            "Interactions": [
+                {
+                    "Type": "OpenCustomUI",
+                    "Page": {
+                        "Id": "EnchantScroll",
+                        "EnchantmentId": "waterbreathing",
+                        "Level": 3
+                    }
+                }
+            ]
+        }
+    },
+    "Recipe": {
+        "TimeSeconds": 2,
+        "Input": [
+            {
+                "ItemId": "Ingredient_Fabric_Scrap_Cindercloth",
+                "Quantity": 5
+            },
+            {
+                "ItemId": "Ingredient_Water_Essence",
+                "Quantity": 3
+            },
+            {
+                "ItemId": "Deco_Coral_Shell",
+                "Quantity": 10
+            },
+            {
+                "ItemId": "Ingredient_Crystal_Blue",
+                "Quantity": 30
+            }
+        ],
+        "OutputQuantity": 1,
+        "BenchRequirement": [
+            {
+                "Id": "Enchantingbench",
+                "Type": "Crafting",
+                "Categories": [
+                    "Enchanting_Armor"
+                ],
+                "RequiredTierLevel": 3
+            }
+        ]
+    },
+    "PlayerAnimationsId": "Item",
+    "IconProperties": {
+        "Scale": 0.84,
+        "Translation": [
+            5,
+            15
+        ],
+        "Rotation": [
+            90,
+            45,
+            0
+        ]
+    },
+    "MaxStack": 10,
+    "ItemLevel": 3,
+    "Quality": "Epic",
+    "Tags": {
+        "Type": [
+            "EnchantmentScroll"
+        ]
+    }
+}

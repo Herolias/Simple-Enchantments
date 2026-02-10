@@ -1,0 +1,454 @@
+﻿﻿benchCategories.enchantingArmor = Pancerz
+
+benchCategories.enchantingTools = Narzędzia
+
+benchCategories.enchantingMelee = Wręcz
+
+benchCategories.enchantingRanged = Dystansowe
+
+benchCategories.enchantingStaff = Magia
+
+benchCategories.enchantingShield = Tarcza
+
+
+
+customUI.enchantScrollPage.title = Zaklnij przedmiot
+
+customUI.enchantScrollPage.noItems = Brak przedmiotów do zaklęcia
+
+customUI.enchantScrollPage.item = Przedmiot
+
+customUI.enchantScrollPage.enchantment = Zaklęcie
+
+
+
+items.Enchanting_Table.name = Stół do Zaklinania
+
+items.Enchanting_Table.description = Stół używany do tworzenia zwojów zaklęć.
+
+
+
+items.Scroll_Sharpness_I.name = Zwój Ostrości I
+
+items.Scroll_Sharpness_I.description = Zwiększa obrażenia w walce wręcz o 10%.
+
+items.Scroll_Sharpness_II.name = Zwój Ostrości II
+
+items.Scroll_Sharpness_II.description = Zwiększa obrażenia w walce wręcz o 20%.
+
+items.Scroll_Sharpness_III.name = Zwój Ostrości III
+
+items.Scroll_Sharpness_III.description = Zwiększa obrażenia w walce wręcz o 30%.
+
+
+
+items.Scroll_Durability_I.name = Zwój Wytrzymałości I
+
+items.Scroll_Durability_I.description = Zmniejsza szansę na utratę wytrzymałości o 25%.
+
+items.Scroll_Durability_II.name = Zwój Wytrzymałości II
+
+items.Scroll_Durability_II.description = Zmniejsza szansę na utratę wytrzymałości o 50%.
+
+items.Scroll_Durability_III.name = Zwój Wytrzymałości III
+
+items.Scroll_Durability_III.description = Zmniejsza szansę na utratę wytrzymałości o 75%.
+
+
+
+items.Scroll_Protection_I.name = Zwój Ochrony I
+
+items.Scroll_Protection_I.description = Zmniejsza otrzymywane obrażenia fizyczne o 4% na element pancerza.
+
+items.Scroll_Protection_II.name = Zwój Ochrony II
+
+items.Scroll_Protection_II.description = Zmniejsza otrzymywane obrażenia fizyczne o 8% na element pancerza.
+
+items.Scroll_Protection_III.name = Zwój Ochrony III
+
+items.Scroll_Protection_III.description = Zmniejsza otrzymywane obrażenia fizyczne o 12% na element pancerza.
+
+
+
+items.Scroll_Efficiency_I.name = Zwój Wydajności I
+
+items.Scroll_Efficiency_I.description = Zwiększa prędkość wydobycia o 20%.
+
+items.Scroll_Efficiency_II.name = Zwój Wydajności II
+
+items.Scroll_Efficiency_II.description = Zwiększa prędkość wydobycia o 40%.
+
+items.Scroll_Efficiency_III.name = Zwój Wydajności III
+
+items.Scroll_Efficiency_III.description = Zwiększa prędkość wydobycia o 60%.
+
+
+
+items.Scroll_Fortune_I.name = Zwój Fortuny I
+
+items.Scroll_Fortune_I.description = Zwiększa szansę na dodatkowe rudy/kryształy o 25%.
+
+items.Scroll_Fortune_II.name = Zwój Fortuny II
+
+items.Scroll_Fortune_II.description = Zwiększa szansę na dodatkowe rudy/kryształy o 50%.
+
+items.Scroll_Fortune_III.name = Zwój Fortuny III
+
+items.Scroll_Fortune_III.description = Zwiększa szansę na dodatkowe rudy/kryształy o 75%.
+
+
+
+items.Scroll_Smelting_I.name = Zwój Przetapiania
+
+items.Scroll_Smelting_I.description = Automatycznie przetapia wydobyte bloki.
+
+
+
+items.Scroll_Life_Leech_I.name = Zwój Kradzieży Życia I
+
+items.Scroll_Life_Leech_I.description = Leczy atakującego za 10% zadanych obrażeń.
+
+items.Scroll_Life_Leech_II.name = Zwój Kradzieży Życia II
+
+items.Scroll_Life_Leech_II.description = Leczy atakującego za 20% zadanych obrażeń.
+
+items.Scroll_Life_Leech_III.name = Zwój Kradzieży Życia III
+
+items.Scroll_Life_Leech_III.description = Leczy atakującego za 30% zadanych obrażeń.
+
+
+
+items.Scroll_Dexterity_I.name = Zwój Zręczności I
+
+items.Scroll_Dexterity_I.description = Zmniejsza koszt wytrzymałości o 20%.
+
+items.Scroll_Dexterity_II.name = Zwój Zręczności II
+
+items.Scroll_Dexterity_II.description = Zmniejsza koszt wytrzymałości o 40%.
+
+items.Scroll_Dexterity_III.name = Zwój Zręczności III
+
+items.Scroll_Dexterity_III.description = Zmniejsza koszt wytrzymałości o 60%.
+
+
+
+items.Scroll_Looting_I.name = Zwój Grabieży I
+
+items.Scroll_Looting_I.description = Zwiększa częstość wypadania przedmiotów z mobów o 25% i zwiększa szansę na rzadkie przedmioty.
+
+items.Scroll_Looting_II.name = Zwój Grabieży II
+
+items.Scroll_Looting_II.description = Zwiększa częstość wypadania przedmiotów z mobów o 50% i zwiększa szansę na rzadkie przedmioty.
+
+items.Scroll_Looting_III.name = Zwój Grabieży III
+
+items.Scroll_Looting_III.description = Zwiększa częstość wypadania przedmiotów z mobów o 75% i zwiększa szansę na rzadkie przedmioty.
+
+
+
+items.Scroll_Sturdy_I.name = Zwój Solidności
+
+items.Scroll_Sturdy_I.description = Zapobiega utracie maksymalnej wytrzymałości podczas naprawy.
+
+
+
+items.Scroll_Strength_I.name = Zwój Siły I
+
+items.Scroll_Strength_I.description = Zwiększa obrażenia pocisków o 10%.
+
+items.Scroll_Strength_II.name = Zwój Siły II
+
+items.Scroll_Strength_II.description = Zwiększa obrażenia pocisków o 20%.
+
+items.Scroll_Strength_III.name = Zwój Siły III
+
+items.Scroll_Strength_III.description = Zwiększa obrażenia pocisków o 30%.
+
+
+
+items.Scroll_Eagles_Eye_I.name = Zwój Sokolego Oka I
+
+items.Scroll_Eagles_Eye_I.description = Zwiększa obrażenia pocisków do 15% w zależności od dystansu.
+
+items.Scroll_Eagles_Eye_II.name = Zwój Sokolego Oka II
+
+items.Scroll_Eagles_Eye_II.description = Zwiększa obrażenia pocisków do 30% w zależności od dystansu.
+
+items.Scroll_Eagles_Eye_III.name = Zwój Sokolego Oka III
+
+items.Scroll_Eagles_Eye_III.description = Zwiększa obrażenia pocisków do 45% w zależności od dystansu.
+
+
+
+items.Scroll_Feather_Falling_I.name = Zwój Powolnego Opadania I
+
+items.Scroll_Feather_Falling_I.description = Zmniejsza obrażenia od upadku o 20%.
+
+items.Scroll_Feather_Falling_II.name = Zwój Powolnego Opadania II
+
+items.Scroll_Feather_Falling_II.description = Zmniejsza obrażenia od upadku o 40%.
+
+items.Scroll_Feather_Falling_III.name = Zwój Powolnego Opadania III
+
+items.Scroll_Feather_Falling_III.description = Zmniejsza obrażenia od upadku o 60%.
+
+
+
+items.Scroll_Waterbreathing_I.name = Zwój Wodnego Oddechu I
+
+items.Scroll_Waterbreathing_I.description = Zmniejsza zużycie tlenu o 20%.
+
+items.Scroll_Waterbreathing_II.name = Zwój Wodnego Oddechu II
+
+items.Scroll_Waterbreathing_II.description = Zmniejsza zużycie tlenu o 40%.
+
+items.Scroll_Waterbreathing_III.name = Zwój Wodnego Oddechu III
+
+items.Scroll_Waterbreathing_III.description = Zmniejsza zużycie tlenu o 60%.
+
+
+
+items.Scroll_Burn_I.name = Zwój Podpalenia
+
+items.Scroll_Burn_I.description = Podpala cel i sprawia, że wypada z niego upieczone mięso. Nie można łączyć z Zamrożeniem.
+
+
+
+items.Scroll_Freeze_I.name = Zwój Zamrożenia
+
+items.Scroll_Freeze_I.description = Nakłada silne spowolnienie (50%) na cel przy trafieniu. Nie można łączyć z Podpaleniem.
+
+
+
+items.Scroll_Eternal_Shot_I.name = Zwój Wiecznego Strzału
+
+items.Scroll_Eternal_Shot_I.description = Pozwala strzelać strzałami bez ich zużywania.
+
+
+
+items.Scroll_Silktouch_I.name = Zwój Jedwabnego Dotyku
+
+items.Scroll_Silktouch_I.description = Wydobyte bloki wypadają jako one same zamiast ich zwykłych zasobów. Nie można łączyć z Fortuną lub Przetapianiem.
+
+
+
+items.Scroll_Thrift_I.name = Zwój Oszczędności I
+
+items.Scroll_Thrift_I.description = Przywraca 20% wydanej many przy trafieniu.
+
+items.Scroll_Thrift_II.name = Zwój Oszczędności II
+
+items.Scroll_Thrift_II.description = Przywraca 40% wydanej many przy trafieniu.
+
+items.Scroll_Thrift_III.name = Zwój Oszczędności III
+
+items.Scroll_Thrift_III.description = Przywraca 60% wydanej many przy trafieniu.
+
+
+
+items.Scroll_ElementalHeart_I.name = Zwój Żywiołowego Serca
+
+items.Scroll_ElementalHeart_I.description = Laski żywiołów nie zużywają esencji podczas rzucania zaklęć.
+
+
+
+items.Scroll_Knockback_I.name = Zwój Odrzutu I
+
+items.Scroll_Knockback_I.description = Odrzuca cele przy trafieniu.
+
+items.Scroll_Knockback_II.name = Zwój Odrzutu II
+
+items.Scroll_Knockback_II.description = Odrzuca cele dalej przy trafieniu.
+
+items.Scroll_Knockback_III.name = Zwój Odrzutu III
+
+items.Scroll_Knockback_III.description = Odrzuca cele znacznie dalej przy trafieniu.
+
+
+
+items.Scroll_Reflection_I.name = Zwój Odbicia I
+
+items.Scroll_Reflection_I.description = Odbija 10% zablokowanych obrażeń z powrotem do atakującego. Nie można łączyć z Absorpcją.
+
+items.Scroll_Reflection_II.name = Zwój Odbicia II
+
+items.Scroll_Reflection_II.description = Odbija 20% zablokowanych obrażeń z powrotem do atakującego. Nie można łączyć z Absorpcją.
+
+items.Scroll_Reflection_III.name = Zwój Odbicia III
+
+items.Scroll_Reflection_III.description = Odbija 30% zablokowanych obrażeń z powrotem do atakującego. Nie można łączyć z Absorpcją.
+
+
+
+items.Scroll_Absorption_I.name = Zwój Absorpcji I
+
+items.Scroll_Absorption_I.description = Leczy obrońcę za 10% zablokowanych obrażeń. Nie można łączyć z Odbiciem.
+
+items.Scroll_Absorption_II.name = Zwój Absorpcji II
+
+items.Scroll_Absorption_II.description = Leczy obrońcę za 20% zablokowanych obrażeń. Nie można łączyć z Odbiciem.
+
+items.Scroll_Absorption_III.name = Zwój Absorpcji III
+
+items.Scroll_Absorption_III.description = Leczy obrońcę za 30% zablokowanych obrażeń. Nie można łączyć z Odbiciem.
+
+
+
+items.Scroll_FastSwim_I.name = Zwój Szybkiego Pływania I
+
+items.Scroll_FastSwim_I.description = Zwiększa prędkość pływania o 25%.
+
+items.Scroll_FastSwim_II.name = Zwój Szybkiego Pływania II
+
+items.Scroll_FastSwim_II.description = Zwiększa prędkość pływania o 50%.
+
+items.Scroll_FastSwim_III.name = Zwój Szybkiego Pływania III
+
+items.Scroll_FastSwim_III.description = Zwiększa prędkość pływania o 75%.
+
+
+
+commands.enchantconfig.desc = Otwiera edytor konfiguracji zaklinania w grze.
+
+
+
+customUI.enchantConfigPage.title = Konfiguracja Zaklinania
+
+customUI.enchantConfigPage.tabGeneral = Ogólne
+
+customUI.enchantConfigPage.tabEnchantments = Zaklęcia
+
+customUI.enchantConfigPage.tabRecipes = Receptury
+
+customUI.enchantConfigPage.save = Zapisz
+
+customUI.enchantConfigPage.cancel = Anuluj
+
+
+
+items.Scroll_Cleansing.name = Zwój Oczyszczenia
+
+items.Scroll_Cleansing.description = Usuwa jedno zaklęcie z dowolnego przedmiotu.
+
+
+
+customUI.cleansingScrollPage.title = Usuń Zaklęcie
+
+customUI.cleansingScrollPage.noItems = Nie znaleziono zaklętych przedmiotów
+
+customUI.cleansingScrollPage.item = Przedmiot
+
+customUI.cleansingScrollPage.enchantments = Zaklęcia
+
+
+
+customUI.cleansingEnchantmentPage.title = Wybierz zaklęcie do usunięcia
+
+customUI.cleansingEnchantmentPage.selectHint = Kliknij zaklęcie, aby je usunąć
+
+
+
+
+
+
+
+
+
+# Enchantment Localizations (Auto-generated)
+
+enchantment.sharpness.name = Ostrość
+
+enchantment.sharpness.description = Zwiększa obrażenia w walce wręcz o 10%.
+
+enchantment.life_leech.name = Kradzież Życia
+
+enchantment.life_leech.description = Leczy atakującego za 10% zadanych obrażeń.
+
+enchantment.durability.name = Wytrzymałość
+
+enchantment.durability.description = Zmniejsza szansę na utratę wytrzymałości o 25%.
+
+enchantment.sturdy.name = Solidność
+
+enchantment.sturdy.description = Zapobiega utracie maksymalnej wytrzymałości podczas naprawy.
+
+enchantment.dexterity.name = Zręczność
+
+enchantment.dexterity.description = Zmniejsza koszt wytrzymałości o 20%.
+
+enchantment.protection.name = Ochrona
+
+enchantment.protection.description = Zmniejsza otrzymywane obrażenia fizyczne o 4% na element pancerza.
+
+enchantment.efficiency.name = Wydajność
+
+enchantment.efficiency.description = Zwiększa prędkość wydobycia o 20%.
+
+enchantment.fortune.name = Fortuna
+
+enchantment.fortune.description = Zwiększa szansę na dodatkowe rudy/kryształy o 25%.
+
+enchantment.smelting.name = Przetapianie
+
+enchantment.smelting.description = Automatycznie przetapia wydobyte bloki.
+
+enchantment.strength.name = Siła
+
+enchantment.strength.description = Zwiększa obrażenia pocisków o 10%.
+
+enchantment.eagles_eye.name = Sokole Oko
+
+enchantment.eagles_eye.description = Zwiększa obrażenia pocisków do 15% w zależności od dystansu.
+
+enchantment.looting.name = Grabież
+
+enchantment.looting.description = Zwiększa częstość wypadania przedmiotów z mobów o 25% i zwiększa szansę na rzadkie przedmioty.
+
+enchantment.feather_falling.name = Powolne Opadanie
+
+enchantment.feather_falling.description = Zmniejsza obrażenia od upadku o 20%.
+
+enchantment.waterbreathing.name = Wodny Oddech
+
+enchantment.waterbreathing.description = Zmniejsza zużycie tlenu o 20%.
+
+enchantment.burn.name = Podpalenie
+
+enchantment.burn.description = Podpala cel i sprawia, że wypada z niego upieczone mięso. Nie można łączyć z Zamrożeniem.
+
+enchantment.freeze.name = Zamrożenie
+
+enchantment.freeze.description = Nakłada silne spowolnienie (50%) na cel przy trafieniu. Nie można łączyć z Podpaleniem.
+
+enchantment.eternal_shot.name = Wieczny Strzał
+
+enchantment.eternal_shot.description = Pozwala strzelać strzałami bez ich zużywania.
+
+enchantment.pick_perfect.name = Jedwabny Dotyk
+
+enchantment.pick_perfect.description = Wydobyte bloki wypadają jako one same zamiast ich zwykłych zasobów. Nie można łączyć z Fortuną lub Przetapianiem.
+
+enchantment.thrift.name = Oszczędność
+
+enchantment.thrift.description = Przywraca 20% wydanej many przy trafieniu.
+
+enchantment.elemental_heart.name = Żywiołowe Serce
+
+enchantment.elemental_heart.description = Laski żywiołów nie zużywają esencji podczas rzucania zaklęć.
+
+enchantment.knockback.name = Odrzut
+
+enchantment.knockback.description = Odrzuca cele przy trafieniu.
+
+enchantment.reflection.name = Odbicie
+
+enchantment.reflection.description = Odbija 10% zablokowanych obrażeń z powrotem do atakującego. Nie można łączyć z Absorpcją.
+
+enchantment.absorption.name = Absorpcja
+
+enchantment.absorption.description = Leczy obrońcę za 10% zablokowanych obrażeń. Nie można łączyć z Odbiciem.
+
+enchantment.fast_swim.name = Szybkie Pływanie
+
+enchantment.fast_swim.description = Zwiększa prędkość pływania o 25%.
+

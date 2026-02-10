@@ -1,0 +1,454 @@
+﻿﻿benchCategories.enchantingArmor = Rüstung
+
+benchCategories.enchantingTools = Werkzeuge
+
+benchCategories.enchantingMelee = Nahkampf
+
+benchCategories.enchantingRanged = Fernkampf
+
+benchCategories.enchantingStaff = Magie
+
+benchCategories.enchantingShield = Schild
+
+
+
+customUI.enchantScrollPage.title = Gegenstand verzaubern
+
+customUI.enchantScrollPage.noItems = Keine verzauberbaren Gegenstände
+
+customUI.enchantScrollPage.item = Gegenstand
+
+customUI.enchantScrollPage.enchantment = Verzauberung
+
+
+
+items.Enchanting_Table.name = Verzauberungstisch
+
+items.Enchanting_Table.description = Ein Tisch zur Herstellung von Verzauberungsschriftrollen.
+
+
+
+items.Scroll_Sharpness_I.name = Schriftrolle der Schärfe I
+
+items.Scroll_Sharpness_I.description = Erhöht den Nahkampfschaden um 10%.
+
+items.Scroll_Sharpness_II.name = Schriftrolle der Schärfe II
+
+items.Scroll_Sharpness_II.description = Erhöht den Nahkampfschaden um 20%.
+
+items.Scroll_Sharpness_III.name = Schriftrolle der Schärfe III
+
+items.Scroll_Sharpness_III.description = Erhöht den Nahkampfschaden um 30%.
+
+
+
+items.Scroll_Durability_I.name = Schriftrolle der Haltbarkeit I
+
+items.Scroll_Durability_I.description = Verringert die Wahrscheinlichkeit von Haltbarkeitsverlust um 25%.
+
+items.Scroll_Durability_II.name = Schriftrolle der Haltbarkeit II
+
+items.Scroll_Durability_II.description = Verringert die Wahrscheinlichkeit von Haltbarkeitsverlust um 50%.
+
+items.Scroll_Durability_III.name = Schriftrolle der Haltbarkeit III
+
+items.Scroll_Durability_III.description = Verringert die Wahrscheinlichkeit von Haltbarkeitsverlust um 75%.
+
+
+
+items.Scroll_Protection_I.name = Schriftrolle des Schutzes I
+
+items.Scroll_Protection_I.description = Verringert eingehenden physischen Schaden um 4% pro Rüstungsteil.
+
+items.Scroll_Protection_II.name = Schriftrolle des Schutzes II
+
+items.Scroll_Protection_II.description = Verringert eingehenden physischen Schaden um 8% pro Rüstungsteil.
+
+items.Scroll_Protection_III.name = Schriftrolle des Schutzes III
+
+items.Scroll_Protection_III.description = Verringert eingehenden physischen Schaden um 12% pro Rüstungsteil.
+
+
+
+items.Scroll_Efficiency_I.name = Schriftrolle der Effizienz I
+
+items.Scroll_Efficiency_I.description = Erhöht die Abbaugeschwindigkeit um 20%.
+
+items.Scroll_Efficiency_II.name = Schriftrolle der Effizienz II
+
+items.Scroll_Efficiency_II.description = Erhöht die Abbaugeschwindigkeit um 40%.
+
+items.Scroll_Efficiency_III.name = Schriftrolle der Effizienz III
+
+items.Scroll_Efficiency_III.description = Erhöht die Abbaugeschwindigkeit um 60%.
+
+
+
+items.Scroll_Fortune_I.name = Schriftrolle des Glücks I
+
+items.Scroll_Fortune_I.description = Erhöht die Chance auf zusätzliche Erze/Kristalle um 25%.
+
+items.Scroll_Fortune_II.name = Schriftrolle des Glücks II
+
+items.Scroll_Fortune_II.description = Erhöht die Chance auf zusätzliche Erze/Kristalle um 50%.
+
+items.Scroll_Fortune_III.name = Schriftrolle des Glücks III
+
+items.Scroll_Fortune_III.description = Erhöht die Chance auf zusätzliche Erze/Kristalle um 75%.
+
+
+
+items.Scroll_Smelting_I.name = Schriftrolle des Schmelzens
+
+items.Scroll_Smelting_I.description = Schmilzt abgebaute Blöcke automatisch.
+
+
+
+items.Scroll_Life_Leech_I.name = Schriftrolle des Lebensentzugs I
+
+items.Scroll_Life_Leech_I.description = Heilt den Angreifer um 10% des verursachten Schadens.
+
+items.Scroll_Life_Leech_II.name = Schriftrolle des Lebensentzugs II
+
+items.Scroll_Life_Leech_II.description = Heilt den Angreifer um 20% des verursachten Schadens.
+
+items.Scroll_Life_Leech_III.name = Schriftrolle des Lebensentzugs III
+
+items.Scroll_Life_Leech_III.description = Heilt den Angreifer um 30% des verursachten Schadens.
+
+
+
+items.Scroll_Dexterity_I.name = Schriftrolle der Gewandtheit I
+
+items.Scroll_Dexterity_I.description = Verringert Ausdauerkosten um 20%.
+
+items.Scroll_Dexterity_II.name = Schriftrolle der Gewandtheit II
+
+items.Scroll_Dexterity_II.description = Verringert Ausdauerkosten um 40%.
+
+items.Scroll_Dexterity_III.name = Schriftrolle der Gewandtheit III
+
+items.Scroll_Dexterity_III.description = Verringert Ausdauerkosten um 60%.
+
+
+
+items.Scroll_Looting_I.name = Schriftrolle der Plünderung I
+
+items.Scroll_Looting_I.description = Erhöht die Beutehäufigkeit von Monstern um 25% und verbessert die Chance auf seltene Gegenstände.
+
+items.Scroll_Looting_II.name = Schriftrolle der Plünderung II
+
+items.Scroll_Looting_II.description = Erhöht die Beutehäufigkeit von Monstern um 50% und verbessert die Chance auf seltene Gegenstände.
+
+items.Scroll_Looting_III.name = Schriftrolle der Plünderung III
+
+items.Scroll_Looting_III.description = Erhöht die Beutehäufigkeit von Monstern um 75% und verbessert die Chance auf seltene Gegenstände.
+
+
+
+items.Scroll_Sturdy_I.name = Schriftrolle der Stabilität
+
+items.Scroll_Sturdy_I.description = Verhindert den Verlust der maximalen Haltbarkeit beim Reparieren.
+
+
+
+items.Scroll_Strength_I.name = Schriftrolle der Stärke I
+
+items.Scroll_Strength_I.description = Erhöht Projektilschaden um 10%.
+
+items.Scroll_Strength_II.name = Schriftrolle der Stärke II
+
+items.Scroll_Strength_II.description = Erhöht Projektilschaden um 20%.
+
+items.Scroll_Strength_III.name = Schriftrolle der Stärke III
+
+items.Scroll_Strength_III.description = Erhöht Projektilschaden um 30%.
+
+
+
+items.Scroll_Eagles_Eye_I.name = Schriftrolle des Adlerauges I
+
+items.Scroll_Eagles_Eye_I.description = Erhöht Projektilschaden je nach Distanz um bis zu 15%.
+
+items.Scroll_Eagles_Eye_II.name = Schriftrolle des Adlerauges II
+
+items.Scroll_Eagles_Eye_II.description = Erhöht Projektilschaden je nach Distanz um bis zu 30%.
+
+items.Scroll_Eagles_Eye_III.name = Schriftrolle des Adlerauges III
+
+items.Scroll_Eagles_Eye_III.description = Erhöht Projektilschaden je nach Distanz um bis zu 45%.
+
+
+
+items.Scroll_Feather_Falling_I.name = Schriftrolle des Federfalls I
+
+items.Scroll_Feather_Falling_I.description = Verringert Fallschaden um 20%.
+
+items.Scroll_Feather_Falling_II.name = Schriftrolle des Federfalls II
+
+items.Scroll_Feather_Falling_II.description = Verringert Fallschaden um 40%.
+
+items.Scroll_Feather_Falling_III.name = Schriftrolle des Federfalls III
+
+items.Scroll_Feather_Falling_III.description = Verringert Fallschaden um 60%.
+
+
+
+items.Scroll_Waterbreathing_I.name = Schriftrolle der Wasseratmung I
+
+items.Scroll_Waterbreathing_I.description = Verringert Sauerstoffverbrauch um 20%.
+
+items.Scroll_Waterbreathing_II.name = Schriftrolle der Wasseratmung II
+
+items.Scroll_Waterbreathing_II.description = Verringert Sauerstoffverbrauch um 40%.
+
+items.Scroll_Waterbreathing_III.name = Schriftrolle der Wasseratmung III
+
+items.Scroll_Waterbreathing_III.description = Verringert Sauerstoffverbrauch um 60%.
+
+
+
+items.Scroll_Burn_I.name = Schriftrolle des Verbrennens
+
+items.Scroll_Burn_I.description = Setzt das Ziel in Brand und lässt es gekochtes Fleisch fallen. Nicht kombinierbar mit Frost.
+
+
+
+items.Scroll_Freeze_I.name = Schriftrolle des Frosts
+
+items.Scroll_Freeze_I.description = Verlangsamt das Ziel bei Treffern stark (50%). Nicht kombinierbar mit Verbrennen.
+
+
+
+items.Scroll_Eternal_Shot_I.name = Schriftrolle des Ewigen Pfeils
+
+items.Scroll_Eternal_Shot_I.description = Erlaubt das Schießen von Pfeilen ohne Verbrauch.
+
+
+
+items.Scroll_Silktouch_I.name = Schriftrolle der Behutsamkeit
+
+items.Scroll_Silktouch_I.description = Baue Blöcke ab, ohne sie zu verändern. Nicht kombinierbar mit Glück oder Schmelzen.
+
+
+
+items.Scroll_Thrift_I.name = Schriftrolle der Sparsamkeit I
+
+items.Scroll_Thrift_I.description = Stellt 20% des bei einem Treffer verbrauchten Manas wieder her.
+
+items.Scroll_Thrift_II.name = Schriftrolle der Sparsamkeit II
+
+items.Scroll_Thrift_II.description = Stellt 40% des bei einem Treffer verbrauchten Manas wieder her.
+
+items.Scroll_Thrift_III.name = Schriftrolle der Sparsamkeit III
+
+items.Scroll_Thrift_III.description = Stellt 60% des bei einem Treffer verbrauchten Manas wieder her.
+
+
+
+items.Scroll_ElementalHeart_I.name = Schriftrolle des Elementarherzens
+
+items.Scroll_ElementalHeart_I.description = Elementarstäbe verbrauchen keine Essenz beim Zaubern.
+
+
+
+items.Scroll_Knockback_I.name = Schriftrolle des Rückstoßes I
+
+items.Scroll_Knockback_I.description = Stößt Ziele bei einem Treffer zurück.
+
+items.Scroll_Knockback_II.name = Schriftrolle des Rückstoßes II
+
+items.Scroll_Knockback_II.description = Stößt Ziele bei einem Treffer weiter zurück.
+
+items.Scroll_Knockback_III.name = Schriftrolle des Rückstoßes III
+
+items.Scroll_Knockback_III.description = Stößt Ziele bei einem Treffer deutlich zurück.
+
+
+
+items.Scroll_Reflection_I.name = Schriftrolle der Reflexion I
+
+items.Scroll_Reflection_I.description = Wirft 10% des geblockten Schadens auf den Angreifer zurück. Nicht kombinierbar mit Absorption.
+
+items.Scroll_Reflection_II.name = Schriftrolle der Reflexion II
+
+items.Scroll_Reflection_II.description = Wirft 20% des geblockten Schadens auf den Angreifer zurück. Nicht kombinierbar mit Absorption.
+
+items.Scroll_Reflection_III.name = Schriftrolle der Reflexion III
+
+items.Scroll_Reflection_III.description = Wirft 30% des geblockten Schadens auf den Angreifer zurück. Nicht kombinierbar mit Absorption.
+
+
+
+items.Scroll_Absorption_I.name = Schriftrolle der Absorption I
+
+items.Scroll_Absorption_I.description = Heilt den Verteidiger um 10% des geblockten Schadens. Nicht kombinierbar mit Reflexion.
+
+items.Scroll_Absorption_II.name = Schriftrolle der Absorption II
+
+items.Scroll_Absorption_II.description = Heilt den Verteidiger um 20% des geblockten Schadens. Nicht kombinierbar mit Reflexion.
+
+items.Scroll_Absorption_III.name = Schriftrolle der Absorption III
+
+items.Scroll_Absorption_III.description = Heilt den Verteidiger um 30% des geblockten Schadens. Nicht kombinierbar mit Reflexion.
+
+
+
+items.Scroll_FastSwim_I.name = Schriftrolle des Flossenschwimmens I
+
+items.Scroll_FastSwim_I.description = Erhöht die Schwimmgeschwindigkeit um 25%.
+
+items.Scroll_FastSwim_II.name = Schriftrolle des Flossenschwimmens II
+
+items.Scroll_FastSwim_II.description = Erhöht die Schwimmgeschwindigkeit um 50%.
+
+items.Scroll_FastSwim_III.name = Schriftrolle des Flossenschwimmens III
+
+items.Scroll_FastSwim_III.description = Erhöht die Schwimmgeschwindigkeit um 75%.
+
+
+
+commands.enchantconfig.desc = Öffnet den Verzauberungskonfigurator im Spiel.
+
+
+
+customUI.enchantConfigPage.title = Verzauberungskonfiguration
+
+customUI.enchantConfigPage.tabGeneral = Allgemein
+
+customUI.enchantConfigPage.tabEnchantments = Verzauberungen
+
+customUI.enchantConfigPage.tabRecipes = Rezepte
+
+customUI.enchantConfigPage.save = Speichern
+
+customUI.enchantConfigPage.cancel = Abbrechen
+
+
+
+items.Scroll_Cleansing.name = Schriftrolle der Reinigung
+
+items.Scroll_Cleansing.description = Entfernt eine Verzauberung von einem Gegenstand.
+
+
+
+customUI.cleansingScrollPage.title = Verzauberung entfernen
+
+customUI.cleansingScrollPage.noItems = Keine verzauberten Gegenstände gefunden
+
+customUI.cleansingScrollPage.item = Gegenstand
+
+customUI.cleansingScrollPage.enchantments = Verzauberungen
+
+
+
+customUI.cleansingEnchantmentPage.title = Wähle eine Verzauberung zum Entfernen
+
+customUI.cleansingEnchantmentPage.selectHint = Klicke auf eine Verzauberung, um sie zu entfernen
+
+
+
+
+
+
+
+
+
+# Enchantment Localizations (Auto-generated)
+
+enchantment.sharpness.name = Schärfe
+
+enchantment.sharpness.description = Erhöht den Nahkampfschaden um 10%.
+
+enchantment.life_leech.name = Lebensentzug
+
+enchantment.life_leech.description = Heilt den Angreifer um 10% des verursachten Schadens.
+
+enchantment.durability.name = Haltbarkeit
+
+enchantment.durability.description = Verringert die Wahrscheinlichkeit von Haltbarkeitsverlust um 25%.
+
+enchantment.sturdy.name = Stabilität
+
+enchantment.sturdy.description = Verhindert den Verlust der maximalen Haltbarkeit beim Reparieren.
+
+enchantment.dexterity.name = Gewandtheit
+
+enchantment.dexterity.description = Verringert Ausdauerkosten um 20%.
+
+enchantment.protection.name = Schutz
+
+enchantment.protection.description = Verringert eingehenden physischen Schaden um 4% pro Rüstungsteil.
+
+enchantment.efficiency.name = Effizienz
+
+enchantment.efficiency.description = Erhöht die Abbaugeschwindigkeit um 20%.
+
+enchantment.fortune.name = Glück
+
+enchantment.fortune.description = Erhöht die Chance auf zusätzliche Erze/Kristalle um 25%.
+
+enchantment.smelting.name = Schmelzen
+
+enchantment.smelting.description = Schmilzt abgebaute Blöcke automatisch.
+
+enchantment.strength.name = Stärke
+
+enchantment.strength.description = Erhöht Projektilschaden um 10%.
+
+enchantment.eagles_eye.name = Adlerauge
+
+enchantment.eagles_eye.description = Erhöht Projektilschaden je nach Distanz um bis zu 15%.
+
+enchantment.looting.name = Plünderung
+
+enchantment.looting.description = Erhöht die Beutehäufigkeit von Monstern um 25% und verbessert die Chance auf seltene Gegenstände.
+
+enchantment.feather_falling.name = Federfall
+
+enchantment.feather_falling.description = Verringert Fallschaden um 20%.
+
+enchantment.waterbreathing.name = Wasseratmung
+
+enchantment.waterbreathing.description = Verringert Sauerstoffverbrauch um 20%.
+
+enchantment.burn.name = Verbrennung
+
+enchantment.burn.description = Setzt das Ziel in Brand und lässt es gekochtes Fleisch fallen. Nicht kombinierbar mit Frost.
+
+enchantment.freeze.name = Frost
+
+enchantment.freeze.description = Verlangsamt das Ziel bei Treffern stark (50%). Nicht kombinierbar mit Verbrennen.
+
+enchantment.eternal_shot.name = Ewiger Pfeil
+
+enchantment.eternal_shot.description = Erlaubt das Schießen von Pfeilen ohne Verbrauch.
+
+enchantment.pick_perfect.name = Behutsamkeit
+
+enchantment.pick_perfect.description = Baue Blöcke ab, ohne sie zu verändern. Nicht kombinierbar mit Glück oder Schmelzen.
+
+enchantment.thrift.name = Sparsamkeit
+
+enchantment.thrift.description = Stellt 20% des bei einem Treffer verbrauchten Manas wieder her.
+
+enchantment.elemental_heart.name = Elementarherz
+
+enchantment.elemental_heart.description = Elementarstäbe verbrauchen keine Essenz beim Zaubern.
+
+enchantment.knockback.name = Rückstoß
+
+enchantment.knockback.description = Stößt Ziele bei einem Treffer zurück.
+
+enchantment.reflection.name = Reflexion
+
+enchantment.reflection.description = Wirft 10% des geblockten Schadens auf den Angreifer zurück. Nicht kombinierbar mit Absorption.
+
+enchantment.absorption.name = Absorption
+
+enchantment.absorption.description = Heilt den Verteidiger um 10% des geblockten Schadens. Nicht kombinierbar mit Reflexion.
+
+enchantment.fast_swim.name = Flossenschwimmen
+
+enchantment.fast_swim.description = Erhöht die Schwimmgeschwindigkeit um 25%.
+

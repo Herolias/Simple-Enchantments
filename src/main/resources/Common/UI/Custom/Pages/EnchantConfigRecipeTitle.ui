@@ -1,0 +1,10 @@
+$C = "../Common.ui";
+
+Label {
+  Anchor: (Height: 30, Bottom: 15);
+  Style: (
+    FontSize: 16,
+    RenderBold: true,
+    VerticalAlignment: Center
+  );
+}

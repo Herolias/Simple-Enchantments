@@ -1,0 +1,47 @@
+{
+    "blocks": {
+        "Enchanting_Table": "Enchanting Table"
+    },
+    "items": {
+        "Enchanting_Table": "Enchanting Table"
+    },
+    "enchantments": {
+        "sharpness": "Sharpness",
+    "sharpness.description": "Increases melee damage by 10% per level",
+    "durability": "Durability",
+    "durability.description": "Reduces durability loss",
+    "protection": "Protection",
+    "protection.description": "Increases physical damage resistance",
+    "efficiency": "Efficiency",
+    "efficiency.description": "Increases mining speed",
+    "fortune": "Fortune",
+    "fortune.description": "Chance for extra ore/crystal drops",
+    "smelting": "Smelting",
+    "smelting.description": "Automatically smelts mined blocks",
+    "looting": "Looting",
+    "looting.description": "Increases enemy drops and rare drop chance",
+    "sturdy": "Sturdy",
+    "sturdy.description": "Prevents repair durability penalties",
+    "life_leech": "Life Leech",
+    "life_leech.description": "Heals for 2% of damage per level",
+    "dexterity": "Dexterity",
+    "dexterity.description": "Reduces stamina costs for blocking and abilities",
+    "strength": "Strength",
+    "strength.description": "Increases projectile damage and range",
+    "eagles_eye": "Eagle's Eye",
+    "eagles_eye.description": "Increases damage with distance"
+    },
+    "ui": {
+        "enchanting_table.title": "Enchanting Table",
+        "enchanting_table.enchant": "Enchant",
+        "enchanting_table.no_item": "Place an item to enchant",
+        "enchanting_table.no_essence": "Add an essence to enchant",
+        "enchanting_table.success": "Enchantment applied!",
+        "enchanting_table.failure": "Cannot apply this enchantment"
+    },
+    "essences": {
+        "fire": "Fire Essence",
+        "void": "Void Essence",
+        "ice": "Ice Essence"
+    }
+}

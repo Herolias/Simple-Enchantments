@@ -1,0 +1,454 @@
+﻿﻿benchCategories.enchantingArmor = Броня
+
+benchCategories.enchantingTools = Инструменты
+
+benchCategories.enchantingMelee = Ближний бой
+
+benchCategories.enchantingRanged = Дальний бой
+
+benchCategories.enchantingStaff = Магия
+
+benchCategories.enchantingShield = Щит
+
+
+
+customUI.enchantScrollPage.title = Зачаровать предмет
+
+customUI.enchantScrollPage.noItems = Нет предметов для зачарования
+
+customUI.enchantScrollPage.item = Предмет
+
+customUI.enchantScrollPage.enchantment = Чары
+
+
+
+items.Enchanting_Table.name = Стол зачарования
+
+items.Enchanting_Table.description = Стол, используемый для создания свитков зачарования.
+
+
+
+items.Scroll_Sharpness_I.name = Свиток Остроты I
+
+items.Scroll_Sharpness_I.description = Увеличивает урон в ближнем бою на 10%.
+
+items.Scroll_Sharpness_II.name = Свиток Остроты II
+
+items.Scroll_Sharpness_II.description = Увеличивает урон в ближнем бою на 20%.
+
+items.Scroll_Sharpness_III.name = Свиток Остроты III
+
+items.Scroll_Sharpness_III.description = Увеличивает урон в ближнем бою на 30%.
+
+
+
+items.Scroll_Durability_I.name = Свиток Прочности I
+
+items.Scroll_Durability_I.description = Снижает шанс потери прочности на 25%.
+
+items.Scroll_Durability_II.name = Свиток Прочности II
+
+items.Scroll_Durability_II.description = Снижает шанс потери прочности на 50%.
+
+items.Scroll_Durability_III.name = Свиток Прочности III
+
+items.Scroll_Durability_III.description = Снижает шанс потери прочности на 75%.
+
+
+
+items.Scroll_Protection_I.name = Свиток Защиты I
+
+items.Scroll_Protection_I.description = Снижает получаемый физический урон на 4% за элемент брони.
+
+items.Scroll_Protection_II.name = Свиток Защиты II
+
+items.Scroll_Protection_II.description = Снижает получаемый физический урон на 8% за элемент брони.
+
+items.Scroll_Protection_III.name = Свиток Защиты III
+
+items.Scroll_Protection_III.description = Снижает получаемый физический урон на 12% за элемент брони.
+
+
+
+items.Scroll_Efficiency_I.name = Свиток Эффективности I
+
+items.Scroll_Efficiency_I.description = Увеличивает скорость добычи на 20%.
+
+items.Scroll_Efficiency_II.name = Свиток Эффективности II
+
+items.Scroll_Efficiency_II.description = Увеличивает скорость добычи на 40%.
+
+items.Scroll_Efficiency_III.name = Свиток Эффективности III
+
+items.Scroll_Efficiency_III.description = Увеличивает скорость добычи на 60%.
+
+
+
+items.Scroll_Fortune_I.name = Свиток Удачи I
+
+items.Scroll_Fortune_I.description = Увеличивает шанс на дополнительные руды/кристаллы на 25%.
+
+items.Scroll_Fortune_II.name = Свиток Удачи II
+
+items.Scroll_Fortune_II.description = Увеличивает шанс на дополнительные руды/кристаллы на 50%.
+
+items.Scroll_Fortune_III.name = Свиток Удачи III
+
+items.Scroll_Fortune_III.description = Увеличивает шанс на дополнительные руды/кристаллы на 75%.
+
+
+
+items.Scroll_Smelting_I.name = Свиток Плавки
+
+items.Scroll_Smelting_I.description = Автоматически плавит добытые блоки.
+
+
+
+items.Scroll_Life_Leech_I.name = Свиток Кражи Жизни I
+
+items.Scroll_Life_Leech_I.description = Исцеляет атакующего на 10% от нанесенного урона.
+
+items.Scroll_Life_Leech_II.name = Свиток Кражи Жизни II
+
+items.Scroll_Life_Leech_II.description = Исцеляет атакующего на 20% от нанесенного урона.
+
+items.Scroll_Life_Leech_III.name = Свиток Кражи Жизни III
+
+items.Scroll_Life_Leech_III.description = Исцеляет атакующего на 30% от нанесенного урона.
+
+
+
+items.Scroll_Dexterity_I.name = Свиток Ловкости I
+
+items.Scroll_Dexterity_I.description = Снижает затраты выносливости на 20%.
+
+items.Scroll_Dexterity_II.name = Свиток Ловкости II
+
+items.Scroll_Dexterity_II.description = Снижает затраты выносливости на 40%.
+
+items.Scroll_Dexterity_III.name = Свиток Ловкости III
+
+items.Scroll_Dexterity_III.description = Снижает затраты выносливости на 60%.
+
+
+
+items.Scroll_Looting_I.name = Свиток Добычи I
+
+items.Scroll_Looting_I.description = Увеличивает шанс выпадения предметов с мобов на 25% и повышает шанс на редкие предметы.
+
+items.Scroll_Looting_II.name = Свиток Добычи II
+
+items.Scroll_Looting_II.description = Увеличивает шанс выпадения предметов с мобов на 50% и повышает шанс на редкие предметы.
+
+items.Scroll_Looting_III.name = Свиток Добычи III
+
+items.Scroll_Looting_III.description = Увеличивает шанс выпадения предметов с мобов на 75% и повышает шанс на редкие предметы.
+
+
+
+items.Scroll_Sturdy_I.name = Свиток Починки
+
+items.Scroll_Sturdy_I.description = Предотвращает потерю максимальной прочности при ремонте.
+
+
+
+items.Scroll_Strength_I.name = Свиток Силы I
+
+items.Scroll_Strength_I.description = Увеличивает урон снарядов на 10%.
+
+items.Scroll_Strength_II.name = Свиток Силы II
+
+items.Scroll_Strength_II.description = Увеличивает урон снарядов на 20%.
+
+items.Scroll_Strength_III.name = Свиток Силы III
+
+items.Scroll_Strength_III.description = Увеличивает урон снарядов на 30%.
+
+
+
+items.Scroll_Eagles_Eye_I.name = Свиток Орлиного Глаза I
+
+items.Scroll_Eagles_Eye_I.description = Увеличивает урон снарядов до 15% в зависимости от расстояния.
+
+items.Scroll_Eagles_Eye_II.name = Свиток Орлиного Глаза II
+
+items.Scroll_Eagles_Eye_II.description = Увеличивает урон снарядов до 30% в зависимости от расстояния.
+
+items.Scroll_Eagles_Eye_III.name = Свиток Орлиного Глаза III
+
+items.Scroll_Eagles_Eye_III.description = Увеличивает урон снарядов до 45% в зависимости от расстояния.
+
+
+
+items.Scroll_Feather_Falling_I.name = Свиток Невесомости I
+
+items.Scroll_Feather_Falling_I.description = Снижает урон от падения на 20%.
+
+items.Scroll_Feather_Falling_II.name = Свиток Невесомости II
+
+items.Scroll_Feather_Falling_II.description = Снижает урон от падения на 40%.
+
+items.Scroll_Feather_Falling_III.name = Свиток Невесомости III
+
+items.Scroll_Feather_Falling_III.description = Снижает урон от падения на 60%.
+
+
+
+items.Scroll_Waterbreathing_I.name = Свиток Подводного Дыхания I
+
+items.Scroll_Waterbreathing_I.description = Снижает потребление кислорода на 20%.
+
+items.Scroll_Waterbreathing_II.name = Свиток Подводного Дыхания II
+
+items.Scroll_Waterbreathing_II.description = Снижает потребление кислорода на 40%.
+
+items.Scroll_Waterbreathing_III.name = Свиток Подводного Дыхания III
+
+items.Scroll_Waterbreathing_III.description = Снижает потребление кислорода на 60%.
+
+
+
+items.Scroll_Burn_I.name = Свиток Поджога
+
+items.Scroll_Burn_I.description = Поджигает цель и заставляет её ронять жареное мясо. Несовместимо с Заморозкой.
+
+
+
+items.Scroll_Freeze_I.name = Свиток Заморозки
+
+items.Scroll_Freeze_I.description = Сильно замедляет цель (50%) при ударе. Несовместимо с Поджогом.
+
+
+
+items.Scroll_Eternal_Shot_I.name = Свиток Бесконечной Стрельбы
+
+items.Scroll_Eternal_Shot_I.description = Позволяет стрелять стрелами, не расходуя их.
+
+
+
+items.Scroll_Silktouch_I.name = Свиток Шелкового Касания
+
+items.Scroll_Silktouch_I.description = Блоки выпадают в первозданном виде вместо обычных ресурсов. Несовместимо с Удачей или Плавкой.
+
+
+
+items.Scroll_Thrift_I.name = Свиток Бережливости I
+
+items.Scroll_Thrift_I.description = Восстанавливает 20% потраченной маны при ударе.
+
+items.Scroll_Thrift_II.name = Свиток Бережливости II
+
+items.Scroll_Thrift_II.description = Восстанавливает 40% потраченной маны при ударе.
+
+items.Scroll_Thrift_III.name = Свиток Бережливости III
+
+items.Scroll_Thrift_III.description = Восстанавливает 60% потраченной маны при ударе.
+
+
+
+items.Scroll_ElementalHeart_I.name = Свиток Элементального Сердца
+
+items.Scroll_ElementalHeart_I.description = Элементальные посохи не тратят эссенцию при использовании.
+
+
+
+items.Scroll_Knockback_I.name = Свиток Отбрасывания I
+
+items.Scroll_Knockback_I.description = Отбрасывает цели назад при ударе.
+
+items.Scroll_Knockback_II.name = Свиток Отбрасывания II
+
+items.Scroll_Knockback_II.description = Отбрасывает цели дальше назад при ударе.
+
+items.Scroll_Knockback_III.name = Свиток Отбрасывания III
+
+items.Scroll_Knockback_III.description = Отбрасывает цели значительно дальше назад при ударе.
+
+
+
+items.Scroll_Reflection_I.name = Свиток Отражения I
+
+items.Scroll_Reflection_I.description = Отражает 10% заблокированного урона обратно в атакующего. Несовместимо с Поглощением.
+
+items.Scroll_Reflection_II.name = Свиток Отражения II
+
+items.Scroll_Reflection_II.description = Отражает 20% заблокированного урона обратно в атакующего. Несовместимо с Поглощением.
+
+items.Scroll_Reflection_III.name = Свиток Отражения III
+
+items.Scroll_Reflection_III.description = Отражает 30% заблокированного урона обратно в атакующего. Несовместимо с Поглощением.
+
+
+
+items.Scroll_Absorption_I.name = Свиток Поглощения I
+
+items.Scroll_Absorption_I.description = Исцеляет защищающегося на 10% от заблокированного урона. Несовместимо с Отражением.
+
+items.Scroll_Absorption_II.name = Свиток Поглощения II
+
+items.Scroll_Absorption_II.description = Исцеляет защищающегося на 20% от заблокированного урона. Несовместимо с Отражением.
+
+items.Scroll_Absorption_III.name = Свиток Поглощения III
+
+items.Scroll_Absorption_III.description = Исцеляет защищающегося на 30% от заблокированного урона. Несовместимо с Отражением.
+
+
+
+items.Scroll_FastSwim_I.name = Свиток Быстрого Плавания I
+
+items.Scroll_FastSwim_I.description = Увеличивает скорость плавания на 25%.
+
+items.Scroll_FastSwim_II.name = Свиток Быстрого Плавания II
+
+items.Scroll_FastSwim_II.description = Увеличивает скорость плавания на 50%.
+
+items.Scroll_FastSwim_III.name = Свиток Быстрого Плавания III
+
+items.Scroll_FastSwim_III.description = Увеличивает скорость плавания на 75%.
+
+
+
+commands.enchantconfig.desc = Открывает редактор конфигурации зачарований в игре.
+
+
+
+customUI.enchantConfigPage.title = Настройка Зачарований
+
+customUI.enchantConfigPage.tabGeneral = Общее
+
+customUI.enchantConfigPage.tabEnchantments = Чары
+
+customUI.enchantConfigPage.tabRecipes = Рецепты
+
+customUI.enchantConfigPage.save = Сохранить
+
+customUI.enchantConfigPage.cancel = Отмена
+
+
+
+items.Scroll_Cleansing.name = Свиток Очищения
+
+items.Scroll_Cleansing.description = Снимает одно зачарование с любого предмета.
+
+
+
+customUI.cleansingScrollPage.title = Снять зачарование
+
+customUI.cleansingScrollPage.noItems = Зачарованных предметов не найдено
+
+customUI.cleansingScrollPage.item = Предмет
+
+customUI.cleansingScrollPage.enchantments = Чары
+
+
+
+customUI.cleansingEnchantmentPage.title = Выберите чары для снятия
+
+customUI.cleansingEnchantmentPage.selectHint = Нажмите на чары, чтобы снять их
+
+
+
+
+
+
+
+
+
+# Enchantment Localizations (Auto-generated)
+
+enchantment.sharpness.name = Острота
+
+enchantment.sharpness.description = Увеличивает урон в ближнем бою на 10%.
+
+enchantment.life_leech.name = Кража Жизни
+
+enchantment.life_leech.description = Исцеляет атакующего на 10% от нанесенного урона.
+
+enchantment.durability.name = Прочность
+
+enchantment.durability.description = Снижает шанс потери прочности на 25%.
+
+enchantment.sturdy.name = Починка
+
+enchantment.sturdy.description = Предотвращает потерю максимальной прочности при ремонте.
+
+enchantment.dexterity.name = Ловкость
+
+enchantment.dexterity.description = Снижает затраты выносливости на 20%.
+
+enchantment.protection.name = Защита
+
+enchantment.protection.description = Снижает получаемый физический урон на 4% за элемент брони.
+
+enchantment.efficiency.name = Эффективность
+
+enchantment.efficiency.description = Увеличивает скорость добычи на 20%.
+
+enchantment.fortune.name = Удача
+
+enchantment.fortune.description = Увеличивает шанс на дополнительные руды/кристаллы на 25%.
+
+enchantment.smelting.name = Плавка
+
+enchantment.smelting.description = Автоматически плавит добытые блоки.
+
+enchantment.strength.name = Сила
+
+enchantment.strength.description = Увеличивает урон снарядов на 10%.
+
+enchantment.eagles_eye.name = Орлиный Глаз
+
+enchantment.eagles_eye.description = Увеличивает урон снарядов до 15% в зависимости от расстояния.
+
+enchantment.looting.name = Добыча
+
+enchantment.looting.description = Увеличивает шанс выпадения предметов с мобов на 25% и повышает шанс на редкие предметы.
+
+enchantment.feather_falling.name = Невесомость
+
+enchantment.feather_falling.description = Снижает урон от падения на 20%.
+
+enchantment.waterbreathing.name = Подводное Дыхание
+
+enchantment.waterbreathing.description = Снижает потребление кислорода на 20%.
+
+enchantment.burn.name = Поджог
+
+enchantment.burn.description = Поджигает цель и заставляет её ронять жареное мясо. Несовместимо с Заморозкой.
+
+enchantment.freeze.name = Заморозка
+
+enchantment.freeze.description = Сильно замедляет цель (50%) при ударе. Несовместимо с Поджогом.
+
+enchantment.eternal_shot.name = Бесконечная Стрельба
+
+enchantment.eternal_shot.description = Позволяет стрелять стрелами, не расходуя их.
+
+enchantment.pick_perfect.name = Шелковое Касание
+
+enchantment.pick_perfect.description = Блоки выпадают в первозданном виде вместо обычных ресурсов. Несовместимо с Удачей или Плавкой.
+
+enchantment.thrift.name = Бережливость
+
+enchantment.thrift.description = Восстанавливает 20% потраченной маны при ударе.
+
+enchantment.elemental_heart.name = Элементальное Сердце
+
+enchantment.elemental_heart.description = Элементальные посохи не тратят эссенцию при использовании.
+
+enchantment.knockback.name = Отбрасывание
+
+enchantment.knockback.description = Отбрасывает цели назад при ударе.
+
+enchantment.reflection.name = Отражение
+
+enchantment.reflection.description = Отражает 10% заблокированного урона обратно в атакующего. Несовместимо с Поглощением.
+
+enchantment.absorption.name = Поглощение
+
+enchantment.absorption.description = Исцеляет защищающегося на 10% от заблокированного урона. Несовместимо с Отражением.
+
+enchantment.fast_swim.name = Быстрое Плавание
+
+enchantment.fast_swim.description = Увеличивает скорость плавания на 25%.
+

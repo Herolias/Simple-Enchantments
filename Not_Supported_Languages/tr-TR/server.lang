@@ -1,0 +1,454 @@
+﻿﻿benchCategories.enchantingArmor = Zırh
+
+benchCategories.enchantingTools = Aletler
+
+benchCategories.enchantingMelee = Yakın Dövüş
+
+benchCategories.enchantingRanged = Menzilli
+
+benchCategories.enchantingStaff = Büyü
+
+benchCategories.enchantingShield = Kalkan
+
+
+
+customUI.enchantScrollPage.title = Eşyayı Büyüle
+
+customUI.enchantScrollPage.noItems = Büyülenecek eşya yok
+
+customUI.enchantScrollPage.item = Eşya
+
+customUI.enchantScrollPage.enchantment = Büyü
+
+
+
+items.Enchanting_Table.name = Büyü Masası
+
+items.Enchanting_Table.description = Büyü parşömenleri yapmak için kullanılan bir masa.
+
+
+
+items.Scroll_Sharpness_I.name = Keskinlik Parşömeni I
+
+items.Scroll_Sharpness_I.description = Yakın dövüş hasarını %10 artırır.
+
+items.Scroll_Sharpness_II.name = Keskinlik Parşömeni II
+
+items.Scroll_Sharpness_II.description = Yakın dövüş hasarını %20 artırır.
+
+items.Scroll_Sharpness_III.name = Keskinlik Parşömeni III
+
+items.Scroll_Sharpness_III.description = Yakın dövüş hasarını %30 artırır.
+
+
+
+items.Scroll_Durability_I.name = Dayanıklılık Parşömeni I
+
+items.Scroll_Durability_I.description = Dayanıklılık kaybı şansını %25 azaltır.
+
+items.Scroll_Durability_II.name = Dayanıklılık Parşömeni II
+
+items.Scroll_Durability_II.description = Dayanıklılık kaybı şansını %50 azaltır.
+
+items.Scroll_Durability_III.name = Dayanıklılık Parşömeni III
+
+items.Scroll_Durability_III.description = Dayanıklılık kaybı şansını %75 azaltır.
+
+
+
+items.Scroll_Protection_I.name = Koruma Parşömeni I
+
+items.Scroll_Protection_I.description = Zırh parçası başına gelen fiziksel hasarı %4 azaltır.
+
+items.Scroll_Protection_II.name = Koruma Parşömeni II
+
+items.Scroll_Protection_II.description = Zırh parçası başına gelen fiziksel hasarı %8 azaltır.
+
+items.Scroll_Protection_III.name = Koruma Parşömeni III
+
+items.Scroll_Protection_III.description = Zırh parçası başına gelen fiziksel hasarı %12 azaltır.
+
+
+
+items.Scroll_Efficiency_I.name = Verimlilik Parşömeni I
+
+items.Scroll_Efficiency_I.description = Kazma hızını %20 artırır.
+
+items.Scroll_Efficiency_II.name = Verimlilik Parşömeni II
+
+items.Scroll_Efficiency_II.description = Kazma hızını %40 artırır.
+
+items.Scroll_Efficiency_III.name = Verimlilik Parşömeni III
+
+items.Scroll_Efficiency_III.description = Kazma hızını %60 artırır.
+
+
+
+items.Scroll_Fortune_I.name = Servet Parşömeni I
+
+items.Scroll_Fortune_I.description = Ekstra cevher/kristal düşürme şansını %25 artırır.
+
+items.Scroll_Fortune_II.name = Servet Parşömeni II
+
+items.Scroll_Fortune_II.description = Ekstra cevher/kristal düşürme şansını %50 artırır.
+
+items.Scroll_Fortune_III.name = Servet Parşömeni III
+
+items.Scroll_Fortune_III.description = Ekstra cevher/kristal düşürme şansını %75 artırır.
+
+
+
+items.Scroll_Smelting_I.name = Eritme Parşömeni
+
+items.Scroll_Smelting_I.description = Kazılan blokları otomatik olarak eritir.
+
+
+
+items.Scroll_Life_Leech_I.name = Can Çalma Parşömeni I
+
+items.Scroll_Life_Leech_I.description = Saldırganı verilen hasarın %10'u kadar iyileştirir.
+
+items.Scroll_Life_Leech_II.name = Can Çalma Parşömeni II
+
+items.Scroll_Life_Leech_II.description = Saldırganı verilen hasarın %20'si kadar iyileştirir.
+
+items.Scroll_Life_Leech_III.name = Can Çalma Parşömeni III
+
+items.Scroll_Life_Leech_III.description = Saldırganı verilen hasarın %30'u kadar iyileştirir.
+
+
+
+items.Scroll_Dexterity_I.name = Çeviklik Parşömeni I
+
+items.Scroll_Dexterity_I.description = Dayanıklılık maliyetlerini %20 azaltır.
+
+items.Scroll_Dexterity_II.name = Çeviklik Parşömeni II
+
+items.Scroll_Dexterity_II.description = Dayanıklılık maliyetlerini %40 azaltır.
+
+items.Scroll_Dexterity_III.name = Çeviklik Parşömeni III
+
+items.Scroll_Dexterity_III.description = Dayanıklılık maliyetlerini %60 azaltır.
+
+
+
+items.Scroll_Looting_I.name = Yağma Parşömeni I
+
+items.Scroll_Looting_I.description = Yaratıkların eşya düşürme oranını %25 artırır ve nadir eşya şansını yükseltir.
+
+items.Scroll_Looting_II.name = Yağma Parşömeni II
+
+items.Scroll_Looting_II.description = Yaratıkların eşya düşürme oranını %50 artırır ve nadir eşya şansını yükseltir.
+
+items.Scroll_Looting_III.name = Yağma Parşömeni III
+
+items.Scroll_Looting_III.description = Yaratıkların eşya düşürme oranını %75 artırır ve nadir eşya şansını yükseltir.
+
+
+
+items.Scroll_Sturdy_I.name = Sağlamlık Parşömeni
+
+items.Scroll_Sturdy_I.description = Tamir sırasında maksimum dayanıklılık kaybını önler.
+
+
+
+items.Scroll_Strength_I.name = Güç Parşömeni I
+
+items.Scroll_Strength_I.description = Mermi hasarını %10 artırır.
+
+items.Scroll_Strength_II.name = Güç Parşömeni II
+
+items.Scroll_Strength_II.description = Mermi hasarını %20 artırır.
+
+items.Scroll_Strength_III.name = Güç Parşömeni III
+
+items.Scroll_Strength_III.description = Mermi hasarını %30 artırır.
+
+
+
+items.Scroll_Eagles_Eye_I.name = Kartal Gözü Parşömeni I
+
+items.Scroll_Eagles_Eye_I.description = Mesafeye bağlı olarak mermi hasarını %15'e kadar artırır.
+
+items.Scroll_Eagles_Eye_II.name = Kartal Gözü Parşömeni II
+
+items.Scroll_Eagles_Eye_II.description = Mesafeye bağlı olarak mermi hasarını %30'a kadar artırır.
+
+items.Scroll_Eagles_Eye_III.name = Kartal Gözü Parşömeni III
+
+items.Scroll_Eagles_Eye_III.description = Mesafeye bağlı olarak mermi hasarını %45'e kadar artırır.
+
+
+
+items.Scroll_Feather_Falling_I.name = Tüy Düşüşü Parşömeni I
+
+items.Scroll_Feather_Falling_I.description = Düşme hasarını %20 azaltır.
+
+items.Scroll_Feather_Falling_II.name = Tüy Düşüşü Parşömeni II
+
+items.Scroll_Feather_Falling_II.description = Düşme hasarını %40 azaltır.
+
+items.Scroll_Feather_Falling_III.name = Tüy Düşüşü Parşömeni III
+
+items.Scroll_Feather_Falling_III.description = Düşme hasarını %60 azaltır.
+
+
+
+items.Scroll_Waterbreathing_I.name = Suda Nefes Alma Parşömeni I
+
+items.Scroll_Waterbreathing_I.description = Oksijen tüketimini %20 azaltır.
+
+items.Scroll_Waterbreathing_II.name = Suda Nefes Alma Parşömeni II
+
+items.Scroll_Waterbreathing_II.description = Oksijen tüketimini %40 azaltır.
+
+items.Scroll_Waterbreathing_III.name = Suda Nefes Alma Parşömeni III
+
+items.Scroll_Waterbreathing_III.description = Oksijen tüketimini %60 azaltır.
+
+
+
+items.Scroll_Burn_I.name = Yakma Parşömeni
+
+items.Scroll_Burn_I.description = Hedefi yakar ve pişmiş et düşürmesini sağlar. Donma ile birleştirilemez.
+
+
+
+items.Scroll_Freeze_I.name = Dondurma Parşömeni
+
+items.Scroll_Freeze_I.description = Vurulduğunda hedefe şiddetli yavaşlatma (%50) uygular. Yakma ile birleştirilemez.
+
+
+
+items.Scroll_Eternal_Shot_I.name = Sonsuz Atış Parşömeni
+
+items.Scroll_Eternal_Shot_I.description = Okları tüketmeden atış yapmanızı sağlar.
+
+
+
+items.Scroll_Silktouch_I.name = İpeksi Dokunuş Parşömeni
+
+items.Scroll_Silktouch_I.description = Kazılan bloklar normal kaynakları yerine kendilerini düşürür. Servet veya Eritme ile birleştirilemez.
+
+
+
+items.Scroll_Thrift_I.name = Tasarruf Parşömeni I
+
+items.Scroll_Thrift_I.description = Vuruşta harcanan mananın %20'sini geri kazandırır.
+
+items.Scroll_Thrift_II.name = Tasarruf Parşömeni II
+
+items.Scroll_Thrift_II.description = Vuruşta harcanan mananın %40'ını geri kazandırır.
+
+items.Scroll_Thrift_III.name = Tasarruf Parşömeni III
+
+items.Scroll_Thrift_III.description = Vuruşta harcanan mananın %60'ını geri kazandırır.
+
+
+
+items.Scroll_ElementalHeart_I.name = Element Kalbi Parşömeni
+
+items.Scroll_ElementalHeart_I.description = Element asaları büyü yaparken öz tüketmez.
+
+
+
+items.Scroll_Knockback_I.name = Geri Tepme Parşömeni I
+
+items.Scroll_Knockback_I.description = Vuruşta hedefleri geri teper.
+
+items.Scroll_Knockback_II.name = Geri Tepme Parşömeni II
+
+items.Scroll_Knockback_II.description = Vuruşta hedefleri daha uzağa geri teper.
+
+items.Scroll_Knockback_III.name = Geri Tepme Parşömeni III
+
+items.Scroll_Knockback_III.description = Vuruşta hedefleri önemli ölçüde geri teper.
+
+
+
+items.Scroll_Reflection_I.name = Yansıtma Parşömeni I
+
+items.Scroll_Reflection_I.description = Engellenen hasarın %10'unu saldırgana geri yansıtır. Emilim ile birleştirilemez.
+
+items.Scroll_Reflection_II.name = Yansıtma Parşömeni II
+
+items.Scroll_Reflection_II.description = Engellenen hasarın %20'sini saldırgana geri yansıtır. Emilim ile birleştirilemez.
+
+items.Scroll_Reflection_III.name = Yansıtma Parşömeni III
+
+items.Scroll_Reflection_III.description = Engellenen hasarın %30'unu saldırgana geri yansıtır. Emilim ile birleştirilemez.
+
+
+
+items.Scroll_Absorption_I.name = Emilim Parşömeni I
+
+items.Scroll_Absorption_I.description = Savunanı engellenen hasarın %10'u kadar iyileştirir. Yansıtma ile birleştirilemez.
+
+items.Scroll_Absorption_II.name = Emilim Parşömeni II
+
+items.Scroll_Absorption_II.description = Savunanı engellenen hasarın %20'u kadar iyileştirir. Yansıtma ile birleştirilemez.
+
+items.Scroll_Absorption_III.name = Emilim Parşömeni III
+
+items.Scroll_Absorption_III.description = Savunanı engellenen hasarın %30'u kadar iyileştirir. Yansıtma ile birleştirilemez.
+
+
+
+items.Scroll_FastSwim_I.name = Hızlı Yüzme Parşömeni I
+
+items.Scroll_FastSwim_I.description = Yüzme hızını %25 artırır.
+
+items.Scroll_FastSwim_II.name = Hızlı Yüzme Parşömeni II
+
+items.Scroll_FastSwim_II.description = Yüzme hızını %50 artırır.
+
+items.Scroll_FastSwim_III.name = Hızlı Yüzme Parşömeni III
+
+items.Scroll_FastSwim_III.description = Yüzme hızını %75 artırır.
+
+
+
+commands.enchantconfig.desc = Oyun içi büyü yapılandırma düzenleyicisini açar.
+
+
+
+customUI.enchantConfigPage.title = Büyü Yapılandırması
+
+customUI.enchantConfigPage.tabGeneral = Genel
+
+customUI.enchantConfigPage.tabEnchantments = Büyüler
+
+customUI.enchantConfigPage.tabRecipes = Tarifler
+
+customUI.enchantConfigPage.save = Kaydet
+
+customUI.enchantConfigPage.cancel = İptal
+
+
+
+items.Scroll_Cleansing.name = Arınma Parşömeni
+
+items.Scroll_Cleansing.description = Herhangi bir eşyadan bir büyüyü kaldırır.
+
+
+
+customUI.cleansingScrollPage.title = Büyü Kaldır
+
+customUI.cleansingScrollPage.noItems = Büyülü eşya bulunamadı
+
+customUI.cleansingScrollPage.item = Eşya
+
+customUI.cleansingScrollPage.enchantments = Büyüler
+
+
+
+customUI.cleansingEnchantmentPage.title = Kaldırılacak büyüyü seçin
+
+customUI.cleansingEnchantmentPage.selectHint = Kaldırmak için bir büyüye tıklayın
+
+
+
+
+
+
+
+
+
+# Enchantment Localizations (Auto-generated)
+
+enchantment.sharpness.name = Keskinlik
+
+enchantment.sharpness.description = Yakın dövüş hasarını %10 artırır.
+
+enchantment.life_leech.name = Can Çalma
+
+enchantment.life_leech.description = Saldırganı verilen hasarın %10'u kadar iyileştirir.
+
+enchantment.durability.name = Dayanıklılık
+
+enchantment.durability.description = Dayanıklılık kaybı şansını %25 azaltır.
+
+enchantment.sturdy.name = Sağlamlık
+
+enchantment.sturdy.description = Tamir sırasında maksimum dayanıklılık kaybını önler.
+
+enchantment.dexterity.name = Çeviklik
+
+enchantment.dexterity.description = Dayanıklılık maliyetlerini %20 azaltır.
+
+enchantment.protection.name = Koruma
+
+enchantment.protection.description = Zırh parçası başına gelen fiziksel hasarı %4 azaltır.
+
+enchantment.efficiency.name = Verimlilik
+
+enchantment.efficiency.description = Kazma hızını %20 artırır.
+
+enchantment.fortune.name = Servet
+
+enchantment.fortune.description = Ekstra cevher/kristal düşürme şansını %25 artırır.
+
+enchantment.smelting.name = Eritme
+
+enchantment.smelting.description = Kazılan blokları otomatik olarak eritir.
+
+enchantment.strength.name = Güç
+
+enchantment.strength.description = Mermi hasarını %10 artırır.
+
+enchantment.eagles_eye.name = Kartal Gözü
+
+enchantment.eagles_eye.description = Mesafeye bağlı olarak mermi hasarını %15'e kadar artırır.
+
+enchantment.looting.name = Yağma
+
+enchantment.looting.description = Yaratıkların eşya düşürme oranını %25 artırır ve nadir eşya şansını yükseltir.
+
+enchantment.feather_falling.name = Tüy Düşüşü
+
+enchantment.feather_falling.description = Düşme hasarını %20 azaltır.
+
+enchantment.waterbreathing.name = Suda Nefes Alma
+
+enchantment.waterbreathing.description = Oksijen tüketimini %20 azaltır.
+
+enchantment.burn.name = Yakma
+
+enchantment.burn.description = Hedefi yakar ve pişmiş et düşürmesini sağlar. Donma ile birleştirilemez.
+
+enchantment.freeze.name = Dondurma
+
+enchantment.freeze.description = Vurulduğunda hedefe şiddetli yavaşlatma (%50) uygular. Yakma ile birleştirilemez.
+
+enchantment.eternal_shot.name = Sonsuz Atış
+
+enchantment.eternal_shot.description = Okları tüketmeden atış yapmanızı sağlar.
+
+enchantment.pick_perfect.name = İpeksi Dokunuş
+
+enchantment.pick_perfect.description = Kazılan bloklar normal kaynakları yerine kendilerini düşürür. Servet veya Eritme ile birleştirilemez.
+
+enchantment.thrift.name = Tasarruf
+
+enchantment.thrift.description = Vuruşta harcanan mananın %20'sini geri kazandırır.
+
+enchantment.elemental_heart.name = Element Kalbi
+
+enchantment.elemental_heart.description = Element asaları büyü yaparken öz tüketmez.
+
+enchantment.knockback.name = Geri Tepme
+
+enchantment.knockback.description = Vuruşta hedefleri geri teper.
+
+enchantment.reflection.name = Yansıtma
+
+enchantment.reflection.description = Engellenen hasarın %10'unu saldırgana geri yansıtır. Emilim ile birleştirilemez.
+
+enchantment.absorption.name = Emilim
+
+enchantment.absorption.description = Savunanı engellenen hasarın %10'u kadar iyileştirir. Yansıtma ile birleştirilemez.
+
+enchantment.fast_swim.name = Hızlı Yüzme
+
+enchantment.fast_swim.description = Yüzme hızını %25 artırır.
+

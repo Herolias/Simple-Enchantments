@@ -1,0 +1,454 @@
+﻿﻿benchCategories.enchantingArmor = 防具
+
+benchCategories.enchantingTools = 道具
+
+benchCategories.enchantingMelee = 近接攻撃
+
+benchCategories.enchantingRanged = 遠距離攻撃
+
+benchCategories.enchantingStaff = 魔術
+
+benchCategories.enchantingShield = 盾
+
+
+
+customUI.enchantScrollPage.title = エンチャント付与
+
+customUI.enchantScrollPage.noItems = エンチャント可能なアイテムがありません
+
+customUI.enchantScrollPage.item = アイテム
+
+customUI.enchantScrollPage.enchantment = エンチャント
+
+
+
+items.Enchanting_Table.name = エンチャントテーブル
+
+items.Enchanting_Table.description = エンチャントの巻物を作るためのテーブル。
+
+
+
+items.Scroll_Sharpness_I.name = 鋭さの巻物 I
+
+items.Scroll_Sharpness_I.description = 近接ダメージが10%増加する。
+
+items.Scroll_Sharpness_II.name = 鋭さの巻物 II
+
+items.Scroll_Sharpness_II.description = 近接ダメージが20%増加する。
+
+items.Scroll_Sharpness_III.name = 鋭さの巻物 III
+
+items.Scroll_Sharpness_III.description = 近接ダメージが30%増加する。
+
+
+
+items.Scroll_Durability_I.name = 耐久力の巻物 I
+
+items.Scroll_Durability_I.description = 耐久値減少の確率を25%軽減する。
+
+items.Scroll_Durability_II.name = 耐久力の巻物 II
+
+items.Scroll_Durability_II.description = 耐久値減少の確率を50%軽減する。
+
+items.Scroll_Durability_III.name = 耐久力の巻物 III
+
+items.Scroll_Durability_III.description = 耐久値減少の確率を75%軽減する。
+
+
+
+items.Scroll_Protection_I.name = 防御の巻物 I
+
+items.Scroll_Protection_I.description = 防具1つにつき物理被ダメージを4%軽減する。
+
+items.Scroll_Protection_II.name = 防御の巻物 II
+
+items.Scroll_Protection_II.description = 防具1つにつき物理被ダメージを8%軽減する。
+
+items.Scroll_Protection_III.name = 防御の巻物 III
+
+items.Scroll_Protection_III.description = 防具1つにつき物理被ダメージを12%軽減する。
+
+
+
+items.Scroll_Efficiency_I.name = 効率強化の巻物 I
+
+items.Scroll_Efficiency_I.description = 採掘速度が20%増加する。
+
+items.Scroll_Efficiency_II.name = 効率強化の巻物 II
+
+items.Scroll_Efficiency_II.description = 採掘速度が40%増加する。
+
+items.Scroll_Efficiency_III.name = 効率強化の巻物 III
+
+items.Scroll_Efficiency_III.description = 採掘速度が60%増加する。
+
+
+
+items.Scroll_Fortune_I.name = 幸運の巻物 I
+
+items.Scroll_Fortune_I.description = 鉱石・クリスタルの追加ドロップ率が25%増加する。
+
+items.Scroll_Fortune_II.name = 幸運の巻物 II
+
+items.Scroll_Fortune_II.description = 鉱石・クリスタルの追加ドロップ率が50%増加する。
+
+items.Scroll_Fortune_III.name = 幸運の巻物 III
+
+items.Scroll_Fortune_III.description = 鉱石・クリスタルの追加ドロップ率が75%増加する。
+
+
+
+items.Scroll_Smelting_I.name = 精錬の巻物
+
+items.Scroll_Smelting_I.description = 採掘したブロックを自動的に精錬する。
+
+
+
+items.Scroll_Life_Leech_I.name = ライフスティールの巻物 I
+
+items.Scroll_Life_Leech_I.description = 与えたダメージの10%を回復する。
+
+items.Scroll_Life_Leech_II.name = ライフスティールの巻物 II
+
+items.Scroll_Life_Leech_II.description = 与えたダメージの20%を回復する。
+
+items.Scroll_Life_Leech_III.name = ライフスティールの巻物 III
+
+items.Scroll_Life_Leech_III.description = 与えたダメージの30%を回復する。
+
+
+
+items.Scroll_Dexterity_I.name = 機敏の巻物 I
+
+items.Scroll_Dexterity_I.description = スタミナ消費を20%軽減する。
+
+items.Scroll_Dexterity_II.name = 機敏の巻物 II
+
+items.Scroll_Dexterity_II.description = スタミナ消費を40%軽減する。
+
+items.Scroll_Dexterity_III.name = 機敏の巻物 III
+
+items.Scroll_Dexterity_III.description = スタミナ消費を60%軽減する。
+
+
+
+items.Scroll_Looting_I.name = ドロップ増加の巻物 I
+
+items.Scroll_Looting_I.description = モブのドロップ率が25%増加し、レアアイテムの確率も上がる。
+
+items.Scroll_Looting_II.name = ドロップ増加の巻物 II
+
+items.Scroll_Looting_II.description = モブのドロップ率が50%増加し、レアアイテムの確率も上がる。
+
+items.Scroll_Looting_III.name = ドロップ増加の巻物 III
+
+items.Scroll_Looting_III.description = モブのドロップ率が75%増加し、レアアイテムの確率も上がる。
+
+
+
+items.Scroll_Sturdy_I.name = 修繕の巻物
+
+items.Scroll_Sturdy_I.description = 修理時に最大耐久値が減少しなくなる。
+
+
+
+items.Scroll_Strength_I.name = パワーの巻物 I
+
+items.Scroll_Strength_I.description = 遠距離ダメージが10%増加する。
+
+items.Scroll_Strength_II.name = パワーの巻物 II
+
+items.Scroll_Strength_II.description = 遠距離ダメージが20%増加する。
+
+items.Scroll_Strength_III.name = パワーの巻物 III
+
+items.Scroll_Strength_III.description = 遠距離ダメージが30%増加する。
+
+
+
+items.Scroll_Eagles_Eye_I.name = 鷲の目の巻物 I
+
+items.Scroll_Eagles_Eye_I.description = 距離に応じて遠距離ダメージが最大15%増加する。
+
+items.Scroll_Eagles_Eye_II.name = 鷲の目の巻物 II
+
+items.Scroll_Eagles_Eye_II.description = 距離に応じて遠距離ダメージが最大30%増加する。
+
+items.Scroll_Eagles_Eye_III.name = 鷲の目の巻物 III
+
+items.Scroll_Eagles_Eye_III.description = 距離に応じて遠距離ダメージが最大45%増加する。
+
+
+
+items.Scroll_Feather_Falling_I.name = 落下耐性の巻物 I
+
+items.Scroll_Feather_Falling_I.description = 落下ダメージを20%軽減する。
+
+items.Scroll_Feather_Falling_II.name = 落下耐性の巻物 II
+
+items.Scroll_Feather_Falling_II.description = 落下ダメージを40%軽減する。
+
+items.Scroll_Feather_Falling_III.name = 落下耐性の巻物 III
+
+items.Scroll_Feather_Falling_III.description = 落下ダメージを60%軽減する。
+
+
+
+items.Scroll_Waterbreathing_I.name = 水中呼吸の巻物 I
+
+items.Scroll_Waterbreathing_I.description = 酸素ゲージの減少を20%軽減する。
+
+items.Scroll_Waterbreathing_II.name = 水中呼吸の巻物 II
+
+items.Scroll_Waterbreathing_II.description = 酸素ゲージの減少を40%軽減する。
+
+items.Scroll_Waterbreathing_III.name = 水中呼吸の巻物 III
+
+items.Scroll_Waterbreathing_III.description = 酸素ゲージの減少を60%軽減する。
+
+
+
+items.Scroll_Burn_I.name = 火炎の巻物
+
+items.Scroll_Burn_I.description = ターゲットを燃やし、ドロップアイテムを調理された状態にする。「氷結」と併用不可。
+
+
+
+items.Scroll_Freeze_I.name = 氷結の巻物
+
+items.Scroll_Freeze_I.description = 攻撃時にターゲットを強力な鈍足状態(50%)にする。「火炎」と併用不可。
+
+
+
+items.Scroll_Eternal_Shot_I.name = 無限の巻物
+
+items.Scroll_Eternal_Shot_I.description = 矢を消費せずに撃つことができる。
+
+
+
+items.Scroll_Silktouch_I.name = シルクタッチの巻物
+
+items.Scroll_Silktouch_I.description = ブロックを破壊した際、そのブロック自体をドロップする。「幸運」「精錬」と併用不可。
+
+
+
+items.Scroll_Thrift_I.name = マナ節約の巻物 I
+
+items.Scroll_Thrift_I.description = 攻撃時に消費したマナの20%を回復する。
+
+items.Scroll_Thrift_II.name = マナ節約の巻物 II
+
+items.Scroll_Thrift_II.description = 攻撃時に消費したマナの40%を回復する。
+
+items.Scroll_Thrift_III.name = マナ節約の巻物 III
+
+items.Scroll_Thrift_III.description = 攻撃時に消費したマナの60%を回復する。
+
+
+
+items.Scroll_ElementalHeart_I.name = エレメンタルハートの巻物
+
+items.Scroll_ElementalHeart_I.description = 魔法の杖を使用する際、エッセンスを消費しない。
+
+
+
+items.Scroll_Knockback_I.name = ノックバックの巻物 I
+
+items.Scroll_Knockback_I.description = 攻撃時にターゲットを後ろへ飛ばす。
+
+items.Scroll_Knockback_II.name = ノックバックの巻物 II
+
+items.Scroll_Knockback_II.description = 攻撃時にターゲットをさらに後ろへ飛ばす。
+
+items.Scroll_Knockback_III.name = ノックバックの巻物 III
+
+items.Scroll_Knockback_III.description = 攻撃時にターゲットを大きく後ろへ飛ばす。
+
+
+
+items.Scroll_Reflection_I.name = 反射の巻物 I
+
+items.Scroll_Reflection_I.description = パリィしたダメージの10%を攻撃者に跳ね返す。「吸収」と併用不可。
+
+items.Scroll_Reflection_II.name = 反射の巻物 II
+
+items.Scroll_Reflection_II.description = パリィしたダメージの20%を攻撃者に跳ね返す。「吸収」と併用不可。
+
+items.Scroll_Reflection_III.name = 反射の巻物 III
+
+items.Scroll_Reflection_III.description = パリィしたダメージの30%を攻撃者に跳ね返す。「吸収」と併用不可。
+
+
+
+items.Scroll_Absorption_I.name = 吸収の巻物 I
+
+items.Scroll_Absorption_I.description = パリィしたダメージの10%を回復する。「反射」と併用不可。
+
+items.Scroll_Absorption_II.name = 吸収の巻物 II
+
+items.Scroll_Absorption_II.description = パリィしたダメージの20%を回復する。「反射」と併用不可。
+
+items.Scroll_Absorption_III.name = 吸収の巻物 III
+
+items.Scroll_Absorption_III.description = パリィしたダメージの30%を回復する。「反射」と併用不可。
+
+
+
+items.Scroll_FastSwim_I.name = 水中歩行の巻物 I
+
+items.Scroll_FastSwim_I.description = 水中での移動速度が25%増加する。
+
+items.Scroll_FastSwim_II.name = 水中歩行の巻物 II
+
+items.Scroll_FastSwim_II.description = 水中での移動速度が50%増加する。
+
+items.Scroll_FastSwim_III.name = 水中歩行の巻物 III
+
+items.Scroll_FastSwim_III.description = 水中での移動速度が75%増加する。
+
+
+
+commands.enchantconfig.desc = ゲーム内でエンチャント設定エディタを開く。
+
+
+
+customUI.enchantConfigPage.title = エンチャント設定
+
+customUI.enchantConfigPage.tabGeneral = 一般
+
+customUI.enchantConfigPage.tabEnchantments = エンチャント
+
+customUI.enchantConfigPage.tabRecipes = レシピ
+
+customUI.enchantConfigPage.save = 保存
+
+customUI.enchantConfigPage.cancel = キャンセル
+
+
+
+items.Scroll_Cleansing.name = 浄化の巻物
+
+items.Scroll_Cleansing.description = アイテムからエンチャントを1つ取り除く。
+
+
+
+customUI.cleansingScrollPage.title = エンチャント除去
+
+customUI.cleansingScrollPage.noItems = エンチャントされたアイテムが見つかりません
+
+customUI.cleansingScrollPage.item = アイテム
+
+customUI.cleansingScrollPage.enchantments = エンチャント
+
+
+
+customUI.cleansingEnchantmentPage.title = 除去するエンチャントを選択
+
+customUI.cleansingEnchantmentPage.selectHint = 除去したいエンチャントをクリックしてください
+
+
+
+
+
+
+
+
+
+# Enchantment Localizations (Auto-generated)
+
+enchantment.sharpness.name = 鋭さ
+
+enchantment.sharpness.description = 近接ダメージが10%増加する。
+
+enchantment.life_leech.name = ライフスティール
+
+enchantment.life_leech.description = 与えたダメージの10%を回復する。
+
+enchantment.durability.name = 耐久力
+
+enchantment.durability.description = 耐久値減少の確率を25%軽減する。
+
+enchantment.sturdy.name = 修繕
+
+enchantment.sturdy.description = 修理時に最大耐久値が減少しなくなる。
+
+enchantment.dexterity.name = 機敏
+
+enchantment.dexterity.description = スタミナ消費を20%軽減する。
+
+enchantment.protection.name = 防御
+
+enchantment.protection.description = 防具1つにつき物理被ダメージを4%軽減する。
+
+enchantment.efficiency.name = 効率強化
+
+enchantment.efficiency.description = 採掘速度が20%増加する。
+
+enchantment.fortune.name = 幸運
+
+enchantment.fortune.description = 鉱石・クリスタルの追加ドロップ率が25%増加する。
+
+enchantment.smelting.name = 精錬
+
+enchantment.smelting.description = 採掘したブロックを自動的に精錬する。
+
+enchantment.strength.name = パワー
+
+enchantment.strength.description = 遠距離ダメージが10%増加する。
+
+enchantment.eagles_eye.name = 鷲の目
+
+enchantment.eagles_eye.description = 距離に応じて遠距離ダメージが最大15%増加する。
+
+enchantment.looting.name = ドロップ増加
+
+enchantment.looting.description = モブのドロップ率が25%増加し、レアアイテムの確率も上がる。
+
+enchantment.feather_falling.name = 落下耐性
+
+enchantment.feather_falling.description = 落下ダメージを20%軽減する。
+
+enchantment.waterbreathing.name = 水中呼吸
+
+enchantment.waterbreathing.description = 酸素ゲージの減少を20%軽減する。
+
+enchantment.burn.name = 火炎
+
+enchantment.burn.description = ターゲットを燃やし、ドロップアイテムを調理された状態にする。「氷結」と併用不可。
+
+enchantment.freeze.name = 氷結
+
+enchantment.freeze.description = 攻撃時にターゲットを強力な鈍足状態(50%)にする。「火炎」と併用不可。
+
+enchantment.eternal_shot.name = 無限
+
+enchantment.eternal_shot.description = 矢を消費せずに撃つことができる。
+
+enchantment.pick_perfect.name = シルクタッチ
+
+enchantment.pick_perfect.description = ブロックを破壊した際、そのブロック自体をドロップする。「幸運」「精錬」と併用不可。
+
+enchantment.thrift.name = マナ節約
+
+enchantment.thrift.description = 攻撃時に消費したマナの20%を回復する。
+
+enchantment.elemental_heart.name = エレメンタルハート
+
+enchantment.elemental_heart.description = 魔法の杖を使用する際、エッセンスを消費しない。
+
+enchantment.knockback.name = ノックバック
+
+enchantment.knockback.description = 攻撃時にターゲットを後ろへ飛ばす。
+
+enchantment.reflection.name = 反射
+
+enchantment.reflection.description = パリィしたダメージの10%を攻撃者に跳ね返す。「吸収」と併用不可。
+
+enchantment.absorption.name = 吸収
+
+enchantment.absorption.description = パリィしたダメージの10%を回復する。「反射」と併用不可。
+
+enchantment.fast_swim.name = 水中歩行
+
+enchantment.fast_swim.description = 水中での移動速度が25%増加する。
+

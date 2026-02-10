@@ -1,0 +1,17 @@
+$C = "../Common.ui";
+
+Group {
+  LayoutMode: Left;
+  Anchor: (Height: 40, Bottom: 10);
+
+  Group {
+    FlexWeight: 1;
+  }
+
+  TextButton #ResetRecipeBtn {
+    Style: $C.@TertiaryTextButtonStyle;
+    Anchor: (Width: 210, Height: 32);
+    Padding: (Horizontal: 12);
+    Text: "Reset to Default";
+  }
+}

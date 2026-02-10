@@ -1,0 +1,227 @@
+﻿﻿benchCategories.enchantingArmor = Zbroj
+benchCategories.enchantingTools = Nástroje
+benchCategories.enchantingMelee = Na blízko
+benchCategories.enchantingRanged = Na dálku
+benchCategories.enchantingStaff = Magie
+benchCategories.enchantingShield = Štít
+
+customUI.enchantScrollPage.title = Očarovat předmět
+customUI.enchantScrollPage.noItems = Žádné předměty k očarování
+customUI.enchantScrollPage.item = Předmět
+customUI.enchantScrollPage.enchantment = Očarování
+
+items.Enchanting_Table.name = Stůl očarování
+items.Enchanting_Table.description = Stůl používaný k výrobě svitků očarování.
+
+items.Scroll_Sharpness_I.name = Svitek ostrosti I
+items.Scroll_Sharpness_I.description = Zvyšuje poškození na blízko o 10 %.
+items.Scroll_Sharpness_II.name = Svitek ostrosti II
+items.Scroll_Sharpness_II.description = Zvyšuje poškození na blízko o 20 %.
+items.Scroll_Sharpness_III.name = Svitek ostrosti III
+items.Scroll_Sharpness_III.description = Zvyšuje poškození na blízko o 30 %.
+
+items.Scroll_Durability_I.name = Svitek odolnosti I
+items.Scroll_Durability_I.description = Snižuje šanci na ztrátu odolnosti o 25 %.
+items.Scroll_Durability_II.name = Svitek odolnosti II
+items.Scroll_Durability_II.description = Snižuje šanci na ztrátu odolnosti o 50 %.
+items.Scroll_Durability_III.name = Svitek odolnosti III
+items.Scroll_Durability_III.description = Snižuje šanci na ztrátu odolnosti o 75 %.
+
+items.Scroll_Protection_I.name = Svitek ochrany I
+items.Scroll_Protection_I.description = Snižuje příchozí fyzické poškození o 4 % za kus zbroje.
+items.Scroll_Protection_II.name = Svitek ochrany II
+items.Scroll_Protection_II.description = Snižuje příchozí fyzické poškození o 8 % za kus zbroje.
+items.Scroll_Protection_III.name = Svitek ochrany III
+items.Scroll_Protection_III.description = Snižuje příchozí fyzické poškození o 12 % za kus zbroje.
+
+items.Scroll_Efficiency_I.name = Svitek efektivity I
+items.Scroll_Efficiency_I.description = Zvyšuje rychlost těžby o 20 %.
+items.Scroll_Efficiency_II.name = Svitek efektivity II
+items.Scroll_Efficiency_II.description = Zvyšuje rychlost těžby o 40 %.
+items.Scroll_Efficiency_III.name = Svitek efektivity III
+items.Scroll_Efficiency_III.description = Zvyšuje rychlost těžby o 60 %.
+
+items.Scroll_Fortune_I.name = Svitek štěstí I
+items.Scroll_Fortune_I.description = Zvyšuje šanci na extra rudu/krystaly o 25 %.
+items.Scroll_Fortune_II.name = Svitek štěstí II
+items.Scroll_Fortune_II.description = Zvyšuje šanci na extra rudu/krystaly o 50 %.
+items.Scroll_Fortune_III.name = Svitek štěstí III
+items.Scroll_Fortune_III.description = Zvyšuje šanci na extra rudu/krystaly o 75 %.
+
+items.Scroll_Smelting_I.name = Svitek tavení
+items.Scroll_Smelting_I.description = Automaticky taví vytěžené bloky.
+
+items.Scroll_Life_Leech_I.name = Svitek sání zdraví I
+items.Scroll_Life_Leech_I.description = Léčí útočníka za 10 % způsobeného poškození.
+items.Scroll_Life_Leech_II.name = Svitek sání zdraví II
+items.Scroll_Life_Leech_II.description = Léčí útočníka za 20 % způsobeného poškození.
+items.Scroll_Life_Leech_III.name = Svitek sání zdraví III
+items.Scroll_Life_Leech_III.description = Léčí útočníka za 30 % způsobeného poškození.
+
+items.Scroll_Dexterity_I.name = Svitek obratnosti I
+items.Scroll_Dexterity_I.description = Snižuje spotřebu výdrže o 20 %.
+items.Scroll_Dexterity_II.name = Svitek obratnosti II
+items.Scroll_Dexterity_II.description = Snižuje spotřebu výdrže o 40 %.
+items.Scroll_Dexterity_III.name = Svitek obratnosti III
+items.Scroll_Dexterity_III.description = Snižuje spotřebu výdrže o 60 %.
+
+items.Scroll_Looting_I.name = Svitek kořisti I
+items.Scroll_Looting_I.description = Zvyšuje šanci na drop z mobů o 25 % a zvyšuje šanci na vzácné předměty.
+items.Scroll_Looting_II.name = Svitek kořisti II
+items.Scroll_Looting_II.description = Zvyšuje šanci na drop z mobů o 50 % a zvyšuje šanci na vzácné předměty.
+items.Scroll_Looting_III.name = Svitek kořisti III
+items.Scroll_Looting_III.description = Zvyšuje šanci na drop z mobů o 75 % a zvyšuje šanci na vzácné předměty.
+
+items.Scroll_Sturdy_I.name = Svitek pevnosti
+items.Scroll_Sturdy_I.description = Zabraňuje snížení maximální odolnosti při opravě.
+
+items.Scroll_Strength_I.name = Svitek síly I
+items.Scroll_Strength_I.description = Zvyšuje poškození projektily o 10 %.
+items.Scroll_Strength_II.name = Svitek síly II
+items.Scroll_Strength_II.description = Zvyšuje poškození projektily o 20 %.
+items.Scroll_Strength_III.name = Svitek síly III
+items.Scroll_Strength_III.description = Zvyšuje poškození projektily o 30 %.
+
+items.Scroll_Eagles_Eye_I.name = Svitek orlího oka I
+items.Scroll_Eagles_Eye_I.description = Zvyšuje poškození projektily až o 15 % v závislosti na vzdálenosti.
+items.Scroll_Eagles_Eye_II.name = Svitek orlího oka II
+items.Scroll_Eagles_Eye_II.description = Zvyšuje poškození projektily až o 30 % v závislosti na vzdálenosti.
+items.Scroll_Eagles_Eye_III.name = Svitek orlího oka III
+items.Scroll_Eagles_Eye_III.description = Zvyšuje poškození projektily až o 45 % v závislosti na vzdálenosti.
+
+items.Scroll_Feather_Falling_I.name = Svitek lehkého dopadu I
+items.Scroll_Feather_Falling_I.description = Snižuje poškození pádem o 20 %.
+items.Scroll_Feather_Falling_II.name = Svitek lehkého dopadu II
+items.Scroll_Feather_Falling_II.description = Snižuje poškození pádem o 40 %.
+items.Scroll_Feather_Falling_III.name = Svitek lehkého dopadu III
+items.Scroll_Feather_Falling_III.description = Snižuje poškození pádem o 60 %.
+
+items.Scroll_Waterbreathing_I.name = Svitek vodního dechu I
+items.Scroll_Waterbreathing_I.description = Snižuje spotřebu kyslíku o 20 %.
+items.Scroll_Waterbreathing_II.name = Svitek vodního dechu II
+items.Scroll_Waterbreathing_II.description = Snižuje spotřebu kyslíku o 40 %.
+items.Scroll_Waterbreathing_III.name = Svitek vodního dechu III
+items.Scroll_Waterbreathing_III.description = Snižuje spotřebu kyslíku o 60 %.
+
+items.Scroll_Burn_I.name = Svitek hoření
+items.Scroll_Burn_I.description = Zapálí cíl a způsobí, že z něj padají upečené varianty předmětů. Nelze kombinovat s mrazením.
+
+items.Scroll_Freeze_I.name = Svitek mrazení
+items.Scroll_Freeze_I.description = Aplikuje silné zpomalení (50 %) na cíl při zásahu. Nelze kombinovat s hořením.
+
+items.Scroll_Eternal_Shot_I.name = Svitek věčné střely
+items.Scroll_Eternal_Shot_I.description = Umožňuje střílet šípy bez jejich spotřebování.
+
+items.Scroll_Silktouch_I.name = Svitek hedvábného doteku
+items.Scroll_Silktouch_I.description = Těžené bloky padají samy sebe namísto obvyklých surovin. Nelze kombinovat se štěstím nebo tavením.
+
+items.Scroll_Thrift_I.name = Svitek úspory I
+items.Scroll_Thrift_I.description = Obnovuje 20 % utracené many při zásahu.
+items.Scroll_Thrift_II.name = Svitek úspory II
+items.Scroll_Thrift_II.description = Obnovuje 40 % utracené many při zásahu.
+items.Scroll_Thrift_III.name = Svitek úspory III
+items.Scroll_Thrift_III.description = Obnovuje 60 % utracené many při zásahu.
+
+items.Scroll_ElementalHeart_I.name = Svitek elementárního srdce
+items.Scroll_ElementalHeart_I.description = Elementální hole nespotřebovávají esenci při sesílání.
+
+items.Scroll_Knockback_I.name = Svitek odražení I
+items.Scroll_Knockback_I.description = Při zásahu odrazí cíle zpět.
+items.Scroll_Knockback_II.name = Svitek odražení II
+items.Scroll_Knockback_II.description = Při zásahu odrazí cíle dále zpět.
+items.Scroll_Knockback_III.name = Svitek odražení III
+items.Scroll_Knockback_III.description = Při zásahu odrazí cíle výrazně zpět.
+
+items.Scroll_Reflection_I.name = Svitek reflexe I
+items.Scroll_Reflection_I.description = Odráží 10 % blokovaného poškození zpět na útočníka. Nelze kombinovat s absorpcí.
+items.Scroll_Reflection_II.name = Svitek reflexe II
+items.Scroll_Reflection_II.description = Odráží 20 % blokovaného poškození zpět na útočníka. Nelze kombinovat s absorpcí.
+items.Scroll_Reflection_III.name = Svitek reflexe III
+items.Scroll_Reflection_III.description = Odráží 30 % blokovaného poškození zpět na útočníka. Nelze kombinovat s absorpcí.
+
+items.Scroll_Absorption_I.name = Svitek absorpce I
+items.Scroll_Absorption_I.description = Léčí obránce za 10 % blokovaného poškození. Nelze kombinovat s reflexí.
+items.Scroll_Absorption_II.name = Svitek absorpce II
+items.Scroll_Absorption_II.description = Léčí obránce za 20 % blokovaného poškození. Nelze kombinovat s reflexí.
+items.Scroll_Absorption_III.name = Svitek absorpce III
+items.Scroll_Absorption_III.description = Léčí obránce za 30 % blokovaného poškození. Nelze kombinovat s reflexí.
+
+items.Scroll_FastSwim_I.name = Svitek rychlého plavání I
+items.Scroll_FastSwim_I.description = Zvyšuje rychlost plavání o 25 %.
+items.Scroll_FastSwim_II.name = Svitek rychlého plavání II
+items.Scroll_FastSwim_II.description = Zvyšuje rychlost plavání o 50 %.
+items.Scroll_FastSwim_III.name = Svitek rychlého plavání III
+items.Scroll_FastSwim_III.description = Zvyšuje rychlost plavání o 75 %.
+
+commands.enchantconfig.desc = Otevře editor konfigurace očarování ve hře.
+
+customUI.enchantConfigPage.title = Konfigurace očarování
+customUI.enchantConfigPage.tabGeneral = Obecné
+customUI.enchantConfigPage.tabEnchantments = Očarování
+customUI.enchantConfigPage.tabRecipes = Recepty
+customUI.enchantConfigPage.save = Uložit
+customUI.enchantConfigPage.cancel = Zrušit
+
+items.Scroll_Cleansing.name = Svitek očisty
+items.Scroll_Cleansing.description = Odstraní jedno očarování z libovolného předmětu.
+
+customUI.cleansingScrollPage.title = Odstranit očarování
+customUI.cleansingScrollPage.noItems = Nebyly nalezeny žádné očarované předměty
+customUI.cleansingScrollPage.item = Předmět
+customUI.cleansingScrollPage.enchantments = Očarování
+
+customUI.cleansingEnchantmentPage.title = Vyberte očarování k odstranění
+customUI.cleansingEnchantmentPage.selectHint = Kliknutím na očarování jej odstraníte
+
+
+
+
+# Enchantment Localizations (Auto-generated)
+enchantment.sharpness.name = Ostrost
+enchantment.sharpness.description = Zvyšuje poškození na blízko o 10 %.
+enchantment.life_leech.name = Sání zdraví
+enchantment.life_leech.description = Léčí útočníka za 10 % způsobeného poškození.
+enchantment.durability.name = Odolnost
+enchantment.durability.description = Snižuje šanci na ztrátu odolnosti o 25 %.
+enchantment.sturdy.name = Pevnost
+enchantment.sturdy.description = Zabraňuje snížení maximální odolnosti při opravě.
+enchantment.dexterity.name = Obratnost
+enchantment.dexterity.description = Snižuje spotřebu výdrže o 20 %.
+enchantment.protection.name = Ochrana
+enchantment.protection.description = Snižuje příchozí fyzické poškození o 4 % za kus zbroje.
+enchantment.efficiency.name = Efektivita
+enchantment.efficiency.description = Zvyšuje rychlost těžby o 20 %.
+enchantment.fortune.name = Štěstí
+enchantment.fortune.description = Zvyšuje šanci na extra rudu/krystaly o 25 %.
+enchantment.smelting.name = Tavení
+enchantment.smelting.description = Automaticky taví vytěžené bloky.
+enchantment.strength.name = Síla
+enchantment.strength.description = Zvyšuje poškození projektily o 10 %.
+enchantment.eagles_eye.name = Orlí oko
+enchantment.eagles_eye.description = Zvyšuje poškození projektily až o 15 % v závislosti na vzdálenosti.
+enchantment.looting.name = Kořist
+enchantment.looting.description = Zvyšuje šanci na drop z mobů o 25 % a zvyšuje šanci na vzácné předměty.
+enchantment.feather_falling.name = Lehký dopad
+enchantment.feather_falling.description = Snižuje poškození pádem o 20 %.
+enchantment.waterbreathing.name = Vodní dech
+enchantment.waterbreathing.description = Snižuje spotřebu kyslíku o 20 %.
+enchantment.burn.name = Hoření
+enchantment.burn.description = Zapálí cíl a způsobí, že z něj padají upečené varianty předmětů. Nelze kombinovat s mrazením.
+enchantment.freeze.name = Mrazení
+enchantment.freeze.description = Aplikuje silné zpomalení (50 %) na cíl při zásahu. Nelze kombinovat s hořením.
+enchantment.eternal_shot.name = Věčná střela
+enchantment.eternal_shot.description = Umožňuje střílet šípy bez jejich spotřebování.
+enchantment.pick_perfect.name = Hedvábný dotek
+enchantment.pick_perfect.description = Těžené bloky padají samy sebe namísto obvyklých surovin. Nelze kombinovat se štěstím nebo tavením.
+enchantment.thrift.name = Úspora
+enchantment.thrift.description = Obnovuje 20 % utracené many při zásahu.
+enchantment.elemental_heart.name = Elementární srdce
+enchantment.elemental_heart.description = Elementální hole nespotřebovávají esenci při sesílání.
+enchantment.knockback.name = Odražení
+enchantment.knockback.description = Při zásahu odrazí cíle zpět.
+enchantment.reflection.name = Reflexe
+enchantment.reflection.description = Odráží 10 % blokovaného poškození zpět na útočníka. Nelze kombinovat s absorpcí.
+enchantment.absorption.name = Absorpce
+enchantment.absorption.description = Léčí obránce za 10 % blokovaného poškození. Nelze kombinovat s reflexí.
+enchantment.fast_swim.name = Rychlé plavání
+enchantment.fast_swim.description = Zvyšuje rychlost plavání o 25 %.

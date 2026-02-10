@@ -1,0 +1,77 @@
+$C = "../Common.ui";
+
+Group {
+  LayoutMode: Left;
+  Anchor: (Height: 48, Bottom: 6);
+  Padding: (Horizontal: 12, Vertical: 4);
+  Background: (TexturePath: "../Common/ContainerPanelPatch.png", Border: 4);
+
+  ItemSlot #IngredientIcon {
+    Anchor: (Width: 40, Height: 40, Right: 10);
+    ShowQualityBackground: true;
+    ShowQuantity: false;
+  }
+
+  Label #IngredientName {
+    FlexWeight: 1;
+    Style: (
+      FontSize: 13,
+      VerticalAlignment: Center,
+      TextColor: #cccccc
+    );
+  }
+
+  TextButton #MoveUpBtn {
+    Style: $C.@TertiaryTextButtonStyle;
+    Anchor: (Width: 28, Height: 28, Right: 2);
+    Padding: (Horizontal: 6);
+    Text: "^";
+    TooltipText: "Move up";
+  }
+
+  TextButton #MoveDownBtn {
+    Style: $C.@TertiaryTextButtonStyle;
+    Anchor: (Width: 28, Height: 28, Right: 8);
+    Padding: (Horizontal: 6);
+    Text: "v";
+    TooltipText: "Move down";
+  }
+
+  TextButton #ChangeBtn {
+    Style: $C.@TertiaryTextButtonStyle;
+    Anchor: (Width: 100, Height: 30, Right: 8);
+    Padding: (Horizontal: 8);
+    Text: "Change";
+  }
+
+  TextButton #DecreaseAmountBtn {
+    Style: $C.@TertiaryTextButtonStyle;
+    Anchor: (Width: 28, Height: 28, Right: 4);
+    Padding: (Horizontal: 6);
+    Text: "-";
+  }
+
+  $C.@NumberField #AmountInput {
+    Anchor: (Width: 50, Height: 30);
+    Format: (
+      MaxDecimalPlaces: 0,
+      Step: 1
+    );
+  }
+
+  TextButton #IncreaseAmountBtn {
+    Style: $C.@TertiaryTextButtonStyle;
+    Anchor: (Width: 28, Height: 28, Left: 4, Right: 8);
+    Padding: (Horizontal: 6);
+    Text: "+";
+  }
+
+  TextButton #RemoveBtn {
+    Style: $C.@TertiaryTextButtonStyle;
+    Anchor: (Width: 32, Height: 28);
+    Padding: (Horizontal: 6);
+    Text: "X";
+    TooltipText: "Remove ingredient";
+    Background: (Color: #8b2222);
+  }
+}

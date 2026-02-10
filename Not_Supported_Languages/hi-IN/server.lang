@@ -1,0 +1,454 @@
+﻿﻿benchCategories.enchantingArmor = कवच
+
+benchCategories.enchantingTools = औजार
+
+benchCategories.enchantingMelee = हाथापाई
+
+benchCategories.enchantingRanged = दूरस्थ
+
+benchCategories.enchantingStaff = जादू
+
+benchCategories.enchantingShield = ढाल
+
+
+
+customUI.enchantScrollPage.title = आइटम को मंत्रमुग्ध करें
+
+customUI.enchantScrollPage.noItems = कोई आइटम मंत्रमुग्ध नहीं किया जा सकता
+
+customUI.enchantScrollPage.item = आइटम
+
+customUI.enchantScrollPage.enchantment = मंत्र
+
+
+
+items.Enchanting_Table.name = मंत्रमुग्ध करने वाली मेज
+
+items.Enchanting_Table.description = मंत्र स्क्रॉल तैयार करने के लिए उपयोग की जाने वाली एक मेज।
+
+
+
+items.Scroll_Sharpness_I.name = तीक्ष्णता का स्क्रॉल I
+
+items.Scroll_Sharpness_I.description = हाथापाई की क्षति को 10% बढ़ाता है।
+
+items.Scroll_Sharpness_II.name = तीक्ष्णता का स्क्रॉल II
+
+items.Scroll_Sharpness_II.description = हाथापाई की क्षति को 20% बढ़ाता है।
+
+items.Scroll_Sharpness_III.name = तीक्ष्णता का स्क्रॉल III
+
+items.Scroll_Sharpness_III.description = हाथापाई की क्षति को 30% बढ़ाता है।
+
+
+
+items.Scroll_Durability_I.name = टिकाऊपन का स्क्रॉल I
+
+items.Scroll_Durability_I.description = टिकाऊपन कम होने की संभावना को 25% कम करता है।
+
+items.Scroll_Durability_II.name = टिकाऊपन का स्क्रॉल II
+
+items.Scroll_Durability_II.description = टिकाऊपन कम होने की संभावना को 50% कम करता है।
+
+items.Scroll_Durability_III.name = टिकाऊपन का स्क्रॉल III
+
+items.Scroll_Durability_III.description = टिकाऊपन कम होने की संभावना को 75% कम करता है।
+
+
+
+items.Scroll_Protection_I.name = सुरक्षा का स्क्रॉल I
+
+items.Scroll_Protection_I.description = आने वाली शारीरिक क्षति को 4% प्रति कवच टुकड़ा कम करता है।
+
+items.Scroll_Protection_II.name = सुरक्षा का स्क्रॉल II
+
+items.Scroll_Protection_II.description = आने वाली शारीरिक क्षति को 8% प्रति कवच टुकड़ा कम करता है।
+
+items.Scroll_Protection_III.name = सुरक्षा का स्क्रॉल III
+
+items.Scroll_Protection_III.description = आने वाली शारीरिक क्षति को 12% प्रति कवच टुकड़ा कम करता है।
+
+
+
+items.Scroll_Efficiency_I.name = दक्षता का स्क्रॉल I
+
+items.Scroll_Efficiency_I.description = खनन की गति को 20% बढ़ाता है।
+
+items.Scroll_Efficiency_II.name = दक्षता का स्क्रॉल II
+
+items.Scroll_Efficiency_II.description = खनन की गति को 40% बढ़ाता है।
+
+items.Scroll_Efficiency_III.name = दक्षता का स्क्रॉल III
+
+items.Scroll_Efficiency_III.description = खनन की गति को 60% बढ़ाता है।
+
+
+
+items.Scroll_Fortune_I.name = भाग्य का स्क्रॉल I
+
+items.Scroll_Fortune_I.description = अतिरिक्त अयस्क/क्रिस्टल बूँदें प्राप्त करने की संभावना को 25% बढ़ाता है।
+
+items.Scroll_Fortune_II.name = भाग्य का स्क्रॉल II
+
+items.Scroll_Fortune_II.description = अतिरिक्त अयस्क/क्रिस्टल बूँदें प्राप्त करने की संभावना को 50% बढ़ाता है।
+
+items.Scroll_Fortune_III.name = भाग्य का स्क्रॉल III
+
+items.Scroll_Fortune_III.description = अतिरिक्त अयस्क/क्रिस्टल बूँदें प्राप्त करने की संभावना को 75% बढ़ाता है।
+
+
+
+items.Scroll_Smelting_I.name = गलाने का स्क्रॉल
+
+items.Scroll_Smelting_I.description = खनन किए गए ब्लॉकों को स्वचालित रूप से गला देता है।
+
+
+
+items.Scroll_Life_Leech_I.name = जीवन लीच का स्क्रॉल I
+
+items.Scroll_Life_Leech_I.description = हमलावर को दिए गए नुकसान का 10% ठीक करता है।
+
+items.Scroll_Life_Leech_II.name = जीवन लीच का स्क्रॉल II
+
+items.Scroll_Life_Leech_II.description = हमलावर को दिए गए नुकसान का 20% ठीक करता है।
+
+items.Scroll_Life_Leech_III.name = जीवन लीच का स्क्रॉल III
+
+items.Scroll_Life_Leech_III.description = हमलावर को दिए गए नुकसान का 30% ठीक करता है।
+
+
+
+items.Scroll_Dexterity_I.name = निपुणता का स्क्रॉल I
+
+items.Scroll_Dexterity_I.description = स्टैमिना लागत को 20% कम करता है।
+
+items.Scroll_Dexterity_II.name = निपुणता का स्क्रॉल II
+
+items.Scroll_Dexterity_II.description = स्टैमिना लागत को 40% कम करता है।
+
+items.Scroll_Dexterity_III.name = निपुणता का स्क्रॉल III
+
+items.Scroll_Dexterity_III.description = स्टैमिना लागत को 60% कम करता है।
+
+
+
+items.Scroll_Looting_I.name = लूटपाट का स्क्रॉल I
+
+items.Scroll_Looting_I.description = भीड़ की अधिकतम ड्रॉप दरों को 25% बढ़ाता है और दुर्लभ बूँदों की संभावना को बढ़ाता है।
+
+items.Scroll_Looting_II.name = लूटपाट का स्क्रॉल II
+
+items.Scroll_Looting_II.description = भीड़ की अधिकतम ड्रॉप दरों को 50% बढ़ाता है और दुर्लभ बूँदों की संभावना को बढ़ाता है।
+
+items.Scroll_Looting_III.name = लूटपाट का स्क्रॉल III
+
+items.Scroll_Looting_III.description = भीड़ की अधिकतम ड्रॉप दरों को 75% बढ़ाता है और दुर्लभ बूँदों की संभावना को बढ़ाता है।
+
+
+
+items.Scroll_Sturdy_I.name = मजबूती का स्क्रॉल
+
+items.Scroll_Sturdy_I.description = मरम्मत करते समय अधिकतम टिकाऊपन के नुकसान को रोकता है।
+
+
+
+items.Scroll_Strength_I.name = शक्ति का स्क्रॉल I
+
+items.Scroll_Strength_I.description = प्रोजेक्टाइल क्षति को 10% बढ़ाता है।
+
+items.Scroll_Strength_II.name = शक्ति का स्क्रॉल II
+
+items.Scroll_Strength_II.description = प्रोजेक्टाइल क्षति को 20% बढ़ाता है।
+
+items.Scroll_Strength_III.name = शक्ति का स्क्रॉल III
+
+items.Scroll_Strength_III.description = प्रोजेक्टाइल क्षति को 30% बढ़ाता है।
+
+
+
+items.Scroll_Eagles_Eye_I.name = बाज की आँख का स्क्रॉल I
+
+items.Scroll_Eagles_Eye_I.description = दूरी के आधार पर प्रोजेक्टाइल क्षति को 15% तक बढ़ाता है।
+
+items.Scroll_Eagles_Eye_II.name = बाज की आँख का स्क्रॉल II
+
+items.Scroll_Eagles_Eye_II.description = दूरी के आधार पर प्रोजेक्टाइल क्षति को 30% तक बढ़ाता है।
+
+items.Scroll_Eagles_Eye_III.name = बाज की आँख का स्क्रॉल III
+
+items.Scroll_Eagles_Eye_III.description = दूरी के आधार पर प्रोजेक्टाइल क्षति को 45% तक बढ़ाता है।
+
+
+
+items.Scroll_Feather_Falling_I.name = पंख गिरने का स्क्रॉल I
+
+items.Scroll_Feather_Falling_I.description = गिरने से होने वाले नुकसान को 20% कम करता है।
+
+items.Scroll_Feather_Falling_II.name = पंख गिरने का स्क्रॉल II
+
+items.Scroll_Feather_Falling_II.description = गिरने से होने वाले नुकसान को 40% कम करता है।
+
+items.Scroll_Feather_Falling_III.name = पंख गिरने का स्क्रॉल III
+
+items.Scroll_Feather_Falling_III.description = गिरने से होने वाले नुकसान को 60% कम करता है।
+
+
+
+items.Scroll_Waterbreathing_I.name = जल संश्वसन का स्क्रॉल I
+
+items.Scroll_Waterbreathing_I.description = ऑक्सीजन की खपत को 20% कम करता है।
+
+items.Scroll_Waterbreathing_II.name = जल संश्वसन का स्क्रॉल II
+
+items.Scroll_Waterbreathing_II.description = ऑक्सीजन की खपत को 40% कम करता है।
+
+items.Scroll_Waterbreathing_III.name = जल संश्वसन का स्क्रॉल III
+
+items.Scroll_Waterbreathing_III.description = ऑक्सीजन की खपत को 60% कम करता है।
+
+
+
+items.Scroll_Burn_I.name = जलने का स्क्रॉल
+
+items.Scroll_Burn_I.description = लक्ष्य को आग लगा देता है और उसे पकाया हुआ मांस गिराने देता है। फ्रीज के साथ संयोजन योग्य नहीं।
+
+
+
+items.Scroll_Freeze_I.name = जमने का स्क्रॉल
+
+items.Scroll_Freeze_I.description = हिट होने पर लक्ष्य पर गंभीर धीमापन (50%) लागू करता है। जलने के साथ संयोजन योग्य नहीं।
+
+
+
+items.Scroll_Eternal_Shot_I.name = अनंत शॉट का स्क्रॉल
+
+items.Scroll_Eternal_Shot_I.description = आपको तीरों का उपभोग किए बिना शूट करने देता है।
+
+
+
+items.Scroll_Silktouch_I.name = रेशमी स्पर्श का स्क्रॉल
+
+items.Scroll_Silktouch_I.description = खनन किए गए ब्लॉक अपनी सामान्य बूँदों के बजाय खुद को गिराते हैं। भाग्य या गलाने के साथ संयोजन योग्य नहीं।
+
+
+
+items.Scroll_Thrift_I.name = किफायती का स्क्रॉल I
+
+items.Scroll_Thrift_I.description = हिट होने पर खर्च किए गए मान का 20% पुनर्स्थापित करता है।
+
+items.Scroll_Thrift_II.name = किफायती का स्क्रॉल II
+
+items.Scroll_Thrift_II.description = हिट होने पर खर्च किए गए मान का 40% पुनर्स्थापित करता है।
+
+items.Scroll_Thrift_III.name = किफायती का स्क्रॉल III
+
+items.Scroll_Thrift_III.description = हिट होने पर खर्च किए गए मान का 60% पुनर्स्थापित करता है।
+
+
+
+items.Scroll_ElementalHeart_I.name = मौलिक हृदय का स्क्रॉल
+
+items.Scroll_ElementalHeart_I.description = कास्टिंग करते समय मौलिक कर्मचारी सार का उपभोग नहीं करते हैं।
+
+
+
+items.Scroll_Knockback_I.name = नॉकबैक का स्क्रॉल I
+
+items.Scroll_Knockback_I.description = हिट होने पर लक्ष्यों को पीछे धकेलता है।
+
+items.Scroll_Knockback_II.name = नॉकबैक का स्क्रॉल II
+
+items.Scroll_Knockback_II.description = हिट होने पर लक्ष्यों को और पीछे धकेलता है।
+
+items.Scroll_Knockback_III.name = नॉकबैक का स्क्रॉल III
+
+items.Scroll_Knockback_III.description = हिट होने पर लक्ष्यों को काफी पीछे धकेलता है।
+
+
+
+items.Scroll_Reflection_I.name = प्रतिबिंब का स्क्रॉल I
+
+items.Scroll_Reflection_I.description = अवरुद्ध क्षति का 10% हमलावर को वापस दर्शाता है। अवशोषण के साथ संयोजन योग्य नहीं।
+
+items.Scroll_Reflection_II.name = प्रतिबिंब का स्क्रॉल II
+
+items.Scroll_Reflection_II.description = अवरुद्ध क्षति का 20% हमलावर को वापस दर्शाता है। अवशोषण के साथ संयोजन योग्य नहीं।
+
+items.Scroll_Reflection_III.name = प्रतिबिंब का स्क्रॉल III
+
+items.Scroll_Reflection_III.description = अवरुद्ध क्षति का 30% हमलावर को वापस दर्शाता है। अवशोषण के साथ संयोजन योग्य नहीं।
+
+
+
+items.Scroll_Absorption_I.name = अवशोषण का स्क्रॉल I
+
+items.Scroll_Absorption_I.description = अवरुद्ध क्षति के 10% के लिए अवरोधक को ठीक करता है। प्रतिबिंब के साथ संयोजन योग्य नहीं।
+
+items.Scroll_Absorption_II.name = अवशोषण का स्क्रॉल II
+
+items.Scroll_Absorption_II.description = अवरुद्ध क्षति के 20% के लिए अवरोधक को ठीक करता है। प्रतिबिंब के साथ संयोजन योग्य नहीं।
+
+items.Scroll_Absorption_III.name = अवशोषण का स्क्रॉल III
+
+items.Scroll_Absorption_III.description = अवरुद्ध क्षति के 30% के लिए अवरोधक को ठीक करता है। प्रतिबिंब के साथ संयोजन योग्य नहीं।
+
+
+
+items.Scroll_FastSwim_I.name = स्विफ्ट स्विम का स्क्रॉल I
+
+items.Scroll_FastSwim_I.description = तैरने की गति को 25% बढ़ाता है।
+
+items.Scroll_FastSwim_II.name = स्विफ्ट स्विम का स्क्रॉल II
+
+items.Scroll_FastSwim_II.description = तैरने की गति को 50% बढ़ाता है।
+
+items.Scroll_FastSwim_III.name = स्विफ्ट स्विम का स्क्रॉल III
+
+items.Scroll_FastSwim_III.description = तैरने की गति को 75% बढ़ाता है।
+
+
+
+commands.enchantconfig.desc = खेल में मंत्रमुग्धता कॉन्फ़िगरेशन संपादक खोलता है।
+
+
+
+customUI.enchantConfigPage.title = मंत्रमुग्धता विन्यास
+
+customUI.enchantConfigPage.tabGeneral = सामान्य
+
+customUI.enchantConfigPage.tabEnchantments = मंत्र
+
+customUI.enchantConfigPage.tabRecipes = व्यंजनों
+
+customUI.enchantConfigPage.save = सहेजें
+
+customUI.enchantConfigPage.cancel = रद्द करें
+
+
+
+items.Scroll_Cleansing.name = सफाई का स्क्रॉल
+
+items.Scroll_Cleansing.description = किसी भी वस्तु से एक मंत्र को हटा देता है।
+
+
+
+customUI.cleansingScrollPage.title = मंत्र हटाएँ
+
+customUI.cleansingScrollPage.noItems = कोई मंत्रमुग्ध वस्तु नहीं मिली
+
+customUI.cleansingScrollPage.item = वस्तु
+
+customUI.cleansingScrollPage.enchantments = मंत्र
+
+
+
+customUI.cleansingEnchantmentPage.title = हटाने के लिए मंत्र चुनें
+
+customUI.cleansingEnchantmentPage.selectHint = इसे हटाने के लिए एक मंत्र पर क्लिक करें
+
+
+
+
+
+
+
+
+
+# Enchantment Localizations (Auto-generated)
+
+enchantment.sharpness.name = तीक्ष्णता
+
+enchantment.sharpness.description = हाथापाई की क्षति को 10% बढ़ाता है।
+
+enchantment.life_leech.name = जीवन लीच
+
+enchantment.life_leech.description = हमलावर को दिए गए नुकसान का 10% ठीक करता है।
+
+enchantment.durability.name = टिकाऊपन
+
+enchantment.durability.description = टिकाऊपन कम होने की संभावना को 25% कम करता है।
+
+enchantment.sturdy.name = मजबूती
+
+enchantment.sturdy.description = मरम्मत करते समय अधिकतम टिकाऊपन के नुकसान को रोकता है।
+
+enchantment.dexterity.name = निपुणता
+
+enchantment.dexterity.description = स्टैमिना लागत को 20% कम करता है।
+
+enchantment.protection.name = सुरक्षा
+
+enchantment.protection.description = आने वाली शारीरिक क्षति को 4% प्रति कवच टुकड़ा कम करता है।
+
+enchantment.efficiency.name = दक्षता
+
+enchantment.efficiency.description = खनन की गति को 20% बढ़ाता है।
+
+enchantment.fortune.name = भाग्य
+
+enchantment.fortune.description = अतिरिक्त अयस्क/क्रिस्टल बूँदें प्राप्त करने की संभावना को 25% बढ़ाता है।
+
+enchantment.smelting.name = गलाने
+
+enchantment.smelting.description = खनन किए गए ब्लॉकों को स्वचालित रूप से गला देता है।
+
+enchantment.strength.name = शक्ति
+
+enchantment.strength.description = प्रोजेक्टाइल क्षति को 10% बढ़ाता है।
+
+enchantment.eagles_eye.name = बाज की आँख
+
+enchantment.eagles_eye.description = दूरी के आधार पर प्रोजेक्टाइल क्षति को 15% तक बढ़ाता है।
+
+enchantment.looting.name = लूटपाट
+
+enchantment.looting.description = भीड़ की अधिकतम ड्रॉप दरों को 25% बढ़ाता है और दुर्लभ बूँदों की संभावना को बढ़ाता है।
+
+enchantment.feather_falling.name = पंख गिरने
+
+enchantment.feather_falling.description = गिरने से होने वाले नुकसान को 20% कम करता है।
+
+enchantment.waterbreathing.name = जल संश्वसन
+
+enchantment.waterbreathing.description = ऑक्सीजन की खपत को 20% कम करता है।
+
+enchantment.burn.name = जलने
+
+enchantment.burn.description = लक्ष्य को आग लगा देता है और उसे पकाया हुआ मांस गिराने देता है। फ्रीज के साथ संयोजन योग्य नहीं।
+
+enchantment.freeze.name = जमने
+
+enchantment.freeze.description = हिट होने पर लक्ष्य पर गंभीर धीमापन (50%) लागू करता है। जलने के साथ संयोजन योग्य नहीं।
+
+enchantment.eternal_shot.name = अनंत शॉट
+
+enchantment.eternal_shot.description = आपको तीरों का उपभोग किए बिना शूट करने देता है।
+
+enchantment.pick_perfect.name = रेशमी स्पर्श
+
+enchantment.pick_perfect.description = खनन किए गए ब्लॉक अपनी सामान्य बूँदों के बजाय खुद को गिराते हैं। भाग्य या गलाने के साथ संयोजन योग्य नहीं।
+
+enchantment.thrift.name = किफायती
+
+enchantment.thrift.description = हिट होने पर खर्च किए गए मान का 20% पुनर्स्थापित करता है।
+
+enchantment.elemental_heart.name = मौलिक हृदय
+
+enchantment.elemental_heart.description = कास्टिंग करते समय मौलिक कर्मचारी सार का उपभोग नहीं करते हैं।
+
+enchantment.knockback.name = नॉकबैक
+
+enchantment.knockback.description = हिट होने पर लक्ष्यों को पीछे धकेलता है।
+
+enchantment.reflection.name = प्रतिबिंब
+
+enchantment.reflection.description = अवरुद्ध क्षति का 10% हमलावर को वापस दर्शाता है। अवशोषण के साथ संयोजन योग्य नहीं।
+
+enchantment.absorption.name = अवशोषण
+
+enchantment.absorption.description = अवरुद्ध क्षति के 10% के लिए अवरोधक को ठीक करता है। प्रतिबिंब के साथ संयोजन योग्य नहीं।
+
+enchantment.fast_swim.name = स्विफ्ट स्विम
+
+enchantment.fast_swim.description = तैरने की गति को 25% बढ़ाता है।
+

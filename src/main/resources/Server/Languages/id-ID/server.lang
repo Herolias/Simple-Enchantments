@@ -1,0 +1,454 @@
+﻿﻿benchCategories.enchantingArmor = Baju Zirah
+
+benchCategories.enchantingTools = Alat
+
+benchCategories.enchantingMelee = Jarak Dekat
+
+benchCategories.enchantingRanged = Jarak Jauh
+
+benchCategories.enchantingStaff = Sihir
+
+benchCategories.enchantingShield = Perisai
+
+
+
+customUI.enchantScrollPage.title = Sihir Item
+
+customUI.enchantScrollPage.noItems = Tidak ada item untuk disihir
+
+customUI.enchantScrollPage.item = Item
+
+customUI.enchantScrollPage.enchantment = Sihir
+
+
+
+items.Enchanting_Table.name = Meja Penyihir
+
+items.Enchanting_Table.description = Meja untuk membuat gulungan sihir.
+
+
+
+items.Scroll_Sharpness_I.name = Gulungan Ketajaman I
+
+items.Scroll_Sharpness_I.description = Meningkatkan kerusakan jarak dekat sebesar 10%.
+
+items.Scroll_Sharpness_II.name = Gulungan Ketajaman II
+
+items.Scroll_Sharpness_II.description = Meningkatkan kerusakan jarak dekat sebesar 20%.
+
+items.Scroll_Sharpness_III.name = Gulungan Ketajaman III
+
+items.Scroll_Sharpness_III.description = Meningkatkan kerusakan jarak dekat sebesar 30%.
+
+
+
+items.Scroll_Durability_I.name = Gulungan Ketahanan I
+
+items.Scroll_Durability_I.description = Mengurangi peluang kehilangan ketahanan sebesar 25%.
+
+items.Scroll_Durability_II.name = Gulungan Ketahanan II
+
+items.Scroll_Durability_II.description = Mengurangi peluang kehilangan ketahanan sebesar 50%.
+
+items.Scroll_Durability_III.name = Gulungan Ketahanan III
+
+items.Scroll_Durability_III.description = Mengurangi peluang kehilangan ketahanan sebesar 75%.
+
+
+
+items.Scroll_Protection_I.name = Gulungan Perlindungan I
+
+items.Scroll_Protection_I.description = Mengurangi kerusakan fisik yang diterima sebesar 4% per bagian baju zirah.
+
+items.Scroll_Protection_II.name = Gulungan Perlindungan II
+
+items.Scroll_Protection_II.description = Mengurangi kerusakan fisik yang diterima sebesar 8% per bagian baju zirah.
+
+items.Scroll_Protection_III.name = Gulungan Perlindungan III
+
+items.Scroll_Protection_III.description = Mengurangi kerusakan fisik yang diterima sebesar 12% per bagian baju zirah.
+
+
+
+items.Scroll_Efficiency_I.name = Gulungan Efisiensi I
+
+items.Scroll_Efficiency_I.description = Meningkatkan kecepatan menambang sebesar 20%.
+
+items.Scroll_Efficiency_II.name = Gulungan Efisiensi II
+
+items.Scroll_Efficiency_II.description = Meningkatkan kecepatan menambang sebesar 40%.
+
+items.Scroll_Efficiency_III.name = Gulungan Efisiensi III
+
+items.Scroll_Efficiency_III.description = Meningkatkan kecepatan menambang sebesar 60%.
+
+
+
+items.Scroll_Fortune_I.name = Gulungan Keberuntungan I
+
+items.Scroll_Fortune_I.description = Meningkatkan peluang mendapatkan bijih/kristal tambahan sebesar 25%.
+
+items.Scroll_Fortune_II.name = Gulungan Keberuntungan II
+
+items.Scroll_Fortune_II.description = Meningkatkan peluang mendapatkan bijih/kristal tambahan sebesar 50%.
+
+items.Scroll_Fortune_III.name = Gulungan Keberuntungan III
+
+items.Scroll_Fortune_III.description = Meningkatkan peluang mendapatkan bijih/kristal tambahan sebesar 75%.
+
+
+
+items.Scroll_Smelting_I.name = Gulungan Peleburan
+
+items.Scroll_Smelting_I.description = Melebur blok yang ditambang secara otomatis.
+
+
+
+items.Scroll_Life_Leech_I.name = Gulungan Penyerap Nyawa I
+
+items.Scroll_Life_Leech_I.description = Menyembuhkan penyerang sebesar 10% dari kerusakan yang diberikan.
+
+items.Scroll_Life_Leech_II.name = Gulungan Penyerap Nyawa II
+
+items.Scroll_Life_Leech_II.description = Menyembuhkan penyerang sebesar 20% dari kerusakan yang diberikan.
+
+items.Scroll_Life_Leech_III.name = Gulungan Penyerap Nyawa III
+
+items.Scroll_Life_Leech_III.description = Menyembuhkan penyerang sebesar 30% dari kerusakan yang diberikan.
+
+
+
+items.Scroll_Dexterity_I.name = Gulungan Ketangkasan I
+
+items.Scroll_Dexterity_I.description = Mengurangi biaya stamina sebesar 20%.
+
+items.Scroll_Dexterity_II.name = Gulungan Ketangkasan II
+
+items.Scroll_Dexterity_II.description = Mengurangi biaya stamina sebesar 40%.
+
+items.Scroll_Dexterity_III.name = Gulungan Ketangkasan III
+
+items.Scroll_Dexterity_III.description = Mengurangi biaya stamina sebesar 60%.
+
+
+
+items.Scroll_Looting_I.name = Gulungan Penjarahan I
+
+items.Scroll_Looting_I.description = Meningkatkan tingkat jatuh barang dari monster sebesar 25% dan meningkatkan peluang barang langka.
+
+items.Scroll_Looting_II.name = Gulungan Penjarahan II
+
+items.Scroll_Looting_II.description = Meningkatkan tingkat jatuh barang dari monster sebesar 50% dan meningkatkan peluang barang langka.
+
+items.Scroll_Looting_III.name = Gulungan Penjarahan III
+
+items.Scroll_Looting_III.description = Meningkatkan tingkat jatuh barang dari monster sebesar 75% dan meningkatkan peluang barang langka.
+
+
+
+items.Scroll_Sturdy_I.name = Gulungan Kokoh
+
+items.Scroll_Sturdy_I.description = Mencegah pengurangan ketahanan maksimal saat memperbaiki.
+
+
+
+items.Scroll_Strength_I.name = Gulungan Kekuatan I
+
+items.Scroll_Strength_I.description = Meningkatkan kerusakan proyektil sebesar 10%.
+
+items.Scroll_Strength_II.name = Gulungan Kekuatan II
+
+items.Scroll_Strength_II.description = Meningkatkan kerusakan proyektil sebesar 20%.
+
+items.Scroll_Strength_III.name = Gulungan Kekuatan III
+
+items.Scroll_Strength_III.description = Meningkatkan kerusakan proyektil sebesar 30%.
+
+
+
+items.Scroll_Eagles_Eye_I.name = Gulungan Mata Rajawali I
+
+items.Scroll_Eagles_Eye_I.description = Meningkatkan kerusakan proyektil hingga 15% berdasarkan jarak.
+
+items.Scroll_Eagles_Eye_II.name = Gulungan Mata Rajawali II
+
+items.Scroll_Eagles_Eye_II.description = Meningkatkan kerusakan proyektil hingga 30% berdasarkan jarak.
+
+items.Scroll_Eagles_Eye_III.name = Gulungan Mata Rajawali III
+
+items.Scroll_Eagles_Eye_III.description = Meningkatkan kerusakan proyektil hingga 45% berdasarkan jarak.
+
+
+
+items.Scroll_Feather_Falling_I.name = Gulungan Jatuh Ringan I
+
+items.Scroll_Feather_Falling_I.description = Mengurangi kerusakan akibat jatuh sebesar 20%.
+
+items.Scroll_Feather_Falling_II.name = Gulungan Jatuh Ringan II
+
+items.Scroll_Feather_Falling_II.description = Mengurangi kerusakan akibat jatuh sebesar 40%.
+
+items.Scroll_Feather_Falling_III.name = Gulungan Jatuh Ringan III
+
+items.Scroll_Feather_Falling_III.description = Mengurangi kerusakan akibat jatuh sebesar 60%.
+
+
+
+items.Scroll_Waterbreathing_I.name = Gulungan Bernapas Dalam Air I
+
+items.Scroll_Waterbreathing_I.description = Mengurangi penggunaan oksigen sebesar 20%.
+
+items.Scroll_Waterbreathing_II.name = Gulungan Bernapas Dalam Air II
+
+items.Scroll_Waterbreathing_II.description = Mengurangi penggunaan oksigen sebesar 40%.
+
+items.Scroll_Waterbreathing_III.name = Gulungan Bernapas Dalam Air III
+
+items.Scroll_Waterbreathing_III.description = Mengurangi penggunaan oksigen sebesar 60%.
+
+
+
+items.Scroll_Burn_I.name = Gulungan Pembakaran
+
+items.Scroll_Burn_I.description = Membakar target dan membuat daging yang jatuh matang. Tidak bisa digabung dengan Beku.
+
+
+
+items.Scroll_Freeze_I.name = Gulungan Pembekuan
+
+items.Scroll_Freeze_I.description = Memberikan efek lambat yang parah (50%) ke target saat dipukul. Tidak bisa digabung dengan Bakar.
+
+
+
+items.Scroll_Eternal_Shot_I.name = Gulungan Tembakan Abadi
+
+items.Scroll_Eternal_Shot_I.description = Memungkinkan menembak panah tanpa mengonsumsinya.
+
+
+
+items.Scroll_Silktouch_I.name = Gulungan Sentuhan Sutra
+
+items.Scroll_Silktouch_I.description = Blok yang ditambang menjatuhkan dirinya sendiri, bukan hasil biasanya. Tidak bisa digabung dengan Keberuntungan atau Peleburan.
+
+
+
+items.Scroll_Thrift_I.name = Gulungan Hemat I
+
+items.Scroll_Thrift_I.description = Mengembalikan 20% mana yang digunakan saat memukul.
+
+items.Scroll_Thrift_II.name = Gulungan Hemat II
+
+items.Scroll_Thrift_II.description = Mengembalikan 40% mana yang digunakan saat memukul.
+
+items.Scroll_Thrift_III.name = Gulungan Hemat III
+
+items.Scroll_Thrift_III.description = Mengembalikan 60% mana yang digunakan saat memukul.
+
+
+
+items.Scroll_ElementalHeart_I.name = Gulungan Jantung Elemental
+
+items.Scroll_ElementalHeart_I.description = Tongkat elemental tidak menggunakan esensi saat digunakan.
+
+
+
+items.Scroll_Knockback_I.name = Gulungan Pukulan Mundur I
+
+items.Scroll_Knockback_I.description = Mendorong target ke belakang saat dipukul.
+
+items.Scroll_Knockback_II.name = Gulungan Pukulan Mundur II
+
+items.Scroll_Knockback_II.description = Mendorong target lebih jauh ke belakang saat dipukul.
+
+items.Scroll_Knockback_III.name = Gulungan Pukulan Mundur III
+
+items.Scroll_Knockback_III.description = Mendorong target sangat jauh ke belakang saat dipukul.
+
+
+
+items.Scroll_Reflection_I.name = Gulungan Pantulan I
+
+items.Scroll_Reflection_I.description = Memantulkan 10% kerusakan yang ditangkis kembali ke penyerang. Tidak bisa digabung dengan Absorpsi.
+
+items.Scroll_Reflection_II.name = Gulungan Pantulan II
+
+items.Scroll_Reflection_II.description = Memantulkan 20% kerusakan yang ditangkis kembali ke penyerang. Tidak bisa digabung dengan Absorpsi.
+
+items.Scroll_Reflection_III.name = Gulungan Pantulan III
+
+items.Scroll_Reflection_III.description = Memantulkan 30% kerusakan yang ditangkis kembali ke penyerang. Tidak bisa digabung dengan Absorpsi.
+
+
+
+items.Scroll_Absorption_I.name = Gulungan Absorpsi I
+
+items.Scroll_Absorption_I.description = Menyembuhkan penangkis sebesar 10% dari kerusakan yang ditangkis. Tidak bisa digabung dengan Pantulan.
+
+items.Scroll_Absorption_II.name = Gulungan Absorpsi II
+
+items.Scroll_Absorption_II.description = Menyembuhkan penangkis sebesar 20% dari kerusakan yang ditangkis. Tidak bisa digabung dengan Pantulan.
+
+items.Scroll_Absorption_III.name = Gulungan Absorpsi III
+
+items.Scroll_Absorption_III.description = Menyembuhkan penangkis sebesar 30% dari kerusakan yang ditangkis. Tidak bisa digabung dengan Pantulan.
+
+
+
+items.Scroll_FastSwim_I.name = Gulungan Renang Cepat I
+
+items.Scroll_FastSwim_I.description = Meningkatkan kecepatan berenang sebesar 25%.
+
+items.Scroll_FastSwim_II.name = Gulungan Renang Cepat II
+
+items.Scroll_FastSwim_II.description = Meningkatkan kecepatan berenang sebesar 50%.
+
+items.Scroll_FastSwim_III.name = Gulungan Renang Cepat III
+
+items.Scroll_FastSwim_III.description = Meningkatkan kecepatan berenang sebesar 75%.
+
+
+
+commands.enchantconfig.desc = Membuka editor konfigurasi sihir dalam game.
+
+
+
+customUI.enchantConfigPage.title = Konfigurasi Sihir
+
+customUI.enchantConfigPage.tabGeneral = Umum
+
+customUI.enchantConfigPage.tabEnchantments = Sihir
+
+customUI.enchantConfigPage.tabRecipes = Resep
+
+customUI.enchantConfigPage.save = Simpan
+
+customUI.enchantConfigPage.cancel = Batal
+
+
+
+items.Scroll_Cleansing.name = Gulungan Pembersihan
+
+items.Scroll_Cleansing.description = Menghapus satu sihir dari item apa pun.
+
+
+
+customUI.cleansingScrollPage.title = Hapus Sihir
+
+customUI.cleansingScrollPage.noItems = Tidak ditemukan item yang disihir
+
+customUI.cleansingScrollPage.item = Item
+
+customUI.cleansingScrollPage.enchantments = Sihir
+
+
+
+customUI.cleansingEnchantmentPage.title = Pilih Sihir untuk Dihapus
+
+customUI.cleansingEnchantmentPage.selectHint = Klik sihir untuk menghapusnya
+
+
+
+
+
+
+
+
+
+# Enchantment Localizations (Auto-generated)
+
+enchantment.sharpness.name = Ketajaman
+
+enchantment.sharpness.description = Meningkatkan kerusakan jarak dekat sebesar 10%.
+
+enchantment.life_leech.name = Penyerap Nyawa
+
+enchantment.life_leech.description = Menyembuhkan penyerang sebesar 10% dari kerusakan yang diberikan.
+
+enchantment.durability.name = Ketahanan
+
+enchantment.durability.description = Mengurangi peluang kehilangan ketahanan sebesar 25%.
+
+enchantment.sturdy.name = Kokoh
+
+enchantment.sturdy.description = Mencegah pengurangan ketahanan maksimal saat memperbaiki.
+
+enchantment.dexterity.name = Ketangkasan
+
+enchantment.dexterity.description = Mengurangi biaya stamina sebesar 20%.
+
+enchantment.protection.name = Perlindungan
+
+enchantment.protection.description = Mengurangi kerusakan fisik yang diterima sebesar 4% per bagian baju zirah.
+
+enchantment.efficiency.name = Efisiensi
+
+enchantment.efficiency.description = Meningkatkan kecepatan menambang sebesar 20%.
+
+enchantment.fortune.name = Keberuntungan
+
+enchantment.fortune.description = Meningkatkan peluang mendapatkan bijih/kristal tambahan sebesar 25%.
+
+enchantment.smelting.name = Peleburan
+
+enchantment.smelting.description = Melebur blok yang ditambang secara otomatis.
+
+enchantment.strength.name = Kekuatan
+
+enchantment.strength.description = Meningkatkan kerusakan proyektil sebesar 10%.
+
+enchantment.eagles_eye.name = Mata Rajawali
+
+enchantment.eagles_eye.description = Meningkatkan kerusakan proyektil hingga 15% berdasarkan jarak.
+
+enchantment.looting.name = Penjarahan
+
+enchantment.looting.description = Meningkatkan tingkat jatuh barang dari monster sebesar 25% dan meningkatkan peluang barang langka.
+
+enchantment.feather_falling.name = Jatuh Ringan
+
+enchantment.feather_falling.description = Mengurangi kerusakan akibat jatuh sebesar 20%.
+
+enchantment.waterbreathing.name = Bernapas Dalam Air
+
+enchantment.waterbreathing.description = Mengurangi penggunaan oksigen sebesar 20%.
+
+enchantment.burn.name = Pembakaran
+
+enchantment.burn.description = Membakar target dan membuat daging yang jatuh matang. Tidak bisa digabung dengan Beku.
+
+enchantment.freeze.name = Pembekuan
+
+enchantment.freeze.description = Memberikan efek lambat yang parah (50%) ke target saat dipukul. Tidak bisa digabung dengan Bakar.
+
+enchantment.eternal_shot.name = Tembakan Abadi
+
+enchantment.eternal_shot.description = Memungkinkan menembak panah tanpa mengonsumsinya.
+
+enchantment.pick_perfect.name = Sentuhan Sutra
+
+enchantment.pick_perfect.description = Blok yang ditambang menjatuhkan dirinya sendiri, bukan hasil biasanya. Tidak bisa digabung dengan Keberuntungan atau Peleburan.
+
+enchantment.thrift.name = Hemat
+
+enchantment.thrift.description = Mengembalikan 20% mana yang digunakan saat memukul.
+
+enchantment.elemental_heart.name = Jantung Elemental
+
+enchantment.elemental_heart.description = Tongkat elemental tidak menggunakan esensi saat digunakan.
+
+enchantment.knockback.name = Pukulan Mundur
+
+enchantment.knockback.description = Mendorong target ke belakang saat dipukul.
+
+enchantment.reflection.name = Pantulan
+
+enchantment.reflection.description = Memantulkan 10% kerusakan yang ditangkis kembali ke penyerang. Tidak bisa digabung dengan Absorpsi.
+
+enchantment.absorption.name = Absorpsi
+
+enchantment.absorption.description = Menyembuhkan penangkis sebesar 10% dari kerusakan yang ditangkis. Tidak bisa digabung dengan Pantulan.
+
+enchantment.fast_swim.name = Renang Cepat
+
+enchantment.fast_swim.description = Meningkatkan kecepatan berenang sebesar 25%.
+

@@ -1,0 +1,67 @@
+$C = "../Common.ui";
+
+Group {
+  LayoutMode: Left;
+  Anchor: (Height: 52, Bottom: 8);
+  Background: (TexturePath: "../Common/ContainerPanelPatch.png", Border: 4);
+  Padding: (Horizontal: 12, Vertical: 6);
+
+  Label #RecipeName {
+    Anchor: (Width: 140);
+    Style: (
+      FontSize: 14,
+      VerticalAlignment: Center
+    );
+  }
+
+  Group {
+    FlexWeight: 1;
+  }
+
+  Label #TierLabel {
+    Anchor: (Width: 150, Right: 4);
+    Style: (
+      FontSize: 13,
+      VerticalAlignment: Center,
+      TextColor: #7a9cc6
+    );
+    Text: "Unlocks at Table Tier";
+  }
+
+  TextButton #TierReset {
+    Style: $C.@TertiaryTextButtonStyle;
+    Anchor: (Width: 70, Height: 28, Right: 4);
+    Padding: (Horizontal: 4);
+    Text: "Reset";
+    TooltipText: "Reset to default";
+  }
+
+  TextButton #TierDecrease {
+    Style: $C.@TertiaryTextButtonStyle;
+    Anchor: (Width: 32, Height: 30, Right: 4);
+    Padding: (Horizontal: 6);
+    Text: "-";
+  }
+
+  $C.@NumberField #TierInput {
+    Anchor: (Width: 50, Height: 30);
+    Format: (
+      MaxDecimalPlaces: 0,
+      Step: 1
+    );
+  }
+
+  TextButton #TierIncrease {
+    Style: $C.@TertiaryTextButtonStyle;
+    Anchor: (Width: 32, Height: 30, Right: 15);
+    Padding: (Horizontal: 6);
+    Text: "+";
+  }
+
+  TextButton #SelectBtn {
+    Style: $C.@TertiaryTextButtonStyle;
+    Anchor: (Width: 170, Height: 34);
+    Padding: (Horizontal: 10);
+    Text: "Edit Recipe";
+  }
+}

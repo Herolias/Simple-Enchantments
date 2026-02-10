@@ -1,0 +1,454 @@
+﻿﻿benchCategories.enchantingArmor = Обладунки
+
+benchCategories.enchantingTools = Інструменти
+
+benchCategories.enchantingMelee = Ближній бій
+
+benchCategories.enchantingRanged = Дальній бій
+
+benchCategories.enchantingStaff = Магія
+
+benchCategories.enchantingShield = Щит
+
+
+
+customUI.enchantScrollPage.title = Зачарувати предмет
+
+customUI.enchantScrollPage.noItems = Немає предметів для зачарування
+
+customUI.enchantScrollPage.item = Предмет
+
+customUI.enchantScrollPage.enchantment = Чари
+
+
+
+items.Enchanting_Table.name = Стіл зачарування
+
+items.Enchanting_Table.description = Стіл, що використовується для створення сувоїв зачарування.
+
+
+
+items.Scroll_Sharpness_I.name = Сувій Гостроти I
+
+items.Scroll_Sharpness_I.description = Збільшує шкоду в ближньому бою на 10%.
+
+items.Scroll_Sharpness_II.name = Сувій Гостроти II
+
+items.Scroll_Sharpness_II.description = Збільшує шкоду в ближньому бою на 20%.
+
+items.Scroll_Sharpness_III.name = Сувій Гостроти III
+
+items.Scroll_Sharpness_III.description = Збільшує шкоду в ближньому бою на 30%.
+
+
+
+items.Scroll_Durability_I.name = Сувій Міцності I
+
+items.Scroll_Durability_I.description = Зменшує шанс втрати міцності на 25%.
+
+items.Scroll_Durability_II.name = Сувій Міцності II
+
+items.Scroll_Durability_II.description = Зменшує шанс втрати міцності на 50%.
+
+items.Scroll_Durability_III.name = Сувій Міцності III
+
+items.Scroll_Durability_III.description = Зменшує шанс втрати міцності на 75%.
+
+
+
+items.Scroll_Protection_I.name = Сувій Захисту I
+
+items.Scroll_Protection_I.description = Зменшує отриману фізичну шкоду на 4% за кожен елемент обладунків.
+
+items.Scroll_Protection_II.name = Сувій Захисту II
+
+items.Scroll_Protection_II.description = Зменшує отриману фізичну шкоду на 8% за кожен елемент обладунків.
+
+items.Scroll_Protection_III.name = Сувій Захисту III
+
+items.Scroll_Protection_III.description = Зменшує отриману фізичну шкоду на 12% за кожен елемент обладунків.
+
+
+
+items.Scroll_Efficiency_I.name = Сувій Ефективності I
+
+items.Scroll_Efficiency_I.description = Збільшує швидкість видобутку на 20%.
+
+items.Scroll_Efficiency_II.name = Сувій Ефективності II
+
+items.Scroll_Efficiency_II.description = Збільшує швидкість видобутку на 40%.
+
+items.Scroll_Efficiency_III.name = Сувій Ефективності III
+
+items.Scroll_Efficiency_III.description = Збільшує швидкість видобутку на 60%.
+
+
+
+items.Scroll_Fortune_I.name = Сувій Удачі I
+
+items.Scroll_Fortune_I.description = Збільшує шанс на додаткову руду/кристали на 25%.
+
+items.Scroll_Fortune_II.name = Сувій Удачі II
+
+items.Scroll_Fortune_II.description = Збільшує шанс на додаткову руду/кристали на 50%.
+
+items.Scroll_Fortune_III.name = Сувій Удачі III
+
+items.Scroll_Fortune_III.description = Збільшує шанс на додаткову руду/кристали на 75%.
+
+
+
+items.Scroll_Smelting_I.name = Сувій Переплавки
+
+items.Scroll_Smelting_I.description = Автоматично переплавляє видобуті блоки.
+
+
+
+items.Scroll_Life_Leech_I.name = Сувій Викрадення Життя I
+
+items.Scroll_Life_Leech_I.description = Зцілює нападника на 10% від завданої шкоди.
+
+items.Scroll_Life_Leech_II.name = Сувій Викрадення Життя II
+
+items.Scroll_Life_Leech_II.description = Зцілює нападника на 20% від завданої шкоди.
+
+items.Scroll_Life_Leech_III.name = Сувій Викрадення Життя III
+
+items.Scroll_Life_Leech_III.description = Зцілює нападника на 30% від завданої шкоди.
+
+
+
+items.Scroll_Dexterity_I.name = Сувій Спритності I
+
+items.Scroll_Dexterity_I.description = Зменшує витрати витривалості на 20%.
+
+items.Scroll_Dexterity_II.name = Сувій Спритності II
+
+items.Scroll_Dexterity_II.description = Зменшує витрати витривалості на 40%.
+
+items.Scroll_Dexterity_III.name = Сувій Спритності III
+
+items.Scroll_Dexterity_III.description = Зменшує витрати витривалості на 60%.
+
+
+
+items.Scroll_Looting_I.name = Сувій Мародерства I
+
+items.Scroll_Looting_I.description = Збільшує частоту випадіння предметів з мобів на 25% та підвищує шанс рідкісних предметів.
+
+items.Scroll_Looting_II.name = Сувій Мародерства II
+
+items.Scroll_Looting_II.description = Збільшує частоту випадіння предметів з мобів на 50% та підвищує шанс рідкісних предметів.
+
+items.Scroll_Looting_III.name = Сувій Мародерства III
+
+items.Scroll_Looting_III.description = Збільшує частоту випадіння предметів з мобів на 75% та підвищує шанс рідкісних предметів.
+
+
+
+items.Scroll_Sturdy_I.name = Сувій Міцності
+
+items.Scroll_Sturdy_I.description = Запобігає втраті максимальної міцності під час ремонту.
+
+
+
+items.Scroll_Strength_I.name = Сувій Сили I
+
+items.Scroll_Strength_I.description = Збільшує шкоду від снарядів на 10%.
+
+items.Scroll_Strength_II.name = Сувій Сили II
+
+items.Scroll_Strength_II.description = Збільшує шкоду від снарядів на 20%.
+
+items.Scroll_Strength_III.name = Сувій Сили III
+
+items.Scroll_Strength_III.description = Збільшує шкоду від снарядів на 30%.
+
+
+
+items.Scroll_Eagles_Eye_I.name = Сувій Орлиного Ока I
+
+items.Scroll_Eagles_Eye_I.description = Збільшує шкоду від снарядів до 15% залежно від відстані.
+
+items.Scroll_Eagles_Eye_II.name = Сувій Орлиного Ока II
+
+items.Scroll_Eagles_Eye_II.description = Збільшує шкоду від снарядів до 30% залежно від відстані.
+
+items.Scroll_Eagles_Eye_III.name = Сувій Орлиного Ока III
+
+items.Scroll_Eagles_Eye_III.description = Збільшує шкоду від снарядів до 45% залежно від відстані.
+
+
+
+items.Scroll_Feather_Falling_I.name = Сувій Пера I
+
+items.Scroll_Feather_Falling_I.description = Зменшує шкоду від падіння на 20%.
+
+items.Scroll_Feather_Falling_II.name = Сувій Пера II
+
+items.Scroll_Feather_Falling_II.description = Зменшує шкоду від падіння на 40%.
+
+items.Scroll_Feather_Falling_III.name = Сувій Пера III
+
+items.Scroll_Feather_Falling_III.description = Зменшує шкоду від падіння на 60%.
+
+
+
+items.Scroll_Waterbreathing_I.name = Сувій Підводного Дихання I
+
+items.Scroll_Waterbreathing_I.description = Зменшує споживання кисню на 20%.
+
+items.Scroll_Waterbreathing_II.name = Сувій Підводного Дихання II
+
+items.Scroll_Waterbreathing_II.description = Зменшує споживання кисню на 40%.
+
+items.Scroll_Waterbreathing_III.name = Сувій Підводного Дихання III
+
+items.Scroll_Waterbreathing_III.description = Зменшує споживання кисню на 60%.
+
+
+
+items.Scroll_Burn_I.name = Сувій Підпалу
+
+items.Scroll_Burn_I.description = Підпалює ціль і змушує її кидати смажене м'ясо. Не сумісний із Заморожуванням.
+
+
+
+items.Scroll_Freeze_I.name = Сувій Заморожування
+
+items.Scroll_Freeze_I.description = Сильно сповільнює ціль (50%) при ударі. Не сумісний із Підпалом.
+
+
+
+items.Scroll_Eternal_Shot_I.name = Сувій Вічного Пострілу
+
+items.Scroll_Eternal_Shot_I.description = Дозволяє стріляти стрілами, не витрачаючи їх.
+
+
+
+items.Scroll_Silktouch_I.name = Сувій Шовкового Дотику
+
+items.Scroll_Silktouch_I.description = Замість звичайних ресурсів випадають самі блоки. Не сумісний із Удачею або Переплавкою.
+
+
+
+items.Scroll_Thrift_I.name = Сувій Ощадливості I
+
+items.Scroll_Thrift_I.description = Відновлює 20% витраченої мани при ударі.
+
+items.Scroll_Thrift_II.name = Сувій Ощадливості II
+
+items.Scroll_Thrift_II.description = Відновлює 40% витраченої мани при ударі.
+
+items.Scroll_Thrift_III.name = Сувій Ощадливості III
+
+items.Scroll_Thrift_III.description = Відновлює 60% витраченої мани при ударі.
+
+
+
+items.Scroll_ElementalHeart_I.name = Сувій Елементального Серця
+
+items.Scroll_ElementalHeart_I.description = Елементальні посохи не витрачають есенцію при використанні.
+
+
+
+items.Scroll_Knockback_I.name = Сувій Відкидання I
+
+items.Scroll_Knockback_I.description = Відкидає цілі назад при ударі.
+
+items.Scroll_Knockback_II.name = Сувій Відкидання II
+
+items.Scroll_Knockback_II.description = Відкидає цілі далі назад при ударі.
+
+items.Scroll_Knockback_III.name = Сувій Відкидання III
+
+items.Scroll_Knockback_III.description = Відкидає цілі значно далі назад при ударі.
+
+
+
+items.Scroll_Reflection_I.name = Сувій Відображення I
+
+items.Scroll_Reflection_I.description = Відображає 10% заблокованої шкоди назад нападнику. Не сумісний із Поглинанням.
+
+items.Scroll_Reflection_II.name = Сувій Відображення II
+
+items.Scroll_Reflection_II.description = Відображає 20% заблокованої шкоди назад нападнику. Не сумісний із Поглинанням.
+
+items.Scroll_Reflection_III.name = Сувій Відображення III
+
+items.Scroll_Reflection_III.description = Відображає 30% заблокованої шкоди назад нападнику. Не сумісний із Поглинанням.
+
+
+
+items.Scroll_Absorption_I.name = Сувій Поглинання I
+
+items.Scroll_Absorption_I.description = Зцілює захисника на 10% від заблокованої шкоди. Не сумісний із Відображенням.
+
+items.Scroll_Absorption_II.name = Сувій Поглинання II
+
+items.Scroll_Absorption_II.description = Зцілює захисника на 20% від заблокованої шкоди. Не сумісний із Відображенням.
+
+items.Scroll_Absorption_III.name = Сувій Поглинання III
+
+items.Scroll_Absorption_III.description = Зцілює захисника на 30% від заблокованої шкоди. Не сумісний із Відображенням.
+
+
+
+items.Scroll_FastSwim_I.name = Сувій Швидкого Плавання I
+
+items.Scroll_FastSwim_I.description = Збільшує швидкість плавання на 25%.
+
+items.Scroll_FastSwim_II.name = Сувій Швидкого Плавання II
+
+items.Scroll_FastSwim_II.description = Збільшує швидкість плавання на 50%.
+
+items.Scroll_FastSwim_III.name = Сувій Швидкого Плавання III
+
+items.Scroll_FastSwim_III.description = Збільшує швидкість плавання на 75%.
+
+
+
+commands.enchantconfig.desc = Відкриває редактор конфігурації зачарувань у грі.
+
+
+
+customUI.enchantConfigPage.title = Налаштування Зачарувань
+
+customUI.enchantConfigPage.tabGeneral = Загальне
+
+customUI.enchantConfigPage.tabEnchantments = Чары
+
+customUI.enchantConfigPage.tabRecipes = Рецепти
+
+customUI.enchantConfigPage.save = Зберегти
+
+customUI.enchantConfigPage.cancel = Скасувати
+
+
+
+items.Scroll_Cleansing.name = Сувій Очищення
+
+items.Scroll_Cleansing.description = Знімає одне зачарування з будь-якого предмета.
+
+
+
+customUI.cleansingScrollPage.title = Зняти Зачарування
+
+customUI.cleansingScrollPage.noItems = Зачарованих предметів не знайдено
+
+customUI.cleansingScrollPage.item = Предмет
+
+customUI.cleansingScrollPage.enchantments = Чари
+
+
+
+customUI.cleansingEnchantmentPage.title = Виберіть чари для зняття
+
+customUI.cleansingEnchantmentPage.selectHint = Натисніть на чари, щоб зняти їх
+
+
+
+
+
+
+
+
+
+# Enchantment Localizations (Auto-generated)
+
+enchantment.sharpness.name = Гострота
+
+enchantment.sharpness.description = Збільшує шкоду в ближньому бою на 10%.
+
+enchantment.life_leech.name = Викрадення Життя
+
+enchantment.life_leech.description = Зцілює нападника на 10% від завданої шкоди.
+
+enchantment.durability.name = Міцність
+
+enchantment.durability.description = Зменшує шанс втрати міцності на 25%.
+
+enchantment.sturdy.name = Міцність
+
+enchantment.sturdy.description = Запобігає втраті максимальної міцності під час ремонту.
+
+enchantment.dexterity.name = Спритність
+
+enchantment.dexterity.description = Зменшує витрати витривалості на 20%.
+
+enchantment.protection.name = Захист
+
+enchantment.protection.description = Зменшує отриману фізичну шкоду на 4% за кожен елемент обладунків.
+
+enchantment.efficiency.name = Ефективність
+
+enchantment.efficiency.description = Збільшує швидкість видобутку на 20%.
+
+enchantment.fortune.name = Удача
+
+enchantment.fortune.description = Збільшує шанс на додаткову руду/кристали на 25%.
+
+enchantment.smelting.name = Переплавка
+
+enchantment.smelting.description = Автоматично переплавляє видобуті блоки.
+
+enchantment.strength.name = Сила
+
+enchantment.strength.description = Збільшує шкоду від снарядів на 10%.
+
+enchantment.eagles_eye.name = Орлине Око
+
+enchantment.eagles_eye.description = Збільшує шкоду від снарядів до 15% залежно від відстані.
+
+enchantment.looting.name = Мародерство
+
+enchantment.looting.description = Збільшує частоту випадіння предметів з мобів на 25% та підвищує шанс рідкісних предметів.
+
+enchantment.feather_falling.name = Легке Падіння
+
+enchantment.feather_falling.description = Зменшує шкоду від падіння на 20%.
+
+enchantment.waterbreathing.name = Підводне Дихання
+
+enchantment.waterbreathing.description = Зменшує споживання кисню на 20%.
+
+enchantment.burn.name = Підпал
+
+enchantment.burn.description = Підпалює ціль і змушує її кидати смажене м'ясо. Не сумісний із Заморожуванням.
+
+enchantment.freeze.name = Заморожування
+
+enchantment.freeze.description = Сильно сповільнює ціль (50%) при ударі. Не сумісний із Підпалом.
+
+enchantment.eternal_shot.name = Вічний Постріл
+
+enchantment.eternal_shot.description = Дозволяє стріляти стрілами, не витрачаючи їх.
+
+enchantment.pick_perfect.name = Шовковий Дотик
+
+enchantment.pick_perfect.description = Замість звичайних ресурсів випадають самі блоки. Не сумісний із Удачею або Переплавкою.
+
+enchantment.thrift.name = Ощадливість
+
+enchantment.thrift.description = Відновлює 20% витраченої мани при ударі.
+
+enchantment.elemental_heart.name = Елементальне Серце
+
+enchantment.elemental_heart.description = Елементальні посохи не витрачають есенцію при використанні.
+
+enchantment.knockback.name = Відкидання
+
+enchantment.knockback.description = Відкидає цілі назад при ударі.
+
+enchantment.reflection.name = Відображення
+
+enchantment.reflection.description = Відображає 10% заблокованої шкоди назад нападнику. Не сумісний із Поглинанням.
+
+enchantment.absorption.name = Поглинання
+
+enchantment.absorption.description = Зцілює захисника на 10% від заблокованої шкоди. Не сумісний із Відображенням.
+
+enchantment.fast_swim.name = Швидке Плавання
+
+enchantment.fast_swim.description = Збільшує швидкість плавання на 25%.
+

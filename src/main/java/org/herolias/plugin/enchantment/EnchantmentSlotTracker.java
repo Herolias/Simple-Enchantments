@@ -1,0 +1,174 @@
+package org.herolias.plugin.enchantment;
+
+import com.hypixel.hytale.server.core.Message;
+import com.hypixel.hytale.server.core.entity.entities.Player;
+import com.hypixel.hytale.server.core.inventory.Inventory;
+import com.hypixel.hytale.server.core.inventory.ItemStack;
+import com.hypixel.hytale.server.core.universe.PlayerRef;
+import com.hypixel.hytale.server.core.universe.Universe;
+import com.hypixel.hytale.server.core.universe.world.World;
+import com.hypixel.hytale.server.core.util.EventTitleUtil;
+import com.hypixel.hytale.logger.HytaleLogger;
+import org.herolias.plugin.SimpleEnchanting;
+
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
+
+/**
+ * Lightweight ticker that tracks player hotbar slot changes.
+ * Only triggers updates when the active slot actually changes,
+ * avoiding heavy per-tick calculations.
+ *
+ * Also handles:
+ * <ul>
+ *   <li>Detecting newly connected players and triggering initial tooltip setup</li>
+ *   <li>Updating tooltip translations when the active slot changes (priority item may differ)</li>
+ *   <li>Cleaning up tooltip data for disconnected players</li>
+ * </ul>
+ */
+public class EnchantmentSlotTracker implements Runnable {
+
+    private final EnchantmentManager enchantmentManager;
+    private final Map<UUID, Byte> lastSlotMap = new ConcurrentHashMap<>();
+    /** Set of player UUIDs we have already processed for initial tooltip setup. */
+    private final Set<UUID> knownPlayers = ConcurrentHashMap.newKeySet();
+
+    public EnchantmentSlotTracker(EnchantmentManager enchantmentManager) {
+        this.enchantmentManager = enchantmentManager;
+    }
+
+    @Override
+    public void run() {
+        try {
+            if (Universe.get() == null) return;
+
+            // Collect currently online player UUIDs for disconnect detection
+            Set<UUID> onlinePlayers = new HashSet<>();
+
+            for (World world : Universe.get().getWorlds().values()) {
+                if (world == null) continue;
+                world.execute(() -> {
+                    for (PlayerRef playerRef : world.getPlayerRefs()) {
+                        checkPlayerSlot(playerRef);
+                    }
+                });
+                // Collect online UUIDs (best-effort, may race slightly)
+                for (PlayerRef playerRef : world.getPlayerRefs()) {
+                    if (playerRef != null && playerRef.isValid()) {
+                        onlinePlayers.add(playerRef.getUuid());
+                    }
+                }
+            }
+
+            // Clean up disconnected players
+            Set<UUID> disconnected = new HashSet<>(knownPlayers);
+            disconnected.removeAll(onlinePlayers);
+            for (UUID uuid : disconnected) {
+                knownPlayers.remove(uuid);
+                lastSlotMap.remove(uuid);
+                EnchantmentTooltipManager tooltipManager = getTooltipManager();
+                if (tooltipManager != null) {
+                    tooltipManager.onPlayerLeave(uuid);
+                }
+            }
+        } catch (Exception e) {
+            HytaleLogger.getLogger().atSevere().log("Error in EnchantmentSlotTracker: " + e.getMessage());
+        }
+    }
+
+    private void checkPlayerSlot(PlayerRef playerRef) {
+        if (playerRef == null || !playerRef.isValid()) {
+            if (playerRef != null) {
+                lastSlotMap.remove(playerRef.getUuid());
+            }
+            return;
+        }
+
+        var ref = playerRef.getReference();
+        if (ref == null || !ref.isValid()) return;
+
+        var store = ref.getStore();
+        Player player = store.getComponent(ref, Player.getComponentType());
+        if (player == null) return;
+
+        Inventory inventory = player.getInventory();
+        if (inventory == null) return;
+
+        UUID uuid = playerRef.getUuid();
+
+        // ── Detect new players for initial tooltip setup ──
+        if (knownPlayers.add(uuid)) {
+            EnchantmentTooltipManager tooltipManager = getTooltipManager();
+            if (tooltipManager != null) {
+                tooltipManager.onPlayerJoin(playerRef, player);
+            }
+        }
+
+        byte currentSlot = inventory.getActiveHotbarSlot();
+
+        // Also track off-hand state (simple empty check is sufficient for glow logic)
+        ItemStack offHandItem = inventory.getUtilityItem();
+        boolean hasOffHand = offHandItem != null && !offHandItem.isEmpty();
+        // Use bit 7 (128) to store offhand presence combined with slot index (0-8).
+        byte combinedState = (byte) (currentSlot | (hasOffHand ? 0x80 : 0x00));
+
+        Byte lastState = lastSlotMap.get(uuid);
+
+        if (lastState == null || lastState != combinedState) {
+            // State changed!
+            lastSlotMap.put(uuid, combinedState);
+
+            // 1. Update Glow (Held item changed)
+            EnchantmentVisualsHelper.updateGlowStats(ref, store, player, enchantmentManager);
+
+            // 2. Show Title (only if slot actually changed, not just offhand)
+            // Mask out the offhand bit to check slot index
+            byte lastSlotIndex = lastState != null ? (byte)(lastState & 0x7F) : -1;
+            if (currentSlot != lastSlotIndex) {
+                showEnchantmentTitle(playerRef, player, currentSlot);
+
+                // 3. Update tooltip translations (active item changed = priority item may differ)
+                EnchantmentTooltipManager tooltipManager = getTooltipManager();
+                if (tooltipManager != null) {
+                    tooltipManager.onActiveSlotChanged(playerRef, player);
+                }
+            }
+        }
+    }
+
+    private void showEnchantmentTitle(PlayerRef playerRef, Player player, byte slot) {
+        if (!SimpleEnchanting.getInstance().getConfigManager().getConfig().showEnchantmentBanner) {
+            return;
+        }
+
+        ItemStack item = player.getInventory().getHotbar().getItemStack(slot);
+        Message displayMessage = enchantmentManager.getEnchantmentDisplayMessage(item);
+
+        if (displayMessage != null) {
+            EventTitleUtil.hideEventTitleFromPlayer(playerRef, 0.0f);
+            EventTitleUtil.showEventTitleToPlayer(
+                playerRef,
+                Message.raw(""),
+                displayMessage.color("GOLD"),
+                false,
+                null,
+                1.5f,
+                0.1f,
+                0.2f
+            );
+        } else {
+            EventTitleUtil.hideEventTitleFromPlayer(playerRef, 0.1f);
+        }
+    }
+
+    /**
+     * Gets the tooltip manager from the plugin instance. Returns null if not yet initialized.
+     */
+    private static EnchantmentTooltipManager getTooltipManager() {
+        SimpleEnchanting plugin = SimpleEnchanting.getInstance();
+        return plugin != null ? plugin.getTooltipManager() : null;
+    }
+}

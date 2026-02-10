@@ -1,14 +1,19 @@
 {
-    "Group": "Example",
-    "Name": "ExamplePlugin",
-    "Version": "0.0.2",
-    "Description": "An example plugin for HyTale!",
+    "Group": "org.herolias",
+    "Name": "SimpleEnchantments",
+    "Version": "0.6.1",
+    "Description": "Adds an Enchanting Table and a variety of enchantments to the game!",
     "Authors": [
         {
-            "Name": "It's you!"
+            "Name": "MineAndCraft",
+            "Role": "Developer"
+        },
+        {
+            "Name": "Sorath",
+            "Role": "Artist"
         }
     ],
-    "Website": "example.org",
+    "Website": "https://discord.gg/7XQAnUfQfM",
     "ServerVersion": "*",
     "Dependencies": {
         
@@ -17,6 +22,6 @@
         
     },
     "DisabledByDefault": false,
-    "Main": "org.example.plugin.ExamplePlugin",
+    "Main": "org.herolias.plugin.SimpleEnchanting",
     "IncludesAssetPack": true
 }

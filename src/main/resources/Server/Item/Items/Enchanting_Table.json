@@ -1,0 +1,221 @@
+{
+    "TranslationProperties": {
+        "Name": "server.items.Enchanting_Table.name",
+        "Description": "server.items.Enchanting_Table.description"
+    },
+    "Icon": "Icons/ItemsGenerated/Enchanting_Table.png",
+    "Categories": [
+        "Furniture.Benches"
+    ],
+    "Recipe": {
+        "TimeSeconds": 5,
+        "Input": [
+            {
+                "ItemId": "Ingredient_Bar_Gold",
+                "Quantity": 5
+            },
+            {
+                "ItemId": "Ingredient_Bar_Copper",
+                "Quantity": 30
+            },
+            {
+                "ItemId": "Ingredient_Void_Essence",
+                "Quantity": 10
+            },
+            {
+                "ItemId": "Wood_Azure_Trunk",
+                "Quantity": 10
+            }
+        ],
+        "BenchRequirement": [
+            {
+                "Id": "Workbench",
+                "Type": "Crafting",
+                "Categories": [
+                    "Workbench_Crafting"
+                ],
+                "RequiredTierLevel": 2
+            }
+        ]
+    },
+    "BlockType": {
+        "Material": "Solid",
+        "DrawType": "Model",
+        "Opacity": "Transparent",
+        "CustomModel": "Blocks/Benches/Enchanting_Table.blockymodel",
+        "CustomModelTexture": [
+            {
+                "Texture": "Blocks/Benches/Enchanting_Table_Texture.png",
+                "Weight": 1
+            }
+        ],
+        "HitboxType": "Bench_Alchemy",
+        "VariantRotation": "NESW",
+        "Bench": {
+            "Type": "Crafting",
+            "LocalOpenSoundEventId": "SFX_Alchemy_Bench_Open",
+            "LocalCloseSoundEventId": "SFX_Alchemy_Bench_Close",
+            "CompletedSoundEventId": "SFX_Alchemy_Bench_Craft",
+            "BenchUpgradeSoundEventId": "SFX_Workbench_Upgrade_Start_Default",
+            "BenchUpgradeCompletedSoundEventId": "SFX_Workbench_Upgrade_Complete_Default",
+            "Categories": [
+                {
+                    "Id": "Enchanting_Armor",
+                    "Icon": "Icons/CraftingCategories/Armory/MetalChest.png",
+                    "Name": "server.benchCategories.enchantingArmor"
+                },
+                {
+                    "Id": "Enchanting_Tools",
+                    "Icon": "Icons/CraftingCategories/Fieldcraft/Tool_Pickaxe_Crude.png",
+                    "Name": "server.benchCategories.enchantingTools"
+                },
+                {
+                    "Id": "Enchanting_Melee",
+                    "Icon": "Icons/CraftingCategories/Armory/Sword.png",
+                    "Name": "server.benchCategories.enchantingMelee"
+                },
+                {
+                    "Id": "Enchanting_Ranged",
+                    "Icon": "Icons/CraftingCategories/Armory/Bow.png",
+                    "Name": "server.benchCategories.enchantingRanged"
+                },
+                {
+                    "Id": "Enchanting_Staff",
+                    "Icon": "Icons/CraftingCategories/Weapon_Staff_Crystal_Flame.png",
+                    "Name": "server.benchCategories.enchantingStaff"
+                },
+                {
+                    "Id": "Enchanting_Shield",
+                    "Icon": "Icons/CraftingCategories/Armory/Shield.png",
+                    "Name": "server.benchCategories.enchantingShield"
+                }
+            ],
+            "Id": "Enchantingbench",
+            "TierLevels": [
+                {
+                    "CraftingTimeReductionModifier": 0.0,
+                    "UpgradeRequirement": {
+                        "Material": [
+                            {
+                                "ItemId": "Ingredient_Bar_Gold",
+                                "Quantity": 15
+                            },
+                            {
+                                "ItemId": "Ingredient_Life_Essence",
+                                "Quantity": 30
+                            },
+                            {
+                                "ItemId": "Ingredient_Fire_Essence",
+                                "Quantity": 10
+                            },
+                            {
+                                "ItemId": "Ingredient_Ice_Essence",
+                                "Quantity": 10
+                            }
+                        ],
+                        "TimeSeconds": 5
+                    }
+                },
+                {
+                    "CraftingTimeReductionModifier": 0.0,
+                    "UpgradeRequirement": {
+                        "Material": [
+                            {
+                                "ItemId": "Ingredient_Bar_Adamantite",
+                                "Quantity": 10
+                            },
+                            {
+                                "ItemId": "Ingredient_Life_Essence",
+                                "Quantity": 35
+                            },
+                            {
+                                "ItemId": "Rock_Gem_Sapphire",
+                                "Quantity": 1
+                            },
+                            {
+                                "ItemId": "Rock_Gem_Emerald",
+                                "Quantity": 1
+                            }
+                        ],
+                        "TimeSeconds": 5
+                    }
+                },
+                {
+                    "CraftingTimeReductionModifier": 0.0,
+                    "UpgradeRequirement": {
+                        "Material": [
+                            {
+                                "ItemId": "Rock_Gem_Topaz",
+                                "Quantity": 1
+                            },
+                            {
+                                "ItemId": "Ingredient_Voidheart",
+                                "Quantity": 1
+                            },
+                            {
+                                "ItemId": "Ingredient_Life_Essence",
+                                "Quantity": 40
+                            },
+                            {
+                                "ItemId": "Ingredient_Void_Essence",
+                                "Quantity": 20
+                            }
+                        ],
+                        "TimeSeconds": 5
+                    }
+                },
+                {
+                    "CraftingTimeReductionModifier": 0.0
+                }
+            ]
+        },
+        "State": {
+            "Id": "crafting",
+            "Definitions": {
+                "CraftCompleted": {
+                    "CustomModelAnimation": "Blocks/Benches/Enchanting_Crafting.blockyanim",
+                    "Looping": true
+                },
+                "CraftCompletedInstant": {
+                    "CustomModelAnimation": "Blocks/Benches/Enchanting_Crafting.blockyanim"
+                }
+            }
+        },
+        "Gathering": {
+            "Breaking": {
+                "GatherType": "Benches"
+            }
+        },
+        "BlockParticleSetId": "Stone",
+        "ParticleColor": "#6B4AA0",
+        "Support": {
+            "Down": [
+                {
+                    "FaceType": "Full"
+                }
+            ]
+        },
+        "BlockSoundSetId": "Stone"
+    },
+    "PlayerAnimationsId": "Block",
+    "IconProperties": {
+        "Scale": 0.435,
+        "Translation": [
+            11.4,
+            -18.6
+        ],
+        "Rotation": [
+            22.5,
+            45,
+            22.5
+        ]
+    },
+    "Tags": {
+        "Type": [
+            "Bench"
+        ]
+    },
+    "MaxStack": 1,
+    "ItemLevel": 11,
+    "ItemSoundSetId": "ISS_Blocks_Wood"
+}

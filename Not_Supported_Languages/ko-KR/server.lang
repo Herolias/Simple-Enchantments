@@ -1,0 +1,454 @@
+﻿﻿benchCategories.enchantingArmor = 방어구
+
+benchCategories.enchantingTools = 도구
+
+benchCategories.enchantingMelee = 근거리
+
+benchCategories.enchantingRanged = 원거리
+
+benchCategories.enchantingStaff = 마법
+
+benchCategories.enchantingShield = 방패
+
+
+
+customUI.enchantScrollPage.title = 아이템 마법 부여
+
+customUI.enchantScrollPage.noItems = 마법 부여할 수 있는 아이템이 없습니다
+
+customUI.enchantScrollPage.item = 아이템
+
+customUI.enchantScrollPage.enchantment = 마법 부여
+
+
+
+items.Enchanting_Table.name = 마법 부여대
+
+items.Enchanting_Table.description = 마법 부여 주문서를 제작하는 데 사용되는 테이블입니다.
+
+
+
+items.Scroll_Sharpness_I.name = 날카로움의 주문서 I
+
+items.Scroll_Sharpness_I.description = 근거리 공격력이 10% 증가합니다.
+
+items.Scroll_Sharpness_II.name = 날카로움의 주문서 II
+
+items.Scroll_Sharpness_II.description = 근거리 공격력이 20% 증가합니다.
+
+items.Scroll_Sharpness_III.name = 날카로움의 주문서 III
+
+items.Scroll_Sharpness_III.description = 근거리 공격력이 30% 증가합니다.
+
+
+
+items.Scroll_Durability_I.name = 내구력의 주문서 I
+
+items.Scroll_Durability_I.description = 내구도 감소 확률이 25% 줄어듭니다.
+
+items.Scroll_Durability_II.name = 내구력의 주문서 II
+
+items.Scroll_Durability_II.description = 내구도 감소 확률이 50% 줄어듭니다.
+
+items.Scroll_Durability_III.name = 내구력의 주문서 III
+
+items.Scroll_Durability_III.description = 내구도 감소 확률이 75% 줄어듭니다.
+
+
+
+items.Scroll_Protection_I.name = 보호의 주문서 I
+
+items.Scroll_Protection_I.description = 방어구당 입는 물리 피해가 4% 감소합니다.
+
+items.Scroll_Protection_II.name = 보호의 주문서 II
+
+items.Scroll_Protection_II.description = 방어구당 입는 물리 피해가 8% 감소합니다.
+
+items.Scroll_Protection_III.name = 보호의 주문서 III
+
+items.Scroll_Protection_III.description = 방어구당 입는 물리 피해가 12% 감소합니다.
+
+
+
+items.Scroll_Efficiency_I.name = 효율의 주문서 I
+
+items.Scroll_Efficiency_I.description = 채광 속도가 20% 증가합니다.
+
+items.Scroll_Efficiency_II.name = 효율의 주문서 II
+
+items.Scroll_Efficiency_II.description = 채광 속도가 40% 증가합니다.
+
+items.Scroll_Efficiency_III.name = 효율의 주문서 III
+
+items.Scroll_Efficiency_III.description = 채광 속도가 60% 증가합니다.
+
+
+
+items.Scroll_Fortune_I.name = 행운의 주문서 I
+
+items.Scroll_Fortune_I.description = 광석/수정 추가 획득 확률이 25% 증가합니다.
+
+items.Scroll_Fortune_II.name = 행운의 주문서 II
+
+items.Scroll_Fortune_II.description = 광석/수정 추가 획득 확률이 50% 증가합니다.
+
+items.Scroll_Fortune_III.name = 행운의 주문서 III
+
+items.Scroll_Fortune_III.description = 광석/수정 추가 획득 확률이 75% 증가합니다.
+
+
+
+items.Scroll_Smelting_I.name = 제련의 주문서
+
+items.Scroll_Smelting_I.description = 채광된 블록을 자동으로 제련합니다.
+
+
+
+items.Scroll_Life_Leech_I.name = 생명력 흡수의 주문서 I
+
+items.Scroll_Life_Leech_I.description = 입힌 피해의 10%만큼 체력을 회복합니다.
+
+items.Scroll_Life_Leech_II.name = 생명력 흡수의 주문서 II
+
+items.Scroll_Life_Leech_II.description = 입힌 피해의 20%만큼 체력을 회복합니다.
+
+items.Scroll_Life_Leech_III.name = 생명력 흡수의 주문서 III
+
+items.Scroll_Life_Leech_III.description = 입힌 피해의 30%만큼 체력을 회복합니다.
+
+
+
+items.Scroll_Dexterity_I.name = 민첩의 주문서 I
+
+items.Scroll_Dexterity_I.description = 스태미나 소모량이 20% 감소합니다.
+
+items.Scroll_Dexterity_II.name = 민첩의 주문서 II
+
+items.Scroll_Dexterity_II.description = 스태미나 소모량이 40% 감소합니다.
+
+items.Scroll_Dexterity_III.name = 민첩의 주문서 III
+
+items.Scroll_Dexterity_III.description = 스태미나 소모량이 60% 감소합니다.
+
+
+
+items.Scroll_Looting_I.name = 약탈의 주문서 I
+
+items.Scroll_Looting_I.description = 몬스터 전리품 획득률이 25% 증가하고 희귀 아이템 획득 확률이 증가합니다.
+
+items.Scroll_Looting_II.name = 약탈의 주문서 II
+
+items.Scroll_Looting_II.description = 몬스터 전리품 획득률이 50% 증가하고 희귀 아이템 획득 확률이 증가합니다.
+
+items.Scroll_Looting_III.name = 약탈의 주문서 III
+
+items.Scroll_Looting_III.description = 몬스터 전리품 획득률이 75% 증가하고 희귀 아이템 획득 확률이 증가합니다.
+
+
+
+items.Scroll_Sturdy_I.name = 견고함의 주문서
+
+items.Scroll_Sturdy_I.description = 수리 시 최대 내구도 손실을 방지합니다.
+
+
+
+items.Scroll_Strength_I.name = 힘의 주문서 I
+
+items.Scroll_Strength_I.description = 투사체 피해가 10% 증가합니다.
+
+items.Scroll_Strength_II.name = 힘의 주문서 II
+
+items.Scroll_Strength_II.description = 투사체 피해가 20% 증가합니다.
+
+items.Scroll_Strength_III.name = 힘의 주문서 III
+
+items.Scroll_Strength_III.description = 투사체 피해가 30% 증가합니다.
+
+
+
+items.Scroll_Eagles_Eye_I.name = 독수리의 눈 주문서 I
+
+items.Scroll_Eagles_Eye_I.description = 거리에 따라 투사체 피해가 최대 15% 증가합니다.
+
+items.Scroll_Eagles_Eye_II.name = 독수리의 눈 주문서 II
+
+items.Scroll_Eagles_Eye_II.description = 거리에 따라 투사체 피해가 최대 30% 증가합니다.
+
+items.Scroll_Eagles_Eye_III.name = 독수리의 눈 주문서 III
+
+items.Scroll_Eagles_Eye_III.description = 거리에 따라 투사체 피해가 최대 45% 증가합니다.
+
+
+
+items.Scroll_Feather_Falling_I.name = 가벼운 착지의 주문서 I
+
+items.Scroll_Feather_Falling_I.description = 낙하 피해가 20% 감소합니다.
+
+items.Scroll_Feather_Falling_II.name = 가벼운 착지의 주문서 II
+
+items.Scroll_Feather_Falling_II.description = 낙하 피해가 40% 감소합니다.
+
+items.Scroll_Feather_Falling_III.name = 가벼운 착지의 주문서 III
+
+items.Scroll_Feather_Falling_III.description = 낙하 피해가 60% 감소합니다.
+
+
+
+items.Scroll_Waterbreathing_I.name = 수중 호흡의 주문서 I
+
+items.Scroll_Waterbreathing_I.description = 산소 소모량이 20% 감소합니다.
+
+items.Scroll_Waterbreathing_II.name = 수중 호흡의 주문서 II
+
+items.Scroll_Waterbreathing_II.description = 산소 소모량이 40% 감소합니다.
+
+items.Scroll_Waterbreathing_III.name = 수중 호흡의 주문서 III
+
+items.Scroll_Waterbreathing_III.description = 산소 소모량이 60% 감소합니다.
+
+
+
+items.Scroll_Burn_I.name = 화염의 주문서
+
+items.Scroll_Burn_I.description = 대상에게 불을 붙이고 조리된 고기를 드롭하게 합니다. 동결과 함께 사용할 수 없습니다.
+
+
+
+items.Scroll_Freeze_I.name = 동결의 주문서
+
+items.Scroll_Freeze_I.description = 적중 시 대상의 이동 속도를 크게(50%) 감소시킵니다. 화염과 함께 사용할 수 없습니다.
+
+
+
+items.Scroll_Eternal_Shot_I.name = 무한의 주문서
+
+items.Scroll_Eternal_Shot_I.description = 화살을 소모하지 않고 발사할 수 있습니다.
+
+
+
+items.Scroll_Silktouch_I.name = 섬세한 손길의 주문서
+
+items.Scroll_Silktouch_I.description = 채광한 블록이 자원 대신 블록 자체로 드롭됩니다. 행운 또는 제련과 함께 사용할 수 없습니다.
+
+
+
+items.Scroll_Thrift_I.name = 절약의 주문서 I
+
+items.Scroll_Thrift_I.description = 적중 시 소모된 마나의 20%를 회복합니다.
+
+items.Scroll_Thrift_II.name = 절약의 주문서 II
+
+items.Scroll_Thrift_II.description = 적중 시 소모된 마나의 40%를 회복합니다.
+
+items.Scroll_Thrift_III.name = 절약의 주문서 III
+
+items.Scroll_Thrift_III.description = 적중 시 소모된 마나의 60%를 회복합니다.
+
+
+
+items.Scroll_ElementalHeart_I.name = 정령의 심장 주문서
+
+items.Scroll_ElementalHeart_I.description = 정령 지팡이 사용 시 에센스를 소모하지 않습니다.
+
+
+
+items.Scroll_Knockback_I.name = 밀치기의 주문서 I
+
+items.Scroll_Knockback_I.description = 적중 시 대상을 뒤로 밀쳐냅니다.
+
+items.Scroll_Knockback_II.name = 밀치기의 주문서 II
+
+items.Scroll_Knockback_II.description = 적중 시 대상을 더 멀리 뒤로 밀쳐냅니다.
+
+items.Scroll_Knockback_III.name = 밀치기의 주문서 III
+
+items.Scroll_Knockback_III.description = 적중 시 대상을 훨씬 멀리 뒤로 밀쳐냅니다.
+
+
+
+items.Scroll_Reflection_I.name = 반사의 주문서 I
+
+items.Scroll_Reflection_I.description = 막은 피해의 10%를 공격자에게 되돌려줍니다. 흡수와 함께 사용할 수 없습니다.
+
+items.Scroll_Reflection_II.name = 반사의 주문서 II
+
+items.Scroll_Reflection_II.description = 막은 피해의 20%를 공격자에게 되돌려줍니다. 흡수와 함께 사용할 수 없습니다.
+
+items.Scroll_Reflection_III.name = 반사의 주문서 III
+
+items.Scroll_Reflection_III.description = 막은 피해의 30%를 공격자에게 되돌려줍니다. 흡수와 함께 사용할 수 없습니다.
+
+
+
+items.Scroll_Absorption_I.name = 흡수의 주문서 I
+
+items.Scroll_Absorption_I.description = 막은 피해의 10%만큼 방어자를 치유합니다. 반사와 함께 사용할 수 없습니다.
+
+items.Scroll_Absorption_II.name = 흡수의 주문서 II
+
+items.Scroll_Absorption_II.description = 막은 피해의 20%만큼 방어자를 치유합니다. 반사와 함께 사용할 수 없습니다.
+
+items.Scroll_Absorption_III.name = 흡수의 주문서 III
+
+items.Scroll_Absorption_III.description = 막은 피해의 30%만큼 방어자를 치유합니다. 반사와 함께 사용할 수 없습니다.
+
+
+
+items.Scroll_FastSwim_I.name = 빠른 헤엄의 주문서 I
+
+items.Scroll_FastSwim_I.description = 수영 속도가 25% 증가합니다.
+
+items.Scroll_FastSwim_II.name = 빠른 헤엄의 주문서 II
+
+items.Scroll_FastSwim_II.description = 수영 속도가 50% 증가합니다.
+
+items.Scroll_FastSwim_III.name = 빠른 헤엄의 주문서 III
+
+items.Scroll_FastSwim_III.description = 수영 속도가 75% 증가합니다.
+
+
+
+commands.enchantconfig.desc = 게임 내 마법 부여 설정 편집기를 엽니다.
+
+
+
+customUI.enchantConfigPage.title = 마법 부여 설정
+
+customUI.enchantConfigPage.tabGeneral = 일반
+
+customUI.enchantConfigPage.tabEnchantments = 마법 부여
+
+customUI.enchantConfigPage.tabRecipes = 제작법
+
+customUI.enchantConfigPage.save = 저장
+
+customUI.enchantConfigPage.cancel = 취소
+
+
+
+items.Scroll_Cleansing.name = 정화의 주문서
+
+items.Scroll_Cleansing.description = 아이템에서 하나의 마법 부여를 제거합니다.
+
+
+
+customUI.cleansingScrollPage.title = 마법 부여 제거
+
+customUI.cleansingScrollPage.noItems = 마법 부여된 아이템 없음
+
+customUI.cleansingScrollPage.item = 아이템
+
+customUI.cleansingScrollPage.enchantments = 마법 부여
+
+
+
+customUI.cleansingEnchantmentPage.title = 제거할 마법 부여 선택
+
+customUI.cleansingEnchantmentPage.selectHint = 제거할 마법 부여를 클릭하세요
+
+
+
+
+
+
+
+
+
+# Enchantment Localizations (Auto-generated)
+
+enchantment.sharpness.name = 날카로움
+
+enchantment.sharpness.description = 근거리 공격력이 10% 증가합니다.
+
+enchantment.life_leech.name = 생명력 흡수
+
+enchantment.life_leech.description = 입힌 피해의 10%만큼 체력을 회복합니다.
+
+enchantment.durability.name = 내구력
+
+enchantment.durability.description = 내구도 감소 확률이 25% 줄어듭니다.
+
+enchantment.sturdy.name = 견고함
+
+enchantment.sturdy.description = 수리 시 최대 내구도 손실을 방지합니다.
+
+enchantment.dexterity.name = 민첩
+
+enchantment.dexterity.description = 스태미나 소모량이 20% 감소합니다.
+
+enchantment.protection.name = 보호
+
+enchantment.protection.description = 방어구당 입는 물리 피해가 4% 감소합니다.
+
+enchantment.efficiency.name = 효율
+
+enchantment.efficiency.description = 채광 속도가 20% 증가합니다.
+
+enchantment.fortune.name = 행운
+
+enchantment.fortune.description = 광석/수정 추가 획득 확률이 25% 증가합니다.
+
+enchantment.smelting.name = 제련
+
+enchantment.smelting.description = 채광된 블록을 자동으로 제련합니다.
+
+enchantment.strength.name = 힘
+
+enchantment.strength.description = 투사체 피해가 10% 증가합니다.
+
+enchantment.eagles_eye.name = 독수리의 눈
+
+enchantment.eagles_eye.description = 거리에 따라 투사체 피해가 최대 15% 증가합니다.
+
+enchantment.looting.name = 약탈
+
+enchantment.looting.description = 몬스터 전리품 획득률이 25% 증가하고 희귀 아이템 획득 확률이 증가합니다.
+
+enchantment.feather_falling.name = 가벼운 착지
+
+enchantment.feather_falling.description = 낙하 피해가 20% 감소합니다.
+
+enchantment.waterbreathing.name = 수중 호흡
+
+enchantment.waterbreathing.description = 산소 소모량이 20% 감소합니다.
+
+enchantment.burn.name = 화염
+
+enchantment.burn.description = 대상에게 불을 붙이고 조리된 고기를 드롭하게 합니다. 동결과 함께 사용할 수 없습니다.
+
+enchantment.freeze.name = 동결
+
+enchantment.freeze.description = 적중 시 대상의 이동 속도를 크게(50%) 감소시킵니다. 화염과 함께 사용할 수 없습니다.
+
+enchantment.eternal_shot.name = 무한
+
+enchantment.eternal_shot.description = 화살을 소모하지 않고 발사할 수 있습니다.
+
+enchantment.pick_perfect.name = 섬세한 손길
+
+enchantment.pick_perfect.description = 채광한 블록이 자원 대신 블록 자체로 드롭됩니다. 행운 또는 제련과 함께 사용할 수 없습니다.
+
+enchantment.thrift.name = 절약
+
+enchantment.thrift.description = 적중 시 소모된 마나의 20%를 회복합니다.
+
+enchantment.elemental_heart.name = 정령의 심장
+
+enchantment.elemental_heart.description = 정령 지팡이 사용 시 에센스를 소모하지 않습니다.
+
+enchantment.knockback.name = 밀치기
+
+enchantment.knockback.description = 적중 시 대상을 뒤로 밀쳐냅니다.
+
+enchantment.reflection.name = 반사
+
+enchantment.reflection.description = 막은 피해의 10%를 공격자에게 되돌려줍니다. 흡수와 함께 사용할 수 없습니다.
+
+enchantment.absorption.name = 흡수
+
+enchantment.absorption.description = 막은 피해의 10%만큼 방어자를 치유합니다. 반사와 함께 사용할 수 없습니다.
+
+enchantment.fast_swim.name = 빠른 헤엄
+
+enchantment.fast_swim.description = 수영 속도가 25% 증가합니다.
+

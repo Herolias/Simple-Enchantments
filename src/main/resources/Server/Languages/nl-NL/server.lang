@@ -1,0 +1,454 @@
+﻿﻿benchCategories.enchantingArmor = Harnas
+
+benchCategories.enchantingTools = Gereedschap
+
+benchCategories.enchantingMelee = Melee
+
+benchCategories.enchantingRanged = Afstand
+
+benchCategories.enchantingStaff = Magie
+
+benchCategories.enchantingShield = Schild
+
+
+
+customUI.enchantScrollPage.title = Voorwerp Betoveren
+
+customUI.enchantScrollPage.noItems = Geen voorwerpen om te betoveren
+
+customUI.enchantScrollPage.item = Voorwerp
+
+customUI.enchantScrollPage.enchantment = Betovering
+
+
+
+items.Enchanting_Table.name = Betoveringstafel
+
+items.Enchanting_Table.description = Een tafel die wordt gebruikt om betoveringsrollen te maken.
+
+
+
+items.Scroll_Sharpness_I.name = Rol van Scherpte I
+
+items.Scroll_Sharpness_I.description = Verhoogt melee-schade met 10%.
+
+items.Scroll_Sharpness_II.name = Rol van Scherpte II
+
+items.Scroll_Sharpness_II.description = Verhoogt melee-schade met 20%.
+
+items.Scroll_Sharpness_III.name = Rol van Scherpte III
+
+items.Scroll_Sharpness_III.description = Verhoogt melee-schade met 30%.
+
+
+
+items.Scroll_Durability_I.name = Rol van Duurzaamheid I
+
+items.Scroll_Durability_I.description = Vermindert kans op duurzaamheidsverlies met 25%.
+
+items.Scroll_Durability_II.name = Rol van Duurzaamheid II
+
+items.Scroll_Durability_II.description = Vermindert kans op duurzaamheidsverlies met 50%.
+
+items.Scroll_Durability_III.name = Rol van Duurzaamheid III
+
+items.Scroll_Durability_III.description = Vermindert kans op duurzaamheidsverlies met 75%.
+
+
+
+items.Scroll_Protection_I.name = Rol van Bescherming I
+
+items.Scroll_Protection_I.description = Vermindert inkomende fysieke schade met 4% per harnasstuk.
+
+items.Scroll_Protection_II.name = Rol van Bescherming II
+
+items.Scroll_Protection_II.description = Vermindert inkomende fysieke schade met 8% per harnasstuk.
+
+items.Scroll_Protection_III.name = Rol van Bescherming III
+
+items.Scroll_Protection_III.description = Vermindert inkomende fysieke schade met 12% per harnasstuk.
+
+
+
+items.Scroll_Efficiency_I.name = Rol van Efficiëntie I
+
+items.Scroll_Efficiency_I.description = Verhoogt mijnsnelheid met 20%.
+
+items.Scroll_Efficiency_II.name = Rol van Efficiëntie II
+
+items.Scroll_Efficiency_II.description = Verhoogt mijnsnelheid met 40%.
+
+items.Scroll_Efficiency_III.name = Rol van Efficiëntie III
+
+items.Scroll_Efficiency_III.description = Verhoogt mijnsnelheid met 60%.
+
+
+
+items.Scroll_Fortune_I.name = Rol van Geluk I
+
+items.Scroll_Fortune_I.description = Verhoogt kans op extra erts/kristallen met 25%.
+
+items.Scroll_Fortune_II.name = Rol van Geluk II
+
+items.Scroll_Fortune_II.description = Verhoogt kans op extra erts/kristallen met 50%.
+
+items.Scroll_Fortune_III.name = Rol van Geluk III
+
+items.Scroll_Fortune_III.description = Verhoogt kans op extra erts/kristallen met 75%.
+
+
+
+items.Scroll_Smelting_I.name = Rol van Smelten
+
+items.Scroll_Smelting_I.description = Smelt gedolven blokken automatisch.
+
+
+
+items.Scroll_Life_Leech_I.name = Rol van Levensroof I
+
+items.Scroll_Life_Leech_I.description = Geneest aanvaller voor 10% van toegebrachte schade.
+
+items.Scroll_Life_Leech_II.name = Rol van Levensroof II
+
+items.Scroll_Life_Leech_II.description = Geneest aanvaller voor 20% van toegebrachte schade.
+
+items.Scroll_Life_Leech_III.name = Rol van Levensroof III
+
+items.Scroll_Life_Leech_III.description = Geneest aanvaller voor 30% van toegebrachte schade.
+
+
+
+items.Scroll_Dexterity_I.name = Rol van Behendigheid I
+
+items.Scroll_Dexterity_I.description = Vermindert staminakosten met 20%.
+
+items.Scroll_Dexterity_II.name = Rol van Behendigheid II
+
+items.Scroll_Dexterity_II.description = Vermindert staminakosten met 40%.
+
+items.Scroll_Dexterity_III.name = Rol van Behendigheid III
+
+items.Scroll_Dexterity_III.description = Vermindert staminakosten met 60%.
+
+
+
+items.Scroll_Looting_I.name = Rol van Plundering I
+
+items.Scroll_Looting_I.description = Verhoogt de drop rate van mobs met 25% en vergroot de kans op zeldzame drops.
+
+items.Scroll_Looting_II.name = Rol van Plundering II
+
+items.Scroll_Looting_II.description = Verhoogt de drop rate van mobs met 50% en vergroot de kans op zeldzame drops.
+
+items.Scroll_Looting_III.name = Rol van Plundering III
+
+items.Scroll_Looting_III.description = Verhoogt de drop rate van mobs met 75% en vergroot de kans op zeldzame drops.
+
+
+
+items.Scroll_Sturdy_I.name = Rol van Stevigheid
+
+items.Scroll_Sturdy_I.description = Voorkomt verlies van maximale duurzaamheid bij reparatie.
+
+
+
+items.Scroll_Strength_I.name = Rol van Kracht I
+
+items.Scroll_Strength_I.description = Verhoogt projectielschade met 10%.
+
+items.Scroll_Strength_II.name = Rol van Kracht II
+
+items.Scroll_Strength_II.description = Verhoogt projectielschade met 20%.
+
+items.Scroll_Strength_III.name = Rol van Kracht III
+
+items.Scroll_Strength_III.description = Verhoogt projectielschade met 30%.
+
+
+
+items.Scroll_Eagles_Eye_I.name = Rol van Adelaarsoog I
+
+items.Scroll_Eagles_Eye_I.description = Verhoogt projectielschade tot 15% op basis van afstand.
+
+items.Scroll_Eagles_Eye_II.name = Rol van Adelaarsoog II
+
+items.Scroll_Eagles_Eye_II.description = Verhoogt projectielschade tot 30% op basis van afstand.
+
+items.Scroll_Eagles_Eye_III.name = Rol van Adelaarsoog III
+
+items.Scroll_Eagles_Eye_III.description = Verhoogt projectielschade tot 45% op basis van afstand.
+
+
+
+items.Scroll_Feather_Falling_I.name = Rol van Vederlicht Vallen I
+
+items.Scroll_Feather_Falling_I.description = Vermindert valschade met 20%.
+
+items.Scroll_Feather_Falling_II.name = Rol van Vederlicht Vallen II
+
+items.Scroll_Feather_Falling_II.description = Vermindert valschade met 40%.
+
+items.Scroll_Feather_Falling_III.name = Rol van Vederlicht Vallen III
+
+items.Scroll_Feather_Falling_III.description = Vermindert valschade met 60%.
+
+
+
+items.Scroll_Waterbreathing_I.name = Rol van Waterademhaling I
+
+items.Scroll_Waterbreathing_I.description = Vermindert zuurstofverbruik met 20%.
+
+items.Scroll_Waterbreathing_II.name = Rol van Waterademhaling II
+
+items.Scroll_Waterbreathing_II.description = Vermindert zuurstofverbruik met 40%.
+
+items.Scroll_Waterbreathing_III.name = Rol van Waterademhaling III
+
+items.Scroll_Waterbreathing_III.description = Vermindert zuurstofverbruik met 60%.
+
+
+
+items.Scroll_Burn_I.name = Rol van Verbranding
+
+items.Scroll_Burn_I.description = Steekt doelwit in brand en laat gekookt vlees vallen. Niet combineerbaar met Bevriezing.
+
+
+
+items.Scroll_Freeze_I.name = Rol van Bevriezing
+
+items.Scroll_Freeze_I.description = Vertraagt doelwit sterk (50%) bij een treffer. Niet combineerbaar met Verbranding.
+
+
+
+items.Scroll_Eternal_Shot_I.name = Rol van Eeuwig Schot
+
+items.Scroll_Eternal_Shot_I.description = Hiermee kun je pijlen schieten zonder ze te verbruiken.
+
+
+
+items.Scroll_Silktouch_I.name = Rol van Zijdezachte Aanraking
+
+items.Scroll_Silktouch_I.description = Gedolven blokken vallen als zichzelf in plaats van hun gebruikelijke grondstoffen. Niet combineerbaar met Geluk of Smelten.
+
+
+
+items.Scroll_Thrift_I.name = Rol van Zuinigheid I
+
+items.Scroll_Thrift_I.description = Herstelt 20% van de verbruikte mana bij een treffer.
+
+items.Scroll_Thrift_II.name = Rol van Zuinigheid II
+
+items.Scroll_Thrift_II.description = Herstelt 40% van de verbruikte mana bij een treffer.
+
+items.Scroll_Thrift_III.name = Rol van Zuinigheid III
+
+items.Scroll_Thrift_III.description = Herstelt 60% van de verbruikte mana bij een treffer.
+
+
+
+items.Scroll_ElementalHeart_I.name = Rol van Elementair Hart
+
+items.Scroll_ElementalHeart_I.description = Elementaire staven verbruiken geen essentie bij het toveren.
+
+
+
+items.Scroll_Knockback_I.name = Rol van Terugslag I
+
+items.Scroll_Knockback_I.description = Slaat doelen terug bij een treffer.
+
+items.Scroll_Knockback_II.name = Rol van Terugslag II
+
+items.Scroll_Knockback_II.description = Slaat doelen verder terug bij een treffer.
+
+items.Scroll_Knockback_III.name = Rol van Terugslag III
+
+items.Scroll_Knockback_III.description = Slaat doelen aanzienlijk terug bij een treffer.
+
+
+
+items.Scroll_Reflection_I.name = Rol van Reflectie I
+
+items.Scroll_Reflection_I.description = Reflecteert 10% van geblokkeerde schade terug naar de aanvaller. Niet combineerbaar met Absorptie.
+
+items.Scroll_Reflection_II.name = Rol van Reflectie II
+
+items.Scroll_Reflection_II.description = Reflecteert 20% van geblokkeerde schade terug naar de aanvaller. Niet combineerbaar met Absorptie.
+
+items.Scroll_Reflection_III.name = Rol van Reflectie III
+
+items.Scroll_Reflection_III.description = Reflecteert 30% van geblokkeerde schade terug naar de aanvaller. Niet combineerbaar met Absorptie.
+
+
+
+items.Scroll_Absorption_I.name = Rol van Absorptie I
+
+items.Scroll_Absorption_I.description = Geneest verdediger voor 10% van geblokkeerde schade. Niet combineerbaar met Reflectie.
+
+items.Scroll_Absorption_II.name = Rol van Absorptie II
+
+items.Scroll_Absorption_II.description = Geneest verdediger voor 20% van geblokkeerde schade. Niet combineerbaar met Reflectie.
+
+items.Scroll_Absorption_III.name = Rol van Absorptie III
+
+items.Scroll_Absorption_III.description = Geneest verdediger voor 30% van geblokkeerde schade. Niet combineerbaar met Reflectie.
+
+
+
+items.Scroll_FastSwim_I.name = Rol van Snel Zwemmen I
+
+items.Scroll_FastSwim_I.description = Verhoogt zwemsnelheid met 25%.
+
+items.Scroll_FastSwim_II.name = Rol van Snel Zwemmen II
+
+items.Scroll_FastSwim_II.description = Verhoogt zwemsnelheid met 50%.
+
+items.Scroll_FastSwim_III.name = Rol van Snel Zwemmen III
+
+items.Scroll_FastSwim_III.description = Verhoogt zwemsnelheid met 75%.
+
+
+
+commands.enchantconfig.desc = Opent de in-game betoveringsconfiguratie.
+
+
+
+customUI.enchantConfigPage.title = Betoveringsconfiguratie
+
+customUI.enchantConfigPage.tabGeneral = Algemeen
+
+customUI.enchantConfigPage.tabEnchantments = Betoveringen
+
+customUI.enchantConfigPage.tabRecipes = Recepten
+
+customUI.enchantConfigPage.save = Opslaan
+
+customUI.enchantConfigPage.cancel = Annuleren
+
+
+
+items.Scroll_Cleansing.name = Rol van Reiniging
+
+items.Scroll_Cleansing.description = Verwijdert één betovering van een voorwerp.
+
+
+
+customUI.cleansingScrollPage.title = Betovering Verwijderen
+
+customUI.cleansingScrollPage.noItems = Geen betoverde voorwerpen gevonden
+
+customUI.cleansingScrollPage.item = Voorwerp
+
+customUI.cleansingScrollPage.enchantments = Betoveringen
+
+
+
+customUI.cleansingEnchantmentPage.title = Selecteer een betovering om te verwijderen
+
+customUI.cleansingEnchantmentPage.selectHint = Klik op een betovering om deze te verwijderen
+
+
+
+
+
+
+
+
+
+# Enchantment Localizations (Auto-generated)
+
+enchantment.sharpness.name = Scherpte
+
+enchantment.sharpness.description = Verhoogt melee-schade met 10%.
+
+enchantment.life_leech.name = Levensroof
+
+enchantment.life_leech.description = Geneest aanvaller voor 10% van toegebrachte schade.
+
+enchantment.durability.name = Duurzaamheid
+
+enchantment.durability.description = Vermindert kans op duurzaamheidsverlies met 25%.
+
+enchantment.sturdy.name = Stevigheid
+
+enchantment.sturdy.description = Voorkomt verlies van maximale duurzaamheid bij reparatie.
+
+enchantment.dexterity.name = Behendigheid
+
+enchantment.dexterity.description = Vermindert staminakosten met 20%.
+
+enchantment.protection.name = Bescherming
+
+enchantment.protection.description = Vermindert inkomende fysieke schade met 4% per harnasstuk.
+
+enchantment.efficiency.name = Efficiëntie
+
+enchantment.efficiency.description = Verhoogt mijnsnelheid met 20%.
+
+enchantment.fortune.name = Geluk
+
+enchantment.fortune.description = Verhoogt kans op extra erts/kristallen met 25%.
+
+enchantment.smelting.name = Smelten
+
+enchantment.smelting.description = Smelt gedolven blokken automatisch.
+
+enchantment.strength.name = Kracht
+
+enchantment.strength.description = Verhoogt projectielschade met 10%.
+
+enchantment.eagles_eye.name = Adelaarsoog
+
+enchantment.eagles_eye.description = Verhoogt projectielschade tot 15% op basis van afstand.
+
+enchantment.looting.name = Plundering
+
+enchantment.looting.description = Verhoogt de drop rate van mobs met 25% en vergroot de kans op zeldzame drops.
+
+enchantment.feather_falling.name = Vederlicht Vallen
+
+enchantment.feather_falling.description = Vermindert valschade met 20%.
+
+enchantment.waterbreathing.name = Waterademhaling
+
+enchantment.waterbreathing.description = Vermindert zuurstofverbruik met 20%.
+
+enchantment.burn.name = Verbranding
+
+enchantment.burn.description = Steekt doelwit in brand en laat gekookt vlees vallen. Niet combineerbaar met Bevriezing.
+
+enchantment.freeze.name = Bevriezing
+
+enchantment.freeze.description = Vertraagt doelwit sterk (50%) bij een treffer. Niet combineerbaar met Verbranding.
+
+enchantment.eternal_shot.name = Eeuwig Schot
+
+enchantment.eternal_shot.description = Hiermee kun je pijlen schieten zonder ze te verbruiken.
+
+enchantment.pick_perfect.name = Zijdezachte Aanraking
+
+enchantment.pick_perfect.description = Gedolven blokken vallen als zichzelf in plaats van hun gebruikelijke grondstoffen. Niet combineerbaar met Geluk of Smelten.
+
+enchantment.thrift.name = Zuinigheid
+
+enchantment.thrift.description = Herstelt 20% van de verbruikte mana bij een treffer.
+
+enchantment.elemental_heart.name = Elementair Hart
+
+enchantment.elemental_heart.description = Elementaire staven verbruiken geen essentie bij het toveren.
+
+enchantment.knockback.name = Terugslag
+
+enchantment.knockback.description = Slaat doelen terug bij een treffer.
+
+enchantment.reflection.name = Reflectie
+
+enchantment.reflection.description = Reflecteert 10% van geblokkeerde schade terug naar de aanvaller. Niet combineerbaar met Absorptie.
+
+enchantment.absorption.name = Absorptie
+
+enchantment.absorption.description = Geneest verdediger voor 10% van geblokkeerde schade. Niet combineerbaar met Reflectie.
+
+enchantment.fast_swim.name = Snel Zwemmen
+
+enchantment.fast_swim.description = Verhoogt zwemsnelheid met 25%.
+

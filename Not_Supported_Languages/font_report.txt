@@ -1,0 +1,89 @@
+Scanning languages for unsupported characters...
+Supported Ranges: [(0, 255), (1024, 1279), (8192, 8303)]
+
+FAILED: ar-SA has 37 unsupported characters.
+FAILED: cs-CZ has 1 unsupported characters.
+FAILED: de-DE has 10 unsupported characters.
+FAILED: en-US has 1 unsupported characters.
+FAILED: es-ES has 1 unsupported characters.
+FAILED: fr-FR has 2 unsupported characters.
+FAILED: hi-IN has 55 unsupported characters.
+FAILED: id-ID has 1 unsupported characters.
+FAILED: it-IT has 1 unsupported characters.
+FAILED: ja-JP has 213 unsupported characters.
+FAILED: ko-KR has 197 unsupported characters.
+FAILED: nl-NL has 1 unsupported characters.
+FAILED: pl-PL has 9 unsupported characters.
+FAILED: pt-BR has 1 unsupported characters.
+FAILED: ru-RU has 1 unsupported characters.
+FAILED: sv-SE has 1 unsupported characters.
+FAILED: th-TH has 50 unsupported characters.
+FAILED: tr-TR has 5 unsupported characters.
+FAILED: uk-UA has 1 unsupported characters.
+FAILED: vi-VN has 41 unsupported characters.
+FAILED: zh-CN has 212 unsupported characters.
+
+--- SUMMARY OF AFFECTED LANGUAGES ---
+
+ar-SA:
+  Missing: ء (U+0621), أ (U+0623), ؤ (U+0624), إ (U+0625), ئ (U+0626), ا (U+0627), ب (U+0628), ة (U+0629), ت (U+062A), ث (U+062B)...
+
+cs-CZ:
+  Missing: ﻿ (U+FEFF)
+
+de-DE:
+  Missing: č (U+010D), ě (U+011B), ň (U+0148), ř (U+0159), Š (U+0160), š (U+0161), ů (U+016F), Ž (U+017D), ž (U+017E), ﻿ (U+FEFF)
+
+en-US:
+  Missing: ﻿ (U+FEFF)
+
+es-ES:
+  Missing: ﻿ (U+FEFF)
+
+fr-FR:
+  Missing: œ (U+0153), ﻿ (U+FEFF)
+
+hi-IN:
+  Missing: ँ (U+0901), ं (U+0902), अ (U+0905), आ (U+0906), इ (U+0907), ई (U+0908), उ (U+0909), ऊ (U+090A), ए (U+090F), ऑ (U+0911)...
+
+id-ID:
+  Missing: ﻿ (U+FEFF)
+
+it-IT:
+  Missing: ﻿ (U+FEFF)
+
+ja-JP:
+  Missing: 、 (U+3001), 。 (U+3002), 「 (U+300C), 」 (U+300D), あ (U+3042), い (U+3044), え (U+3048), か (U+304B), が (U+304C), き (U+304D)...
+
+ko-KR:
+  Missing: 가 (U+AC00), 감 (U+AC10), 거 (U+AC70), 게 (U+AC8C), 격 (U+ACA9), 견 (U+ACAC), 결 (U+ACB0), 고 (U+ACE0), 공 (U+ACF5), 과 (U+ACFC)...
+
+nl-NL:
+  Missing: ﻿ (U+FEFF)
+
+pl-PL:
+  Missing: ą (U+0105), ć (U+0107), ę (U+0119), ł (U+0142), ń (U+0144), ś (U+015B), Ż (U+017B), ż (U+017C), ﻿ (U+FEFF)
+
+pt-BR:
+  Missing: ﻿ (U+FEFF)
+
+ru-RU:
+  Missing: ﻿ (U+FEFF)
+
+sv-SE:
+  Missing: ﻿ (U+FEFF)
+
+th-TH:
+  Missing: ก (U+0E01), ข (U+0E02), ค (U+0E04), ง (U+0E07), จ (U+0E08), ช (U+0E0A), ซ (U+0E0B), ญ (U+0E0D), ด (U+0E14), ต (U+0E15)...
+
+tr-TR:
+  Missing: ğ (U+011F), İ (U+0130), ı (U+0131), ş (U+015F), ﻿ (U+FEFF)
+
+uk-UA:
+  Missing: ﻿ (U+FEFF)
+
+vi-VN:
+  Missing: ă (U+0103), Đ (U+0110), đ (U+0111), ơ (U+01A1), ư (U+01B0), ạ (U+1EA1), ả (U+1EA3), ấ (U+1EA5), ầ (U+1EA7), ẩ (U+1EA9)...
+
+zh-CN:
+  Missing: 。 (U+3002), 一 (U+4E00), 上 (U+4E0A), 下 (U+4E0B), 不 (U+4E0D), 与 (U+4E0E), 严 (U+4E25), 个 (U+4E2A), 中 (U+4E2D), 久 (U+4E45)...

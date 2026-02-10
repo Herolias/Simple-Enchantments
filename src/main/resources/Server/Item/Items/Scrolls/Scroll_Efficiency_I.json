@@ -1,0 +1,91 @@
+{
+  "TranslationProperties": {
+    "Name": "server.items.Scroll_Efficiency_I.name",
+    "Description": "server.items.Scroll_Efficiency_I.description"
+  },
+  "Icon": "Icons/ItemsGenerated/Scroll.png",
+  "Categories": [
+    "Items.Magic"
+  ],
+  "Model": "Items/Scrolls/EnchantmentScroll.blockymodel",
+  "Texture": "Items/Scrolls/EnchScroll.png",
+  "Interactions": {
+    "Primary": {
+      "Interactions": [
+        {
+          "Type": "OpenCustomUI",
+          "Page": {
+            "Id": "EnchantScroll",
+            "EnchantmentId": "efficiency",
+            "Level": 1
+          }
+        }
+      ]
+    },
+    "Secondary": {
+      "Interactions": [
+        {
+          "Type": "OpenCustomUI",
+          "Page": {
+            "Id": "EnchantScroll",
+            "EnchantmentId": "efficiency",
+            "Level": 1
+          }
+        }
+      ]
+    }
+  },
+  "Recipe": {
+    "TimeSeconds": 2,
+    "Input": [
+      {
+        "ItemId": "Ingredient_Fabric_Scrap_Cindercloth",
+        "Quantity": 5
+      },
+      {
+        "ItemId": "Ingredient_Crystal_Red",
+        "Quantity": 10
+      },
+      {
+        "ItemId": "Ingredient_Bar_Gold",
+        "Quantity": 5
+      },
+      {
+        "ItemId": "Ingredient_Bar_Cobalt",
+        "Quantity": 5
+      }
+    ],
+    "OutputQuantity": 1,
+    "BenchRequirement": [
+      {
+        "Id": "Enchantingbench",
+        "Type": "Crafting",
+        "Categories": [
+          "Enchanting_Tools"
+        ],
+        "RequiredTierLevel": 1
+      }
+    ]
+  },
+  "PlayerAnimationsId": "Item",
+  "IconProperties": {
+    "Scale": 0.84,
+    "Translation": [
+      5,
+      15
+    ],
+    "Rotation": [
+      90,
+      45,
+      0
+    ]
+  },
+  "MaxStack": 10,
+  "ItemLevel": 1,
+  "Quality": "Uncommon",
+  "Tags": {
+    "Type": [
+      "EnchantmentScroll"
+    ]
+  }
+}

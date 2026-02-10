@@ -1,0 +1,126 @@
+$C = "../Common.ui";
+
+$C.@PageOverlay {}
+
+$C.@DecoratedContainer {
+  Anchor: (Width: 900, Height: 600);
+
+  #Title {
+    Group {
+      $C.@Title {
+        @Text = %server.customUI.enchantConfigPage.title;
+      }
+    }
+  }
+
+  #Content {
+    LayoutMode: Top;
+
+    Group #TabBar {
+      LayoutMode: Left;
+      Anchor: (Height: 50, Bottom: 10);
+      Padding: (Horizontal: 5);
+
+      TextButton #TabGeneral {
+        Style: $C.@SecondaryTextButtonStyle;
+        Anchor: (Width: 150, Height: 40, Right: 8);
+        Padding: (Horizontal: 16);
+        Text: %server.customUI.enchantConfigPage.tabGeneral;
+      }
+
+      TextButton #TabEnchantments {
+        Style: $C.@SecondaryTextButtonStyle;
+        Anchor: (Width: 150, Height: 40, Right: 8);
+        Padding: (Horizontal: 16);
+        Text: %server.customUI.enchantConfigPage.tabEnchantments;
+      }
+
+      TextButton #TabRecipes {
+        Style: $C.@SecondaryTextButtonStyle;
+        Anchor: (Width: 150, Height: 40);
+        Padding: (Horizontal: 16);
+        Text: %server.customUI.enchantConfigPage.tabRecipes;
+      }
+    }
+
+    Group {
+      Anchor: (Height: 1, Bottom: 10);
+      Background: (Color: #5e512c);
+    }
+
+    Group #ContentArea {
+      FlexWeight: 1;
+      LayoutMode: TopScrolling;
+      ScrollbarStyle: $C.@DefaultScrollbarStyle;
+      Padding: (Right: 10);
+    }
+
+    Group {
+      Anchor: (Height: 1, Top: 10);
+      Background: (Color: #5e512c);
+    }
+
+    Group #ActionBar {
+      LayoutMode: Left;
+      Anchor: (Height: 50, Top: 10);
+
+      Label #UnsavedIndicator {
+        Anchor: (Width: 150, Right: 10);
+        Visible: false;
+        Style: (
+          FontSize: 12,
+          VerticalAlignment: Center,
+          TextColor: #ffcc00
+        );
+      }
+
+      Label #SaveFeedback {
+        Anchor: (Width: 240, Right: 10);
+        Visible: false;
+        Style: (
+          FontSize: 12,
+          VerticalAlignment: Center,
+          TextColor: #44ff44
+        );
+      }
+
+      Group {
+        FlexWeight: 1;
+      }
+
+      TextButton #ResetAllButton {
+        Style: $C.@TertiaryTextButtonStyle;
+        Anchor: (Width: 220, Height: 40, Right: 10);
+        Padding: (Horizontal: 16);
+        Text: "Reset All";
+        Background: (Color: #8b2222);
+        TooltipText: "Reset entire config to defaults";
+      }
+
+      TextButton #ConfirmResetButton {
+        Style: $C.@TertiaryTextButtonStyle;
+        Anchor: (Width: 220, Height: 40, Right: 10);
+        Padding: (Horizontal: 16);
+        Text: "Confirm Reset?";
+        Background: (Color: #ff3333);
+        Visible: false;
+      }
+
+      TextButton #SaveButton {
+        Style: $C.@DefaultTextButtonStyle;
+        Anchor: (Width: 120, Height: 40, Right: 10);
+        Padding: (Horizontal: 16);
+        Text: %server.customUI.enchantConfigPage.save;
+      }
+
+      TextButton #CancelButton {
+        Style: $C.@TertiaryTextButtonStyle;
+        Anchor: (Width: 120, Height: 40);
+        Padding: (Horizontal: 16);
+        Text: %server.customUI.enchantConfigPage.cancel;
+      }
+    }
+  }
+}
+
+$C.@BackButton {}

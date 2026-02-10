@@ -1,0 +1,50 @@
+$C = "../Common.ui";
+
+Group {
+  LayoutMode: Left;
+  Anchor: (Height: 48, Bottom: 8);
+  Background: (TexturePath: "../Common/ContainerPanelPatch.png", Border: 4);
+  Padding: (Horizontal: 12, Vertical: 6);
+
+  Label #SettingName {
+    Anchor: (Width: 220);
+    Style: (
+      FontSize: 14,
+      VerticalAlignment: Center
+    );
+  }
+
+  Group {
+    FlexWeight: 1;
+  }
+
+  TextButton #ResetBtn {
+    Style: $C.@TertiaryTextButtonStyle;
+    Anchor: (Width: 70, Height: 28, Right: 8);
+    Padding: (Horizontal: 4);
+    Text: "Reset";
+    TooltipText: "Reset to default";
+  }
+
+  TextButton #DecreaseBtn {
+    Style: $C.@TertiaryTextButtonStyle;
+    Anchor: (Width: 32, Height: 34, Right: 4);
+    Padding: (Horizontal: 8);
+    Text: "-";
+  }
+
+  $C.@NumberField #SettingInput {
+    Anchor: (Width: 70, Height: 34);
+    Format: (
+      MaxDecimalPlaces: 3,
+      Step: 0.01
+    );
+  }
+
+  TextButton #IncreaseBtn {
+    Style: $C.@TertiaryTextButtonStyle;
+    Anchor: (Width: 32, Height: 34, Left: 4);
+    Padding: (Horizontal: 8);
+    Text: "+";
+  }
+}

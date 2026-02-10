@@ -1,0 +1,454 @@
+﻿﻿benchCategories.enchantingArmor = Armure
+
+benchCategories.enchantingTools = Outils
+
+benchCategories.enchantingMelee = Mêlée
+
+benchCategories.enchantingRanged = Distance
+
+benchCategories.enchantingStaff = Magie
+
+benchCategories.enchantingShield = Bouclier
+
+
+
+customUI.enchantScrollPage.title = Enchanter l'objet
+
+customUI.enchantScrollPage.noItems = Aucun objet à enchanter
+
+customUI.enchantScrollPage.item = Objet
+
+customUI.enchantScrollPage.enchantment = Enchantement
+
+
+
+items.Enchanting_Table.name = Table d'Enchantement
+
+items.Enchanting_Table.description = Une table utilisée pour fabriquer des parchemins d'enchantement.
+
+
+
+items.Scroll_Sharpness_I.name = Parchemin de Tranchant I
+
+items.Scroll_Sharpness_I.description = Augmente les dégâts de mêlée de 10%.
+
+items.Scroll_Sharpness_II.name = Parchemin de Tranchant II
+
+items.Scroll_Sharpness_II.description = Augmente les dégâts de mêlée de 20%.
+
+items.Scroll_Sharpness_III.name = Parchemin de Tranchant III
+
+items.Scroll_Sharpness_III.description = Augmente les dégâts de mêlée de 30%.
+
+
+
+items.Scroll_Durability_I.name = Parchemin de Solidité I
+
+items.Scroll_Durability_I.description = Réduit la perte de durabilité de 25%.
+
+items.Scroll_Durability_II.name = Parchemin de Solidité II
+
+items.Scroll_Durability_II.description = Réduit la perte de durabilité de 50%.
+
+items.Scroll_Durability_III.name = Parchemin de Solidité III
+
+items.Scroll_Durability_III.description = Réduit la perte de durabilité de 75%.
+
+
+
+items.Scroll_Protection_I.name = Parchemin de Protection I
+
+items.Scroll_Protection_I.description = Réduit les dégâts physiques reçus de 4% par pièce d'armure.
+
+items.Scroll_Protection_II.name = Parchemin de Protection II
+
+items.Scroll_Protection_II.description = Réduit les dégâts physiques reçus de 8% par pièce d'armure.
+
+items.Scroll_Protection_III.name = Parchemin de Protection III
+
+items.Scroll_Protection_III.description = Réduit les dégâts physiques reçus de 12% par pièce d'armure.
+
+
+
+items.Scroll_Efficiency_I.name = Parchemin d'Efficacité I
+
+items.Scroll_Efficiency_I.description = Augmente la vitesse de minage de 20%.
+
+items.Scroll_Efficiency_II.name = Parchemin d'Efficacité II
+
+items.Scroll_Efficiency_II.description = Augmente la vitesse de minage de 40%.
+
+items.Scroll_Efficiency_III.name = Parchemin d'Efficacité III
+
+items.Scroll_Efficiency_III.description = Augmente la vitesse de minage de 60%.
+
+
+
+items.Scroll_Fortune_I.name = Parchemin de Fortune I
+
+items.Scroll_Fortune_I.description = Augmente les chances d'obtenir des minerais/cristaux supplémentaires de 25%.
+
+items.Scroll_Fortune_II.name = Parchemin de Fortune II
+
+items.Scroll_Fortune_II.description = Augmente les chances d'obtenir des minerais/cristaux supplémentaires de 50%.
+
+items.Scroll_Fortune_III.name = Parchemin de Fortune III
+
+items.Scroll_Fortune_III.description = Augmente les chances d'obtenir des minerais/cristaux supplémentaires de 75%.
+
+
+
+items.Scroll_Smelting_I.name = Parchemin de Fonderie
+
+items.Scroll_Smelting_I.description = Fond automatiquement les blocs minés.
+
+
+
+items.Scroll_Life_Leech_I.name = Parchemin de Vol de Vie I
+
+items.Scroll_Life_Leech_I.description = Soigne l'attaquant pour 10% des dégâts infligés.
+
+items.Scroll_Life_Leech_II.name = Parchemin de Vol de Vie II
+
+items.Scroll_Life_Leech_II.description = Soigne l'attaquant pour 20% des dégâts infligés.
+
+items.Scroll_Life_Leech_III.name = Parchemin de Vol de Vie III
+
+items.Scroll_Life_Leech_III.description = Soigne l'attaquant pour 30% des dégâts infligés.
+
+
+
+items.Scroll_Dexterity_I.name = Parchemin de Dextérité I
+
+items.Scroll_Dexterity_I.description = Réduit le coût en endurance de 20%.
+
+items.Scroll_Dexterity_II.name = Parchemin de Dextérité II
+
+items.Scroll_Dexterity_II.description = Réduit le coût en endurance de 40%.
+
+items.Scroll_Dexterity_III.name = Parchemin de Dextérité III
+
+items.Scroll_Dexterity_III.description = Réduit le coût en endurance de 60%.
+
+
+
+items.Scroll_Looting_I.name = Parchemin de Butin I
+
+items.Scroll_Looting_I.description = Augmente le taux de drop des mobs de 25% et les chances d'obtenir des objets rares.
+
+items.Scroll_Looting_II.name = Parchemin de Butin II
+
+items.Scroll_Looting_II.description = Augmente le taux de drop des mobs de 50% et les chances d'obtenir des objets rares.
+
+items.Scroll_Looting_III.name = Parchemin de Butin III
+
+items.Scroll_Looting_III.description = Augmente le taux de drop des mobs de 75% et les chances d'obtenir des objets rares.
+
+
+
+items.Scroll_Sturdy_I.name = Parchemin de Robustesse
+
+items.Scroll_Sturdy_I.description = Empêche la perte de durabilité maximale lors des réparations.
+
+
+
+items.Scroll_Strength_I.name = Parchemin de Force I
+
+items.Scroll_Strength_I.description = Augmente les dégâts des projectiles de 10%.
+
+items.Scroll_Strength_II.name = Parchemin de Force II
+
+items.Scroll_Strength_II.description = Augmente les dégâts des projectiles de 20%.
+
+items.Scroll_Strength_III.name = Parchemin de Force III
+
+items.Scroll_Strength_III.description = Augmente les dégâts des projectiles de 30%.
+
+
+
+items.Scroll_Eagles_Eye_I.name = Parchemin d'Oeil d'Aigle I
+
+items.Scroll_Eagles_Eye_I.description = Augmente les dégâts des projectiles jusqu'à 15% selon la distance.
+
+items.Scroll_Eagles_Eye_II.name = Parchemin d'Oeil d'Aigle II
+
+items.Scroll_Eagles_Eye_II.description = Augmente les dégâts des projectiles jusqu'à 30% selon la distance.
+
+items.Scroll_Eagles_Eye_III.name = Parchemin d'Oeil d'Aigle III
+
+items.Scroll_Eagles_Eye_III.description = Augmente les dégâts des projectiles jusqu'à 45% selon la distance.
+
+
+
+items.Scroll_Feather_Falling_I.name = Parchemin de Chute Amortie I
+
+items.Scroll_Feather_Falling_I.description = Réduit les dégâts de chute de 20%.
+
+items.Scroll_Feather_Falling_II.name = Parchemin de Chute Amortie II
+
+items.Scroll_Feather_Falling_II.description = Réduit les dégâts de chute de 40%.
+
+items.Scroll_Feather_Falling_III.name = Parchemin de Chute Amortie III
+
+items.Scroll_Feather_Falling_III.description = Réduit les dégâts de chute de 60%.
+
+
+
+items.Scroll_Waterbreathing_I.name = Parchemin d'Apnée I
+
+items.Scroll_Waterbreathing_I.description = Réduit la consommation d'oxygène de 20%.
+
+items.Scroll_Waterbreathing_II.name = Parchemin d'Apnée II
+
+items.Scroll_Waterbreathing_II.description = Réduit la consommation d'oxygène de 40%.
+
+items.Scroll_Waterbreathing_III.name = Parchemin d'Apnée III
+
+items.Scroll_Waterbreathing_III.description = Réduit la consommation d'oxygène de 60%.
+
+
+
+items.Scroll_Burn_I.name = Parchemin de Brûlure
+
+items.Scroll_Burn_I.description = Enflamme la cible et fait tomber des variantes cuites de ses butins. Incompatible avec Gel.
+
+
+
+items.Scroll_Freeze_I.name = Parchemin de Gel
+
+items.Scroll_Freeze_I.description = Applique un fort ralentissement (50%) à la cible touchée. Incompatible avec Brûlure.
+
+
+
+items.Scroll_Eternal_Shot_I.name = Parchemin de Tir Éternel
+
+items.Scroll_Eternal_Shot_I.description = Permet de tirer des flèches sans les consommer.
+
+
+
+items.Scroll_Silktouch_I.name = Parchemin de Toucher de Soie
+
+items.Scroll_Silktouch_I.description = Les blocs minés tombent tels quels au lieu de leurs ressources habituelles. Incompatible avec Fortune ou Fonderie.
+
+
+
+items.Scroll_Thrift_I.name = Parchemin d'Économie I
+
+items.Scroll_Thrift_I.description = Restaure 20% du mana dépensé lors d'un coup.
+
+items.Scroll_Thrift_II.name = Parchemin d'Économie II
+
+items.Scroll_Thrift_II.description = Restaure 40% du mana dépensé lors d'un coup.
+
+items.Scroll_Thrift_III.name = Parchemin d'Économie III
+
+items.Scroll_Thrift_III.description = Restaure 60% du mana dépensé lors d'un coup.
+
+
+
+items.Scroll_ElementalHeart_I.name = Parchemin de Cœur Élémentaire
+
+items.Scroll_ElementalHeart_I.description = Les bâtons élémentaires ne consomment pas d'essence lors du lancement.
+
+
+
+items.Scroll_Knockback_I.name = Parchemin de Recul I
+
+items.Scroll_Knockback_I.description = Repousse les cibles touchées.
+
+items.Scroll_Knockback_II.name = Parchemin de Recul II
+
+items.Scroll_Knockback_II.description = Repousse les cibles touchées plus loin.
+
+items.Scroll_Knockback_III.name = Parchemin de Recul III
+
+items.Scroll_Knockback_III.description = Repousse les cibles touchées très loin.
+
+
+
+items.Scroll_Reflection_I.name = Parchemin de Réflexion I
+
+items.Scroll_Reflection_I.description = Renvoie 10% des dégâts bloqués à l'attaquant. Incompatible avec Absorption.
+
+items.Scroll_Reflection_II.name = Parchemin de Réflexion II
+
+items.Scroll_Reflection_II.description = Renvoie 20% des dégâts bloqués à l'attaquant. Incompatible avec Absorption.
+
+items.Scroll_Reflection_III.name = Parchemin de Réflexion III
+
+items.Scroll_Reflection_III.description = Renvoie 30% des dégâts bloqués à l'attaquant. Incompatible avec Absorption.
+
+
+
+items.Scroll_Absorption_I.name = Parchemin d'Absorption I
+
+items.Scroll_Absorption_I.description = Soigne le défenseur pour 10% des dégâts bloqués. Incompatible avec Réflexion.
+
+items.Scroll_Absorption_II.name = Parchemin d'Absorption II
+
+items.Scroll_Absorption_II.description = Soigne le défenseur pour 20% des dégâts bloqués. Incompatible avec Réflexion.
+
+items.Scroll_Absorption_III.name = Parchemin d'Absorption III
+
+items.Scroll_Absorption_III.description = Soigne le défenseur pour 30% des dégâts bloqués. Incompatible avec Réflexion.
+
+
+
+items.Scroll_FastSwim_I.name = Parchemin de Nage Rapide I
+
+items.Scroll_FastSwim_I.description = Augmente la vitesse de nage de 25%.
+
+items.Scroll_FastSwim_II.name = Parchemin de Nage Rapide II
+
+items.Scroll_FastSwim_II.description = Augmente la vitesse de nage de 50%.
+
+items.Scroll_FastSwim_III.name = Parchemin de Nage Rapide III
+
+items.Scroll_FastSwim_III.description = Augmente la vitesse de nage de 75%.
+
+
+
+commands.enchantconfig.desc = Ouvre l'éditeur de configuration d'enchantement en jeu.
+
+
+
+customUI.enchantConfigPage.title = Configuration des Enchantements
+
+customUI.enchantConfigPage.tabGeneral = Général
+
+customUI.enchantConfigPage.tabEnchantments = Enchantements
+
+customUI.enchantConfigPage.tabRecipes = Recettes
+
+customUI.enchantConfigPage.save = Sauvegarder
+
+customUI.enchantConfigPage.cancel = Annuler
+
+
+
+items.Scroll_Cleansing.name = Parchemin de Purification
+
+items.Scroll_Cleansing.description = Retire un enchantement d'un objet.
+
+
+
+customUI.cleansingScrollPage.title = Retirer Enchantement
+
+customUI.cleansingScrollPage.noItems = Aucun objet enchanté trouvé
+
+customUI.cleansingScrollPage.item = Objet
+
+customUI.cleansingScrollPage.enchantments = Enchantements
+
+
+
+customUI.cleansingEnchantmentPage.title = Sélectionnez un enchantement à retirer
+
+customUI.cleansingEnchantmentPage.selectHint = Cliquez sur un enchantement pour le retirer
+
+
+
+
+
+
+
+
+
+# Enchantment Localizations (Auto-generated)
+
+enchantment.sharpness.name = Tranchant
+
+enchantment.sharpness.description = Augmente les dégâts de mêlée de 10%.
+
+enchantment.life_leech.name = Vol de Vie
+
+enchantment.life_leech.description = Soigne l'attaquant pour 10% des dégâts infligés.
+
+enchantment.durability.name = Solidité
+
+enchantment.durability.description = Réduit la perte de durabilité de 25%.
+
+enchantment.sturdy.name = Robustesse
+
+enchantment.sturdy.description = Empêche la perte de durabilité maximale lors des réparations.
+
+enchantment.dexterity.name = Dextérité
+
+enchantment.dexterity.description = Réduit le coût en endurance de 20%.
+
+enchantment.protection.name = Protection
+
+enchantment.protection.description = Réduit les dégâts physiques reçus de 4% par pièce d'armure.
+
+enchantment.efficiency.name = Efficacité
+
+enchantment.efficiency.description = Augmente la vitesse de minage de 20%.
+
+enchantment.fortune.name = Fortune
+
+enchantment.fortune.description = Augmente les chances d'obtenir des minerais/cristaux supplémentaires de 25%.
+
+enchantment.smelting.name = Fonderie
+
+enchantment.smelting.description = Fond automatiquement les blocs minés.
+
+enchantment.strength.name = Force
+
+enchantment.strength.description = Augmente les dégâts des projectiles de 10%.
+
+enchantment.eagles_eye.name = Oeil d'Aigle
+
+enchantment.eagles_eye.description = Augmente les dégâts des projectiles jusqu'à 15% selon la distance.
+
+enchantment.looting.name = Butin
+
+enchantment.looting.description = Augmente le taux de drop des mobs de 25% et les chances d'obtenir des objets rares.
+
+enchantment.feather_falling.name = Chute Amortie
+
+enchantment.feather_falling.description = Réduit les dégâts de chute de 20%.
+
+enchantment.waterbreathing.name = Apnée
+
+enchantment.waterbreathing.description = Réduit la consommation d'oxygène de 20%.
+
+enchantment.burn.name = Brûlure
+
+enchantment.burn.description = Enflamme la cible et fait tomber des variantes cuites de ses butins. Incompatible avec Gel.
+
+enchantment.freeze.name = Gel
+
+enchantment.freeze.description = Applique un fort ralentissement (50%) à la cible touchée. Incompatible avec Brûlure.
+
+enchantment.eternal_shot.name = Tir Éternel
+
+enchantment.eternal_shot.description = Permet de tirer des flèches sans les consommer.
+
+enchantment.pick_perfect.name = Toucher de Soie
+
+enchantment.pick_perfect.description = Les blocs minés tombent tels quels au lieu de leurs ressources habituelles. Incompatible avec Fortune ou Fonderie.
+
+enchantment.thrift.name = Économie
+
+enchantment.thrift.description = Restaure 20% du mana dépensé lors d'un coup.
+
+enchantment.elemental_heart.name = Cœur Élémentaire
+
+enchantment.elemental_heart.description = Les bâtons élémentaires ne consomment pas d'essence lors du lancement.
+
+enchantment.knockback.name = Recul
+
+enchantment.knockback.description = Repousse les cibles touchées.
+
+enchantment.reflection.name = Réflexion
+
+enchantment.reflection.description = Renvoie 10% des dégâts bloqués à l'attaquant. Incompatible avec Absorption.
+
+enchantment.absorption.name = Absorption
+
+enchantment.absorption.description = Soigne le défenseur pour 10% des dégâts bloqués. Incompatible avec Réflexion.
+
+enchantment.fast_swim.name = Nage Rapide
+
+enchantment.fast_swim.description = Augmente la vitesse de nage de 25%.
+

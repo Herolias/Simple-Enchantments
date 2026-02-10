@@ -1,0 +1,26 @@
+$C = "../Common.ui";
+
+Group {
+  LayoutMode: Left;
+  Anchor: (Height: 44, Bottom: 8);
+  Background: (TexturePath: "../Common/ContainerPanelPatch.png", Border: 4);
+  Padding: (Horizontal: 12, Vertical: 6);
+
+  Label #SettingName {
+    Anchor: (Width: 280);
+    Style: (
+      FontSize: 14,
+      VerticalAlignment: Center
+    );
+  }
+
+  Group {
+    FlexWeight: 1;
+  }
+
+  TextButton #ToggleButton {
+    Style: $C.@SecondaryTextButtonStyle;
+    Anchor: (Width: 110, Height: 32);
+    Padding: (Horizontal: 12);
+  }
+}

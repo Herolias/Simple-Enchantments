@@ -1,0 +1,36 @@
+$C = "../Common.ui";
+
+// Single item row in search results - shows icon and display name
+Group {
+  LayoutMode: Left;
+  Anchor: (Height: 44, Bottom: 4);
+  Padding: (Horizontal: 8, Vertical: 4);
+  
+  Button #ItemSelectBtn {
+    Style: (
+      Default: (Background: (Color: #1a2030)),
+      Hovered: (Background: (Color: #2a3548)),
+      Pressed: (Background: (Color: #1a2530))
+    );
+    
+    Group {
+      LayoutMode: Left;
+      Padding: (Horizontal: 8, Vertical: 4);
+      
+      ItemSlot #ItemIcon {
+        Anchor: (Width: 32, Height: 32, Right: 10);
+        ShowQualityBackground: true;
+        ShowQuantity: false;
+      }
+      
+      Label #ItemDisplayName {
+        FlexWeight: 1;
+        Style: (
+          FontSize: 13,
+          VerticalAlignment: Center,
+          TextColor: #cccccc
+        );
+      }
+    }
+  }
+}

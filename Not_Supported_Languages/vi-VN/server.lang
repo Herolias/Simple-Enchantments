@@ -1,0 +1,454 @@
+﻿﻿benchCategories.enchantingArmor = Giáp
+
+benchCategories.enchantingTools = Công cụ
+
+benchCategories.enchantingMelee = Cận chiến
+
+benchCategories.enchantingRanged = Tầm xa
+
+benchCategories.enchantingStaff = Phép thuật
+
+benchCategories.enchantingShield = Khiên
+
+
+
+customUI.enchantScrollPage.title = Phù phép Vật phẩm
+
+customUI.enchantScrollPage.noItems = Không có vật phẩm nào để phù phép
+
+customUI.enchantScrollPage.item = Vật phẩm
+
+customUI.enchantScrollPage.enchantment = Phù phép
+
+
+
+items.Enchanting_Table.name = Bàn Phù Phép
+
+items.Enchanting_Table.description = Một chiếc bàn dùng để chế tạo các cuộn giấy phù phép.
+
+
+
+items.Scroll_Sharpness_I.name = Cuộn Giấy Sắc Bén I
+
+items.Scroll_Sharpness_I.description = Tăng 10% sát thương cận chiến.
+
+items.Scroll_Sharpness_II.name = Cuộn Giấy Sắc Bén II
+
+items.Scroll_Sharpness_II.description = Tăng 20% sát thương cận chiến.
+
+items.Scroll_Sharpness_III.name = Cuộn Giấy Sắc Bén III
+
+items.Scroll_Sharpness_III.description = Tăng 30% sát thương cận chiến.
+
+
+
+items.Scroll_Durability_I.name = Cuộn Giấy Bền Bỉ I
+
+items.Scroll_Durability_I.description = Giảm 25% cơ hội mất độ bền.
+
+items.Scroll_Durability_II.name = Cuộn Giấy Bền Bỉ II
+
+items.Scroll_Durability_II.description = Giảm 50% cơ hội mất độ bền.
+
+items.Scroll_Durability_III.name = Cuộn Giấy Bền Bỉ III
+
+items.Scroll_Durability_III.description = Giảm 75% cơ hội mất độ bền.
+
+
+
+items.Scroll_Protection_I.name = Cuộn Giấy Bảo Vệ I
+
+items.Scroll_Protection_I.description = Giảm 4% sát thương vật lý nhận vào cho mỗi mảnh giáp.
+
+items.Scroll_Protection_II.name = Cuộn Giấy Bảo Vệ II
+
+items.Scroll_Protection_II.description = Giảm 8% sát thương vật lý nhận vào cho mỗi mảnh giáp.
+
+items.Scroll_Protection_III.name = Cuộn Giấy Bảo Vệ III
+
+items.Scroll_Protection_III.description = Giảm 12% sát thương vật lý nhận vào cho mỗi mảnh giáp.
+
+
+
+items.Scroll_Efficiency_I.name = Cuộn Giấy Hiệu Quả I
+
+items.Scroll_Efficiency_I.description = Tăng 20% tốc độ khai thác.
+
+items.Scroll_Efficiency_II.name = Cuộn Giấy Hiệu Quả II
+
+items.Scroll_Efficiency_II.description = Tăng 40% tốc độ khai thác.
+
+items.Scroll_Efficiency_III.name = Cuộn Giấy Hiệu Quả III
+
+items.Scroll_Efficiency_III.description = Tăng 60% tốc độ khai thác.
+
+
+
+items.Scroll_Fortune_I.name = Cuộn Giấy May Mắn I
+
+items.Scroll_Fortune_I.description = Tăng 25% cơ hội nhận thêm quặng/tinh thể.
+
+items.Scroll_Fortune_II.name = Cuộn Giấy May Mắn II
+
+items.Scroll_Fortune_II.description = Tăng 50% cơ hội nhận thêm quặng/tinh thể.
+
+items.Scroll_Fortune_III.name = Cuộn Giấy May Mắn III
+
+items.Scroll_Fortune_III.description = Tăng 75% cơ hội nhận thêm quặng/tinh thể.
+
+
+
+items.Scroll_Smelting_I.name = Cuộn Giấy Nung Chảy
+
+items.Scroll_Smelting_I.description = Tự động nung chảy các khối đã khai thác.
+
+
+
+items.Scroll_Life_Leech_I.name = Cuộn Giấy Hút Máu I
+
+items.Scroll_Life_Leech_I.description = Hồi máu cho người tấn công bằng 10% sát thương gây ra.
+
+items.Scroll_Life_Leech_II.name = Cuộn Giấy Hút Máu II
+
+items.Scroll_Life_Leech_II.description = Hồi máu cho người tấn công bằng 20% sát thương gây ra.
+
+items.Scroll_Life_Leech_III.name = Cuộn Giấy Hút Máu III
+
+items.Scroll_Life_Leech_III.description = Hồi máu cho người tấn công bằng 30% sát thương gây ra.
+
+
+
+items.Scroll_Dexterity_I.name = Cuộn Giấy Khéo Léo I
+
+items.Scroll_Dexterity_I.description = Giảm 20% chi phí thể lực.
+
+items.Scroll_Dexterity_II.name = Cuộn Giấy Khéo Léo II
+
+items.Scroll_Dexterity_II.description = Giảm 40% chi phí thể lực.
+
+items.Scroll_Dexterity_III.name = Cuộn Giấy Khéo Léo III
+
+items.Scroll_Dexterity_III.description = Giảm 60% chi phí thể lực.
+
+
+
+items.Scroll_Looting_I.name = Cuộn Giấy Nhặt Đồ I
+
+items.Scroll_Looting_I.description = Tăng 25% tỷ lệ rơi đồ của quái vật và tăng cơ hội nhận vật phẩm hiếm.
+
+items.Scroll_Looting_II.name = Cuộn Giấy Nhặt Đồ II
+
+items.Scroll_Looting_II.description = Tăng 50% tỷ lệ rơi đồ của quái vật và tăng cơ hội nhận vật phẩm hiếm.
+
+items.Scroll_Looting_III.name = Cuộn Giấy Nhặt Đồ III
+
+items.Scroll_Looting_III.description = Tăng 75% tỷ lệ rơi đồ của quái vật và tăng cơ hội nhận vật phẩm hiếm.
+
+
+
+items.Scroll_Sturdy_I.name = Cuộn Giấy Cứng Cáp
+
+items.Scroll_Sturdy_I.description = Ngăn chặn việc mất độ bền tối đa khi sửa chữa.
+
+
+
+items.Scroll_Strength_I.name = Cuộn Giấy Sức Mạnh I
+
+items.Scroll_Strength_I.description = Tăng 10% sát thương đạn đạo.
+
+items.Scroll_Strength_II.name = Cuộn Giấy Sức Mạnh II
+
+items.Scroll_Strength_II.description = Tăng 20% sát thương đạn đạo.
+
+items.Scroll_Strength_III.name = Cuộn Giấy Sức Mạnh III
+
+items.Scroll_Strength_III.description = Tăng 30% sát thương đạn đạo.
+
+
+
+items.Scroll_Eagles_Eye_I.name = Cuộn Giấy Mắt Đại Bàng I
+
+items.Scroll_Eagles_Eye_I.description = Tăng tối đa 15% sát thương đạn đạo dựa trên khoảng cách.
+
+items.Scroll_Eagles_Eye_II.name = Cuộn Giấy Mắt Đại Bàng II
+
+items.Scroll_Eagles_Eye_II.description = Tăng tối đa 30% sát thương đạn đạo dựa trên khoảng cách.
+
+items.Scroll_Eagles_Eye_III.name = Cuộn Giấy Mắt Đại Bàng III
+
+items.Scroll_Eagles_Eye_III.description = Tăng tối đa 45% sát thương đạn đạo dựa trên khoảng cách.
+
+
+
+items.Scroll_Feather_Falling_I.name = Cuộn Giấy Rơi Nhẹ I
+
+items.Scroll_Feather_Falling_I.description = Giảm 20% sát thương khi rơi.
+
+items.Scroll_Feather_Falling_II.name = Cuộn Giấy Rơi Nhẹ II
+
+items.Scroll_Feather_Falling_II.description = Giảm 40% sát thương khi rơi.
+
+items.Scroll_Feather_Falling_III.name = Cuộn Giấy Rơi Nhẹ III
+
+items.Scroll_Feather_Falling_III.description = Giảm 60% sát thương khi rơi.
+
+
+
+items.Scroll_Waterbreathing_I.name = Cuộn Giấy Thở Dưới Nước I
+
+items.Scroll_Waterbreathing_I.description = Giảm 20% lượng oxy tiêu thụ.
+
+items.Scroll_Waterbreathing_II.name = Cuộn Giấy Thở Dưới Nước II
+
+items.Scroll_Waterbreathing_II.description = Giảm 40% lượng oxy tiêu thụ.
+
+items.Scroll_Waterbreathing_III.name = Cuộn Giấy Thở Dưới Nước III
+
+items.Scroll_Waterbreathing_III.description = Giảm 60% lượng oxy tiêu thụ.
+
+
+
+items.Scroll_Burn_I.name = Cuộn Giấy Thiêu Đốt
+
+items.Scroll_Burn_I.description = Đốt cháy mục tiêu và khiến chúng rơi ra đồ đã nấu chín. Không thể kết hợp với Đóng Băng.
+
+
+
+items.Scroll_Freeze_I.name = Cuộn Giấy Đóng Băng
+
+items.Scroll_Freeze_I.description = Làm chậm mục tiêu đáng kể (50%) khi đánh trúng. Không thể kết hợp với Thiêu Đốt.
+
+
+
+items.Scroll_Eternal_Shot_I.name = Cuộn Giấy Bắn Mãi Mãi
+
+items.Scroll_Eternal_Shot_I.description = Cho phép bạn bắn tên mà không tiêu tốn chúng.
+
+
+
+items.Scroll_Silktouch_I.name = Cuộn Giấy Chạm Mềm Mại
+
+items.Scroll_Silktouch_I.description = Các khối được khai thác sẽ rơi ra chính nó thay vì tài nguyên thông thường. Không thể kết hợp với May Mắn hoặc Nung Chảy.
+
+
+
+items.Scroll_Thrift_I.name = Cuộn Giấy Tiết Kiệm I
+
+items.Scroll_Thrift_I.description = Hồi phục 20% năng lượng đã sử dụng khi đánh trúng.
+
+items.Scroll_Thrift_II.name = Cuộn Giấy Tiết Kiệm II
+
+items.Scroll_Thrift_II.description = Hồi phục 40% năng lượng đã sử dụng khi đánh trúng.
+
+items.Scroll_Thrift_III.name = Cuộn Giấy Tiết Kiệm III
+
+items.Scroll_Thrift_III.description = Hồi phục 60% năng lượng đã sử dụng khi đánh trúng.
+
+
+
+items.Scroll_ElementalHeart_I.name = Cuộn Giấy Trái Tim Nguyên Tố
+
+items.Scroll_ElementalHeart_I.description = Gậy phép nguyên tố không tiêu tốn tinh chất khi sử dụng.
+
+
+
+items.Scroll_Knockback_I.name = Cuộn Giấy Đẩy Lùi I
+
+items.Scroll_Knockback_I.description = Đẩy lùi mục tiêu khi đánh trúng.
+
+items.Scroll_Knockback_II.name = Cuộn Giấy Đẩy Lùi II
+
+items.Scroll_Knockback_II.description = Đẩy lùi mục tiêu xa hơn khi đánh trúng.
+
+items.Scroll_Knockback_III.name = Cuộn Giấy Đẩy Lùi III
+
+items.Scroll_Knockback_III.description = Đẩy lùi mục tiêu rất xa khi đánh trúng.
+
+
+
+items.Scroll_Reflection_I.name = Cuộn Giấy Phản Hồi I
+
+items.Scroll_Reflection_I.description = Phản lại 10% sát thương đã chặn về phía kẻ tấn công. Không thể kết hợp với Hấp Thụ.
+
+items.Scroll_Reflection_II.name = Cuộn Giấy Phản Hồi II
+
+items.Scroll_Reflection_II.description = Phản lại 20% sát thương đã chặn về phía kẻ tấn công. Không thể kết hợp với Hấp Thụ.
+
+items.Scroll_Reflection_III.name = Cuộn Giấy Phản Hồi III
+
+items.Scroll_Reflection_III.description = Phản lại 30% sát thương đã chặn về phía kẻ tấn công. Không thể kết hợp với Hấp Thụ.
+
+
+
+items.Scroll_Absorption_I.name = Cuộn Giấy Hấp Thụ I
+
+items.Scroll_Absorption_I.description = Hồi máu cho người phòng thủ bằng 10% sát thương đã chặn. Không thể kết hợp với Phản Hồi.
+
+items.Scroll_Absorption_II.name = Cuộn Giấy Hấp Thụ II
+
+items.Scroll_Absorption_II.description = Hồi máu cho người phòng thủ bằng 20% sát thương đã chặn. Không thể kết hợp với Phản Hồi.
+
+items.Scroll_Absorption_III.name = Cuộn Giấy Hấp Thụ III
+
+items.Scroll_Absorption_III.description = Hồi máu cho người phòng thủ bằng 30% sát thương đã chặn. Không thể kết hợp với Phản Hồi.
+
+
+
+items.Scroll_FastSwim_I.name = Cuộn Giấy Bơi Nhanh I
+
+items.Scroll_FastSwim_I.description = Tăng 25% tốc độ bơi.
+
+items.Scroll_FastSwim_II.name = Cuộn Giấy Bơi Nhanh II
+
+items.Scroll_FastSwim_II.description = Tăng 50% tốc độ bơi.
+
+items.Scroll_FastSwim_III.name = Cuộn Giấy Bơi Nhanh III
+
+items.Scroll_FastSwim_III.description = Tăng 75% tốc độ bơi.
+
+
+
+commands.enchantconfig.desc = Mở trình chỉnh sửa cấu hình phù phép trong trò chơi.
+
+
+
+customUI.enchantConfigPage.title = Cấu Hình Phù Phép
+
+customUI.enchantConfigPage.tabGeneral = Chung
+
+customUI.enchantConfigPage.tabEnchantments = Phù Phép
+
+customUI.enchantConfigPage.tabRecipes = Công Thức
+
+customUI.enchantConfigPage.save = Lưu
+
+customUI.enchantConfigPage.cancel = Hủy
+
+
+
+items.Scroll_Cleansing.name = Cuộn Giấy Thanh Tẩy
+
+items.Scroll_Cleansing.description = Loại bỏ một phù phép khỏi bất kỳ vật phẩm nào.
+
+
+
+customUI.cleansingScrollPage.title = Loại Bỏ Phù Phép
+
+customUI.cleansingScrollPage.noItems = Không tìm thấy vật phẩm đã phù phép
+
+customUI.cleansingScrollPage.item = Vật phẩm
+
+customUI.cleansingScrollPage.enchantments = Phù phép
+
+
+
+customUI.cleansingEnchantmentPage.title = Chọn phù phép để loại bỏ
+
+customUI.cleansingEnchantmentPage.selectHint = Nhấp vào một phù phép để loại bỏ nó
+
+
+
+
+
+
+
+
+
+# Enchantment Localizations (Auto-generated)
+
+enchantment.sharpness.name = Sắc Bén
+
+enchantment.sharpness.description = Tăng 10% sát thương cận chiến.
+
+enchantment.life_leech.name = Hút Máu
+
+enchantment.life_leech.description = Hồi máu cho người tấn công bằng 10% sát thương gây ra.
+
+enchantment.durability.name = Bền Bỉ
+
+enchantment.durability.description = Giảm 25% cơ hội mất độ bền.
+
+enchantment.sturdy.name = Cứng Cáp
+
+enchantment.sturdy.description = Ngăn chặn việc mất độ bền tối đa khi sửa chữa.
+
+enchantment.dexterity.name = Khéo Léo
+
+enchantment.dexterity.description = Giảm 20% chi phí thể lực.
+
+enchantment.protection.name = Bảo Vệ
+
+enchantment.protection.description = Giảm 4% sát thương vật lý nhận vào cho mỗi mảnh giáp.
+
+enchantment.efficiency.name = Hiệu Quả
+
+enchantment.efficiency.description = Tăng 20% tốc độ khai thác.
+
+enchantment.fortune.name = May Mắn
+
+enchantment.fortune.description = Tăng 25% cơ hội nhận thêm quặng/tinh thể.
+
+enchantment.smelting.name = Nung Chảy
+
+enchantment.smelting.description = Tự động nung chảy các khối đã khai thác.
+
+enchantment.strength.name = Sức Mạnh
+
+enchantment.strength.description = Tăng 10% sát thương đạn đạo.
+
+enchantment.eagles_eye.name = Mắt Đại Bàng
+
+enchantment.eagles_eye.description = Tăng tối đa 15% sát thương đạn đạo dựa trên khoảng cách.
+
+enchantment.looting.name = Nhặt Đồ
+
+enchantment.looting.description = Tăng 25% tỷ lệ rơi đồ của quái vật và tăng cơ hội nhận vật phẩm hiếm.
+
+enchantment.feather_falling.name = Rơi Nhẹ
+
+enchantment.feather_falling.description = Giảm 20% sát thương khi rơi.
+
+enchantment.waterbreathing.name = Thở Dưới Nước
+
+enchantment.waterbreathing.description = Giảm 20% lượng oxy tiêu thụ.
+
+enchantment.burn.name = Thiêu Đốt
+
+enchantment.burn.description = Đốt cháy mục tiêu và khiến chúng rơi ra đồ đã nấu chín. Không thể kết hợp với Đóng Băng.
+
+enchantment.freeze.name = Đóng Băng
+
+enchantment.freeze.description = Làm chậm mục tiêu đáng kể (50%) khi đánh trúng. Không thể kết hợp với Thiêu Đốt.
+
+enchantment.eternal_shot.name = Bắn Mãi Mãi
+
+enchantment.eternal_shot.description = Cho phép bạn bắn tên mà không tiêu tốn chúng.
+
+enchantment.pick_perfect.name = Chạm Mềm Mại
+
+enchantment.pick_perfect.description = Các khối được khai thác sẽ rơi ra chính nó thay vì tài nguyên thông thường. Không thể kết hợp với May Mắn hoặc Nung Chảy.
+
+enchantment.thrift.name = Tiết Kiệm
+
+enchantment.thrift.description = Hồi phục 20% năng lượng đã sử dụng khi đánh trúng.
+
+enchantment.elemental_heart.name = Trái Tim Nguyên Tố
+
+enchantment.elemental_heart.description = Gậy phép nguyên tố không tiêu tốn tinh chất khi sử dụng.
+
+enchantment.knockback.name = Đẩy Lùi
+
+enchantment.knockback.description = Đẩy lùi mục tiêu khi đánh trúng.
+
+enchantment.reflection.name = Phản Hồi
+
+enchantment.reflection.description = Phản lại 10% sát thương đã chặn về phía kẻ tấn công. Không thể kết hợp với Hấp Thụ.
+
+enchantment.absorption.name = Hấp Thụ
+
+enchantment.absorption.description = Hồi máu cho người phòng thủ bằng 10% sát thương đã chặn. Không thể kết hợp với Phản Hồi.
+
+enchantment.fast_swim.name = Bơi Nhanh
+
+enchantment.fast_swim.description = Tăng 25% tốc độ bơi.
+

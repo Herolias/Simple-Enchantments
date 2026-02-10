@@ -1,0 +1,91 @@
+{
+    "TranslationProperties": {
+        "Name": "server.items.Scroll_Eternal_Shot_I.name",
+        "Description": "server.items.Scroll_Eternal_Shot_I.description"
+    },
+    "Icon": "Icons/ItemsGenerated/Scroll.png",
+    "Categories": [
+        "Items.Magic"
+    ],
+    "Model": "Items/Scrolls/EnchantmentScroll.blockymodel",
+    "Texture": "Items/Scrolls/EnchScroll.png",
+    "Interactions": {
+        "Primary": {
+            "Interactions": [
+                {
+                    "Type": "OpenCustomUI",
+                    "Page": {
+                        "Id": "EnchantScroll",
+                        "EnchantmentId": "eternal_shot",
+                        "Level": 1
+                    }
+                }
+            ]
+        },
+        "Secondary": {
+            "Interactions": [
+                {
+                    "Type": "OpenCustomUI",
+                    "Page": {
+                        "Id": "EnchantScroll",
+                        "EnchantmentId": "eternal_shot",
+                        "Level": 1
+                    }
+                }
+            ]
+        }
+    },
+    "Recipe": {
+        "TimeSeconds": 2,
+        "Input": [
+            {
+                "ItemId": "Ingredient_Fabric_Scrap_Cindercloth",
+                "Quantity": 5
+            },
+            {
+                "ItemId": "Ingredient_Void_Essence",
+                "Quantity": 30
+            },
+            {
+                "ItemId": "Weapon_Arrow_Crude",
+                "Quantity": 100
+            },
+            {
+                "ItemId": "Ingredient_Crystal_Purple",
+                "Quantity": 15
+            }
+        ],
+        "OutputQuantity": 1,
+        "BenchRequirement": [
+            {
+                "Id": "Enchantingbench",
+                "Type": "Crafting",
+                "Categories": [
+                    "Enchanting_Ranged"
+                ],
+                "RequiredTierLevel": 3
+            }
+        ]
+    },
+    "PlayerAnimationsId": "Item",
+    "IconProperties": {
+        "Scale": 0.84,
+        "Translation": [
+            5,
+            15
+        ],
+        "Rotation": [
+            90,
+            45,
+            0
+        ]
+    },
+    "MaxStack": 10,
+    "ItemLevel": 3,
+    "Quality": "Epic",
+    "Tags": {
+        "Type": [
+            "EnchantmentScroll"
+        ]
+    }
+}

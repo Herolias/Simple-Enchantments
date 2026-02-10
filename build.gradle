@@ -13,6 +13,14 @@ java {
     withJavadocJar()
 }
 
+// Ensure UTF-8 encoding for all text operations.
+// This prevents special characters in .lang translation files from being
+// corrupted when building on Windows (which defaults to Windows-1252).
+compileJava.options.encoding = 'UTF-8'
+tasks.withType(Javadoc).configureEach { options.encoding = 'UTF-8' }
+tasks.withType(Copy).configureEach { filteringCharset = 'UTF-8' }
+tasks.withType(JavaCompile).configureEach { options.encoding = 'UTF-8' }
+
 // Quiet warnings about missing Javadocs.
 javadoc {
     options.addStringOption('Xdoclint:-missing', '-quiet')
@@ -66,5 +74,15 @@ idea.project.settings.runConfigurations {
             programParameters += " --mods=$hytaleHome/UserData/Mods"
         }
         workingDirectory = serverRunDir.absolutePath
+    }
+}
+task inspectCommandBase {
+    doLast {
+        def url = configurations.runtimeClasspath.find { it.name.contains('HytaleServer') }?.toURI()?.toURL()
+        if (url == null) { println 'HytaleServer.jar not found'; return }
+        def loader = new URLClassLoader([url] as URL[], ClassLoader.systemClassLoader)
+        def clazz = loader.loadClass('com.hypixel.hytale.server.core.command.system.basecommands.CommandBase')
+        println 'Methods of CommandBase:'
+        clazz.methods.each { println it }
     }
 }

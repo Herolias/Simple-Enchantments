@@ -1,0 +1,454 @@
+﻿﻿benchCategories.enchantingArmor = Armatura
+
+benchCategories.enchantingTools = Strumenti
+
+benchCategories.enchantingMelee = Mischia
+
+benchCategories.enchantingRanged = A distanza
+
+benchCategories.enchantingStaff = Magia
+
+benchCategories.enchantingShield = Scudo
+
+
+
+customUI.enchantScrollPage.title = Incanta Oggetto
+
+customUI.enchantScrollPage.noItems = Nessun oggetto da incantare
+
+customUI.enchantScrollPage.item = Oggetto
+
+customUI.enchantScrollPage.enchantment = Incantesimo
+
+
+
+items.Enchanting_Table.name = Tavolo degli Incantesimi
+
+items.Enchanting_Table.description = Un tavolo usato per creare pergamene d'incantesimo.
+
+
+
+items.Scroll_Sharpness_I.name = Pergamena dell'Affilatezza I
+
+items.Scroll_Sharpness_I.description = Aumenta i danni in mischia del 10%.
+
+items.Scroll_Sharpness_II.name = Pergamena dell'Affilatezza II
+
+items.Scroll_Sharpness_II.description = Aumenta i danni in mischia del 20%.
+
+items.Scroll_Sharpness_III.name = Pergamena dell'Affilatezza III
+
+items.Scroll_Sharpness_III.description = Aumenta i danni in mischia del 30%.
+
+
+
+items.Scroll_Durability_I.name = Pergamena della Durabilità I
+
+items.Scroll_Durability_I.description = Riduce la probabilità di perdere durabilità del 25%.
+
+items.Scroll_Durability_II.name = Pergamena della Durabilità II
+
+items.Scroll_Durability_II.description = Riduce la probabilità di perdere durabilità del 50%.
+
+items.Scroll_Durability_III.name = Pergamena della Durabilità III
+
+items.Scroll_Durability_III.description = Riduce la probabilità di perdere durabilità del 75%.
+
+
+
+items.Scroll_Protection_I.name = Pergamena della Protezione I
+
+items.Scroll_Protection_I.description = Riduce i danni fisici subiti del 4% per pezzo di armatura.
+
+items.Scroll_Protection_II.name = Pergamena della Protezione II
+
+items.Scroll_Protection_II.description = Riduce i danni fisici subiti dell'8% per pezzo di armatura.
+
+items.Scroll_Protection_III.name = Pergamena della Protezione III
+
+items.Scroll_Protection_III.description = Riduce i danni fisici subiti del 12% per pezzo di armatura.
+
+
+
+items.Scroll_Efficiency_I.name = Pergamena dell'Efficienza I
+
+items.Scroll_Efficiency_I.description = Aumenta la velocità di scavo del 20%.
+
+items.Scroll_Efficiency_II.name = Pergamena dell'Efficienza II
+
+items.Scroll_Efficiency_II.description = Aumenta la velocità di scavo del 40%.
+
+items.Scroll_Efficiency_III.name = Pergamena dell'Efficienza III
+
+items.Scroll_Efficiency_III.description = Aumenta la velocità di scavo del 60%.
+
+
+
+items.Scroll_Fortune_I.name = Pergamena della Fortuna I
+
+items.Scroll_Fortune_I.description = Aumenta la probabilità di ottenere minerali/cristalli extra del 25%.
+
+items.Scroll_Fortune_II.name = Pergamena della Fortuna II
+
+items.Scroll_Fortune_II.description = Aumenta la probabilità di ottenere minerali/cristalli extra del 50%.
+
+items.Scroll_Fortune_III.name = Pergamena della Fortuna III
+
+items.Scroll_Fortune_III.description = Aumenta la probabilità di ottenere minerali/cristalli extra del 75%.
+
+
+
+items.Scroll_Smelting_I.name = Pergamena della Fusione
+
+items.Scroll_Smelting_I.description = Fonde automaticamente i blocchi scavati.
+
+
+
+items.Scroll_Life_Leech_I.name = Pergamena del Furto Vitale I
+
+items.Scroll_Life_Leech_I.description = Cura l'attaccante del 10% del danno inflitto.
+
+items.Scroll_Life_Leech_II.name = Pergamena del Furto Vitale II
+
+items.Scroll_Life_Leech_II.description = Cura l'attaccante del 20% del danno inflitto.
+
+items.Scroll_Life_Leech_III.name = Pergamena del Furto Vitale III
+
+items.Scroll_Life_Leech_III.description = Cura l'attaccante del 30% del danno inflitto.
+
+
+
+items.Scroll_Dexterity_I.name = Pergamena della Destrezza I
+
+items.Scroll_Dexterity_I.description = Riduce i costi di resistenza del 20%.
+
+items.Scroll_Dexterity_II.name = Pergamena della Destrezza II
+
+items.Scroll_Dexterity_II.description = Riduce i costi di resistenza del 40%.
+
+items.Scroll_Dexterity_III.name = Pergamena della Destrezza III
+
+items.Scroll_Dexterity_III.description = Riduce i costi di resistenza del 60%.
+
+
+
+items.Scroll_Looting_I.name = Pergamena del Saccheggio I
+
+items.Scroll_Looting_I.description = Aumenta il tasso di caduta oggetti dai mostri del 25% e le probabilità di oggetti rari.
+
+items.Scroll_Looting_II.name = Pergamena del Saccheggio II
+
+items.Scroll_Looting_II.description = Aumenta il tasso di caduta oggetti dai mostri del 50% e le probabilità di oggetti rari.
+
+items.Scroll_Looting_III.name = Pergamena del Saccheggio III
+
+items.Scroll_Looting_III.description = Aumenta il tasso di caduta oggetti dai mostri del 75% e le probabilità di oggetti rari.
+
+
+
+items.Scroll_Sturdy_I.name = Pergamena della Solidità
+
+items.Scroll_Sturdy_I.description = Previene la perdita della durabilità massima durante la riparazione.
+
+
+
+items.Scroll_Strength_I.name = Pergamena della Forza I
+
+items.Scroll_Strength_I.description = Aumenta i danni dei proiettili del 10%.
+
+items.Scroll_Strength_II.name = Pergamena della Forza II
+
+items.Scroll_Strength_II.description = Aumenta i danni dei proiettili del 20%.
+
+items.Scroll_Strength_III.name = Pergamena della Forza III
+
+items.Scroll_Strength_III.description = Aumenta i danni dei proiettili del 30%.
+
+
+
+items.Scroll_Eagles_Eye_I.name = Pergamena dell'Occhio d'Aquila I
+
+items.Scroll_Eagles_Eye_I.description = Aumenta i danni dei proiettili fino al 15% in base alla distanza.
+
+items.Scroll_Eagles_Eye_II.name = Pergamena dell'Occhio d'Aquila II
+
+items.Scroll_Eagles_Eye_II.description = Aumenta i danni dei proiettili fino al 30% in base alla distanza.
+
+items.Scroll_Eagles_Eye_III.name = Pergamena dell'Occhio d'Aquila III
+
+items.Scroll_Eagles_Eye_III.description = Aumenta i danni dei proiettili fino al 45% in base alla distanza.
+
+
+
+items.Scroll_Feather_Falling_I.name = Pergamena della Caduta Piumata I
+
+items.Scroll_Feather_Falling_I.description = Riduce i danni da caduta del 20%.
+
+items.Scroll_Feather_Falling_II.name = Pergamena della Caduta Piumata II
+
+items.Scroll_Feather_Falling_II.description = Riduce i danni da caduta del 40%.
+
+items.Scroll_Feather_Falling_III.name = Pergamena della Caduta Piumata III
+
+items.Scroll_Feather_Falling_III.description = Riduce i danni da caduta del 60%.
+
+
+
+items.Scroll_Waterbreathing_I.name = Pergamena della Respirazione Acquatica I
+
+items.Scroll_Waterbreathing_I.description = Riduce il consumo di ossigeno del 20%.
+
+items.Scroll_Waterbreathing_II.name = Pergamena della Respirazione Acquatica II
+
+items.Scroll_Waterbreathing_II.description = Riduce il consumo di ossigeno del 40%.
+
+items.Scroll_Waterbreathing_III.name = Pergamena della Respirazione Acquatica III
+
+items.Scroll_Waterbreathing_III.description = Riduce il consumo di ossigeno del 60%.
+
+
+
+items.Scroll_Burn_I.name = Pergamena dell'Arsura
+
+items.Scroll_Burn_I.description = Incendia il bersaglio e fa cadere carne cotta. Non combinabile con Congelamento.
+
+
+
+items.Scroll_Freeze_I.name = Pergamena del Congelamento
+
+items.Scroll_Freeze_I.description = Applica un forte rallentamento (50%) al bersaglio colpito. Non combinabile con Arsura.
+
+
+
+items.Scroll_Eternal_Shot_I.name = Pergamena del Tiro Eterno
+
+items.Scroll_Eternal_Shot_I.description = Permette di scoccare frecce senza consumarle.
+
+
+
+items.Scroll_Silktouch_I.name = Pergamena del Tocco di Velluto
+
+items.Scroll_Silktouch_I.description = I blocchi scavati rilasciano sé stessi invece delle risorse abituali. Non combinabile con Fortuna o Fusione.
+
+
+
+items.Scroll_Thrift_I.name = Pergamena del Risparmio I
+
+items.Scroll_Thrift_I.description = Ripristina il 20% del mana speso colpendo.
+
+items.Scroll_Thrift_II.name = Pergamena del Risparmio II
+
+items.Scroll_Thrift_II.description = Ripristina il 40% del mana speso colpendo.
+
+items.Scroll_Thrift_III.name = Pergamena del Risparmio III
+
+items.Scroll_Thrift_III.description = Ripristina il 60% del mana speso colpendo.
+
+
+
+items.Scroll_ElementalHeart_I.name = Pergamena del Cuore Elementale
+
+items.Scroll_ElementalHeart_I.description = I bastoni elementali non consumano essenza durante il lancio.
+
+
+
+items.Scroll_Knockback_I.name = Pergamena del Contraccolpo I
+
+items.Scroll_Knockback_I.description = Respinge i bersagli colpiti.
+
+items.Scroll_Knockback_II.name = Pergamena del Contraccolpo II
+
+items.Scroll_Knockback_II.description = Respinge ulteriormente i bersagli colpiti.
+
+items.Scroll_Knockback_III.name = Pergamena del Contraccolpo III
+
+items.Scroll_Knockback_III.description = Respinge significativamente i bersagli colpiti.
+
+
+
+items.Scroll_Reflection_I.name = Pergamena del Riflesso I
+
+items.Scroll_Reflection_I.description = Riflette il 10% del danno bloccato sull'attaccante. Non combinabile con Assorbimento.
+
+items.Scroll_Reflection_II.name = Pergamena del Riflesso II
+
+items.Scroll_Reflection_II.description = Riflette il 20% del danno bloccato sull'attaccante. Non combinabile con Assorbimento.
+
+items.Scroll_Reflection_III.name = Pergamena del Riflesso III
+
+items.Scroll_Reflection_III.description = Riflette il 30% del danno bloccato sull'attaccante. Non combinabile con Assorbimento.
+
+
+
+items.Scroll_Absorption_I.name = Pergamena dell'Assorbimento I
+
+items.Scroll_Absorption_I.description = Cura il difensore del 10% del danno bloccato. Non combinabile con Riflesso.
+
+items.Scroll_Absorption_II.name = Pergamena dell'Assorbimento II
+
+items.Scroll_Absorption_II.description = Cura il difensore del 20% del danno bloccato. Non combinabile con Riflesso.
+
+items.Scroll_Absorption_III.name = Pergamena dell'Assorbimento III
+
+items.Scroll_Absorption_III.description = Cura il difensore del 30% del danno bloccato. Non combinabile con Riflesso.
+
+
+
+items.Scroll_FastSwim_I.name = Pergamena del Nuoto Rapido I
+
+items.Scroll_FastSwim_I.description = Aumenta la velocità di nuoto del 25%.
+
+items.Scroll_FastSwim_II.name = Pergamena del Nuoto Rapido II
+
+items.Scroll_FastSwim_II.description = Aumenta la velocità di nuoto del 50%.
+
+items.Scroll_FastSwim_III.name = Pergamena del Nuoto Rapido III
+
+items.Scroll_FastSwim_III.description = Aumenta la velocità di nuoto del 75%.
+
+
+
+commands.enchantconfig.desc = Apre l'editor di configurazione degli incantesimi in gioco.
+
+
+
+customUI.enchantConfigPage.title = Configurazione Incantesimi
+
+customUI.enchantConfigPage.tabGeneral = Generale
+
+customUI.enchantConfigPage.tabEnchantments = Incantesimi
+
+customUI.enchantConfigPage.tabRecipes = Ricette
+
+customUI.enchantConfigPage.save = Salva
+
+customUI.enchantConfigPage.cancel = Annulla
+
+
+
+items.Scroll_Cleansing.name = Pergamena della Purificazione
+
+items.Scroll_Cleansing.description = Rimuove un incantesimo da qualsiasi oggetto.
+
+
+
+customUI.cleansingScrollPage.title = Rimuovi Incantesimo
+
+customUI.cleansingScrollPage.noItems = Nessun oggetto incantato trovato
+
+customUI.cleansingScrollPage.item = Oggetto
+
+customUI.cleansingScrollPage.enchantments = Incantesimi
+
+
+
+customUI.cleansingEnchantmentPage.title = Seleziona un incantesimo da rimuovere
+
+customUI.cleansingEnchantmentPage.selectHint = Clicca su un incantesimo per rimuoverlo
+
+
+
+
+
+
+
+
+
+# Enchantment Localizations (Auto-generated)
+
+enchantment.sharpness.name = Affilatezza
+
+enchantment.sharpness.description = Aumenta i danni in mischia del 10%.
+
+enchantment.life_leech.name = Furto Vitale
+
+enchantment.life_leech.description = Cura l'attaccante del 10% del danno inflitto.
+
+enchantment.durability.name = Durabilità
+
+enchantment.durability.description = Riduce la probabilità di perdere durabilità del 25%.
+
+enchantment.sturdy.name = Solidità
+
+enchantment.sturdy.description = Previene la perdita della durabilità massima durante la riparazione.
+
+enchantment.dexterity.name = Destrezza
+
+enchantment.dexterity.description = Riduce i costi di resistenza del 20%.
+
+enchantment.protection.name = Protezione
+
+enchantment.protection.description = Riduce i danni fisici subiti del 4% per pezzo di armatura.
+
+enchantment.efficiency.name = Efficienza
+
+enchantment.efficiency.description = Aumenta la velocità di scavo del 20%.
+
+enchantment.fortune.name = Fortuna
+
+enchantment.fortune.description = Aumenta la probabilità di ottenere minerali/cristalli extra del 25%.
+
+enchantment.smelting.name = Fusione
+
+enchantment.smelting.description = Fonde automaticamente i blocchi scavati.
+
+enchantment.strength.name = Forza
+
+enchantment.strength.description = Aumenta i danni dei proiettili del 10%.
+
+enchantment.eagles_eye.name = Occhio d'Aquila
+
+enchantment.eagles_eye.description = Aumenta i danni dei proiettili fino al 15% in base alla distanza.
+
+enchantment.looting.name = Saccheggio
+
+enchantment.looting.description = Aumenta il tasso di caduta oggetti dai mostri del 25% e le probabilità di oggetti rari.
+
+enchantment.feather_falling.name = Caduta Piumata
+
+enchantment.feather_falling.description = Riduce i danni da caduta del 20%.
+
+enchantment.waterbreathing.name = Respirazione Acquatica
+
+enchantment.waterbreathing.description = Riduce il consumo di ossigeno del 20%.
+
+enchantment.burn.name = Arsura
+
+enchantment.burn.description = Incendia il bersaglio e fa cadere carne cotta. Non combinabile con Congelamento.
+
+enchantment.freeze.name = Congelamento
+
+enchantment.freeze.description = Applica un forte rallentamento (50%) al bersaglio colpito. Non combinabile con Arsura.
+
+enchantment.eternal_shot.name = Tiro Eterno
+
+enchantment.eternal_shot.description = Permette di scoccare frecce senza consumarle.
+
+enchantment.pick_perfect.name = Tocco di Velluto
+
+enchantment.pick_perfect.description = I blocchi scavati rilasciano sé stessi invece delle risorse abituali. Non combinabile con Fortuna o Fusione.
+
+enchantment.thrift.name = Risparmio
+
+enchantment.thrift.description = Ripristina il 20% del mana speso colpendo.
+
+enchantment.elemental_heart.name = Cuore Elementale
+
+enchantment.elemental_heart.description = I bastoni elementali non consumano essenza durante il lancio.
+
+enchantment.knockback.name = Contraccolpo
+
+enchantment.knockback.description = Respinge i bersagli colpiti.
+
+enchantment.reflection.name = Riflesso
+
+enchantment.reflection.description = Riflette il 10% del danno bloccato sull'attaccante. Non combinabile con Assorbimento.
+
+enchantment.absorption.name = Assorbimento
+
+enchantment.absorption.description = Cura il difensore del 10% del danno bloccato. Non combinabile con Riflesso.
+
+enchantment.fast_swim.name = Nuoto Rapido
+
+enchantment.fast_swim.description = Aumenta la velocità di nuoto del 25%.
+

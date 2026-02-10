@@ -1,0 +1,454 @@
+﻿﻿benchCategories.enchantingArmor = Rustning
+
+benchCategories.enchantingTools = Verktyg
+
+benchCategories.enchantingMelee = Närstrid
+
+benchCategories.enchantingRanged = Avstånd
+
+benchCategories.enchantingStaff = Magi
+
+benchCategories.enchantingShield = Sköld
+
+
+
+customUI.enchantScrollPage.title = Förtrolla Föremål
+
+customUI.enchantScrollPage.noItems = Inga föremål att förtrolla
+
+customUI.enchantScrollPage.item = Föremål
+
+customUI.enchantScrollPage.enchantment = Förtrollning
+
+
+
+items.Enchanting_Table.name = Förtrollningsbord
+
+items.Enchanting_Table.description = Ett bord som används för att skapa förtrollningsrullar.
+
+
+
+items.Scroll_Sharpness_I.name = Skärperulle I
+
+items.Scroll_Sharpness_I.description = Ökar närstridsskada med 10%.
+
+items.Scroll_Sharpness_II.name = Skärperulle II
+
+items.Scroll_Sharpness_II.description = Ökar närstridsskada med 20%.
+
+items.Scroll_Sharpness_III.name = Skärperulle III
+
+items.Scroll_Sharpness_III.description = Ökar närstridsskada med 30%.
+
+
+
+items.Scroll_Durability_I.name = Hållbarhetsrulle I
+
+items.Scroll_Durability_I.description = Minskar risken för hållbarhetsförlust med 25%.
+
+items.Scroll_Durability_II.name = Hållbarhetsrulle II
+
+items.Scroll_Durability_II.description = Minskar risken för hållbarhetsförlust med 50%.
+
+items.Scroll_Durability_III.name = Hållbarhetsrulle III
+
+items.Scroll_Durability_III.description = Minskar risken för hållbarhetsförlust med 75%.
+
+
+
+items.Scroll_Protection_I.name = Skyddsrulle I
+
+items.Scroll_Protection_I.description = Minskar inkommande fysisk skada med 4% per rustningsdel.
+
+items.Scroll_Protection_II.name = Skyddsrulle II
+
+items.Scroll_Protection_II.description = Minskar inkommande fysisk skada med 8% per rustningsdel.
+
+items.Scroll_Protection_III.name = Skyddsrulle III
+
+items.Scroll_Protection_III.description = Minskar inkommande fysisk skada med 12% per rustningsdel.
+
+
+
+items.Scroll_Efficiency_I.name = Effektivitetsrulle I
+
+items.Scroll_Efficiency_I.description = Ökar grävhastigheten med 20%.
+
+items.Scroll_Efficiency_II.name = Effektivitetsrulle II
+
+items.Scroll_Efficiency_II.description = Ökar grävhastigheten med 40%.
+
+items.Scroll_Efficiency_III.name = Effektivitetsrulle III
+
+items.Scroll_Efficiency_III.description = Ökar grävhastigheten med 60%.
+
+
+
+items.Scroll_Fortune_I.name = Lyckorulle I
+
+items.Scroll_Fortune_I.description = Ökar chansen för extra malm/kristaller med 25%.
+
+items.Scroll_Fortune_II.name = Lyckorulle II
+
+items.Scroll_Fortune_II.description = Ökar chansen för extra malm/kristaller med 50%.
+
+items.Scroll_Fortune_III.name = Lyckorulle III
+
+items.Scroll_Fortune_III.description = Ökar chansen för extra malm/kristaller med 75%.
+
+
+
+items.Scroll_Smelting_I.name = Smältrulle
+
+items.Scroll_Smelting_I.description = Smälter automatiskt brutna block.
+
+
+
+items.Scroll_Life_Leech_I.name = Livssugningsrulle I
+
+items.Scroll_Life_Leech_I.description = Läker anfallaren för 10% av utdelad skada.
+
+items.Scroll_Life_Leech_II.name = Livssugningsrulle II
+
+items.Scroll_Life_Leech_II.description = Läker anfallaren för 20% av utdelad skada.
+
+items.Scroll_Life_Leech_III.name = Livssugningsrulle III
+
+items.Scroll_Life_Leech_III.description = Läker anfallaren för 30% av utdelad skada.
+
+
+
+items.Scroll_Dexterity_I.name = Smidighetsrulle I
+
+items.Scroll_Dexterity_I.description = Minskar uthållighetskostnaden med 20%.
+
+items.Scroll_Dexterity_II.name = Smidighetsrulle II
+
+items.Scroll_Dexterity_II.description = Minskar uthållighetskostnaden med 40%.
+
+items.Scroll_Dexterity_III.name = Smidighetsrulle III
+
+items.Scroll_Dexterity_III.description = Minskar uthållighetskostnaden med 60%.
+
+
+
+items.Scroll_Looting_I.name = Plundringsrulle I
+
+items.Scroll_Looting_I.description = Ökar monsterbyten med 25% och chansen för sällsynta föremål.
+
+items.Scroll_Looting_II.name = Plundringsrulle II
+
+items.Scroll_Looting_II.description = Ökar monsterbyten med 50% och chansen för sällsynta föremål.
+
+items.Scroll_Looting_III.name = Plundringsrulle III
+
+items.Scroll_Looting_III.description = Ökar monsterbyten med 75% och chansen för sällsynta föremål.
+
+
+
+items.Scroll_Sturdy_I.name = Stadighetsrulle
+
+items.Scroll_Sturdy_I.description = Förhindrar förlust av maximal hållbarhet vid reparation.
+
+
+
+items.Scroll_Strength_I.name = Styrkerulle I
+
+items.Scroll_Strength_I.description = Ökar projektilskada med 10%.
+
+items.Scroll_Strength_II.name = Styrkerulle II
+
+items.Scroll_Strength_II.description = Ökar projektilskada med 20%.
+
+items.Scroll_Strength_III.name = Styrkerulle III
+
+items.Scroll_Strength_III.description = Ökar projektilskada med 30%.
+
+
+
+items.Scroll_Eagles_Eye_I.name = Örnblicksrulle I
+
+items.Scroll_Eagles_Eye_I.description = Ökar projektilskada upp till 15% baserat på avstånd.
+
+items.Scroll_Eagles_Eye_II.name = Örnblicksrulle II
+
+items.Scroll_Eagles_Eye_II.description = Ökar projektilskada upp till 30% baserat på avstånd.
+
+items.Scroll_Eagles_Eye_III.name = Örnblicksrulle III
+
+items.Scroll_Eagles_Eye_III.description = Ökar projektilskada upp till 45% baserat på avstånd.
+
+
+
+items.Scroll_Feather_Falling_I.name = Fjäderfallsrulle I
+
+items.Scroll_Feather_Falling_I.description = Minskar fallskada med 20%.
+
+items.Scroll_Feather_Falling_II.name = Fjäderfallsrulle II
+
+items.Scroll_Feather_Falling_II.description = Minskar fallskada med 40%.
+
+items.Scroll_Feather_Falling_III.name = Fjäderfallsrulle III
+
+items.Scroll_Feather_Falling_III.description = Minskar fallskada med 60%.
+
+
+
+items.Scroll_Waterbreathing_I.name = Vattenandningsrulle I
+
+items.Scroll_Waterbreathing_I.description = Minskar syreförbrukningen med 20%.
+
+items.Scroll_Waterbreathing_II.name = Vattenandningsrulle II
+
+items.Scroll_Waterbreathing_II.description = Minskar syreförbrukningen med 40%.
+
+items.Scroll_Waterbreathing_III.name = Vattenandningsrulle III
+
+items.Scroll_Waterbreathing_III.description = Minskar syreförbrukningen med 60%.
+
+
+
+items.Scroll_Burn_I.name = Brännrulle
+
+items.Scroll_Burn_I.description = Tänder eld på målet och får det att tappa tillagat kött. Ej kompatibel med Frysning.
+
+
+
+items.Scroll_Freeze_I.name = Frysrulle
+
+items.Scroll_Freeze_I.description = Saktar ner målet kraftigt (50%) vid träff. Ej kompatibel med Bränning.
+
+
+
+items.Scroll_Eternal_Shot_I.name = Evighetsskotsrulle
+
+items.Scroll_Eternal_Shot_I.description = Låter dig skjuta pilar utan att förbruka dem.
+
+
+
+items.Scroll_Silktouch_I.name = Silkeslen Rulle
+
+items.Scroll_Silktouch_I.description = Brutna block faller som sig själva istället för sina vanliga resurser. Ej kompatibel med Lycka eller Smältning.
+
+
+
+items.Scroll_Thrift_I.name = Sparsamhetsrulle I
+
+items.Scroll_Thrift_I.description = Återställer 20% av använd mana vid träff.
+
+items.Scroll_Thrift_II.name = Sparsamhetsrulle II
+
+items.Scroll_Thrift_II.description = Återställer 40% av använd mana vid träff.
+
+items.Scroll_Thrift_III.name = Sparsamhetsrulle III
+
+items.Scroll_Thrift_III.description = Återställer 60% av använd mana vid träff.
+
+
+
+items.Scroll_ElementalHeart_I.name = Elementärt Hjärtrulle
+
+items.Scroll_ElementalHeart_I.description = Elementärstavar förbrukar inte essens vid kast.
+
+
+
+items.Scroll_Knockback_I.name = Knockbackrulle I
+
+items.Scroll_Knockback_I.description = Knuffar tillbaka mål vid träff.
+
+items.Scroll_Knockback_II.name = Knockbackrulle II
+
+items.Scroll_Knockback_II.description = Knuffar tillbaka mål längre vid träff.
+
+items.Scroll_Knockback_III.name = Knockbackrulle III
+
+items.Scroll_Knockback_III.description = Knuffar tillbaka mål betydligt längre vid träff.
+
+
+
+items.Scroll_Reflection_I.name = Reflektionsrulle I
+
+items.Scroll_Reflection_I.description = Reflekterar 10% av blockerad skada tillbaka till anfallaren. Ej kompatibel med Absorption.
+
+items.Scroll_Reflection_II.name = Reflektionsrulle II
+
+items.Scroll_Reflection_II.description = Reflekterar 20% av blockerad skada tillbaka till anfallaren. Ej kompatibel med Absorption.
+
+items.Scroll_Reflection_III.name = Reflektionsrulle III
+
+items.Scroll_Reflection_III.description = Reflekterar 30% av blockerad skada tillbaka till anfallaren. Ej kompatibel med Absorption.
+
+
+
+items.Scroll_Absorption_I.name = Absorptionsrulle I
+
+items.Scroll_Absorption_I.description = Läker försvararen för 10% av blockerad skada. Ej kompatibel med Reflektion.
+
+items.Scroll_Absorption_II.name = Absorptionsrulle II
+
+items.Scroll_Absorption_II.description = Läker försvararen för 20% av blockerad skada. Ej kompatibel med Reflektion.
+
+items.Scroll_Absorption_III.name = Absorptionsrulle III
+
+items.Scroll_Absorption_III.description = Läker försvararen för 30% av blockerad skada. Ej kompatibel med Reflektion.
+
+
+
+items.Scroll_FastSwim_I.name = Snabbsimsrulle I
+
+items.Scroll_FastSwim_I.description = Ökar simhastigheten med 25%.
+
+items.Scroll_FastSwim_II.name = Snabbsimsrulle II
+
+items.Scroll_FastSwim_II.description = Ökar simhastigheten med 50%.
+
+items.Scroll_FastSwim_III.name = Snabbsimsrulle III
+
+items.Scroll_FastSwim_III.description = Ökar simhastigheten med 75%.
+
+
+
+commands.enchantconfig.desc = Öppnar konfigurationsredigeraren för förtrollningar i spelet.
+
+
+
+customUI.enchantConfigPage.title = Förtrollningskonfiguration
+
+customUI.enchantConfigPage.tabGeneral = Allmänt
+
+customUI.enchantConfigPage.tabEnchantments = Förtrollningar
+
+customUI.enchantConfigPage.tabRecipes = Recept
+
+customUI.enchantConfigPage.save = Spara
+
+customUI.enchantConfigPage.cancel = Avbryt
+
+
+
+items.Scroll_Cleansing.name = Reningsrulle
+
+items.Scroll_Cleansing.description = Tar bort en förtrollning från vilket föremål som helst.
+
+
+
+customUI.cleansingScrollPage.title = Ta Bort Förtrollning
+
+customUI.cleansingScrollPage.noItems = Inga förtrollade föremål hittades
+
+customUI.cleansingScrollPage.item = Föremål
+
+customUI.cleansingScrollPage.enchantments = Förtrollningar
+
+
+
+customUI.cleansingEnchantmentPage.title = Välj en förtrollning att ta bort
+
+customUI.cleansingEnchantmentPage.selectHint = Klicka på en förtrollning för att ta bort den
+
+
+
+
+
+
+
+
+
+# Enchantment Localizations (Auto-generated)
+
+enchantment.sharpness.name = Skärpa
+
+enchantment.sharpness.description = Ökar närstridsskada med 10%.
+
+enchantment.life_leech.name = Livssugning
+
+enchantment.life_leech.description = Läker anfallaren för 10% av utdelad skada.
+
+enchantment.durability.name = Hållbarhet
+
+enchantment.durability.description = Minskar risken för hållbarhetsförlust med 25%.
+
+enchantment.sturdy.name = Stadighet
+
+enchantment.sturdy.description = Förhindrar förlust av maximal hållbarhet vid reparation.
+
+enchantment.dexterity.name = Smidighet
+
+enchantment.dexterity.description = Minskar uthållighetskostnaden med 20%.
+
+enchantment.protection.name = Skydd
+
+enchantment.protection.description = Minskar inkommande fysisk skada med 4% per rustningsdel.
+
+enchantment.efficiency.name = Effektivitet
+
+enchantment.efficiency.description = Ökar grävhastigheten med 20%.
+
+enchantment.fortune.name = Lycka
+
+enchantment.fortune.description = Ökar chansen för extra malm/kristaller med 25%.
+
+enchantment.smelting.name = Smältning
+
+enchantment.smelting.description = Smälter automatiskt brutna block.
+
+enchantment.strength.name = Styrka
+
+enchantment.strength.description = Ökar projektilskada med 10%.
+
+enchantment.eagles_eye.name = Örnblick
+
+enchantment.eagles_eye.description = Ökar projektilskada upp till 15% baserat på avstånd.
+
+enchantment.looting.name = Plundring
+
+enchantment.looting.description = Ökar monsterbyten med 25% och chansen för sällsynta föremål.
+
+enchantment.feather_falling.name = Fjäderfall
+
+enchantment.feather_falling.description = Minskar fallskada med 20%.
+
+enchantment.waterbreathing.name = Vattenandning
+
+enchantment.waterbreathing.description = Minskar syreförbrukningen med 20%.
+
+enchantment.burn.name = Bränna
+
+enchantment.burn.description = Tänder eld på målet och får det att tappa tillagat kött. Ej kompatibel med Frysning.
+
+enchantment.freeze.name = Frysning
+
+enchantment.freeze.description = Saktar ner målet kraftigt (50%) vid träff. Ej kompatibel med Bränning.
+
+enchantment.eternal_shot.name = Evighetsskott
+
+enchantment.eternal_shot.description = Låter dig skjuta pilar utan att förbruka dem.
+
+enchantment.pick_perfect.name = Silkeslen
+
+enchantment.pick_perfect.description = Brutna block faller som sig själva istället för sina vanliga resurser. Ej kompatibel med Lycka eller Smältning.
+
+enchantment.thrift.name = Sparsamhet
+
+enchantment.thrift.description = Återställer 20% av använd mana vid träff.
+
+enchantment.elemental_heart.name = Elementärt Hjärta
+
+enchantment.elemental_heart.description = Elementärstavar förbrukar inte essens vid kast.
+
+enchantment.knockback.name = Knuff
+
+enchantment.knockback.description = Knuffar tillbaka mål vid träff.
+
+enchantment.reflection.name = Reflektion
+
+enchantment.reflection.description = Reflekterar 10% av blockerad skada tillbaka till anfallaren. Ej kompatibel med Absorption.
+
+enchantment.absorption.name = Absorption
+
+enchantment.absorption.description = Läker försvararen för 10% av blockerad skada. Ej kompatibel med Reflektion.
+
+enchantment.fast_swim.name = Snabbsim
+
+enchantment.fast_swim.description = Ökar simhastigheten med 25%.
+

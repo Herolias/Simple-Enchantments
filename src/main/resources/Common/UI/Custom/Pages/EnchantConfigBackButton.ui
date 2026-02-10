@@ -1,0 +1,13 @@
+$C = "../Common.ui";
+
+Group {
+  LayoutMode: Left;
+  Anchor: (Height: 40, Bottom: 10);
+
+  TextButton #BackBtn {
+    Style: $C.@TertiaryTextButtonStyle;
+    Anchor: (Width: 220, Height: 32);
+    Padding: (Horizontal: 12);
+    Text: "< Back to Recipes";
+  }
+}

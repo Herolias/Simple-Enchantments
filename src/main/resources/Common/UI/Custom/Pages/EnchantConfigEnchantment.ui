@@ -1,0 +1,62 @@
+$C = "../Common.ui";
+
+Group {
+  LayoutMode: Left;
+  Anchor: (Height: 48, Bottom: 8);
+  Background: (TexturePath: "../Common/ContainerPanelPatch.png", Border: 4);
+  Padding: (Horizontal: 12, Vertical: 6);
+
+  Label #EnchantName {
+    Anchor: (Width: 160);
+    Style: (
+      FontSize: 14,
+      VerticalAlignment: Center,
+      RenderBold: true
+    );
+  }
+
+  Group {
+    FlexWeight: 1;
+  }
+
+  Group #MultiplierSection {
+    LayoutMode: Left;
+    Anchor: (Width: 220, Right: 15);
+
+    TextButton #ResetMultiplier {
+      Style: $C.@TertiaryTextButtonStyle;
+      Anchor: (Width: 70, Height: 28, Right: 6);
+      Padding: (Horizontal: 4);
+      Text: "Reset";
+      TooltipText: "Reset to default";
+    }
+
+    TextButton #MultiplierDecrease {
+      Style: $C.@TertiaryTextButtonStyle;
+      Anchor: (Width: 32, Height: 30, Right: 4);
+      Padding: (Horizontal: 6);
+      Text: "-";
+    }
+
+    $C.@NumberField #MultiplierInput {
+      Anchor: (Width: 70, Height: 30);
+      Format: (
+        MaxDecimalPlaces: 3,
+        Step: 0.01
+      );
+    }
+
+    TextButton #MultiplierIncrease {
+      Style: $C.@TertiaryTextButtonStyle;
+      Anchor: (Width: 32, Height: 30, Left: 4);
+      Padding: (Horizontal: 6);
+      Text: "+";
+    }
+  }
+
+  TextButton #EnableToggle {
+    Style: $C.@SecondaryTextButtonStyle;
+    Anchor: (Width: 110, Height: 34);
+    Padding: (Horizontal: 12);
+  }
+}
