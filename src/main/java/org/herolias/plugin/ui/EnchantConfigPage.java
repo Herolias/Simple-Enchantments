@@ -1283,6 +1283,17 @@ public class EnchantConfigPage extends InteractiveCustomUIPage<EnchantConfigPage
         // Save to disk
         configManager.saveConfig();
         LOGGER.atInfo().log("Configuration saved via in-game editor");
+
+        // Force-refresh all players' tooltips so changes are visible immediately.
+        // TooltipBridge isolates all DynamicTooltipsLib references; only call it
+        // when we know the lib was loaded successfully.
+        if (org.herolias.plugin.SimpleEnchanting.getInstance().isTooltipsEnabled()) {
+            try {
+                org.herolias.plugin.enchantment.TooltipBridge.refreshAllPlayers();
+            } catch (NoClassDefFoundError e) {
+                // Safety net — should never happen if isTooltipsEnabled() is true
+            }
+        }
         
         // Reset unsaved changes state
         hasUnsavedChanges = false;
@@ -1433,7 +1444,7 @@ public class EnchantConfigPage extends InteractiveCustomUIPage<EnchantConfigPage
         // Update Save Feedback
         commandBuilder.set("#SaveFeedback.Visible", showSaveFeedback);
         if (showSaveFeedback) {
-            commandBuilder.set("#SaveFeedback.TextSpans", Message.raw("Saved! Most changes require a restart."));
+            commandBuilder.set("#SaveFeedback.TextSpans", Message.raw("Saved! Tooltip changes applied immediately."));
             // Auto-hide feedback could be handled by a delayed task, but for now it stays until next action clears it
             // Or we could perform a clear on next event
         }

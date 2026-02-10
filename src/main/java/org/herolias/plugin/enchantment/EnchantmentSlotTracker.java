@@ -69,10 +69,6 @@ public class EnchantmentSlotTracker implements Runnable {
             for (UUID uuid : disconnected) {
                 knownPlayers.remove(uuid);
                 lastSlotMap.remove(uuid);
-                EnchantmentTooltipManager tooltipManager = getTooltipManager();
-                if (tooltipManager != null) {
-                    tooltipManager.onPlayerLeave(uuid);
-                }
             }
         } catch (Exception e) {
             HytaleLogger.getLogger().atSevere().log("Error in EnchantmentSlotTracker: " + e.getMessage());
@@ -99,13 +95,8 @@ public class EnchantmentSlotTracker implements Runnable {
 
         UUID uuid = playerRef.getUuid();
 
-        // ── Detect new players for initial tooltip setup ──
-        if (knownPlayers.add(uuid)) {
-            EnchantmentTooltipManager tooltipManager = getTooltipManager();
-            if (tooltipManager != null) {
-                tooltipManager.onPlayerJoin(playerRef, player);
-            }
-        }
+        // ── Track new players ──
+        knownPlayers.add(uuid);
 
         byte currentSlot = inventory.getActiveHotbarSlot();
 
@@ -129,12 +120,7 @@ public class EnchantmentSlotTracker implements Runnable {
             byte lastSlotIndex = lastState != null ? (byte)(lastState & 0x7F) : -1;
             if (currentSlot != lastSlotIndex) {
                 showEnchantmentTitle(playerRef, player, currentSlot);
-
-                // 3. Update tooltip translations (active item changed = priority item may differ)
-                EnchantmentTooltipManager tooltipManager = getTooltipManager();
-                if (tooltipManager != null) {
-                    tooltipManager.onActiveSlotChanged(playerRef, player);
-                }
+                // DynamicTooltipsLib handles tooltip updates via packet interception
             }
         }
     }
@@ -164,11 +150,4 @@ public class EnchantmentSlotTracker implements Runnable {
         }
     }
 
-    /**
-     * Gets the tooltip manager from the plugin instance. Returns null if not yet initialized.
-     */
-    private static EnchantmentTooltipManager getTooltipManager() {
-        SimpleEnchanting plugin = SimpleEnchanting.getInstance();
-        return plugin != null ? plugin.getTooltipManager() : null;
-    }
 }

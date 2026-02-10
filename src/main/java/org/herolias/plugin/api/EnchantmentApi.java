@@ -1,8 +1,6 @@
 package org.herolias.plugin.api;
 
 import com.hypixel.hytale.server.core.inventory.ItemStack;
-import com.hypixel.hytale.server.core.ui.ItemGridSlot;
-import com.hypixel.hytale.server.core.universe.PlayerRef;
 import java.util.Map;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -72,58 +70,5 @@ public interface EnchantmentApi {
      */
     void registerItemToCategory(@Nonnull String itemId, @Nonnull String categoryId);
 
-    // ─────────────────────────────────────────────────────────────────────────
-    //  CustomUI Tooltip Support
-    // ─────────────────────────────────────────────────────────────────────────
-
-    /**
-     * Prepares an ItemStack for display in a CustomUI with proper enchantment tooltips.
-     * <p>
-     * If the item has enchantments, returns a new ItemStack with a virtual item ID
-     * that has a unique tooltip. If the item has no enchantments, returns the original.
-     * <p>
-     * <b>IMPORTANT:</b> After calling this, you MUST call {@link #sendVirtualItemDefinitions}
-     * to send the virtual item definition to the player before rendering the UI.
-     *
-     * @param item The item to prepare (may have enchantments)
-     * @return An ItemStack ready for UI display (may have a virtual ID)
-     */
-    @Nonnull
-    ItemStack prepareItemForUI(@Nonnull ItemStack item);
-
-    /**
-     * Sends virtual item definitions and translations for prepared items to a player.
-     * <p>
-     * Call this BEFORE sending the CustomPage packet to ensure tooltips display correctly.
-     * Only items that were prepared via {@link #prepareItemForUI} and have virtual IDs
-     * need their definitions sent.
-     *
-     * @param playerRef The player to send definitions to
-     * @param items     The items prepared via prepareItemForUI()
-     */
-    void sendVirtualItemDefinitions(@Nonnull PlayerRef playerRef, @Nonnull ItemStack... items);
-
-    /**
-     * Convenience method to create an ItemGridSlot ready for CustomUI display.
-     * <p>
-     * This method automatically handles virtual ID generation and sends the required
-     * definitions to the player. Mod authors can use this directly in their
-     * {@code UICommandBuilder.set()} calls for item display.
-     * <p>
-     * <b>This is the simplest integration option for third-party mods.</b>
-     *
-     * <pre>{@code
-     * // Usage example in a CustomUI build() method:
-     * EnchantmentApi api = EnchantmentApiProvider.getApi();
-     * ItemStack enchantedItem = getItemFromDatabase();
-     * ItemGridSlot slot = api.createEnchantedItemSlot(playerRef, enchantedItem);
-     * cmd.set(selector + " #ItemIcon.Slots", new ItemGridSlot[]{slot});
-     * }</pre>
-     *
-     * @param playerRef The player viewing the UI
-     * @param item      The item to display (can be enchanted)
-     * @return An ItemGridSlot configured to display the item with enchantment tooltips
-     */
-    @Nonnull
-    ItemGridSlot createEnchantedItemSlot(@Nonnull PlayerRef playerRef, @Nonnull ItemStack item);
 }
+

@@ -19,7 +19,7 @@
         
     },
     "OptionalDependencies": {
-        
+        "org.herolias:DynamicTooltipsLib": "*"
     },
     "DisabledByDefault": false,
     "Main": "org.herolias.plugin.SimpleEnchanting",

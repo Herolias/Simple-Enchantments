@@ -32,7 +32,7 @@ import org.herolias.plugin.enchantment.EnchantmentVisualsListener;
 import org.herolias.plugin.enchantment.EnchantmentKnockbackSystem;
 import org.herolias.plugin.enchantment.EnchantmentSlotTracker;
 import org.herolias.plugin.enchantment.EnchantmentThriftSystem;
-import org.herolias.plugin.enchantment.EnchantmentTooltipManager;
+import org.herolias.plugin.enchantment.TooltipBridge;
 import org.herolias.plugin.enchantment.ItemCategoryManager;
 import org.herolias.plugin.enchantment.EnchantmentReflectionSystem;
 import org.herolias.plugin.enchantment.EnchantmentAbsorptionSystem;
@@ -84,7 +84,7 @@ public class SimpleEnchanting extends JavaPlugin {
     private EnchantmentAbilityStaminaSystem enchantmentAbilityStaminaSystem;
     private EnchantmentProjectileSpeedSystem enchantmentProjectileSpeedSystem;
     private EnchantingTableListener enchantingTableListener;
-    private EnchantmentTooltipManager tooltipManager;
+    private boolean tooltipsEnabled;
     private org.herolias.plugin.config.ConfigManager configManager;
 
     public SimpleEnchanting(@Nonnull JavaPluginInit init) {
@@ -256,13 +256,18 @@ public class SimpleEnchanting extends JavaPlugin {
         this.getEventRegistry().registerGlobal(LivingEntityInventoryChangeEvent.class, visualsListener::onInventoryChange);
         LOGGER.atInfo().log("Registered EnchantmentVisualsListener");
 
-        // Register EnchantmentTooltipManager with Virtual Item ID system
-        // This intercepts outbound UpdatePlayerInventory packets and replaces enchanted
-        // item IDs with virtual IDs that have unique description translation keys.
-        // Each enchanted item instance gets its own tooltip — no more shared descriptions!
-        this.tooltipManager = new EnchantmentTooltipManager(enchantmentManager);
-        this.tooltipManager.registerPacketAdapter();
-        LOGGER.atInfo().log("Registered EnchantmentTooltipManager with Virtual Item ID packet adapter");
+        // ── Tooltip System (via DynamicTooltipsLib, optional) ──
+        // All lib references are isolated in TooltipBridge so that
+        // Simple-Enchantments loads and runs normally without the lib.
+        try {
+            Class.forName("org.herolias.tooltips.api.DynamicTooltipsApiProvider");
+            // TooltipBridge is only loaded here — after we've confirmed the lib exists.
+            // It contains all compile-time references to DynamicTooltipsLib classes.
+            this.tooltipsEnabled = TooltipBridge.register(enchantmentManager);
+        } catch (ClassNotFoundException | NoClassDefFoundError e) {
+            LOGGER.atWarning().log("DynamicTooltipsLib not found — enchantment tooltips will not display. "
+                    + "Install DynamicTooltipsLib for rich enchantment tooltips.");
+        }
 
         // Initialize enchanting table listener
         this.enchantingTableListener = new EnchantingTableListener(this);
@@ -285,20 +290,23 @@ public class SimpleEnchanting extends JavaPlugin {
 
     @Override
     protected void start() {
-        // Initialize and register the slot tracker (Ticker)
-        // This is a lightweight tracker that only updates when necessary (on slot change)
+        // Register the slot tracker (handles glow updates + enchantment banner on slot change)
         try {
             EnchantmentSlotTracker slotTracker = new EnchantmentSlotTracker(enchantmentManager);
             com.hypixel.hytale.server.core.HytaleServer.SCHEDULED_EXECUTOR.scheduleAtFixedRate(
-                slotTracker, 
-                0, 
+                slotTracker,
+                0,
                 50, // 50ms = 1 tick
                 java.util.concurrent.TimeUnit.MILLISECONDS
             );
             LOGGER.atInfo().log("Registered EnchantmentSlotTracker ticker in start()");
         } catch (Exception e) {
-             LOGGER.atSevere().log("Failed to register Slot Tracker: " + e.getMessage());
-             e.printStackTrace();
+            LOGGER.atSevere().log("Failed to register Slot Tracker: " + e.getMessage());
+            e.printStackTrace();
+        }
+
+        if (tooltipsEnabled) {
+            LOGGER.atInfo().log("Enchantment tooltips active via DynamicTooltipsLib");
         }
     }
 
@@ -331,10 +339,10 @@ public class SimpleEnchanting extends JavaPlugin {
     }
 
     /**
-     * Gets the tooltip manager for per-player enchantment tooltip updates.
+     * Returns whether enchantment tooltips are active (DynamicTooltipsLib present).
      */
-    public EnchantmentTooltipManager getTooltipManager() {
-        return tooltipManager;
+    public boolean isTooltipsEnabled() {
+        return tooltipsEnabled;
     }
 
     public org.herolias.plugin.config.ConfigManager getConfigManager() {

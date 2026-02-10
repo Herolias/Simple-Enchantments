@@ -1,23 +1,17 @@
 package org.herolias.plugin.api;
 
 import com.hypixel.hytale.logger.HytaleLogger;
-import com.hypixel.hytale.protocol.ItemBase;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
-import com.hypixel.hytale.server.core.ui.ItemGridSlot;
-import com.hypixel.hytale.server.core.universe.PlayerRef;
 import org.herolias.plugin.SimpleEnchanting;
 import org.herolias.plugin.enchantment.EnchantmentData;
 import org.herolias.plugin.enchantment.EnchantmentManager;
-import org.herolias.plugin.enchantment.EnchantmentTooltipManager;
 import org.herolias.plugin.enchantment.EnchantmentType;
 import org.herolias.plugin.enchantment.ItemCategory;
 import org.herolias.plugin.enchantment.ItemCategoryManager;
-import org.herolias.plugin.enchantment.VirtualItemRegistry;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class EnchantmentApiImpl implements EnchantmentApi {
@@ -131,111 +125,5 @@ public class EnchantmentApiImpl implements EnchantmentApi {
         ItemCategoryManager.getInstance().registerApiItem(itemId, category);
     }
 
-    // ─────────────────────────────────────────────────────────────────────────
-    //  CustomUI Tooltip Support
-    // ─────────────────────────────────────────────────────────────────────────
-
-    @Override
-    @Nonnull
-    public ItemStack prepareItemForUI(@Nonnull ItemStack item) {
-        if (item == null || item.isEmpty()) {
-            return item;
-        }
-
-        EnchantmentData data = manager.getEnchantmentsFromItem(item);
-        if (data.isEmpty()) {
-            return item; // Not enchanted, no modification needed
-        }
-
-        // Generate a virtual ID for this enchanted item
-        VirtualItemRegistry registry = getVirtualItemRegistry();
-        if (registry == null) {
-            LOGGER.atWarning().log("VirtualItemRegistry not available, returning original item");
-            return item;
-        }
-
-        String virtualId = registry.generateVirtualId(item.getItemId(), data);
-        
-        // Create a new ItemStack with the virtual ID but same metadata
-        return new ItemStack(virtualId, item.getQuantity(), item.getMetadata());
-    }
-
-    @Override
-    public void sendVirtualItemDefinitions(@Nonnull PlayerRef playerRef, @Nonnull ItemStack... items) {
-        if (playerRef == null || items == null || items.length == 0) {
-            return;
-        }
-
-        VirtualItemRegistry registry = getVirtualItemRegistry();
-        if (registry == null) {
-            LOGGER.atWarning().log("VirtualItemRegistry not available, cannot send definitions");
-            return;
-        }
-
-        String language = playerRef.getLanguage();
-        Map<String, ItemBase> virtualItems = new LinkedHashMap<>();
-        Map<String, String> translations = new LinkedHashMap<>();
-
-        for (ItemStack item : items) {
-            if (item == null || item.isEmpty()) continue;
-
-            String itemId = item.getItemId();
-            if (!VirtualItemRegistry.isVirtualId(itemId)) {
-                continue; // Not a virtual item, skip
-            }
-
-            String baseItemId = VirtualItemRegistry.getBaseItemId(itemId);
-            if (baseItemId == null) continue;
-
-            // Get or create the virtual item base
-            ItemBase virtualBase = registry.getOrCreateVirtualItemBase(baseItemId, itemId);
-            if (virtualBase == null) continue;
-
-            virtualItems.put(itemId, virtualBase);
-
-            // Build the description translation
-            String descKey = VirtualItemRegistry.getVirtualDescriptionKey(itemId);
-            if (!translations.containsKey(descKey)) {
-                // Get enchantment data from the item
-                EnchantmentData enchData = manager.getEnchantmentsFromItem(item);
-                String originalDesc = registry.getOriginalDescription(baseItemId, language);
-                String enchantedDesc = registry.buildEnchantedDescription(originalDesc, enchData, itemId);
-                translations.put(descKey, enchantedDesc);
-            }
-        }
-
-        // Send the virtual item definitions and translations to the player
-        if (!virtualItems.isEmpty() || !translations.isEmpty()) {
-            EnchantmentTooltipManager tooltipManager = SimpleEnchanting.getInstance().getTooltipManager();
-            if (tooltipManager != null) {
-                tooltipManager.sendVirtualItemData(playerRef, virtualItems, translations);
-            }
-        }
-    }
-
-    @Override
-    @Nonnull
-    public ItemGridSlot createEnchantedItemSlot(@Nonnull PlayerRef playerRef, @Nonnull ItemStack item) {
-        if (item == null || item.isEmpty()) {
-            return new ItemGridSlot(ItemStack.EMPTY);
-        }
-
-        // Prepare the item (generates virtual ID if enchanted)
-        ItemStack preparedItem = prepareItemForUI(item);
-
-        // Send virtual item definitions to the player
-        sendVirtualItemDefinitions(playerRef, preparedItem);
-
-        // Create and return the ItemGridSlot
-        return new ItemGridSlot(preparedItem);
-    }
-
-    /**
-     * Gets the VirtualItemRegistry from the tooltip manager.
-     */
-    @Nullable
-    private VirtualItemRegistry getVirtualItemRegistry() {
-        EnchantmentTooltipManager tooltipManager = SimpleEnchanting.getInstance().getTooltipManager();
-        return tooltipManager != null ? tooltipManager.getVirtualItemRegistry() : null;
-    }
 }
+
