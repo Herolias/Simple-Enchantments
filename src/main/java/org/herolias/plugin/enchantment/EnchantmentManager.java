@@ -804,6 +804,49 @@ public class EnchantmentManager {
     }
 
     /**
+     * Calculates the ranged protection multiplier from Ranged Protection enchantment on armor.
+     * Reduces incoming projectile and magic damage.
+     *
+     * @param armorContainer The armor inventory container
+     * @return The damage multiplier (1.0 = normal, 0.9 = 10% reduction, etc.)
+     */
+    public double calculateRangedProtectionMultiplier(@Nullable ItemContainer armorContainer) {
+        if (armorContainer == null) {
+            return 1.0;
+        }
+
+        if (!isEnchantmentEnabled(EnchantmentType.RANGED_PROTECTION)) {
+            return 1.0;
+        }
+
+        double multiplier = 1.0;
+        for (short slot = 0; slot < armorContainer.getCapacity(); slot = (short) (slot + 1)) {
+            ItemStack armorPiece = armorContainer.getItemStack(slot);
+            if (armorPiece == null || armorPiece.isEmpty()) {
+                continue;
+            }
+
+            BsonDocument enchBson = armorPiece.getFromMetadataOrNull(
+                    EnchantmentData.METADATA_KEY, Codec.BSON_DOCUMENT);
+            if (enchBson == null || enchBson.isEmpty()) continue;
+
+            int level = 0;
+            if (enchBson.containsKey(EnchantmentType.RANGED_PROTECTION.getDisplayName())) {
+                level = parseBsonLevel(enchBson.get(EnchantmentType.RANGED_PROTECTION.getDisplayName()));
+            } else if (enchBson.containsKey(EnchantmentType.RANGED_PROTECTION.getId())) {
+                level = parseBsonLevel(enchBson.get(EnchantmentType.RANGED_PROTECTION.getId()));
+            }
+
+            if (level > 0) {
+                double pieceMultiplier = 1.0 - (level * EnchantmentType.RANGED_PROTECTION.getEffectMultiplier());
+                multiplier *= Math.max(0.0, pieceMultiplier);
+            }
+        }
+
+        return multiplier;
+    }
+
+    /**
      * Rolls for extra Fortune drops.
      *
      * @param fortuneLevel The Fortune level on the tool
@@ -1181,6 +1224,81 @@ public class EnchantmentManager {
         effectController.addEffect(targetRef, effect, commandBuffer);
         return true;
     }
+
+    /**
+     * Applies a status effect to an entity (event listener variant).
+     * Use this overload when only a Store is available (no CommandBuffer).
+     * 
+     * @param targetRef The entity to apply the effect to
+     * @param effectId The effect ID (e.g., "Night_Vision")
+     * @param store The entity store (also serves as ComponentAccessor)
+     * @return true if the effect was applied successfully
+     */
+    public boolean applyStatusEffect(@Nonnull Ref<EntityStore> targetRef, 
+                                     @Nonnull String effectId,
+                                     @Nonnull Store<EntityStore> store) {
+        if (targetRef == null || !targetRef.isValid()) return false;
+
+        EffectControllerComponent effectController = store.getComponent(targetRef, EffectControllerComponent.getComponentType());
+        if (effectController == null) return false;
+
+        EntityEffect effect = EntityEffect.getAssetMap().getAsset(effectId);
+        if (effect == null) {
+            LOGGER.atWarning().log("Effect '" + effectId + "' not found in asset map");
+            return false;
+        }
+
+        effectController.addEffect(targetRef, effect, store);
+        return true;
+    }
+
+    /**
+     * Removes a status effect from an entity.
+     * 
+     * @param targetRef The entity to remove the effect from
+     * @param effectId The effect ID (e.g., "Night_Vision")
+     * @param store The entity store
+     * @return true if the effect was removed successfully
+     */
+    public boolean removeStatusEffect(@Nonnull Ref<EntityStore> targetRef, 
+                                      @Nonnull String effectId,
+                                      @Nonnull Store<EntityStore> store) {
+        if (targetRef == null || !targetRef.isValid()) return false;
+
+        EffectControllerComponent effectController = store.getComponent(targetRef, EffectControllerComponent.getComponentType());
+        if (effectController == null) return false;
+
+        int effectIndex = EntityEffect.getAssetMap().getIndex(effectId);
+        if (effectIndex == Integer.MIN_VALUE) return false;
+
+        // Only remove if currently active
+        if (!effectController.getActiveEffects().containsKey(effectIndex)) return false;
+
+        effectController.removeEffect(targetRef, effectIndex, store);
+        return true;
+    }
+
+    /**
+     * Checks whether an entity currently has a specific status effect active.
+     * 
+     * @param targetRef The entity to check
+     * @param effectId The effect ID (e.g., "Night_Vision")
+     * @param store The entity store
+     * @return true if the effect is currently active on the entity
+     */
+    public boolean hasActiveEffect(@Nonnull Ref<EntityStore> targetRef, 
+                                   @Nonnull String effectId,
+                                   @Nonnull Store<EntityStore> store) {
+        if (targetRef == null || !targetRef.isValid()) return false;
+
+        EffectControllerComponent effectController = store.getComponent(targetRef, EffectControllerComponent.getComponentType());
+        if (effectController == null) return false;
+
+        int effectIndex = EntityEffect.getAssetMap().getIndex(effectId);
+        if (effectIndex == Integer.MIN_VALUE) return false;
+
+        return effectController.getActiveEffects().containsKey(effectIndex);
+    }
     
     // --- Existing Helper Methods for Systems ---
 
@@ -1250,6 +1368,14 @@ public class EnchantmentManager {
 
     public boolean isPhysicalDamage(@Nullable com.hypixel.hytale.server.core.modules.entity.damage.DamageCause cause) {
         return checkDamageCause(cause, "Physical");
+    }
+
+    /**
+     * Checks if a damage cause is ranged (projectile or magic) — excludes melee physical damage.
+     * Used by Ranged Protection enchantment.
+     */
+    public boolean isRangedDamage(@Nullable com.hypixel.hytale.server.core.modules.entity.damage.DamageCause cause) {
+        return checkDamageCause(cause, "Projectile");
     }
 
     public boolean isProjectileEntity(@Nonnull Ref<EntityStore> sourceRef,

@@ -104,6 +104,20 @@ public class EnchantmentDamageSystem extends DamageEventSystem {
             }
         }
 
+        // Apply Ranged Protection enchantment (defender - projectile/magic damage)
+        if (damageCause != null && !damageCause.doesBypassResistances() && enchantmentManager.isRangedDamage(damageCause)) {
+            Entity targetEntity = EntityUtils.getEntity(index, archetypeChunk);
+            if (targetEntity instanceof LivingEntity targetLiving) {
+                Inventory targetInventory = targetLiving.getInventory();
+                if (targetInventory != null) {
+                    double rangedProtectionMultiplier = enchantmentManager.calculateRangedProtectionMultiplier(targetInventory.getArmor());
+                    if (rangedProtectionMultiplier < 1.0) {
+                        damage.setAmount((float) (damage.getAmount() * rangedProtectionMultiplier));
+                    }
+                }
+            }
+        }
+
         // Apply Life Leech (melee only)
         applyLifeLeech(ctx, damage, commandBuffer);
     }

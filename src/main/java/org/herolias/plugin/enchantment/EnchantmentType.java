@@ -349,6 +349,34 @@ public enum EnchantmentType {
         false, // requiresDurability
         false, // isLegendary
         ItemCategory.GLOVES
+    ),
+
+    /**
+     * Night Vision - Increases sight in dark places (caves, nighttime, underwater)
+     * Applicable to: Helmets only
+     */
+    NIGHT_VISION(
+        "night_vision",
+        "Night Vision",
+        "Increases visibility in dark environments",
+        1,  // max level
+        false, // requiresDurability
+        true, // isLegendary
+        ItemCategory.HELMET
+    ),
+
+    /**
+     * Ranged Protection - Reduces incoming projectile and magic damage by 4% per level (per armor piece)
+     * Applicable to: Armor
+     */
+    RANGED_PROTECTION(
+        "ranged_protection",
+        "Ranged Protection",
+        "Reduces projectile and magic damage",
+        3,  // max level
+        false, // requiresDurability
+        false, // isLegendary
+        ItemCategory.ARMOR
     )
     ;
 
@@ -470,6 +498,7 @@ public enum EnchantmentType {
             case REFLECTION -> config.reflectionDamagePercentagePerLevel;
             case ABSORPTION -> config.absorptionHealPercentagePerLevel;
             case FAST_SWIM -> config.fastSwimSpeedBonusPerLevel;
+            case RANGED_PROTECTION -> config.rangedProtectionDamageReductionPerLevel;
             //case BURN -> config.burnDamagePerSecond;
             default -> 0.0;
         };
@@ -564,6 +593,8 @@ public enum EnchantmentType {
              case REFLECTION -> "Reflects " + percentage + "% of damage";
              case ABSORPTION -> "Heals for " + percentage + "% of blocked damage";
              case FAST_SWIM -> "Swim speed increased by " + percentage + "%";
+             case NIGHT_VISION -> "Enhances vision in dark environments";
+             case RANGED_PROTECTION -> "Projectile/magic damage reduced by " + percentage + "%";
              default -> "";
          };
     }

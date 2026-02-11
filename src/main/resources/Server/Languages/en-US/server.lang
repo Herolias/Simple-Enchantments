@@ -452,3 +452,33 @@ enchantment.fast_swim.name = Swift Swim
 
 enchantment.fast_swim.description = Increases swim speed by 25%.
 
+
+
+items.Scroll_Night_Vision_I.name = Scroll of Night Vision
+
+items.Scroll_Night_Vision_I.description = Enhances visibility in dark environments such as caves, nighttime, and underwater.
+
+
+
+items.Scroll_Ranged_Protection_I.name = Scroll of Ranged Protection I
+
+items.Scroll_Ranged_Protection_I.description = Reduces incoming projectile and magic damage by 4% per armor piece.
+
+items.Scroll_Ranged_Protection_II.name = Scroll of Ranged Protection II
+
+items.Scroll_Ranged_Protection_II.description = Reduces incoming projectile and magic damage by 8% per armor piece.
+
+items.Scroll_Ranged_Protection_III.name = Scroll of Ranged Protection III
+
+items.Scroll_Ranged_Protection_III.description = Reduces incoming projectile and magic damage by 12% per armor piece.
+
+
+
+enchantment.night_vision.name = Night Vision
+
+enchantment.night_vision.description = Enhances visibility in dark environments such as caves, nighttime, and underwater.
+
+enchantment.ranged_protection.name = Ranged Protection
+
+enchantment.ranged_protection.description = Reduces incoming projectile and magic damage by 4% per armor piece.
+

@@ -452,3 +452,34 @@ enchantment.fast_swim.name = Быстрое Плавание
 
 enchantment.fast_swim.description = Увеличивает скорость плавания на 25%.
 
+
+
+items.Scroll_Night_Vision_I.name = Свиток Ночного Зрения
+
+items.Scroll_Night_Vision_I.description = Улучшает видимость в тёмных местах: пещерах, ночью и под водой.
+
+
+
+items.Scroll_Ranged_Protection_I.name = Свиток Защиты от Дальних Атак I
+
+items.Scroll_Ranged_Protection_I.description = Снижает входящий урон от снарядов и магии на 4% за каждый элемент брони.
+
+items.Scroll_Ranged_Protection_II.name = Свиток Защиты от Дальних Атак II
+
+items.Scroll_Ranged_Protection_II.description = Снижает входящий урон от снарядов и магии на 8% за каждый элемент брони.
+
+items.Scroll_Ranged_Protection_III.name = Свиток Защиты от Дальних Атак III
+
+items.Scroll_Ranged_Protection_III.description = Снижает входящий урон от снарядов и магии на 12% за каждый элемент брони.
+
+
+
+enchantment.night_vision.name = Ночное Зрение
+
+enchantment.night_vision.description = Улучшает видимость в тёмных местах: пещерах, ночью и под водой.
+
+enchantment.ranged_protection.name = Защита от Дальних Атак
+
+enchantment.ranged_protection.description = Снижает входящий урон от снарядов и магии на 4% за каждый элемент брони.
+
+

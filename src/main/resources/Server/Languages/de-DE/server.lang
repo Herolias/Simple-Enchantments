@@ -452,3 +452,33 @@ enchantment.fast_swim.name = Flossenschwimmen
 
 enchantment.fast_swim.description = Erhöht die Schwimmgeschwindigkeit um 25%.
 
+
+
+items.Scroll_Night_Vision_I.name = Schriftrolle der Nachtsicht
+
+items.Scroll_Night_Vision_I.description = Verbessert die Sicht in dunklen Umgebungen wie Höhlen, Nacht und Unterwasser.
+
+
+
+items.Scroll_Ranged_Protection_I.name = Schriftrolle des Fernkampfschutzes I
+
+items.Scroll_Ranged_Protection_I.description = Verringert eingehenden Projektil- und Magieschaden um 4% pro Rüstungsteil.
+
+items.Scroll_Ranged_Protection_II.name = Schriftrolle des Fernkampfschutzes II
+
+items.Scroll_Ranged_Protection_II.description = Verringert eingehenden Projektil- und Magieschaden um 8% pro Rüstungsteil.
+
+items.Scroll_Ranged_Protection_III.name = Schriftrolle des Fernkampfschutzes III
+
+items.Scroll_Ranged_Protection_III.description = Verringert eingehenden Projektil- und Magieschaden um 12% pro Rüstungsteil.
+
+
+
+enchantment.night_vision.name = Nachtsicht
+
+enchantment.night_vision.description = Verbessert die Sicht in dunklen Umgebungen wie Höhlen, Nacht und Unterwasser.
+
+enchantment.ranged_protection.name = Fernkampfschutz
+
+enchantment.ranged_protection.description = Verringert eingehenden Projektil- und Magieschaden um 4% pro Rüstungsteil.
+

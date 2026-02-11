@@ -452,3 +452,34 @@ enchantment.fast_swim.name = Швидке Плавання
 
 enchantment.fast_swim.description = Збільшує швидкість плавання на 25%.
 
+
+
+items.Scroll_Night_Vision_I.name = Сувій Нічного Зору
+
+items.Scroll_Night_Vision_I.description = Покращує видимість у темних місцях: печерах, вночі та під водою.
+
+
+
+items.Scroll_Ranged_Protection_I.name = Сувій Захисту від Далекобійності I
+
+items.Scroll_Ranged_Protection_I.description = Зменшує вхідну шкоду від снарядів та магії на 4% за кожен елемент броні.
+
+items.Scroll_Ranged_Protection_II.name = Сувій Захисту від Далекобійності II
+
+items.Scroll_Ranged_Protection_II.description = Зменшує вхідну шкоду від снарядів та магії на 8% за кожен елемент броні.
+
+items.Scroll_Ranged_Protection_III.name = Сувій Захисту від Далекобійності III
+
+items.Scroll_Ranged_Protection_III.description = Зменшує вхідну шкоду від снарядів та магії на 12% за кожен елемент броні.
+
+
+
+enchantment.night_vision.name = Нічний Зір
+
+enchantment.night_vision.description = Покращує видимість у темних місцях: печерах, вночі та під водою.
+
+enchantment.ranged_protection.name = Захист від Далекобійності
+
+enchantment.ranged_protection.description = Зменшує вхідну шкоду від снарядів та магії на 4% за кожен елемент броні.
+
+

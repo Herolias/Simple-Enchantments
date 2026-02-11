@@ -452,3 +452,34 @@ enchantment.fast_swim.name = Snabbsim
 
 enchantment.fast_swim.description = Ökar simhastigheten med 25%.
 
+
+
+items.Scroll_Night_Vision_I.name = Skriftrulle av Mörkerseende
+
+items.Scroll_Night_Vision_I.description = Förbättrar sikten i mörka miljöer som grottor, nattetid och under vatten.
+
+
+
+items.Scroll_Ranged_Protection_I.name = Skriftrulle av Avståndsskydd I
+
+items.Scroll_Ranged_Protection_I.description = Minskar inkommande projektil- och magiskada med 4% per rustningsdel.
+
+items.Scroll_Ranged_Protection_II.name = Skriftrulle av Avståndsskydd II
+
+items.Scroll_Ranged_Protection_II.description = Minskar inkommande projektil- och magiskada med 8% per rustningsdel.
+
+items.Scroll_Ranged_Protection_III.name = Skriftrulle av Avståndsskydd III
+
+items.Scroll_Ranged_Protection_III.description = Minskar inkommande projektil- och magiskada med 12% per rustningsdel.
+
+
+
+enchantment.night_vision.name = Mörkerseende
+
+enchantment.night_vision.description = Förbättrar sikten i mörka miljöer som grottor, nattetid och under vatten.
+
+enchantment.ranged_protection.name = Avståndsskydd
+
+enchantment.ranged_protection.description = Minskar inkommande projektil- och magiskada med 4% per rustningsdel.
+
+

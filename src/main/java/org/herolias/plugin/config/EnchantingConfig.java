@@ -33,6 +33,7 @@ public class EnchantingConfig {
     public double reflectionDamagePercentagePerLevel = 0.10;
     public double absorptionHealPercentagePerLevel = 0.10;
     public double fastSwimSpeedBonusPerLevel = 0.25;
+    public double rangedProtectionDamageReductionPerLevel = 0.04;
     //public double burnDamagePerSecond = 3.0;
 
     // Staff Enchantments
@@ -142,6 +143,11 @@ public class EnchantingConfig {
         addScrollRecipe("Scroll_FastSwim_I", 1, "Ingredient_Fabric_Scrap_Cindercloth", 5, "Ingredient_Water_Essence", 1, "Ingredient_Crystal_Blue", 10, "Plant_Petals_Blue", 10);
         addScrollRecipe("Scroll_FastSwim_II", 2, "Ingredient_Fabric_Scrap_Cindercloth", 5, "Ingredient_Water_Essence", 2, "Ingredient_Crystal_Blue", 15, "Plant_Petals_Blue", 20);
         addScrollRecipe("Scroll_FastSwim_III", 3, "Ingredient_Fabric_Scrap_Cindercloth", 5, "Ingredient_Water_Essence", 3, "Ingredient_Crystal_Blue", 20, "Plant_Petals_Blue", 30);
+
+        addScrollRecipe("Scroll_Night_Vision_I", 4, "Ingredient_Fabric_Scrap_Cindercloth", 5, "Ingredient_Void_Essence", 30, "Ingredient_Life_Essence", 20, "Rock_Gem_Emerald", 1);
+        addScrollRecipe("Scroll_Ranged_Protection_I", 1, "Ingredient_Fabric_Scrap_Cindercloth", 5, "Ingredient_Life_Essence", 15, "Ingredient_Crystal_Purple", 10, "Ingredient_Feathers_Light", 10);
+        addScrollRecipe("Scroll_Ranged_Protection_II", 2, "Ingredient_Fabric_Scrap_Cindercloth", 5, "Ingredient_Life_Essence", 30, "Ingredient_Crystal_Purple", 15, "Ingredient_Feathers_Light", 15);
+        addScrollRecipe("Scroll_Ranged_Protection_III", 3, "Ingredient_Fabric_Scrap_Cindercloth", 5, "Ingredient_Life_Essence", 40, "Ingredient_Crystal_Purple", 25, "Ingredient_Feathers_Light", 20);
         if (enchantingTableRecipe == null) {
             enchantingTableRecipe = new ArrayList<>();
             addTableRecipe("Ingredient_Bar_Gold", 5);

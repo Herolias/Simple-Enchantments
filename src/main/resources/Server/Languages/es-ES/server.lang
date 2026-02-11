@@ -452,3 +452,33 @@ enchantment.fast_swim.name = Nado Rápido
 
 enchantment.fast_swim.description = Aumenta la velocidad de nado un 25%.
 
+
+
+items.Scroll_Night_Vision_I.name = Pergamino de Visión Nocturna
+
+items.Scroll_Night_Vision_I.description = Mejora la visibilidad en entornos oscuros como cuevas, noche y bajo el agua.
+
+
+
+items.Scroll_Ranged_Protection_I.name = Pergamino de Protección a Distancia I
+
+items.Scroll_Ranged_Protection_I.description = Reduce el daño de proyectiles y magia recibido un 4% por pieza de armadura.
+
+items.Scroll_Ranged_Protection_II.name = Pergamino de Protección a Distancia II
+
+items.Scroll_Ranged_Protection_II.description = Reduce el daño de proyectiles y magia recibido un 8% por pieza de armadura.
+
+items.Scroll_Ranged_Protection_III.name = Pergamino de Protección a Distancia III
+
+items.Scroll_Ranged_Protection_III.description = Reduce el daño de proyectiles y magia recibido un 12% por pieza de armadura.
+
+
+
+enchantment.night_vision.name = Visión Nocturna
+
+enchantment.night_vision.description = Mejora la visibilidad en entornos oscuros como cuevas, noche y bajo el agua.
+
+enchantment.ranged_protection.name = Protección a Distancia
+
+enchantment.ranged_protection.description = Reduce el daño de proyectiles y magia recibido un 4% por pieza de armadura.
+

@@ -452,3 +452,34 @@ enchantment.fast_swim.name = Snel Zwemmen
 
 enchantment.fast_swim.description = Verhoogt zwemsnelheid met 25%.
 
+
+
+items.Scroll_Night_Vision_I.name = Boekrol van Nachtzicht
+
+items.Scroll_Night_Vision_I.description = Verbetert het zicht in donkere omgevingen zoals grotten, 's nachts en onder water.
+
+
+
+items.Scroll_Ranged_Protection_I.name = Boekrol van Afstandsbescherming I
+
+items.Scroll_Ranged_Protection_I.description = Vermindert inkomende projectiel- en magieschade met 4% per pantseronderdeel.
+
+items.Scroll_Ranged_Protection_II.name = Boekrol van Afstandsbescherming II
+
+items.Scroll_Ranged_Protection_II.description = Vermindert inkomende projectiel- en magieschade met 8% per pantseronderdeel.
+
+items.Scroll_Ranged_Protection_III.name = Boekrol van Afstandsbescherming III
+
+items.Scroll_Ranged_Protection_III.description = Vermindert inkomende projectiel- en magieschade met 12% per pantseronderdeel.
+
+
+
+enchantment.night_vision.name = Nachtzicht
+
+enchantment.night_vision.description = Verbetert het zicht in donkere omgevingen zoals grotten, 's nachts en onder water.
+
+enchantment.ranged_protection.name = Afstandsbescherming
+
+enchantment.ranged_protection.description = Vermindert inkomende projectiel- en magieschade met 4% per pantseronderdeel.
+
+

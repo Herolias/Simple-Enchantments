@@ -21,6 +21,8 @@ import org.herolias.plugin.enchantment.EnchantmentBurnSystem;
 import org.herolias.plugin.enchantment.EnchantmentFreezeSystem;
 import org.herolias.plugin.enchantment.EnchantmentBurnSmeltingSystem;
 import org.herolias.plugin.enchantment.EnchantmentEternalShotSystem;
+import org.herolias.plugin.enchantment.EnchantmentNightVisionListener;
+import org.herolias.plugin.enchantment.EnchantmentNightVisionSystem;
 import org.herolias.plugin.enchantment.DropItemEventSystem;
 import org.herolias.plugin.enchantment.EnchantmentRecipeManager;
 import org.herolias.plugin.enchantment.EnchantmentSalvageSystem;
@@ -232,6 +234,8 @@ public class SimpleEnchanting extends JavaPlugin {
             LOGGER.atInfo().log("Registered EnchantmentAbsorptionSystem with ECS");
             this.getEntityStoreRegistry().registerSystem(new EnchantmentFastSwimSystem(enchantmentManager));
             LOGGER.atInfo().log("Registered EnchantmentFastSwimSystem with ECS");
+            this.getEntityStoreRegistry().registerSystem(new EnchantmentNightVisionSystem(enchantmentManager));
+            LOGGER.atInfo().log("Registered EnchantmentNightVisionSystem with ECS");
         } catch (Exception e) {
             LOGGER.atWarning().log("Could not register enchantment ECS systems: " + e.getMessage());
         }
@@ -275,6 +279,11 @@ public class SimpleEnchanting extends JavaPlugin {
         EnchantmentVisualsListener visualsListener = new EnchantmentVisualsListener(enchantmentManager);
         this.getEventRegistry().registerGlobal(LivingEntityInventoryChangeEvent.class, visualsListener::onInventoryChange);
         LOGGER.atInfo().log("Registered EnchantmentVisualsListener");
+
+        // Register Night Vision Listener (applies/removes screen effect on armor change)
+        EnchantmentNightVisionListener nightVisionListener = new EnchantmentNightVisionListener(enchantmentManager);
+        this.getEventRegistry().registerGlobal(LivingEntityInventoryChangeEvent.class, nightVisionListener::onInventoryChange);
+        LOGGER.atInfo().log("Registered EnchantmentNightVisionListener");
 
         // ── Tooltip System (via DynamicTooltipsLib, optional) ──
         // All lib references are isolated in TooltipBridge so that

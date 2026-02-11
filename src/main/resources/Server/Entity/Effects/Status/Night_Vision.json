@@ -1,0 +1,8 @@
+{
+    "ApplicationEffects": {},
+    "Infinite": true,
+    "Debuff": false,
+    "OverlapBehavior": "Ignore",
+    "RemovalBehavior": "Complete",
+    "StatusEffectIcon": "UI/StatusEffects/Immune.png"
+}
