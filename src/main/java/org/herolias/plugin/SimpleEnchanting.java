@@ -138,6 +138,22 @@ public class SimpleEnchanting extends JavaPlugin {
             org.herolias.plugin.ui.CleansingScrollPageSupplier.CODEC
         );
         LOGGER.atInfo().log("Registered CleansingScroll UI page supplier");
+
+        // Register custom Ammo Consumption interaction
+        this.getCodecRegistry(com.hypixel.hytale.server.core.modules.interaction.interaction.config.Interaction.CODEC).register(
+            "ConsumeAmmo",
+            org.herolias.plugin.interaction.ConsumeAmmoInteraction.class,
+            org.herolias.plugin.interaction.ConsumeAmmoInteraction.CODEC
+        );
+        LOGGER.atInfo().log("Registered ConsumeAmmo interaction");
+
+        // Register Dynamic Projectile Launch interaction
+        this.getCodecRegistry(com.hypixel.hytale.server.core.modules.interaction.interaction.config.Interaction.CODEC).register(
+            "LaunchDynamicProjectile",
+            org.herolias.plugin.interaction.LaunchDynamicProjectileInteraction.class,
+            org.herolias.plugin.interaction.LaunchDynamicProjectileInteraction.CODEC
+        );
+        LOGGER.atInfo().log("Registered LaunchDynamicProjectile interaction");
         
         // Initialize the ECS damage system for applying enchantment effects
         this.enchantmentDamageSystem = new EnchantmentDamageSystem(enchantmentManager);
@@ -187,6 +203,10 @@ public class SimpleEnchanting extends JavaPlugin {
             LOGGER.atInfo().log("Registered EnchantmentAbilityStaminaSystem with ECS");
             this.getEntityStoreRegistry().registerSystem(enchantmentProjectileSpeedSystem);
             LOGGER.atInfo().log("Registered EnchantmentProjectileSpeedSystem with ECS");
+            
+            // Register Cleanup System for Eternal Shot projectiles
+            this.getEntityStoreRegistry().registerSystem(new org.herolias.plugin.enchantment.EternalShotProjectileCleanupSystem(enchantmentManager));
+            LOGGER.atInfo().log("Registered EternalShotProjectileCleanupSystem with ECS");
 
             this.getEntityStoreRegistry().registerSystem(new EnchantmentThriftSystem(enchantmentManager));
             LOGGER.atInfo().log("Registered EnchantmentThriftSystem with ECS");

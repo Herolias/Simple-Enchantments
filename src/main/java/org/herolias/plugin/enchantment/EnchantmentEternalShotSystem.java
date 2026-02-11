@@ -31,6 +31,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * 
  * Tracks manual drops to avoid incorrectly refunding dropped arrows.
  */
+@SuppressWarnings("removal")
 public class EnchantmentEternalShotSystem extends AbstractRefundSystem {
 
     private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();

@@ -30,6 +30,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * 
  * Uses a time accumulator to batch oxygen updates and prevent UI flickering.
  */
+@SuppressWarnings("removal")
 public class EnchantmentWaterbreathingSystem extends EntityTickingSystem<EntityStore> {
 
     private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();

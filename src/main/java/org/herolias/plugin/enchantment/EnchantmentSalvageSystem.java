@@ -30,6 +30,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
  * It strips metadata from items when they are placed in the Salvager Bench so they match the recipe.
  * If the item is removed by the player before processing, the metadata is restored.
  */
+@SuppressWarnings("removal")
 public class EnchantmentSalvageSystem {
     
     private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
