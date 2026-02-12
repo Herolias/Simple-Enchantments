@@ -21,9 +21,12 @@ public class EnchantingConfig {
     public double dexterityStaminaReductionPerLevel = 0.20;
     public double protectionDamageReductionPerLevel = 0.04;
     public double efficiencyMiningSpeedPerLevel = 0.20;
+    public double efficiencySwingSpeedMultiplier = 0.10;
     public double fortuneRollChancePerLevel = 0.25;
     public double strengthDamageMultiplierPerLevel = 0.10;
     public double strengthRangeMultiplierPerLevel = 0.15;
+    
+    public boolean disableEnchantmentCrafting = false;
     public double eaglesEyeDistanceBonusPerLevel = 0.005;
     public double lootingChanceMultiplierPerLevel = 0.25;
     public double lootingQuantityMultiplierPerLevel = 0.25;

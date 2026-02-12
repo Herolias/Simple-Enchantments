@@ -21,7 +21,6 @@ import org.herolias.plugin.enchantment.EnchantmentBurnSystem;
 import org.herolias.plugin.enchantment.EnchantmentFreezeSystem;
 import org.herolias.plugin.enchantment.EnchantmentBurnSmeltingSystem;
 import org.herolias.plugin.enchantment.EnchantmentEternalShotSystem;
-import org.herolias.plugin.enchantment.EnchantmentNightVisionListener;
 import org.herolias.plugin.enchantment.EnchantmentNightVisionSystem;
 import org.herolias.plugin.enchantment.DropItemEventSystem;
 import org.herolias.plugin.enchantment.EnchantmentRecipeManager;
@@ -280,10 +279,7 @@ public class SimpleEnchanting extends JavaPlugin {
         this.getEventRegistry().registerGlobal(LivingEntityInventoryChangeEvent.class, visualsListener::onInventoryChange);
         LOGGER.atInfo().log("Registered EnchantmentVisualsListener");
 
-        // Register Night Vision Listener (applies/removes screen effect on armor change)
-        EnchantmentNightVisionListener nightVisionListener = new EnchantmentNightVisionListener(enchantmentManager);
-        this.getEventRegistry().registerGlobal(LivingEntityInventoryChangeEvent.class, nightVisionListener::onInventoryChange);
-        LOGGER.atInfo().log("Registered EnchantmentNightVisionListener");
+
 
         // ── Tooltip System (via DynamicTooltipsLib, optional) ──
         // All lib references are isolated in TooltipBridge so that

@@ -682,6 +682,20 @@ public class EnchantmentManager {
     }
 
     /**
+     * Calculates the swing speed multiplier from Efficiency enchantment.
+     *
+     * @param item The weapon/tool being swung
+     * @return The swing speed multiplier (1.0 = normal, 1.1 = +10%, etc.)
+     */
+    public double calculateSwingSpeedMultiplier(@Nullable ItemStack item) {
+        int efficiencyLevel = getEnchantmentLevel(item, EnchantmentType.EFFICIENCY);
+        if (efficiencyLevel > 0) {
+            return 1.0 + (efficiencyLevel * getConfig().efficiencySwingSpeedMultiplier);
+        }
+        return 1.0;
+    }
+
+    /**
      * Calculates the projectile damage multiplier from ranged enchantments.
      *
      * @param weapon The ranged weapon used to fire the projectile

@@ -39,10 +39,13 @@ public class EnchantmentNightVisionSystem extends EntityTickingSystem<EntityStor
     private static final short HELMET_SLOT = 0;
 
     // Light config
+    // Radius 10. RGB (1, 1, 1) -> Effectively black?
+    // If client forces brightness, this will confirm it.
     private static final byte LIGHT_RADIUS = -1;
-    private static final byte LIGHT_RED = (byte) 0xBB;
-    private static final byte LIGHT_GREEN = (byte) 0xAA;
-    private static final byte LIGHT_BLUE = (byte) 0x99;
+    // Minimal values
+    private static final byte LIGHT_RED = (byte) 1;
+    private static final byte LIGHT_GREEN = (byte) 1;
+    private static final byte LIGHT_BLUE = (byte) 1;
 
     @Nonnull
     private static final Query<EntityStore> QUERY = Query.and(
@@ -112,17 +115,14 @@ public class EnchantmentNightVisionSystem extends EntityTickingSystem<EntityStor
                 update.dynamicLight = new ColorLight(LIGHT_RADIUS, LIGHT_RED, LIGHT_GREEN, LIGHT_BLUE);
                 viewer.queueUpdate(ref, update);
                 activeNightVision.add(ref);
-            } else if (hasNightVision && wasActive) {
-                // Continuously resend the light since the tracker system might clear it
-                ComponentUpdate update = new ComponentUpdate();
-                update.type = ComponentUpdateType.DynamicLight;
-                update.dynamicLight = new ColorLight(LIGHT_RADIUS, LIGHT_RED, LIGHT_GREEN, LIGHT_BLUE);
-                viewer.queueUpdate(ref, update);
             } else if (!hasNightVision && wasActive) {
                 // Remove the light from this player only
                 viewer.queueRemove(ref, ComponentUpdateType.DynamicLight);
                 activeNightVision.remove(ref);
             }
+            // Optimization: Do NOTHING if hasNightVision && wasActive.
+            // This prevents spamming packets every tick.
+            
         } catch (Exception e) {
             LOGGER.atWarning().log("Error in NightVision system: " + e.getMessage());
         }
