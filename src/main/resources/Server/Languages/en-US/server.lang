@@ -482,3 +482,22 @@ enchantment.ranged_protection.name = Ranged Protection
 
 enchantment.ranged_protection.description = Reduces incoming projectile and magic damage by 4% per armor piece.
 
+
+
+items.Scroll_Frenzy_I.name = Scroll of Frenzy I
+
+items.Scroll_Frenzy_I.description = Increases signature charge rate by 15%.
+
+items.Scroll_Frenzy_II.name = Scroll of Frenzy II
+
+items.Scroll_Frenzy_II.description = Increases signature charge rate by 30%.
+
+items.Scroll_Frenzy_III.name = Scroll of Frenzy III
+
+items.Scroll_Frenzy_III.description = Increases signature charge rate by 45%.
+
+
+
+enchantment.frenzy.name = Frenzy
+
+enchantment.frenzy.description = Increases signature charge rate by 15%.

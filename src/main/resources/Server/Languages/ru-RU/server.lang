@@ -483,3 +483,22 @@ enchantment.ranged_protection.name = Защита от Дальних Атак
 enchantment.ranged_protection.description = Снижает входящий урон от снарядов и магии на 4% за каждый элемент брони.
 
 
+
+
+items.Scroll_Frenzy_I.name = Свиток Бешенства I
+
+items.Scroll_Frenzy_I.description = Увеличивает скорость зарядки сигнатурной способности на 15%.
+
+items.Scroll_Frenzy_II.name = Свиток Бешенства II
+
+items.Scroll_Frenzy_II.description = Увеличивает скорость зарядки сигнатурной способности на 30%.
+
+items.Scroll_Frenzy_III.name = Свиток Бешенства III
+
+items.Scroll_Frenzy_III.description = Увеличивает скорость зарядки сигнатурной способности на 45%.
+
+
+
+enchantment.frenzy.name = Бешенство
+
+enchantment.frenzy.description = Увеличивает скорость зарядки сигнатурной способности на 15%.   

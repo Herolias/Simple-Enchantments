@@ -90,6 +90,7 @@ public class EnchantConfigPage extends InteractiveCustomUIPage<EnchantConfigPage
         ENCHANTMENT_MULTIPLIERS.put(EnchantmentType.FAST_SWIM, "fastSwimSpeedBonusPerLevel");
         ENCHANTMENT_MULTIPLIERS.put(EnchantmentType.THRIFT, "thriftRestoreAmountPerLevel");
         ENCHANTMENT_MULTIPLIERS.put(EnchantmentType.ELEMENTAL_HEART, "elementalHeartSaveChancePerLevel");
+        ENCHANTMENT_MULTIPLIERS.put(EnchantmentType.FRENZY, "frenzyChargeSpeedMultiplierPerLevel");
 
         // Secondary multipliers for enchantments with multiple effects
         ENCHANTMENT_SECONDARY_MULTIPLIERS.put(EnchantmentType.STRENGTH, "strengthRangeMultiplierPerLevel");
@@ -143,6 +144,7 @@ public class EnchantConfigPage extends InteractiveCustomUIPage<EnchantConfigPage
         copy.fortuneRollChancePerLevel = original.fortuneRollChancePerLevel;
         copy.strengthDamageMultiplierPerLevel = original.strengthDamageMultiplierPerLevel;
         copy.strengthRangeMultiplierPerLevel = original.strengthRangeMultiplierPerLevel;
+        copy.frenzyChargeSpeedMultiplierPerLevel = original.frenzyChargeSpeedMultiplierPerLevel;
         
         copy.disableEnchantmentCrafting = original.disableEnchantmentCrafting;
         copy.eaglesEyeDistanceBonusPerLevel = original.eaglesEyeDistanceBonusPerLevel;
@@ -1110,6 +1112,7 @@ public class EnchantConfigPage extends InteractiveCustomUIPage<EnchantConfigPage
             case "absorptionHealPercentagePerLevel" -> workingConfig.absorptionHealPercentagePerLevel;
             case "fastSwimSpeedBonusPerLevel" -> workingConfig.fastSwimSpeedBonusPerLevel;
             case "elementalHeartSaveChancePerLevel" -> workingConfig.elementalHeartSaveChancePerLevel;
+            case "frenzyChargeSpeedMultiplierPerLevel" -> workingConfig.frenzyChargeSpeedMultiplierPerLevel;
             default -> 0.0;
         };
     }
@@ -1159,6 +1162,7 @@ public class EnchantConfigPage extends InteractiveCustomUIPage<EnchantConfigPage
                 case "absorptionHealPercentagePerLevel" -> workingConfig.absorptionHealPercentagePerLevel = Double.parseDouble(value);
                 case "fastSwimSpeedBonusPerLevel" -> workingConfig.fastSwimSpeedBonusPerLevel = Double.parseDouble(value);
                 case "elementalHeartSaveChancePerLevel" -> workingConfig.elementalHeartSaveChancePerLevel = Double.parseDouble(value);
+                case "frenzyChargeSpeedMultiplierPerLevel" -> workingConfig.frenzyChargeSpeedMultiplierPerLevel = Double.parseDouble(value);
             }
         } catch (NumberFormatException e) {
             LOGGER.atWarning().log("Failed to parse setting value: " + key + " = " + value);
@@ -1250,6 +1254,7 @@ public class EnchantConfigPage extends InteractiveCustomUIPage<EnchantConfigPage
             case "fastSwimSpeedBonusPerLevel" -> String.valueOf(DEFAULT_CONFIG.fastSwimSpeedBonusPerLevel);
             case "elementalHeartSaveChancePerLevel" -> String.valueOf(DEFAULT_CONFIG.elementalHeartSaveChancePerLevel);
             case "returnEnchantmentOnCleanse" -> String.valueOf(DEFAULT_CONFIG.returnEnchantmentOnCleanse);
+            case "frenzyChargeSpeedMultiplierPerLevel" -> String.valueOf(DEFAULT_CONFIG.frenzyChargeSpeedMultiplierPerLevel);
             case "disableEnchantmentCrafting" -> String.valueOf(DEFAULT_CONFIG.disableEnchantmentCrafting);
             default -> null;
         };
@@ -1283,6 +1288,7 @@ public class EnchantConfigPage extends InteractiveCustomUIPage<EnchantConfigPage
         actualConfig.absorptionHealPercentagePerLevel = workingConfig.absorptionHealPercentagePerLevel;
         actualConfig.fastSwimSpeedBonusPerLevel = workingConfig.fastSwimSpeedBonusPerLevel;
         actualConfig.elementalHeartSaveChancePerLevel = workingConfig.elementalHeartSaveChancePerLevel;
+        actualConfig.frenzyChargeSpeedMultiplierPerLevel = workingConfig.frenzyChargeSpeedMultiplierPerLevel;
         actualConfig.returnEnchantmentOnCleanse = workingConfig.returnEnchantmentOnCleanse;
         actualConfig.disableEnchantmentCrafting = workingConfig.disableEnchantmentCrafting;
         actualConfig.disabledEnchantments = new LinkedHashMap<>(workingConfig.disabledEnchantments);
@@ -1365,6 +1371,7 @@ public class EnchantConfigPage extends InteractiveCustomUIPage<EnchantConfigPage
         workingConfig.absorptionHealPercentagePerLevel = defaults.absorptionHealPercentagePerLevel;
         workingConfig.fastSwimSpeedBonusPerLevel = defaults.fastSwimSpeedBonusPerLevel;
         workingConfig.elementalHeartSaveChancePerLevel = defaults.elementalHeartSaveChancePerLevel;
+        workingConfig.frenzyChargeSpeedMultiplierPerLevel = defaults.frenzyChargeSpeedMultiplierPerLevel;
         workingConfig.returnEnchantmentOnCleanse = defaults.returnEnchantmentOnCleanse;
         workingConfig.disableEnchantmentCrafting = defaults.disableEnchantmentCrafting;
         

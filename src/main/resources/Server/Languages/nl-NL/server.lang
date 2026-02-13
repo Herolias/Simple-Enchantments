@@ -483,3 +483,22 @@ enchantment.ranged_protection.name = Afstandsbescherming
 enchantment.ranged_protection.description = Vermindert inkomende projectiel- en magieschade met 4% per pantseronderdeel.
 
 
+
+
+items.Scroll_Frenzy_I.name = Geschrift der Razernij I
+
+items.Scroll_Frenzy_I.description = Verhoogt de oplaadsnelheid van de signatuurvaardigheid met 15%.
+
+items.Scroll_Frenzy_II.name = Geschrift der Razernij II
+
+items.Scroll_Frenzy_II.description = Verhoogt de oplaadsnelheid van de signatuurvaardigheid met 30%.
+
+items.Scroll_Frenzy_III.name = Geschrift der Razernij III
+
+items.Scroll_Frenzy_III.description = Verhoogt de oplaadsnelheid van de signatuurvaardigheid met 45%.
+
+
+
+enchantment.frenzy.name = Razernij
+
+enchantment.frenzy.description = Verhoogt de oplaadsnelheid van de signatuurvaardigheid met 15%.

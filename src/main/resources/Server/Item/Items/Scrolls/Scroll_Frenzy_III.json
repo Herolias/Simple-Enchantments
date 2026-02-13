@@ -1,7 +1,7 @@
 {
     "TranslationProperties": {
-        "Name": "server.items.Scroll_FastSwim_II.name",
-        "Description": "server.items.Scroll_FastSwim_II.description"
+        "Name": "server.items.Scroll_Frenzy_III.name",
+        "Description": "server.items.Scroll_Frenzy_III.description"
     },
     "Icon": "Icons/ItemsGenerated/Scroll.png",
     "Categories": [
@@ -16,8 +16,8 @@
                     "Type": "OpenCustomUI",
                     "Page": {
                         "Id": "EnchantScroll",
-                        "EnchantmentId": "fast_swim",
-                        "Level": 2
+                        "EnchantmentId": "frenzy",
+                        "Level": 3
                     }
                 }
             ]
@@ -28,8 +28,8 @@
                     "Type": "OpenCustomUI",
                     "Page": {
                         "Id": "EnchantScroll",
-                        "EnchantmentId": "fast_swim",
-                        "Level": 2
+                        "EnchantmentId": "frenzy",
+                        "Level": 3
                     }
                 }
             ]
@@ -43,16 +43,16 @@
                 "Quantity": 5
             },
             {
-                "ItemId": "Ingredient_Water_Essence",
-                "Quantity": 10
+                "ItemId": "Ingredient_Life_Essence",
+                "Quantity": 35
             },
             {
-                "ItemId": "Deco_Coral_Shell",
-                "Quantity": 6
+                "ItemId": "Ingredient_Crystal_Red",
+                "Quantity": 30
             },
             {
-                "ItemId": "Ingredient_Spider_Eye",
-                "Quantity": 5
+                "ItemId": "Plant_Crop_Stamina1",
+                "Quantity": 15
             }
         ],
         "OutputQuantity": 1,
@@ -61,9 +61,10 @@
                 "Id": "Enchantingbench",
                 "Type": "Crafting",
                 "Categories": [
-                    "Enchanting_Armor"
+                    "Enchanting_Melee",
+                    "Enchanting_Ranged"
                 ],
-                "RequiredTierLevel": 2
+                "RequiredTierLevel": 3
             }
         ]
     },
@@ -81,8 +82,8 @@
         ]
     },
     "MaxStack": 10,
-    "ItemLevel": 2,
-    "Quality": "Rare",
+    "ItemLevel": 3,
+    "Quality": "Epic",
     "Tags": {
         "Type": [
             "EnchantmentScroll"

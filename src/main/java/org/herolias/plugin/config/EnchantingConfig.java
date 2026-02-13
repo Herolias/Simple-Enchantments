@@ -37,6 +37,7 @@ public class EnchantingConfig {
     public double absorptionHealPercentagePerLevel = 0.10;
     public double fastSwimSpeedBonusPerLevel = 0.25;
     public double rangedProtectionDamageReductionPerLevel = 0.04;
+    public double frenzyChargeSpeedMultiplierPerLevel = 0.15;
     //public double burnDamagePerSecond = 3.0;
 
     // Staff Enchantments
@@ -148,9 +149,14 @@ public class EnchantingConfig {
         addScrollRecipe("Scroll_FastSwim_III", 3, "Ingredient_Fabric_Scrap_Cindercloth", 5, "Ingredient_Water_Essence", 3, "Ingredient_Crystal_Blue", 20, "Plant_Petals_Blue", 30);
 
         addScrollRecipe("Scroll_Night_Vision_I", 4, "Ingredient_Fabric_Scrap_Cindercloth", 5, "Ingredient_Fire_Essence", 30, "Ingredient_Crystal_Yellow", 30, "Plant_Crop_Mushroom_Glowing_Orange", 20);
-        addScrollRecipe("Scroll_Ranged_Protection_I", 1, "Ingredient_Fabric_Scrap_Cindercloth", 5, "Ingredient_Life_Essence", 15, "Ingredient_Crystal_Purple", 10, "Ingredient_Feathers_Light", 10);
-        addScrollRecipe("Scroll_Ranged_Protection_II", 2, "Ingredient_Fabric_Scrap_Cindercloth", 5, "Ingredient_Life_Essence", 30, "Ingredient_Crystal_Purple", 15, "Ingredient_Feathers_Light", 15);
-        addScrollRecipe("Scroll_Ranged_Protection_III", 3, "Ingredient_Fabric_Scrap_Cindercloth", 5, "Ingredient_Life_Essence", 40, "Ingredient_Crystal_Purple", 25, "Ingredient_Feathers_Light", 20);
+        addScrollRecipe("Scroll_Ranged_Protection_I", 1, "Ingredient_Fabric_Scrap_Cindercloth", 5,  "Ingredient_Ice_Essence", 15, "Ingredient_Fire_Essence", 15, "Plant_Petals_Azure", 10);
+        addScrollRecipe("Scroll_Ranged_Protection_II", 2, "Ingredient_Fabric_Scrap_Cindercloth", 5, "Ingredient_Ice_Essence", 20, "Ingredient_Fire_Essence", 20, "Plant_Petals_Azure", 20);
+        addScrollRecipe("Scroll_Ranged_Protection_III", 3, "Ingredient_Fabric_Scrap_Cindercloth", 5, "Ingredient_Ice_Essence", 25, "Ingredient_Fire_Essence", 25, "Plant_Petals_Azure", 30);
+        
+        addScrollRecipe("Scroll_Frenzy_I", 1, "Ingredient_Fabric_Scrap_Cindercloth", 5, "Plant_Petals_Blood", 15, "Ingredient_Crystal_Cyan", 10, "Plant_Crop_Stamina1", 5);
+        addScrollRecipe("Scroll_Frenzy_II", 2, "Ingredient_Fabric_Scrap_Cindercloth", 5, "Plant_Petals_Blood", 20, "Ingredient_Crystal_Cyan", 20, "Plant_Crop_Stamina1", 7);
+        addScrollRecipe("Scroll_Frenzy_III", 3, "Ingredient_Fabric_Scrap_Cindercloth", 5, "Plant_Petals_Blood", 25, "Ingredient_Crystal_Cyan", 30, "Plant_Crop_Stamina1", 10);
+
         if (enchantingTableRecipe == null) {
             enchantingTableRecipe = new ArrayList<>();
             addTableRecipe("Ingredient_Bar_Gold", 5);

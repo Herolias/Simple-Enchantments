@@ -56,7 +56,7 @@ import javax.annotation.Nullable;
 public class EnchantmentManager {
 
     private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
-    private static final double EAGLES_EYE_MAX_DISTANCE = 100.0;
+    private static final double EAGLES_EYE_MAX_DISTANCE = 50.0;
     private final ConcurrentHashMap<UUID, ProjectileEnchantmentData> projectileEnchantmentsByUuid = new ConcurrentHashMap<>();
     private final ConcurrentHashMap<UUID, ProjectileEnchantmentData> burnEnchantmentsByEntityUuid = new ConcurrentHashMap<>();
 
@@ -694,6 +694,18 @@ public class EnchantmentManager {
         }
         return 1.0;
     }
+
+    /**
+     * Calculates the ability charge speed multiplier from Frenzy enchantment.
+     *
+     * @param level The level of the Frenzy enchantment
+     * @return The charge speed multiplier (0.1 = +10%, etc.)
+     */
+    public double calculateFrenzySpeedMultiplier(int level) {
+        if (level <= 0) return 0.0;
+        return level * EnchantmentType.FRENZY.getEffectMultiplier();
+    }
+
 
     /**
      * Calculates the projectile damage multiplier from ranged enchantments.

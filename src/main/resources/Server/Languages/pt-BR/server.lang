@@ -483,3 +483,22 @@ enchantment.ranged_protection.name = Proteção à Distância
 enchantment.ranged_protection.description = Reduz o dano de projéteis e magia recebido em 4% por peça de armadura.
 
 
+
+
+items.Scroll_Frenzy_I.name = Pergaminho do Frenesi I
+
+items.Scroll_Frenzy_I.description = Aumenta a taxa de carga da habilidade de assinatura em 15%.
+
+items.Scroll_Frenzy_II.name = Pergaminho do Frenesi II
+
+items.Scroll_Frenzy_II.description = Aumenta a taxa de carga da habilidade de assinatura em 30%.
+
+items.Scroll_Frenzy_III.name = Pergaminho do Frenesi III
+
+items.Scroll_Frenzy_III.description = Aumenta a taxa de carga da habilidade de assinatura em 45%.
+
+
+
+enchantment.frenzy.name = Frenesi
+
+enchantment.frenzy.description = Aumenta a taxa de carga da habilidade de assinatura em 15%.

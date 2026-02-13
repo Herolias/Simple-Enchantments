@@ -39,6 +39,7 @@ import org.herolias.plugin.enchantment.EnchantmentReflectionSystem;
 import org.herolias.plugin.enchantment.EnchantmentAbsorptionSystem;
 import org.herolias.plugin.enchantment.EnchantmentFastSwimSystem;
 
+
 import org.herolias.plugin.listener.EnchantingTableListener;
 import org.herolias.plugin.ui.EnchantScrollPageSupplier;
 import com.hypixel.hytale.server.core.event.events.entity.LivingEntityInventoryChangeEvent;
@@ -237,6 +238,7 @@ public class SimpleEnchanting extends JavaPlugin {
             LOGGER.atInfo().log("Registered EnchantmentFastSwimSystem with ECS");
             this.getEntityStoreRegistry().registerSystem(new EnchantmentNightVisionSystem(enchantmentManager));
             LOGGER.atInfo().log("Registered EnchantmentNightVisionSystem with ECS");
+
         } catch (Exception e) {
             LOGGER.atWarning().log("Could not register enchantment ECS systems: " + e.getMessage());
         }

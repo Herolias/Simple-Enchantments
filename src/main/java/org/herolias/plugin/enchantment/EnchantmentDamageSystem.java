@@ -120,6 +120,9 @@ public class EnchantmentDamageSystem extends DamageEventSystem {
 
         // Apply Life Leech (melee only)
         applyLifeLeech(ctx, damage, commandBuffer);
+
+        // Apply Frenzy (ability charge)
+        applyFrenzy(ctx, damage, commandBuffer);
     }
 
     private void applyLifeLeech(EnchantmentManager.DamageContext ctx, 
@@ -145,6 +148,59 @@ public class EnchantmentDamageSystem extends DamageEventSystem {
         EntityStatMap statMap = commandBuffer.getComponent(ctx.attackerRef(), EntityStatMap.getComponentType());
         if (statMap != null) {
             statMap.addStatValue(DefaultEntityStatTypes.getHealth(), healAmount);
+        }
+    }
+
+    private void applyFrenzy(EnchantmentManager.DamageContext ctx,
+                             @Nonnull Damage damage,
+                             @Nonnull CommandBuffer<EntityStore> commandBuffer) {
+        if (damage.getAmount() <= 0) return;
+        if (!ctx.hasAttacker()) return;
+
+        Entity attackerEntity = EntityUtils.getEntity(ctx.attackerRef(), commandBuffer);
+        ItemStack weapon = enchantmentManager.getWeaponFromEntity(attackerEntity);
+        if (weapon == null) return;
+
+        // Frenzy applies to all weapons (Melee, Ranged, Staves)
+        int frenzyLevel = enchantmentManager.getEnchantmentLevel(weapon, EnchantmentType.FRENZY);
+        if (frenzyLevel <= 0) return;
+
+        // Calculate bonus charge amount
+        float chargeAmount = 0.0f;
+        boolean foundBase = false;
+
+        // Try to get base charge from DamageSequence (native Hytale charge logic)
+        if (damage.hasMetaObject(com.hypixel.hytale.server.core.modules.entity.damage.DamageCalculatorSystems.DAMAGE_SEQUENCE)) {
+             com.hypixel.hytale.server.core.modules.entity.damage.DamageCalculatorSystems.DamageSequence seq = 
+                 damage.getMetaObject(com.hypixel.hytale.server.core.modules.entity.damage.DamageCalculatorSystems.DAMAGE_SEQUENCE);
+             
+             com.hypixel.hytale.server.core.modules.interaction.interaction.config.server.DamageEntityInteraction.EntityStatOnHit[] stats = seq.getEntityStatOnHit();
+             if (stats != null) {
+                 for (com.hypixel.hytale.server.core.modules.interaction.interaction.config.server.DamageEntityInteraction.EntityStatOnHit stat : stats) {
+                     // Access via toPacket to get public fields
+                     com.hypixel.hytale.protocol.EntityStatOnHit packet = stat.toPacket();
+                     if (packet.entityStatIndex == DefaultEntityStatTypes.getSignatureEnergy()) {
+                         chargeAmount += packet.amount;
+                         foundBase = true; // Found at least one source of charge
+                     }
+                 }
+             }
+        }
+
+        if (foundBase) {
+             // If we found a base charge, increase it by the percentage (e.g. +10% per level)
+             chargeAmount = (float) (chargeAmount * enchantmentManager.calculateFrenzySpeedMultiplier(frenzyLevel));
+        } else {
+             // Fallback: 1% of damage * level (equivalent to +10% of an assumed 10% base charge)
+             // This ensures the enchantment works on non-charging attacks effectively adding a charge mechanic.
+             chargeAmount = (float) (damage.getAmount() * 0.01 * frenzyLevel); 
+        }
+        
+        if (chargeAmount <= 0.0f) return;
+
+        EntityStatMap statMap = commandBuffer.getComponent(ctx.attackerRef(), EntityStatMap.getComponentType());
+        if (statMap != null) {
+            statMap.addStatValue(DefaultEntityStatTypes.getSignatureEnergy(), chargeAmount);
         }
     }
 

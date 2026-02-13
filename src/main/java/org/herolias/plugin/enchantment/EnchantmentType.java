@@ -377,7 +377,23 @@ public enum EnchantmentType {
         false, // requiresDurability
         false, // isLegendary
         ItemCategory.ARMOR
+    ),
+
+    /**
+     * Frenzy - Increases ability charge rate
+     * Applicable to: All weapons
+     */
+    FRENZY(
+        "frenzy",
+        "Frenzy",
+        "Increases ability charge rate",
+        3,  // max level
+        false, // requiresDurability
+        false, // isLegendary
+        ItemCategory.MELEE_WEAPON, ItemCategory.RANGED_WEAPON, 
+        ItemCategory.STAFF, ItemCategory.STAFF_MANA, ItemCategory.STAFF_ESSENCE
     )
+
     ;
 
     private final String id;
@@ -499,6 +515,7 @@ public enum EnchantmentType {
             case ABSORPTION -> config.absorptionHealPercentagePerLevel;
             case FAST_SWIM -> config.fastSwimSpeedBonusPerLevel;
             case RANGED_PROTECTION -> config.rangedProtectionDamageReductionPerLevel;
+            case FRENZY -> config.frenzyChargeSpeedMultiplierPerLevel;
             //case BURN -> config.burnDamagePerSecond;
             default -> 0.0;
         };
@@ -579,7 +596,7 @@ public enum EnchantmentType {
              case FORTUNE -> "Extra drop chance increased by " + percentage + "%";
              case SMELTING -> "Smelts mined blocks";
              case STRENGTH -> "Projectile damage increased by " + percentage + "%";
-             case EAGLES_EYE -> "Damage increases with distance up to " + percentage + "%";
+             case EAGLES_EYE -> "Damage increases with distance up to " + percentage * 50 + "%";
              case LOOTING -> "Drop rates increased by " + percentage + "%";
              case FEATHER_FALLING -> "Fall damage reduced by " + percentage + "%";
              case WATERBREATHING -> "Oxygen drain reduced by " + percentage + "%";
@@ -588,13 +605,14 @@ public enum EnchantmentType {
              case ETERNAL_SHOT -> "Does not consume arrows";
              case PICK_PERFECT -> "Drops block item instead of drops";
              case THRIFT -> "Restores " + percentage + "% of mana on hit";
-             case ELEMENTAL_HEART -> "Chance to save essence"; 
+             case ELEMENTAL_HEART -> "Does not consume essence when casting"; 
              case KNOCKBACK -> "Knocks targets back";
              case REFLECTION -> "Reflects " + percentage + "% of damage";
              case ABSORPTION -> "Heals for " + percentage + "% of blocked damage";
              case FAST_SWIM -> "Swim speed increased by " + percentage + "%";
              case NIGHT_VISION -> "Enhances vision in dark environments";
              case RANGED_PROTECTION -> "Projectile/magic damage reduced by " + percentage + "%";
+             case FRENZY -> "Ability charge speed increased by " + percentage + "%";
              default -> "";
          };
     }

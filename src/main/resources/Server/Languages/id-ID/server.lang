@@ -483,3 +483,22 @@ enchantment.ranged_protection.name = Perlindungan Jarak Jauh
 enchantment.ranged_protection.description = Mengurangi kerusakan proyektil dan sihir yang diterima sebesar 4% per bagian armor.
 
 
+
+
+items.Scroll_Frenzy_I.name = Gulungan Frenzy I
+
+items.Scroll_Frenzy_I.description = Meningkatkan laju pengisian kemampuan signature sebesar 15%.
+
+items.Scroll_Frenzy_II.name = Gulungan Frenzy II
+
+items.Scroll_Frenzy_II.description = Meningkatkan laju pengisian kemampuan signature sebesar 30%.
+
+items.Scroll_Frenzy_III.name = Gulungan Frenzy III
+
+items.Scroll_Frenzy_III.description = Meningkatkan laju pengisian kemampuan signature sebesar 45%.
+
+
+
+enchantment.frenzy.name = Frenzy
+
+enchantment.frenzy.description = Meningkatkan laju pengisian kemampuan signature sebesar 15%.

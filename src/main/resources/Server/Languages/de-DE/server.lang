@@ -482,3 +482,22 @@ enchantment.ranged_protection.name = Fernkampfschutz
 
 enchantment.ranged_protection.description = Verringert eingehenden Projektil- und Magieschaden um 4% pro Rüstungsteil.
 
+
+
+items.Scroll_Frenzy_I.name = Schriftrolle der Raserei I
+
+items.Scroll_Frenzy_I.description = Erhöht die Aufladerate der Signaturfähigkeit um 15%.
+
+items.Scroll_Frenzy_II.name = Schriftrolle der Raserei II
+
+items.Scroll_Frenzy_II.description = Erhöht die Aufladerate der Signaturfähigkeit um 30%.
+
+items.Scroll_Frenzy_III.name = Schriftrolle der Raserei III
+
+items.Scroll_Frenzy_III.description = Erhöht die Aufladerate der Signaturfähigkeit um 45%.
+
+
+
+enchantment.frenzy.name = Raserei
+
+enchantment.frenzy.description = Erhöht die Aufladerate der Signaturfähigkeit um 15%.

@@ -482,3 +482,22 @@ enchantment.ranged_protection.name = Protección a Distancia
 
 enchantment.ranged_protection.description = Reduce el daño de proyectiles y magia recibido un 4% por pieza de armadura.
 
+
+
+items.Scroll_Frenzy_I.name = Pergamino de Frenesí I
+
+items.Scroll_Frenzy_I.description = Aumenta la velocidad de carga de la habilidad característica en un 15%.
+
+items.Scroll_Frenzy_II.name = Pergamino de Frenesí II
+
+items.Scroll_Frenzy_II.description = Aumenta la velocidad de carga de la habilidad característica en un 30%.
+
+items.Scroll_Frenzy_III.name = Pergamino de Frenesí III
+
+items.Scroll_Frenzy_III.description = Aumenta la velocidad de carga de la habilidad característica en un 45%.
+
+
+
+enchantment.frenzy.name = Frenesí
+
+enchantment.frenzy.description = Aumenta la velocidad de carga de la habilidad característica en un 15%.

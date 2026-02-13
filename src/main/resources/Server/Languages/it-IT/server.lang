@@ -483,3 +483,22 @@ enchantment.ranged_protection.name = Protezione a Distanza
 enchantment.ranged_protection.description = Riduce i danni da proiettili e magia del 4% per pezzo di armatura.
 
 
+
+
+items.Scroll_Frenzy_I.name = Pergamena della Frenesia I
+
+items.Scroll_Frenzy_I.description = Aumenta la velocità di carica dell'abilità caratteristica del 15%.
+
+items.Scroll_Frenzy_II.name = Pergamena della Frenesia II
+
+items.Scroll_Frenzy_II.description = Aumenta la velocità di carica dell'abilità caratteristica del 30%.
+
+items.Scroll_Frenzy_III.name = Pergamena della Frenesia III
+
+items.Scroll_Frenzy_III.description = Aumenta la velocità di carica dell'abilità caratteristica del 45%.
+
+
+
+enchantment.frenzy.name = Frenesia
+
+enchantment.frenzy.description = Aumenta la velocità di carica dell'abilità caratteristica del 15%.

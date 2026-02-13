@@ -1,7 +1,7 @@
 {
     "TranslationProperties": {
-        "Name": "server.items.Scroll_FastSwim_II.name",
-        "Description": "server.items.Scroll_FastSwim_II.description"
+        "Name": "server.items.Scroll_Frenzy_II.name",
+        "Description": "server.items.Scroll_Frenzy_II.description"
     },
     "Icon": "Icons/ItemsGenerated/Scroll.png",
     "Categories": [
@@ -16,7 +16,7 @@
                     "Type": "OpenCustomUI",
                     "Page": {
                         "Id": "EnchantScroll",
-                        "EnchantmentId": "fast_swim",
+                        "EnchantmentId": "frenzy",
                         "Level": 2
                     }
                 }
@@ -28,7 +28,7 @@
                     "Type": "OpenCustomUI",
                     "Page": {
                         "Id": "EnchantScroll",
-                        "EnchantmentId": "fast_swim",
+                        "EnchantmentId": "frenzy",
                         "Level": 2
                     }
                 }
@@ -43,16 +43,16 @@
                 "Quantity": 5
             },
             {
-                "ItemId": "Ingredient_Water_Essence",
+                "ItemId": "Ingredient_Life_Essence",
+                "Quantity": 25
+            },
+            {
+                "ItemId": "Ingredient_Crystal_Red",
+                "Quantity": 20
+            },
+            {
+                "ItemId": "Plant_Crop_Stamina1",
                 "Quantity": 10
-            },
-            {
-                "ItemId": "Deco_Coral_Shell",
-                "Quantity": 6
-            },
-            {
-                "ItemId": "Ingredient_Spider_Eye",
-                "Quantity": 5
             }
         ],
         "OutputQuantity": 1,
@@ -61,7 +61,8 @@
                 "Id": "Enchantingbench",
                 "Type": "Crafting",
                 "Categories": [
-                    "Enchanting_Armor"
+                    "Enchanting_Melee",
+                    "Enchanting_Ranged"
                 ],
                 "RequiredTierLevel": 2
             }

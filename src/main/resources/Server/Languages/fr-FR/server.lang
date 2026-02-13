@@ -482,3 +482,22 @@ enchantment.ranged_protection.name = Protection à Distance
 
 enchantment.ranged_protection.description = Réduit les dégâts de projectiles et de magie reçus de 4% par pièce d'armure.
 
+
+
+items.Scroll_Frenzy_I.name = Parchemin de Frénésie I
+
+items.Scroll_Frenzy_I.description = Augmente la vitesse de charge de la capacité signature de 15%.
+
+items.Scroll_Frenzy_II.name = Parchemin de Frénésie II
+
+items.Scroll_Frenzy_II.description = Augmente la vitesse de charge de la capacité signature de 30%.
+
+items.Scroll_Frenzy_III.name = Parchemin de Frénésie III
+
+items.Scroll_Frenzy_III.description = Augmente la vitesse de charge de la capacité signature de 45%.
+
+
+
+enchantment.frenzy.name = Frénésie
+
+enchantment.frenzy.description = Augmente la vitesse de charge de la capacité signature de 15%.

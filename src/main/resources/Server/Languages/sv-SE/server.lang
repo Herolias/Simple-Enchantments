@@ -483,3 +483,22 @@ enchantment.ranged_protection.name = Avståndsskydd
 enchantment.ranged_protection.description = Minskar inkommande projektil- och magiskada med 4% per rustningsdel.
 
 
+
+
+items.Scroll_Frenzy_I.name = Raseriskrift I
+
+items.Scroll_Frenzy_I.description = Ökar laddningshastigheten för signaturförmågan med 15%.
+
+items.Scroll_Frenzy_II.name = Raseriskrift II
+
+items.Scroll_Frenzy_II.description = Ökar laddningshastigheten för signaturförmågan med 30%.
+
+items.Scroll_Frenzy_III.name = Raseriskrift III
+
+items.Scroll_Frenzy_III.description = Ökar laddningshastigheten för signaturförmågan med 45%.
+
+
+
+enchantment.frenzy.name = Raseri
+
+enchantment.frenzy.description = Ökar laddningshastigheten för signaturförmågan med 15%.
