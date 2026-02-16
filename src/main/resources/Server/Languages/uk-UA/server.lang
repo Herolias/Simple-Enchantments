@@ -502,3 +502,93 @@ items.Scroll_Frenzy_III.description = Збільшує швидкість зар
 enchantment.frenzy.name = Шаленство
 
 enchantment.frenzy.description = Збільшує швидкість зарядки сигнатурної здібності на 15%.
+
+items.Scroll_Riposte_I.name = Сувій Riposte I
+items.Scroll_Riposte_I.description = Збільшує шкоду від контратак на 20%.
+items.Scroll_Riposte_II.name = Сувій Riposte II
+items.Scroll_Riposte_II.description = Збільшує шкоду від контратак на 40%.
+items.Scroll_Riposte_III.name = Сувій Riposte III
+items.Scroll_Riposte_III.description = Збільшує шкоду від контратак на 60%.
+
+enchantment.riposte.name = Riposte
+enchantment.riposte.description = Збільшує шкоду від контратак на 20%.
+
+items.Scroll_Coup_De_Grace_I.name = Сувій Coup de Grâce I
+items.Scroll_Coup_De_Grace_I.description = Збільшує шкоду по оглушених ворогах на 20%.
+items.Scroll_Coup_De_Grace_II.name = Сувій Coup de Grâce II
+items.Scroll_Coup_De_Grace_II.description = Збільшує шкоду по оглушених ворогах на 40%.
+items.Scroll_Coup_De_Grace_III.name = Сувій Coup de Grâce III
+items.Scroll_Coup_De_Grace_III.description = Збільшує шкоду по оглушених ворогах на 60%.
+
+enchantment.coup_de_grace.name = Coup de Grâce
+enchantment.coup_de_grace.description = Збільшує шкоду по оглушених ворогах на 20%.
+
+# Enchantment Bonuses
+enchantment.sharpness.bonus = Шкода в ближньому бою збільшена на {amount}%
+enchantment.life_leech.bonus = Зцілює {amount}% від завданої шкоди
+enchantment.durability.bonus = Втрата міцності знижена на {amount}%
+enchantment.sturdy.bonus = Запобігає втраті міцності при лагодженні
+enchantment.dexterity.bonus = Витрати витривалості знижені на {amount}%
+enchantment.protection.bonus = Фізична шкода знижена на {amount}%
+enchantment.efficiency.bonus = Швидкість видобутку збільшена на {amount}%
+enchantment.fortune.bonus = Шанс дод. видобутку збільшений на {amount}%
+enchantment.smelting.bonus = Автоматично переплавляет видобуті блоки
+enchantment.strength.bonus = Шкода снарядів збільшена на {amount}%
+enchantment.eagles_eye.bonus = Шкода зростає з відстанню до {amount}%
+enchantment.looting.bonus = Шанс здобичі збільшений на {amount}%
+enchantment.feather_falling.bonus = Шкода від падіння знижена на {amount}%
+enchantment.waterbreathing.bonus = Витрата кисню знижена на {amount}%
+enchantment.burn.bonus = Підпалює ціль
+enchantment.freeze.bonus = Уповільнює ціль при ударі
+enchantment.eternal_shot.bonus = Не витрачає стріли
+enchantment.pick_perfect.bonus = Випадає сам блок
+enchantment.thrift.bonus = Відновлює {amount}% мани при ударі
+enchantment.elemental_heart.bonus = Не витрачає есенцію
+enchantment.knockback.bonus = Відкидає цілі
+enchantment.reflection.bonus = Відбиває {amount}% шкоди
+enchantment.absorption.bonus = Зцілює {amount}% заблокованої шкоди
+enchantment.fast_swim.bonus = Швидкість плавання збільшена на {amount}%
+enchantment.night_vision.bonus = Покращує зір у темряві
+enchantment.ranged_protection.bonus = Шкода від снарядів/магії знижена на {amount}%
+enchantment.frenzy.bonus = Швидкість зарядки збільшена на {amount}%
+enchantment.riposte.bonus = Шкода контратаки збільшена на {amount}%
+enchantment.coup_de_grace.bonus = Шкода по оглушених збільшена на {amount}%
+
+# Config UI
+config.title = Налаштування Чар
+config.tab.general = Загальні
+config.tab.enchantments = Чари
+config.tab.recipes = Рецепти
+config.button.save = Зберегти
+config.button.cancel = Скасувати
+config.button.reset_all = Скинути Все
+config.button.confirm_reset = Підтвердити Скидання
+config.button.back = Назад
+config.button.add_ingredient = Додати Інгредієнт
+config.button.reset_recipe = Скинути Рецепт
+
+config.general.max_enchantments = Макс. Чар На Предмет
+config.general.show_banner = Показати Банер Чар
+config.general.enable_glow = Увімкнути Світіння
+config.general.table_tier = Рівень Крафту Столу Чар
+config.general.disable_crafting = Вимкнути Крафт Чар
+config.general.return_cleanse = Повертати Чари При Очищенні
+config.general.table_recipe = Рецепт Столу Чар
+config.general.upgrade_1 = Вартість Покращення 1 (Рів. 1 -> 2)
+config.general.upgrade_2 = Вартість Покращення 2 (Рів. 2 -> 3)
+config.general.upgrade_3 = Вартість Покращення 3 (Рів. 3 -> 4)
+
+config.recipe.title = Рецепт
+config.recipe.ingredients = Інгредієнти
+
+config.common.enabled = Увімкнено
+config.common.disabled = Вимкнено
+
+config.secondary.range_speed_bonus = Бонус Дистанції/Швидкості
+config.secondary.quantity_bonus = Бонус Кількості
+
+config.recipe.active_title = {0} - Інгредієнти
+config.recipe.crafting_tier = Рівень Крафту
+
+config.message.saved = Збережено! Більшість змін вимагають перезапуску.
+config.message.unsaved = [!] Незбережені зміни

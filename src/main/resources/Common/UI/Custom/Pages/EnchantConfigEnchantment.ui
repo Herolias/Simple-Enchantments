@@ -56,7 +56,7 @@ Group {
 
   TextButton #EnableToggle {
     Style: $C.@SecondaryTextButtonStyle;
-    Anchor: (Width: 110, Height: 34);
+    Anchor: (Width: 200, Height: 34);
     Padding: (Horizontal: 12);
   }
 }

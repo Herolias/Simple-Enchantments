@@ -39,6 +39,7 @@ public class SalvagerInteractionSystem extends EntityEventSystem<EntityStore, Us
     }
 
     @Override
+    @SuppressWarnings("removal")
     public void handle(int index,
                        @Nonnull ArchetypeChunk<EntityStore> archetypeChunk,
                        @Nonnull Store<EntityStore> store,

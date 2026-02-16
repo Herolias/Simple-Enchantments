@@ -502,3 +502,93 @@ items.Scroll_Frenzy_III.description = Meningkatkan laju pengisian kemampuan sign
 enchantment.frenzy.name = Frenzy
 
 enchantment.frenzy.description = Meningkatkan laju pengisian kemampuan signature sebesar 15%.
+
+items.Scroll_Riposte_I.name = Gulungan Riposte I
+items.Scroll_Riposte_I.description = Meningkatkan kerusakan serangan balik sebesar 20%.
+items.Scroll_Riposte_II.name = Gulungan Riposte II
+items.Scroll_Riposte_II.description = Meningkatkan kerusakan serangan balik sebesar 40%.
+items.Scroll_Riposte_III.name = Gulungan Riposte III
+items.Scroll_Riposte_III.description = Meningkatkan kerusakan serangan balik sebesar 60%.
+
+enchantment.riposte.name = Riposte
+enchantment.riposte.description = Meningkatkan kerusakan serangan balik sebesar 20%.
+
+items.Scroll_Coup_De_Grace_I.name = Gulungan Coup de Grâce I
+items.Scroll_Coup_De_Grace_I.description = Meningkatkan kerusakan pada musuh yang terkena stun sebesar 20%.
+items.Scroll_Coup_De_Grace_II.name = Gulungan Coup de Grâce II
+items.Scroll_Coup_De_Grace_II.description = Meningkatkan kerusakan pada musuh yang terkena stun sebesar 40%.
+items.Scroll_Coup_De_Grace_III.name = Gulungan Coup de Grâce III
+items.Scroll_Coup_De_Grace_III.description = Meningkatkan kerusakan pada musuh yang terkena stun sebesar 60%.
+
+enchantment.coup_de_grace.name = Coup de Grâce
+enchantment.coup_de_grace.description = Meningkatkan kerusakan pada musuh yang terkena stun sebesar 20%.
+
+# Enchantment Bonuses
+enchantment.sharpness.bonus = Kerusakan jarak dekat meningkat {amount}%
+enchantment.life_leech.bonus = Menyembuhkan {amount}% dari kerusakan
+enchantment.durability.bonus = Kehilangan ketahanan berkurang {amount}%
+enchantment.sturdy.bonus = Mencegah kehilangan ketahanan saat perbaikan
+enchantment.dexterity.bonus = Biaya stamina berkurang {amount}%
+enchantment.protection.bonus = Kerusakan fisik berkurang {amount}%
+enchantment.efficiency.bonus = Kecepatan menambang meningkat {amount}%
+enchantment.fortune.bonus = Peluang jarahan ekstra meningkat {amount}%
+enchantment.smelting.bonus = Melebur blok yang ditambang secara otomatis
+enchantment.strength.bonus = Kerusakan proyektil meningkat {amount}%
+enchantment.eagles_eye.bonus = Kerusakan meningkat dengan jarak hingga {amount}%
+enchantment.looting.bonus = Tingkat jarahan meningkat {amount}%
+enchantment.feather_falling.bonus = Kerusakan jatuh berkurang {amount}%
+enchantment.waterbreathing.bonus = Penggunaan oksigen berkurang {amount}%
+enchantment.burn.bonus = Membakar target
+enchantment.freeze.bonus = Memperlambat target
+enchantment.eternal_shot.bonus = Tidak menggunakan panah
+enchantment.pick_perfect.bonus = Menjatuhkan blok itu sendiri
+enchantment.thrift.bonus = Mengembalikan {amount}% mana
+enchantment.elemental_heart.bonus = Tidak menggunakan esensi
+enchantment.knockback.bonus = Mendorong target
+enchantment.reflection.bonus = Memantulkan {amount}% kerusakan
+enchantment.absorption.bonus = Menyembuhkan {amount}% kerusakan yang diblokir
+enchantment.fast_swim.bonus = Kecepatan renang meningkat {amount}%
+enchantment.night_vision.bonus = Meningkatkan penglihatan dalam gelap
+enchantment.ranged_protection.bonus = Kerusakan proyektil/sihir berkurang {amount}%
+enchantment.frenzy.bonus = Laju pengisian meningkat {amount}%
+enchantment.riposte.bonus = Kerusakan serangan balik meningkat {amount}%
+enchantment.coup_de_grace.bonus = Kerusakan pada musuh stun meningkat {amount}%
+
+# Config UI
+config.title = Konfigurasi Sihir
+config.tab.general = Umum
+config.tab.enchantments = Sihir
+config.tab.recipes = Resep
+config.button.save = Simpan
+config.button.cancel = Batal
+config.button.reset_all = Atur Ulang Semua
+config.button.confirm_reset = Konfirmasi Atur Ulang
+config.button.back = Kembali
+config.button.add_ingredient = Tambah Bahan
+config.button.reset_recipe = Atur Ulang Resep
+
+config.general.max_enchantments = Maks Sihir Per Item
+config.general.show_banner = Tampilkan Spanduk Sihir
+config.general.enable_glow = Aktifkan Cahaya Sihir
+config.general.table_tier = Tingkat Kerajinan Meja Sihir
+config.general.disable_crafting = Nonaktifkan Kerajinan Sihir
+config.general.return_cleanse = Kembalikan Sihir saat Pembersihan
+config.general.table_recipe = Resep Meja Sihir
+config.general.upgrade_1 = Biaya Peningkatan 1 (Tingkat 1 -> 2)
+config.general.upgrade_2 = Biaya Peningkatan 2 (Tingkat 2 -> 3)
+config.general.upgrade_3 = Biaya Peningkatan 3 (Tingkat 3 -> 4)
+
+config.recipe.title = Resep
+config.recipe.ingredients = Bahan
+
+config.common.enabled = Diaktifkan
+config.common.disabled = Dinonaktifkan
+
+config.secondary.range_speed_bonus = Bonus Jarak/Kecepatan
+config.secondary.quantity_bonus = Bonus Jumlah
+
+config.recipe.active_title = {0} - Bahan
+config.recipe.crafting_tier = Tingkat Kerajinan
+
+config.message.saved = Disimpan! Sebagian besar perubahan memerlukan restart.
+config.message.unsaved = [!] Perubahan belum disimpan

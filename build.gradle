@@ -87,3 +87,71 @@ task inspectCommandBase {
         clazz.methods.each { println it }
     }
 }
+
+task inspectComponentUpdate {
+    doLast {
+        def url = configurations.compileClasspath.find { it.name.contains('HytaleServer') }?.toURI()?.toURL()
+        if (url == null) { println 'HytaleServer.jar not found'; return }
+        def loader = new java.net.URLClassLoader([url] as java.net.URL[], ClassLoader.systemClassLoader)
+        
+        println '--- ComponentUpdate Inspection ---'
+        try {
+            def clazz = loader.loadClass('com.hypixel.hytale.protocol.ComponentUpdate')
+            println 'ComponentUpdate modifiers: ' + java.lang.reflect.Modifier.toString(clazz.getModifiers())
+            
+            // List all classes in the jar to find subclasses
+            def jarFile = new java.util.jar.JarFile(new File(url.toURI()))
+            def entries = jarFile.entries()
+            while (entries.hasMoreElements()) {
+                def entry = entries.nextElement()
+                if (entry.name.endsWith('.class') && entry.name.contains('protocol')) {
+                    def className = entry.name.replace('/', '.').replace('.class', '')
+                    try {
+                        def c = loader.loadClass(className)
+                        if (clazz.isAssignableFrom(c) && c != clazz) {
+                            println 'Subclass: ' + className
+                            // Check for 'item' field
+                             try {
+                                c.getDeclaredField('item')
+                                println '  -> Has item field!'
+                            } catch (NoSuchFieldException e) {}
+                        }
+                    } catch (Throwable t) {}
+                }
+            }
+        } catch (Throwable t) {
+            t.printStackTrace()
+        }
+
+        println '--- Entity Inspection ---'
+        try {
+             def entityClass = loader.loadClass('com.hypixel.hytale.server.core.entity.Entity')
+             println 'Entity methods:'
+             entityClass.methods.each { if (it.name.contains('uid') || it.name.contains('Id')) println it }
+        } catch (Throwable t) {}
+    }
+}
+
+
+task inspectSubclasses {
+    doLast {
+        def url = configurations.compileClasspath.find { it.name.contains('HytaleServer') }?.toURI()?.toURL()
+        if (url == null) { logger.lifecycle 'HytaleServer.jar not found'; return }
+        def loader = new java.net.URLClassLoader([url] as java.net.URL[], ClassLoader.systemClassLoader)
+        
+        ['com.hypixel.hytale.protocol.ItemUpdate', 'com.hypixel.hytale.protocol.DynamicLightUpdate'].each { className ->
+            logger.lifecycle '--- Inspecting ' + className + ' ---'
+            try {
+                def clazz = loader.loadClass(className)
+                logger.lifecycle 'Fields:'
+                clazz.getDeclaredFields().each { logger.lifecycle '  ' + it.toString() }
+                logger.lifecycle 'Constructors:'
+                clazz.getConstructors().each { logger.lifecycle '  ' + it.toString() }
+            } catch (Throwable t) {
+                logger.lifecycle 'Failed to inspect ' + className
+                t.printStackTrace()
+            }
+        }
+    }
+}
+

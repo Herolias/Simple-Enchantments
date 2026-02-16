@@ -19,6 +19,7 @@ public class WelcomeListener {
         this.plugin = plugin;
     }
 
+    @SuppressWarnings("removal")
     public void onPlayerReady(PlayerReadyEvent event) {
         // Only show if tooltips are enabled (meaning the lib is present)
         if (!plugin.isTooltipsEnabled()) {

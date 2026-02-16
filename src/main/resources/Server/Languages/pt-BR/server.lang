@@ -502,3 +502,93 @@ items.Scroll_Frenzy_III.description = Aumenta a taxa de carga da habilidade de a
 enchantment.frenzy.name = Frenesi
 
 enchantment.frenzy.description = Aumenta a taxa de carga da habilidade de assinatura em 15%.
+
+items.Scroll_Riposte_I.name = Pergaminho de Riposte I
+items.Scroll_Riposte_I.description = Aumenta o dano de contra-ataque em 20%.
+items.Scroll_Riposte_II.name = Pergaminho de Riposte II
+items.Scroll_Riposte_II.description = Aumenta o dano de contra-ataque em 40%.
+items.Scroll_Riposte_III.name = Pergaminho de Riposte III
+items.Scroll_Riposte_III.description = Aumenta o dano de contra-ataque em 60%.
+
+enchantment.riposte.name = Riposte
+enchantment.riposte.description = Aumenta o dano de contra-ataque em 20%.
+
+items.Scroll_Coup_De_Grace_I.name = Pergaminho de Coup de Grâce I
+items.Scroll_Coup_De_Grace_I.description = Aumenta o dano contra inimigos atordoados em 20%.
+items.Scroll_Coup_De_Grace_II.name = Pergaminho de Coup de Grâce II
+items.Scroll_Coup_De_Grace_II.description = Aumenta o dano contra inimigos atordoados em 40%.
+items.Scroll_Coup_De_Grace_III.name = Pergaminho de Coup de Grâce III
+items.Scroll_Coup_De_Grace_III.description = Aumenta o dano contra inimigos atordoados em 60%.
+
+enchantment.coup_de_grace.name = Coup de Grâce
+enchantment.coup_de_grace.description = Aumenta o dano contra inimigos atordoados em 20%.
+
+# Enchantment Bonuses
+enchantment.sharpness.bonus = Dano corpo a corpo aumentado em {amount}%
+enchantment.life_leech.bonus = Cura {amount}% do dano causado
+enchantment.durability.bonus = Perda de durabilidade reduzida em {amount}%
+enchantment.sturdy.bonus = Previne perda de durabilidade ao reparar
+enchantment.dexterity.bonus = Custo de vigor reduzido em {amount}%
+enchantment.protection.bonus = Dano físico reduzido em {amount}%
+enchantment.efficiency.bonus = Velocidade de mineração aumentada em {amount}%
+enchantment.fortune.bonus = Chance de espólio extra aumentada em {amount}%
+enchantment.smelting.bonus = Funde blocos minerados automaticamente
+enchantment.strength.bonus = Dano de projétil aumentado em {amount}%
+enchantment.eagles_eye.bonus = Dano aumenta com a distância até {amount}%
+enchantment.looting.bonus = Taxas de espólio aumentadas em {amount}%
+enchantment.feather_falling.bonus = Dano de queda reduzido em {amount}%
+enchantment.waterbreathing.bonus = Consumo de oxigênio reduzido em {amount}%
+enchantment.burn.bonus = Incendeia o alvo
+enchantment.freeze.bonus = Retarda o alvo ao atingir
+enchantment.eternal_shot.bonus = Não consome flechas
+enchantment.pick_perfect.bonus = Solta o próprio bloco
+enchantment.thrift.bonus = Restaura {amount}% de mana ao atingir
+enchantment.elemental_heart.bonus = Não consome essência ao conjurar
+enchantment.knockback.bonus = Empurra alvos para trás
+enchantment.reflection.bonus = Reflete {amount}% do dano
+enchantment.absorption.bonus = Cura {amount}% do dano bloqueado
+enchantment.fast_swim.bonus = Velocidade de nado aumentada em {amount}%
+enchantment.night_vision.bonus = Melhora a visão no escuro
+enchantment.ranged_protection.bonus = Dano de projétil/magia reduzido em {amount}%
+enchantment.frenzy.bonus = Taxa de carga aumentada em {amount}%
+enchantment.riposte.bonus = Dano de contra-ataque aumentado em {amount}%
+enchantment.coup_de_grace.bonus = Dano contra atordoados aumentado em {amount}%
+
+# Config UI
+config.title = Configuração de Encantamentos
+config.tab.general = Geral
+config.tab.enchantments = Encantamentos
+config.tab.recipes = Receitas
+config.button.save = Salvar
+config.button.cancel = Cancelar
+config.button.reset_all = Redefinir Tudo
+config.button.confirm_reset = Confirmar Redefinição
+config.button.back = Voltar
+config.button.add_ingredient = Adicionar Ingrediente
+config.button.reset_recipe = Redefinir Receita
+
+config.general.max_enchantments = Máx. Encantamentos Por Item
+config.general.show_banner = Mostrar Banner de Encantamento
+config.general.enable_glow = Habilitar Brilho de Encantamento
+config.general.table_tier = Nível de Criação da Mesa de Encantamentos
+config.general.disable_crafting = Desabilitar Criação de Encantamentos
+config.general.return_cleanse = Devolver Encantamento ao Limpar
+config.general.table_recipe = Receita da Mesa de Encantamentos
+config.general.upgrade_1 = Custo de Melhoria 1 (Nível 1 -> 2)
+config.general.upgrade_2 = Custo de Melhoria 2 (Nível 2 -> 3)
+config.general.upgrade_3 = Custo de Melhoria 3 (Nível 3 -> 4)
+
+config.recipe.title = Receita
+config.recipe.ingredients = Ingredientes
+
+config.common.enabled = Habilitado
+config.common.disabled = Desabilitado
+
+config.secondary.range_speed_bonus = Bônus de Alcance/Velocidade
+config.secondary.quantity_bonus = Bônus de Quantidade
+
+config.recipe.active_title = {0} - Ingredientes
+config.recipe.crafting_tier = Nível de Criação
+
+config.message.saved = Salvo! A maioria das alterações requer reinicialização.
+config.message.unsaved = [!] Alterações não salvas

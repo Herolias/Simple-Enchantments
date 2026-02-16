@@ -535,3 +535,74 @@ items.Scroll_Coup_De_Grace_III.description = Increases damage to stunned enemies
 enchantment.coup_de_grace.name = Coup de Grâce
 
 enchantment.coup_de_grace.description = Increases damage to stunned enemies by 20%.
+
+
+# Enchantment Bonuses
+enchantment.sharpness.bonus = Melee damage increased by {amount}%
+enchantment.life_leech.bonus = Heals for {amount}% of damage dealt
+enchantment.durability.bonus = Durability loss reduced by {amount}%
+enchantment.sturdy.bonus = Prevents durability loss on repair
+enchantment.dexterity.bonus = Stamina costs reduced by {amount}%
+enchantment.protection.bonus = Physical damage reduced by {amount}%
+enchantment.efficiency.bonus = Mining speed increased by {amount}%
+enchantment.fortune.bonus = Extra drop chance increased by {amount}%
+enchantment.smelting.bonus = Automatically smelts mined blocks
+enchantment.strength.bonus = Projectile damage increased by {amount}%
+enchantment.eagles_eye.bonus = Damage increases with distance up to {amount}%
+enchantment.looting.bonus = Drop rates increased by {amount}%
+enchantment.feather_falling.bonus = Fall damage reduced by {amount}%
+enchantment.waterbreathing.bonus = Oxygen drain reduced by {amount}%
+enchantment.burn.bonus = Sets target on fire
+enchantment.freeze.bonus = Slows target on hit
+enchantment.eternal_shot.bonus = Does not consume arrows
+enchantment.pick_perfect.bonus = Drops the block itself when mined
+enchantment.thrift.bonus = Restores {amount}% of mana on hit
+enchantment.elemental_heart.bonus = Does not consume essence when casting
+enchantment.knockback.bonus = Knocks targets back
+enchantment.reflection.bonus = Reflects {amount}% of damage
+enchantment.absorption.bonus = Heals for {amount}% of blocked damage
+enchantment.fast_swim.bonus = Swim speed increased by {amount}%
+enchantment.night_vision.bonus = Enhances vision in dark environments
+enchantment.ranged_protection.bonus = Projectile/magic damage reduced by {amount}%
+enchantment.frenzy.bonus = Ability charge speed increased by {amount}%
+enchantment.riposte.bonus = Counter attack damage increased by {amount}%
+enchantment.coup_de_grace.bonus = Damage to stunned enemies increased by {amount}%
+
+# Config UI
+config.title = Enchantment Configuration
+config.tab.general = General
+config.tab.enchantments = Enchantments
+config.tab.recipes = Recipes
+config.button.save = Save
+config.button.cancel = Cancel
+config.button.reset_all = Reset All
+config.button.confirm_reset = Confirm Reset
+config.button.back = Back
+config.button.add_ingredient = Add Ingredient
+config.button.reset_recipe = Reset Recipe
+
+config.general.max_enchantments = Max Enchantments Per Item
+config.general.show_banner = Show Enchantment Banner
+config.general.enable_glow = Enable Enchantment Glow
+config.general.table_tier = Enchanting Table Crafting Tier
+config.general.disable_crafting = Disable Enchantment Crafting
+config.general.return_cleanse = Return Enchantment On Cleanse
+config.general.table_recipe = Enchanting Table Recipe
+config.general.upgrade_1 = Upgrade 1 Cost (Tier 1 -> 2)
+config.general.upgrade_2 = Upgrade 2 Cost (Tier 2 -> 3)
+config.general.upgrade_3 = Upgrade 3 Cost (Tier 3 -> 4)
+
+config.recipe.title = Recipe
+config.recipe.ingredients = Ingredients
+
+config.common.enabled = Enabled
+config.common.disabled = Disabled
+
+config.secondary.range_speed_bonus = Range/Speed Bonus
+config.secondary.quantity_bonus = Quantity Bonus
+
+config.recipe.active_title = {0} - Ingredients
+config.recipe.crafting_tier = Crafting Tier
+
+config.message.saved = Saved! Most changes require a restart.
+config.message.unsaved = [!] Unsaved Changes

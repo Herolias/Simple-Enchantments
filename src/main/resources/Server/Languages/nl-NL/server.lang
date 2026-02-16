@@ -502,3 +502,93 @@ items.Scroll_Frenzy_III.description = Verhoogt de oplaadsnelheid van de signatuu
 enchantment.frenzy.name = Razernij
 
 enchantment.frenzy.description = Verhoogt de oplaadsnelheid van de signatuurvaardigheid met 15%.
+
+items.Scroll_Riposte_I.name = Rol van Riposte I
+items.Scroll_Riposte_I.description = Verhoogt tegenaanvalschade met 20%.
+items.Scroll_Riposte_II.name = Rol van Riposte II
+items.Scroll_Riposte_II.description = Verhoogt tegenaanvalschade met 40%.
+items.Scroll_Riposte_III.name = Rol van Riposte III
+items.Scroll_Riposte_III.description = Verhoogt tegenaanvalschade met 60%.
+
+enchantment.riposte.name = Riposte
+enchantment.riposte.description = Verhoogt tegenaanvalschade met 20%.
+
+items.Scroll_Coup_De_Grace_I.name = Rol van Coup de Grâce I
+items.Scroll_Coup_De_Grace_I.description = Verhoogt schade aan verdoofde vijanden met 20%.
+items.Scroll_Coup_De_Grace_II.name = Rol van Coup de Grâce II
+items.Scroll_Coup_De_Grace_II.description = Verhoogt schade aan verdoofde vijanden met 40%.
+items.Scroll_Coup_De_Grace_III.name = Rol van Coup de Grâce III
+items.Scroll_Coup_De_Grace_III.description = Verhoogt schade aan verdoofde vijanden met 60%.
+
+enchantment.coup_de_grace.name = Coup de Grâce
+enchantment.coup_de_grace.description = Verhoogt schade aan verdoofde vijanden met 20%.
+
+# Enchantment Bonuses
+enchantment.sharpness.bonus = Melee-schade verhoogd met {amount}%
+enchantment.life_leech.bonus = Geneest {amount}% van toegebrachte schade
+enchantment.durability.bonus = Duurzaamheidsverlies verminderd met {amount}%
+enchantment.sturdy.bonus = Voorkomt duurzaamheidsverlies bij reparatie
+enchantment.dexterity.bonus = Uithoudingsvermogenkosten verminderd met {amount}%
+enchantment.protection.bonus = Fysieke schade verminderd met {amount}%
+enchantment.efficiency.bonus = Mijnsnelheid verhoogd met {amount}%
+enchantment.fortune.bonus = Kans op extra buit verhoogd met {amount}%
+enchantment.smelting.bonus = Smelt gedolven blokken automatisch
+enchantment.strength.bonus = Projectielschade verhoogd met {amount}%
+enchantment.eagles_eye.bonus = Schade neemt toe met afstand tot {amount}%
+enchantment.looting.bonus = Buitkans verhoogd met {amount}%
+enchantment.feather_falling.bonus = Valschade verminderd met {amount}%
+enchantment.waterbreathing.bonus = Zuurstofverbruik verminderd met {amount}%
+enchantment.burn.bonus = Zet doelwit in brand
+enchantment.freeze.bonus = Vertraagt doelwit bij treffer
+enchantment.eternal_shot.bonus = Verbruikt geen pijlen
+enchantment.pick_perfect.bonus = Laat het blok zelf vallen
+enchantment.thrift.bonus = Herstelt {amount}% mana bij treffer
+enchantment.elemental_heart.bonus = Verbruikt geen essentie
+enchantment.knockback.bonus = Stoot doelen terug
+enchantment.reflection.bonus = Weerkaatst {amount}% van de schade
+enchantment.absorption.bonus = Geneest {amount}% van geblokkeerde schade
+enchantment.fast_swim.bonus = Zwemsnelheid verhoogd met {amount}%
+enchantment.night_vision.bonus = Verbeterd zicht in donkere omgevingen
+enchantment.ranged_protection.bonus = Projectiel-/magieschade verminderd met {amount}%
+enchantment.frenzy.bonus = Oplaadsnelheid verhoogd met {amount}%
+enchantment.riposte.bonus = Tegenaanvalschade verhoogd met {amount}%
+enchantment.coup_de_grace.bonus = Schade aan verdoofde vijanden verhoogd met {amount}%
+
+# Config UI
+config.title = Betoveringsconfiguratie
+config.tab.general = Algemeen
+config.tab.enchantments = Betoveringen
+config.tab.recipes = Recepten
+config.button.save = Opslaan
+config.button.cancel = Annuleren
+config.button.reset_all = Alles Resetten
+config.button.confirm_reset = Reset Bevestigen
+config.button.back = Terug
+config.button.add_ingredient = Ingrediënt Toevoegen
+config.button.reset_recipe = Recept Resetten
+
+config.general.max_enchantments = Max. Betoveringen Per Item
+config.general.show_banner = Toon Betoveringsbanner
+config.general.enable_glow = Activeer Betoveringsgloed
+config.general.table_tier = Betoveringstafel Ambachtsniveau
+config.general.disable_crafting = Schakel Betoveringsambacht Uit
+config.general.return_cleanse = Geef Betovering Terug Bij Reiniging
+config.general.table_recipe = Betoveringstafel Recept
+config.general.upgrade_1 = Upgrade 1 Kosten (Niveau 1 -> 2)
+config.general.upgrade_2 = Upgrade 2 Kosten (Niveau 2 -> 3)
+config.general.upgrade_3 = Upgrade 3 Kosten (Niveau 3 -> 4)
+
+config.recipe.title = Recept
+config.recipe.ingredients = Ingrediënten
+
+config.common.enabled = Ingeschakeld
+config.common.disabled = Uitgeschakeld
+
+config.secondary.range_speed_bonus = Bereik/Snelheid Bonus
+config.secondary.quantity_bonus = Aantal Bonus
+
+config.recipe.active_title = {0} - Ingrediënten
+config.recipe.crafting_tier = Ambachtsniveau
+
+config.message.saved = Opgeslagen! De meeste wijzigingen vereisen een herstart.
+config.message.unsaved = [!] Niet-opgeslagen wijzigingen

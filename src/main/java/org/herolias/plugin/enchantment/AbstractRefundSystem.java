@@ -30,6 +30,7 @@ public abstract class AbstractRefundSystem {
      * Event handler for DropItemEvent.PlayerRequest (ECS event).
      * Records when a player manually drops an item so we don't refund it.
      */
+    @SuppressWarnings("removal")
     public void onDropItemRequest(@Nonnull DropItemEvent.PlayerRequest event, 
                                    @Nonnull Ref<EntityStore> ref, 
                                    @Nonnull Store<EntityStore> store) {
@@ -50,6 +51,7 @@ public abstract class AbstractRefundSystem {
     /**
      * Clean up old drop records for a player.
      */
+    @SuppressWarnings("removal")
     protected void cleanupOldDropRecords(Player player) {
         UUID playerKey = player.getUuid();
         Map<Short, Long> playerDrops = recentDrops.get(playerKey);
@@ -76,6 +78,7 @@ public abstract class AbstractRefundSystem {
      * Check if a slot was recently dropped by this player.
      * Use this before refunding an item.
      */
+    @SuppressWarnings("removal")
     protected boolean wasRecentlyDropped(Player player, short slot) {
         UUID playerKey = player.getUuid();
         Map<Short, Long> playerDrops = recentDrops.get(playerKey);

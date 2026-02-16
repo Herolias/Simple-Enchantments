@@ -7,7 +7,7 @@ Group {
   Padding: (Horizontal: 12, Vertical: 6);
 
   Label #RecipeName {
-    Anchor: (Width: 140);
+    Anchor: (Width: 300);
     Style: (
       FontSize: 14,
       VerticalAlignment: Center

@@ -206,6 +206,13 @@ public class EnchantmentRecipeManager {
             EnchantmentRecipeManager::onRecipeLoad
         );
 
+        // Register event listener for when items are loaded (to hide from creative menu)
+        plugin.getEventRegistry().register(
+            LoadedAssetsEvent.class,
+            Item.class,
+            EnchantmentRecipeManager::onItemLoad
+        );
+
 
 
         plugin.getEventRegistry().register(
@@ -247,6 +254,7 @@ public class EnchantmentRecipeManager {
 
         // Check for missing optional dependencies
         boolean hasPerfectParries = plugin.isPerfectParriesModPresent();
+        LOGGER.atInfo().log("Perfect Parries mod present: " + hasPerfectParries);
         if (!hasPerfectParries) {
             LOGGER.atInfo().log("Perfect Parries mod not found. Disabling Riposte and Coup de Grâce scrolls.");
         }
@@ -636,6 +644,50 @@ public class EnchantmentRecipeManager {
             
         } catch (Exception e) {
             LOGGER.atSevere().log("Failed to update tier " + index + ": " + e.getMessage());
+        }
+    }
+
+    /**
+     * Event handler called when items are loaded.
+     * Removes disabled enchantment scrolls from the registry so they don't appear in game or creative menu.
+     */
+    private static void onItemLoad(LoadedAssetsEvent<String, Item, DefaultAssetMap<String, Item>> event) {
+        if (plugin == null) return;
+        
+        // Debug logging
+        if (DISABLED_SCROLL_ITEM_IDS.isEmpty()) {
+            LOGGER.atInfo().log("DISABLED_SCROLL_ITEM_IDS is empty! Auto-disable logic might have failed.");
+        } else {
+             LOGGER.atInfo().log("Disabled Scroll IDs: " + String.join(", ", DISABLED_SCROLL_ITEM_IDS));
+        }
+
+        List<String> itemsToRemove = new ArrayList<>();
+        int checkedCount = 0;
+
+        for (Map.Entry<String, Item> entry : event.getLoadedAssets().entrySet()) {
+            String itemId = entry.getKey();
+            
+            // Log first few items to verify ID format/namespacing
+            if (checkedCount < 5) {
+                LOGGER.atInfo().log("Loaded Item ID: " + itemId);
+            }
+            checkedCount++;
+
+            // Check if this item is a disabled scroll
+            if (DISABLED_SCROLL_ITEM_IDS.contains(itemId)) {
+                itemsToRemove.add(itemId);
+            }
+        }
+        
+        if (!itemsToRemove.isEmpty()) {
+            try {
+                // Remove the assets entirely - this ensures they are gone from creative menu, search, etc.
+                Item.getAssetStore().removeAssets(itemsToRemove);
+                LOGGER.atInfo().log("Removed " + itemsToRemove.size() + " disabled enchantment scroll items.");
+            } catch (Exception e) {
+                LOGGER.atSevere().log("Failed to remove disabled scroll items: " + e.getMessage());
+                e.printStackTrace();
+            }
         }
     }
 }

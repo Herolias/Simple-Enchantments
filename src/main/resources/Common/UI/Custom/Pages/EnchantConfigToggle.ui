@@ -7,7 +7,7 @@ Group {
   Padding: (Horizontal: 12, Vertical: 6);
 
   Label #SettingName {
-    Anchor: (Width: 280);
+    Anchor: (Width: 390);
     Style: (
       FontSize: 14,
       VerticalAlignment: Center
@@ -20,7 +20,7 @@ Group {
 
   TextButton #ToggleButton {
     Style: $C.@SecondaryTextButtonStyle;
-    Anchor: (Width: 110, Height: 32);
+    Anchor: (Width: 150, Height: 32);
     Padding: (Horizontal: 12);
   }
 }

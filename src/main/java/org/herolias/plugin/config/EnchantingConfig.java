@@ -39,8 +39,8 @@ public class EnchantingConfig {
     public double fastSwimSpeedBonusPerLevel = 0.25;
     public double rangedProtectionDamageReductionPerLevel = 0.04;
     public double frenzyChargeSpeedMultiplierPerLevel = 0.15;
-    public double riposteDamageMultiplierPerLevel = 0.20;
-    public double coupDeGraceDamageMultiplierPerLevel = 0.20;
+    public double riposteDamageMultiplierPerLevel = 0.10;
+    public double coupDeGraceDamageMultiplierPerLevel = 0.15;
     //public double burnDamagePerSecond = 3.0;
 
     // Staff Enchantments

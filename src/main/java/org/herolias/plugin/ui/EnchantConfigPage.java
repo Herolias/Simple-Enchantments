@@ -18,6 +18,7 @@ import com.hypixel.hytale.logger.HytaleLogger;
 import org.herolias.plugin.config.ConfigManager;
 import org.herolias.plugin.config.EnchantingConfig;
 import org.herolias.plugin.enchantment.EnchantmentType;
+import org.herolias.plugin.SimpleEnchanting;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -91,13 +92,15 @@ public class EnchantConfigPage extends InteractiveCustomUIPage<EnchantConfigPage
         ENCHANTMENT_MULTIPLIERS.put(EnchantmentType.THRIFT, "thriftRestoreAmountPerLevel");
         ENCHANTMENT_MULTIPLIERS.put(EnchantmentType.ELEMENTAL_HEART, "elementalHeartSaveChancePerLevel");
         ENCHANTMENT_MULTIPLIERS.put(EnchantmentType.FRENZY, "frenzyChargeSpeedMultiplierPerLevel");
+        ENCHANTMENT_MULTIPLIERS.put(EnchantmentType.RIPOSTE, "riposteDamageMultiplierPerLevel");
+        ENCHANTMENT_MULTIPLIERS.put(EnchantmentType.COUP_DE_GRACE, "coupDeGraceDamageMultiplierPerLevel");
 
         // Secondary multipliers for enchantments with multiple effects
         ENCHANTMENT_SECONDARY_MULTIPLIERS.put(EnchantmentType.STRENGTH, "strengthRangeMultiplierPerLevel");
         ENCHANTMENT_SECONDARY_MULTIPLIERS.put(EnchantmentType.LOOTING, "lootingQuantityMultiplierPerLevel");
 
-        SECONDARY_MULTIPLIER_LABELS.put("strengthRangeMultiplierPerLevel", "Range/Speed Bonus");
-        SECONDARY_MULTIPLIER_LABELS.put("lootingQuantityMultiplierPerLevel", "Quantity Bonus");
+        SECONDARY_MULTIPLIER_LABELS.put("strengthRangeMultiplierPerLevel", "server.config.secondary.range_speed_bonus");
+        SECONDARY_MULTIPLIER_LABELS.put("lootingQuantityMultiplierPerLevel", "server.config.secondary.quantity_bonus");
         
         // ENCHANTMENT_SECONDARY_MULTIPLIERS.put(EnchantmentType.EFFICIENCY, "efficiencySwingSpeedMultiplier");
         // SECONDARY_MULTIPLIER_LABELS.put("efficiencySwingSpeedMultiplier", "Swing Speed Bonus");
@@ -133,6 +136,7 @@ public class EnchantConfigPage extends InteractiveCustomUIPage<EnchantConfigPage
         copy.configVersion = original.configVersion;
         copy.maxEnchantmentsPerItem = original.maxEnchantmentsPerItem;
         copy.showEnchantmentBanner = original.showEnchantmentBanner;
+        copy.hasAutoDisabledBanner = original.hasAutoDisabledBanner;
         copy.enableEnchantmentGlow = original.enableEnchantmentGlow;
         copy.sharpnessDamageMultiplierPerLevel = original.sharpnessDamageMultiplierPerLevel;
         copy.lifeLeechPercentage = original.lifeLeechPercentage;
@@ -145,6 +149,8 @@ public class EnchantConfigPage extends InteractiveCustomUIPage<EnchantConfigPage
         copy.strengthDamageMultiplierPerLevel = original.strengthDamageMultiplierPerLevel;
         copy.strengthRangeMultiplierPerLevel = original.strengthRangeMultiplierPerLevel;
         copy.frenzyChargeSpeedMultiplierPerLevel = original.frenzyChargeSpeedMultiplierPerLevel;
+        copy.riposteDamageMultiplierPerLevel = original.riposteDamageMultiplierPerLevel;
+        copy.coupDeGraceDamageMultiplierPerLevel = original.coupDeGraceDamageMultiplierPerLevel;
         
         copy.disableEnchantmentCrafting = original.disableEnchantmentCrafting;
         copy.eaglesEyeDistanceBonusPerLevel = original.eaglesEyeDistanceBonusPerLevel;
@@ -465,7 +471,7 @@ public class EnchantConfigPage extends InteractiveCustomUIPage<EnchantConfigPage
         int maxEnchants = workingConfig.maxEnchantmentsPerItem;
         int maxEnchantsStep = 1;  // Integer value, step by 1
         commandBuilder.append("#ContentArea", "Pages/EnchantConfigItem.ui");
-        commandBuilder.set("#ContentArea[" + index + "] #SettingName.TextSpans", Message.raw("Max Enchantments Per Item"));
+        commandBuilder.set("#ContentArea[" + index + "] #SettingName.TextSpans", Message.translation("server.config.general.max_enchantments"));
         commandBuilder.set("#ContentArea[" + index + "] #SettingInput.Value", (double) maxEnchants);
         eventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#ContentArea[" + index + "] #ResetBtn",
             EventData.of("ResetValue", "maxEnchantmentsPerItem"));
@@ -479,18 +485,18 @@ public class EnchantConfigPage extends InteractiveCustomUIPage<EnchantConfigPage
         
         // Show Enchantment Banner
         commandBuilder.append("#ContentArea", "Pages/EnchantConfigToggle.ui");
-        commandBuilder.set("#ContentArea[" + index + "] #SettingName.TextSpans", Message.raw("Show Enchantment Banner"));
+        commandBuilder.set("#ContentArea[" + index + "] #SettingName.TextSpans", Message.translation("server.config.general.show_banner"));
         commandBuilder.set("#ContentArea[" + index + "] #ToggleButton.TextSpans", 
-            Message.raw(workingConfig.showEnchantmentBanner ? "Enabled" : "Disabled"));
+            Message.translation(workingConfig.showEnchantmentBanner ? "server.config.common.enabled" : "server.config.common.disabled"));
         eventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#ContentArea[" + index + "] #ToggleButton",
             EventData.of("SettingValue", "showEnchantmentBanner:" + !workingConfig.showEnchantmentBanner));
         index++;
         
         // Enable Enchantment Glow
         commandBuilder.append("#ContentArea", "Pages/EnchantConfigToggle.ui");
-        commandBuilder.set("#ContentArea[" + index + "] #SettingName.TextSpans", Message.raw("Enable Enchantment Glow"));
+        commandBuilder.set("#ContentArea[" + index + "] #SettingName.TextSpans", Message.translation("server.config.general.enable_glow"));
         commandBuilder.set("#ContentArea[" + index + "] #ToggleButton.TextSpans", 
-            Message.raw(workingConfig.enableEnchantmentGlow ? "Enabled" : "Disabled"));
+            Message.translation(workingConfig.enableEnchantmentGlow ? "server.config.common.enabled" : "server.config.common.disabled"));
         eventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#ContentArea[" + index + "] #ToggleButton",
             EventData.of("SettingValue", "enableEnchantmentGlow:" + !workingConfig.enableEnchantmentGlow));
         index++;
@@ -499,7 +505,7 @@ public class EnchantConfigPage extends InteractiveCustomUIPage<EnchantConfigPage
         int craftingTier = workingConfig.enchantingTableCraftingTier;
         int craftingTierStep = 1;  // Integer value, step by 1
         commandBuilder.append("#ContentArea", "Pages/EnchantConfigItem.ui");
-        commandBuilder.set("#ContentArea[" + index + "] #SettingName.TextSpans", Message.raw("Enchanting Table Crafting Tier"));
+        commandBuilder.set("#ContentArea[" + index + "] #SettingName.TextSpans", Message.translation("server.config.general.table_tier"));
         commandBuilder.set("#ContentArea[" + index + "] #SettingInput.Value", (double) craftingTier);
         eventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#ContentArea[" + index + "] #ResetBtn",
             EventData.of("ResetValue", "enchantingTableCraftingTier"));
@@ -513,46 +519,46 @@ public class EnchantConfigPage extends InteractiveCustomUIPage<EnchantConfigPage
         
         // Disable Enchantment Crafting toggle
         commandBuilder.append("#ContentArea", "Pages/EnchantConfigToggle.ui");
-        commandBuilder.set("#ContentArea[" + index + "] #SettingName.TextSpans", Message.raw("Disable Enchantment Crafting"));
+        commandBuilder.set("#ContentArea[" + index + "] #SettingName.TextSpans", Message.translation("server.config.general.disable_crafting"));
         commandBuilder.set("#ContentArea[" + index + "] #ToggleButton.TextSpans", 
-            Message.raw(workingConfig.disableEnchantmentCrafting ? "Enabled" : "Disabled"));
+            Message.translation(workingConfig.disableEnchantmentCrafting ? "server.config.common.enabled" : "server.config.common.disabled"));
         eventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#ContentArea[" + index + "] #ToggleButton",
             EventData.of("SettingValue", "disableEnchantmentCrafting:" + !workingConfig.disableEnchantmentCrafting));
         index++;
         
         // Return Enchantment On Cleanse toggle
         commandBuilder.append("#ContentArea", "Pages/EnchantConfigToggle.ui");
-        commandBuilder.set("#ContentArea[" + index + "] #SettingName.TextSpans", Message.raw("Return Enchantment On Cleanse"));
+        commandBuilder.set("#ContentArea[" + index + "] #SettingName.TextSpans", Message.translation("server.config.general.return_cleanse"));
         commandBuilder.set("#ContentArea[" + index + "] #ToggleButton.TextSpans", 
-            Message.raw(workingConfig.returnEnchantmentOnCleanse ? "Enabled" : "Disabled"));
+            Message.translation(workingConfig.returnEnchantmentOnCleanse ? "server.config.common.enabled" : "server.config.common.disabled"));
         eventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#ContentArea[" + index + "] #ToggleButton",
             EventData.of("SettingValue", "returnEnchantmentOnCleanse:" + !workingConfig.returnEnchantmentOnCleanse));
         index++;
         
         // Edit Table Recipe button
         commandBuilder.append("#ContentArea", "Pages/EnchantConfigRecipeButton.ui");
-        commandBuilder.set("#ContentArea[" + index + "] #RecipeButtonLabel.TextSpans", Message.raw("Enchanting Table Recipe"));
+        commandBuilder.set("#ContentArea[" + index + "] #RecipeButtonLabel.TextSpans", Message.translation("server.config.general.table_recipe"));
         eventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#ContentArea[" + index + "] #EditRecipeBtn",
             EventData.of("EditRecipeType", "table"));
         index++;
         
         // Edit Upgrade 1 button
         commandBuilder.append("#ContentArea", "Pages/EnchantConfigRecipeButton.ui");
-        commandBuilder.set("#ContentArea[" + index + "] #RecipeButtonLabel.TextSpans", Message.raw("Upgrade 1 Cost (Tier 1 -> 2)"));
+        commandBuilder.set("#ContentArea[" + index + "] #RecipeButtonLabel.TextSpans", Message.translation("server.config.general.upgrade_1"));
         eventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#ContentArea[" + index + "] #EditRecipeBtn",
             EventData.of("EditRecipeType", "Upgrade_1"));
         index++;
         
         // Edit Upgrade 2 button
         commandBuilder.append("#ContentArea", "Pages/EnchantConfigRecipeButton.ui");
-        commandBuilder.set("#ContentArea[" + index + "] #RecipeButtonLabel.TextSpans", Message.raw("Upgrade 2 Cost (Tier 2 -> 3)"));
+        commandBuilder.set("#ContentArea[" + index + "] #RecipeButtonLabel.TextSpans", Message.translation("server.config.general.upgrade_2"));
         eventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#ContentArea[" + index + "] #EditRecipeBtn",
             EventData.of("EditRecipeType", "Upgrade_2"));
         index++;
         
         // Edit Upgrade 3 button
         commandBuilder.append("#ContentArea", "Pages/EnchantConfigRecipeButton.ui");
-        commandBuilder.set("#ContentArea[" + index + "] #RecipeButtonLabel.TextSpans", Message.raw("Upgrade 3 Cost (Tier 3 -> 4)"));
+        commandBuilder.set("#ContentArea[" + index + "] #RecipeButtonLabel.TextSpans", Message.translation("server.config.general.upgrade_3"));
         eventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#ContentArea[" + index + "] #EditRecipeBtn",
             EventData.of("EditRecipeType", "Upgrade_3"));
     }
@@ -571,8 +577,9 @@ public class EnchantConfigPage extends InteractiveCustomUIPage<EnchantConfigPage
         
         // Title and Reset button
         commandBuilder.append("#ContentArea", "Pages/EnchantConfigRecipeTitle.ui");
-        String title = getEditingRecipeTitle();
-        commandBuilder.set("#ContentArea[1].TextSpans", Message.raw(title + " - Ingredients"));
+        String titleKey = getEditingRecipeTitleKey();
+        String formattedTitle = com.hypixel.hytale.server.core.modules.i18n.I18nModule.get().getMessage("en-US", titleKey);
+        commandBuilder.set("#ContentArea[1].TextSpans", Message.translation("config.recipe.active_title").param("0", formattedTitle != null ? formattedTitle : titleKey));
         
         int index = 2;
         int ingredientDataIndex = 0;
@@ -584,7 +591,7 @@ public class EnchantConfigPage extends InteractiveCustomUIPage<EnchantConfigPage
                 
                 commandBuilder.append("#ContentArea", "Pages/EnchantConfigIngredient.ui");
                 commandBuilder.set("#ContentArea[" + index + "] #IngredientIcon.ItemId", ingredient.item);
-                commandBuilder.set("#ContentArea[" + index + "] #IngredientName.TextSpans", Message.raw(formatItemName(ingredient.item)));
+                commandBuilder.set("#ContentArea[" + index + "] #IngredientName.TextSpans", Message.translation(formatItemName(ingredient.item)));
                 commandBuilder.set("#ContentArea[" + index + "] #AmountInput.Value", (double) currentAmount);
                 
                 eventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#ContentArea[" + index + "] #ChangeBtn",
@@ -640,21 +647,27 @@ public class EnchantConfigPage extends InteractiveCustomUIPage<EnchantConfigPage
         return null;
     }
     
-    private String getEditingRecipeTitle() {
-        if (editingRecipeType == null) return "Recipe";
+    private String getEditingRecipeTitleKey() {
+        if (editingRecipeType == null) return "server.config.recipe.title";
         return switch (editingRecipeType) {
-            case "table" -> "Enchanting Table Recipe";
-            case "Upgrade_1" -> "Upgrade 1 Cost";
-            case "Upgrade_2" -> "Upgrade 2 Cost";
-            case "Upgrade_3" -> "Upgrade 3 Cost";
-            default -> "Recipe";
+            case "table" -> "server.config.general.table_recipe";
+            case "Upgrade_1" -> "server.config.general.upgrade_1";
+            case "Upgrade_2" -> "server.config.general.upgrade_2";
+            case "Upgrade_3" -> "server.config.general.upgrade_3";
+            default -> "server.config.recipe.title";
         };
     }
     
     private void buildEnchantmentsTab(@Nonnull UICommandBuilder commandBuilder, @Nonnull UIEventBuilder eventBuilder) {
         int index = 0;
+        boolean hasPerfectParries = SimpleEnchanting.getInstance().isPerfectParriesModPresent();
         
         for (EnchantmentType type : EnchantmentType.values()) {
+            // Skip Riposte and Coup de Grâce if Perfect Parries is missing
+            if (!hasPerfectParries && (type == EnchantmentType.RIPOSTE || type == EnchantmentType.COUP_DE_GRACE)) {
+                continue;
+            }
+
             commandBuilder.append("#ContentArea", "Pages/EnchantConfigEnchantment.ui");
             
             // Enchantment name
@@ -685,7 +698,7 @@ public class EnchantConfigPage extends InteractiveCustomUIPage<EnchantConfigPage
             // Toggle enabled/disabled
             boolean isDisabled = workingConfig.disabledEnchantments.getOrDefault(type.getId(), false);
             commandBuilder.set("#ContentArea[" + index + "] #EnableToggle.TextSpans", 
-                Message.raw(isDisabled ? "Disabled" : "Enabled"));
+                Message.translation(isDisabled ? "server.config.common.disabled" : "server.config.common.enabled"));
             eventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#ContentArea[" + index + "] #EnableToggle",
                 EventData.of("ToggleEnchantment", type.getId()));
             
@@ -694,12 +707,12 @@ public class EnchantConfigPage extends InteractiveCustomUIPage<EnchantConfigPage
             // Secondary multiplier row (e.g., Strength range bonus, Looting quantity bonus)
             String secondaryField = ENCHANTMENT_SECONDARY_MULTIPLIERS.get(type);
             if (secondaryField != null) {
-                String label = SECONDARY_MULTIPLIER_LABELS.getOrDefault(secondaryField, secondaryField);
+                String getOrDefault = SECONDARY_MULTIPLIER_LABELS.getOrDefault(secondaryField, secondaryField);
                 double secValue = getMultiplierValue(secondaryField);
                 double secStep = calculateStep(secValue);
                 
                 commandBuilder.append("#ContentArea", "Pages/EnchantConfigItem.ui");
-                commandBuilder.set("#ContentArea[" + index + "] #SettingName.TextSpans", Message.raw("  " + label));
+                commandBuilder.set("#ContentArea[" + index + "] #SettingName.TextSpans", Message.translation(getOrDefault));
                 commandBuilder.set("#ContentArea[" + index + "] #SettingInput.Value", secValue);
                 eventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#ContentArea[" + index + "] #ResetBtn",
                     EventData.of("ResetValue", secondaryField));
@@ -722,7 +735,16 @@ public class EnchantConfigPage extends InteractiveCustomUIPage<EnchantConfigPage
         }
         
         int index = 0;
+        boolean hasPerfectParries = SimpleEnchanting.getInstance().isPerfectParriesModPresent();
+
         for (String recipeName : workingConfig.scrollRecipes.keySet()) {
+            // Filter out Riposte and Coup de Grâce recipes if the mod is missing
+            if (!hasPerfectParries) {
+                if (recipeName.toLowerCase().contains("riposte") || recipeName.toLowerCase().contains("coup_de_grace")) {
+                    continue;
+                }
+            }
+
             List<EnchantingConfig.ConfigIngredient> ingredients = workingConfig.scrollRecipes.get(recipeName);
             
             // Find tier
@@ -738,7 +760,7 @@ public class EnchantConfigPage extends InteractiveCustomUIPage<EnchantConfigPage
             final String recipeKey = recipeName;
             
             commandBuilder.append("#ContentArea", "Pages/EnchantConfigRecipeItem.ui");
-            commandBuilder.set("#ContentArea[" + index + "] #RecipeName.TextSpans", Message.raw(formatRecipeName(recipeName)));
+            commandBuilder.set("#ContentArea[" + index + "] #RecipeName.TextSpans", Message.translation(getRecipeNameKey(recipeName)));
             commandBuilder.set("#ContentArea[" + index + "] #TierInput.Value", (double) tier);
             
             // Tier controls with reset button
@@ -766,16 +788,26 @@ public class EnchantConfigPage extends InteractiveCustomUIPage<EnchantConfigPage
         if (ingredients == null) return;
         
         // Determine title and reset target
-        String title;
+        Message title;
         String resetTarget;
         boolean isScrollRecipe = selectedRecipe != null && editingRecipeType == null;
         
-        if (isScrollRecipe) {
-            title = formatRecipeName(selectedRecipe) + " - Ingredients";
+        if (selectedRecipe != null) {
+            String nameKey = getRecipeNameKey(selectedRecipe);
+            // Translate the name key to a string before passing to the outer message
+            String formattedName = com.hypixel.hytale.server.core.modules.i18n.I18nModule.get().getMessage("en-US", nameKey);
+            title = Message.translation("server.config.recipe.active_title").param("0", formattedName != null ? formattedName : nameKey);
             resetTarget = selectedRecipe;
-        } else {
-            title = getEditingRecipeTitle() + " - Ingredients";
+        } else if (editingRecipeType != null) {
+            // Editing generic recipe type (e.g. "Scroll of Sharpness I")
+            String titleKey = getEditingRecipeTitleKey();
+            String formattedName = com.hypixel.hytale.server.core.modules.i18n.I18nModule.get().getMessage("en-US", titleKey);
+            title = Message.translation("server.config.recipe.active_title").param("0", formattedName != null ? formattedName : titleKey);
             resetTarget = editingRecipeType;
+        } else {
+            // Fallback if neither selectedRecipe nor editingRecipeType is set
+            title = Message.translation("server.config.recipe.active_title").param("0", "Unknown Recipe");
+            resetTarget = null; // Or some default/error value
         }
         
         // Back button
@@ -790,7 +822,7 @@ public class EnchantConfigPage extends InteractiveCustomUIPage<EnchantConfigPage
         
         // Recipe title
         commandBuilder.append("#ContentArea", "Pages/EnchantConfigRecipeTitle.ui");
-        commandBuilder.set("#ContentArea[1].TextSpans", Message.raw(title));
+        commandBuilder.set("#ContentArea[1].TextSpans", title);
         
         int index = 2;
         int ingredientDataIndex = 0;  // Track actual ingredient index in list (excluding tier entries)
@@ -815,7 +847,7 @@ public class EnchantConfigPage extends InteractiveCustomUIPage<EnchantConfigPage
                 
                 commandBuilder.append("#ContentArea", "Pages/EnchantConfigIngredient.ui");
                 commandBuilder.set("#ContentArea[" + index + "] #IngredientIcon.ItemId", ingredient.item);
-                commandBuilder.set("#ContentArea[" + index + "] #IngredientName.TextSpans", Message.raw(displayName));
+                commandBuilder.set("#ContentArea[" + index + "] #IngredientName.TextSpans", Message.translation(displayName));
                 commandBuilder.set("#ContentArea[" + index + "] #AmountInput.Value", (double) currentAmount);
                 
                 // Change button to open item search
@@ -897,7 +929,7 @@ public class EnchantConfigPage extends InteractiveCustomUIPage<EnchantConfigPage
             
             commandBuilder.append("#ItemSearchResults", "Pages/EnchantConfigSearchItem.ui");
             commandBuilder.set("#ItemSearchResults[" + itemIndex + "] #ItemIcon.ItemId", itemId);
-            commandBuilder.set("#ItemSearchResults[" + itemIndex + "] #ItemDisplayName.TextSpans", Message.raw(displayName));
+            commandBuilder.set("#ItemSearchResults[" + itemIndex + "] #ItemDisplayName.TextSpans", Message.translation(displayName));
             
             // Clicking the item selects it
             eventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#ItemSearchResults[" + itemIndex + "] #ItemSelectBtn",
@@ -929,7 +961,7 @@ public class EnchantConfigPage extends InteractiveCustomUIPage<EnchantConfigPage
             
             commandBuilder.append("#ItemSearchResults", "Pages/EnchantConfigSearchItem.ui");
             commandBuilder.set("#ItemSearchResults[" + itemIndex + "] #ItemIcon.ItemId", itemId);
-            commandBuilder.set("#ItemSearchResults[" + itemIndex + "] #ItemDisplayName.TextSpans", Message.raw(displayName));
+            commandBuilder.set("#ItemSearchResults[" + itemIndex + "] #ItemDisplayName.TextSpans", Message.translation(displayName));
             
             eventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#ItemSearchResults[" + itemIndex + "] #ItemSelectBtn",
                 EventData.of("SelectItem", itemId));
@@ -982,15 +1014,12 @@ public class EnchantConfigPage extends InteractiveCustomUIPage<EnchantConfigPage
     private String getItemDisplayName(Item item) {
         String translationKey = item.getTranslationKey();
         if (translationKey != null && !translationKey.isEmpty()) {
-            // Get translated message from I18n
-            String translated = I18nModule.get().getMessage("en-US", translationKey);
-            if (translated != null && !translated.equals(translationKey)) {
-                return translated;
-            }
+            return translationKey;
         }
         // Fall back to formatted ID
         return formatItemName(item.getId());
     }
+
     
     /**
      * Gets the ingredient list currently being edited (scroll, table, or upgrade).
@@ -1082,11 +1111,8 @@ public class EnchantConfigPage extends InteractiveCustomUIPage<EnchantConfigPage
         return name.replace("_", " ");
     }
     
-    private String formatRecipeName(String name) {
-        // Convert Scroll_Sharpness_I to Sharpness I
-        String formatted = name.replace("Scroll_", "").replace("_", " ");
-        // Explicit rename for FastSwim -> Swift Swim
-        return formatted.replace("FastSwim", "Swift Swim");
+    private String getRecipeNameKey(String name) {
+        return "server.items." + name + ".name";
     }
     
     private double getMultiplierValue(String fieldName) {
@@ -1113,6 +1139,8 @@ public class EnchantConfigPage extends InteractiveCustomUIPage<EnchantConfigPage
             case "fastSwimSpeedBonusPerLevel" -> workingConfig.fastSwimSpeedBonusPerLevel;
             case "elementalHeartSaveChancePerLevel" -> workingConfig.elementalHeartSaveChancePerLevel;
             case "frenzyChargeSpeedMultiplierPerLevel" -> workingConfig.frenzyChargeSpeedMultiplierPerLevel;
+            case "riposteDamageMultiplierPerLevel" -> workingConfig.riposteDamageMultiplierPerLevel;
+            case "coupDeGraceDamageMultiplierPerLevel" -> workingConfig.coupDeGraceDamageMultiplierPerLevel;
             default -> 0.0;
         };
     }
@@ -1163,6 +1191,8 @@ public class EnchantConfigPage extends InteractiveCustomUIPage<EnchantConfigPage
                 case "fastSwimSpeedBonusPerLevel" -> workingConfig.fastSwimSpeedBonusPerLevel = Double.parseDouble(value);
                 case "elementalHeartSaveChancePerLevel" -> workingConfig.elementalHeartSaveChancePerLevel = Double.parseDouble(value);
                 case "frenzyChargeSpeedMultiplierPerLevel" -> workingConfig.frenzyChargeSpeedMultiplierPerLevel = Double.parseDouble(value);
+                case "riposteDamageMultiplierPerLevel" -> workingConfig.riposteDamageMultiplierPerLevel = Double.parseDouble(value);
+                case "coupDeGraceDamageMultiplierPerLevel" -> workingConfig.coupDeGraceDamageMultiplierPerLevel = Double.parseDouble(value);
             }
         } catch (NumberFormatException e) {
             LOGGER.atWarning().log("Failed to parse setting value: " + key + " = " + value);
@@ -1256,6 +1286,8 @@ public class EnchantConfigPage extends InteractiveCustomUIPage<EnchantConfigPage
             case "returnEnchantmentOnCleanse" -> String.valueOf(DEFAULT_CONFIG.returnEnchantmentOnCleanse);
             case "frenzyChargeSpeedMultiplierPerLevel" -> String.valueOf(DEFAULT_CONFIG.frenzyChargeSpeedMultiplierPerLevel);
             case "disableEnchantmentCrafting" -> String.valueOf(DEFAULT_CONFIG.disableEnchantmentCrafting);
+            case "riposteDamageMultiplierPerLevel" -> String.valueOf(DEFAULT_CONFIG.riposteDamageMultiplierPerLevel);
+            case "coupDeGraceDamageMultiplierPerLevel" -> String.valueOf(DEFAULT_CONFIG.coupDeGraceDamageMultiplierPerLevel);
             default -> null;
         };
     }
@@ -1265,6 +1297,7 @@ public class EnchantConfigPage extends InteractiveCustomUIPage<EnchantConfigPage
         EnchantingConfig actualConfig = configManager.getConfig();
         actualConfig.maxEnchantmentsPerItem = workingConfig.maxEnchantmentsPerItem;
         actualConfig.showEnchantmentBanner = workingConfig.showEnchantmentBanner;
+        actualConfig.hasAutoDisabledBanner = workingConfig.hasAutoDisabledBanner;
         actualConfig.enableEnchantmentGlow = workingConfig.enableEnchantmentGlow;
         actualConfig.enchantingTableCraftingTier = workingConfig.enchantingTableCraftingTier;
         actualConfig.sharpnessDamageMultiplierPerLevel = workingConfig.sharpnessDamageMultiplierPerLevel;
@@ -1291,6 +1324,8 @@ public class EnchantConfigPage extends InteractiveCustomUIPage<EnchantConfigPage
         actualConfig.frenzyChargeSpeedMultiplierPerLevel = workingConfig.frenzyChargeSpeedMultiplierPerLevel;
         actualConfig.returnEnchantmentOnCleanse = workingConfig.returnEnchantmentOnCleanse;
         actualConfig.disableEnchantmentCrafting = workingConfig.disableEnchantmentCrafting;
+        actualConfig.riposteDamageMultiplierPerLevel = workingConfig.riposteDamageMultiplierPerLevel;
+        actualConfig.coupDeGraceDamageMultiplierPerLevel = workingConfig.coupDeGraceDamageMultiplierPerLevel;
         actualConfig.disabledEnchantments = new LinkedHashMap<>(workingConfig.disabledEnchantments);
         actualConfig.scrollRecipes = new LinkedHashMap<>();
         for (var entry : workingConfig.scrollRecipes.entrySet()) {
@@ -1323,6 +1358,9 @@ public class EnchantConfigPage extends InteractiveCustomUIPage<EnchantConfigPage
             }
         }
         
+        // Broadcast global scroll translation updates (for Crafting UI etc)
+        org.herolias.plugin.enchantment.ScrollDescriptionManager.broadcastUpdatePacket();
+        
         // Refresh recipes based on new config settings (e.g. invalidates disabled recipes)
         org.herolias.plugin.enchantment.EnchantmentRecipeManager.reload();
         
@@ -1347,7 +1385,16 @@ public class EnchantConfigPage extends InteractiveCustomUIPage<EnchantConfigPage
         EnchantingConfig defaults = EnchantingConfig.createDefault();
         
         workingConfig.maxEnchantmentsPerItem = defaults.maxEnchantmentsPerItem;
-        workingConfig.showEnchantmentBanner = defaults.showEnchantmentBanner;
+        
+        // Smart default for banner: verify if tooltips are enabled
+        if (SimpleEnchanting.getInstance().isTooltipsEnabled()) {
+            workingConfig.showEnchantmentBanner = false;
+            workingConfig.hasAutoDisabledBanner = true;
+        } else {
+            workingConfig.showEnchantmentBanner = defaults.showEnchantmentBanner;
+            workingConfig.hasAutoDisabledBanner = false;
+        }
+        
         workingConfig.enableEnchantmentGlow = defaults.enableEnchantmentGlow;
         workingConfig.enchantingTableCraftingTier = defaults.enchantingTableCraftingTier;
         workingConfig.sharpnessDamageMultiplierPerLevel = defaults.sharpnessDamageMultiplierPerLevel;
@@ -1372,8 +1419,11 @@ public class EnchantConfigPage extends InteractiveCustomUIPage<EnchantConfigPage
         workingConfig.fastSwimSpeedBonusPerLevel = defaults.fastSwimSpeedBonusPerLevel;
         workingConfig.elementalHeartSaveChancePerLevel = defaults.elementalHeartSaveChancePerLevel;
         workingConfig.frenzyChargeSpeedMultiplierPerLevel = defaults.frenzyChargeSpeedMultiplierPerLevel;
+        workingConfig.riposteDamageMultiplierPerLevel = defaults.riposteDamageMultiplierPerLevel;
+        workingConfig.coupDeGraceDamageMultiplierPerLevel = defaults.coupDeGraceDamageMultiplierPerLevel;
         workingConfig.returnEnchantmentOnCleanse = defaults.returnEnchantmentOnCleanse;
         workingConfig.disableEnchantmentCrafting = defaults.disableEnchantmentCrafting;
+
         
         // Reset maps
         workingConfig.disabledEnchantments = new LinkedHashMap<>(); // Defaults are empty usually
@@ -1472,13 +1522,13 @@ public class EnchantConfigPage extends InteractiveCustomUIPage<EnchantConfigPage
         // Update Unsaved Changes Indicator
         commandBuilder.set("#UnsavedIndicator.Visible", hasUnsavedChanges);
         if (hasUnsavedChanges) {
-            commandBuilder.set("#UnsavedIndicator.TextSpans", Message.raw("[!] Unsaved Changes"));
+            commandBuilder.set("#UnsavedIndicator.TextSpans", Message.translation("server.config.message.unsaved"));
         }
         
         // Update Save Feedback
         commandBuilder.set("#SaveFeedback.Visible", showSaveFeedback);
         if (showSaveFeedback) {
-            commandBuilder.set("#SaveFeedback.TextSpans", Message.raw("Saved! Most changes require a restart."));
+            commandBuilder.set("#SaveFeedback.TextSpans", Message.translation("server.config.message.saved"));
             // Auto-hide feedback could be handled by a delayed task, but for now it stays until next action clears it
             // Or we could perform a clear on next event
         }

@@ -62,6 +62,10 @@ public class EnchantmentBurnSystem extends DamageEventSystem {
                        @Nonnull Damage damage) {
         
         if (damage.getAmount() <= 0 || damage.isCancelled()) return;
+
+        // Check if this is reflected damage - if so, don't apply burn/weapon effects
+        Boolean isReflection = damage.getIfPresentMetaObject(EnchantmentReflectionSystem.IS_REFLECTION);
+        if (isReflection != null && isReflection) return;
         
         // Use centralized damage context extraction
         EnchantmentManager.DamageContext ctx = enchantmentManager.getDamageContext(damage, commandBuffer);

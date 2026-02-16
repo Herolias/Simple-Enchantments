@@ -10,6 +10,7 @@ import com.hypixel.hytale.logger.HytaleLogger;
 import com.hypixel.hytale.protocol.ColorLight;
 import com.hypixel.hytale.protocol.ComponentUpdate;
 import com.hypixel.hytale.protocol.ComponentUpdateType;
+import com.hypixel.hytale.protocol.DynamicLightUpdate;
 import com.hypixel.hytale.server.core.entity.Entity;
 import com.hypixel.hytale.server.core.entity.EntityUtils;
 import com.hypixel.hytale.server.core.entity.LivingEntity;
@@ -110,8 +111,8 @@ public class EnchantmentNightVisionSystem extends EntityTickingSystem<EntityStor
 
             if (hasNightVision && !wasActive) {
                 // Send DynamicLight update ONLY to this player
-                ComponentUpdate update = new ComponentUpdate();
-                update.type = ComponentUpdateType.DynamicLight;
+                DynamicLightUpdate update = new DynamicLightUpdate();
+                // update.type is not accessible or needed for DynamicLightUpdate
                 update.dynamicLight = new ColorLight(LIGHT_RADIUS, LIGHT_RED, LIGHT_GREEN, LIGHT_BLUE);
                 viewer.queueUpdate(ref, update);
                 activeNightVision.add(ref);

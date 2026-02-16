@@ -502,3 +502,93 @@ items.Scroll_Frenzy_III.description = Увеличивает скорость з
 enchantment.frenzy.name = Бешенство
 
 enchantment.frenzy.description = Увеличивает скорость зарядки сигнатурной способности на 15%.   
+
+items.Scroll_Riposte_I.name = Свиток Riposte I
+items.Scroll_Riposte_I.description = Увеличивает урон от контратак на 20%.
+items.Scroll_Riposte_II.name = Свиток Riposte II
+items.Scroll_Riposte_II.description = Увеличивает урон от контратак на 40%.
+items.Scroll_Riposte_III.name = Свиток Riposte III
+items.Scroll_Riposte_III.description = Увеличивает урон от контратак на 60%.
+
+enchantment.riposte.name = Riposte
+enchantment.riposte.description = Увеличивает урон от контратак на 20%.
+
+items.Scroll_Coup_De_Grace_I.name = Свиток Coup de Grâce I
+items.Scroll_Coup_De_Grace_I.description = Увеличивает урон по оглушенным врагам на 20%.
+items.Scroll_Coup_De_Grace_II.name = Свиток Coup de Grâce II
+items.Scroll_Coup_De_Grace_II.description = Увеличивает урон по оглушенным врагам на 40%.
+items.Scroll_Coup_De_Grace_III.name = Свиток Coup de Grâce III
+items.Scroll_Coup_De_Grace_III.description = Увеличивает урон по оглушенным врагам на 60%.
+
+enchantment.coup_de_grace.name = Coup de Grâce
+enchantment.coup_de_grace.description = Увеличивает урон по оглушенным врагам на 20%.
+
+# Enchantment Bonuses
+enchantment.sharpness.bonus = Урон в ближнем бою увеличен на {amount}%
+enchantment.life_leech.bonus = Исцеляет {amount}% от нанесенного урона
+enchantment.durability.bonus = Потеря прочности снижена на {amount}%
+enchantment.sturdy.bonus = Предотвращает потерю прочности при починке
+enchantment.dexterity.bonus = Затраты выносливости снижены на {amount}%
+enchantment.protection.bonus = Физический урон снижен на {amount}%
+enchantment.efficiency.bonus = Скорость добычи увеличена на {amount}%
+enchantment.fortune.bonus = Шанс доп. добычи увеличен на {amount}%
+enchantment.smelting.bonus = Автоматически переплавляет добытые блоки
+enchantment.strength.bonus = Урон снарядов увеличен на {amount}%
+enchantment.eagles_eye.bonus = Урон растет с расстоянием до {amount}%
+enchantment.looting.bonus = Шанс добычи увеличен на {amount}%
+enchantment.feather_falling.bonus = Урон от падения снижен на {amount}%
+enchantment.waterbreathing.bonus = Расход кислорода снижен на {amount}%
+enchantment.burn.bonus = Поджигает цель
+enchantment.freeze.bonus = Замедляет цель при ударе
+enchantment.eternal_shot.bonus = Не расходует стрелы
+enchantment.pick_perfect.bonus = Выпадает сам блок
+enchantment.thrift.bonus = Восстанавливает {amount}% маны при ударе
+enchantment.elemental_heart.bonus = Не расходует эссенцию
+enchantment.knockback.bonus = Отбрасывает цели
+enchantment.reflection.bonus = Отражает {amount}% урона
+enchantment.absorption.bonus = Исцеляет {amount}% заблокированного урона
+enchantment.fast_swim.bonus = Скорость плавания увеличена на {amount}%
+enchantment.night_vision.bonus = Улучшает зрение в темноте
+enchantment.ranged_protection.bonus = Урон от снарядов/магии снижен на {amount}%
+enchantment.frenzy.bonus = Скорость зарядки увеличена на {amount}%
+enchantment.riposte.bonus = Урон контратаки увеличен на {amount}%
+enchantment.coup_de_grace.bonus = Урон по оглушенным увеличен на {amount}%
+
+# Config UI
+config.title = Настройка Зачарований
+config.tab.general = Общие
+config.tab.enchantments = Зачарования
+config.tab.recipes = Рецепты
+config.button.save = Сохранить
+config.button.cancel = Отмена
+config.button.reset_all = Сбросить Все
+config.button.confirm_reset = Подтвердить Сброс
+config.button.back = Назад
+config.button.add_ingredient = Добавить Ингредиент
+config.button.reset_recipe = Сбросить Рецепт
+
+config.general.max_enchantments = Макс. Зачарований На Предмет
+config.general.show_banner = Показать Баннер Зачарований
+config.general.enable_glow = Включить Свечение
+config.general.table_tier = Уровень Крафта Стола Зачарований
+config.general.disable_crafting = Отключить Крафт Зачарований
+config.general.return_cleanse = Возвращать Зачарование При Очистке
+config.general.table_recipe = Рецепт Стола Зачарований
+config.general.upgrade_1 = Стоимость Улучшения 1 (Ур. 1 -> 2)
+config.general.upgrade_2 = Стоимость Улучшения 2 (Ур. 2 -> 3)
+config.general.upgrade_3 = Стоимость Улучшения 3 (Ур. 3 -> 4)
+
+config.recipe.title = Рецепт
+config.recipe.ingredients = Ингредиенты
+
+config.common.enabled = Включено
+config.common.disabled = Отключено
+
+config.secondary.range_speed_bonus = Бонус Дистанции/Скорости
+config.secondary.quantity_bonus = Бонус Количества
+
+config.recipe.active_title = {0} - Ингредиенты
+config.recipe.crafting_tier = Уровень Крафта
+
+config.message.saved = Сохранено! Большинство изменений требуют перезапуска.
+config.message.unsaved = [!] Несохраненные изменения

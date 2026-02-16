@@ -502,3 +502,93 @@ items.Scroll_Frenzy_III.description = Ökar laddningshastigheten för signaturf�
 enchantment.frenzy.name = Raseri
 
 enchantment.frenzy.description = Ökar laddningshastigheten för signaturförmågan med 15%.
+
+items.Scroll_Riposte_I.name = Riposterulle I
+items.Scroll_Riposte_I.description = Ökar motattackskada med 20%.
+items.Scroll_Riposte_II.name = Riposterulle II
+items.Scroll_Riposte_II.description = Ökar motattackskada med 40%.
+items.Scroll_Riposte_III.name = Riposterulle III
+items.Scroll_Riposte_III.description = Ökar motattackskada med 60%.
+
+enchantment.riposte.name = Riposte
+enchantment.riposte.description = Ökar motattackskada med 20%.
+
+items.Scroll_Coup_De_Grace_I.name = Coup de Grâce-rulle I
+items.Scroll_Coup_De_Grace_I.description = Ökar skadan mot bedövade fiender med 20%.
+items.Scroll_Coup_De_Grace_II.name = Coup de Grâce-rulle II
+items.Scroll_Coup_De_Grace_II.description = Ökar skadan mot bedövade fiender med 40%.
+items.Scroll_Coup_De_Grace_III.name = Coup de Grâce-rulle III
+items.Scroll_Coup_De_Grace_III.description = Ökar skadan mot bedövade fiender med 60%.
+
+enchantment.coup_de_grace.name = Coup de Grâce
+enchantment.coup_de_grace.description = Ökar skadan mot bedövade fiender med 20%.
+
+# Enchantment Bonuses
+enchantment.sharpness.bonus = Närstridsskada ökad med {amount}%
+enchantment.life_leech.bonus = Läker {amount}% av skadan
+enchantment.durability.bonus = Hållbarhetsförlust minskad med {amount}%
+enchantment.sturdy.bonus = Förhindrar hållbarhetsförlust vid reparation
+enchantment.dexterity.bonus = Uthållighetskostnad minskad med {amount}%
+enchantment.protection.bonus = Fysisk skada minskad med {amount}%
+enchantment.efficiency.bonus = Brythastighet ökad med {amount}%
+enchantment.fortune.bonus = Chans för extra byte ökad med {amount}%
+enchantment.smelting.bonus = Smälter brytna block automatiskt
+enchantment.strength.bonus = Projektilskada ökad med {amount}%
+enchantment.eagles_eye.bonus = Skadan ökar med avståndet upp till {amount}%
+enchantment.looting.bonus = Bytesfrekvens ökad med {amount}%
+enchantment.feather_falling.bonus = Fallskada minskad med {amount}%
+enchantment.waterbreathing.bonus = Syreförbrukning minskad med {amount}%
+enchantment.burn.bonus = Sätter målet i brand
+enchantment.freeze.bonus = Sakta ner målet vid träff
+enchantment.eternal_shot.bonus = Förbrukar inga pilar
+enchantment.pick_perfect.bonus = Släpper blocket självt
+enchantment.thrift.bonus = Återställer {amount}% mana vid träff
+enchantment.elemental_heart.bonus = Förbrukar ingen essens
+enchantment.knockback.bonus = Stöter bort mål
+enchantment.reflection.bonus = Reflekterar {amount}% av skadan
+enchantment.absorption.bonus = Läker {amount}% av blockerad skada
+enchantment.fast_swim.bonus = Simhastighet ökad med {amount}%
+enchantment.night_vision.bonus = Förbättrar syn i mörker
+enchantment.ranged_protection.bonus = Projektil-/magiskada minskad med {amount}%
+enchantment.frenzy.bonus = Laddningshastighet ökad med {amount}%
+enchantment.riposte.bonus = Motattackskada ökad med {amount}%
+enchantment.coup_de_grace.bonus = Skada mot bedövade ökad med {amount}%
+
+# Config UI
+config.title = Förtrollningskonfiguration
+config.tab.general = Allmänt
+config.tab.enchantments = Förtrollningar
+config.tab.recipes = Recept
+config.button.save = Spara
+config.button.cancel = Avbryt
+config.button.reset_all = Återställ Alla
+config.button.confirm_reset = Bekräfta Återställning
+config.button.back = Tillbaka
+config.button.add_ingredient = Lägg Till Ingrediens
+config.button.reset_recipe = Återställ Recept
+
+config.general.max_enchantments = Max Förtrollningar Per Föremål
+config.general.show_banner = Visa Förtrollningsbanner
+config.general.enable_glow = Aktivera Förtrollningsglöd
+config.general.table_tier = Förtrollningsbords Hantverksnivå
+config.general.disable_crafting = Inaktivera Förtrollningshantverk
+config.general.return_cleanse = Returnera Förtrollning Vid Rening
+config.general.table_recipe = Förtrollningsbordsrecept
+config.general.upgrade_1 = Uppgraderingskostnad 1 (Nivå 1 -> 2)
+config.general.upgrade_2 = Uppgraderingskostnad 2 (Nivå 2 -> 3)
+config.general.upgrade_3 = Uppgraderingskostnad 3 (Nivå 3 -> 4)
+
+config.recipe.title = Recept
+config.recipe.ingredients = Ingredienser
+
+config.common.enabled = Aktiverad
+config.common.disabled = Inaktiverad
+
+config.secondary.range_speed_bonus = Räckvidd/Hastighetsbonus
+config.secondary.quantity_bonus = Mängdbonus
+
+config.recipe.active_title = {0} - Ingredienser
+config.recipe.crafting_tier = Hantverksnivå
+
+config.message.saved = Sparad! De flesta ändringar kräver omstart.
+config.message.unsaved = [!] Osparat ändringar

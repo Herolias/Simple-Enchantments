@@ -62,56 +62,15 @@ public class EnchantmentTooltipProvider implements TooltipProvider {
         EnchantmentData data = parseEnchantments(metadata);
         if (data == null || data.isEmpty()) return null;
 
-        // Build the formatted enchantment lines
-        List<String> lines = buildEnchantmentLines(data);
-        if (lines.isEmpty()) return null;
-
         // Use the stable hash from EnchantmentData for virtual ID generation
         String stableHash = data.computeStableHash();
 
+        // Use translation key for dynamic server-side localization
+        // The EnchantmentTranslationManager handles sending the translation update to the client
         return TooltipData.builder()
-                .addLine("<color is=\"" + HEADER_COLOR + "\">Enchantments:</color>")
-                .addLines(lines)
+                .descriptionTranslationKey("enchantment.combo." + stableHash)
                 .hashInput(stableHash)
                 .build();
-    }
-
-    /**
-     * Builds formatted lines for each enchantment on the item.
-     * <p>
-     * Each line uses Hytale's rich-text format:
-     * <pre>
-     * &lt;color is="#AA55FF"&gt;• Sharpness III&lt;/color&gt; &lt;color is="#AAAAAA"&gt;+30% melee damage&lt;/color&gt;
-     * </pre>
-     */
-    @Nonnull
-    private List<String> buildEnchantmentLines(@Nonnull EnchantmentData data) {
-        List<String> lines = new ArrayList<>();
-
-        for (Map.Entry<EnchantmentType, Integer> entry : data.getAllEnchantments().entrySet()) {
-            EnchantmentType type = entry.getKey();
-            int level = entry.getValue();
-
-            if (!enchantmentManager.isEnchantmentEnabled(type)) continue;
-
-            StringBuilder sb = new StringBuilder();
-            String color = type.isLegendary() ? LEGENDARY_COLOR : ENCHANTMENT_COLOR;
-            sb.append("<color is=\"").append(color).append("\">");
-            sb.append(ENCHANT_SYMBOL);
-            sb.append(type.getFormattedName(level));
-            sb.append("</color>");
-
-            String bonus = type.getBonusDescription(level);
-            if (bonus != null && !bonus.isEmpty()) {
-                sb.append(" <color is=\"").append(BONUS_COLOR).append("\">");
-                sb.append(bonus);
-                sb.append("</color>");
-            }
-
-            lines.add(sb.toString());
-        }
-
-        return lines;
     }
 
     /**

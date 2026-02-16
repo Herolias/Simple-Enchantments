@@ -124,9 +124,47 @@ public class EnchantmentManager {
     private final SmeltingRecipeRegistry smeltingRecipeRegistry = new SmeltingRecipeRegistry();
     private final CookingRecipeRegistry cookingRecipeRegistry = new CookingRecipeRegistry();
     
+    // Global cache of enchantment data hashes for reverse lookup (used by TranslationManager)
+    // Key: 8-char hex hash, Value: EnchantmentData
+    public static final ConcurrentHashMap<String, EnchantmentData> HASH_CACHE = new ConcurrentHashMap<>();
+    
     public EnchantmentManager(SimpleEnchanting plugin) {
         LOGGER.atInfo().log("EnchantmentManager initialized (metadata-based storage)");
         ItemCategoryManager.getInstance().loadConfiguration();
+    }
+    
+    /**
+     * Registers enchantment data in the global hash cache.
+     * Should be called whenever a stable hash is computed/used.
+     */
+    public void registerEnchantmentData(EnchantmentData data) {
+        if (data != null && !data.isEmpty()) {
+            HASH_CACHE.put(data.computeStableHash(), data);
+        }
+    }
+
+    /**
+     * Retrieves EnchanmentData by its hash.
+     */
+    public EnchantmentData getEnchantmentDataByHash(String hash) {
+        return HASH_CACHE.get(hash);
+    }
+    
+    /**
+     * Parses EnchantmentData from a raw metadata string (JSON/BSON string).
+     */
+    public EnchantmentData getEnchantmentsFromMetadata(String metadata) {
+        if (metadata == null || metadata.isEmpty()) return EnchantmentData.EMPTY;
+        
+        try {
+            BsonDocument doc = BsonDocument.parse(metadata);
+            if (doc.containsKey(EnchantmentData.METADATA_KEY)) {
+                return EnchantmentData.fromBson(doc.getDocument(EnchantmentData.METADATA_KEY));
+            }
+        } catch (Exception ignored) {
+            // Fallback for legacy string format if needed, but usually metadata is JSON
+        }
+        return EnchantmentData.EMPTY;
     }
 
     private org.herolias.plugin.config.EnchantingConfig getConfig() {
@@ -1196,15 +1234,54 @@ public class EnchantmentManager {
 
     /**
      * Gets the active blocking item (shield) for an entity.
-     * Checks main hand first, then off-hand, respecting weapon priority.
+     * Uses InteractionManager to find the active Wielding/Blocking interaction.
      * 
      * @param entity The entity to check
-     * @return The shield ItemStack if actively blocking, null otherwise
+     * @return The ItemStack actively being used for blocking, null otherwise
      */
     @Nullable
     public ItemStack getActiveBlocker(@Nullable LivingEntity entity) {
         if (entity == null) return null;
         
+        // 1. Precise check using InteractionManager (Server-side ECS)
+        // This detects exactly which item is driving the interaction state.
+        if (entity instanceof com.hypixel.hytale.server.core.entity.Entity) {
+            com.hypixel.hytale.component.Ref<com.hypixel.hytale.server.core.universe.world.storage.EntityStore> ref = 
+                ((com.hypixel.hytale.server.core.entity.Entity) entity).getReference();
+                
+            if (ref != null && ref.isValid()) {
+                try {
+                    com.hypixel.hytale.component.Store<com.hypixel.hytale.server.core.universe.world.storage.EntityStore> store = ref.getStore();
+                    com.hypixel.hytale.server.core.entity.InteractionManager im = 
+                        store.getComponent(ref, com.hypixel.hytale.server.core.modules.interaction.InteractionModule.get().getInteractionManagerComponent());
+                    
+                    if (im != null) {
+                        for (com.hypixel.hytale.server.core.entity.InteractionChain chain : im.getChains().values()) {
+                            // The blocking action often runs as a "Secondary" interaction (Right Click), 
+                            // not explicitly "Wielding" in the chain type itself.
+                            if (chain.getType() == InteractionType.Wielding || chain.getType() == InteractionType.Secondary) {
+                                ItemStack held = chain.getContext().getHeldItem();
+                                if (held != null && !held.isEmpty()) {
+                                    // Verify if this item is actually capable of blocking/wielding
+                                    Item item = held.getItem();
+                                    if (item != null) {
+                                        // Check if it's a shield OR has Wielding interaction (like parrying weapon)
+                                        if (categorizeItem(held) == ItemCategory.SHIELD || 
+                                            (item.getInteractions() != null && item.getInteractions().containsKey(InteractionType.Wielding))) {
+                                            return held;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                } catch (Exception e) {
+                    // Fallback to legacy logic if InteractionManager is inaccessible/fails
+                }
+            }
+        }
+
+        // 2. Legacy Fallback (Inventory scanning) - Only if InteractionManager check yielded nothing (e.g. client/prediction mismatch or error)
         Inventory inventory = entity.getInventory();
         if (inventory == null) return null;
 
@@ -1212,6 +1289,12 @@ public class EnchantmentManager {
         if (mainHand != null && !mainHand.isEmpty()) {
             ItemCategory cat = categorizeItem(mainHand);
             if (cat == ItemCategory.SHIELD) return mainHand;
+            
+            Item item = mainHand.getItem();
+            if (item != null && item.getInteractions() != null && 
+                item.getInteractions().containsKey(InteractionType.Wielding)) {
+                return mainHand;
+            }
         }
 
         ItemStack offHand = inventory.getUtilityItem();
@@ -1573,5 +1656,55 @@ public class EnchantmentManager {
         if (itemEntities.length > 0) {
             commandBuffer.addEntities(itemEntities, com.hypixel.hytale.component.AddReason.SPAWN);
         }
+    }
+
+    /**
+     * Generates a localized description string for a set of enchantments.
+     * Used by EnchantmentTranslationManager to send per-player translations.
+     */
+    public String getLocalizedEnchantmentDescription(EnchantmentData data, String locale) {
+        if (data == null || data.isEmpty()) return "";
+
+        StringBuilder sb = new StringBuilder();
+        // Header
+        sb.append("<color is=\"#C8A2FF\">Enchantments:</color>"); 
+
+        for (java.util.Map.Entry<EnchantmentType, Integer> entry : data.getAllEnchantments().entrySet()) {
+            EnchantmentType type = entry.getKey();
+            int level = entry.getValue();
+
+            if (!isEnchantmentEnabled(type)) continue;
+
+            sb.append("\n"); // Newline separator
+            
+            String color = type.isLegendary() ? "#FFAA00" : "#AA55FF";
+            sb.append("<color is=\"").append(color).append("\">");
+            sb.append("\u2022 "); // Bullet
+            
+            String nameKey = type.getNameKey();
+            String name = resolveTranslation(nameKey, locale, type.getDisplayName());
+            sb.append(name).append(" ").append(EnchantmentType.toRoman(level));
+            sb.append("</color>");
+
+            String bonus = type.getBonusDescription(level, locale);
+            if (bonus != null && !bonus.isEmpty()) {
+                sb.append(" <color is=\"#AAAAAA\">");
+                sb.append(bonus);
+                sb.append("</color>");
+            }
+        }
+        return sb.toString();
+    }
+    
+    // Helper to resolve translation
+    private String resolveTranslation(String key, String locale, String def) {
+        try {
+            com.hypixel.hytale.server.core.modules.i18n.I18nModule i18n = com.hypixel.hytale.server.core.modules.i18n.I18nModule.get();
+            if (i18n != null) {
+                String val = i18n.getMessage(locale != null ? locale : "en-US", key);
+                if (val != null) return val;
+            }
+        } catch (Exception ignored) {}
+        return def;
     }
 }

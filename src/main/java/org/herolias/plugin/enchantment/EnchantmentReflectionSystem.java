@@ -40,8 +40,9 @@ public class EnchantmentReflectionSystem extends DamageEventSystem {
         LOGGER.atInfo().log("EnchantmentReflectionSystem initialized");
     }
 
+    public static final com.hypixel.hytale.server.core.meta.MetaKey<Boolean> IS_REFLECTION = Damage.META_REGISTRY.registerMetaObject(data -> Boolean.FALSE);
+
     @Override
-    @Nonnull
     public Set<Dependency<EntityStore>> getDependencies() {
         return dependencies;
     }
@@ -96,6 +97,7 @@ public class EnchantmentReflectionSystem extends DamageEventSystem {
         if (attackCause != null) {
             Damage.EntitySource source = new Damage.EntitySource(archetypeChunk.getReferenceTo(index));
             Damage reflectionDamage = new Damage(source, attackCause, reflectedAmount);
+            reflectionDamage.putMetaObject(IS_REFLECTION, true);
             DamageSystems.executeDamage(ctx.attackerRef(), commandBuffer, reflectionDamage);
         }
     }

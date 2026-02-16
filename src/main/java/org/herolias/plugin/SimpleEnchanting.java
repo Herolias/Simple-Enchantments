@@ -46,6 +46,9 @@ import org.herolias.plugin.ui.EnchantScrollPageSupplier;
 import com.hypixel.hytale.server.core.event.events.entity.LivingEntityInventoryChangeEvent;
 import com.hypixel.hytale.server.core.event.events.ecs.SwitchActiveSlotEvent;
 import com.hypixel.hytale.server.core.entity.entities.Player;
+import com.hypixel.hytale.server.core.event.events.player.PlayerReadyEvent;
+import com.hypixel.hytale.server.core.event.events.player.PlayerDisconnectEvent;
+import org.herolias.plugin.enchantment.EnchantmentTranslationManager;
 
 import javax.annotation.Nonnull;
 
@@ -91,6 +94,7 @@ public class SimpleEnchanting extends JavaPlugin {
     private EnchantingTableListener enchantingTableListener;
     private boolean tooltipsEnabled;
     private org.herolias.plugin.config.ConfigManager configManager;
+    private EnchantmentTranslationManager enchantmentTranslationManager;
 
     public SimpleEnchanting(@Nonnull JavaPluginInit init) {
         super(init);
@@ -139,6 +143,15 @@ public class SimpleEnchanting extends JavaPlugin {
         // Register Public API
         org.herolias.plugin.api.EnchantmentApi api = new org.herolias.plugin.api.EnchantmentApiImpl(enchantmentManager);
         org.herolias.plugin.api.EnchantmentApiProvider.register(api);
+
+        // Initialize translation manager for dynamic tooltips
+        this.enchantmentTranslationManager = new EnchantmentTranslationManager(this);
+        this.enchantmentTranslationManager.init();
+        
+        // Register cleanup listener for translation cache
+        this.getEventRegistry().register(PlayerDisconnectEvent.class, event -> {
+            enchantmentTranslationManager.onPlayerQuit(event.getPlayerRef().getUuid());
+        });
 
         // Register custom UI page for enchantment scrolls
         this.getCodecRegistry(OpenCustomUIInteraction.PAGE_CODEC).register(
@@ -299,6 +312,13 @@ public class SimpleEnchanting extends JavaPlugin {
         EnchantmentVisualsListener visualsListener = new EnchantmentVisualsListener(enchantmentManager);
         this.getEventRegistry().registerGlobal(LivingEntityInventoryChangeEvent.class, visualsListener::onInventoryChange);
         LOGGER.atInfo().log("Registered EnchantmentVisualsListener");
+
+        // Register ScrollDescriptionManager to send global translation updates on join
+        // Using PlayerReadyEvent as it ensures the player is fully connected (similar to WelcomeListener)
+        this.getEventRegistry().registerGlobal(PlayerReadyEvent.class, event -> {
+            org.herolias.plugin.enchantment.ScrollDescriptionManager.sendUpdatePacket(event.getPlayer());
+        });
+        LOGGER.atInfo().log("Registered ScrollDescriptionManager listener");
 
 
         // ── Tooltip System (via DynamicTooltipsLib, optional) ──

@@ -67,6 +67,8 @@ public class EnchantmentFreezeSystem extends DamageEventSystem {
         
         // Use centralized damage context extraction
         EnchantmentManager.DamageContext ctx = enchantmentManager.getDamageContext(damage, commandBuffer);
+        Boolean isReflection = damage.getIfPresentMetaObject(EnchantmentReflectionSystem.IS_REFLECTION);
+        if (isReflection != null && isReflection) return;
         
         int freezeLevel = 0;
         

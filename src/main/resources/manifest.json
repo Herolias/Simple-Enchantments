@@ -14,12 +14,15 @@
         }
     ],
     "Website": "https://discord.gg/7XQAnUfQfM",
-    "ServerVersion": "*",
+    "ServerVersion": "2026.02.11-255364b8e",
     "Dependencies": {
         
     },
     "OptionalDependencies": {
         "org.herolias:DynamicTooltipsLib": "*"
+    },
+    "UpdateChecker": {
+        "CurseForge": "1434302"
     },
     "DisabledByDefault": false,
     "Main": "org.herolias.plugin.SimpleEnchanting",

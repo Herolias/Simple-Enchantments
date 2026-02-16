@@ -502,3 +502,93 @@ items.Scroll_Frenzy_III.description = Aumenta la velocità di carica dell'abilit
 enchantment.frenzy.name = Frenesia
 
 enchantment.frenzy.description = Aumenta la velocità di carica dell'abilità caratteristica del 15%.
+
+items.Scroll_Riposte_I.name = Pergamena della Riposte I
+items.Scroll_Riposte_I.description = Aumenta i danni del contrattacco del 20%.
+items.Scroll_Riposte_II.name = Pergamena della Riposte II
+items.Scroll_Riposte_II.description = Aumenta i danni del contrattacco del 40%.
+items.Scroll_Riposte_III.name = Pergamena della Riposte III
+items.Scroll_Riposte_III.description = Aumenta i danni del contrattacco del 60%.
+
+enchantment.riposte.name = Riposte
+enchantment.riposte.description = Aumenta i danni del contrattacco del 20%.
+
+items.Scroll_Coup_De_Grace_I.name = Pergamena del Coup de Grâce I
+items.Scroll_Coup_De_Grace_I.description = Aumenta i danni contro i nemici storditi del 20%.
+items.Scroll_Coup_De_Grace_II.name = Pergamena del Coup de Grâce II
+items.Scroll_Coup_De_Grace_II.description = Aumenta i danni contro i nemici storditi del 40%.
+items.Scroll_Coup_De_Grace_III.name = Pergamena del Coup de Grâce III
+items.Scroll_Coup_De_Grace_III.description = Aumenta i danni contro i nemici storditi del 60%.
+
+enchantment.coup_de_grace.name = Coup de Grâce
+enchantment.coup_de_grace.description = Aumenta i danni contro i nemici storditi del 20%.
+
+# Enchantment Bonuses
+enchantment.sharpness.bonus = Danni corpo a corpo aumentati del {amount}%
+enchantment.life_leech.bonus = Cura il {amount}% dei danni inflitti
+enchantment.durability.bonus = Perdita di durabilità ridotta del {amount}%
+enchantment.sturdy.bonus = Previene la perdita di durabilità durante la riparazione
+enchantment.dexterity.bonus = Costo della resistenza ridotto del {amount}%
+enchantment.protection.bonus = Danni fisici ridotti del {amount}%
+enchantment.efficiency.bonus = Velocità di estrazione aumentata del {amount}%
+enchantment.fortune.bonus = Probabilità di bottino extra aumentata del {amount}%
+enchantment.smelting.bonus = Fonde automaticamente i blocchi estratti
+enchantment.strength.bonus = Danni dei proiettili aumentati del {amount}%
+enchantment.eagles_eye.bonus = I danni aumentano con la distanza fino al {amount}%
+enchantment.looting.bonus = Tassi di bottino aumentati del {amount}%
+enchantment.feather_falling.bonus = Danni da caduta ridotti del {amount}%
+enchantment.waterbreathing.bonus = Consumo di ossigeno ridotto del {amount}%
+enchantment.burn.bonus = Dà fuoco al bersaglio
+enchantment.freeze.bonus = Rallenta il bersaglio dopo aver colpito
+enchantment.eternal_shot.bonus = Non consuma frecce
+enchantment.pick_perfect.bonus = Lascia cadere il blocco stesso
+enchantment.thrift.bonus = Ripristina il {amount}% del mana al colpo
+enchantment.elemental_heart.bonus = Non consuma essenza
+enchantment.knockback.bonus = Respinge i bersagli
+enchantment.reflection.bonus = Riflette il {amount}% dei danni
+enchantment.absorption.bonus = Cura il {amount}% dei danni bloccati
+enchantment.fast_swim.bonus = Velocità di nuoto aumentata del {amount}%
+enchantment.night_vision.bonus = Migliora la visione al buio
+enchantment.ranged_protection.bonus = Danni da proiettile/magia ridotti del {amount}%
+enchantment.frenzy.bonus = Tasso di carica aumentato del {amount}%
+enchantment.riposte.bonus = Danni da contrattacco aumentati del {amount}%
+enchantment.coup_de_grace.bonus = Danni contro nemici storditi aumentati del {amount}%
+
+# Config UI
+config.title = Configurazione Incantesimi
+config.tab.general = Generale
+config.tab.enchantments = Incantesimi
+config.tab.recipes = Ricette
+config.button.save = Salva
+config.button.cancel = Annulla
+config.button.reset_all = Reimposta Tutto
+config.button.confirm_reset = Conferma Reimpostazione
+config.button.back = Indietro
+config.button.add_ingredient = Aggiungi Ingrediente
+config.button.reset_recipe = Reimposta Ricetta
+
+config.general.max_enchantments = Max Incantesimi Per Oggetto
+config.general.show_banner = Mostra Banner Incantesimi
+config.general.enable_glow = Abilita Bagliore Incantesimi
+config.general.table_tier = Livello Creazione Tavolo Incantesimi
+config.general.disable_crafting = Disabilita Creazione Incantesimi
+config.general.return_cleanse = Restituisci Incantesimo alla Pulizia
+config.general.table_recipe = Ricetta Tavolo Incantesimi
+config.general.upgrade_1 = Costo Aggiornamento 1 (Livello 1 -> 2)
+config.general.upgrade_2 = Costo Aggiornamento 2 (Livello 2 -> 3)
+config.general.upgrade_3 = Costo Aggiornamento 3 (Livello 3 -> 4)
+
+config.recipe.title = Ricetta
+config.recipe.ingredients = Ingredienti
+
+config.common.enabled = Abilitato
+config.common.disabled = Disabilitato
+
+config.secondary.range_speed_bonus = Bonus Raggio/Velocità
+config.secondary.quantity_bonus = Bonus Quantità
+
+config.recipe.active_title = {0} - Ingredienti
+config.recipe.crafting_tier = Livello Creazione
+
+config.message.saved = Salvato! La maggior parte delle modifiche richiede un riavvio.
+config.message.unsaved = [!] Modifiche non salvate
