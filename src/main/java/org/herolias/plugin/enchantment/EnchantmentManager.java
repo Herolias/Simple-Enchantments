@@ -330,13 +330,47 @@ public class EnchantmentManager {
              Number maxDur = item.getItem().getMaxDurability();
              Integer maxStack = item.getItem().getMaxStack();
              if (maxDur == null || maxDur.doubleValue() <= 0) {
-                 return "This enchantment requires an item with durability.";
+                 // Check if any state variant has durability (e.g. filled Watering Can)
+                 if (!hasStateVariantWithDurability(item.getItem())) {
+                     return "This enchantment requires an item with durability.";
+                 }
              }
              if (maxStack != null && maxStack > 1) {
                  return "Cannot apply durability enchantments to stackable items.";
              }
         }
         return null;
+    }
+
+    /**
+     * Checks if any state variant of an item has durability.
+     * For example, an empty Watering Can has no durability, but its filled state does.
+     *
+     * @param item The item to check
+     * @return true if any state variant has positive maxDurability
+     */
+    private boolean hasStateVariantWithDurability(@Nonnull Item item) {
+        try {
+            // Iterate all known state variants via blockToState reverse map
+            // getStateForItem() uses blockToState, but we need to check stateToBlock (forward map)
+            // Use getItemForState() with known state names — but we don't know them.
+            // Instead, iterate the asset map for items that are variants of this item.
+            // We cast to AssetMap to access the underlying map, as the interface might be generic
+            for (Item candidate : com.hypixel.hytale.server.core.asset.type.item.config.Item.getAssetMap().getAssetMap().values()) {
+                if (candidate == item) continue;
+                // Check if this item has a state that maps to the candidate
+                String stateName = item.getStateForItem(candidate.getId());
+                if (stateName != null) {
+                    Number variantDurability = candidate.getMaxDurability();
+                    if (variantDurability != null && variantDurability.doubleValue() > 0) {
+                        return true;
+                    }
+                }
+            }
+        } catch (Exception e) {
+            // Fallback: ignore errors during state variant lookup
+        }
+        return false;
     }
 
     /**

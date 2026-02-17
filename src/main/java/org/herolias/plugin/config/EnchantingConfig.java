@@ -164,13 +164,13 @@ public class EnchantingConfig {
         addScrollRecipe("Scroll_Frenzy_II", 2, "Ingredient_Fabric_Scrap_Cindercloth", 5, "Plant_Petals_Blood", 20, "Ingredient_Crystal_Cyan", 20, "Plant_Crop_Stamina1", 7);
         addScrollRecipe("Scroll_Frenzy_III", 3, "Ingredient_Fabric_Scrap_Cindercloth", 5, "Plant_Petals_Blood", 25, "Ingredient_Crystal_Cyan", 30, "Plant_Crop_Stamina1", 10);
 
-        addScrollRecipe("Scroll_Riposte_I", 1, "Ingredient_Fabric_Scrap_Cindercloth", 5, "Ingredient_Bar_Iron", 5, "Ingredient_Crystal_Yellow", 5);
-        addScrollRecipe("Scroll_Riposte_II", 2, "Ingredient_Fabric_Scrap_Cindercloth", 5, "Ingredient_Bar_Iron", 10, "Ingredient_Crystal_Yellow", 10);
-        addScrollRecipe("Scroll_Riposte_III", 3, "Ingredient_Fabric_Scrap_Cindercloth", 5, "Ingredient_Bar_Steel", 5, "Ingredient_Crystal_Yellow", 15);
+        addScrollRecipe("Scroll_Riposte_I", 1, "Ingredient_Fabric_Scrap_Cindercloth", 5, "Plant_Cactus_Flower", 5, "Ingredient_Crystal_Yellow", 15, "Ingredient_Bar_Iron", 10);
+        addScrollRecipe("Scroll_Riposte_II", 2, "Ingredient_Fabric_Scrap_Cindercloth", 5, "Plant_Cactus_Flower", 10, "Ingredient_Crystal_Yellow", 20, "Ingredient_Bar_Iron", 20);
+        addScrollRecipe("Scroll_Riposte_III", 3, "Ingredient_Fabric_Scrap_Cindercloth", 5, "Plant_Cactus_Flower", 15, "Ingredient_Crystal_Yellow", 25, "Ingredient_Bar_Iron", 30);
 
-        addScrollRecipe("Scroll_Coup_De_Grace_I", 1, "Ingredient_Fabric_Scrap_Cindercloth", 5, "Ingredient_Bar_Iron", 5, "Ingredient_Crystal_Red", 5);
-        addScrollRecipe("Scroll_Coup_De_Grace_II", 2, "Ingredient_Fabric_Scrap_Cindercloth", 5, "Ingredient_Bar_Iron", 10, "Ingredient_Crystal_Red", 10);
-        addScrollRecipe("Scroll_Coup_De_Grace_III", 3, "Ingredient_Fabric_Scrap_Cindercloth", 5, "Ingredient_Bar_Steel", 5, "Ingredient_Crystal_Red", 15);
+        addScrollRecipe("Scroll_Coup_De_Grace_I", 1, "Ingredient_Fabric_Scrap_Cindercloth", 5, "Plant_Crop_Stamina2", 3, "Ingredient_Crystal_Yellow", 15, "Ingredient_Void_Essence", 10);
+        addScrollRecipe("Scroll_Coup_De_Grace_II", 2, "Ingredient_Fabric_Scrap_Cindercloth", 5, "Plant_Crop_Stamina2", 5, "Ingredient_Crystal_Yellow", 20, "Ingredient_Void_Essence", 15);
+        addScrollRecipe("Scroll_Coup_De_Grace_III", 3, "Ingredient_Fabric_Scrap_Cindercloth", 5, "Plant_Crop_Stamina2", 7, "Ingredient_Crystal_Yellow", 25, "Ingredient_Void_Essence", 20);
 
         if (enchantingTableRecipe == null) {
             enchantingTableRecipe = new ArrayList<>();

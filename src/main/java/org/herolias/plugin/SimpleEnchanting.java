@@ -16,6 +16,7 @@ import org.herolias.plugin.enchantment.EnchantmentManager;
 import org.herolias.plugin.enchantment.EnchantmentProjectileSpeedSystem;
 import org.herolias.plugin.enchantment.EnchantmentSmeltingSystem;
 import org.herolias.plugin.enchantment.EnchantmentStaminaSystem;
+import org.herolias.plugin.enchantment.EnchantmentStateTransferSystem;
 import org.herolias.plugin.enchantment.EnchantmentFeatherFallingSystem;
 import org.herolias.plugin.enchantment.EnchantmentWaterbreathingSystem;
 import org.herolias.plugin.enchantment.EnchantmentBurnSystem;
@@ -270,6 +271,11 @@ public class SimpleEnchanting extends JavaPlugin {
             LOGGER.atWarning().log("Could not register enchantment ECS systems: " + e.getMessage());
         }
         
+        // Initialize and register the state transfer system (preserves enchantments on item state changes)
+        EnchantmentStateTransferSystem stateTransferSystem = new EnchantmentStateTransferSystem(enchantmentManager);
+        this.getEventRegistry().registerGlobal(LivingEntityInventoryChangeEvent.class, stateTransferSystem::onInventoryChange);
+        LOGGER.atInfo().log("Registered EnchantmentStateTransferSystem listener");
+
         // Initialize and register the durability system (Event Listener)
         EnchantmentDurabilitySystem durabilitySystem = new EnchantmentDurabilitySystem(enchantmentManager);
         this.getEventRegistry().registerGlobal(LivingEntityInventoryChangeEvent.class, durabilitySystem::onInventoryChange);

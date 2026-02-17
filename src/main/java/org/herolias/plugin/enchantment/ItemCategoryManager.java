@@ -426,7 +426,6 @@ public class ItemCategoryManager {
         
         // Add some example data so user sees how to use it
         defaultConfig.customItems = new java.util.LinkedHashMap<>();
-        
         java.util.Map<String, String> tensaZangetsu = new java.util.LinkedHashMap<>();
         tensaZangetsu.put("Tensa_Zangetsu", "MELEE_WEAPON");
         tensaZangetsu.put("ZangetsuShikai", "MELEE_WEAPON");
@@ -462,7 +461,7 @@ public class ItemCategoryManager {
             // Blowguns
             "Weapon_Blowgun_Tribal",
             // Spellbooks
-            "Weapon_Spellbook_Demon", "Weapon_Spellbook_Fire", "Weapon_Spellbook_Frost", "Weapon_Spellbook_Grimoire_Brown", "Weapon_Spellbook_Grimoire_Purple", "Weapon_Spellbook_Rekindle_Embers", "*Tool_Watering_Can_State_Filled_Water"
+            "Weapon_Spellbook_Demon", "Weapon_Spellbook_Fire", "Weapon_Spellbook_Frost", "Weapon_Spellbook_Grimoire_Brown", "Weapon_Spellbook_Grimoire_Purple", "Weapon_Spellbook_Rekindle_Embers"
         );
         return defaultConfig;
     }
