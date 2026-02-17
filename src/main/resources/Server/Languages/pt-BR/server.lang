@@ -6,7 +6,7 @@ benchCategories.enchantingMelee = Corpo a Corpo
 
 benchCategories.enchantingRanged = À Distância
 
-benchCategories.enchantingStaff = Magia
+benchCategories.enchantingStaff = Cajados
 
 benchCategories.enchantingShield = Escudo
 
@@ -210,25 +210,25 @@ items.Scroll_Waterbreathing_III.description = Reduz o consumo de oxigênio em 60
 
 items.Scroll_Burn_I.name = Pergaminho de Queimar
 
-items.Scroll_Burn_I.description = Incendeia o alvo e faz cair carne cozida. Não combinável com Congelamento.
+items.Scroll_Burn_I.description = Incendeia o alvo, fazendo-o derrubar carne cozida. Imcompatível com Congelamento.
 
 
 
 items.Scroll_Freeze_I.name = Pergaminho de Congelamento
 
-items.Scroll_Freeze_I.description = Aplica lentidão severa (50%) ao alvo ao acertar. Não combinável com Queimar.
+items.Scroll_Freeze_I.description = Aplica lentidão severa (50%) ao alvo ao acertar. Imcompatível com Queimar.
 
 
 
 items.Scroll_Eternal_Shot_I.name = Pergaminho de Tiro Eterno
 
-items.Scroll_Eternal_Shot_I.description = Permite atirar flechas sem consumi-las.
+items.Scroll_Eternal_Shot_I.description = Permite disparar flechas sem consumi-las.
 
 
 
 items.Scroll_Silktouch_I.name = Pergaminho de Toque de Seda
 
-items.Scroll_Silktouch_I.description = Blocos minerados caem como eles mesmos em vez de seus recursos. Não combinável com Fortuna ou Fundição.
+items.Scroll_Silktouch_I.description = Blocos minerados dropam a si mesmos em vez de seus recursos. Imcompatível com Fortuna ou Fundição.
 
 
 
@@ -414,19 +414,19 @@ enchantment.waterbreathing.description = Reduz o consumo de oxigênio em 20%.
 
 enchantment.burn.name = Queimar
 
-enchantment.burn.description = Incendeia o alvo e faz cair carne cozida. Não combinável com Congelamento.
+enchantment.burn.description = Incendeia o alvo, fazendo-o derrubar carne cozida. Imcompatível com Congelamento.
 
 enchantment.freeze.name = Congelamento
 
-enchantment.freeze.description = Aplica lentidão severa (50%) ao alvo ao acertar. Não combinável com Queimar.
+enchantment.freeze.description = Aplica lentidão severa (50%) ao alvo ao acertar. Imcompatível com Queimar.
 
 enchantment.eternal_shot.name = Tiro Eterno
 
-enchantment.eternal_shot.description = Permite atirar flechas sem consumi-las.
+enchantment.eternal_shot.description = Permite disparar flechas sem consumi-las.
 
 enchantment.pick_perfect.name = Toque de Seda
 
-enchantment.pick_perfect.description = Blocos minerados caem como eles mesmos em vez de seus recursos. Não combinável com Fortuna ou Fundição.
+enchantment.pick_perfect.description = Blocos minerados dropam a si mesmos em vez de seus recursos. Imcompatível com Fortuna ou Fundição.
 
 enchantment.thrift.name = Economia
 
@@ -543,7 +543,7 @@ enchantment.freeze.bonus = Retarda o alvo ao atingir
 enchantment.eternal_shot.bonus = Não consome flechas
 enchantment.pick_perfect.bonus = Solta o próprio bloco
 enchantment.thrift.bonus = Restaura {amount}% de mana ao atingir
-enchantment.elemental_heart.bonus = Não consome essência ao conjurar
+enchantment.elemental_heart.bonus = Não consome Essência ao conjurar
 enchantment.knockback.bonus = Empurra alvos para trás
 enchantment.reflection.bonus = Reflete {amount}% do dano
 enchantment.absorption.bonus = Cura {amount}% do dano bloqueado

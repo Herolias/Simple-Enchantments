@@ -210,13 +210,13 @@ items.Scroll_Waterbreathing_III.description = Vermindert zuurstofverbruik met 60
 
 items.Scroll_Burn_I.name = Rol van Verbranding
 
-items.Scroll_Burn_I.description = Steekt doelwit in brand en laat gekookt vlees vallen. Niet combineerbaar met Bevriezing.
+items.Scroll_Burn_I.description = Steekt doelwit in brand en laat gekookt vlees droppen. Niet compatibel met Bevriezing.
 
 
 
 items.Scroll_Freeze_I.name = Rol van Bevriezing
 
-items.Scroll_Freeze_I.description = Vertraagt doelwit sterk (50%) bij een treffer. Niet combineerbaar met Verbranding.
+items.Scroll_Freeze_I.description = Vertraagt doelwit sterk (50%) bij een treffer. Niet compatibel met Verbranding.
 
 
 
@@ -226,9 +226,9 @@ items.Scroll_Eternal_Shot_I.description = Hiermee kun je pijlen schieten zonder 
 
 
 
-items.Scroll_Silktouch_I.name = Rol van Zijdezachte Aanraking
+items.Scroll_Silktouch_I.name = Rol van Zijdeaanraking
 
-items.Scroll_Silktouch_I.description = Gedolven blokken vallen als zichzelf in plaats van hun gebruikelijke grondstoffen. Niet combineerbaar met Geluk of Smelten.
+items.Scroll_Silktouch_I.description = Gedolven blokken droppen zichzelf in plaats van hun gebruikelijke grondstoffen. Niet compatibel met Geluk of Smelten.
 
 
 
@@ -414,19 +414,19 @@ enchantment.waterbreathing.description = Vermindert zuurstofverbruik met 20%.
 
 enchantment.burn.name = Verbranding
 
-enchantment.burn.description = Steekt doelwit in brand en laat gekookt vlees vallen. Niet combineerbaar met Bevriezing.
+enchantment.burn.description = Steekt doelwit in brand en laat gekookt vlees droppen. Niet compatibel met Bevriezing.
 
 enchantment.freeze.name = Bevriezing
 
-enchantment.freeze.description = Vertraagt doelwit sterk (50%) bij een treffer. Niet combineerbaar met Verbranding.
+enchantment.freeze.description = Vertraagt doelwit sterk (50%) bij een treffer. Niet compatibel met Verbranding.
 
 enchantment.eternal_shot.name = Eeuwig Schot
 
 enchantment.eternal_shot.description = Hiermee kun je pijlen schieten zonder ze te verbruiken.
 
-enchantment.pick_perfect.name = Zijdezachte Aanraking
+enchantment.pick_perfect.name = Zijdeaanraking
 
-enchantment.pick_perfect.description = Gedolven blokken vallen als zichzelf in plaats van hun gebruikelijke grondstoffen. Niet combineerbaar met Geluk of Smelten.
+enchantment.pick_perfect.description = Gedolven blokken droppen zichzelf in plaats van hun gebruikelijke grondstoffen. Niet compatibel met Geluk of Smelten.
 
 enchantment.thrift.name = Zuinigheid
 
@@ -454,21 +454,21 @@ enchantment.fast_swim.description = Verhoogt zwemsnelheid met 25%.
 
 
 
-items.Scroll_Night_Vision_I.name = Boekrol van Nachtzicht
+items.Scroll_Night_Vision_I.name = Rol van Nachtzicht
 
 items.Scroll_Night_Vision_I.description = Verbetert het zicht in donkere omgevingen zoals grotten, 's nachts en onder water.
 
 
 
-items.Scroll_Ranged_Protection_I.name = Boekrol van Afstandsbescherming I
+items.Scroll_Ranged_Protection_I.name = Rol van Afstandsbescherming I
 
 items.Scroll_Ranged_Protection_I.description = Vermindert inkomende projectiel- en magieschade met 4% per pantseronderdeel.
 
-items.Scroll_Ranged_Protection_II.name = Boekrol van Afstandsbescherming II
+items.Scroll_Ranged_Protection_II.name = Rol van Afstandsbescherming II
 
 items.Scroll_Ranged_Protection_II.description = Vermindert inkomende projectiel- en magieschade met 8% per pantseronderdeel.
 
-items.Scroll_Ranged_Protection_III.name = Boekrol van Afstandsbescherming III
+items.Scroll_Ranged_Protection_III.name = Rol van Afstandsbescherming III
 
 items.Scroll_Ranged_Protection_III.description = Vermindert inkomende projectiel- en magieschade met 12% per pantseronderdeel.
 
@@ -485,15 +485,15 @@ enchantment.ranged_protection.description = Vermindert inkomende projectiel- en 
 
 
 
-items.Scroll_Frenzy_I.name = Geschrift der Razernij I
+items.Scroll_Frenzy_I.name = Rol van Razernij I
 
 items.Scroll_Frenzy_I.description = Verhoogt de oplaadsnelheid van de signatuurvaardigheid met 15%.
 
-items.Scroll_Frenzy_II.name = Geschrift der Razernij II
+items.Scroll_Frenzy_II.name = Rol van Razernij II
 
 items.Scroll_Frenzy_II.description = Verhoogt de oplaadsnelheid van de signatuurvaardigheid met 30%.
 
-items.Scroll_Frenzy_III.name = Geschrift der Razernij III
+items.Scroll_Frenzy_III.name = Rol van Razernij III
 
 items.Scroll_Frenzy_III.description = Verhoogt de oplaadsnelheid van de signatuurvaardigheid met 45%.
 
@@ -541,7 +541,7 @@ enchantment.waterbreathing.bonus = Zuurstofverbruik verminderd met {amount}%
 enchantment.burn.bonus = Zet doelwit in brand
 enchantment.freeze.bonus = Vertraagt doelwit bij treffer
 enchantment.eternal_shot.bonus = Verbruikt geen pijlen
-enchantment.pick_perfect.bonus = Laat het blok zelf vallen
+enchantment.pick_perfect.bonus = Dropt het blok zelf
 enchantment.thrift.bonus = Herstelt {amount}% mana bij treffer
 enchantment.elemental_heart.bonus = Verbruikt geen essentie
 enchantment.knockback.bonus = Stoot doelen terug

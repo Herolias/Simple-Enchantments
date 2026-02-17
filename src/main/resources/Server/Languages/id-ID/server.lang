@@ -22,7 +22,7 @@ customUI.enchantScrollPage.enchantment = Sihir
 
 
 
-items.Enchanting_Table.name = Meja Penyihir
+items.Enchanting_Table.name = Meja Pesona
 
 items.Enchanting_Table.description = Meja untuk membuat gulungan sihir.
 
@@ -485,21 +485,21 @@ enchantment.ranged_protection.description = Mengurangi kerusakan proyektil dan s
 
 
 
-items.Scroll_Frenzy_I.name = Gulungan Frenzy I
+items.Scroll_Frenzy_I.name = Gulungan Amukan I
 
 items.Scroll_Frenzy_I.description = Meningkatkan laju pengisian kemampuan signature sebesar 15%.
 
-items.Scroll_Frenzy_II.name = Gulungan Frenzy II
+items.Scroll_Frenzy_II.name = Gulungan Amukan II
 
 items.Scroll_Frenzy_II.description = Meningkatkan laju pengisian kemampuan signature sebesar 30%.
 
-items.Scroll_Frenzy_III.name = Gulungan Frenzy III
+items.Scroll_Frenzy_III.name = Gulungan Amukan III
 
 items.Scroll_Frenzy_III.description = Meningkatkan laju pengisian kemampuan signature sebesar 45%.
 
 
 
-enchantment.frenzy.name = Frenzy
+enchantment.frenzy.name = Amukan
 
 enchantment.frenzy.description = Meningkatkan laju pengisian kemampuan signature sebesar 15%.
 

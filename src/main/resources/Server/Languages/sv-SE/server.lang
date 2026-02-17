@@ -210,7 +210,7 @@ items.Scroll_Waterbreathing_III.description = Minskar syreförbrukningen med 60%
 
 items.Scroll_Burn_I.name = Brännrulle
 
-items.Scroll_Burn_I.description = Tänder eld på målet och får det att tappa tillagat kött. Ej kompatibel med Frysning.
+items.Scroll_Burn_I.description = Tänder eld på målet och får det att släppa tillagat kött. Kan ej kombineras med Frysning.
 
 
 
@@ -226,9 +226,9 @@ items.Scroll_Eternal_Shot_I.description = Låter dig skjuta pilar utan att förb
 
 
 
-items.Scroll_Silktouch_I.name = Silkeslen Rulle
+items.Scroll_Silktouch_I.name = Silkeslenrulle
 
-items.Scroll_Silktouch_I.description = Brutna block faller som sig själva istället för sina vanliga resurser. Ej kompatibel med Lycka eller Smältning.
+items.Scroll_Silktouch_I.description = Brutna block släpper sig själva istället för sina vanliga resurser. Kan ej kombineras med Lycka eller Smältning.
 
 
 
@@ -246,21 +246,21 @@ items.Scroll_Thrift_III.description = Återställer 60% av använd mana vid trä
 
 
 
-items.Scroll_ElementalHeart_I.name = Elementärt Hjärtrulle
+items.Scroll_ElementalHeart_I.name = Elementärhjärterulle
 
-items.Scroll_ElementalHeart_I.description = Elementärstavar förbrukar inte essens vid kast.
+items.Scroll_ElementalHeart_I.description = Elementärstavar förbrukar ingen essens vid användning.
 
 
 
-items.Scroll_Knockback_I.name = Knockbackrulle I
+items.Scroll_Knockback_I.name = Knuffrulle I
 
 items.Scroll_Knockback_I.description = Knuffar tillbaka mål vid träff.
 
-items.Scroll_Knockback_II.name = Knockbackrulle II
+items.Scroll_Knockback_II.name = Knuffrulle II
 
 items.Scroll_Knockback_II.description = Knuffar tillbaka mål längre vid träff.
 
-items.Scroll_Knockback_III.name = Knockbackrulle III
+items.Scroll_Knockback_III.name = Knuffrulle III
 
 items.Scroll_Knockback_III.description = Knuffar tillbaka mål betydligt längre vid träff.
 
@@ -414,7 +414,7 @@ enchantment.waterbreathing.description = Minskar syreförbrukningen med 20%.
 
 enchantment.burn.name = Bränna
 
-enchantment.burn.description = Tänder eld på målet och får det att tappa tillagat kött. Ej kompatibel med Frysning.
+enchantment.burn.description = Tänder eld på målet och får det att släppa tillagat kött. Kan ej kombineras med Frysning.
 
 enchantment.freeze.name = Frysning
 
@@ -426,7 +426,7 @@ enchantment.eternal_shot.description = Låter dig skjuta pilar utan att förbruk
 
 enchantment.pick_perfect.name = Silkeslen
 
-enchantment.pick_perfect.description = Brutna block faller som sig själva istället för sina vanliga resurser. Ej kompatibel med Lycka eller Smältning.
+enchantment.pick_perfect.description = Brutna block släpper sig själva istället för sina vanliga resurser. Kan ej kombineras med Lycka eller Smältning.
 
 enchantment.thrift.name = Sparsamhet
 
@@ -434,7 +434,7 @@ enchantment.thrift.description = Återställer 20% av använd mana vid träff.
 
 enchantment.elemental_heart.name = Elementärt Hjärta
 
-enchantment.elemental_heart.description = Elementärstavar förbrukar inte essens vid kast.
+enchantment.elemental_heart.description = Elementärstavar förbrukar ingen essens vid användning.
 
 enchantment.knockback.name = Knuff
 
@@ -454,21 +454,21 @@ enchantment.fast_swim.description = Ökar simhastigheten med 25%.
 
 
 
-items.Scroll_Night_Vision_I.name = Skriftrulle av Mörkerseende
+items.Scroll_Night_Vision_I.name = Mörkerseenderulle
 
 items.Scroll_Night_Vision_I.description = Förbättrar sikten i mörka miljöer som grottor, nattetid och under vatten.
 
 
 
-items.Scroll_Ranged_Protection_I.name = Skriftrulle av Avståndsskydd I
+items.Scroll_Ranged_Protection_I.name = Avståndsskyddsrulle I
 
 items.Scroll_Ranged_Protection_I.description = Minskar inkommande projektil- och magiskada med 4% per rustningsdel.
 
-items.Scroll_Ranged_Protection_II.name = Skriftrulle av Avståndsskydd II
+items.Scroll_Ranged_Protection_II.name = Avståndsskyddsrulle II
 
 items.Scroll_Ranged_Protection_II.description = Minskar inkommande projektil- och magiskada med 8% per rustningsdel.
 
-items.Scroll_Ranged_Protection_III.name = Skriftrulle av Avståndsskydd III
+items.Scroll_Ranged_Protection_III.name = Avståndsskyddsrulle III
 
 items.Scroll_Ranged_Protection_III.description = Minskar inkommande projektil- och magiskada med 12% per rustningsdel.
 
@@ -485,15 +485,15 @@ enchantment.ranged_protection.description = Minskar inkommande projektil- och ma
 
 
 
-items.Scroll_Frenzy_I.name = Raseriskrift I
+items.Scroll_Frenzy_I.name = Raserirulle I
 
 items.Scroll_Frenzy_I.description = Ökar laddningshastigheten för signaturförmågan med 15%.
 
-items.Scroll_Frenzy_II.name = Raseriskrift II
+items.Scroll_Frenzy_II.name = Raserirulle II
 
 items.Scroll_Frenzy_II.description = Ökar laddningshastigheten för signaturförmågan med 30%.
 
-items.Scroll_Frenzy_III.name = Raseriskrift III
+items.Scroll_Frenzy_III.name = Raserirulle III
 
 items.Scroll_Frenzy_III.description = Ökar laddningshastigheten för signaturförmågan med 45%.
 
@@ -541,7 +541,7 @@ enchantment.waterbreathing.bonus = Syreförbrukning minskad med {amount}%
 enchantment.burn.bonus = Sätter målet i brand
 enchantment.freeze.bonus = Sakta ner målet vid träff
 enchantment.eternal_shot.bonus = Förbrukar inga pilar
-enchantment.pick_perfect.bonus = Släpper blocket självt
+enchantment.pick_perfect.bonus = Släpper själva blocket
 enchantment.thrift.bonus = Återställer {amount}% mana vid träff
 enchantment.elemental_heart.bonus = Förbrukar ingen essens
 enchantment.knockback.bonus = Stöter bort mål
@@ -591,4 +591,4 @@ config.recipe.active_title = {0} - Ingredienser
 config.recipe.crafting_tier = Hantverksnivå
 
 config.message.saved = Sparad! De flesta ändringar kräver omstart.
-config.message.unsaved = [!] Osparat ändringar
+config.message.unsaved = [!] Osparade ändringar

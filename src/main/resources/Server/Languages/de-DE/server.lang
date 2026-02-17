@@ -458,7 +458,7 @@ items.Scroll_Silktouch_I.name = Schriftrolle der Behutsamkeit
 
 
 
-items.Scroll_Silktouch_I.description = Baue Blöcke ab, ohne sie zu verändern. Nicht kombinierbar mit Glück oder Schmelzen.
+items.Scroll_Silktouch_I.description = Baut den Block selbst ab, anstatt seiner üblichen Ressourcen. Nicht kombinierbar mit Glück oder Schmelzen.
 
 
 
@@ -590,7 +590,7 @@ items.Scroll_Absorption_III.description = Heilt den Verteidiger um 30% des geblo
 
 
 
-items.Scroll_FastSwim_I.name = Schriftrolle des Flossenschwimmens I
+items.Scroll_FastSwim_I.name = Schriftrolle des Schnellschwimmens I
 
 
 
@@ -598,7 +598,7 @@ items.Scroll_FastSwim_I.description = Erhöht die Schwimmgeschwindigkeit um 25%.
 
 
 
-items.Scroll_FastSwim_II.name = Schriftrolle des Flossenschwimmens II
+items.Scroll_FastSwim_II.name = Schriftrolle des Schnellschwimmens II
 
 
 
@@ -606,7 +606,7 @@ items.Scroll_FastSwim_II.description = Erhöht die Schwimmgeschwindigkeit um 50%
 
 
 
-items.Scroll_FastSwim_III.name = Schriftrolle des Flossenschwimmens III
+items.Scroll_FastSwim_III.name = Schriftrolle des Schnellschwimmens III
 
 
 
@@ -854,7 +854,7 @@ enchantment.pick_perfect.name = Behutsamkeit
 
 
 
-enchantment.pick_perfect.description = Baue Blöcke ab, ohne sie zu verändern. Nicht kombinierbar mit Glück oder Schmelzen.
+enchantment.pick_perfect.description = Baut Blöcke behutsam ab, sodass sie sich selbst droppen. Nicht kombinierbar mit Glück oder Schmelzen.
 
 
 
@@ -898,7 +898,7 @@ enchantment.absorption.description = Heilt den Verteidiger um 10% des geblockten
 
 
 
-enchantment.fast_swim.name = Flossenschwimmen
+enchantment.fast_swim.name = Schnellschwimmen
 
 
 
