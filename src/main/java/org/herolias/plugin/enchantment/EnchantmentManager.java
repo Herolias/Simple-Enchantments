@@ -123,33 +123,12 @@ public class EnchantmentManager {
     private final ConcurrentHashMap<Integer, ProjectileEnchantmentData> projectileEnchantmentsByNetworkId = new ConcurrentHashMap<>();
     private final SmeltingRecipeRegistry smeltingRecipeRegistry = new SmeltingRecipeRegistry();
     private final CookingRecipeRegistry cookingRecipeRegistry = new CookingRecipeRegistry();
-    
-    // Global cache of enchantment data hashes for reverse lookup (used by TranslationManager)
-    // Key: 8-char hex hash, Value: EnchantmentData
-    public static final ConcurrentHashMap<String, EnchantmentData> HASH_CACHE = new ConcurrentHashMap<>();
-    
+
     public EnchantmentManager(SimpleEnchanting plugin) {
         LOGGER.atInfo().log("EnchantmentManager initialized (metadata-based storage)");
         ItemCategoryManager.getInstance().loadConfiguration();
     }
-    
-    /**
-     * Registers enchantment data in the global hash cache.
-     * Should be called whenever a stable hash is computed/used.
-     */
-    public void registerEnchantmentData(EnchantmentData data) {
-        if (data != null && !data.isEmpty()) {
-            HASH_CACHE.put(data.computeStableHash(), data);
-        }
-    }
 
-    /**
-     * Retrieves EnchanmentData by its hash.
-     */
-    public EnchantmentData getEnchantmentDataByHash(String hash) {
-        return HASH_CACHE.get(hash);
-    }
-    
     /**
      * Parses EnchantmentData from a raw metadata string (JSON/BSON string).
      */
@@ -1692,55 +1671,5 @@ public class EnchantmentManager {
         if (itemEntities.length > 0) {
             commandBuffer.addEntities(itemEntities, com.hypixel.hytale.component.AddReason.SPAWN);
         }
-    }
-
-    /**
-     * Generates a localized description string for a set of enchantments.
-     * Used by EnchantmentTranslationManager to send per-player translations.
-     */
-    public String getLocalizedEnchantmentDescription(EnchantmentData data, String locale) {
-        if (data == null || data.isEmpty()) return "";
-
-        StringBuilder sb = new StringBuilder();
-        // Header
-        sb.append("<color is=\"#C8A2FF\">Enchantments:</color>"); 
-
-        for (java.util.Map.Entry<EnchantmentType, Integer> entry : data.getAllEnchantments().entrySet()) {
-            EnchantmentType type = entry.getKey();
-            int level = entry.getValue();
-
-            if (!isEnchantmentEnabled(type)) continue;
-
-            sb.append("\n"); // Newline separator
-            
-            String color = type.isLegendary() ? "#FFAA00" : "#AA55FF";
-            sb.append("<color is=\"").append(color).append("\">");
-            sb.append("\u2022 "); // Bullet
-            
-            String nameKey = type.getNameKey();
-            String name = resolveTranslation(nameKey, locale, type.getDisplayName());
-            sb.append(name).append(" ").append(EnchantmentType.toRoman(level));
-            sb.append("</color>");
-
-            String bonus = type.getBonusDescription(level, locale);
-            if (bonus != null && !bonus.isEmpty()) {
-                sb.append(" <color is=\"#AAAAAA\">");
-                sb.append(bonus);
-                sb.append("</color>");
-            }
-        }
-        return sb.toString();
-    }
-    
-    // Helper to resolve translation
-    private String resolveTranslation(String key, String locale, String def) {
-        try {
-            com.hypixel.hytale.server.core.modules.i18n.I18nModule i18n = com.hypixel.hytale.server.core.modules.i18n.I18nModule.get();
-            if (i18n != null) {
-                String val = i18n.getMessage(locale != null ? locale : "en-US", key);
-                if (val != null) return val;
-            }
-        } catch (Exception ignored) {}
-        return def;
     }
 }

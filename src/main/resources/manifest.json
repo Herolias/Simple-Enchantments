@@ -14,10 +14,8 @@
         }
     ],
     "Website": "https://discord.gg/7XQAnUfQfM",
-    "ServerVersion": "2026.02.17-255364b8e",
-    "Dependencies": {
-        
-    },
+    "ServerVersion": "2026.02.18-f3b8fff95",
+    "Dependencies": {},
     "OptionalDependencies": {
         "org.herolias:DynamicTooltipsLib": "*"
     },

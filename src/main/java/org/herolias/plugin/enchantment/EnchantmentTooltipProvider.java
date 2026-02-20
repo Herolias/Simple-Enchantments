@@ -54,6 +54,13 @@ public class EnchantmentTooltipProvider implements TooltipProvider {
     @Nullable
     @Override
     public TooltipData getTooltipData(@Nonnull String itemId, @Nullable String metadata) {
+        return getTooltipData(itemId, metadata, "en-US");
+    }
+
+    @Nullable
+    @Override
+    public TooltipData getTooltipData(@Nonnull String itemId, @Nullable String metadata,
+                                      @Nullable String locale) {
         if (metadata == null || metadata.isEmpty()) return null;
 
         // Quick string-contains check to avoid JSON parsing for items without enchantments
@@ -65,12 +72,80 @@ public class EnchantmentTooltipProvider implements TooltipProvider {
         // Use the stable hash from EnchantmentData for virtual ID generation
         String stableHash = data.computeStableHash();
 
-        // Use translation key for dynamic server-side localization
-        // The EnchantmentTranslationManager handles sending the translation update to the client
-        return TooltipData.builder()
-                .descriptionTranslationKey("enchantment.combo." + stableHash)
-                .hashInput(stableHash)
-                .build();
+        // Build additive lines in the player's locale.
+        // The locale comes from processSection → compose → getTooltipData.
+        String effectiveLocale = (locale != null && !locale.isEmpty()) ? locale : "en-US";
+        TooltipData.Builder builder = TooltipData.builder()
+                .hashInput(stableHash);
+
+        List<String> lines = buildEnchantmentLines(data, effectiveLocale);
+        for (String line : lines) {
+            builder.addLine(line);
+        }
+
+        return builder.build();
+    }
+
+    /**
+     * Builds formatted enchantment lines for the tooltip.
+     * Each entry is a separate additive line with Hytale markup.
+     *
+     * @param data   the enchantment data to format
+     * @param locale the locale for translation resolution
+     * @return list of formatted lines (header + one per enchantment)
+     */
+    @Nonnull
+    public List<String> buildEnchantmentLines(@Nonnull EnchantmentData data, @Nonnull String locale) {
+        List<String> lines = new ArrayList<>();
+
+        // Header line
+        lines.add("<color is=\"" + HEADER_COLOR + "\">Enchantments:</color>");
+
+        for (Map.Entry<EnchantmentType, Integer> entry : data.getAllEnchantments().entrySet()) {
+            EnchantmentType type = entry.getKey();
+            int level = entry.getValue();
+
+            if (!enchantmentManager.isEnchantmentEnabled(type)) continue;
+
+            StringBuilder line = new StringBuilder();
+            String color = type.isLegendary() ? LEGENDARY_COLOR : ENCHANTMENT_COLOR;
+            line.append("<color is=\"").append(color).append("\">");
+            line.append(ENCHANT_SYMBOL);
+
+            // Resolve the enchantment name via I18n
+            String nameKey = type.getNameKey();
+            String name = resolveTranslation(nameKey, locale, type.getDisplayName());
+            line.append(name).append(" ").append(EnchantmentType.toRoman(level));
+            line.append("</color>");
+
+            // Append bonus description
+            String bonus = type.getBonusDescription(level, locale);
+            if (bonus != null && !bonus.isEmpty()) {
+                line.append(" <color is=\"").append(BONUS_COLOR).append("\">");
+                line.append(bonus);
+                line.append("</color>");
+            }
+
+            lines.add(line.toString());
+        }
+
+        return lines;
+    }
+
+    /**
+     * Resolves a translation key for the given locale, falling back to the default value.
+     */
+    @Nonnull
+    private static String resolveTranslation(@Nonnull String key, @Nonnull String locale, @Nonnull String defaultValue) {
+        try {
+            com.hypixel.hytale.server.core.modules.i18n.I18nModule i18n =
+                    com.hypixel.hytale.server.core.modules.i18n.I18nModule.get();
+            if (i18n != null) {
+                String resolved = i18n.getMessage(locale, key);
+                if (resolved != null) return resolved;
+            }
+        } catch (Exception ignored) {}
+        return defaultValue;
     }
 
     /**
