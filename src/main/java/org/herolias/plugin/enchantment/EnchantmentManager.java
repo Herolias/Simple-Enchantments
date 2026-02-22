@@ -59,6 +59,7 @@ public class EnchantmentManager {
     private static final double EAGLES_EYE_MAX_DISTANCE = 50.0;
     private final ConcurrentHashMap<UUID, ProjectileEnchantmentData> projectileEnchantmentsByUuid = new ConcurrentHashMap<>();
     private final ConcurrentHashMap<UUID, ProjectileEnchantmentData> burnEnchantmentsByEntityUuid = new ConcurrentHashMap<>();
+    private final SimpleEnchanting plugin;
 
     // Reflection Cache
     private static Field CHANGE_STAT_ENTITY_STAT_ASSETS;
@@ -125,8 +126,13 @@ public class EnchantmentManager {
     private final CookingRecipeRegistry cookingRecipeRegistry = new CookingRecipeRegistry();
 
     public EnchantmentManager(SimpleEnchanting plugin) {
+        this.plugin = plugin;
         LOGGER.atInfo().log("EnchantmentManager initialized (metadata-based storage)");
         ItemCategoryManager.getInstance().loadConfiguration();
+    }
+
+    public SimpleEnchanting getPlugin() {
+        return plugin;
     }
 
     /**
@@ -1174,7 +1180,7 @@ public class EnchantmentManager {
      * Used for visual notifications (Title/Action Bar).
      */
     @javax.annotation.Nullable
-    public com.hypixel.hytale.server.core.Message getEnchantmentDisplayMessage(@javax.annotation.Nonnull ItemStack item) {
+    public com.hypixel.hytale.server.core.Message getEnchantmentDisplayMessage(@javax.annotation.Nonnull ItemStack item, @javax.annotation.Nonnull com.hypixel.hytale.server.core.universe.PlayerRef playerRef) {
         EnchantmentData data = getEnchantmentsFromItem(item);
         if (data.isEmpty()) {
             return null;
@@ -1196,7 +1202,8 @@ public class EnchantmentManager {
         for (int i = 0; i < enabledEnchants.size(); i++) {
             java.util.Map.Entry<EnchantmentType, Integer> entry = enabledEnchants.get(i);
             
-            com.hypixel.hytale.server.core.Message part = com.hypixel.hytale.server.core.Message.translation(entry.getKey().getNameKey())
+            String lang = getPlugin().getUserSettingsManager().getLanguage(playerRef.getUuid());
+            com.hypixel.hytale.server.core.Message part = getPlugin().getLanguageManager().getMessage(entry.getKey().getNameKey(), lang, playerRef.getLanguage())
                      .insert(com.hypixel.hytale.server.core.Message.raw(" " + EnchantmentType.toRoman(entry.getValue())));
             
             if (msg == null) {

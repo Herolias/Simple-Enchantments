@@ -565,6 +565,10 @@ config.button.confirm_reset = Confirmer Réinitialisation
 config.button.back = Retour
 config.button.add_ingredient = Ajouter Ingrédient
 config.button.reset_recipe = Réinitialiser Recette
+config.button.edit = Modifier
+config.button.edit_recipe = Modifier la Recette
+config.button.reset = Réinitialiser
+config.button.change = Changer
 
 config.general.max_enchantments = Max Enchantements Par Objet
 config.general.show_banner = Afficher Bannière d'Enchantement
@@ -588,6 +592,7 @@ config.secondary.quantity_bonus = Bonus Quantité
 
 config.recipe.active_title = {0} - Ingrédients
 config.recipe.crafting_tier = Niveau de Craft
+config.recipe.tier_label = Débloqué au niveau de la table
 
 config.message.saved = Sauvegardé ! La plupart des changements nécessitent un redémarrage.
 config.message.unsaved = [!] Changements non sauvegardés

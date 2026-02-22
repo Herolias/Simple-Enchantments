@@ -7,7 +7,7 @@ Group {
   Padding: (Horizontal: 12, Vertical: 6);
 
   Label #SettingName {
-    Anchor: (Width: 220);
+    Anchor: (Width: 600);
     Style: (
       FontSize: 14,
       VerticalAlignment: Center
@@ -20,7 +20,7 @@ Group {
 
   TextButton #ResetBtn {
     Style: $C.@TertiaryTextButtonStyle;
-    Anchor: (Width: 70, Height: 28, Right: 8);
+    Anchor: (Width: 120, Height: 28, Right: 8);
     Padding: (Horizontal: 4);
     Text: "Reset";
     TooltipText: "Reset to default";

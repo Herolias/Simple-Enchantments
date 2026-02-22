@@ -57,7 +57,8 @@ public class CleansingScrollElement extends ChoiceElement {
     ) {
         commandBuilder.append("#ElementList", "Pages/EnchantScrollElement.ui");
         commandBuilder.set(selector + " #Icon.ItemId", this.itemStack.getItemId().toString());
-        commandBuilder.set(selector + " #Name.TextSpans", Message.translation(this.itemStack.getItem().getTranslationKey()));
+        String lang = enchantmentManager.getPlugin().getUserSettingsManager().getLanguage(playerRef.getUuid());
+        commandBuilder.set(selector + " #Name.TextSpans", enchantmentManager.getPlugin().getLanguageManager().getMessage(this.itemStack.getItem().getTranslationKey(), lang, playerRef.getLanguage()));
 
         int enchantCount = enchantmentData.getAllEnchantments().size();
         String detail = enchantCount + " enchantment" + (enchantCount > 1 ? "s" : "");

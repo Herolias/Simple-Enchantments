@@ -119,7 +119,7 @@ public class EnchantmentTooltipProvider implements TooltipProvider {
             line.append("</color>");
 
             // Append bonus description
-            String bonus = type.getBonusDescription(level, locale);
+            String bonus = type.getBonusDescription(level, "default", locale);
             if (bonus != null && !bonus.isEmpty()) {
                 line.append(" <color is=\"").append(BONUS_COLOR).append("\">");
                 line.append(bonus);
@@ -138,11 +138,12 @@ public class EnchantmentTooltipProvider implements TooltipProvider {
     @Nonnull
     private static String resolveTranslation(@Nonnull String key, @Nonnull String locale, @Nonnull String defaultValue) {
         try {
-            com.hypixel.hytale.server.core.modules.i18n.I18nModule i18n =
-                    com.hypixel.hytale.server.core.modules.i18n.I18nModule.get();
-            if (i18n != null) {
-                String resolved = i18n.getMessage(locale, key);
-                if (resolved != null) return resolved;
+            org.herolias.plugin.SimpleEnchanting plugin = org.herolias.plugin.SimpleEnchanting.getInstance();
+            if (plugin != null) {
+                // The keys in LanguageManager do not have the "server." prefix!
+                String rawKey = key.startsWith("server.") ? key.substring(7) : key;
+                String resolved = plugin.getLanguageManager().getRawMessage(rawKey, "default", locale);
+                if (resolved != null && !resolved.equals(rawKey)) return resolved;
             }
         } catch (Exception ignored) {}
         return defaultValue;

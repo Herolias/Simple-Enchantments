@@ -111,4 +111,24 @@ public class UserSettingsManager {
         settings.showEnchantmentBanner = show;
         saveSettings();
     }
+
+    /**
+     * Gets the language preference for a player.
+     */
+    public String getLanguage(UUID playerUuid) {
+        UserSettings settings = getSettings(playerUuid);
+        if (settings.language != null) {
+            return settings.language;
+        }
+        return "default";
+    }
+
+    /**
+     * Updates and saves the language preference for a player.
+     */
+    public void setLanguage(UUID playerUuid, String language) {
+        UserSettings settings = getSettings(playerUuid);
+        settings.language = language;
+        saveSettings();
+    }
 }

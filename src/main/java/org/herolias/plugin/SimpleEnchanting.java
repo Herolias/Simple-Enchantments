@@ -96,6 +96,7 @@ public class SimpleEnchanting extends JavaPlugin {
     private boolean tooltipsEnabled;
     private org.herolias.plugin.config.ConfigManager configManager;
     private org.herolias.plugin.config.UserSettingsManager userSettingsManager;
+    private org.herolias.plugin.lang.LanguageManager languageManager;
 
     public SimpleEnchanting(@Nonnull JavaPluginInit init) {
         super(init);
@@ -118,6 +119,9 @@ public class SimpleEnchanting extends JavaPlugin {
         // Initialize User Settings
         this.userSettingsManager = new org.herolias.plugin.config.UserSettingsManager(new java.io.File("config"), this.configManager);
         this.userSettingsManager.loadSettings();
+        
+        // Initialize Language Manager
+        this.languageManager = new org.herolias.plugin.lang.LanguageManager();
         
         // If fresh install, skip the welcome message (users installing now likely know about tooltips or read the mod page)
         if (isFreshInstall) {
@@ -318,6 +322,11 @@ public class SimpleEnchanting extends JavaPlugin {
         // Register ScrollDescriptionManager to send global translation updates on join
         // Using PlayerReadyEvent as it ensures the player is fully connected (similar to WelcomeListener)
         this.getEventRegistry().registerGlobal(PlayerReadyEvent.class, event -> {
+            com.hypixel.hytale.server.core.universe.PlayerRef playerRef = com.hypixel.hytale.server.core.universe.Universe.get().getPlayer(event.getPlayer().getUuid());
+            if (playerRef != null) {
+                String langCode = userSettingsManager.getLanguage(playerRef.getUuid());
+                languageManager.sendUpdatePacket(playerRef, langCode);
+            }
             org.herolias.plugin.enchantment.ScrollDescriptionManager.sendUpdatePacket(event.getPlayer());
         });
         LOGGER.atInfo().log("Registered ScrollDescriptionManager listener");
@@ -447,5 +456,9 @@ public class SimpleEnchanting extends JavaPlugin {
 
     public org.herolias.plugin.config.UserSettingsManager getUserSettingsManager() {
         return userSettingsManager;
+    }
+
+    public org.herolias.plugin.lang.LanguageManager getLanguageManager() {
+        return languageManager;
     }
 }

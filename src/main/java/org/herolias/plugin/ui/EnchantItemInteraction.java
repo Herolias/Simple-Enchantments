@@ -57,8 +57,13 @@ public class EnchantItemInteraction extends ChoiceInteraction {
 
         int targetLevel = Math.max(1, Math.min(this.level, enchantmentType.getMaxLevel()));
         ItemCategory category = enchantmentManager.categorizeItem(itemStack);
+        org.herolias.plugin.lang.LanguageManager languageManager = enchantmentManager.getPlugin().getLanguageManager();
+        String lang = enchantmentManager.getPlugin().getUserSettingsManager().getLanguage(playerRef.getUuid());
+        String clientLang = playerRef.getLanguage();
+
         if (!enchantmentType.canApplyTo(category)) {
-            playerRef.sendMessage(Message.raw("That item cannot be enchanted with " + enchantmentType.getDisplayName() + "."));
+            String translatedName = languageManager.getRawMessage(enchantmentType.getNameKey(), lang, clientLang);
+            playerRef.sendMessage(Message.raw("That item cannot be enchanted with " + translatedName + "."));
             pageManager.setPage(ref, store, Page.None);
             return;
         }
@@ -66,7 +71,8 @@ public class EnchantItemInteraction extends ChoiceInteraction {
         EnchantmentData data = enchantmentManager.getEnchantmentsFromItem(itemStack);
         int currentLevel = data.getLevel(enchantmentType);
         if (currentLevel >= targetLevel) {
-            playerRef.sendMessage(Message.raw("That item already has " + enchantmentType.getFormattedName(currentLevel) + "."));
+            String translatedName = languageManager.getRawMessage(enchantmentType.getNameKey(), lang, clientLang) + " " + EnchantmentType.toRoman(currentLevel);
+            playerRef.sendMessage(Message.raw("That item already has " + translatedName + "."));
             pageManager.setPage(ref, store, Page.None);
             return;
         }
@@ -99,8 +105,9 @@ public class EnchantItemInteraction extends ChoiceInteraction {
             return;
         }
 
-        Message itemName = Message.translation(enchantedItem.getItem().getTranslationKey());
-        Message appliedMessage = Message.raw("Applied " + enchantmentType.getFormattedName(targetLevel) + " to ").insert(itemName);
+        Message itemName = languageManager.getMessage(enchantedItem.getItem().getTranslationKey(), lang, clientLang);
+        String translatedName = languageManager.getRawMessage(enchantmentType.getNameKey(), lang, clientLang) + " " + EnchantmentType.toRoman(targetLevel);
+        Message appliedMessage = Message.raw("Applied " + translatedName + " to ").insert(itemName);
         playerRef.sendMessage(appliedMessage);
         pageManager.setPage(ref, store, Page.None);
     }

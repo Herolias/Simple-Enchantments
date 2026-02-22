@@ -566,6 +566,10 @@ config.button.confirm_reset = Подтвердить Сброс
 config.button.back = Назад
 config.button.add_ingredient = Добавить Ингредиент
 config.button.reset_recipe = Сбросить Рецепт
+config.button.edit = Редактировать
+config.button.edit_recipe = Редактировать Рецепт
+config.button.reset = Сбросить
+config.button.change = Изменить
 
 config.general.max_enchantments = Макс. Зачарований На Предмет
 config.general.show_banner = Показать Баннер Зачарований
@@ -589,6 +593,7 @@ config.secondary.quantity_bonus = Бонус Количества
 
 config.recipe.active_title = {0} - Ингредиенты
 config.recipe.crafting_tier = Уровень Крафта
+config.recipe.tier_label = Разблокируется на уровне стола
 
 config.message.saved = Сохранено! Большинство изменений требуют перезапуска.
 config.message.unsaved = [!] Несохраненные изменения

@@ -138,7 +138,7 @@ public class EnchantmentSlotTracker implements Runnable {
         }
 
         ItemStack item = player.getInventory().getHotbar().getItemStack(slot);
-        Message displayMessage = enchantmentManager.getEnchantmentDisplayMessage(item);
+        Message displayMessage = enchantmentManager.getEnchantmentDisplayMessage(item, playerRef);
 
         if (displayMessage != null) {
             EventTitleUtil.hideEventTitleFromPlayer(playerRef, 0.0f);

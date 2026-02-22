@@ -7,7 +7,7 @@ Group {
   Padding: (Horizontal: 12, Vertical: 6);
 
   Label #SettingName {
-    Anchor: (Width: 390);
+    Anchor: (Width: 700);
     Style: (
       FontSize: 14,
       VerticalAlignment: Center

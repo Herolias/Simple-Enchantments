@@ -566,6 +566,10 @@ config.button.confirm_reset = Konfirmasi Atur Ulang
 config.button.back = Kembali
 config.button.add_ingredient = Tambah Bahan
 config.button.reset_recipe = Atur Ulang Resep
+config.button.edit = Edit
+config.button.edit_recipe = Edit Resep
+config.button.reset = Atur Ulang
+config.button.change = Ubah
 
 config.general.max_enchantments = Maks Sihir Per Item
 config.general.show_banner = Tampilkan Spanduk Sihir
@@ -589,6 +593,7 @@ config.secondary.quantity_bonus = Bonus Jumlah
 
 config.recipe.active_title = {0} - Bahan
 config.recipe.crafting_tier = Tingkat Kerajinan
+config.recipe.tier_label = Terbuka pada Tingkat Meja
 
 config.message.saved = Disimpan! Sebagian besar perubahan memerlukan restart.
 config.message.unsaved = [!] Perubahan belum disimpan

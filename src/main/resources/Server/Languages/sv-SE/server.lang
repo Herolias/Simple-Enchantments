@@ -566,6 +566,10 @@ config.button.confirm_reset = Bekräfta Återställning
 config.button.back = Tillbaka
 config.button.add_ingredient = Lägg Till Ingrediens
 config.button.reset_recipe = Återställ Recept
+config.button.edit = Redigera
+config.button.edit_recipe = Redigera Recept
+config.button.reset = Återställ
+config.button.change = Ändra
 
 config.general.max_enchantments = Max Förtrollningar Per Föremål
 config.general.show_banner = Visa Förtrollningsbanner
@@ -589,6 +593,7 @@ config.secondary.quantity_bonus = Mängdbonus
 
 config.recipe.active_title = {0} - Ingredienser
 config.recipe.crafting_tier = Hantverksnivå
+config.recipe.tier_label = Låses upp vid Bordsnivå
 
 config.message.saved = Sparad! De flesta ändringar kräver omstart.
 config.message.unsaved = [!] Osparade ändringar

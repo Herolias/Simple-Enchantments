@@ -566,6 +566,10 @@ config.button.confirm_reset = Conferma Reimpostazione
 config.button.back = Indietro
 config.button.add_ingredient = Aggiungi Ingrediente
 config.button.reset_recipe = Reimposta Ricetta
+config.button.edit = Modifica
+config.button.edit_recipe = Modifica Ricetta
+config.button.reset = Reimposta
+config.button.change = Cambia
 
 config.general.max_enchantments = Max Incantesimi Per Oggetto
 config.general.show_banner = Mostra Banner Incantesimi
@@ -589,6 +593,7 @@ config.secondary.quantity_bonus = Bonus Quantità
 
 config.recipe.active_title = {0} - Ingredienti
 config.recipe.crafting_tier = Livello Creazione
+config.recipe.tier_label = Si sblocca al Livello del Tavolo
 
 config.message.saved = Salvato! La maggior parte delle modifiche richiede un riavvio.
 config.message.unsaved = [!] Modifiche non salvate

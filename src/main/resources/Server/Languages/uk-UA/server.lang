@@ -566,6 +566,10 @@ config.button.confirm_reset = Підтвердити Скидання
 config.button.back = Назад
 config.button.add_ingredient = Додати Інгредієнт
 config.button.reset_recipe = Скинути Рецепт
+config.button.edit = Редагувати
+config.button.edit_recipe = Редагувати Рецепт
+config.button.reset = Скинути
+config.button.change = Змінити
 
 config.general.max_enchantments = Макс. Чар На Предмет
 config.general.show_banner = Показати Банер Чар
@@ -589,6 +593,7 @@ config.secondary.quantity_bonus = Бонус Кількості
 
 config.recipe.active_title = {0} - Інгредієнти
 config.recipe.crafting_tier = Рівень Крафту
+config.recipe.tier_label = Розблоковується на рівні столу
 
 config.message.saved = Збережено! Більшість змін вимагають перезапуску.
 config.message.unsaved = [!] Незбережені зміни

@@ -3,12 +3,11 @@ $C = "../Common.ui";
 $C.@PageOverlay {}
 
 $C.@DecoratedContainer {
-  Anchor: (Width: 900, Height: 600);
+  Anchor: (Width: 1050, Height: 700);
 
   #Title {
     Group {
-      $C.@Title {
-        @Text = %server.customUI.enchantConfigPage.title;
+      $C.@Title #PageTitle {
       }
     }
   }

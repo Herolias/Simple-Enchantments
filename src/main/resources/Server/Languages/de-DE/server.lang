@@ -1068,6 +1068,10 @@ config.button.confirm_reset = Zurücksetzen bestätigen
 config.button.back = Zurück
 config.button.add_ingredient = Zutat hinzufügen
 config.button.reset_recipe = Rezept zurücksetzen
+config.button.edit = Bearbeiten
+config.button.edit_recipe = Rezept bearbeiten
+config.button.reset = Zurücksetzen
+config.button.change = Ändern
 
 config.general.max_enchantments = Max. Verzauberungen pro Gegenstand
 config.general.show_banner = Verzauberungsbanner anzeigen
@@ -1091,6 +1095,7 @@ config.secondary.quantity_bonus = Mengenbonus
 
 config.recipe.active_title = {0} - Zutaten
 config.recipe.crafting_tier = Crafting Rang
+config.recipe.tier_label = Freigeschaltet ab Tisch-Stufe
 
 config.message.saved = Gespeichert! Die meisten Änderungen erfordern einen Neustart.
 config.message.unsaved = [!] Ungespeicherte Änderungen

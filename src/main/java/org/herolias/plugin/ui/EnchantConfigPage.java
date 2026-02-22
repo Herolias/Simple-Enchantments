@@ -17,6 +17,8 @@ import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.logger.HytaleLogger;
 import org.herolias.plugin.config.ConfigManager;
 import org.herolias.plugin.config.EnchantingConfig;
+import org.herolias.plugin.config.UserSettingsManager;
+import org.herolias.plugin.lang.LanguageManager;
 import org.herolias.plugin.enchantment.EnchantmentType;
 import org.herolias.plugin.SimpleEnchanting;
 
@@ -47,6 +49,9 @@ public class EnchantConfigPage extends InteractiveCustomUIPage<EnchantConfigPage
     private static final String TAB_RECIPES = "recipes";
     
     private final ConfigManager configManager;
+    private final UserSettingsManager userSettingsManager;
+    private final LanguageManager languageManager;
+    private final String lang;
     private final EnchantingConfig workingConfig;
     
     private String currentTab = TAB_GENERAL;
@@ -100,8 +105,8 @@ public class EnchantConfigPage extends InteractiveCustomUIPage<EnchantConfigPage
         // ENCHANTMENT_SECONDARY_MULTIPLIERS.put(EnchantmentType.STRENGTH, "strengthRangeMultiplierPerLevel");
         ENCHANTMENT_SECONDARY_MULTIPLIERS.put(EnchantmentType.LOOTING, "lootingQuantityMultiplierPerLevel");
 
-        SECONDARY_MULTIPLIER_LABELS.put("strengthRangeMultiplierPerLevel", "server.config.secondary.range_speed_bonus");
-        SECONDARY_MULTIPLIER_LABELS.put("lootingQuantityMultiplierPerLevel", "server.config.secondary.quantity_bonus");
+        SECONDARY_MULTIPLIER_LABELS.put("strengthRangeMultiplierPerLevel", "config.secondary.range_speed_bonus");
+        SECONDARY_MULTIPLIER_LABELS.put("lootingQuantityMultiplierPerLevel", "config.secondary.quantity_bonus");
         
         // ENCHANTMENT_SECONDARY_MULTIPLIERS.put(EnchantmentType.EFFICIENCY, "efficiencySwingSpeedMultiplier");
         // SECONDARY_MULTIPLIER_LABELS.put("efficiencySwingSpeedMultiplier", "Swing Speed Bonus");
@@ -125,9 +130,13 @@ public class EnchantConfigPage extends InteractiveCustomUIPage<EnchantConfigPage
         return 0.001;
     }
 
-    public EnchantConfigPage(@Nonnull PlayerRef playerRef, @Nonnull ConfigManager configManager) {
+    public EnchantConfigPage(@Nonnull PlayerRef playerRef, @Nonnull ConfigManager configManager, 
+                             @Nonnull UserSettingsManager userSettingsManager, @Nonnull LanguageManager languageManager) {
         super(playerRef, CustomPageLifetime.CanDismiss, EnchantConfigPageEventData.CODEC);
         this.configManager = configManager;
+        this.userSettingsManager = userSettingsManager;
+        this.languageManager = languageManager;
+        this.lang = userSettingsManager.getLanguage(playerRef.getUuid());
         // Create a working copy of the config for editing
         this.workingConfig = cloneConfig(configManager.getConfig());
     }
@@ -202,6 +211,8 @@ public class EnchantConfigPage extends InteractiveCustomUIPage<EnchantConfigPage
     public void build(@Nonnull Ref<EntityStore> ref, @Nonnull UICommandBuilder commandBuilder, 
                       @Nonnull UIEventBuilder eventBuilder, @Nonnull Store<EntityStore> store) {
         commandBuilder.append("Pages/EnchantConfigPage.ui");
+        
+        commandBuilder.set("#PageTitle.TextSpans", languageManager.getMessage("customUI.enchantConfigPage.title", lang, this.playerRef.getLanguage()));
         
         // Tab buttons
         eventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#TabGeneral", 
@@ -464,6 +475,15 @@ public class EnchantConfigPage extends InteractiveCustomUIPage<EnchantConfigPage
         commandBuilder.set("#TabGeneral.Style", TAB_GENERAL.equals(currentTab) ? BUTTON_STYLE_SELECTED : BUTTON_STYLE);
         commandBuilder.set("#TabEnchantments.Style", TAB_ENCHANTMENTS.equals(currentTab) ? BUTTON_STYLE_SELECTED : BUTTON_STYLE);
         commandBuilder.set("#TabRecipes.Style", TAB_RECIPES.equals(currentTab) ? BUTTON_STYLE_SELECTED : BUTTON_STYLE);
+        
+        commandBuilder.set("#TabGeneral.TextSpans", languageManager.getMessage("customUI.enchantConfigPage.tabGeneral", lang, this.playerRef.getLanguage()));
+        commandBuilder.set("#TabEnchantments.TextSpans", languageManager.getMessage("customUI.enchantConfigPage.tabEnchantments", lang, this.playerRef.getLanguage()));
+        commandBuilder.set("#TabRecipes.TextSpans", languageManager.getMessage("customUI.enchantConfigPage.tabRecipes", lang, this.playerRef.getLanguage()));
+        
+        commandBuilder.set("#SaveButton.TextSpans", languageManager.getMessage("customUI.enchantConfigPage.save", lang, this.playerRef.getLanguage()));
+        commandBuilder.set("#CancelButton.TextSpans", languageManager.getMessage("customUI.enchantConfigPage.cancel", lang, this.playerRef.getLanguage()));
+        commandBuilder.set("#ResetAllButton.TextSpans", languageManager.getMessage("config.button.reset_all", lang, this.playerRef.getLanguage()));
+        commandBuilder.set("#ConfirmResetButton.TextSpans", languageManager.getMessage("config.button.confirm_reset", lang, this.playerRef.getLanguage()));
     }
     
     private void buildGeneralTab(@Nonnull UICommandBuilder commandBuilder, @Nonnull UIEventBuilder eventBuilder) {
@@ -473,8 +493,10 @@ public class EnchantConfigPage extends InteractiveCustomUIPage<EnchantConfigPage
         int maxEnchants = workingConfig.maxEnchantmentsPerItem;
         int maxEnchantsStep = 1;  // Integer value, step by 1
         commandBuilder.append("#ContentArea", "Pages/EnchantConfigItem.ui");
-        commandBuilder.set("#ContentArea[" + index + "] #SettingName.TextSpans", Message.translation("server.config.general.max_enchantments"));
+        commandBuilder.set("#ContentArea[" + index + "] #SettingName.TextSpans", languageManager.getMessage("config.general.max_enchantments", lang, this.playerRef.getLanguage()));
         commandBuilder.set("#ContentArea[" + index + "] #SettingInput.Value", (double) maxEnchants);
+        commandBuilder.set("#ContentArea[" + index + "] #SettingInput.Value", (double) maxEnchants);
+        commandBuilder.set("#ContentArea[" + index + "] #ResetBtn.TextSpans", languageManager.getMessage("config.button.reset", lang, this.playerRef.getLanguage()));
         eventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#ContentArea[" + index + "] #ResetBtn",
             EventData.of("ResetValue", "maxEnchantmentsPerItem"));
         eventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#ContentArea[" + index + "] #DecreaseBtn",
@@ -487,18 +509,18 @@ public class EnchantConfigPage extends InteractiveCustomUIPage<EnchantConfigPage
         
         // Show Enchantment Banner
         commandBuilder.append("#ContentArea", "Pages/EnchantConfigToggle.ui");
-        commandBuilder.set("#ContentArea[" + index + "] #SettingName.TextSpans", Message.translation("server.config.general.show_banner"));
+        commandBuilder.set("#ContentArea[" + index + "] #SettingName.TextSpans", languageManager.getMessage("config.general.show_banner", lang, this.playerRef.getLanguage()));
         commandBuilder.set("#ContentArea[" + index + "] #ToggleButton.TextSpans", 
-            Message.translation(workingConfig.showEnchantmentBanner ? "server.config.common.enabled" : "server.config.common.disabled"));
+            languageManager.getMessage(workingConfig.showEnchantmentBanner ? "config.common.enabled" : "config.common.disabled", lang, this.playerRef.getLanguage()));
         eventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#ContentArea[" + index + "] #ToggleButton",
             EventData.of("SettingValue", "showEnchantmentBanner:" + !workingConfig.showEnchantmentBanner));
         index++;
         
         // Enable Enchantment Glow
         commandBuilder.append("#ContentArea", "Pages/EnchantConfigToggle.ui");
-        commandBuilder.set("#ContentArea[" + index + "] #SettingName.TextSpans", Message.translation("server.config.general.enable_glow"));
+        commandBuilder.set("#ContentArea[" + index + "] #SettingName.TextSpans", languageManager.getMessage("config.general.enable_glow", lang, this.playerRef.getLanguage()));
         commandBuilder.set("#ContentArea[" + index + "] #ToggleButton.TextSpans", 
-            Message.translation(workingConfig.enableEnchantmentGlow ? "server.config.common.enabled" : "server.config.common.disabled"));
+            languageManager.getMessage(workingConfig.enableEnchantmentGlow ? "config.common.enabled" : "config.common.disabled", lang, this.playerRef.getLanguage()));
         eventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#ContentArea[" + index + "] #ToggleButton",
             EventData.of("SettingValue", "enableEnchantmentGlow:" + !workingConfig.enableEnchantmentGlow));
         index++;
@@ -507,8 +529,10 @@ public class EnchantConfigPage extends InteractiveCustomUIPage<EnchantConfigPage
         int craftingTier = workingConfig.enchantingTableCraftingTier;
         int craftingTierStep = 1;  // Integer value, step by 1
         commandBuilder.append("#ContentArea", "Pages/EnchantConfigItem.ui");
-        commandBuilder.set("#ContentArea[" + index + "] #SettingName.TextSpans", Message.translation("server.config.general.table_tier"));
+        commandBuilder.set("#ContentArea[" + index + "] #SettingName.TextSpans", languageManager.getMessage("config.general.table_tier", lang, this.playerRef.getLanguage()));
         commandBuilder.set("#ContentArea[" + index + "] #SettingInput.Value", (double) craftingTier);
+        commandBuilder.set("#ContentArea[" + index + "] #SettingInput.Value", (double) craftingTier);
+        commandBuilder.set("#ContentArea[" + index + "] #ResetBtn.TextSpans", languageManager.getMessage("config.button.reset", lang, this.playerRef.getLanguage()));
         eventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#ContentArea[" + index + "] #ResetBtn",
             EventData.of("ResetValue", "enchantingTableCraftingTier"));
         eventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#ContentArea[" + index + "] #DecreaseBtn",
@@ -521,46 +545,50 @@ public class EnchantConfigPage extends InteractiveCustomUIPage<EnchantConfigPage
         
         // Disable Enchantment Crafting toggle
         commandBuilder.append("#ContentArea", "Pages/EnchantConfigToggle.ui");
-        commandBuilder.set("#ContentArea[" + index + "] #SettingName.TextSpans", Message.translation("server.config.general.disable_crafting"));
+        commandBuilder.set("#ContentArea[" + index + "] #SettingName.TextSpans", languageManager.getMessage("config.general.disable_crafting", lang, this.playerRef.getLanguage()));
         commandBuilder.set("#ContentArea[" + index + "] #ToggleButton.TextSpans", 
-            Message.translation(workingConfig.disableEnchantmentCrafting ? "server.config.common.enabled" : "server.config.common.disabled"));
+            languageManager.getMessage(workingConfig.disableEnchantmentCrafting ? "config.common.enabled" : "config.common.disabled", lang, this.playerRef.getLanguage()));
         eventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#ContentArea[" + index + "] #ToggleButton",
             EventData.of("SettingValue", "disableEnchantmentCrafting:" + !workingConfig.disableEnchantmentCrafting));
         index++;
         
         // Return Enchantment On Cleanse toggle
         commandBuilder.append("#ContentArea", "Pages/EnchantConfigToggle.ui");
-        commandBuilder.set("#ContentArea[" + index + "] #SettingName.TextSpans", Message.translation("server.config.general.return_cleanse"));
+        commandBuilder.set("#ContentArea[" + index + "] #SettingName.TextSpans", languageManager.getMessage("config.general.return_cleanse", lang, this.playerRef.getLanguage()));
         commandBuilder.set("#ContentArea[" + index + "] #ToggleButton.TextSpans", 
-            Message.translation(workingConfig.returnEnchantmentOnCleanse ? "server.config.common.enabled" : "server.config.common.disabled"));
+            languageManager.getMessage(workingConfig.returnEnchantmentOnCleanse ? "config.common.enabled" : "config.common.disabled", lang, this.playerRef.getLanguage()));
         eventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#ContentArea[" + index + "] #ToggleButton",
             EventData.of("SettingValue", "returnEnchantmentOnCleanse:" + !workingConfig.returnEnchantmentOnCleanse));
         index++;
         
         // Edit Table Recipe button
         commandBuilder.append("#ContentArea", "Pages/EnchantConfigRecipeButton.ui");
-        commandBuilder.set("#ContentArea[" + index + "] #RecipeButtonLabel.TextSpans", Message.translation("server.config.general.table_recipe"));
+        commandBuilder.set("#ContentArea[" + index + "] #RecipeButtonLabel.TextSpans", languageManager.getMessage("config.general.table_recipe", lang, this.playerRef.getLanguage()));
+        commandBuilder.set("#ContentArea[" + index + "] #EditRecipeBtn.TextSpans", languageManager.getMessage("config.button.edit", lang, this.playerRef.getLanguage()));
         eventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#ContentArea[" + index + "] #EditRecipeBtn",
             EventData.of("EditRecipeType", "table"));
         index++;
         
         // Edit Upgrade 1 button
         commandBuilder.append("#ContentArea", "Pages/EnchantConfigRecipeButton.ui");
-        commandBuilder.set("#ContentArea[" + index + "] #RecipeButtonLabel.TextSpans", Message.translation("server.config.general.upgrade_1"));
+        commandBuilder.set("#ContentArea[" + index + "] #RecipeButtonLabel.TextSpans", languageManager.getMessage("config.general.upgrade_1", lang, this.playerRef.getLanguage()));
+        commandBuilder.set("#ContentArea[" + index + "] #EditRecipeBtn.TextSpans", languageManager.getMessage("config.button.edit", lang, this.playerRef.getLanguage()));
         eventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#ContentArea[" + index + "] #EditRecipeBtn",
             EventData.of("EditRecipeType", "Upgrade_1"));
         index++;
         
         // Edit Upgrade 2 button
         commandBuilder.append("#ContentArea", "Pages/EnchantConfigRecipeButton.ui");
-        commandBuilder.set("#ContentArea[" + index + "] #RecipeButtonLabel.TextSpans", Message.translation("server.config.general.upgrade_2"));
+        commandBuilder.set("#ContentArea[" + index + "] #RecipeButtonLabel.TextSpans", languageManager.getMessage("config.general.upgrade_2", lang, this.playerRef.getLanguage()));
+        commandBuilder.set("#ContentArea[" + index + "] #EditRecipeBtn.TextSpans", languageManager.getMessage("config.button.edit", lang, this.playerRef.getLanguage()));
         eventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#ContentArea[" + index + "] #EditRecipeBtn",
             EventData.of("EditRecipeType", "Upgrade_2"));
         index++;
         
         // Edit Upgrade 3 button
         commandBuilder.append("#ContentArea", "Pages/EnchantConfigRecipeButton.ui");
-        commandBuilder.set("#ContentArea[" + index + "] #RecipeButtonLabel.TextSpans", Message.translation("server.config.general.upgrade_3"));
+        commandBuilder.set("#ContentArea[" + index + "] #RecipeButtonLabel.TextSpans", languageManager.getMessage("config.general.upgrade_3", lang, this.playerRef.getLanguage()));
+        commandBuilder.set("#ContentArea[" + index + "] #EditRecipeBtn.TextSpans", languageManager.getMessage("config.button.edit", lang, this.playerRef.getLanguage()));
         eventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#ContentArea[" + index + "] #EditRecipeBtn",
             EventData.of("EditRecipeType", "Upgrade_3"));
     }
@@ -580,8 +608,9 @@ public class EnchantConfigPage extends InteractiveCustomUIPage<EnchantConfigPage
         // Title and Reset button
         commandBuilder.append("#ContentArea", "Pages/EnchantConfigRecipeTitle.ui");
         String titleKey = getEditingRecipeTitleKey();
-        String formattedTitle = com.hypixel.hytale.server.core.modules.i18n.I18nModule.get().getMessage("en-US", titleKey);
-        commandBuilder.set("#ContentArea[1].TextSpans", Message.translation("config.recipe.active_title").param("0", formattedTitle != null ? formattedTitle : titleKey));
+        String translatedTitleString = languageManager.getRawMessage(titleKey, lang, this.playerRef.getLanguage());
+        String rawActiveTitle = languageManager.getRawMessage("config.recipe.active_title", lang, this.playerRef.getLanguage());
+        commandBuilder.set("#ContentArea[1].TextSpans", Message.raw(rawActiveTitle.replace("{0}", translatedTitleString)));
         
         int index = 2;
         int ingredientDataIndex = 0;
@@ -593,8 +622,9 @@ public class EnchantConfigPage extends InteractiveCustomUIPage<EnchantConfigPage
                 
                 commandBuilder.append("#ContentArea", "Pages/EnchantConfigIngredient.ui");
                 commandBuilder.set("#ContentArea[" + index + "] #IngredientIcon.ItemId", ingredient.item);
-                commandBuilder.set("#ContentArea[" + index + "] #IngredientName.TextSpans", Message.translation(formatItemName(ingredient.item)));
+                commandBuilder.set("#ContentArea[" + index + "] #IngredientName.TextSpans", languageManager.getMessage(formatItemName(ingredient.item), lang, this.playerRef.getLanguage()));
                 commandBuilder.set("#ContentArea[" + index + "] #AmountInput.Value", (double) currentAmount);
+                commandBuilder.set("#ContentArea[" + index + "] #ChangeBtn.TextSpans", languageManager.getMessage("config.button.change", lang, this.playerRef.getLanguage()));
                 
                 eventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#ContentArea[" + index + "] #ChangeBtn",
                     EventData.of("OpenSearch", String.valueOf(dataIdx)));
@@ -623,12 +653,14 @@ public class EnchantConfigPage extends InteractiveCustomUIPage<EnchantConfigPage
         // Add Ingredient button
         if (searchingIngredientIndex < 0) {
             commandBuilder.append("#ContentArea", "Pages/EnchantConfigAddIngredient.ui");
+            commandBuilder.set("#ContentArea[" + index + "] #AddIngredientBtn.TextSpans", languageManager.getMessage("config.button.add_ingredient", lang, this.playerRef.getLanguage()));
             eventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#ContentArea[" + index + "] #AddIngredientBtn",
                 EventData.of("SettingKey", "AddIngredient"));
             index++;
             
             // Reset Recipe button
             commandBuilder.append("#ContentArea", "Pages/EnchantConfigResetRecipe.ui");
+            commandBuilder.set("#ContentArea[" + index + "] #ResetRecipeBtn.TextSpans", languageManager.getMessage("config.button.reset_recipe", lang, this.playerRef.getLanguage()));
             eventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#ContentArea[" + index + "] #ResetRecipeBtn",
                 EventData.of("ResetRecipe", editingRecipeType));
         }
@@ -650,13 +682,13 @@ public class EnchantConfigPage extends InteractiveCustomUIPage<EnchantConfigPage
     }
     
     private String getEditingRecipeTitleKey() {
-        if (editingRecipeType == null) return "server.config.recipe.title";
+        if (editingRecipeType == null) return "config.recipe.title";
         return switch (editingRecipeType) {
-            case "table" -> "server.config.general.table_recipe";
-            case "Upgrade_1" -> "server.config.general.upgrade_1";
-            case "Upgrade_2" -> "server.config.general.upgrade_2";
-            case "Upgrade_3" -> "server.config.general.upgrade_3";
-            default -> "server.config.recipe.title";
+            case "table" -> "config.general.table_recipe";
+            case "Upgrade_1" -> "config.general.upgrade_1";
+            case "Upgrade_2" -> "config.general.upgrade_2";
+            case "Upgrade_3" -> "config.general.upgrade_3";
+            default -> "config.recipe.title";
         };
     }
     
@@ -673,7 +705,7 @@ public class EnchantConfigPage extends InteractiveCustomUIPage<EnchantConfigPage
             commandBuilder.append("#ContentArea", "Pages/EnchantConfigEnchantment.ui");
             
             // Enchantment name
-            commandBuilder.set("#ContentArea[" + index + "] #EnchantName.TextSpans", Message.translation(type.getNameKey()));
+            commandBuilder.set("#ContentArea[" + index + "] #EnchantName.TextSpans", languageManager.getMessage(type.getNameKey(), lang, this.playerRef.getLanguage()));
             
             // Multiplier value (if this enchantment has one)
             String multiplierField = ENCHANTMENT_MULTIPLIERS.get(type);
@@ -681,7 +713,9 @@ public class EnchantConfigPage extends InteractiveCustomUIPage<EnchantConfigPage
                 double value = getMultiplierValue(multiplierField);
                 double step = calculateStep(value);
                 commandBuilder.set("#ContentArea[" + index + "] #MultiplierInput.Value", value);
+                commandBuilder.set("#ContentArea[" + index + "] #MultiplierInput.Value", value);
                 commandBuilder.set("#ContentArea[" + index + "] #MultiplierSection.Visible", true);
+                commandBuilder.set("#ContentArea[" + index + "] #ResetMultiplier.TextSpans", languageManager.getMessage("config.button.reset", lang, this.playerRef.getLanguage()));
                 // Reset button
                 eventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#ContentArea[" + index + "] #ResetMultiplier",
                     EventData.of("ResetValue", multiplierField));
@@ -700,7 +734,7 @@ public class EnchantConfigPage extends InteractiveCustomUIPage<EnchantConfigPage
             // Toggle enabled/disabled
             boolean isDisabled = workingConfig.disabledEnchantments.getOrDefault(type.getId(), false);
             commandBuilder.set("#ContentArea[" + index + "] #EnableToggle.TextSpans", 
-                Message.translation(isDisabled ? "server.config.common.disabled" : "server.config.common.enabled"));
+                languageManager.getMessage(isDisabled ? "config.common.disabled" : "config.common.enabled", lang, this.playerRef.getLanguage()));
             eventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#ContentArea[" + index + "] #EnableToggle",
                 EventData.of("ToggleEnchantment", type.getId()));
             
@@ -714,8 +748,10 @@ public class EnchantConfigPage extends InteractiveCustomUIPage<EnchantConfigPage
                 double secStep = calculateStep(secValue);
                 
                 commandBuilder.append("#ContentArea", "Pages/EnchantConfigItem.ui");
-                commandBuilder.set("#ContentArea[" + index + "] #SettingName.TextSpans", Message.translation(getOrDefault));
+                commandBuilder.set("#ContentArea[" + index + "] #SettingName.TextSpans", languageManager.getMessage(getOrDefault, lang, this.playerRef.getLanguage()));
+                commandBuilder.set("#ContentArea[" + index + "] #SettingName.TextSpans", languageManager.getMessage(getOrDefault, lang, this.playerRef.getLanguage()));
                 commandBuilder.set("#ContentArea[" + index + "] #SettingInput.Value", secValue);
+                commandBuilder.set("#ContentArea[" + index + "] #ResetBtn.TextSpans", languageManager.getMessage("config.button.reset", lang, this.playerRef.getLanguage()));
                 eventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#ContentArea[" + index + "] #ResetBtn",
                     EventData.of("ResetValue", secondaryField));
                 eventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#ContentArea[" + index + "] #DecreaseBtn",
@@ -762,8 +798,11 @@ public class EnchantConfigPage extends InteractiveCustomUIPage<EnchantConfigPage
             final String recipeKey = recipeName;
             
             commandBuilder.append("#ContentArea", "Pages/EnchantConfigRecipeItem.ui");
-            commandBuilder.set("#ContentArea[" + index + "] #RecipeName.TextSpans", Message.translation(getRecipeNameKey(recipeName)));
+            commandBuilder.set("#ContentArea[" + index + "] #RecipeName.TextSpans", languageManager.getMessage(getRecipeNameKey(recipeName), lang, this.playerRef.getLanguage()));
             commandBuilder.set("#ContentArea[" + index + "] #TierInput.Value", (double) tier);
+            commandBuilder.set("#ContentArea[" + index + "] #TierLabel.TextSpans", languageManager.getMessage("config.recipe.tier_label", lang, this.playerRef.getLanguage()));
+            commandBuilder.set("#ContentArea[" + index + "] #TierReset.TextSpans", languageManager.getMessage("config.button.reset", lang, this.playerRef.getLanguage()));
+            commandBuilder.set("#ContentArea[" + index + "] #SelectBtn.TextSpans", languageManager.getMessage("config.button.edit_recipe", lang, this.playerRef.getLanguage()));
             
             // Tier controls with reset button
             eventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#ContentArea[" + index + "] #TierReset",
@@ -796,24 +835,27 @@ public class EnchantConfigPage extends InteractiveCustomUIPage<EnchantConfigPage
         
         if (selectedRecipe != null) {
             String nameKey = getRecipeNameKey(selectedRecipe);
-            // Translate the name key to a string before passing to the outer message
-            String formattedName = com.hypixel.hytale.server.core.modules.i18n.I18nModule.get().getMessage("en-US", nameKey);
-            title = Message.translation("server.config.recipe.active_title").param("0", formattedName != null ? formattedName : nameKey);
+            String translatedNameStr = languageManager.getRawMessage(nameKey, lang, this.playerRef.getLanguage());
+            String rawActiveTitle = languageManager.getRawMessage("config.recipe.active_title", lang, this.playerRef.getLanguage());
+            title = Message.raw(rawActiveTitle.replace("{0}", translatedNameStr));
             resetTarget = selectedRecipe;
         } else if (editingRecipeType != null) {
             // Editing generic recipe type (e.g. "Scroll of Sharpness I")
             String titleKey = getEditingRecipeTitleKey();
-            String formattedName = com.hypixel.hytale.server.core.modules.i18n.I18nModule.get().getMessage("en-US", titleKey);
-            title = Message.translation("server.config.recipe.active_title").param("0", formattedName != null ? formattedName : titleKey);
+            String translatedNameStr = languageManager.getRawMessage(titleKey, lang, this.playerRef.getLanguage());
+            String rawActiveTitle = languageManager.getRawMessage("config.recipe.active_title", lang, this.playerRef.getLanguage());
+            title = Message.raw(rawActiveTitle.replace("{0}", translatedNameStr));
             resetTarget = editingRecipeType;
         } else {
             // Fallback if neither selectedRecipe nor editingRecipeType is set
-            title = Message.translation("server.config.recipe.active_title").param("0", "Unknown Recipe");
+            String rawActiveTitle = languageManager.getRawMessage("config.recipe.active_title", lang, this.playerRef.getLanguage());
+            title = Message.raw(rawActiveTitle.replace("{0}", "Unknown Recipe"));
             resetTarget = null; // Or some default/error value
         }
         
         // Back button
         commandBuilder.append("#ContentArea", "Pages/EnchantConfigBackButton.ui");
+        commandBuilder.set("#ContentArea[0] #BackBtn.TextSpans", languageManager.getMessage("config.button.back", lang, this.playerRef.getLanguage()));
         if (isScrollRecipe) {
             eventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#ContentArea[0] #BackBtn",
                 EventData.of("BackToList", "true"));
@@ -849,8 +891,9 @@ public class EnchantConfigPage extends InteractiveCustomUIPage<EnchantConfigPage
                 
                 commandBuilder.append("#ContentArea", "Pages/EnchantConfigIngredient.ui");
                 commandBuilder.set("#ContentArea[" + index + "] #IngredientIcon.ItemId", ingredient.item);
-                commandBuilder.set("#ContentArea[" + index + "] #IngredientName.TextSpans", Message.translation(displayName));
+                commandBuilder.set("#ContentArea[" + index + "] #IngredientName.TextSpans", languageManager.getMessage(displayName, lang, this.playerRef.getLanguage()));
                 commandBuilder.set("#ContentArea[" + index + "] #AmountInput.Value", (double) currentAmount);
+                commandBuilder.set("#ContentArea[" + index + "] #ChangeBtn.TextSpans", languageManager.getMessage("config.button.change", lang, this.playerRef.getLanguage()));
                 
                 // Change button to open item search
                 eventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#ContentArea[" + index + "] #ChangeBtn",
@@ -881,12 +924,14 @@ public class EnchantConfigPage extends InteractiveCustomUIPage<EnchantConfigPage
         // Add Ingredient button (only show when not searching)
         if (searchingIngredientIndex < 0) {
             commandBuilder.append("#ContentArea", "Pages/EnchantConfigAddIngredient.ui");
+            commandBuilder.set("#ContentArea[" + index + "] #AddIngredientBtn.TextSpans", languageManager.getMessage("config.button.add_ingredient", lang, this.playerRef.getLanguage()));
             eventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#ContentArea[" + index + "] #AddIngredientBtn",
                 EventData.of("SettingKey", "AddIngredient"));
             index++;
             
             // Reset Recipe button
             commandBuilder.append("#ContentArea", "Pages/EnchantConfigResetRecipe.ui");
+            commandBuilder.set("#ContentArea[" + index + "] #ResetRecipeBtn.TextSpans", languageManager.getMessage("config.button.reset_recipe", lang, this.playerRef.getLanguage()));
             eventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#ContentArea[" + index + "] #ResetRecipeBtn",
                 EventData.of("ResetRecipe", resetTarget));
         }
@@ -910,6 +955,7 @@ public class EnchantConfigPage extends InteractiveCustomUIPage<EnchantConfigPage
         }
         
         // Cancel button
+        commandBuilder.set("#CancelSearchBtn.TextSpans", languageManager.getMessage("config.button.cancel", lang, this.playerRef.getLanguage()));
         eventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#CancelSearchBtn",
             EventData.of("CancelSearch", "true"));
         
@@ -931,7 +977,7 @@ public class EnchantConfigPage extends InteractiveCustomUIPage<EnchantConfigPage
             
             commandBuilder.append("#ItemSearchResults", "Pages/EnchantConfigSearchItem.ui");
             commandBuilder.set("#ItemSearchResults[" + itemIndex + "] #ItemIcon.ItemId", itemId);
-            commandBuilder.set("#ItemSearchResults[" + itemIndex + "] #ItemDisplayName.TextSpans", Message.translation(displayName));
+            commandBuilder.set("#ItemSearchResults[" + itemIndex + "] #ItemDisplayName.TextSpans", languageManager.getMessage(displayName, lang, this.playerRef.getLanguage()));
             
             // Clicking the item selects it
             eventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#ItemSearchResults[" + itemIndex + "] #ItemSelectBtn",
@@ -963,7 +1009,7 @@ public class EnchantConfigPage extends InteractiveCustomUIPage<EnchantConfigPage
             
             commandBuilder.append("#ItemSearchResults", "Pages/EnchantConfigSearchItem.ui");
             commandBuilder.set("#ItemSearchResults[" + itemIndex + "] #ItemIcon.ItemId", itemId);
-            commandBuilder.set("#ItemSearchResults[" + itemIndex + "] #ItemDisplayName.TextSpans", Message.translation(displayName));
+            commandBuilder.set("#ItemSearchResults[" + itemIndex + "] #ItemDisplayName.TextSpans", languageManager.getMessage(displayName, lang, this.playerRef.getLanguage()));
             
             eventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#ItemSearchResults[" + itemIndex + "] #ItemSelectBtn",
                 EventData.of("SelectItem", itemId));
@@ -1114,7 +1160,7 @@ public class EnchantConfigPage extends InteractiveCustomUIPage<EnchantConfigPage
     }
     
     private String getRecipeNameKey(String name) {
-        return "server.items." + name + ".name";
+        return "items." + name + ".name";
     }
     
     private double getMultiplierValue(String fieldName) {
@@ -1529,13 +1575,13 @@ public class EnchantConfigPage extends InteractiveCustomUIPage<EnchantConfigPage
         // Update Unsaved Changes Indicator
         commandBuilder.set("#UnsavedIndicator.Visible", hasUnsavedChanges);
         if (hasUnsavedChanges) {
-            commandBuilder.set("#UnsavedIndicator.TextSpans", Message.translation("server.config.message.unsaved"));
+            commandBuilder.set("#UnsavedIndicator.TextSpans", languageManager.getMessage("config.message.unsaved", lang, this.playerRef.getLanguage()));
         }
         
         // Update Save Feedback
         commandBuilder.set("#SaveFeedback.Visible", showSaveFeedback);
         if (showSaveFeedback) {
-            commandBuilder.set("#SaveFeedback.TextSpans", Message.translation("server.config.message.saved"));
+            commandBuilder.set("#SaveFeedback.TextSpans", languageManager.getMessage("config.message.saved", lang, this.playerRef.getLanguage()));
             // Auto-hide feedback could be handled by a delayed task, but for now it stays until next action clears it
             // Or we could perform a clear on next event
         }

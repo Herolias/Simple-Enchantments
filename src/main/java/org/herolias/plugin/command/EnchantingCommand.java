@@ -56,7 +56,7 @@ public class EnchantingCommand extends AbstractAsyncCommand {
                 playerComponent.getPageManager().openCustomPage(
                     playerRef, 
                     store, 
-                    new EnchantingPage(playerRefComponent, plugin.getUserSettingsManager())
+                    new EnchantingPage(playerRefComponent, plugin)
                 );
             }
         }, world);

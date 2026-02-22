@@ -33,6 +33,20 @@ public final class TooltipBridge {
         DynamicTooltipsApi api = DynamicTooltipsApiProvider.get();
         if (api != null) {
             api.registerProvider(new EnchantmentTooltipProvider(enchantmentManager));
+            
+            api.setLanguageResolver(playerUuid -> {
+                try {
+                    org.herolias.plugin.SimpleEnchanting plugin = org.herolias.plugin.SimpleEnchanting.getInstance();
+                    if (plugin != null) {
+                        String lang = plugin.getUserSettingsManager().getLanguage(playerUuid);
+                        if (lang != null && !"default".equalsIgnoreCase(lang)) {
+                            return lang;
+                        }
+                    }
+                } catch (Exception ignored) {}
+                return null;
+            });
+            
             LOGGER.atInfo().log("Registered EnchantmentTooltipProvider with DynamicTooltipsLib");
             return true;
         } else {
@@ -50,6 +64,17 @@ public final class TooltipBridge {
         if (api != null) {
             api.refreshAllPlayers();
             LOGGER.atInfo().log("Refreshed all player tooltips after config change");
+        }
+    }
+
+    /**
+     * Invalidates caches and immediately refreshes tooltips for a specific player.
+     * Call after a player changes their custom language.
+     */
+    public static void refreshPlayer(@Nonnull java.util.UUID playerUuid) {
+        DynamicTooltipsApi api = DynamicTooltipsApiProvider.get();
+        if (api != null) {
+            api.refreshPlayer(playerUuid);
         }
     }
 }

@@ -45,7 +45,11 @@ public class EnchantScrollElement extends ChoiceElement {
     ) {
         commandBuilder.append("#ElementList", "Pages/EnchantScrollElement.ui");
         commandBuilder.set(selector + " #Icon.ItemId", this.itemStack.getItemId().toString());
-        commandBuilder.set(selector + " #Name.TextSpans", Message.translation(this.itemStack.getItem().getTranslationKey()));
+        String lang = enchantmentManager.getPlugin().getUserSettingsManager().getLanguage(playerRef.getUuid());
+        String clientLang = playerRef.getLanguage();
+        org.herolias.plugin.lang.LanguageManager languageManager = enchantmentManager.getPlugin().getLanguageManager();
+
+        commandBuilder.set(selector + " #Name.TextSpans", languageManager.getMessage(this.itemStack.getItem().getTranslationKey(), lang, clientLang));
 
         StringBuilder detailBuilder = new StringBuilder();
         
@@ -58,17 +62,20 @@ public class EnchantScrollElement extends ChoiceElement {
                 if (!first) {
                     detailBuilder.append(", ");
                 }
-                detailBuilder.append(entry.getKey().getFormattedName(entry.getValue()));
+                String translatedName = languageManager.getRawMessage(entry.getKey().getNameKey(), lang, clientLang);
+                detailBuilder.append(translatedName).append(" ").append(EnchantmentType.toRoman(entry.getValue()));
                 first = false;
             }
             detailBuilder.append("\n");
         }
 
+        String targetName = languageManager.getRawMessage(enchantmentType.getNameKey(), lang, clientLang) + " " + EnchantmentType.toRoman(targetLevel);
         if (currentLevel > 0) {
-            detailBuilder.append("Upgrade: ").append(enchantmentType.getFormattedName(currentLevel))
-                .append(" -> ").append(enchantmentType.getFormattedName(targetLevel));
+            String currentName = languageManager.getRawMessage(enchantmentType.getNameKey(), lang, clientLang) + " " + EnchantmentType.toRoman(currentLevel);
+            detailBuilder.append("Upgrade: ").append(currentName)
+                .append(" -> ").append(targetName);
         } else {
-            detailBuilder.append("Apply: ").append(enchantmentType.getFormattedName(targetLevel));
+            detailBuilder.append("Apply: ").append(targetName);
         }
         
         commandBuilder.set(selector + " #Detail.Text", detailBuilder.toString());

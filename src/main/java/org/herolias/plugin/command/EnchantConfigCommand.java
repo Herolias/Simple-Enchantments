@@ -60,7 +60,7 @@ public class EnchantConfigCommand extends AbstractAsyncCommand {
                 playerComponent.getPageManager().openCustomPage(
                     playerRef, 
                     store, 
-                    new EnchantConfigPage(playerRefComponent, plugin.getConfigManager())
+                    new EnchantConfigPage(playerRefComponent, plugin.getConfigManager(), plugin.getUserSettingsManager(), plugin.getLanguageManager())
                 );
             }
         }, world);

@@ -7,9 +7,9 @@ Group {
   Padding: (Horizontal: 12, Vertical: 6);
 
   Label #RecipeName {
-    Anchor: (Width: 300);
+    Anchor: (Width: 280);
     Style: (
-      FontSize: 14,
+      FontSize: 13,
       VerticalAlignment: Center
     );
   }
@@ -19,9 +19,9 @@ Group {
   }
 
   Label #TierLabel {
-    Anchor: (Width: 150, Right: 4);
+    Anchor: (Width: 260, Right: 4);
     Style: (
-      FontSize: 13,
+      FontSize: 12,
       VerticalAlignment: Center,
       TextColor: #7a9cc6
     );
@@ -30,7 +30,7 @@ Group {
 
   TextButton #TierReset {
     Style: $C.@TertiaryTextButtonStyle;
-    Anchor: (Width: 70, Height: 28, Right: 4);
+    Anchor: (Width: 120, Height: 28, Right: 4);
     Padding: (Horizontal: 4);
     Text: "Reset";
     TooltipText: "Reset to default";

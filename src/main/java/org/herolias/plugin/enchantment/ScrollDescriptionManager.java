@@ -43,13 +43,22 @@ public class ScrollDescriptionManager {
         if (playerRef == null || !playerRef.isValid()) return;
         
         try {
-            // Determine player locale
-            String locale = playerRef.getLanguage();
-            if (locale == null || locale.isEmpty()) {
-                locale = "en-US";
+            // Determine player locale (client language)
+            String clientLocale = playerRef.getLanguage();
+            if (clientLocale == null || clientLocale.isEmpty()) {
+                clientLocale = "en-US";
             }
+            
+            // Get user custom language from settings
+            String langCode = "default";
+            try {
+                org.herolias.plugin.SimpleEnchanting plugin = org.herolias.plugin.SimpleEnchanting.getInstance();
+                if (plugin != null && plugin.getUserSettingsManager() != null) {
+                    langCode = plugin.getUserSettingsManager().getLanguage(playerRef.getUuid());
+                }
+            } catch (Exception ignored) {}
 
-            // Generate translations for this player's locale
+            // Generate translations for this player's locale definition
             Map<String, String> translations = new HashMap<>();
 
             for (EnchantmentType type : EnchantmentType.values()) {
@@ -59,8 +68,8 @@ public class ScrollDescriptionManager {
                     String scrollId = baseName + "_" + EnchantmentType.toRoman(level);
                     String translationKey = "server.items." + scrollId + ".description";
                     
-                    // Resolve description using player's locale
-                    String dynamicDescription = type.getBonusDescription(level, locale);
+                    // Resolve description using custom language and client fallback
+                    String dynamicDescription = type.getBonusDescription(level, langCode, clientLocale);
                     
                     if (dynamicDescription != null && !dynamicDescription.isEmpty()) {
                         translations.put(translationKey, dynamicDescription);

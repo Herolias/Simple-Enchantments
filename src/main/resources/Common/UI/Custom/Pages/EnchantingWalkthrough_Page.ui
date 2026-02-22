@@ -1,0 +1,49 @@
+$C = "../Common.ui";
+
+Group {
+  LayoutMode: Top;
+  Padding: (Horizontal: 15, Vertical: 10);
+  FlexWeight: 1;
+  
+  Label #Title {
+    Style: (
+      FontSize: 24,
+      TextColor: #ffd700,
+      HorizontalAlignment: Center
+    );
+    Padding: (Bottom: 15);
+  }
+
+  Label #Desc {
+    Style: (
+      FontSize: 16,
+      TextColor: #ffffff
+    );
+    Padding: (Bottom: 15);
+  }
+
+  Group {
+    FlexWeight: 1;
+  }
+
+  Group #NavGroup {
+    LayoutMode: Left;
+    Anchor: (Height: 40);
+
+    TextButton #WalkthroughPrev {
+      Style: $C.@SecondaryTextButtonStyle;
+      Anchor: (Width: 120, Height: 40);
+      Padding: (Horizontal: 10);
+    }
+    
+    Group {
+      FlexWeight: 1;
+    }
+
+    TextButton #WalkthroughNext {
+      Style: $C.@SecondaryTextButtonStyle;
+      Anchor: (Width: 120, Height: 40);
+      Padding: (Horizontal: 10);
+    }
+  }
+}

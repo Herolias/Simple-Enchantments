@@ -566,6 +566,10 @@ config.button.confirm_reset = Reset Bevestigen
 config.button.back = Terug
 config.button.add_ingredient = Ingrediënt Toevoegen
 config.button.reset_recipe = Recept Resetten
+config.button.edit = Bewerken
+config.button.edit_recipe = Recept Bewerken
+config.button.reset = Resetten
+config.button.change = Wijzigen
 
 config.general.max_enchantments = Max. Betoveringen Per Item
 config.general.show_banner = Toon Betoveringsbanner
@@ -589,6 +593,7 @@ config.secondary.quantity_bonus = Aantal Bonus
 
 config.recipe.active_title = {0} - Ingrediënten
 config.recipe.crafting_tier = Ambachtsniveau
+config.recipe.tier_label = Ontgrendelt op Tafel Niveau
 
 config.message.saved = Opgeslagen! De meeste wijzigingen vereisen een herstart.
 config.message.unsaved = [!] Niet-opgeslagen wijzigingen

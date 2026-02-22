@@ -614,62 +614,62 @@ public enum EnchantmentType {
      * Gets formatted bonus text for the specific level (default English).
      */
     public String getBonusDescription(int level) {
-        return getBonusDescription(level, "en-US");
+        return getBonusDescription(level, "en-US", "en-US");
     }
 
     /**
      * Gets localized bonus text for the specific level.
      */
-    public String getBonusDescription(int level, String locale) {
+    public String getBonusDescription(int level, String langCode, String clientLangCode) {
          if (level <= 0) return "";
          double mult = getEffectMultiplier() * level;
          float percentage = (float) (mult * 100);
 
          return switch (this) {
-             case SHARPNESS -> resolve(locale, "Melee damage increased by {amount}%", percentage);
-             case LIFE_LEECH -> resolve(locale, "Heals for {amount}% of damage dealt", percentage);
-             case DURABILITY -> resolve(locale, "Durability loss reduced by {amount}%", percentage);
-             case STURDY -> resolve(locale, "Prevents durability loss on repair", null);
-             case DEXTERITY -> resolve(locale, "Stamina costs reduced by {amount}%", percentage);
-             case PROTECTION -> resolve(locale, "Physical damage reduced by {amount}%", percentage);
-             case EFFICIENCY -> resolve(locale, "Mining speed increased by {amount}%", percentage);
-             case FORTUNE -> resolve(locale, "Extra drop chance increased by {amount}%", percentage);
-             case SMELTING -> resolve(locale, "Automatically smelts mined blocks", null);
-             case STRENGTH -> resolve(locale, "Projectile damage increased by {amount}%", percentage);
-             case EAGLES_EYE -> resolve(locale, "Damage increases with distance up to {amount}%", percentage * 50);
-             case LOOTING -> resolve(locale, "Drop rates increased by {amount}%", percentage);
-             case FEATHER_FALLING -> resolve(locale, "Fall damage reduced by {amount}%", percentage);
-             case WATERBREATHING -> resolve(locale, "Oxygen drain reduced by {amount}%", percentage);
-             case BURN -> resolve(locale, "Sets target on fire", null);
-             case FREEZE -> resolve(locale, "Slows target on hit", null);
-             case ETERNAL_SHOT -> resolve(locale, "Does not consume arrows", null);
-             case PICK_PERFECT -> resolve(locale, "Drops the block itself when mined", null);
-             case THRIFT -> resolve(locale, "Restores {amount}% of mana on hit", percentage);
-             case ELEMENTAL_HEART -> resolve(locale, "Does not consume essence when casting", null); 
-             case KNOCKBACK -> resolve(locale, "Knocks targets back", null);
-             case REFLECTION -> resolve(locale, "Reflects {amount}% of damage", percentage);
-             case ABSORPTION -> resolve(locale, "Heals for {amount}% of blocked damage", percentage);
-             case FAST_SWIM -> resolve(locale, "Swim speed increased by {amount}%", percentage);
-             case NIGHT_VISION -> resolve(locale, "Enhances vision in dark environments", null);
-             case RANGED_PROTECTION -> resolve(locale, "Projectile/magic damage reduced by {amount}%", percentage);
-             case FRENZY -> resolve(locale, "Ability charge speed increased by {amount}%", percentage);
-             case RIPOSTE -> resolve(locale, "Counter attack damage increased by {amount}%", percentage);
-             case COUP_DE_GRACE -> resolve(locale, "Damage to stunned enemies increased by {amount}%", percentage);
+             case SHARPNESS -> resolve(langCode, clientLangCode, "Melee damage increased by {amount}%", percentage);
+             case LIFE_LEECH -> resolve(langCode, clientLangCode, "Heals for {amount}% of damage dealt", percentage);
+             case DURABILITY -> resolve(langCode, clientLangCode, "Durability loss reduced by {amount}%", percentage);
+             case STURDY -> resolve(langCode, clientLangCode, "Prevents durability loss on repair", null);
+             case DEXTERITY -> resolve(langCode, clientLangCode, "Stamina costs reduced by {amount}%", percentage);
+             case PROTECTION -> resolve(langCode, clientLangCode, "Physical damage reduced by {amount}%", percentage);
+             case EFFICIENCY -> resolve(langCode, clientLangCode, "Mining speed increased by {amount}%", percentage);
+             case FORTUNE -> resolve(langCode, clientLangCode, "Extra drop chance increased by {amount}%", percentage);
+             case SMELTING -> resolve(langCode, clientLangCode, "Automatically smelts mined blocks", null);
+             case STRENGTH -> resolve(langCode, clientLangCode, "Projectile damage increased by {amount}%", percentage);
+             case EAGLES_EYE -> resolve(langCode, clientLangCode, "Damage increases with distance up to {amount}%", percentage * 50);
+             case LOOTING -> resolve(langCode, clientLangCode, "Drop rates increased by {amount}%", percentage);
+             case FEATHER_FALLING -> resolve(langCode, clientLangCode, "Fall damage reduced by {amount}%", percentage);
+             case WATERBREATHING -> resolve(langCode, clientLangCode, "Oxygen drain reduced by {amount}%", percentage);
+             case BURN -> resolve(langCode, clientLangCode, "Sets target on fire", null);
+             case FREEZE -> resolve(langCode, clientLangCode, "Slows target on hit", null);
+             case ETERNAL_SHOT -> resolve(langCode, clientLangCode, "Does not consume arrows", null);
+             case PICK_PERFECT -> resolve(langCode, clientLangCode, "Drops the block itself when mined", null);
+             case THRIFT -> resolve(langCode, clientLangCode, "Restores {amount}% of mana on hit", percentage);
+             case ELEMENTAL_HEART -> resolve(langCode, clientLangCode, "Does not consume essence when casting", null); 
+             case KNOCKBACK -> resolve(langCode, clientLangCode, "Knocks targets back", null);
+             case REFLECTION -> resolve(langCode, clientLangCode, "Reflects {amount}% of damage", percentage);
+             case ABSORPTION -> resolve(langCode, clientLangCode, "Heals for {amount}% of blocked damage", percentage);
+             case FAST_SWIM -> resolve(langCode, clientLangCode, "Swim speed increased by {amount}%", percentage);
+             case NIGHT_VISION -> resolve(langCode, clientLangCode, "Enhances vision in dark environments", null);
+             case RANGED_PROTECTION -> resolve(langCode, clientLangCode, "Projectile/magic damage reduced by {amount}%", percentage);
+             case FRENZY -> resolve(langCode, clientLangCode, "Ability charge speed increased by {amount}%", percentage);
+             case RIPOSTE -> resolve(langCode, clientLangCode, "Counter attack damage increased by {amount}%", percentage);
+             case COUP_DE_GRACE -> resolve(langCode, clientLangCode, "Damage to stunned enemies increased by {amount}%", percentage);
              default -> "";
          };
     }
 
-    private String resolve(String locale, String defaultPattern, Float amount) {
+    private String resolve(String langCode, String clientLangCode, String defaultPattern, Float amount) {
         String key = getBonusTranslationKey();
         String template = null;
         try {
-            com.hypixel.hytale.server.core.modules.i18n.I18nModule i18n = com.hypixel.hytale.server.core.modules.i18n.I18nModule.get();
-            if (i18n != null) {
-                template = i18n.getMessage(locale != null ? locale : "en-US", key);
+            org.herolias.plugin.SimpleEnchanting plugin = org.herolias.plugin.SimpleEnchanting.getInstance();
+            if (plugin != null) {
+                template = plugin.getLanguageManager().getRawMessage(key, langCode, clientLangCode);
             }
         } catch (Exception ignored) {}
         
-        if (template == null) template = defaultPattern;
+        if (template == null || template.equals(key)) template = defaultPattern;
         
         if (amount != null) {
             return template.replace("{amount}", String.valueOf(amount));
@@ -679,10 +679,10 @@ public enum EnchantmentType {
 
     /**
      * Gets the translation key for the enchantment bonus.
-     * Format: server.enchantment.[id].bonus
+     * Format: enchantment.[id].bonus
      */
     public String getBonusTranslationKey() {
-        return "server.enchantment." + id + ".bonus";
+        return "enchantment." + id + ".bonus";
     }
 
     /**

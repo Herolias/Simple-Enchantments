@@ -59,8 +59,13 @@ public class RemoveEnchantmentInteraction extends ChoiceInteraction {
         }
 
         EnchantmentData data = enchantmentManager.getEnchantmentsFromItem(itemStack);
+        org.herolias.plugin.lang.LanguageManager languageManager = enchantmentManager.getPlugin().getLanguageManager();
+        String lang = enchantmentManager.getPlugin().getUserSettingsManager().getLanguage(playerRef.getUuid());
+        String clientLang = playerRef.getLanguage();
+
         if (!data.hasEnchantment(enchantmentType)) {
-            playerRef.sendMessage(Message.raw("This item no longer has " + enchantmentType.getDisplayName() + "."));
+            String translatedName = languageManager.getRawMessage(enchantmentType.getNameKey(), lang, clientLang);
+            playerRef.sendMessage(Message.raw("This item no longer has " + translatedName + "."));
             pageManager.setPage(ref, store, Page.None);
             return;
         }
@@ -115,7 +120,8 @@ public class RemoveEnchantmentInteraction extends ChoiceInteraction {
                     if (scrollStack.isValid() && !scrollStack.isEmpty()) {
                         ItemContainer playerInventory = playerComponent.getInventory().getCombinedArmorHotbarUtilityStorage();
                         SimpleItemContainer.addOrDropItemStack(store, ref, playerInventory, (short) 0, scrollStack);
-                        playerRef.sendMessage(Message.raw("Returned: " + enchantmentType.getFormattedName(removedLevel)));
+                        String translatedName = languageManager.getRawMessage(enchantmentType.getNameKey(), lang, clientLang) + " " + EnchantmentType.toRoman(removedLevel);
+                        playerRef.sendMessage(Message.raw("Returned: " + translatedName));
                     }
                 } catch (Exception e) {
                     // Scroll doesn't exist, don't return anything
@@ -124,8 +130,9 @@ public class RemoveEnchantmentInteraction extends ChoiceInteraction {
         }
 
         // Send confirmation
-        Message itemName = Message.translation(cleanedItem.getItem().getTranslationKey());
-        Message removedMessage = Message.raw("Removed " + enchantmentType.getFormattedName(removedLevel) + " from ").insert(itemName);
+        Message itemName = languageManager.getMessage(cleanedItem.getItem().getTranslationKey(), lang, clientLang);
+        String translatedName = languageManager.getRawMessage(enchantmentType.getNameKey(), lang, clientLang) + " " + EnchantmentType.toRoman(removedLevel);
+        Message removedMessage = Message.raw("Removed " + translatedName + " from ").insert(itemName);
         playerRef.sendMessage(removedMessage);
         
         pageManager.setPage(ref, store, Page.None);

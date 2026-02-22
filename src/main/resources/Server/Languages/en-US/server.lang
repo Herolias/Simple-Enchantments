@@ -580,6 +580,10 @@ config.button.confirm_reset = Confirm Reset
 config.button.back = Back
 config.button.add_ingredient = Add Ingredient
 config.button.reset_recipe = Reset Recipe
+config.button.edit = Edit
+config.button.edit_recipe = Edit Recipe
+config.button.reset = Reset
+config.button.change = Change
 
 config.general.max_enchantments = Max Enchantments Per Item
 config.general.show_banner = Show Enchantment Banner
@@ -603,6 +607,31 @@ config.secondary.quantity_bonus = Quantity Bonus
 
 config.recipe.active_title = {0} - Ingredients
 config.recipe.crafting_tier = Crafting Tier
+config.recipe.tier_label = Unlocks at Table Tier
 
 config.message.saved = Saved! Most changes require a restart.
 config.message.unsaved = [!] Unsaved Changes
+
+customUI.enchantingPage.tabWalkthrough = Walkthrough
+customUI.enchantingPage.tabSettings = User Settings
+customUI.enchantingPage.title = Simple Enchantments
+customUI.enchantingPage.language = Language
+customUI.enchantingPage.lang.default = Default (Game Language)
+
+customUI.walkthrough.next = Next Page
+customUI.walkthrough.prev = Previous Page
+
+customUI.walkthrough.welcome.title = Welcome to Simple Enchantments!
+customUI.walkthrough.welcome.desc = This mod allows you to enhance your gear and weapons using magical scrolls and enchantments.
+
+customUI.walkthrough.table.title = 1. The Enchanting Table
+customUI.walkthrough.table.desc = Craft an Enchanting Table using Copper and Wood. Place it down and interact with it to browse all available Enchantment Scrolls that you can craft. You can also upgrade the table to access higher tier enchantments.
+
+customUI.walkthrough.scrolls.title = 2. Enchantment Scrolls
+customUI.walkthrough.scrolls.desc = Craft scrolls directly at the Enchanting Table using essences, gems, and monster drops. Once crafted, right-click the scroll while holding it to apply the enchantment to a weapon, armor, or tool in your inventory.
+
+customUI.walkthrough.removing.title = 3. Removing Enchantments
+customUI.walkthrough.removing.desc = Made a mistake? You can craft a Cleansing Scroll to strip off enchantments from an item. If the server enables it, you might even get the scroll back.
+
+customUI.walkthrough.salvaging.title = 4. Salvaging
+customUI.walkthrough.salvaging.desc = If you have an enchanted piece of gear that you no longer need, place it in the Salvaging Station to retrieve valuable dust or essences, effectively destroying the item but refunding some of the enchantment's power.

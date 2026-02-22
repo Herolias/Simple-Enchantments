@@ -25,7 +25,7 @@ Group {
 
     TextButton #ResetMultiplier {
       Style: $C.@TertiaryTextButtonStyle;
-      Anchor: (Width: 70, Height: 28, Right: 6);
+      Anchor: (Width: 120, Height: 28, Right: 6);
       Padding: (Horizontal: 4);
       Text: "Reset";
       TooltipText: "Reset to default";
