@@ -1,0 +1,30 @@
+$C = "../Common.ui";
+
+@DefaultLabelStyle = LabelStyle(
+  ...$C.@SecondaryButtonLabelStyle,
+  HorizontalAlignment: Center
+);
+
+@GoldLabelStyle = LabelStyle(
+  ...$C.@SecondaryButtonLabelStyle,
+  HorizontalAlignment: Center,
+  TextColor: #ffd700
+);
+
+Group {
+  LayoutMode: Top;
+  Padding: (Bottom: 10, Horizontal: 10);
+  
+  Label #SettingName {
+    Anchor: (Height: 30);
+    Style: (
+      FontSize: 16,
+      TextColor: #ffffff,
+      VerticalAlignment: Center
+    );
+  }
+  
+  Group #LanguageGrid {
+    LayoutMode: Top;
+  }
+}

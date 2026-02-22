@@ -2,8 +2,16 @@ $C = "../Common.ui";
 
 $C.@PageOverlay {}
 
-$C.@DecoratedContainer {
-  Anchor: (Width: 1050, Height: 700);
+Group {
+  LayoutMode: Center;
+  Anchor: (Width: 1360, Height: 700);
+
+  Group #WalkthroughSidebarContainer {
+    Anchor: (Width: 300, Right: 10);
+  }
+
+  $C.@DecoratedContainer {
+    Anchor: (Width: 1050, Height: 700);
 
   #Title {
     Group {
@@ -68,6 +76,7 @@ $C.@DecoratedContainer {
       }
     }
   }
+}
 }
 
 $C.@BackButton {}

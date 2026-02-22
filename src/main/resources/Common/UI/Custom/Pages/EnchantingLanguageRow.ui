@@ -1,0 +1,39 @@
+$C = "../Common.ui";
+
+Group {
+  LayoutMode: Center;
+  Anchor: (Height: 35, Bottom: 10);
+  
+  Group { FlexWeight: 1; }
+  
+  Button #Lang1 {
+    Style: $C.@SecondaryButtonStyle;
+    Anchor: (Width: 190, Height: 35, Right: 5);
+    Label #Text {
+      Style: (...$C.@SecondaryButtonLabelStyle, HorizontalAlignment: Center);
+    }
+  }
+  Button #Lang2 {
+    Style: $C.@SecondaryButtonStyle;
+    Anchor: (Width: 190, Height: 35, Right: 5);
+    Label #Text {
+      Style: (...$C.@SecondaryButtonLabelStyle, HorizontalAlignment: Center);
+    }
+  }
+  Button #Lang3 {
+    Style: $C.@SecondaryButtonStyle;
+    Anchor: (Width: 190, Height: 35, Right: 5);
+    Label #Text {
+      Style: (...$C.@SecondaryButtonLabelStyle, HorizontalAlignment: Center);
+    }
+  }
+  Button #Lang4 {
+    Style: $C.@SecondaryButtonStyle;
+    Anchor: (Width: 190, Height: 35);
+    Label #Text {
+      Style: (...$C.@SecondaryButtonLabelStyle, HorizontalAlignment: Center);
+    }
+  }
+
+  Group { FlexWeight: 1; }
+}

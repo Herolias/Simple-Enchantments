@@ -1,0 +1,37 @@
+$C = "../Common.ui";
+
+@GoldButtonStyleOverride = (
+  Default: (
+    LabelStyle: (TextColor: #ffd700)
+  ),
+  Hovered: (
+    LabelStyle: (TextColor: #ffd700)
+  )
+);
+
+// This file is appended directly into #WalkthroughSidebarContainer
+$C.@Panel {
+  Padding: (Horizontal: 15, Vertical: 15);
+  LayoutMode: Top;
+
+  TextButton #WalkthroughP1 {
+    Style: $C.@SecondaryTextButtonStyle;
+    Anchor: (Height: 40, Bottom: 5);
+  }
+  TextButton #WalkthroughP2 {
+    Style: $C.@SecondaryTextButtonStyle;
+    Anchor: (Height: 40, Bottom: 5);
+  }
+  TextButton #WalkthroughP3 {
+    Style: $C.@SecondaryTextButtonStyle;
+    Anchor: (Height: 40, Bottom: 5);
+  }
+  TextButton #WalkthroughP4 {
+    Style: $C.@SecondaryTextButtonStyle;
+    Anchor: (Height: 40, Bottom: 5);
+  }
+  TextButton #WalkthroughP5 {
+    Style: $C.@SecondaryTextButtonStyle;
+    Anchor: (Height: 40, Bottom: 5);
+  }
+}

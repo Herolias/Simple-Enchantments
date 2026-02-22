@@ -19,15 +19,18 @@ import org.herolias.plugin.config.UserSettingsManager;
 import org.herolias.plugin.lang.LanguageManager;
 
 import javax.annotation.Nonnull;
+import java.util.Map;
 
 /**
  * Interactive UI page corresponding to the /enchanting command.
  * Provides a Walkthrough and User Settings (Glow, Banner toggles).
  */
 public class EnchantingPage extends InteractiveCustomUIPage<EnchantingPageEventData> {
-
     private static final Value<String> BUTTON_STYLE = Value.ref("Pages/BasicTextButton.ui", "LabelStyle");
     private static final Value<String> BUTTON_STYLE_SELECTED = Value.ref("Pages/BasicTextButton.ui", "SelectedLabelStyle");
+    private static final Value<String> DEFAULT_LABEL_STYLE = Value.ref("Pages/EnchantingLanguageSettings.ui", "DefaultLabelStyle");
+    private static final Value<String> GOLD_LABEL_STYLE = Value.ref("Pages/EnchantingLanguageSettings.ui", "GoldLabelStyle");
+    private static final Value<String> GOLD_TEXTBUTTON_STYLE = Value.ref("Pages/EnchantingWalkthroughSidebar.ui", "GoldButtonStyleOverride");
 
     private static final String TAB_WALKTHROUGH = "walkthrough";
     private static final String TAB_SETTINGS = "settings";
@@ -44,6 +47,21 @@ public class EnchantingPage extends InteractiveCustomUIPage<EnchantingPageEventD
         "default", "en-US", "de-DE", "es-ES", "fr-FR", "id-ID", "it-IT", 
         "nl-NL", "pt-BR", "ru-RU", "sv-SE", "uk-UA"
     };
+
+    private static final Map<String, String> NATIVE_LANGUAGE_NAMES = Map.ofEntries(
+        Map.entry("default", "Default"),
+        Map.entry("en-US", "English"),
+        Map.entry("de-DE", "Deutsch"),
+        Map.entry("es-ES", "Español"),
+        Map.entry("fr-FR", "Français"),
+        Map.entry("id-ID", "Bahasa Indonesia"),
+        Map.entry("it-IT", "Italiano"),
+        Map.entry("nl-NL", "Nederlands"),
+        Map.entry("pt-BR", "Português (BR)"),
+        Map.entry("ru-RU", "Русский"),
+        Map.entry("sv-SE", "Svenska"),
+        Map.entry("uk-UA", "Українська")
+    );
 
     public EnchantingPage(@Nonnull PlayerRef playerRef, @Nonnull SimpleEnchanting plugin) {
         super(playerRef, CustomPageLifetime.CanDismiss, EnchantingPageEventData.CODEC);
@@ -92,17 +110,18 @@ public class EnchantingPage extends InteractiveCustomUIPage<EnchantingPageEventD
             }
             buildTabContent(commandBuilder, eventBuilder);
             this.sendUpdate(commandBuilder, eventBuilder, false);
-        } else if (data.toggleSetting != null) {
-            if ("lang".equals(data.toggleSetting)) {
-                String currentLang = userSettingsManager.getLanguage(this.playerRef.getUuid());
-                int idx = 0;
-                for (int i = 0; i < LANGUAGE_OPTIONS.length; i++) {
-                    if (LANGUAGE_OPTIONS[i].equals(currentLang)) {
-                        idx = i;
-                        break;
-                    }
+        } else if (data.walkthroughPageSelect != null) {
+            try {
+                int page = Integer.parseInt(data.walkthroughPageSelect);
+                if (page >= 0 && page <= MAX_WALKTHROUGH_PAGES) {
+                    currentWalkthroughPage = page;
                 }
-                String nextLang = LANGUAGE_OPTIONS[(idx + 1) % LANGUAGE_OPTIONS.length];
+            } catch (NumberFormatException ignored) {}
+            buildTabContent(commandBuilder, eventBuilder);
+            this.sendUpdate(commandBuilder, eventBuilder, false);
+        } else if (data.toggleSetting != null) {
+            if (data.toggleSetting.startsWith("lang:")) {
+                String nextLang = data.toggleSetting.substring(5);
                 userSettingsManager.setLanguage(this.playerRef.getUuid(), nextLang);
                 languageManager.sendUpdatePacket(this.playerRef, nextLang);
                 
@@ -129,6 +148,7 @@ public class EnchantingPage extends InteractiveCustomUIPage<EnchantingPageEventD
 
     private void buildTabContent(@Nonnull UICommandBuilder commandBuilder, @Nonnull UIEventBuilder eventBuilder) {
         commandBuilder.clear("#ContentArea");
+        commandBuilder.clear("#WalkthroughSidebarContainer");
 
         switch (currentTab) {
             case TAB_WALKTHROUGH -> buildWalkthroughTab(commandBuilder, eventBuilder);
@@ -150,6 +170,8 @@ public class EnchantingPage extends InteractiveCustomUIPage<EnchantingPageEventD
     }
 
     private void buildWalkthroughTab(@Nonnull UICommandBuilder commandBuilder, @Nonnull UIEventBuilder eventBuilder) {
+        // Append the sidebar directly to its dedicated persistent container outside the main content
+        commandBuilder.append("#WalkthroughSidebarContainer", "Pages/EnchantingWalkthroughSidebar.ui");
         commandBuilder.append("#ContentArea", "Pages/EnchantingWalkthrough_Page.ui");
         
         String lang = userSettingsManager.getLanguage(this.playerRef.getUuid());
@@ -171,6 +193,24 @@ public class EnchantingPage extends InteractiveCustomUIPage<EnchantingPageEventD
             EventData.of("WalkthroughAction", "next"));
         eventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#ContentArea[0] #WalkthroughPrev",
             EventData.of("WalkthroughAction", "prev"));
+
+        // Setup sidebar buttons
+        for (int i = 0; i <= MAX_WALKTHROUGH_PAGES; i++) {
+            String selector = "#WalkthroughSidebarContainer #WalkthroughP" + (i + 1);
+            commandBuilder.set(selector + ".Style", currentWalkthroughPage == i ? GOLD_TEXTBUTTON_STYLE : BUTTON_STYLE);
+            
+            String titleKey = switch (i) {
+                case 0 -> "customUI.walkthrough.welcome.title";
+                case 1 -> "customUI.walkthrough.table.title";
+                case 2 -> "customUI.walkthrough.scrolls.title";
+                case 3 -> "customUI.walkthrough.removing.title";
+                case 4 -> "customUI.walkthrough.salvaging.title";
+                default -> "unknown";
+            };
+            commandBuilder.set(selector + ".TextSpans", languageManager.getMessage(titleKey, lang, this.playerRef.getLanguage()));
+            eventBuilder.addEventBinding(CustomUIEventBindingType.Activating, selector,
+                EventData.of("WalkthroughPageSelect", String.valueOf(i)));
+        }
             
         // Setup language specific strings for the page content
         setupWalkthroughTranslations(commandBuilder, lang, currentWalkthroughPage);
@@ -208,13 +248,28 @@ public class EnchantingPage extends InteractiveCustomUIPage<EnchantingPageEventD
 
         int index = 0;
         
-        // Setup Language Toggle
-        commandBuilder.append("#ContentArea", "Pages/EnchantingSettings.ui");
+        // Setup Language Toggle -> Grid
+        commandBuilder.append("#ContentArea", "Pages/EnchantingLanguageSettings.ui");
         commandBuilder.set("#ContentArea[" + index + "] #SettingName.TextSpans", languageManager.getMessage("customUI.enchantingPage.language", lang, this.playerRef.getLanguage()));
-        commandBuilder.set("#ContentArea[" + index + "] #ToggleButton.TextSpans", 
-            "default".equals(lang) ? languageManager.getMessage("customUI.enchantingPage.lang.default", lang, this.playerRef.getLanguage()) : Message.raw(lang));
-        eventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#ContentArea[" + index + "] #ToggleButton",
-            EventData.of("ToggleSetting", "lang"));
+        
+        int langIndex = 0;
+        int rowIndex = -1;
+        for (String langOpt : LANGUAGE_OPTIONS) {
+            if (langIndex % 4 == 0) {
+                commandBuilder.append("#ContentArea[" + index + "] #LanguageGrid", "Pages/EnchantingLanguageRow.ui");
+                rowIndex++;
+            }
+            String btnSelector = "#ContentArea[" + index + "] #LanguageGrid[" + rowIndex + "] #Lang" + ((langIndex % 4) + 1);
+            commandBuilder.set(btnSelector + " #Text.Style", langOpt.equals(lang) ? GOLD_LABEL_STYLE : DEFAULT_LABEL_STYLE);
+            
+            Message btnText = "default".equals(langOpt) ? languageManager.getMessage("customUI.enchantingPage.lang.default", lang, this.playerRef.getLanguage()) : Message.raw(NATIVE_LANGUAGE_NAMES.get(langOpt));
+            commandBuilder.set(btnSelector + " #Text.TextSpans", btnText);
+            
+            eventBuilder.addEventBinding(CustomUIEventBindingType.Activating, btnSelector,
+                EventData.of("ToggleSetting", "lang:" + langOpt));
+            
+            langIndex++;
+        }
         index++;
 
         // Setup Glow Toggle

@@ -16,7 +16,7 @@ Group {
 
   TextButton #EditRecipeBtn {
     Style: $C.@SecondaryTextButtonStyle;
-    Anchor: (Width: 100, Height: 32);
+    Anchor: (Width: 150, Height: 32);
     Padding: (Horizontal: 12);
     Text: "Edit";
   }

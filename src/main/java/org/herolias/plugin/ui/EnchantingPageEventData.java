@@ -20,12 +20,15 @@ public class EnchantingPageEventData {
             (entry, s) -> entry.close = s, entry -> entry.close)
         .addField(new KeyedCodec<>("WalkthroughAction", Codec.STRING), 
             (entry, s) -> entry.walkthroughAction = s, entry -> entry.walkthroughAction)
+        .addField(new KeyedCodec<>("WalkthroughPageSelect", Codec.STRING), 
+            (entry, s) -> entry.walkthroughPageSelect = s, entry -> entry.walkthroughPageSelect)
         .build();
 
     public String tabSwitch;
     public String toggleSetting;
     public String close;
     public String walkthroughAction;
+    public String walkthroughPageSelect;
 
     public EnchantingPageEventData() {
     }
