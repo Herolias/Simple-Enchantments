@@ -129,7 +129,9 @@ public class EnchantingPage extends InteractiveCustomUIPage<EnchantingPageEventD
                 org.herolias.plugin.enchantment.ScrollDescriptionManager.sendUpdatePacket(this.playerRef);
                 
                 // Also refresh dynamic tooltips in inventory
-                org.herolias.plugin.enchantment.TooltipBridge.refreshPlayer(this.playerRef.getUuid());
+                if (plugin.isTooltipsEnabled()) {
+                    org.herolias.plugin.enchantment.TooltipBridge.refreshPlayer(this.playerRef.getUuid());
+                }
             } else if ("glow".equals(data.toggleSetting)) {
                 boolean current = userSettingsManager.getEnableEnchantmentGlow(this.playerRef.getUuid());
                 userSettingsManager.setEnableEnchantmentGlow(this.playerRef.getUuid(), !current);
@@ -288,6 +290,11 @@ public class EnchantingPage extends InteractiveCustomUIPage<EnchantingPageEventD
             languageManager.getMessage(bannerEnabled ? "config.common.enabled" : "config.common.disabled", lang, this.playerRef.getLanguage()));
         eventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#ContentArea[" + index + "] #ToggleButton",
             EventData.of("ToggleSetting", "banner"));
+        index++;
+
+        // Add Admin Config Note
+        commandBuilder.append("#ContentArea", "Pages/EnchantingSettingsNote.ui");
+        commandBuilder.set("#ContentArea[" + index + "] #NoteText.TextSpans", languageManager.getMessage("customUI.enchantingPage.adminNote", lang, this.playerRef.getLanguage()));
     }
 
     private void closeWithoutSaving(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store) {

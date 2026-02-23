@@ -40,7 +40,7 @@ public class LanguageManager {
                     try (BufferedReader reader = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8))) {
                         String line;
                         while ((line = reader.readLine()) != null) {
-                            line = line.trim();
+                            line = line.replace("\uFEFF", "").trim();
                             if (line.isEmpty() || line.startsWith("#")) continue;
                             
                             int separatorIndex = line.indexOf('=');

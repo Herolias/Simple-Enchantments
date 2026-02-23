@@ -1,0 +1,18 @@
+$C = "../Common.ui";
+
+Group {
+  LayoutMode: Left;
+  Anchor: (Height: 60);
+  Padding: (Top: 20, Horizontal: 10);
+
+  Label #NoteText {
+    FlexWeight: 1;
+    Style: (
+      FontSize: 13,
+      TextColor: #878e9c,
+      VerticalAlignment: Start,
+      HorizontalAlignment: Center,
+      Wrap: true
+    );
+  }
+}

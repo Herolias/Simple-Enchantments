@@ -26,5 +26,6 @@ Group {
   
   Group #LanguageGrid {
     LayoutMode: Top;
+    Padding: (Top: 5, Bottom: 15);
   }
 }

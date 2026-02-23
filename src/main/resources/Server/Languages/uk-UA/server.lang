@@ -22,6 +22,10 @@ customUI.enchantScrollPage.enchantment = Чари
 
 
 
+chat.greeting = Ласкаво просимо до Simple Enchantments! Для посібника та налаштувань використовуйте /enchanting
+
+
+
 items.Enchanting_Table.name = Стіл зачарування
 
 items.Enchanting_Table.description = Стіл, що використовується для створення сувоїв зачарування.
@@ -577,6 +581,7 @@ config.general.enable_glow = Увімкнути Світіння
 config.general.table_tier = Рівень Крафту Столу Чар
 config.general.disable_crafting = Вимкнути Крафт Чар
 config.general.return_cleanse = Повертати Чари При Очищенні
+config.general.salvager_yield = Переробник повертає сувій
 config.general.table_recipe = Рецепт Столу Чар
 config.general.upgrade_1 = Вартість Покращення 1 (Рів. 1 -> 2)
 config.general.upgrade_2 = Вартість Покращення 2 (Рів. 2 -> 3)
@@ -597,3 +602,5 @@ config.recipe.tier_label = Розблоковується на рівні сто
 
 config.message.saved = Збережено! Більшість змін вимагають перезапуску.
 config.message.unsaved = [!] Незбережені зміни
+
+customUI.enchantingPage.adminNote = Налаштування сервера та модифікації чар доступні в Налаштуваннях адміністратора. Отримайте до них доступ через /enchantconfig

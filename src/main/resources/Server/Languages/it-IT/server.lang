@@ -22,6 +22,10 @@ customUI.enchantScrollPage.enchantment = Incantesimo
 
 
 
+chat.greeting = Benvenuto in Simple Enchantments! Per una guida e le impostazioni usa /enchanting
+
+
+
 items.Enchanting_Table.name = Tavolo degli Incantesimi
 
 items.Enchanting_Table.description = Un tavolo usato per creare pergamene d'incantesimo.
@@ -577,6 +581,7 @@ config.general.enable_glow = Abilita Bagliore Incantesimi
 config.general.table_tier = Livello Creazione Tavolo Incantesimi
 config.general.disable_crafting = Disabilita Creazione Incantesimi
 config.general.return_cleanse = Restituisci Incantesimo alla Pulizia
+config.general.salvager_yield = Il Riciclatore restituisce la Pergamena
 config.general.table_recipe = Ricetta Tavolo Incantesimi
 config.general.upgrade_1 = Costo Aggiornamento 1 (Livello 1 -> 2)
 config.general.upgrade_2 = Costo Aggiornamento 2 (Livello 2 -> 3)
@@ -597,3 +602,5 @@ config.recipe.tier_label = Si sblocca al Livello del Tavolo
 
 config.message.saved = Salvato! La maggior parte delle modifiche richiede un riavvio.
 config.message.unsaved = [!] Modifiche non salvate
+
+customUI.enchantingPage.adminNote = Le impostazioni a livello di server e le personalizzazioni degli incantesimi sono disponibili nella configurazione dell'amministratore. Accedi tramite /enchantconfig

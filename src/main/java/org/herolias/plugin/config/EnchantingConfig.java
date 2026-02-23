@@ -49,6 +49,7 @@ public class EnchantingConfig {
     
     // Cleansing Scroll settings
     public boolean returnEnchantmentOnCleanse = false; // If true, gives back the scroll of the removed enchantment
+    public boolean salvagerYieldsScroll = true; // If true, successfully salvaged items yield their highest rarity scroll
     
     public Map<String, Boolean> disabledEnchantments = new LinkedHashMap<>();
     

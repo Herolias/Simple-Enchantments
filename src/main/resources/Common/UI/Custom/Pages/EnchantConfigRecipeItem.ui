@@ -23,6 +23,7 @@ Group {
     Style: (
       FontSize: 12,
       VerticalAlignment: Center,
+      HorizontalAlignment: End,
       TextColor: #7a9cc6
     );
     Text: "Unlocks at Table Tier";

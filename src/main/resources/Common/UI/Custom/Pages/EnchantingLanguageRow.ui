@@ -2,7 +2,7 @@ $C = "../Common.ui";
 
 Group {
   LayoutMode: Center;
-  Anchor: (Height: 35, Bottom: 10);
+  Anchor: (Height: 35, Bottom: 12);
   
   Group { FlexWeight: 1; }
   

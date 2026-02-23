@@ -15,6 +15,8 @@ import com.hypixel.hytale.server.core.inventory.transaction.SlotTransaction;
 import com.hypixel.hytale.server.core.inventory.transaction.Transaction;
 import com.hypixel.hytale.server.core.inventory.transaction.ItemStackTransaction;
 import org.bson.BsonDocument;
+import org.herolias.plugin.enchantment.EnchantmentData;
+import org.herolias.plugin.enchantment.EnchantmentType;
 
 import javax.annotation.Nonnull;
 import java.util.Iterator;
@@ -141,7 +143,13 @@ public class EnchantmentSalvageSystem {
             if (removed || quantityReduced) {
                 BsonDocument savedMeta = getSavedEnchantmentData(bench, slot);
                 if (savedMeta != null) {
-                     queueGlobalRestore(oldItem.getItemId(), savedMeta);
+                     if (isProcessedByBench()) {
+                         if (removed && org.herolias.plugin.SimpleEnchanting.getInstance().getConfigManager().getConfig().salvagerYieldsScroll) {
+                             yieldScroll(bench, savedMeta);
+                         }
+                     } else {
+                         queueGlobalRestore(oldItem.getItemId(), savedMeta);
+                     }
                      
                      if (removed) {
                          clearSavedEnchantmentData(bench, slot);
@@ -275,6 +283,110 @@ public class EnchantmentSalvageSystem {
                  break;
              }
         }
+    }
+
+    private boolean isProcessedByBench() {
+        for (StackTraceElement element : Thread.currentThread().getStackTrace()) {
+            if (element.getClassName().equals("com.hypixel.hytale.builtin.crafting.state.ProcessingBenchState") &&
+                element.getMethodName().equals("tick")) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private void yieldScroll(ProcessingBenchState bench, BsonDocument savedMeta) {
+        ItemStack temp = new ItemStack("dummy", 1).withMetadata(savedMeta);
+        EnchantmentData data = org.herolias.plugin.SimpleEnchanting.getInstance()
+                .getEnchantmentManager().getEnchantmentsFromItem(temp);
+
+        if (data.isEmpty()) return;
+
+        EnchantmentType bestType = null;
+        int bestLevel = -1;
+        boolean bestLegendary = false;
+        
+        java.util.List<EnchantmentType> candidates = new java.util.ArrayList<>();
+
+        for (Map.Entry<EnchantmentType, Integer> entry : data.getAllEnchantments().entrySet()) {
+            EnchantmentType type = entry.getKey();
+            int level = entry.getValue();
+            boolean isLegendary = type.isLegendary();
+
+            if (bestType == null) {
+                bestType = type;
+                bestLevel = level;
+                bestLegendary = isLegendary;
+                candidates.add(type);
+                continue;
+            }
+
+            if (isLegendary && !bestLegendary) {
+                bestType = type;
+                bestLevel = level;
+                bestLegendary = true;
+                candidates.clear();
+                candidates.add(type);
+            } else if (isLegendary == bestLegendary) {
+                if (level > bestLevel) {
+                    bestType = type;
+                    bestLevel = level;
+                    candidates.clear();
+                    candidates.add(type);
+                } else if (level == bestLevel) {
+                    candidates.add(type);
+                }
+            }
+        }
+        
+        if (candidates.isEmpty()) return;
+        
+        EnchantmentType chosenType = candidates.get(java.util.concurrent.ThreadLocalRandom.current().nextInt(candidates.size()));
+        int chosenLevel = data.getLevel(chosenType);
+
+        String scrollId = getScrollItemId(chosenType, chosenLevel);
+        
+        try {
+            ItemStack scrollStack = new ItemStack(scrollId, 1);
+            if (scrollStack.isValid() && !scrollStack.isEmpty()) {
+                ListTransaction<ItemStackTransaction> tx = bench.getItemContainer().addItemStacks(
+                    java.util.Collections.singletonList(scrollStack), false, false, false);
+                
+                if (!tx.succeeded() || tx.getList().stream().anyMatch(t -> t.getRemainder() != null && !t.getRemainder().isEmpty())) {
+                    com.hypixel.hytale.server.core.universe.world.World world = bench.getChunk().getWorld();
+                    com.hypixel.hytale.component.Store<com.hypixel.hytale.server.core.universe.world.storage.EntityStore> entityStore = world.getEntityStore().getStore();
+                    com.hypixel.hytale.math.vector.Vector3d dropPosition = bench.getBlockPosition().toVector3d().add(0.5, 1.0, 0.5);
+                    com.hypixel.hytale.component.Holder<com.hypixel.hytale.server.core.universe.world.storage.EntityStore>[] itemEntityHolders = 
+                        com.hypixel.hytale.server.core.modules.entity.item.ItemComponent.generateItemDrops(
+                            entityStore, java.util.Collections.singletonList(scrollStack), dropPosition, com.hypixel.hytale.math.vector.Vector3f.ZERO);
+                    if (itemEntityHolders.length > 0) {
+                        world.execute(() -> entityStore.addEntities(itemEntityHolders, com.hypixel.hytale.component.AddReason.SPAWN));
+                    }
+                }
+            }
+        } catch (Exception e) {
+            LOGGER.atSevere().log("Failed to yield scroll from salvager: " + e.getMessage());
+        }
+    }
+
+    private String getScrollItemId(EnchantmentType type, int level) {
+        String id = type.getId();
+        StringBuilder sb = new StringBuilder("Scroll_");
+        boolean capitalizeNext = true;
+        for (char c : id.toCharArray()) {
+            if (c == '_') {
+                sb.append('_');
+                capitalizeNext = true;
+            } else if (capitalizeNext) {
+                sb.append(Character.toUpperCase(c));
+                capitalizeNext = false;
+            } else {
+                sb.append(c);
+            }
+        }
+        sb.append('_');
+        sb.append(EnchantmentType.toRoman(level));
+        return sb.toString();
     }
 
     // Session tracking class

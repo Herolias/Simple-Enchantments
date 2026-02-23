@@ -22,6 +22,10 @@ customUI.enchantScrollPage.enchantment = Förtrollning
 
 
 
+chat.greeting = Välkommen till Simple Enchantments! För en genomgång och inställningar, använd /enchanting
+
+
+
 items.Enchanting_Table.name = Förtrollningsbord
 
 items.Enchanting_Table.description = Ett bord som används för att skapa förtrollningsrullar.
@@ -577,6 +581,7 @@ config.general.enable_glow = Aktivera Förtrollningsglöd
 config.general.table_tier = Förtrollningsbords Hantverksnivå
 config.general.disable_crafting = Inaktivera Förtrollningshantverk
 config.general.return_cleanse = Returnera Förtrollning Vid Rening
+config.general.salvager_yield = Återvinnare ger tillbaka Skriftrulle
 config.general.table_recipe = Förtrollningsbordsrecept
 config.general.upgrade_1 = Uppgraderingskostnad 1 (Nivå 1 -> 2)
 config.general.upgrade_2 = Uppgraderingskostnad 2 (Nivå 2 -> 3)
@@ -597,3 +602,5 @@ config.recipe.tier_label = Låses upp vid Bordsnivå
 
 config.message.saved = Sparad! De flesta ändringar kräver omstart.
 config.message.unsaved = [!] Osparade ändringar
+
+customUI.enchantingPage.adminNote = Serveromfattande inställningar och anpassningar av förtrollningar är tillgängliga i administratörskonfig. Kom åt den via /enchantconfig

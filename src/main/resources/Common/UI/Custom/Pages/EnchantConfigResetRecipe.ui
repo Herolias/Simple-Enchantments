@@ -14,4 +14,8 @@ Group {
     Padding: (Horizontal: 12);
     Text: "Reset to Default";
   }
+
+  Group {
+    FlexWeight: 1;
+  }
 }

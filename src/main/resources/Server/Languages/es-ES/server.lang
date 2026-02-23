@@ -22,6 +22,10 @@ customUI.enchantScrollPage.enchantment = Encantamiento
 
 
 
+chat.greeting = ¡Bienvenido a Simple Enchantments! Para una guía y configuración usa /enchanting
+
+
+
 items.Enchanting_Table.name = Mesa de Encantamientos
 
 items.Enchanting_Table.description = Una mesa usada para crear pergaminos de encantamiento.
@@ -576,6 +580,7 @@ config.general.enable_glow = Habilitar Brillo de Encantamiento
 config.general.table_tier = Tier de Crafteo de Mesa de Encantamientos
 config.general.disable_crafting = Deshabilitar Crafteo de Encantamientos
 config.general.return_cleanse = Devolver Encantamiento al Purificar
+config.general.salvager_yield = El Reciclador devuelve Pergamino
 config.general.table_recipe = Receta de Mesa de Encantamientos
 config.general.upgrade_1 = Coste Mejora 1 (Tier 1 -> 2)
 config.general.upgrade_2 = Coste Mejora 2 (Tier 2 -> 3)
@@ -596,3 +601,5 @@ config.recipe.tier_label = Se desbloquea en el nivel de la mesa
 
 config.message.saved = ¡Guardado! La mayoría de cambios requieren reinicio.
 config.message.unsaved = [!] Cambios sin guardar
+
+customUI.enchantingPage.adminNote = La configuración en todo el servidor y las personalizaciones de encantamientos están disponibles en la Configuración de Admin. Accede a través de /enchantconfig

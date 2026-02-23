@@ -6,10 +6,11 @@ import com.hypixel.hytale.server.core.event.events.player.PlayerReadyEvent;
 import com.hypixel.hytale.server.core.util.EventTitleUtil;
 import org.herolias.plugin.SimpleEnchanting;
 import org.herolias.plugin.config.EnchantingConfig;
+import org.herolias.plugin.config.UserSettingsManager;
 
 /**
  * Shows a one-time welcome message to players when they join,
- * informing them about the new tooltip system.
+ * informing them about the new tooltip system and general mod usage.
  */
 public class WelcomeListener {
 
@@ -21,13 +22,27 @@ public class WelcomeListener {
 
     @SuppressWarnings("removal")
     public void onPlayerReady(PlayerReadyEvent event) {
+        Player player = event.getPlayer();
+        String uuid = player.getUuid().toString();
+        
+        UserSettingsManager userSettingsManager = plugin.getUserSettingsManager();
+        
+        // Show the localized greeting message
+        if (!userSettingsManager.hasSeenGreeting(player.getUuid())) {
+            String clientLangCode = player.getPlayerRef().getLanguage();
+            String langCode = userSettingsManager.getLanguage(player.getUuid());
+            
+            Message greeting = plugin.getLanguageManager().getMessage("chat.greeting", langCode, clientLangCode).color("#AA00AA").bold(true); // Changed to purple hex
+            player.sendMessage(greeting);
+            
+            userSettingsManager.setHasSeenGreeting(player.getUuid(), true);
+        }
+
         // Only show if tooltips are enabled (meaning the lib is present)
         if (!plugin.isTooltipsEnabled()) {
             return;
         }
 
-        Player player = event.getPlayer();
-        String uuid = player.getUuid().toString();
         EnchantingConfig config = plugin.getConfigManager().getConfig();
 
         // Check if player has already been notified

@@ -8,6 +8,7 @@ public class UserSettings {
     public Boolean enableEnchantmentGlow = null;
     public Boolean showEnchantmentBanner = null;
     public String language = "default";
+    public Boolean hasSeenGreeting = false;
 
     public UserSettings() {
         // Default constructor for GSON

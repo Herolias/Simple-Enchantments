@@ -20,11 +20,7 @@ benchCategories.enchantingStaff = Magie
 
 benchCategories.enchantingShield = Schild
 
-
-
-
-
-
+chat.greeting = Willkommen bei Simple Enchantments! Für eine Anleitung und Einstellungen nutze /enchanting
 
 customUI.enchantScrollPage.title = Gegenstand verzaubern
 
@@ -39,8 +35,6 @@ customUI.enchantScrollPage.item = Gegenstand
 
 
 customUI.enchantScrollPage.enchantment = Verzauberung
-
-
 
 
 
@@ -1083,6 +1077,7 @@ config.general.table_recipe = Verzauberungstisch Rezept
 config.general.upgrade_1 = Upgrade 1 Kosten (Rang 1 -> 2)
 config.general.upgrade_2 = Upgrade 2 Kosten (Rang 2 -> 3)
 config.general.upgrade_3 = Upgrade 3 Kosten (Rang 3 -> 4)
+config.general.salvager_yield = Zerkleinerer gibt Schriftrolle zurück
 
 config.recipe.title = Rezept
 config.recipe.ingredients = Zutaten
@@ -1099,4 +1094,7 @@ config.recipe.tier_label = Freigeschaltet ab Tisch-Stufe
 
 config.message.saved = Gespeichert! Die meisten Änderungen erfordern einen Neustart.
 config.message.unsaved = [!] Ungespeicherte Änderungen
+
+
+customUI.enchantingPage.adminNote = Serverweite Einstellungen und Verzauberungsanpassungen sind in der Admin-Konfiguration verfügbar. Greifen Sie über /enchantconfig darauf zu
 

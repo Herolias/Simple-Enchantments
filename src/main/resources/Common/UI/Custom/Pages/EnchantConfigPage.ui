@@ -2,10 +2,17 @@ $C = "../Common.ui";
 
 $C.@PageOverlay {}
 
-$C.@DecoratedContainer {
-  Anchor: (Width: 1050, Height: 700);
+Group {
+  Anchor: (Width: 1770, Height: 700);
 
-  #Title {
+  Group #ItemSearchSidebarContainer {
+    Anchor: (Width: 350, Left: 1420);
+  }
+
+  $C.@DecoratedContainer {
+    Anchor: (Width: 1050, Height: 700, Left: 360);
+
+    #Title {
     Group {
       $C.@Title #PageTitle {
       }
@@ -120,6 +127,7 @@ $C.@DecoratedContainer {
       }
     }
   }
+}
 }
 
 $C.@BackButton {}

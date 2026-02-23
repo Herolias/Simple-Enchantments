@@ -18,6 +18,10 @@ customUI.enchantScrollPage.enchantment = Enchantment
 
 
 
+chat.greeting = Welcome to Simple Enchantments! For a walkthrough and Settings use /enchanting
+
+
+
 items.Enchanting_Table.name = Enchanting Table
 
 items.Enchanting_Table.description = A table used to craft enchantment scrolls.
@@ -595,6 +599,7 @@ config.general.table_recipe = Enchanting Table Recipe
 config.general.upgrade_1 = Upgrade 1 Cost (Tier 1 -> 2)
 config.general.upgrade_2 = Upgrade 2 Cost (Tier 2 -> 3)
 config.general.upgrade_3 = Upgrade 3 Cost (Tier 3 -> 4)
+config.general.salvager_yield = Salvager Yields Scroll
 
 config.recipe.title = Recipe
 config.recipe.ingredients = Ingredients
@@ -622,16 +627,19 @@ customUI.walkthrough.next = Next Page
 customUI.walkthrough.prev = Previous Page
 
 customUI.walkthrough.welcome.title = Welcome to Simple Enchantments!
-customUI.walkthrough.welcome.desc = This mod allows you to enhance your gear and weapons using magical scrolls and enchantments.
+customUI.walkthrough.welcome.desc = This mod allows you to enhance your gear and weapons using magical scrolls and enchantments. This walkthrough will be improved and translated in the full release.
 
 customUI.walkthrough.table.title = 1. The Enchanting Table
-customUI.walkthrough.table.desc = Craft an Enchanting Table using Copper and Wood. Place it down and interact with it to browse all available Enchantment Scrolls that you can craft. You can also upgrade the table to access higher tier enchantments.
+customUI.walkthrough.table.desc = Craft an Enchanting Table at the Workbench. Place it down and interact with it to browse all available Enchantment Scrolls that you can craft. You can also upgrade the table to access higher tier enchantments.
 
 customUI.walkthrough.scrolls.title = 2. Enchantment Scrolls
-customUI.walkthrough.scrolls.desc = Craft scrolls directly at the Enchanting Table using essences, gems, and monster drops. Once crafted, right-click the scroll while holding it to apply the enchantment to a weapon, armor, or tool in your inventory.
+customUI.walkthrough.scrolls.desc = Craft scrolls directly at the Enchanting Table using essences, gems, ingots and plants. Once crafted, right-click the scroll while holding it to apply the enchantment to a weapon, armor, or tool in your inventory.
 
 customUI.walkthrough.removing.title = 3. Removing Enchantments
 customUI.walkthrough.removing.desc = Made a mistake? You can craft a Cleansing Scroll to strip off enchantments from an item. If the server enables it, you might even get the scroll back.
 
 customUI.walkthrough.salvaging.title = 4. Salvaging
-customUI.walkthrough.salvaging.desc = If you have an enchanted piece of gear that you no longer need, place it in the Salvaging Station to retrieve valuable dust or essences, effectively destroying the item but refunding some of the enchantment's power.
+customUI.walkthrough.salvaging.desc = If you have an enchanted piece of gear that you no longer need, place it in the Salvaging Station to retrieve the highest tier enchantment scroll if enabled on the server.
+
+customUI.enchantingPage.adminNote = Server-wide settings and Enchantment customizations are available in the Admin Config. Access it via /enchantconfig
+

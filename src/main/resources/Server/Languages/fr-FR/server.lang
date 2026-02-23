@@ -22,6 +22,10 @@ customUI.enchantScrollPage.enchantment = Enchantement
 
 
 
+chat.greeting = Bienvenue dans Simple Enchantments ! Pour un guide et les paramètres, utilisez /enchanting
+
+
+
 items.Enchanting_Table.name = Table d'Enchantement
 
 items.Enchanting_Table.description = Une table utilisée pour fabriquer des parchemins d'enchantement.
@@ -576,6 +580,7 @@ config.general.enable_glow = Activer Lueur d'Enchantement
 config.general.table_tier = Niveau de Craft Table d'Enchantement
 config.general.disable_crafting = Désactiver Craft d'Enchantement
 config.general.return_cleanse = Rendre l'Enchantement au Désenchantement
+config.general.salvager_yield = Le Recycleur rend un Parchemin
 config.general.table_recipe = Recette Table d'Enchantement
 config.general.upgrade_1 = Coût Amélioration 1 (Niveau 1 -> 2)
 config.general.upgrade_2 = Coût Amélioration 2 (Niveau 2 -> 3)
@@ -596,3 +601,5 @@ config.recipe.tier_label = Débloqué au niveau de la table
 
 config.message.saved = Sauvegardé ! La plupart des changements nécessitent un redémarrage.
 config.message.unsaved = [!] Changements non sauvegardés
+
+customUI.enchantingPage.adminNote = Les paramètres du serveur et les personnalisations d'enchantement sont disponibles dans la configuration administrateur. Accédez-y via /enchantconfig

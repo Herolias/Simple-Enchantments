@@ -21,7 +21,7 @@ Group {
 
   Group #MultiplierSection {
     LayoutMode: Left;
-    Anchor: (Width: 220, Right: 15);
+    Anchor: (Width: 270, Right: 15);
 
     TextButton #ResetMultiplier {
       Style: $C.@TertiaryTextButtonStyle;

@@ -587,7 +587,7 @@ public enum EnchantmentType {
      * Format: enchantment.[id].name
      */
     public String getNameKey() {
-        return "server.enchantment." + id + ".name";
+        return "enchantment." + id + ".name";
     }
 
     /**
@@ -595,7 +595,7 @@ public enum EnchantmentType {
      * Format: enchantment.[id].description
      */
     public String getDescriptionKey() {
-        return "server.enchantment." + id + ".description";
+        return "enchantment." + id + ".description";
     }
 
     /**

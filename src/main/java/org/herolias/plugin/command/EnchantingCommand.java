@@ -11,6 +11,7 @@ import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import org.herolias.plugin.SimpleEnchanting;
 import org.herolias.plugin.ui.EnchantingPage;
+import com.hypixel.hytale.protocol.GameMode;
 
 import javax.annotation.Nonnull;
 import java.util.concurrent.CompletableFuture;
@@ -30,6 +31,7 @@ public class EnchantingCommand extends AbstractAsyncCommand {
     public EnchantingCommand(SimpleEnchanting plugin) {
         super("enchanting", "server.commands.enchanting.desc");
         this.plugin = plugin;
+        this.setPermissionGroup(GameMode.Adventure); // Lower permissions to allow everyone
     }
 
     @Override

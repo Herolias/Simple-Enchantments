@@ -176,6 +176,7 @@ public class EnchantConfigPage extends InteractiveCustomUIPage<EnchantConfigPage
         copy.thriftRestoreAmountPerLevel = original.thriftRestoreAmountPerLevel;
         copy.elementalHeartSaveChancePerLevel = original.elementalHeartSaveChancePerLevel;
         copy.returnEnchantmentOnCleanse = original.returnEnchantmentOnCleanse;
+        copy.salvagerYieldsScroll = original.salvagerYieldsScroll;
         copy.enchantingTableCraftingTier = original.enchantingTableCraftingTier;
         
         copy.disabledEnchantments = new LinkedHashMap<>(original.disabledEnchantments);
@@ -457,6 +458,7 @@ public class EnchantConfigPage extends InteractiveCustomUIPage<EnchantConfigPage
     
     private void buildTabContent(@Nonnull UICommandBuilder commandBuilder, @Nonnull UIEventBuilder eventBuilder) {
         commandBuilder.clear("#ContentArea");
+        commandBuilder.clear("#ItemSearchSidebarContainer");
         
         switch (currentTab) {
             case TAB_GENERAL -> {
@@ -559,6 +561,15 @@ public class EnchantConfigPage extends InteractiveCustomUIPage<EnchantConfigPage
             languageManager.getMessage(workingConfig.returnEnchantmentOnCleanse ? "config.common.enabled" : "config.common.disabled", lang, this.playerRef.getLanguage()));
         eventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#ContentArea[" + index + "] #ToggleButton",
             EventData.of("SettingValue", "returnEnchantmentOnCleanse:" + !workingConfig.returnEnchantmentOnCleanse));
+        index++;
+        
+        // Salvager Yields Scroll toggle
+        commandBuilder.append("#ContentArea", "Pages/EnchantConfigToggle.ui");
+        commandBuilder.set("#ContentArea[" + index + "] #SettingName.TextSpans", languageManager.getMessage("config.general.salvager_yield", lang, this.playerRef.getLanguage()));
+        commandBuilder.set("#ContentArea[" + index + "] #ToggleButton.TextSpans", 
+            languageManager.getMessage(workingConfig.salvagerYieldsScroll ? "config.common.enabled" : "config.common.disabled", lang, this.playerRef.getLanguage()));
+        eventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#ContentArea[" + index + "] #ToggleButton",
+            EventData.of("SettingValue", "salvagerYieldsScroll:" + !workingConfig.salvagerYieldsScroll));
         index++;
         
         // Edit Table Recipe button
@@ -946,22 +957,22 @@ public class EnchantConfigPage extends InteractiveCustomUIPage<EnchantConfigPage
      * Builds the item search overlay for selecting a replacement ingredient.
      */
     private void buildItemSearchOverlay(@Nonnull UICommandBuilder commandBuilder, @Nonnull UIEventBuilder eventBuilder) {
-        // Append search overlay to content area
-        commandBuilder.append("#ContentArea", "Pages/EnchantConfigItemSearch.ui");
+        // Append search overlay to sidebar container
+        commandBuilder.append("#ItemSearchSidebarContainer", "Pages/EnchantConfigItemSearch.ui");
         
         // Restore the current search query value so it doesn't get cleared
         if (currentSearchQuery != null && !currentSearchQuery.isEmpty()) {
-            commandBuilder.set("#ItemSearchInput.Value", currentSearchQuery);
+            commandBuilder.set("#ItemSearchSidebarContainer #ItemSearchInput.Value", currentSearchQuery);
         }
         
         // Cancel button
-        commandBuilder.set("#CancelSearchBtn.TextSpans", languageManager.getMessage("config.button.cancel", lang, this.playerRef.getLanguage()));
-        eventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#CancelSearchBtn",
+        commandBuilder.set("#ItemSearchSidebarContainer #CancelSearchBtn.TextSpans", languageManager.getMessage("config.button.cancel", lang, this.playerRef.getLanguage()));
+        eventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#ItemSearchSidebarContainer #CancelSearchBtn",
             EventData.of("CancelSearch", "true"));
         
         // Search input - listen for text changes using .Value property
-        eventBuilder.addEventBinding(CustomUIEventBindingType.ValueChanged, "#ItemSearchInput",
-            EventData.of("SearchInput", "").append("@SearchInput", "#ItemSearchInput.Value"), false);
+        eventBuilder.addEventBinding(CustomUIEventBindingType.ValueChanged, "#ItemSearchSidebarContainer #ItemSearchInput",
+            EventData.of("SearchInput", "").append("@SearchInput", "#ItemSearchSidebarContainer #ItemSearchInput.Value"), false);
         
         // Get filtered items and display them
         List<Item> filteredItems = getFilteredItems(currentSearchQuery);
@@ -975,12 +986,12 @@ public class EnchantConfigPage extends InteractiveCustomUIPage<EnchantConfigPage
             String itemId = item.getId();
             String displayName = getItemDisplayName(item);
             
-            commandBuilder.append("#ItemSearchResults", "Pages/EnchantConfigSearchItem.ui");
-            commandBuilder.set("#ItemSearchResults[" + itemIndex + "] #ItemIcon.ItemId", itemId);
-            commandBuilder.set("#ItemSearchResults[" + itemIndex + "] #ItemDisplayName.TextSpans", languageManager.getMessage(displayName, lang, this.playerRef.getLanguage()));
+            commandBuilder.append("#ItemSearchSidebarContainer #ItemSearchResults", "Pages/EnchantConfigSearchItem.ui");
+            commandBuilder.set("#ItemSearchSidebarContainer #ItemSearchResults[" + itemIndex + "] #ItemIcon.ItemId", itemId);
+            commandBuilder.set("#ItemSearchSidebarContainer #ItemSearchResults[" + itemIndex + "] #ItemDisplayName.TextSpans", languageManager.getMessage(displayName, lang, this.playerRef.getLanguage()));
             
             // Clicking the item selects it
-            eventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#ItemSearchResults[" + itemIndex + "] #ItemSelectBtn",
+            eventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#ItemSearchSidebarContainer #ItemSearchResults[" + itemIndex + "] #ItemSelectBtn",
                 EventData.of("SelectItem", itemId));
             
             itemIndex++;
@@ -993,7 +1004,7 @@ public class EnchantConfigPage extends InteractiveCustomUIPage<EnchantConfigPage
      */
     private void updateSearchResults(@Nonnull UICommandBuilder commandBuilder, @Nonnull UIEventBuilder eventBuilder) {
         // Clear only the search results, not the entire overlay
-        commandBuilder.clear("#ItemSearchResults");
+        commandBuilder.clear("#ItemSearchSidebarContainer #ItemSearchResults");
         
         // Get filtered items and display them
         List<Item> filteredItems = getFilteredItems(currentSearchQuery);
@@ -1007,11 +1018,11 @@ public class EnchantConfigPage extends InteractiveCustomUIPage<EnchantConfigPage
             String itemId = item.getId();
             String displayName = getItemDisplayName(item);
             
-            commandBuilder.append("#ItemSearchResults", "Pages/EnchantConfigSearchItem.ui");
-            commandBuilder.set("#ItemSearchResults[" + itemIndex + "] #ItemIcon.ItemId", itemId);
-            commandBuilder.set("#ItemSearchResults[" + itemIndex + "] #ItemDisplayName.TextSpans", languageManager.getMessage(displayName, lang, this.playerRef.getLanguage()));
+            commandBuilder.append("#ItemSearchSidebarContainer #ItemSearchResults", "Pages/EnchantConfigSearchItem.ui");
+            commandBuilder.set("#ItemSearchSidebarContainer #ItemSearchResults[" + itemIndex + "] #ItemIcon.ItemId", itemId);
+            commandBuilder.set("#ItemSearchSidebarContainer #ItemSearchResults[" + itemIndex + "] #ItemDisplayName.TextSpans", languageManager.getMessage(displayName, lang, this.playerRef.getLanguage()));
             
-            eventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#ItemSearchResults[" + itemIndex + "] #ItemSelectBtn",
+            eventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#ItemSearchSidebarContainer #ItemSearchResults[" + itemIndex + "] #ItemSelectBtn",
                 EventData.of("SelectItem", itemId));
             
             itemIndex++;
@@ -1243,6 +1254,7 @@ public class EnchantConfigPage extends InteractiveCustomUIPage<EnchantConfigPage
                 case "riposteDamageMultiplierPerLevel" -> workingConfig.riposteDamageMultiplierPerLevel = Double.parseDouble(value);
                 case "coupDeGraceDamageMultiplierPerLevel" -> workingConfig.coupDeGraceDamageMultiplierPerLevel = Double.parseDouble(value);
                 case "rangedProtectionDamageReductionPerLevel" -> workingConfig.rangedProtectionDamageReductionPerLevel = Double.parseDouble(value);
+                case "salvagerYieldsScroll" -> workingConfig.salvagerYieldsScroll = Boolean.parseBoolean(value);
             }
         } catch (NumberFormatException e) {
             LOGGER.atWarning().log("Failed to parse setting value: " + key + " = " + value);
@@ -1339,6 +1351,7 @@ public class EnchantConfigPage extends InteractiveCustomUIPage<EnchantConfigPage
             case "riposteDamageMultiplierPerLevel" -> String.valueOf(DEFAULT_CONFIG.riposteDamageMultiplierPerLevel);
             case "coupDeGraceDamageMultiplierPerLevel" -> String.valueOf(DEFAULT_CONFIG.coupDeGraceDamageMultiplierPerLevel);
             case "rangedProtectionDamageReductionPerLevel" -> String.valueOf(DEFAULT_CONFIG.rangedProtectionDamageReductionPerLevel);
+            case "salvagerYieldsScroll" -> String.valueOf(DEFAULT_CONFIG.salvagerYieldsScroll);
             default -> null;
         };
     }
@@ -1375,6 +1388,7 @@ public class EnchantConfigPage extends InteractiveCustomUIPage<EnchantConfigPage
         actualConfig.frenzyChargeSpeedMultiplierPerLevel = workingConfig.frenzyChargeSpeedMultiplierPerLevel;
         actualConfig.returnEnchantmentOnCleanse = workingConfig.returnEnchantmentOnCleanse;
         actualConfig.disableEnchantmentCrafting = workingConfig.disableEnchantmentCrafting;
+        actualConfig.salvagerYieldsScroll = workingConfig.salvagerYieldsScroll;
         actualConfig.riposteDamageMultiplierPerLevel = workingConfig.riposteDamageMultiplierPerLevel;
         actualConfig.coupDeGraceDamageMultiplierPerLevel = workingConfig.coupDeGraceDamageMultiplierPerLevel;
         actualConfig.rangedProtectionDamageReductionPerLevel = workingConfig.rangedProtectionDamageReductionPerLevel;
@@ -1476,6 +1490,7 @@ public class EnchantConfigPage extends InteractiveCustomUIPage<EnchantConfigPage
         workingConfig.rangedProtectionDamageReductionPerLevel = defaults.rangedProtectionDamageReductionPerLevel;
         workingConfig.returnEnchantmentOnCleanse = defaults.returnEnchantmentOnCleanse;
         workingConfig.disableEnchantmentCrafting = defaults.disableEnchantmentCrafting;
+        workingConfig.salvagerYieldsScroll = defaults.salvagerYieldsScroll;
 
         
         // Reset maps

@@ -22,7 +22,8 @@ Group {
     Label #Desc {
       Style: (
         FontSize: 16,
-        TextColor: #ffffff
+        TextColor: #ffffff,
+        Wrap: true
       );
       Padding: (Bottom: 15);
     }

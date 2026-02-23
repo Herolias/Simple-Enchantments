@@ -22,6 +22,10 @@ customUI.enchantScrollPage.enchantment = Sihir
 
 
 
+chat.greeting = Selamat datang di Simple Enchantments! Untuk panduan dan Pengaturan gunakan /enchanting
+
+
+
 items.Enchanting_Table.name = Meja Pesona
 
 items.Enchanting_Table.description = Meja untuk membuat gulungan sihir.
@@ -577,6 +581,7 @@ config.general.enable_glow = Aktifkan Cahaya Sihir
 config.general.table_tier = Tingkat Kerajinan Meja Sihir
 config.general.disable_crafting = Nonaktifkan Kerajinan Sihir
 config.general.return_cleanse = Kembalikan Sihir saat Pembersihan
+config.general.salvager_yield = Pendaur Ulang Mengembalikan Gulungan
 config.general.table_recipe = Resep Meja Sihir
 config.general.upgrade_1 = Biaya Peningkatan 1 (Tingkat 1 -> 2)
 config.general.upgrade_2 = Biaya Peningkatan 2 (Tingkat 2 -> 3)
@@ -597,3 +602,5 @@ config.recipe.tier_label = Terbuka pada Tingkat Meja
 
 config.message.saved = Disimpan! Sebagian besar perubahan memerlukan restart.
 config.message.unsaved = [!] Perubahan belum disimpan
+
+customUI.enchantingPage.adminNote = Pengaturan di seluruh server dan penyesuaian pesona tersedia di Konfigurasi Admin. Akses melalui /enchantconfig

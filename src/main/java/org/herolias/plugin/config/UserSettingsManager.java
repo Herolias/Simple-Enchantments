@@ -29,13 +29,13 @@ public class UserSettingsManager {
         if (!dataFolder.exists()) {
             dataFolder.mkdirs();
         }
-        this.settingsFile = new File(dataFolder, "user_settings.json");
+        this.settingsFile = new File(dataFolder, "simple_enchantments_user_config.json");
         this.configManager = configManager;
     }
 
     public void loadSettings() {
         if (!settingsFile.exists()) {
-            logger.atInfo().log("No user_settings.json found. Creating new empty setup.");
+            logger.atInfo().log("No simple_enchantments_user_config.json found. Creating new empty setup.");
             saveSettings();
             return;
         }
@@ -129,6 +129,26 @@ public class UserSettingsManager {
     public void setLanguage(UUID playerUuid, String language) {
         UserSettings settings = getSettings(playerUuid);
         settings.language = language;
+        saveSettings();
+    }
+
+    /**
+     * Determines whether the player has seen the welcome greeting.
+     */
+    public boolean hasSeenGreeting(UUID playerUuid) {
+        UserSettings settings = getSettings(playerUuid);
+        if (settings.hasSeenGreeting != null) {
+            return settings.hasSeenGreeting;
+        }
+        return false;
+    }
+
+    /**
+     * Updates and saves whether the player has seen the welcome greeting.
+     */
+    public void setHasSeenGreeting(UUID playerUuid, Boolean seen) {
+        UserSettings settings = getSettings(playerUuid);
+        settings.hasSeenGreeting = seen;
         saveSettings();
     }
 }

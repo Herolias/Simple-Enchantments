@@ -14,4 +14,8 @@ Group {
     Padding: (Horizontal: 12);
     Text: "+ Add Ingredient";
   }
+
+  Group {
+    FlexWeight: 1;
+  }
 }

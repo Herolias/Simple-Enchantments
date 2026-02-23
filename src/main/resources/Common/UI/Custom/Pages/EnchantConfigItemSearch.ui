@@ -1,54 +1,49 @@
 $C = "../Common.ui";
 
-// Item search overlay - appears on top of recipe detail
+// Item search sidebar - appears next to the main config window
 Group {
-  Background: (Color: #000000(0.7));
+  Background: (TexturePath: "../Common/ContainerFullPatch.png", Border: 23);
   
   Group {
-    Anchor: (Width: 500, Height: 450);
-    Background: (TexturePath: "../Common/ContainerPatch.png", Border: 23);
+    LayoutMode: Top;
+    Padding: (Full: 15);
     
+    // Header with title
     Group {
-      LayoutMode: Top;
-      Padding: (Full: 15);
+      LayoutMode: Left;
+      Anchor: (Height: 40, Bottom: 10);
       
-      // Header with title and close button
-      Group {
-        LayoutMode: Left;
-        Anchor: (Height: 40, Bottom: 10);
-        
-        Label {
-          FlexWeight: 1;
-          Style: (
-            FontSize: 16,
-            VerticalAlignment: Center,
-            RenderBold: true,
-            TextColor: #b4c8c9
-          );
-          Text: "Select Item";
-        }
-        
-        TextButton #CancelSearchBtn {
-          Style: $C.@TertiaryTextButtonStyle;
-          Anchor: (Width: 80, Height: 32);
-          Padding: (Horizontal: 10);
-          Text: "Cancel";
-        }
-      }
-      
-      // Search input
-      $C.@TextField #ItemSearchInput {
-        Anchor: (Height: 38, Bottom: 10);
-        PlaceholderText: "Type to search items...";
-      }
-      
-      // Scrollable item list
-      Group #ItemSearchResults {
+      Label {
         FlexWeight: 1;
-        LayoutMode: TopScrolling;
-        ScrollbarStyle: $C.@DefaultScrollbarStyle;
-        Padding: (Right: 10);
+        Style: (
+          FontSize: 16,
+          VerticalAlignment: Center,
+          RenderBold: true,
+          TextColor: #b4c8c9
+        );
+        Text: "Select Item";
       }
+      
+      TextButton #CancelSearchBtn {
+        Style: $C.@TertiaryTextButtonStyle;
+        Anchor: (Width: 80, Height: 32);
+        Padding: (Horizontal: 10);
+        Text: "Cancel";
+      }
+    }
+    
+    // Search input
+    $C.@TextField #ItemSearchInput {
+      Anchor: (Height: 38, Bottom: 10);
+      PlaceholderText: "Type to search items...";
+    }
+    
+    // Scrollable item list
+    Group #ItemSearchResults {
+      FlexWeight: 1;
+      LayoutMode: TopScrolling;
+      ScrollbarStyle: $C.@DefaultScrollbarStyle;
+      Padding: (Right: 10);
     }
   }
 }

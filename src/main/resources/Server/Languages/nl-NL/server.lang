@@ -22,6 +22,10 @@ customUI.enchantScrollPage.enchantment = Betovering
 
 
 
+chat.greeting = Welkom bij Simple Enchantments! Gebruik /enchanting voor een uitleg en instellingen
+
+
+
 items.Enchanting_Table.name = Betoveringstafel
 
 items.Enchanting_Table.description = Een tafel die wordt gebruikt om betoveringsrollen te maken.
@@ -577,6 +581,7 @@ config.general.enable_glow = Activeer Betoveringsgloed
 config.general.table_tier = Betoveringstafel Ambachtsniveau
 config.general.disable_crafting = Schakel Betoveringsambacht Uit
 config.general.return_cleanse = Geef Betovering Terug Bij Reiniging
+config.general.salvager_yield = Recycler geeft Rol terug
 config.general.table_recipe = Betoveringstafel Recept
 config.general.upgrade_1 = Upgrade 1 Kosten (Niveau 1 -> 2)
 config.general.upgrade_2 = Upgrade 2 Kosten (Niveau 2 -> 3)
@@ -597,3 +602,5 @@ config.recipe.tier_label = Ontgrendelt op Tafel Niveau
 
 config.message.saved = Opgeslagen! De meeste wijzigingen vereisen een herstart.
 config.message.unsaved = [!] Niet-opgeslagen wijzigingen
+
+customUI.enchantingPage.adminNote = Serverbrede instellingen en betoveringsaanpassingen zijn beschikbaar in de Adminconfiguratie. Open het via /enchantconfig

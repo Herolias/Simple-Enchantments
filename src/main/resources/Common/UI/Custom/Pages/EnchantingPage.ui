@@ -3,15 +3,15 @@ $C = "../Common.ui";
 $C.@PageOverlay {}
 
 Group {
-  LayoutMode: Center;
-  Anchor: (Width: 1360, Height: 700);
+  Anchor: (Width: 1050, Height: 700);
+  LayoutMode: Left;
 
   Group #WalkthroughSidebarContainer {
-    Anchor: (Width: 300, Right: 10);
+    Anchor: (Width: 200);   // Width for sidebar
   }
 
   $C.@DecoratedContainer {
-    Anchor: (Width: 1050, Height: 700);
+    FlexWeight: 1;          // Take the rest of the 1050 width
 
   #Title {
     Group {
@@ -78,5 +78,6 @@ Group {
   }
 }
 }
+
 
 $C.@BackButton {}
