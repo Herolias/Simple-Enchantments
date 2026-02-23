@@ -181,7 +181,6 @@ public class EnchantmentGlowInjector {
         return STAT_GLOW_PRIMARY;
     }
 
-    @SuppressWarnings("unchecked")
     private static void injectGlowCondition(Item item, String statKey, String vfxId, float targetValue) throws IllegalAccessException {
         // Get existing conditions map or create new one
         Map<String, ItemAppearanceCondition[]> conditions = 

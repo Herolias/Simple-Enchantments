@@ -327,12 +327,14 @@ public class SimpleEnchanting extends JavaPlugin {
         // Register ScrollDescriptionManager to send global translation updates on join
         // Using PlayerReadyEvent as it ensures the player is fully connected (similar to WelcomeListener)
         this.getEventRegistry().registerGlobal(PlayerReadyEvent.class, event -> {
-            com.hypixel.hytale.server.core.universe.PlayerRef playerRef = com.hypixel.hytale.server.core.universe.Universe.get().getPlayer(event.getPlayer().getUuid());
+            Player player = event.getPlayer();
+            if (player.getWorld() == null || player.getReference() == null) return;
+            com.hypixel.hytale.server.core.universe.PlayerRef playerRef = player.getWorld().getEntityStore().getStore().getComponent(player.getReference(), com.hypixel.hytale.server.core.universe.PlayerRef.getComponentType());
             if (playerRef != null) {
                 String langCode = userSettingsManager.getLanguage(playerRef.getUuid());
                 languageManager.sendUpdatePacket(playerRef, langCode);
+                org.herolias.plugin.enchantment.ScrollDescriptionManager.sendUpdatePacket(playerRef);
             }
-            org.herolias.plugin.enchantment.ScrollDescriptionManager.sendUpdatePacket(event.getPlayer());
         });
         LOGGER.atInfo().log("Registered ScrollDescriptionManager listener");
 

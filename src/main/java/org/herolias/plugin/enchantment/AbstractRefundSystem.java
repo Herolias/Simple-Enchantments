@@ -30,7 +30,7 @@ public abstract class AbstractRefundSystem {
      * Event handler for DropItemEvent.PlayerRequest (ECS event).
      * Records when a player manually drops an item so we don't refund it.
      */
-    @SuppressWarnings("removal")
+
     public void onDropItemRequest(@Nonnull DropItemEvent.PlayerRequest event, 
                                    @Nonnull Ref<EntityStore> ref, 
                                    @Nonnull Store<EntityStore> store) {
@@ -40,8 +40,13 @@ public abstract class AbstractRefundSystem {
             return;
         }
         
+        com.hypixel.hytale.server.core.entity.UUIDComponent uuidComp = store.getComponent(ref, com.hypixel.hytale.server.core.entity.UUIDComponent.getComponentType());
+        if (uuidComp == null) {
+            return;
+        }
+        
         short slotId = event.getSlotId();
-        UUID playerKey = player.getUuid();
+        UUID playerKey = uuidComp.getUuid();
         
         // Record this drop with current timestamp
         recentDrops.computeIfAbsent(playerKey, k -> new ConcurrentHashMap<>())
@@ -51,9 +56,8 @@ public abstract class AbstractRefundSystem {
     /**
      * Clean up old drop records for a player.
      */
-    @SuppressWarnings("removal")
-    protected void cleanupOldDropRecords(Player player) {
-        UUID playerKey = player.getUuid();
+
+    protected void cleanupOldDropRecords(UUID playerKey) {
         Map<Short, Long> playerDrops = recentDrops.get(playerKey);
         if (playerDrops == null) {
             return;
@@ -78,9 +82,8 @@ public abstract class AbstractRefundSystem {
      * Check if a slot was recently dropped by this player.
      * Use this before refunding an item.
      */
-    @SuppressWarnings("removal")
-    protected boolean wasRecentlyDropped(Player player, short slot) {
-        UUID playerKey = player.getUuid();
+
+    protected boolean wasRecentlyDropped(UUID playerKey, short slot) {
         Map<Short, Long> playerDrops = recentDrops.get(playerKey);
         if (playerDrops == null) {
             return false;

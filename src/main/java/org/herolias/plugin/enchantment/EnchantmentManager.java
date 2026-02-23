@@ -426,7 +426,6 @@ public class EnchantmentManager {
             if (interaction instanceof ChangeStatBaseInteraction) {
                 // Check entityStatAssets (String map)
                 if (CHANGE_STAT_ENTITY_STAT_ASSETS != null) {
-                    @SuppressWarnings("unchecked")
                     Object2FloatMap<String> assets = (Object2FloatMap<String>) CHANGE_STAT_ENTITY_STAT_ASSETS.get(interaction);
                     if (assets != null) {
                         for (Object2FloatMap.Entry<String> entry : assets.object2FloatEntrySet()) {
@@ -440,7 +439,6 @@ public class EnchantmentManager {
                 
                 // Check entityStats (ID map)
                 if (CHANGE_STAT_ENTITY_STATS != null) {
-                    @SuppressWarnings("unchecked")
                     Int2FloatMap changes = (Int2FloatMap) CHANGE_STAT_ENTITY_STATS.get(interaction);
                     if (changes != null) {
                         for (Int2FloatMap.Entry entry : changes.int2FloatEntrySet()) {
@@ -455,7 +453,6 @@ public class EnchantmentManager {
             if (interaction instanceof StatsConditionBaseInteraction) {
                 // Check rawCosts (String map)
                 if (STATS_CONDITION_RAW_COSTS != null) {
-                    @SuppressWarnings("unchecked")
                     Object2FloatMap<String> rawCosts = (Object2FloatMap<String>) STATS_CONDITION_RAW_COSTS.get(interaction);
                     if (rawCosts != null) {
                         for (Object2FloatMap.Entry<String> entry : rawCosts.object2FloatEntrySet()) {
@@ -469,7 +466,6 @@ public class EnchantmentManager {
                 
                 // Check costs (ID map)
                 if (STATS_CONDITION_COSTS != null) {
-                     @SuppressWarnings("unchecked")
                      Int2FloatMap costs = (Int2FloatMap) STATS_CONDITION_COSTS.get(interaction);
                      if (costs != null) {
                          for (Int2FloatMap.Entry entry : costs.int2FloatEntrySet()) {
@@ -487,7 +483,6 @@ public class EnchantmentManager {
         return false;
     }
 
-    @SuppressWarnings("unchecked")
     private Object2FloatMap<String> getProtectedStringFloatMap(Object target, Class<?> clazz, String fieldName) {
         try {
             Field field = clazz.getDeclaredField(fieldName);
@@ -517,7 +512,6 @@ public class EnchantmentManager {
      * @return The enchantment data (never null, may be empty)
      */
     @Nonnull
-    @SuppressWarnings("deprecation")
     public EnchantmentData getEnchantmentsFromItem(@Nullable ItemStack item) {
         if (item == null || item.isEmpty()) {
             return EnchantmentData.EMPTY;

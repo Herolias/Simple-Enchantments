@@ -55,7 +55,7 @@ import java.util.function.DoubleSupplier;
  * Also cooks bonus drops if the weapon has the Burn enchantment.
  *
  * Overhauled Logic:
- * Instead of extra rolls, this system boosts the drop chance of rare items (weight < 100)
+ * Instead of extra rolls, this system boosts the drop chance of rare items (weight &lt; 100)
  * by a multiplicative factor based on Looting level.
  */
 public class EnchantmentLootingSystem extends DeathSystems.OnDeathSystem {

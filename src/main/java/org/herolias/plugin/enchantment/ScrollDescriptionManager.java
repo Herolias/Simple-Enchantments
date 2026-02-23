@@ -24,15 +24,9 @@ public class ScrollDescriptionManager {
     /**
      * Sends the current translation overrides to a specific player, localized to their client language.
      */
-    @SuppressWarnings("removal")
     public static void sendUpdatePacket(Player player) {
-        if (player == null) return;
-        
-        // Fix: Use Universe to get PlayerRef from UUID since Player doesn't expose getPlayerRef()
-        // verify if Universe is available
-        if (Universe.get() == null) return;
-
-        PlayerRef ref = Universe.get().getPlayer(player.getUuid());
+        if (player == null || player.getWorld() == null || player.getReference() == null) return;
+        com.hypixel.hytale.server.core.universe.PlayerRef ref = player.getWorld().getEntityStore().getStore().getComponent(player.getReference(), com.hypixel.hytale.server.core.universe.PlayerRef.getComponentType());
         sendUpdatePacket(ref);
     }
     

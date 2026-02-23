@@ -62,8 +62,7 @@ public class EnchantingTableListener {
     /**
      * Processes an enchanting request from a player.
      * 
-     * @param itemId The item to enchant
-     * @param itemTypeId The type of item (for category detection)
+     * @param item The item to enchant
      * @param essenceId The essence being used
      * @return true if enchanting was successful
      */

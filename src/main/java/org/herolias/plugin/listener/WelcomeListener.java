@@ -20,22 +20,24 @@ public class WelcomeListener {
         this.plugin = plugin;
     }
 
-    @SuppressWarnings("removal")
     public void onPlayerReady(PlayerReadyEvent event) {
         Player player = event.getPlayer();
-        String uuid = player.getUuid().toString();
+        if (player.getWorld() == null || player.getReference() == null) return;
+        com.hypixel.hytale.server.core.universe.PlayerRef playerRef = player.getWorld().getEntityStore().getStore().getComponent(player.getReference(), com.hypixel.hytale.server.core.universe.PlayerRef.getComponentType());
+        if (playerRef == null) return;
+        String uuid = playerRef.getUuid().toString();
         
         UserSettingsManager userSettingsManager = plugin.getUserSettingsManager();
         
         // Show the localized greeting message
-        if (!userSettingsManager.hasSeenGreeting(player.getUuid())) {
-            String clientLangCode = player.getPlayerRef().getLanguage();
-            String langCode = userSettingsManager.getLanguage(player.getUuid());
+        if (!userSettingsManager.hasSeenGreeting(playerRef.getUuid())) {
+            String clientLangCode = playerRef.getLanguage();
+            String langCode = userSettingsManager.getLanguage(playerRef.getUuid());
             
             Message greeting = plugin.getLanguageManager().getMessage("chat.greeting", langCode, clientLangCode).color("#AA00AA").bold(true); // Changed to purple hex
             player.sendMessage(greeting);
             
-            userSettingsManager.setHasSeenGreeting(player.getUuid(), true);
+            userSettingsManager.setHasSeenGreeting(playerRef.getUuid(), true);
         }
 
         // Only show if tooltips are enabled (meaning the lib is present)
@@ -57,7 +59,7 @@ public class WelcomeListener {
 
         // Show Title
         EventTitleUtil.showEventTitleToPlayer(
-            event.getPlayer().getPlayerRef(),
+            playerRef,
             Message.raw(""), // Title
             Message.raw("Enchantment Tooltips are here!").color("#FFAA00"), // Subtitle (Gold)
             false,

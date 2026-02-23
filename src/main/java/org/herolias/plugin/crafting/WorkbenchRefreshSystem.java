@@ -25,7 +25,7 @@ import java.util.List;
  * open and its tier level changes from the previous tick, we explicitly
  * call invalidateExtraResources() to force a chest rescan.
  */
-@SuppressWarnings({ "deprecation", "removal" })
+
 public class WorkbenchRefreshSystem extends EntityTickingSystem<EntityStore> {
 
     private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
@@ -58,7 +58,10 @@ public class WorkbenchRefreshSystem extends EntityTickingSystem<EntityStore> {
         Entity entity = EntityUtils.getEntity(index, archetypeChunk);
         if (!(entity instanceof Player player)) return;
 
-        int networkId = player.getNetworkId();
+        com.hypixel.hytale.server.core.modules.entity.tracker.NetworkId netIdComp = store.getComponent(archetypeChunk.getReferenceTo(index), com.hypixel.hytale.server.core.modules.entity.tracker.NetworkId.getComponentType());
+        if (netIdComp == null) return;
+        int networkId = netIdComp.getId();
+        
         WindowManager windowManager = player.getWindowManager();
         List<Window> openWindows = windowManager.getWindows();
         

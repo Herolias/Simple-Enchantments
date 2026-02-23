@@ -38,7 +38,6 @@ import java.util.concurrent.TimeUnit;
  * velocity is computed in the first physics tick). In such cases, the velocity multiplier
  * is stored and applied on a scheduled retry after the first tick.
  */
-@SuppressWarnings("deprecation")
 public class EnchantmentProjectileSpeedSystem extends RefSystem<EntityStore> {
 
     private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();

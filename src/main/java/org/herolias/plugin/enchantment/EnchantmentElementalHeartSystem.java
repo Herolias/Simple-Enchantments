@@ -12,6 +12,7 @@ import com.hypixel.hytale.server.core.inventory.transaction.SlotTransaction;
 import com.hypixel.hytale.server.core.inventory.transaction.ItemStackTransaction;
 import com.hypixel.hytale.server.core.inventory.transaction.ItemStackSlotTransaction;
 import org.herolias.plugin.util.ProcessingGuard;
+import java.util.UUID;
 
 /**
  * System handling the Elemental Heart enchantment.
@@ -39,18 +40,23 @@ public class EnchantmentElementalHeartSystem extends AbstractRefundSystem {
         Transaction transaction = event.getTransaction();
         ItemContainer container = event.getItemContainer();
 
-        cleanupOldDropRecords(player);
+        if (player.getWorld() == null || player.getReference() == null) return;
+        com.hypixel.hytale.server.core.entity.UUIDComponent uComp = player.getWorld().getEntityStore().getStore().getComponent(player.getReference(), com.hypixel.hytale.server.core.entity.UUIDComponent.getComponentType());
+        if (uComp == null) return;
+        UUID playerUuid = uComp.getUuid();
+
+        cleanupOldDropRecords(playerUuid);
 
         if (transaction instanceof ItemStackTransaction itemStackTransaction) {
             for (ItemStackSlotTransaction slotTx : itemStackTransaction.getSlotTransactions()) {
-                processSlotTransaction(player, container, slotTx);
+                processSlotTransaction(player, playerUuid, container, slotTx);
             }
         } else if (transaction instanceof SlotTransaction slotTransaction) {
-            processSlotTransaction(player, container, slotTransaction);
+            processSlotTransaction(player, playerUuid, container, slotTransaction);
         }
     }
 
-    private void processSlotTransaction(Player player, ItemContainer container, SlotTransaction slotTransaction) {
+    private void processSlotTransaction(Player player, UUID playerUuid, ItemContainer container, SlotTransaction slotTransaction) {
         if (!slotTransaction.succeeded()) return;
 
         ItemStack slotBefore = slotTransaction.getSlotBefore();
@@ -58,7 +64,7 @@ public class EnchantmentElementalHeartSystem extends AbstractRefundSystem {
 
         if (slotBefore == null || slotBefore.isEmpty()) return;
         if (!isEssenceItem(slotBefore.getItemId())) return;
-        if (wasRecentlyDropped(player, slotTransaction.getSlot())) return;
+        if (wasRecentlyDropped(playerUuid, slotTransaction.getSlot())) return;
 
         int beforeQty = slotBefore.getQuantity();
         int afterQty = (slotAfter == null || slotAfter.isEmpty()) ? 0 : slotAfter.getQuantity();

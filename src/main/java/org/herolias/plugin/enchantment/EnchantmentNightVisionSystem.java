@@ -33,7 +33,6 @@ import java.util.Set;
  * this queues a ComponentUpdate with the DynamicLight data directly to the 
  * wearing player's own EntityViewer — making the light visible only to them.
  */
-@SuppressWarnings("removal")
 public class EnchantmentNightVisionSystem extends EntityTickingSystem<EntityStore> {
 
     private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();

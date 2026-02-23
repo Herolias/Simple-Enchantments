@@ -30,7 +30,6 @@ import java.util.concurrent.ConcurrentHashMap;
  * 
  * Uses a time accumulator to batch oxygen updates and prevent UI flickering.
  */
-@SuppressWarnings("removal")
 public class EnchantmentWaterbreathingSystem extends EntityTickingSystem<EntityStore> {
 
     private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
@@ -78,10 +77,9 @@ public class EnchantmentWaterbreathingSystem extends EntityTickingSystem<EntityS
                 return;
             }
             
-            UUID entityId = livingEntity.getUuid();
-            if (entityId == null) {
-                return;
-            }
+            com.hypixel.hytale.server.core.entity.UUIDComponent uuidComp = store.getComponent(archetypeChunk.getReferenceTo(index), com.hypixel.hytale.server.core.entity.UUIDComponent.getComponentType());
+            if (uuidComp == null) return;
+            UUID entityId = uuidComp.getUuid();
             
             Inventory inventory = livingEntity.getInventory();
             if (inventory == null) {

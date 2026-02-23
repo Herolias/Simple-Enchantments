@@ -281,7 +281,6 @@ public class EnchantmentRecipeManager {
      * Event handler called when recipes are loaded.
      * Removes recipes for disabled enchantment scrolls.
      */
-    @SuppressWarnings("unchecked")
     private static void onRecipeLoad(LoadedAssetsEvent<String, CraftingRecipe, DefaultAssetMap<String, CraftingRecipe>> event) {
         if (plugin == null) {
             return;

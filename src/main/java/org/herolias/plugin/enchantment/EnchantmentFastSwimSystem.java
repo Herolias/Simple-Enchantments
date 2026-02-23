@@ -21,7 +21,6 @@ import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 
 import javax.annotation.Nonnull;
 
-@SuppressWarnings({ "deprecation", "removal" })
 public class EnchantmentFastSwimSystem extends EntityTickingSystem<EntityStore> {
 
     private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
@@ -70,7 +69,9 @@ public class EnchantmentFastSwimSystem extends EntityTickingSystem<EntityStore> 
         }
 
         // 2. Optimization: Check if level changed
-        int entityId = player.getNetworkId();
+        com.hypixel.hytale.server.core.modules.entity.tracker.NetworkId netIdComp = store.getComponent(archetypeChunk.getReferenceTo(index), com.hypixel.hytale.server.core.modules.entity.tracker.NetworkId.getComponentType());
+        if (netIdComp == null) return;
+        int entityId = netIdComp.getId();
         int lastLevel = playerLastLevels.get(entityId);
 
         if (level == lastLevel) {

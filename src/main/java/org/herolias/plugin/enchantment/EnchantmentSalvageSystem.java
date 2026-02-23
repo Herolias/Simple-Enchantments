@@ -32,7 +32,6 @@ import java.util.concurrent.CopyOnWriteArrayList;
  * It strips metadata from items when they are placed in the Salvager Bench so they match the recipe.
  * If the item is removed by the player before processing, the metadata is restored.
  */
-@SuppressWarnings("removal")
 public class EnchantmentSalvageSystem {
     
     private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
@@ -51,7 +50,10 @@ public class EnchantmentSalvageSystem {
      * Hooks into the bench's container to monitor item changes.
      */
     public void startSession(Player player, ProcessingBenchState bench) {
-        UUID playerId = player.getUuid();
+        if (player.getWorld() == null || player.getReference() == null) return;
+        com.hypixel.hytale.server.core.entity.UUIDComponent uComp = player.getWorld().getEntityStore().getStore().getComponent(player.getReference(), com.hypixel.hytale.server.core.entity.UUIDComponent.getComponentType());
+        if (uComp == null) return;
+        UUID playerId = uComp.getUuid();
         
         if (sessions.containsKey(playerId)) {
             return;

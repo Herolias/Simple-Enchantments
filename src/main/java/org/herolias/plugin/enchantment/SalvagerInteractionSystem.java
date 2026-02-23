@@ -11,7 +11,6 @@ import com.hypixel.hytale.logger.HytaleLogger;
 import com.hypixel.hytale.server.core.event.events.ecs.UseBlockEvent;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.core.entity.entities.Player;
-import com.hypixel.hytale.server.core.universe.world.meta.BlockState;
 import com.hypixel.hytale.builtin.crafting.state.ProcessingBenchState;
 import com.hypixel.hytale.math.vector.Vector3i;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
@@ -39,7 +38,6 @@ public class SalvagerInteractionSystem extends EntityEventSystem<EntityStore, Us
     }
 
     @Override
-    @SuppressWarnings("removal")
     public void handle(int index,
                        @Nonnull ArchetypeChunk<EntityStore> archetypeChunk,
                        @Nonnull Store<EntityStore> store,
@@ -62,9 +60,8 @@ public class SalvagerInteractionSystem extends EntityEventSystem<EntityStore, Us
         long chunkIndex = ChunkUtil.indexChunkFromBlock(pos.x, pos.z);
         WorldChunk chunk = player.getWorld().getChunk(chunkIndex);
         
-        BlockState state = null;
         if (chunk != null) {
-            int filler = chunk.getFiller(pos.x, pos.y, pos.z);
+            int filler = chunk.getBlockChunk().getSectionAtBlockY(pos.y).getFiller(pos.x, pos.y, pos.z);
             int targetX = pos.x;
             int targetY = pos.y;
             int targetZ = pos.z;
@@ -74,17 +71,14 @@ public class SalvagerInteractionSystem extends EntityEventSystem<EntityStore, Us
                 targetY -= FillerBlockUtil.unpackY(filler);
                 targetZ -= FillerBlockUtil.unpackZ(filler);
             }
-            // getState accepts global coordinates in WorldChunk (handles masking internally)
-            state = chunk.getState(targetX, targetY, targetZ);
-        }
-
-        
-        if (state instanceof ProcessingBenchState) {
-            ProcessingBenchState bench = (ProcessingBenchState) state;
-            if (bench.getBench() != null) {
-                String id = bench.getBench().getId();
-                if (BENCH_ID.equals(id)) {
-                    salvageSystem.startSession(player, bench);
+            
+            com.hypixel.hytale.component.Ref<com.hypixel.hytale.server.core.universe.world.storage.ChunkStore> blockRef = chunk.getBlockComponentEntity(targetX, targetY, targetZ);
+            if (blockRef != null && blockRef.isValid()) {
+                ProcessingBenchState benchState = player.getWorld().getChunkStore().getStore().getComponent(blockRef, com.hypixel.hytale.server.core.universe.world.meta.BlockStateModule.get().getComponentType(ProcessingBenchState.class));
+                if (benchState != null && benchState.getBench() != null) {
+                    if (BENCH_ID.equals(benchState.getBench().getId())) {
+                        salvageSystem.startSession(player, benchState);
+                    }
                 }
             }
         }

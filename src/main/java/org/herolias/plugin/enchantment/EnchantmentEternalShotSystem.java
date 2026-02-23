@@ -36,7 +36,6 @@ import java.util.concurrent.ConcurrentHashMap;
  *      slot(s) and container(s) where they were added
  *   3. If no slot switch is detected (it was a legitimate pickup), do nothing
  */
-@SuppressWarnings("removal")
 public class EnchantmentEternalShotSystem extends AbstractRefundSystem {
 
     private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
@@ -96,10 +95,14 @@ public class EnchantmentEternalShotSystem extends AbstractRefundSystem {
         LivingEntity entity = event.getEntity();
         if (!(entity instanceof Player player)) return;
 
+        if (player.getWorld() == null || player.getReference() == null) return;
+        com.hypixel.hytale.server.core.entity.UUIDComponent uComp = player.getWorld().getEntityStore().getStore().getComponent(player.getReference(), com.hypixel.hytale.server.core.entity.UUIDComponent.getComponentType());
+        if (uComp != null) {
+            cleanupOldDropRecords(uComp.getUuid());
+        }
+
         Transaction transaction = event.getTransaction();
         ItemContainer container = event.getItemContainer();
-
-        cleanupOldDropRecords(player);
 
         if (transaction instanceof ItemStackTransaction itemStackTransaction) {
             for (ItemStackSlotTransaction slotTx : itemStackTransaction.getSlotTransactions()) {
@@ -119,7 +122,10 @@ public class EnchantmentEternalShotSystem extends AbstractRefundSystem {
      * @param previousItem the item in the PREVIOUS slot (before the switch)
      */
     public void onSlotChanged(Player player, @Nullable ItemStack previousItem) {
-        UUID uuid = player.getUuid();
+        if (player.getWorld() == null || player.getReference() == null) return;
+        com.hypixel.hytale.server.core.entity.UUIDComponent uComp = player.getWorld().getEntityStore().getStore().getComponent(player.getReference(), com.hypixel.hytale.server.core.entity.UUIDComponent.getComponentType());
+        if (uComp == null) return;
+        UUID uuid = uComp.getUuid();
 
         // Only relevant if we're tracking a loaded crossbow for this player
         LoadedAmmoRecord record = loadedCrossbowAmmo.get(uuid);
@@ -206,7 +212,12 @@ public class EnchantmentEternalShotSystem extends AbstractRefundSystem {
         if (slotBefore == null || slotBefore.isEmpty()) return;
         if (!isAmmoItem(slotBefore)) return;
 
-        if (wasRecentlyDropped(player, slot)) return;
+        if (player.getWorld() == null || player.getReference() == null) return;
+        com.hypixel.hytale.server.core.entity.UUIDComponent uuidComp = player.getWorld().getEntityStore().getStore().getComponent(player.getReference(), com.hypixel.hytale.server.core.entity.UUIDComponent.getComponentType());
+        if (uuidComp == null) return;
+        UUID playerUuid = uuidComp.getUuid();
+
+        if (wasRecentlyDropped(playerUuid, slot)) return;
 
         Inventory inventory = player.getInventory();
         if (inventory == null) return;
@@ -225,18 +236,22 @@ public class EnchantmentEternalShotSystem extends AbstractRefundSystem {
         // Track this refund for crossbow swap-from duplication prevention.
         if (enchantmentManager.isCrossbow(weapon)) {
             int consumed = beforeQty - afterQty;
-            UUID uuid = player.getUuid();
+            if (player.getWorld() == null || player.getReference() == null) return;
+            com.hypixel.hytale.server.core.entity.UUIDComponent uuidComp2 = player.getWorld().getEntityStore().getStore().getComponent(player.getReference(), com.hypixel.hytale.server.core.entity.UUIDComponent.getComponentType());
+            if (uuidComp2 != null) {
+                UUID uuid = uuidComp2.getUuid();
 
-            // Accumulate refund quantity (crossbow may load multiple arrows)
-            LoadedAmmoRecord existing = loadedCrossbowAmmo.get(uuid);
-            if (existing != null && existing.ammoId.equals(slotBefore.getItemId())) {
-                existing.totalQtyRefunded += consumed;
-            } else {
-                loadedCrossbowAmmo.put(uuid, new LoadedAmmoRecord(slotBefore.getItemId(), consumed));
+                // Accumulate refund quantity (crossbow may load multiple arrows)
+                LoadedAmmoRecord existing = loadedCrossbowAmmo.get(uuid);
+                if (existing != null && existing.ammoId.equals(slotBefore.getItemId())) {
+                    existing.totalQtyRefunded += consumed;
+                } else {
+                    loadedCrossbowAmmo.put(uuid, new LoadedAmmoRecord(slotBefore.getItemId(), consumed));
+                }
+
+                // Clear any stale pending verifications from a previous cycle
+                pendingSwapVerifications.remove(uuid);
             }
-
-            // Clear any stale pending verifications from a previous cycle
-            pendingSwapVerifications.remove(uuid);
         }
     }
 
@@ -252,7 +267,11 @@ public class EnchantmentEternalShotSystem extends AbstractRefundSystem {
         if (slotAfter == null || slotAfter.isEmpty()) return;
         if (!isAmmoItem(slotAfter)) return;
 
-        UUID playerUuid = player.getUuid();
+        if (player.getWorld() == null || player.getReference() == null) return;
+        com.hypixel.hytale.server.core.entity.UUIDComponent uuidComp = player.getWorld().getEntityStore().getStore().getComponent(player.getReference(), com.hypixel.hytale.server.core.entity.UUIDComponent.getComponentType());
+        if (uuidComp == null) return;
+        UUID playerUuid = uuidComp.getUuid();
+        
         LoadedAmmoRecord record = loadedCrossbowAmmo.get(playerUuid);
 
         // If we haven't recorded a refund for this player, ignore.
