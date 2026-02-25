@@ -1092,64 +1092,72 @@ config.general.upgrade_1 = Upgrade 1 Kosten (Rang 1 -> 2)
 config.general.upgrade_2 = Upgrade 2 Kosten (Rang 2 -> 3)
 config.general.upgrade_3 = Upgrade 3 Kosten (Rang 3 -> 4)
 config.general.salvager_yield = Zerkleinerer gibt Schriftrolle zurück
-config.general.show_welcome = Show Welcome Messages
+config.general.show_welcome = Willkommensnachrichten anzeigen
 
-config.recipe.title = Rezept
-config.recipe.ingredients = Zutaten
+customUI.enchantingPage.tabWalkthrough = Anleitung
+customUI.enchantingPage.tabSettings = Benutzereinstellungen
+customUI.enchantingPage.title = Simple Enchantments
+customUI.enchantingPage.language = Sprache
+customUI.enchantingPage.lang.default = Standard (Spielsprache)
 
-config.common.enabled = Aktiviert
-config.common.disabled = Deaktiviert
+customUI.walkthrough.next = Nächste Seite
+customUI.walkthrough.prev = Vorherige Seite
 
-config.secondary.range_speed_bonus = Reichweite/Tempo Bonus
-config.secondary.quantity_bonus = Mengenbonus
+customUI.walkthrough.welcome.title = Willkommen bei Simple Enchantments!
+customUI.walkthrough.welcome.desc = Dieser Mod ermöglicht es dir, deine Ausrüstung und Waffen mit magischen Schriftrollen und Verzauberungen zu verbessern. Er ist hochgradig anpassbar, mit einem Admin-Konfigurationsmenü (/enchantconfig), das es ermöglicht, Einstellungen zu ändern oder bestimmte Verzauberungen zu aktivieren und zu deaktivieren. Er funktioniert am besten mit Vanilla-Gegenständen, bietet aber eine breite Kompatibilität mit anderen Mods. Wenn du auf ein Problem stößt oder einen Vorschlag hast, tritt unserem Discord-Server bei. Außerdem werden Verzauberungen im Tooltip des Gegenstands angezeigt, wenn Dynamic Tooltips Lib installiert ist.
 
-config.recipe.active_title = {0} - Zutaten
-config.recipe.crafting_tier = Crafting Rang
-config.recipe.tier_label = Freigeschaltet ab Tisch-Stufe
+customUI.walkthrough.table.title = 1. Der Verzauberungstisch
+customUI.walkthrough.table.desc = Stelle einen Verzauberungstisch an der Werkbank her. Platziere ihn und interagiere mit ihm, um alle verfügbaren Verzauberungsschriftrollen zu durchstöbern, die du herstellen kannst. Du kannst den Tisch auch aufwerten, um Zugang zu höherstufigen Verzauberungen zu erhalten.
 
-config.message.saved = Gespeichert! Die meisten Änderungen erfordern einen Neustart.
-config.message.unsaved = [!] Ungespeicherte Änderungen
+customUI.walkthrough.scrolls.title = 2. Verzauberungsschriftrollen
+customUI.walkthrough.scrolls.desc = Stelle Schriftrollen direkt am Verzauberungstisch mit Essenzen, Edelsteinen, Barren und Pflanzen her. Einmal hergestellt, klicke mit der rechten Maustaste auf die Schriftrolle, während du sie hältst, um die Verzauberung auf eine Waffe, Rüstung oder ein Werkzeug in deinem Inventar anzuwenden. Schriftrollen haben verschiedene Seltenheiten, die zeigen, wie stark oder einzigartig die Verzauberung ist. Die meisten Verzauberungen haben 3 Stufen, aber es gibt Ausnahmen. Legendäre Verzauberungen sind besonders mächtig oder einzigartig.
 
+customUI.walkthrough.removing.title = 3. Verzauberungen entfernen
+customUI.walkthrough.removing.desc = Einen Fehler gemacht? Du kannst eine Reinigungsschriftrolle herstellen, um Verzauberungen von einem Gegenstand zu entfernen. Auf diesem Server {returnScroll} du die Schriftrolle zurückerhalten.
+
+customUI.walkthrough.salvaging.title = 4. Verwertung
+customUI.walkthrough.salvaging.desc = Wenn du ein verzaubertes Ausrüstungsteil hast, das du nicht mehr brauchst, lege es in die Verwertungsstation, um die Verzauberungsschriftrolle der höchsten Stufe zurückzuerhalten, wenn auf dem Server aktiviert.
 
 customUI.enchantingPage.adminNote = Serverweite Einstellungen und Verzauberungsanpassungen sind in der Admin-Konfiguration verfügbar. Greifen Sie über /enchantconfig darauf zu
 
 
-customUI.walkthrough.enchantments.title = 5. Enchantments
-customUI.walkthrough.enchantments.desc = A complete list of enchantments and their effects. Click on any to find out more.
+customUI.walkthrough.enchantments.title = 5. Verzauberungen
+customUI.walkthrough.enchantments.desc = Eine vollständige Liste der Verzauberungen und ihrer Effekte. Klicke auf eine, um mehr zu erfahren. Auf diesem Server kann jeder Gegenstand bis zu {maxEnchantments} Verzauberungen haben.\n\nHinweis: Derzeit zeigt jede Verzauberungsseite nur die Tooltip-Beschreibung der Verzauberung und ob sie auf dem Server aktiviert ist. Ich plane, detaillierte Beschreibungen für jede einzelne zu schreiben, aber das braucht Zeit. Jedes zukünftige Update des Mods wird detaillierte Beschreibungen für einige von ihnen hinzufügen.
 
-config.general.allow_same_scroll_upgrades = Allow Same Scroll Upgrades
+config.general.allow_same_scroll_upgrades = Gleiche Schriftrollen-Upgrades erlauben (I+I = II)
 
-customUI.walkthrough.enabledOnServer = Enabled on this Server: 
-customUI.walkthrough.returnScroll.yes = will
-customUI.walkthrough.returnScroll.no = won't
+customUI.walkthrough.enabledOnServer = Auf diesem Server aktiviert: 
+customUI.walkthrough.returnScroll.yes = wirst
+customUI.walkthrough.returnScroll.no = wirst nicht
+
 
 # Walkthrough Descriptions
-enchantment.sharpness.walkthrough = Increases melee damage by {amount}% per level. Applies to swords and axes.
-enchantment.life_leech.walkthrough = Heals attacker for {amount}% of damage dealt. Applies to melee weapons.
-enchantment.durability.walkthrough = Reduces durability loss chance by {amount}% per level. Applies to all weapons, tools, and armor.
-enchantment.sturdy.walkthrough = Prevents max durability loss when repairing. Applies to all weapons, tools, and armor.
-enchantment.dexterity.walkthrough = Reduces stamina costs by {amount}% per level. Applies to melee weapons, shields, and staffs.
-enchantment.protection.walkthrough = Reduces incoming physical damage by {amount}% per armor piece per level. Applies to armor.
-enchantment.efficiency.walkthrough = Increases mining speed by {amount}% per level. Applies to pickaxes, axes, and shovels.
-enchantment.fortune.walkthrough = Increases chance for extra ore/crystal drops by {amount}% per level. Applies to pickaxes. Not combinable with Pick Perfect or Smelting.
-enchantment.smelting.walkthrough = Automatically smelts mined blocks. Applies to pickaxes. Not combinable with Pick Perfect or Fortune.
-enchantment.strength.walkthrough = Increases projectile damage by {amount}% per level. Applies to ranged weapons.
-enchantment.eagles_eye.walkthrough = Increases projectile damage by up to {amount}% based on distance per level. Applies to ranged weapons.
-enchantment.looting.walkthrough = Increases mob max drop rates by {amount}% per level and boosts the chance of rare drops. Applies to melee weapons, ranged weapons, and staffs.
-enchantment.feather_falling.walkthrough = Reduces fall damage by {amount}% per level. Applies to boots.
-enchantment.waterbreathing.walkthrough = Reduces oxygen drain by {amount}% per level. Applies to helmets.
-enchantment.burn.walkthrough = Sets target on fire and lets it drop cooked variants of its drops. Applies to melee and ranged weapons. Not combinable with Freeze.
-enchantment.freeze.walkthrough = Applies severe slow (50%) to target on hit. Applies to melee and ranged weapons. Not combinable with Burn.
-enchantment.eternal_shot.walkthrough = Lets you shoot arrows without consuming them. Applies to ranged weapons.
-enchantment.pick_perfect.walkthrough = Mined blocks drop themselves instead of their usual drops. Applies to pickaxes, axes, and shovels. Not combinable with Fortune or Smelting.
-enchantment.thrift.walkthrough = Restores {amount}% of mana spent on hit per level. Applies to mana staffs.
-enchantment.elemental_heart.walkthrough = Elemental Staffs do not consume essence when casting. Applies to essence staffs.
-enchantment.knockback.walkthrough = Knocks targets back on hit. Applies to melee weapons.
-enchantment.reflection.walkthrough = Reflects {amount}% of blocked damage back to the attacker per level. Applies to shields. Not combinable with Absorption.
-enchantment.absorption.walkthrough = Heals blocker for {amount}% of blocked damage per level. Applies to shields. Not combinable with Reflection.
-enchantment.fast_swim.walkthrough = Increases swim speed by {amount}% per level. Applies to gloves.
-enchantment.night_vision.walkthrough = Enhances visibility in dark environments such as caves, nighttime, and underwater. Applies to helmets.
-enchantment.ranged_protection.walkthrough = Reduces incoming projectile and magic damage by {amount}% per armor piece per level. Applies to armor.
-enchantment.frenzy.walkthrough = Increases signature charge rate by {amount}% per level. Applies to all weapons and staffs.
-enchantment.riposte.walkthrough = Increases counter attack damage by {amount}% per level. Applies to melee weapons.
-enchantment.coup_de_grace.walkthrough = Increases damage to stunned enemies by {amount}% per level. Applies to melee weapons.
+enchantment.sharpness.walkthrough = Erhöht den Nahkampfschaden um {amount}% pro Stufe. Gilt für Schwerter und Äxte.
+enchantment.life_leech.walkthrough = Heilt den Angreifer um {amount}% des verursachten Schadens. Gilt für Nahkampfwaffen.
+enchantment.durability.walkthrough = Verringert die Wahrscheinlichkeit von Haltbarkeitsverlust um {amount}% pro Stufe. Gilt für alle Waffen, Werkzeuge und Rüstungen.
+enchantment.sturdy.walkthrough = Verhindert den Verlust der maximalen Haltbarkeit beim Reparieren. Gilt für alle Waffen, Werkzeuge und Rüstungen.
+enchantment.dexterity.walkthrough = Verringert Ausdauerkosten um {amount}% pro Stufe. Gilt für Nahkampfwaffen, Schilde und Stäbe.
+enchantment.protection.walkthrough = Verringert eingehenden physischen Schaden um {amount}% pro Rüstungsteil pro Stufe. Gilt für Rüstungen.
+enchantment.efficiency.walkthrough = Erhöht die Abbaugeschwindigkeit um {amount}% pro Stufe. Gilt für Spitzhacken, Äxte und Schaufeln.\n\nDerzeit kann diese Verzauberung nur erhöhen, wie schnell ein Block abgebaut wird, nicht wie schnell deine Spitzhacke schwingt, aufgrund von Hytale-Einschränkungen.
+enchantment.fortune.walkthrough = Erhöht die Chance auf zusätzliche Erze/Kristalle um {amount}% pro Stufe. Gilt für Spitzhacken. Nicht kombinierbar mit Behutsamkeit oder Schmelzen.
+enchantment.smelting.walkthrough = Schmilzt abgebaute Blöcke automatisch. Gilt für Spitzhacken. Nicht kombinierbar mit Behutsamkeit oder Glück.
+enchantment.strength.walkthrough = Erhöht Projektilschaden um {amount}% pro Stufe. Gilt für Fernkampfwaffen.
+enchantment.eagles_eye.walkthrough = Erhöht Projektilschaden je nach Distanz um bis zu {amount}% pro Stufe. Gilt für Fernkampfwaffen.
+enchantment.looting.walkthrough = Erhöht die maximale Beuterate von Monstern um {amount}% pro Stufe und verbessert die Chance auf seltene Beute. Gilt für Nahkampfwaffen, Fernkampfwaffen und Stäbe.
+enchantment.feather_falling.walkthrough = Verringert Fallschaden um {amount}% pro Stufe. Gilt für Stiefel.
+enchantment.waterbreathing.walkthrough = Verringert Sauerstoffverbrauch um {amount}% pro Stufe. Gilt für Helme.
+enchantment.burn.walkthrough = Setzt das Ziel in Brand und lässt es gekochte Varianten seiner Beute fallen. Gilt für Nahkampf- und Fernkampfwaffen. Nicht kombinierbar mit Frost.
+enchantment.freeze.walkthrough = Verlangsamt das Ziel bei Treffern stark (50%). Gilt für Nahkampf- und Fernkampfwaffen. Nicht kombinierbar mit Verbrennung.
+enchantment.eternal_shot.walkthrough = Erlaubt das Schießen von Pfeilen ohne Verbrauch. Du brauchst immer noch 1 Pfeil im Inventar. Gilt für Fernkampfwaffen.
+enchantment.pick_perfect.walkthrough = Abgebaute Blöcke droppen sich selbst anstatt ihrer üblichen Beute. Gilt für Spitzhacken, Äxte und Schaufeln. Nicht kombinierbar mit Glück oder Schmelzen.
+enchantment.thrift.walkthrough = Stellt {amount}% des bei einem Treffer verbrauchten Manas wieder her pro Stufe. Gilt für Manastäbe.
+enchantment.elemental_heart.walkthrough = Elementarstäbe verbrauchen keine Essenz beim Zaubern. Gilt für Essenzstäbe.
+enchantment.knockback.walkthrough = Stößt Ziele bei einem Treffer zurück. Gilt für Nahkampfwaffen.
+enchantment.reflection.walkthrough = Reflektiert {amount}% des geblockten Schadens zurück zum Angreifer pro Stufe. Gilt für Schilde. Nicht kombinierbar mit Absorption.
+enchantment.absorption.walkthrough = Heilt den Verteidiger um {amount}% des geblockten Schadens pro Stufe. Gilt für Schilde. Nicht kombinierbar mit Reflexion.
+enchantment.fast_swim.walkthrough = Erhöht die Schwimmgeschwindigkeit um {amount}% pro Stufe. Gilt für Handschuhe.
+enchantment.night_vision.walkthrough = Verbessert die Sicht in dunklen Umgebungen wie Höhlen, Nacht und Unterwasser. Gilt für Helme.\n\nDiese Verzauberung ist standardmäßig deaktiviert, da ich mit der Qualität des Effekts nicht ganz zufrieden bin. Aber es ist das Beste, was mit den aktuellen Hytale-Einschränkungen möglich ist.
+enchantment.ranged_protection.walkthrough = Verringert eingehenden Projektil- und Magieschaden um {amount}% pro Rüstungsteil pro Stufe. Gilt für Rüstungen.
+enchantment.frenzy.walkthrough = Erhöht die Aufladerate der Signaturfähigkeit um {amount}% pro Stufe. Gilt für alle Waffen und Stäbe.
+enchantment.riposte.walkthrough = Dies ist eine Kollaborations-Verzauberung mit dem Perfect Parries Mod und funktioniert nur, wenn beide Mods installiert sind.\n\nErhöht den Schaden von Gegenangriffen um {amount}% pro Stufe. Gilt für Nahkampfwaffen.
+enchantment.coup_de_grace.walkthrough = Dies ist eine Kollaborations-Verzauberung mit dem Perfect Parries Mod und funktioniert nur, wenn beide Mods installiert sind.\n\nErhöht den Schaden gegen betäubte Feinde um {amount}% pro Stufe. Gilt für Nahkampfwaffen.

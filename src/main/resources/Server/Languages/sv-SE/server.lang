@@ -582,7 +582,7 @@ config.general.table_tier = Förtrollningsbords Hantverksnivå
 config.general.disable_crafting = Inaktivera Förtrollningshantverk
 config.general.return_cleanse = Returnera Förtrollning Vid Rening
 config.general.salvager_yield = Återvinnare ger tillbaka Skriftrulle
-config.general.show_welcome = Show Welcome Messages
+config.general.show_welcome = Visa Välkomstmeddelanden
 config.general.table_recipe = Förtrollningsbordsrecept
 config.general.upgrade_1 = Uppgraderingskostnad 1 (Nivå 1 -> 2)
 config.general.upgrade_2 = Uppgraderingskostnad 2 (Nivå 2 -> 3)
@@ -604,54 +604,70 @@ config.recipe.tier_label = Låses upp vid Bordsnivå
 config.message.saved = Sparad! De flesta ändringar kräver omstart.
 config.message.unsaved = [!] Osparade ändringar
 
+customUI.enchantingPage.tabWalkthrough = Guide
+customUI.enchantingPage.tabSettings = Användarinställningar
+customUI.enchantingPage.title = Simple Enchantments
+customUI.enchantingPage.language = Språk
+customUI.enchantingPage.lang.default = Standard (Spelspråk)
+
+customUI.walkthrough.next = Nästa Sida
+customUI.walkthrough.prev = Föregående Sida
+
+customUI.walkthrough.welcome.title = Välkommen till Simple Enchantments!
+customUI.walkthrough.welcome.desc = Denna mod låter dig förbättra din utrustning och vapen med magiska skriftrullar och förtrollningar. Den är mycket anpassningsbar, med en admin-konfigurationsmeny (/enchantconfig) som låter dig ändra inställningar eller aktivera och inaktivera specifika förtrollningar. Den fungerar bäst med vaniljföremål, men erbjuder bred kompatibilitet med andra mods. Om du stöter på ett problem eller har en funktionsförfrågan, gå med i vår Discord-server. Om Dynamic Tooltips Lib är installerat visas dessutom förtrollningar i föremålets inforuta.
+
+customUI.walkthrough.table.title = 1. Förtrollningsbordet
+customUI.walkthrough.table.desc = Tillverka ett Förtrollningsbord vid Arbetsbänken. Placera det och interagera med det för att bläddra bland alla tillgängliga Förtrollningsrullar du kan tillverka. Du kan också uppgradera bordet för att komma åt förtrollningar på högre nivå.
+
+customUI.walkthrough.scrolls.title = 2. Förtrollningsrullar
+customUI.walkthrough.scrolls.desc = Tillverka rullar direkt vid Förtrollningsbordet med essenser, ädelstenar, tackor och växter. När de är tillverkade, högerklicka på rullen medan du håller den för att applicera förtrollningen på ett vapen, rustning eller verktyg i din inventarie. Rullar har olika sällsynthet, som visar hur stark eller unik förtrollningen är. De flesta förtrollningar har 3 nivåer, men det finns undantag. Legendariska förtrollningar är särskilt starka eller unika.
+
+customUI.walkthrough.removing.title = 3. Ta Bort Förtrollningar
+customUI.walkthrough.removing.desc = Gjort ett misstag? Du kan tillverka en Reningsrulle för att ta bort förtrollningar från ett föremål. På denna server {returnScroll} du få tillbaka rullen.
+
+customUI.walkthrough.salvaging.title = 4. Återvinning
+customUI.walkthrough.salvaging.desc = Om du har en förtrollad utrustningsdel som du inte längre behöver, placera den i Återvinningsstationen för att hämta förtrollningsrullen av högsta nivå, om det är aktiverat på servern.
+
 customUI.enchantingPage.adminNote = Serveromfattande inställningar och anpassningar av förtrollningar är tillgängliga i administratörskonfig. Kom åt den via /enchantconfig
-customUI.walkthrough.enchantments.title = 5. Enchantments
-customUI.walkthrough.enchantments.desc = A complete list of enchantments and their effects. Click on any to find out more.
-
-customUI.enchantScrollPage.current = Nuvarande:
-
-customUI.enchantScrollPage.apply = Tillämpa:
-
-customUI.enchantScrollPage.upgrade = Uppgradera:
-
-customUI.cleansingScrollPage.enchantment.singular = förtrollning
-
-customUI.cleansingEnchantmentPage.clickToRemove = Klicka för att ta bort
 
 
-config.general.allow_same_scroll_upgrades = Allow Same Scroll Upgrades
+customUI.walkthrough.enchantments.title = 5. Förtrollningar
+customUI.walkthrough.enchantments.desc = En komplett lista över förtrollningar och deras effekter. Klicka på någon för att lära dig mer. På denna server kan varje föremål ha upp till {maxEnchantments} förtrollningar.\n\nObs: Just nu visar varje förtrollningssida bara Tooltip-beskrivningen av förtrollningen och om den är aktiverad på servern. Jag planerar att skriva detaljerade beskrivningar för var och en av dem, men det tar tid. Varje framtida uppdatering av modden kommer att lägga till en detaljerad beskrivning för några av dem.
 
-customUI.walkthrough.enabledOnServer = Enabled on this Server: 
-customUI.walkthrough.returnScroll.yes = will
-customUI.walkthrough.returnScroll.no = won't
+config.general.allow_same_scroll_upgrades = Tillåt Uppgraderingar med Samma Rulle (I+I = II)
+
+customUI.walkthrough.enabledOnServer = Aktiverad på denna server: 
+customUI.walkthrough.returnScroll.yes = kommer
+customUI.walkthrough.returnScroll.no = kommer inte
+
 
 # Walkthrough Descriptions
-enchantment.sharpness.walkthrough = Increases melee damage by {amount}% per level. Applies to swords and axes.
-enchantment.life_leech.walkthrough = Heals attacker for {amount}% of damage dealt. Applies to melee weapons.
-enchantment.durability.walkthrough = Reduces durability loss chance by {amount}% per level. Applies to all weapons, tools, and armor.
-enchantment.sturdy.walkthrough = Prevents max durability loss when repairing. Applies to all weapons, tools, and armor.
-enchantment.dexterity.walkthrough = Reduces stamina costs by {amount}% per level. Applies to melee weapons, shields, and staffs.
-enchantment.protection.walkthrough = Reduces incoming physical damage by {amount}% per armor piece per level. Applies to armor.
-enchantment.efficiency.walkthrough = Increases mining speed by {amount}% per level. Applies to pickaxes, axes, and shovels.
-enchantment.fortune.walkthrough = Increases chance for extra ore/crystal drops by {amount}% per level. Applies to pickaxes. Not combinable with Pick Perfect or Smelting.
-enchantment.smelting.walkthrough = Automatically smelts mined blocks. Applies to pickaxes. Not combinable with Pick Perfect or Fortune.
-enchantment.strength.walkthrough = Increases projectile damage by {amount}% per level. Applies to ranged weapons.
-enchantment.eagles_eye.walkthrough = Increases projectile damage by up to {amount}% based on distance per level. Applies to ranged weapons.
-enchantment.looting.walkthrough = Increases mob max drop rates by {amount}% per level and boosts the chance of rare drops. Applies to melee weapons, ranged weapons, and staffs.
-enchantment.feather_falling.walkthrough = Reduces fall damage by {amount}% per level. Applies to boots.
-enchantment.waterbreathing.walkthrough = Reduces oxygen drain by {amount}% per level. Applies to helmets.
-enchantment.burn.walkthrough = Sets target on fire and lets it drop cooked variants of its drops. Applies to melee and ranged weapons. Not combinable with Freeze.
-enchantment.freeze.walkthrough = Applies severe slow (50%) to target on hit. Applies to melee and ranged weapons. Not combinable with Burn.
-enchantment.eternal_shot.walkthrough = Lets you shoot arrows without consuming them. Applies to ranged weapons.
-enchantment.pick_perfect.walkthrough = Mined blocks drop themselves instead of their usual drops. Applies to pickaxes, axes, and shovels. Not combinable with Fortune or Smelting.
-enchantment.thrift.walkthrough = Restores {amount}% of mana spent on hit per level. Applies to mana staffs.
-enchantment.elemental_heart.walkthrough = Elemental Staffs do not consume essence when casting. Applies to essence staffs.
-enchantment.knockback.walkthrough = Knocks targets back on hit. Applies to melee weapons.
-enchantment.reflection.walkthrough = Reflects {amount}% of blocked damage back to the attacker per level. Applies to shields. Not combinable with Absorption.
-enchantment.absorption.walkthrough = Heals blocker for {amount}% of blocked damage per level. Applies to shields. Not combinable with Reflection.
-enchantment.fast_swim.walkthrough = Increases swim speed by {amount}% per level. Applies to gloves.
-enchantment.night_vision.walkthrough = Enhances visibility in dark environments such as caves, nighttime, and underwater. Applies to helmets.
-enchantment.ranged_protection.walkthrough = Reduces incoming projectile and magic damage by {amount}% per armor piece per level. Applies to armor.
-enchantment.frenzy.walkthrough = Increases signature charge rate by {amount}% per level. Applies to all weapons and staffs.
-enchantment.riposte.walkthrough = Increases counter attack damage by {amount}% per level. Applies to melee weapons.
-enchantment.coup_de_grace.walkthrough = Increases damage to stunned enemies by {amount}% per level. Applies to melee weapons.
+enchantment.sharpness.walkthrough = Ökar närstridsskada med {amount}% per nivå. Gäller för svärd och yxor.
+enchantment.life_leech.walkthrough = Helar angriparen för {amount}% av skadan som orsakats. Gäller för närstridsvapen.
+enchantment.durability.walkthrough = Minskar chansen för hållbarhetsförlust med {amount}% per nivå. Gäller för alla vapen, verktyg och rustningar.
+enchantment.sturdy.walkthrough = Förhindrar maximal hållbarhetsförlust vid reparation. Gäller för alla vapen, verktyg och rustningar.
+enchantment.dexterity.walkthrough = Minskar uthållighetskostnader med {amount}% per nivå. Gäller för närstridsvapen, sköldar och stavar.
+enchantment.protection.walkthrough = Minskar inkommande fysisk skada med {amount}% per rustningsdel per nivå. Gäller för rustningar.
+enchantment.efficiency.walkthrough = Ökar gruvhastighet med {amount}% per nivå. Gäller för hackor, yxor och spadar.\n\nFör tillfället kan denna förtrollning bara öka hur snabbt ett block bryts, inte hur snabbt din hacka svingar på grund av Hytale-begränsningar.
+enchantment.fortune.walkthrough = Ökar chansen för extra malm-/kristalldroppar med {amount}% per nivå. Gäller för hackor. Inte kombinerbar med Perfekt Grepp eller Smältning.
+enchantment.smelting.walkthrough = Smälter automatiskt brutna block. Gäller för hackor. Inte kombinerbar med Perfekt Grepp eller Tur.
+enchantment.strength.walkthrough = Ökar projektilskada med {amount}% per nivå. Gäller för avståndsvapen.
+enchantment.eagles_eye.walkthrough = Ökar projektilskada med upp till {amount}% baserat på avstånd per nivå. Gäller för avståndsvapen.
+enchantment.looting.walkthrough = Ökar maximala droppfrekvenser från monster med {amount}% per nivå och ökar chansen för sällsynta droppar. Gäller för närstridsvapen, avståndsvapen och stavar.
+enchantment.feather_falling.walkthrough = Minskar fallskada med {amount}% per nivå. Gäller för stövlar.
+enchantment.waterbreathing.walkthrough = Minskar syreförbrukning med {amount}% per nivå. Gäller för hjälmar.
+enchantment.burn.walkthrough = Sätter målet i brand och låter det droppa kokta varianter av sina droppar. Gäller för närstrids- och avståndsvapen. Inte kombinerbar med Frysning.
+enchantment.freeze.walkthrough = Applicerar kraftig avmattning (50%) på målet vid träff. Gäller för närstrids- och avståndsvapen. Inte kombinerbar med Bränning.
+enchantment.eternal_shot.walkthrough = Låter dig skjuta pilar utan att förbruka dem. Du behöver fortfarande 1 pil i din inventarie. Gäller för avståndsvapen.
+enchantment.pick_perfect.walkthrough = Brutna block droppar sig själva istället för sina vanliga droppar. Gäller för hackor, yxor och spadar. Inte kombinerbar med Tur eller Smältning.
+enchantment.thrift.walkthrough = Återställer {amount}% av förbrukad mana per träff per nivå. Gäller för manastavar.
+enchantment.elemental_heart.walkthrough = Elementära Stavar förbrukar inte essens vid besvärjelse. Gäller för essensstavar.
+enchantment.knockback.walkthrough = Slår tillbaka mål vid träff. Gäller för närstridsvapen.
+enchantment.reflection.walkthrough = Reflekterar {amount}% av blockerad skada tillbaka till angriparen per nivå. Gäller för sköldar. Inte kombinerbar med Absorption.
+enchantment.absorption.walkthrough = Helar blockeraren för {amount}% av blockerad skada per nivå. Gäller för sköldar. Inte kombinerbar med Reflektion.
+enchantment.fast_swim.walkthrough = Ökar simhastighet med {amount}% per nivå. Gäller för handskar.
+enchantment.night_vision.walkthrough = Förbättrar sikten i mörka miljöer som grottor, nattetid och under vatten. Gäller för hjälmar.\n\nDenna förtrollning är inaktiverad som standard eftersom jag inte är helt nöjd med kvaliteten på effekten. Men det är det bästa som är möjligt med nuvarande Hytale-begränsningar.
+enchantment.ranged_protection.walkthrough = Minskar inkommande projektil- och magiskada med {amount}% per rustningsdel per nivå. Gäller för rustningar.
+enchantment.frenzy.walkthrough = Ökar laddningshastigheten för signaturförmågan med {amount}% per nivå. Gäller för alla vapen och stavar.
+enchantment.riposte.walkthrough = Detta är en samarbetsförtrollning med Perfect Parries-modden och fungerar bara om båda moddarna är installerade.\n\nÖkar motanfallsskada med {amount}% per nivå. Gäller för närstridsvapen.
+enchantment.coup_de_grace.walkthrough = Detta är en samarbetsförtrollning med Perfect Parries-modden och fungerar bara om båda moddarna är installerade.\n\nÖkar skada mot bedövade fiender med {amount}% per nivå. Gäller för närstridsvapen.

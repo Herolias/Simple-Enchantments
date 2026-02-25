@@ -1,4 +1,4 @@
-benchCategories.enchantingArmor = Обладунки
+﻿benchCategories.enchantingArmor = Обладунки
 
 benchCategories.enchantingTools = Інструменти
 
@@ -582,7 +582,7 @@ config.general.table_tier = Рівень Крафту Столу Чар
 config.general.disable_crafting = Вимкнути Крафт Чар
 config.general.return_cleanse = Повертати Чари При Очищенні
 config.general.salvager_yield = Переробник повертає сувій
-config.general.show_welcome = Show Welcome Messages
+config.general.show_welcome = Показувати Вітальні Повідомлення
 config.general.table_recipe = Рецепт Столу Чар
 config.general.upgrade_1 = Вартість Покращення 1 (Рів. 1 -> 2)
 config.general.upgrade_2 = Вартість Покращення 2 (Рів. 2 -> 3)
@@ -604,54 +604,70 @@ config.recipe.tier_label = Розблоковується на рівні сто
 config.message.saved = Збережено! Більшість змін вимагають перезапуску.
 config.message.unsaved = [!] Незбережені зміни
 
+customUI.enchantingPage.tabWalkthrough = Посібник
+customUI.enchantingPage.tabSettings = Налаштування Користувача
+customUI.enchantingPage.title = Simple Enchantments
+customUI.enchantingPage.language = Мова
+customUI.enchantingPage.lang.default = За замовчуванням (Мова Гри)
+
+customUI.walkthrough.next = Наступна Сторінка
+customUI.walkthrough.prev = Попередня Сторінка
+
+customUI.walkthrough.welcome.title = Ласкаво просимо до Simple Enchantments!
+customUI.walkthrough.welcome.desc = Цей мод дозволяє покращувати ваше спорядження та зброю за допомогою магічних сувоїв та чар. Він легко налаштовується — за допомогою меню конфігурації адміністратора (/enchantconfig) можна змінювати налаштування або вмикати та вимикати певні чари. Найкраще працює з ванільними предметами, але має широку сумісність з іншими модами. Якщо ви зіткнулися з проблемою або хочете запропонувати покращення, приєднуйтесь до нашого Discord-сервера. Крім того, якщо встановлено Dynamic Tooltips Lib, чари будуть відображатися у підказці предмета.
+
+customUI.walkthrough.table.title = 1. Стіл Чар
+customUI.walkthrough.table.desc = Створіть Стіл Чар на Верстаку. Розмістіть його та взаємодійте з ним, щоб переглянути всі доступні Сувої Чар, які можна створити. Ви також можете покращити стіл, щоб отримати доступ до чар вищого рівня.
+
+customUI.walkthrough.scrolls.title = 2. Сувої Чар
+customUI.walkthrough.scrolls.desc = Створюйте сувої прямо на Столі Чар, використовуючи есенції, самоцвіти, злитки та рослини. Після створення натисніть правою кнопкою миші на сувій, тримаючи його в руці, щоб застосувати чари до зброї, обладунків або інструменту у вашому інвентарі. Сувої мають різну рідкісність, що показує, наскільки сильне або унікальне зачарування. Більшість чар мають 3 рівні, але є й винятки. Легендарні чари особливо потужні або унікальні.
+
+customUI.walkthrough.removing.title = 3. Зняття Чар
+customUI.walkthrough.removing.desc = Допустили помилку? Ви можете створити Сувій Очищення, щоб зняти чари з предмета. На цьому сервері ви {returnScroll} отримаєте сувій назад.
+
+customUI.walkthrough.salvaging.title = 4. Переробка
+customUI.walkthrough.salvaging.desc = Якщо у вас є зачароване спорядження, яке вам більше не потрібне, помістіть його на Станцію Переробки, щоб отримати сувій чар найвищого рівня, якщо ця функція увімкнена на сервері.
+
 customUI.enchantingPage.adminNote = Налаштування сервера та модифікації чар доступні в Налаштуваннях адміністратора. Отримайте до них доступ через /enchantconfig
-customUI.walkthrough.enchantments.title = 5. Enchantments
-customUI.walkthrough.enchantments.desc = A complete list of enchantments and their effects. Click on any to find out more.
-
-customUI.enchantScrollPage.current = Поточний:
-
-customUI.enchantScrollPage.apply = Застосувати:
-
-customUI.enchantScrollPage.upgrade = Покращити:
-
-customUI.cleansingScrollPage.enchantment.singular = зачарування
-
-customUI.cleansingEnchantmentPage.clickToRemove = Натисніть, щоб видалити
 
 
-config.general.allow_same_scroll_upgrades = Allow Same Scroll Upgrades
+customUI.walkthrough.enchantments.title = 5. Чари
+customUI.walkthrough.enchantments.desc = Повний список чар та їх ефектів. Натисніть на будь-яке, щоб дізнатися більше. На цьому сервері кожен предмет може мати до {maxEnchantments} чар.\n\nПримітка: Зараз кожна сторінка чар показує лише опис з підказки та чи увімкнене воно на сервері. Я планую написати детальні описи для кожного з них, але це потребує часу. Кожне майбутнє оновлення моду буде додавати детальний опис для деяких з них.
 
-customUI.walkthrough.enabledOnServer = Enabled on this Server: 
-customUI.walkthrough.returnScroll.yes = will
-customUI.walkthrough.returnScroll.no = won't
+config.general.allow_same_scroll_upgrades = Дозволити Покращення Однаковими Сувоями (I+I = II)
+
+customUI.walkthrough.enabledOnServer = Увімкнено на цьому сервері: 
+customUI.walkthrough.returnScroll.yes = отримаєте
+customUI.walkthrough.returnScroll.no = не отримаєте
+
 
 # Walkthrough Descriptions
-enchantment.sharpness.walkthrough = Increases melee damage by {amount}% per level. Applies to swords and axes.
-enchantment.life_leech.walkthrough = Heals attacker for {amount}% of damage dealt. Applies to melee weapons.
-enchantment.durability.walkthrough = Reduces durability loss chance by {amount}% per level. Applies to all weapons, tools, and armor.
-enchantment.sturdy.walkthrough = Prevents max durability loss when repairing. Applies to all weapons, tools, and armor.
-enchantment.dexterity.walkthrough = Reduces stamina costs by {amount}% per level. Applies to melee weapons, shields, and staffs.
-enchantment.protection.walkthrough = Reduces incoming physical damage by {amount}% per armor piece per level. Applies to armor.
-enchantment.efficiency.walkthrough = Increases mining speed by {amount}% per level. Applies to pickaxes, axes, and shovels.
-enchantment.fortune.walkthrough = Increases chance for extra ore/crystal drops by {amount}% per level. Applies to pickaxes. Not combinable with Pick Perfect or Smelting.
-enchantment.smelting.walkthrough = Automatically smelts mined blocks. Applies to pickaxes. Not combinable with Pick Perfect or Fortune.
-enchantment.strength.walkthrough = Increases projectile damage by {amount}% per level. Applies to ranged weapons.
-enchantment.eagles_eye.walkthrough = Increases projectile damage by up to {amount}% based on distance per level. Applies to ranged weapons.
-enchantment.looting.walkthrough = Increases mob max drop rates by {amount}% per level and boosts the chance of rare drops. Applies to melee weapons, ranged weapons, and staffs.
-enchantment.feather_falling.walkthrough = Reduces fall damage by {amount}% per level. Applies to boots.
-enchantment.waterbreathing.walkthrough = Reduces oxygen drain by {amount}% per level. Applies to helmets.
-enchantment.burn.walkthrough = Sets target on fire and lets it drop cooked variants of its drops. Applies to melee and ranged weapons. Not combinable with Freeze.
-enchantment.freeze.walkthrough = Applies severe slow (50%) to target on hit. Applies to melee and ranged weapons. Not combinable with Burn.
-enchantment.eternal_shot.walkthrough = Lets you shoot arrows without consuming them. Applies to ranged weapons.
-enchantment.pick_perfect.walkthrough = Mined blocks drop themselves instead of their usual drops. Applies to pickaxes, axes, and shovels. Not combinable with Fortune or Smelting.
-enchantment.thrift.walkthrough = Restores {amount}% of mana spent on hit per level. Applies to mana staffs.
-enchantment.elemental_heart.walkthrough = Elemental Staffs do not consume essence when casting. Applies to essence staffs.
-enchantment.knockback.walkthrough = Knocks targets back on hit. Applies to melee weapons.
-enchantment.reflection.walkthrough = Reflects {amount}% of blocked damage back to the attacker per level. Applies to shields. Not combinable with Absorption.
-enchantment.absorption.walkthrough = Heals blocker for {amount}% of blocked damage per level. Applies to shields. Not combinable with Reflection.
-enchantment.fast_swim.walkthrough = Increases swim speed by {amount}% per level. Applies to gloves.
-enchantment.night_vision.walkthrough = Enhances visibility in dark environments such as caves, nighttime, and underwater. Applies to helmets.
-enchantment.ranged_protection.walkthrough = Reduces incoming projectile and magic damage by {amount}% per armor piece per level. Applies to armor.
-enchantment.frenzy.walkthrough = Increases signature charge rate by {amount}% per level. Applies to all weapons and staffs.
-enchantment.riposte.walkthrough = Increases counter attack damage by {amount}% per level. Applies to melee weapons.
-enchantment.coup_de_grace.walkthrough = Increases damage to stunned enemies by {amount}% per level. Applies to melee weapons.
+enchantment.sharpness.walkthrough = Збільшує шкоду ближнього бою на {amount}% за рівень. Застосовується до мечів та сокир.
+enchantment.life_leech.walkthrough = Зцілює атакуючого на {amount}% від завданої шкоди. Застосовується до зброї ближнього бою.
+enchantment.durability.walkthrough = Зменшує ймовірність втрати міцності на {amount}% за рівень. Застосовується до всієї зброї, інструментів та обладунків.
+enchantment.sturdy.walkthrough = Запобігає втраті максимальної міцності при ремонті. Застосовується до всієї зброї, інструментів та обладунків.
+enchantment.dexterity.walkthrough = Зменшує витрати витривалості на {amount}% за рівень. Застосовується до зброї ближнього бою, щитів та посохів.
+enchantment.protection.walkthrough = Зменшує вхідну фізичну шкоду на {amount}% за елемент обладунків за рівень. Застосовується до обладунків.
+enchantment.efficiency.walkthrough = Збільшує швидкість видобутку на {amount}% за рівень. Застосовується до кайлів, сокир та лопат.\n\nНаразі це зачарування може лише збільшити швидкість руйнування блоку, але не швидкість замаху кайла через обмеження Hytale.
+enchantment.fortune.walkthrough = Збільшує шанс на додаткові руди/кристали на {amount}% за рівень. Застосовується до кайлів. Не поєднується з Дбайливим Видобутком або Переплавкою.
+enchantment.smelting.walkthrough = Автоматично переплавляє видобуті блоки. Застосовується до кайлів. Не поєднується з Дбайливим Видобутком або Удачею.
+enchantment.strength.walkthrough = Збільшує шкоду снарядів на {amount}% за рівень. Застосовується до далекобійної зброї.
+enchantment.eagles_eye.walkthrough = Збільшує шкоду снарядів до {amount}% залежно від відстані за рівень. Застосовується до далекобійної зброї.
+enchantment.looting.walkthrough = Збільшує максимальну частоту здобичі з мобів на {amount}% за рівень та підвищує шанс рідкісної здобичі. Застосовується до зброї ближнього бою, далекобійної зброї та посохів.
+enchantment.feather_falling.walkthrough = Зменшує шкоду від падіння на {amount}% за рівень. Застосовується до чобіт.
+enchantment.waterbreathing.walkthrough = Зменшує витрату кисню на {amount}% за рівень. Застосовується до шоломів.
+enchantment.burn.walkthrough = Підпалює ціль та змушує її скидати приготовлені варіанти здобичі. Застосовується до зброї ближнього та дальнього бою. Не поєднується із Заморозкою.
+enchantment.freeze.walkthrough = Застосовує сильне сповільнення (50%) до цілі при влучанні. Застосовується до зброї ближнього та дальнього бою. Не поєднується з Підпалом.
+enchantment.eternal_shot.walkthrough = Дозволяє стріляти стрілами без їх витрати. Вам все ще потрібна 1 стріла в інвентарі. Застосовується до далекобійної зброї.
+enchantment.pick_perfect.walkthrough = Видобуті блоки випадають самі, а не їх звичайна здобич. Застосовується до кайлів, сокир та лопат. Не поєднується з Удачею або Переплавкою.
+enchantment.thrift.walkthrough = Відновлює {amount}% витраченої мани при влучанні за рівень. Застосовується до посохів мани.
+enchantment.elemental_heart.walkthrough = Елементальні Посохи не витрачають есенцію при використанні. Застосовується до посохів есенції.
+enchantment.knockback.walkthrough = Відкидає цілі при влучанні. Застосовується до зброї ближнього бою.
+enchantment.reflection.walkthrough = Відбиває {amount}% заблокованої шкоди назад атакуючому за рівень. Застосовується до щитів. Не поєднується з Поглинанням.
+enchantment.absorption.walkthrough = Зцілює захисника на {amount}% від заблокованої шкоди за рівень. Застосовується до щитів. Не поєднується з Відбиванням.
+enchantment.fast_swim.walkthrough = Збільшує швидкість плавання на {amount}% за рівень. Застосовується до рукавиць.
+enchantment.night_vision.walkthrough = Покращує видимість у темних середовищах, таких як печери, ніч та підводний простір. Застосовується до шоломів.\n\nЦе зачарування вимкнено за замовчуванням, оскільки я не зовсім задоволений якістю ефекту. Але це найкраще, що можливо при поточних обмеженнях Hytale.
+enchantment.ranged_protection.walkthrough = Зменшує вхідну шкоду від снарядів та магії на {amount}% за елемент обладунків за рівень. Застосовується до обладунків.
+enchantment.frenzy.walkthrough = Збільшує швидкість зарядки особливої здібності на {amount}% за рівень. Застосовується до всієї зброї та посохів.
+enchantment.riposte.walkthrough = Це спільне Зачарування з модом Perfect Parries і працюватиме лише якщо обидва моди встановлені.\n\nЗбільшує шкоду контратаки на {amount}% за рівень. Застосовується до зброї ближнього бою.
+enchantment.coup_de_grace.walkthrough = Це спільне Зачарування з модом Perfect Parries і працюватиме лише якщо обидва моди встановлені.\n\nЗбільшує шкоду по оглушених ворогах на {amount}% за рівень. Застосовується до зброї ближнього бою.

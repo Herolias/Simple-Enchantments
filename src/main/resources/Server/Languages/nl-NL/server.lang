@@ -582,7 +582,7 @@ config.general.table_tier = Betoveringstafel Ambachtsniveau
 config.general.disable_crafting = Schakel Betoveringsambacht Uit
 config.general.return_cleanse = Geef Betovering Terug Bij Reiniging
 config.general.salvager_yield = Recycler geeft Rol terug
-config.general.show_welcome = Show Welcome Messages
+config.general.show_welcome = Welkomstberichten Tonen
 config.general.table_recipe = Betoveringstafel Recept
 config.general.upgrade_1 = Upgrade 1 Kosten (Niveau 1 -> 2)
 config.general.upgrade_2 = Upgrade 2 Kosten (Niveau 2 -> 3)
@@ -604,54 +604,69 @@ config.recipe.tier_label = Ontgrendelt op Tafel Niveau
 config.message.saved = Opgeslagen! De meeste wijzigingen vereisen een herstart.
 config.message.unsaved = [!] Niet-opgeslagen wijzigingen
 
+customUI.enchantingPage.tabWalkthrough = Handleiding
+customUI.enchantingPage.tabSettings = Gebruikersinstellingen
+customUI.enchantingPage.title = Simple Enchantments
+customUI.enchantingPage.language = Taal
+customUI.enchantingPage.lang.default = Standaard (Speltaal)
+
+customUI.walkthrough.next = Volgende Pagina
+customUI.walkthrough.prev = Vorige Pagina
+
+customUI.walkthrough.welcome.title = Welkom bij Simple Enchantments!
+customUI.walkthrough.welcome.desc = Deze mod stelt je in staat om je uitrusting en wapens te verbeteren met magische rollen en betoveringen. Het is zeer aanpasbaar, met een admin-configuratiemenu (/enchantconfig) waarmee je instellingen kunt wijzigen of specifieke betoveringen kunt in- en uitschakelen. Het werkt het beste met vanilla items, maar biedt brede compatibiliteit met andere mods. Als je een probleem tegenkomt of een functieverzoek hebt, sluit je dan aan bij onze Discord-server. Daarnaast, als Dynamic Tooltips Lib is geïnstalleerd, worden betoveringen weergegeven in de tooltip van het item.
+
+customUI.walkthrough.table.title = 1. De Betoveringstafel
+customUI.walkthrough.table.desc = Maak een Betoveringstafel op de Werkbank. Plaats deze en interacteer ermee om alle beschikbare Betoveringsrollen te bekijken die je kunt maken. Je kunt de tafel ook upgraden om betoveringen van een hoger niveau te ontgrendelen.
+
+customUI.walkthrough.scrolls.title = 2. Betoveringsrollen
+customUI.walkthrough.scrolls.desc = Maak rollen direct op de Betoveringstafel met essenties, edelstenen, staven en planten. Eenmaal gemaakt, klik met de rechtermuisknop op de rol terwijl je deze vasthoudt om de betovering toe te passen op een wapen, harnas of gereedschap in je inventaris. Rollen hebben verschillende zeldzaamheden, die aangeven hoe sterk of uniek de betovering is. De meeste betoveringen hebben 3 niveaus, maar er zijn uitzonderingen. Legendarische betoveringen zijn bijzonder krachtig of uniek.
+
+customUI.walkthrough.removing.title = 3. Betoveringen Verwijderen
+customUI.walkthrough.removing.desc = Een fout gemaakt? Je kunt een Reinigingsrol maken om betoveringen van een item te verwijderen. Op deze server {returnScroll} je de rol terugkrijgen.
+
+customUI.walkthrough.salvaging.title = 4. Recyclen
+customUI.walkthrough.salvaging.desc = Als je een betoverd uitrustingsstuk hebt dat je niet meer nodig hebt, plaats het in het Recyclingstation om de betoveringsrol van het hoogste niveau terug te krijgen, als dit is ingeschakeld op de server.
+
 customUI.enchantingPage.adminNote = Serverbrede instellingen en betoveringsaanpassingen zijn beschikbaar in de Adminconfiguratie. Open het via /enchantconfig
-customUI.walkthrough.enchantments.title = 5. Enchantments
-customUI.walkthrough.enchantments.desc = A complete list of enchantments and their effects. Click on any to find out more.
-
-customUI.enchantScrollPage.current = Huidig:
-
-customUI.enchantScrollPage.apply = Toepassen:
-
-customUI.enchantScrollPage.upgrade = Upgraden:
-
-customUI.cleansingScrollPage.enchantment.singular = betovering
-
-customUI.cleansingEnchantmentPage.clickToRemove = Klik om te verwijderen
 
 
-config.general.allow_same_scroll_upgrades = Allow Same Scroll Upgrades
+customUI.walkthrough.enchantments.title = 5. Betoveringen
+customUI.walkthrough.enchantments.desc = Een complete lijst van betoveringen en hun effecten. Klik op een betovering voor meer informatie. Op deze server kan elk item maximaal {maxEnchantments} betoveringen hebben.\n\nOpmerking: Momenteel toont elke betoveringspagina alleen de Tooltip-beschrijving van de betovering en of deze is ingeschakeld op de server. Ik ben van plan gedetailleerde beschrijvingen te schrijven voor elk ervan, maar dat kost tijd. Elke toekomstige update van de mod zal gedetailleerde beschrijvingen toevoegen voor sommige ervan.
 
-customUI.walkthrough.enabledOnServer = Enabled on this Server: 
-customUI.walkthrough.returnScroll.yes = will
-customUI.walkthrough.returnScroll.no = won't
+config.general.allow_same_scroll_upgrades = Dezelfde Rol Upgrades Toestaan (I+I = II)
+
+customUI.walkthrough.enabledOnServer = Ingeschakeld op deze server: 
+customUI.walkthrough.returnScroll.yes = zul
+customUI.walkthrough.returnScroll.no = zul niet
 
 # Walkthrough Descriptions
-enchantment.sharpness.walkthrough = Increases melee damage by {amount}% per level. Applies to swords and axes.
-enchantment.life_leech.walkthrough = Heals attacker for {amount}% of damage dealt. Applies to melee weapons.
-enchantment.durability.walkthrough = Reduces durability loss chance by {amount}% per level. Applies to all weapons, tools, and armor.
-enchantment.sturdy.walkthrough = Prevents max durability loss when repairing. Applies to all weapons, tools, and armor.
-enchantment.dexterity.walkthrough = Reduces stamina costs by {amount}% per level. Applies to melee weapons, shields, and staffs.
-enchantment.protection.walkthrough = Reduces incoming physical damage by {amount}% per armor piece per level. Applies to armor.
-enchantment.efficiency.walkthrough = Increases mining speed by {amount}% per level. Applies to pickaxes, axes, and shovels.
-enchantment.fortune.walkthrough = Increases chance for extra ore/crystal drops by {amount}% per level. Applies to pickaxes. Not combinable with Pick Perfect or Smelting.
-enchantment.smelting.walkthrough = Automatically smelts mined blocks. Applies to pickaxes. Not combinable with Pick Perfect or Fortune.
-enchantment.strength.walkthrough = Increases projectile damage by {amount}% per level. Applies to ranged weapons.
-enchantment.eagles_eye.walkthrough = Increases projectile damage by up to {amount}% based on distance per level. Applies to ranged weapons.
-enchantment.looting.walkthrough = Increases mob max drop rates by {amount}% per level and boosts the chance of rare drops. Applies to melee weapons, ranged weapons, and staffs.
-enchantment.feather_falling.walkthrough = Reduces fall damage by {amount}% per level. Applies to boots.
-enchantment.waterbreathing.walkthrough = Reduces oxygen drain by {amount}% per level. Applies to helmets.
-enchantment.burn.walkthrough = Sets target on fire and lets it drop cooked variants of its drops. Applies to melee and ranged weapons. Not combinable with Freeze.
-enchantment.freeze.walkthrough = Applies severe slow (50%) to target on hit. Applies to melee and ranged weapons. Not combinable with Burn.
-enchantment.eternal_shot.walkthrough = Lets you shoot arrows without consuming them. Applies to ranged weapons.
-enchantment.pick_perfect.walkthrough = Mined blocks drop themselves instead of their usual drops. Applies to pickaxes, axes, and shovels. Not combinable with Fortune or Smelting.
-enchantment.thrift.walkthrough = Restores {amount}% of mana spent on hit per level. Applies to mana staffs.
-enchantment.elemental_heart.walkthrough = Elemental Staffs do not consume essence when casting. Applies to essence staffs.
-enchantment.knockback.walkthrough = Knocks targets back on hit. Applies to melee weapons.
-enchantment.reflection.walkthrough = Reflects {amount}% of blocked damage back to the attacker per level. Applies to shields. Not combinable with Absorption.
-enchantment.absorption.walkthrough = Heals blocker for {amount}% of blocked damage per level. Applies to shields. Not combinable with Reflection.
-enchantment.fast_swim.walkthrough = Increases swim speed by {amount}% per level. Applies to gloves.
-enchantment.night_vision.walkthrough = Enhances visibility in dark environments such as caves, nighttime, and underwater. Applies to helmets.
-enchantment.ranged_protection.walkthrough = Reduces incoming projectile and magic damage by {amount}% per armor piece per level. Applies to armor.
-enchantment.frenzy.walkthrough = Increases signature charge rate by {amount}% per level. Applies to all weapons and staffs.
-enchantment.riposte.walkthrough = Increases counter attack damage by {amount}% per level. Applies to melee weapons.
-enchantment.coup_de_grace.walkthrough = Increases damage to stunned enemies by {amount}% per level. Applies to melee weapons.
+enchantment.sharpness.walkthrough = Verhoogt melee-schade met {amount}% per niveau. Van toepassing op zwaarden en bijlen.
+enchantment.life_leech.walkthrough = Geneest de aanvaller voor {amount}% van de toegebrachte schade. Van toepassing op melee-wapens.
+enchantment.durability.walkthrough = Vermindert de kans op duurzaamheidsverlies met {amount}% per niveau. Van toepassing op alle wapens, gereedschap en harnassen.
+enchantment.sturdy.walkthrough = Voorkomt maximaal duurzaamheidsverlies bij reparatie. Van toepassing op alle wapens, gereedschap en harnassen.
+enchantment.dexterity.walkthrough = Vermindert uithoudingskosten met {amount}% per niveau. Van toepassing op melee-wapens, schilden en staven.
+enchantment.protection.walkthrough = Vermindert inkomende fysieke schade met {amount}% per harnasdeel per niveau. Van toepassing op harnassen.
+enchantment.efficiency.walkthrough = Verhoogt mijnsnelheid met {amount}% per niveau. Van toepassing op pikhouwelen, bijlen en schoppen.\n\nVoorlopig kan deze betovering alleen verhogen hoe snel een blok breekt, niet hoe snel je pikhouweel zwaait vanwege Hytale-beperkingen.
+enchantment.fortune.walkthrough = Verhoogt de kans op extra erts-/kristaldrops met {amount}% per niveau. Van toepassing op pikhouwelen. Niet combineerbaar met Perfecte Greep of Smelten.
+enchantment.smelting.walkthrough = Smelt automatisch gedolven blokken. Van toepassing op pikhouwelen. Niet combineerbaar met Perfecte Greep of Fortuin.
+enchantment.strength.walkthrough = Verhoogt projectielschade met {amount}% per niveau. Van toepassing op afstandswapens.
+enchantment.eagles_eye.walkthrough = Verhoogt projectielschade tot {amount}% op basis van afstand per niveau. Van toepassing op afstandswapens.
+enchantment.looting.walkthrough = Verhoogt maximale buitpercentages van mobs met {amount}% per niveau en verhoogt de kans op zeldzame buit. Van toepassing op melee-wapens, afstandswapens en staven.
+enchantment.feather_falling.walkthrough = Vermindert valschade met {amount}% per niveau. Van toepassing op laarzen.
+enchantment.waterbreathing.walkthrough = Vermindert zuurstofverbruik met {amount}% per niveau. Van toepassing op helmen.
+enchantment.burn.walkthrough = Steekt het doelwit in brand en laat het gekookte varianten van zijn buit vallen. Van toepassing op melee- en afstandswapens. Niet combineerbaar met Bevriezen.
+enchantment.freeze.walkthrough = Past ernstige vertraging (50%) toe op het doelwit bij een treffer. Van toepassing op melee- en afstandswapens. Niet combineerbaar met Verbranden.
+enchantment.eternal_shot.walkthrough = Laat je pijlen schieten zonder ze te verbruiken. Je hebt nog steeds 1 pijl nodig in je inventaris. Van toepassing op afstandswapens.
+enchantment.pick_perfect.walkthrough = Gedolven blokken laten zichzelf vallen in plaats van hun gebruikelijke buit. Van toepassing op pikhouwelen, bijlen en schoppen. Niet combineerbaar met Fortuin of Smelten.
+enchantment.thrift.walkthrough = Herstelt {amount}% van het gebruikte mana per treffer per niveau. Van toepassing op manastaven.
+enchantment.elemental_heart.walkthrough = Elementaire Staven verbruiken geen essentie bij het casten. Van toepassing op essentiestaven.
+enchantment.knockback.walkthrough = Slaat doelen terug bij een treffer. Van toepassing op melee-wapens.
+enchantment.reflection.walkthrough = Reflecteert {amount}% van geblokkeerde schade terug naar de aanvaller per niveau. Van toepassing op schilden. Niet combineerbaar met Absorptie.
+enchantment.absorption.walkthrough = Geneest de blokker voor {amount}% van de geblokkeerde schade per niveau. Van toepassing op schilden. Niet combineerbaar met Reflectie.
+enchantment.fast_swim.walkthrough = Verhoogt zwemsnelheid met {amount}% per niveau. Van toepassing op handschoenen.
+enchantment.night_vision.walkthrough = Verbetert het zicht in donkere omgevingen zoals grotten, 's nachts en onder water. Van toepassing op helmen.\n\nDeze betovering is standaard uitgeschakeld omdat ik niet helemaal tevreden ben met de kwaliteit van het effect. Maar het is het beste van wat mogelijk is met de huidige Hytale-beperkingen.
+enchantment.ranged_protection.walkthrough = Vermindert inkomende projectiel- en magieschade met {amount}% per harnasdeel per niveau. Van toepassing op harnassen.
+enchantment.frenzy.walkthrough = Verhoogt de oplaadsnelheid van de kenmerkende vaardigheid met {amount}% per niveau. Van toepassing op alle wapens en staven.
+enchantment.riposte.walkthrough = Dit is een samenwerkingsbetovering met de Perfect Parries mod en werkt alleen als beide mods zijn geïnstalleerd.\n\nVerhoogt tegenaanvalschade met {amount}% per niveau. Van toepassing op melee-wapens.
+enchantment.coup_de_grace.walkthrough = Dit is een samenwerkingsbetovering met de Perfect Parries mod en werkt alleen als beide mods zijn geïnstalleerd.\n\nVerhoogt schade aan verdoofde vijanden met {amount}% per niveau. Van toepassing op melee-wapens.

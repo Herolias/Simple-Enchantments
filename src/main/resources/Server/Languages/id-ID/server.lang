@@ -582,7 +582,7 @@ config.general.table_tier = Tingkat Kerajinan Meja Sihir
 config.general.disable_crafting = Nonaktifkan Kerajinan Sihir
 config.general.return_cleanse = Kembalikan Sihir saat Pembersihan
 config.general.salvager_yield = Pendaur Ulang Mengembalikan Gulungan
-config.general.show_welcome = Show Welcome Messages
+config.general.show_welcome = Tampilkan Pesan Selamat Datang
 config.general.table_recipe = Resep Meja Sihir
 config.general.upgrade_1 = Biaya Peningkatan 1 (Tingkat 1 -> 2)
 config.general.upgrade_2 = Biaya Peningkatan 2 (Tingkat 2 -> 3)
@@ -604,54 +604,69 @@ config.recipe.tier_label = Terbuka pada Tingkat Meja
 config.message.saved = Disimpan! Sebagian besar perubahan memerlukan restart.
 config.message.unsaved = [!] Perubahan belum disimpan
 
+customUI.enchantingPage.tabWalkthrough = Panduan
+customUI.enchantingPage.tabSettings = Pengaturan Pengguna
+customUI.enchantingPage.title = Simple Enchantments
+customUI.enchantingPage.language = Bahasa
+customUI.enchantingPage.lang.default = Bawaan (Bahasa Permainan)
+
+customUI.walkthrough.next = Halaman Berikutnya
+customUI.walkthrough.prev = Halaman Sebelumnya
+
+customUI.walkthrough.welcome.title = Selamat Datang di Simple Enchantments!
+customUI.walkthrough.welcome.desc = Mod ini memungkinkan Anda meningkatkan perlengkapan dan senjata menggunakan gulungan sihir dan pesona. Mod ini sangat dapat disesuaikan, dengan menu konfigurasi admin (/enchantconfig) yang memungkinkan Anda mengubah pengaturan atau mengaktifkan dan menonaktifkan pesona tertentu. Mod ini paling cocok dengan item vanilla, tetapi menawarkan kompatibilitas luas dengan mod lain. Jika Anda menemukan masalah atau memiliki permintaan fitur, silakan bergabung dengan server Discord kami. Selain itu, jika Dynamic Tooltips Lib terinstal, pesona akan ditampilkan di tooltip item.
+
+customUI.walkthrough.table.title = 1. Meja Sihir
+customUI.walkthrough.table.desc = Buat Meja Sihir di Meja Kerja. Letakkan dan berinteraksi dengannya untuk melihat semua Gulungan Sihir yang tersedia yang dapat Anda buat. Anda juga dapat meningkatkan meja untuk mengakses pesona tingkat lebih tinggi.
+
+customUI.walkthrough.scrolls.title = 2. Gulungan Sihir
+customUI.walkthrough.scrolls.desc = Buat gulungan langsung di Meja Sihir menggunakan esensi, permata, batangan dan tanaman. Setelah dibuat, klik kanan gulungan saat memegangnya untuk menerapkan pesona ke senjata, baju zirah, atau alat di inventaris Anda. Gulungan memiliki tingkat kelangkaan berbeda, menunjukkan seberapa kuat atau unik pesona tersebut. Sebagian besar pesona memiliki 3 Level, tetapi ada beberapa pengecualian. Pesona legendaris sangat kuat atau unik.
+
+customUI.walkthrough.removing.title = 3. Menghapus Pesona
+customUI.walkthrough.removing.desc = Membuat kesalahan? Anda dapat membuat Gulungan Pembersihan untuk menghapus pesona dari item. Di server ini, Anda {returnScroll} mendapatkan gulungan kembali.
+
+customUI.walkthrough.salvaging.title = 4. Daur Ulang
+customUI.walkthrough.salvaging.desc = Jika Anda memiliki perlengkapan berpesona yang tidak lagi dibutuhkan, letakkan di Stasiun Daur Ulang untuk mendapatkan gulungan pesona tingkat tertinggi jika diaktifkan di server.
+
 customUI.enchantingPage.adminNote = Pengaturan di seluruh server dan penyesuaian pesona tersedia di Konfigurasi Admin. Akses melalui /enchantconfig
-customUI.walkthrough.enchantments.title = 5. Enchantments
-customUI.walkthrough.enchantments.desc = A complete list of enchantments and their effects. Click on any to find out more.
-
-customUI.enchantScrollPage.current = Saat ini:
-
-customUI.enchantScrollPage.apply = Terapkan:
-
-customUI.enchantScrollPage.upgrade = Tingkatkan:
-
-customUI.cleansingScrollPage.enchantment.singular = pesona
-
-customUI.cleansingEnchantmentPage.clickToRemove = Klik untuk menghapus
 
 
-config.general.allow_same_scroll_upgrades = Allow Same Scroll Upgrades
+customUI.walkthrough.enchantments.title = 5. Pesona
+customUI.walkthrough.enchantments.desc = Daftar lengkap pesona dan efeknya. Klik salah satu untuk mengetahui lebih lanjut. Di server ini, setiap Item dapat memiliki hingga {maxEnchantments} Pesona.\n\nCatatan: Saat ini setiap halaman pesona hanya menampilkan deskripsi Tooltip dari pesona dan apakah pesona tersebut diaktifkan di server. Saya berencana menulis deskripsi terperinci untuk masing-masing, tetapi itu membutuhkan waktu. Setiap pembaruan mod di masa depan akan menambahkan deskripsi terperinci untuk beberapa di antaranya.
 
-customUI.walkthrough.enabledOnServer = Enabled on this Server: 
-customUI.walkthrough.returnScroll.yes = will
-customUI.walkthrough.returnScroll.no = won't
+config.general.allow_same_scroll_upgrades = Izinkan Peningkatan Gulungan yang Sama (I+I = II)
+
+customUI.walkthrough.enabledOnServer = Diaktifkan di server ini: 
+customUI.walkthrough.returnScroll.yes = akan
+customUI.walkthrough.returnScroll.no = tidak akan
 
 # Walkthrough Descriptions
-enchantment.sharpness.walkthrough = Increases melee damage by {amount}% per level. Applies to swords and axes.
-enchantment.life_leech.walkthrough = Heals attacker for {amount}% of damage dealt. Applies to melee weapons.
-enchantment.durability.walkthrough = Reduces durability loss chance by {amount}% per level. Applies to all weapons, tools, and armor.
-enchantment.sturdy.walkthrough = Prevents max durability loss when repairing. Applies to all weapons, tools, and armor.
-enchantment.dexterity.walkthrough = Reduces stamina costs by {amount}% per level. Applies to melee weapons, shields, and staffs.
-enchantment.protection.walkthrough = Reduces incoming physical damage by {amount}% per armor piece per level. Applies to armor.
-enchantment.efficiency.walkthrough = Increases mining speed by {amount}% per level. Applies to pickaxes, axes, and shovels.
-enchantment.fortune.walkthrough = Increases chance for extra ore/crystal drops by {amount}% per level. Applies to pickaxes. Not combinable with Pick Perfect or Smelting.
-enchantment.smelting.walkthrough = Automatically smelts mined blocks. Applies to pickaxes. Not combinable with Pick Perfect or Fortune.
-enchantment.strength.walkthrough = Increases projectile damage by {amount}% per level. Applies to ranged weapons.
-enchantment.eagles_eye.walkthrough = Increases projectile damage by up to {amount}% based on distance per level. Applies to ranged weapons.
-enchantment.looting.walkthrough = Increases mob max drop rates by {amount}% per level and boosts the chance of rare drops. Applies to melee weapons, ranged weapons, and staffs.
-enchantment.feather_falling.walkthrough = Reduces fall damage by {amount}% per level. Applies to boots.
-enchantment.waterbreathing.walkthrough = Reduces oxygen drain by {amount}% per level. Applies to helmets.
-enchantment.burn.walkthrough = Sets target on fire and lets it drop cooked variants of its drops. Applies to melee and ranged weapons. Not combinable with Freeze.
-enchantment.freeze.walkthrough = Applies severe slow (50%) to target on hit. Applies to melee and ranged weapons. Not combinable with Burn.
-enchantment.eternal_shot.walkthrough = Lets you shoot arrows without consuming them. Applies to ranged weapons.
-enchantment.pick_perfect.walkthrough = Mined blocks drop themselves instead of their usual drops. Applies to pickaxes, axes, and shovels. Not combinable with Fortune or Smelting.
-enchantment.thrift.walkthrough = Restores {amount}% of mana spent on hit per level. Applies to mana staffs.
-enchantment.elemental_heart.walkthrough = Elemental Staffs do not consume essence when casting. Applies to essence staffs.
-enchantment.knockback.walkthrough = Knocks targets back on hit. Applies to melee weapons.
-enchantment.reflection.walkthrough = Reflects {amount}% of blocked damage back to the attacker per level. Applies to shields. Not combinable with Absorption.
-enchantment.absorption.walkthrough = Heals blocker for {amount}% of blocked damage per level. Applies to shields. Not combinable with Reflection.
-enchantment.fast_swim.walkthrough = Increases swim speed by {amount}% per level. Applies to gloves.
-enchantment.night_vision.walkthrough = Enhances visibility in dark environments such as caves, nighttime, and underwater. Applies to helmets.
-enchantment.ranged_protection.walkthrough = Reduces incoming projectile and magic damage by {amount}% per armor piece per level. Applies to armor.
-enchantment.frenzy.walkthrough = Increases signature charge rate by {amount}% per level. Applies to all weapons and staffs.
-enchantment.riposte.walkthrough = Increases counter attack damage by {amount}% per level. Applies to melee weapons.
-enchantment.coup_de_grace.walkthrough = Increases damage to stunned enemies by {amount}% per level. Applies to melee weapons.
+enchantment.sharpness.walkthrough = Meningkatkan kerusakan jarak dekat sebesar {amount}% per level. Berlaku untuk pedang dan kapak.
+enchantment.life_leech.walkthrough = Menyembuhkan penyerang sebesar {amount}% dari kerusakan yang diberikan. Berlaku untuk senjata jarak dekat.
+enchantment.durability.walkthrough = Mengurangi kemungkinan kehilangan ketahanan sebesar {amount}% per level. Berlaku untuk semua senjata, alat, dan baju zirah.
+enchantment.sturdy.walkthrough = Mencegah kehilangan ketahanan maksimum saat perbaikan. Berlaku untuk semua senjata, alat, dan baju zirah.
+enchantment.dexterity.walkthrough = Mengurangi biaya stamina sebesar {amount}% per level. Berlaku untuk senjata jarak dekat, perisai, dan tongkat.
+enchantment.protection.walkthrough = Mengurangi kerusakan fisik masuk sebesar {amount}% per bagian baju zirah per level. Berlaku untuk baju zirah.
+enchantment.efficiency.walkthrough = Meningkatkan kecepatan menambang sebesar {amount}% per level. Berlaku untuk beliung, kapak, dan sekop.\n\nUntuk saat ini pesona ini hanya dapat meningkatkan seberapa cepat blok hancur, bukan seberapa cepat beliung Anda berayun karena keterbatasan Hytale.
+enchantment.fortune.walkthrough = Meningkatkan peluang mendapatkan bijih/kristal tambahan sebesar {amount}% per level. Berlaku untuk beliung. Tidak dapat dikombinasikan dengan Sentuhan Sempurna atau Peleburan.
+enchantment.smelting.walkthrough = Secara otomatis melebur blok yang ditambang. Berlaku untuk beliung. Tidak dapat dikombinasikan dengan Sentuhan Sempurna atau Keberuntungan.
+enchantment.strength.walkthrough = Meningkatkan kerusakan proyektil sebesar {amount}% per level. Berlaku untuk senjata jarak jauh.
+enchantment.eagles_eye.walkthrough = Meningkatkan kerusakan proyektil hingga {amount}% berdasarkan jarak per level. Berlaku untuk senjata jarak jauh.
+enchantment.looting.walkthrough = Meningkatkan tingkat jarahan maksimum monster sebesar {amount}% per level dan meningkatkan peluang jarahan langka. Berlaku untuk senjata jarak dekat, senjata jarak jauh, dan tongkat.
+enchantment.feather_falling.walkthrough = Mengurangi kerusakan jatuh sebesar {amount}% per level. Berlaku untuk sepatu bot.
+enchantment.waterbreathing.walkthrough = Mengurangi konsumsi oksigen sebesar {amount}% per level. Berlaku untuk helm.
+enchantment.burn.walkthrough = Membakar target dan membuatnya menjatuhkan varian matang dari jarahannya. Berlaku untuk senjata jarak dekat dan jarak jauh. Tidak dapat dikombinasikan dengan Beku.
+enchantment.freeze.walkthrough = Memberikan perlambatan parah (50%) pada target saat terkena. Berlaku untuk senjata jarak dekat dan jarak jauh. Tidak dapat dikombinasikan dengan Bakar.
+enchantment.eternal_shot.walkthrough = Memungkinkan menembakkan panah tanpa mengkonsumsinya. Anda masih membutuhkan 1 panah di inventaris. Berlaku untuk senjata jarak jauh.
+enchantment.pick_perfect.walkthrough = Blok yang ditambang menjatuhkan diri sendiri alih-alih jarahan biasa. Berlaku untuk beliung, kapak, dan sekop. Tidak dapat dikombinasikan dengan Keberuntungan atau Peleburan.
+enchantment.thrift.walkthrough = Mengembalikan {amount}% mana yang digunakan per pukulan per level. Berlaku untuk tongkat mana.
+enchantment.elemental_heart.walkthrough = Tongkat Elemental tidak mengkonsumsi esensi saat melemparkan. Berlaku untuk tongkat esensi.
+enchantment.knockback.walkthrough = Mendorong target mundur saat terkena. Berlaku untuk senjata jarak dekat.
+enchantment.reflection.walkthrough = Memantulkan {amount}% kerusakan yang diblokir kembali ke penyerang per level. Berlaku untuk perisai. Tidak dapat dikombinasikan dengan Penyerapan.
+enchantment.absorption.walkthrough = Menyembuhkan pemblokir sebesar {amount}% dari kerusakan yang diblokir per level. Berlaku untuk perisai. Tidak dapat dikombinasikan dengan Pantulan.
+enchantment.fast_swim.walkthrough = Meningkatkan kecepatan berenang sebesar {amount}% per level. Berlaku untuk sarung tangan.
+enchantment.night_vision.walkthrough = Meningkatkan visibilitas di lingkungan gelap seperti gua, malam hari, dan bawah air. Berlaku untuk helm.\n\nPesona ini dinonaktifkan secara bawaan karena saya belum cukup puas dengan kualitas efeknya. Tetapi ini yang terbaik dari apa yang mungkin dengan keterbatasan Hytale saat ini.
+enchantment.ranged_protection.walkthrough = Mengurangi kerusakan proyektil dan sihir masuk sebesar {amount}% per bagian baju zirah per level. Berlaku untuk baju zirah.
+enchantment.frenzy.walkthrough = Meningkatkan kecepatan pengisian kemampuan tanda tangan sebesar {amount}% per level. Berlaku untuk semua senjata dan tongkat.
+enchantment.riposte.walkthrough = Ini adalah Pesona kolaborasi dengan mod Perfect Parries dan hanya akan berfungsi jika kedua mod terinstal.\n\nMeningkatkan kerusakan serangan balik sebesar {amount}% per level. Berlaku untuk senjata jarak dekat.
+enchantment.coup_de_grace.walkthrough = Ini adalah Pesona kolaborasi dengan mod Perfect Parries dan hanya akan berfungsi jika kedua mod terinstal.\n\nMeningkatkan kerusakan terhadap musuh yang terkejut sebesar {amount}% per level. Berlaku untuk senjata jarak dekat.

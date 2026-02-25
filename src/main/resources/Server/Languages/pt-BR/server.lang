@@ -582,7 +582,7 @@ config.general.table_tier = Nível de Criação da Mesa de Encantamentos
 config.general.disable_crafting = Desabilitar Criação de Encantamentos
 config.general.return_cleanse = Devolver Encantamento ao Limpar
 config.general.salvager_yield = Reciclador devolve Pergaminho
-config.general.show_welcome = Show Welcome Messages
+config.general.show_welcome = Mostrar Mensagens de Boas-Vindas
 config.general.table_recipe = Receita da Mesa de Encantamentos
 config.general.upgrade_1 = Custo de Melhoria 1 (Nível 1 -> 2)
 config.general.upgrade_2 = Custo de Melhoria 2 (Nível 2 -> 3)
@@ -604,54 +604,69 @@ config.recipe.tier_label = Desbloqueia no Nível da Mesa
 config.message.saved = Salvo! A maioria das alterações requer reinicialização.
 config.message.unsaved = [!] Alterações não salvas
 
+customUI.enchantingPage.tabWalkthrough = Guia
+customUI.enchantingPage.tabSettings = Configurações do Usuário
+customUI.enchantingPage.title = Simple Enchantments
+customUI.enchantingPage.language = Idioma
+customUI.enchantingPage.lang.default = Padrão (Idioma do Jogo)
+
+customUI.walkthrough.next = Próxima Página
+customUI.walkthrough.prev = Página Anterior
+
+customUI.walkthrough.welcome.title = Bem-vindo ao Simple Enchantments!
+customUI.walkthrough.welcome.desc = Este mod permite que você aprimore seus equipamentos e armas usando pergaminhos mágicos e encantamentos. Ele é altamente personalizável, com um menu de configuração de administrador (/enchantconfig) que permite ajustar configurações ou ativar e desativar encantamentos específicos. Funciona melhor com itens vanilla, mas oferece ampla compatibilidade com outros mods. Se encontrar um problema ou tiver uma sugestão, junte-se ao nosso servidor Discord. Além disso, se o Dynamic Tooltips Lib estiver instalado, os encantamentos serão mostrados na dica do item.
+
+customUI.walkthrough.table.title = 1. A Mesa de Encantamentos
+customUI.walkthrough.table.desc = Crie uma Mesa de Encantamentos na Bancada de Trabalho. Coloque-a e interaja com ela para ver todos os Pergaminhos de Encantamento disponíveis que você pode criar. Você também pode melhorar a mesa para acessar encantamentos de nível superior.
+
+customUI.walkthrough.scrolls.title = 2. Pergaminhos de Encantamento
+customUI.walkthrough.scrolls.desc = Crie pergaminhos diretamente na Mesa de Encantamentos usando essências, gemas, lingotes e plantas. Uma vez criado, clique com o botão direito no pergaminho enquanto o segura para aplicar o encantamento em uma arma, armadura ou ferramenta no seu inventário. Pergaminhos possuem diferentes raridades, mostrando quão forte ou único é o encantamento. A maioria dos encantamentos tem 3 Níveis, mas há algumas exceções. Encantamentos lendários são especialmente fortes ou únicos.
+
+customUI.walkthrough.removing.title = 3. Removendo Encantamentos
+customUI.walkthrough.removing.desc = Cometeu um erro? Você pode criar um Pergaminho de Purificação para remover encantamentos de um item. Neste servidor, você {returnScroll} receber o pergaminho de volta.
+
+customUI.walkthrough.salvaging.title = 4. Reciclagem
+customUI.walkthrough.salvaging.desc = Se você tem um equipamento encantado que não precisa mais, coloque-o na Estação de Reciclagem para recuperar o pergaminho de encantamento de nível mais alto, se habilitado no servidor.
+
 customUI.enchantingPage.adminNote = As configurações de todo o servidor e as personalizações de encantamentos estão disponíveis na Configuração de Admin. Acesse via /enchantconfig
-customUI.walkthrough.enchantments.title = 5. Enchantments
-customUI.walkthrough.enchantments.desc = A complete list of enchantments and their effects. Click on any to find out more.
-
-customUI.enchantScrollPage.current = Atual:
-
-customUI.enchantScrollPage.apply = Aplicar:
-
-customUI.enchantScrollPage.upgrade = Melhorar:
-
-customUI.cleansingScrollPage.enchantment.singular = encantamento
-
-customUI.cleansingEnchantmentPage.clickToRemove = Clique para remover
 
 
-config.general.allow_same_scroll_upgrades = Allow Same Scroll Upgrades
+customUI.walkthrough.enchantments.title = 5. Encantamentos
+customUI.walkthrough.enchantments.desc = Uma lista completa dos encantamentos e seus efeitos. Clique em qualquer um para saber mais. Neste servidor, cada item pode ter até {maxEnchantments} encantamentos.\n\nNota: No momento, cada página de encantamento mostra apenas a descrição da dica do encantamento e se ele está habilitado no servidor. Pretendo escrever descrições detalhadas para cada um deles, mas isso leva tempo. Cada futura atualização do mod adicionará uma descrição detalhada para alguns deles.
 
-customUI.walkthrough.enabledOnServer = Enabled on this Server: 
-customUI.walkthrough.returnScroll.yes = will
-customUI.walkthrough.returnScroll.no = won't
+config.general.allow_same_scroll_upgrades = Permitir Melhorias de Pergaminho Iguais (I+I = II)
+
+customUI.walkthrough.enabledOnServer = Ativado neste servidor: 
+customUI.walkthrough.returnScroll.yes = vai
+customUI.walkthrough.returnScroll.no = não vai
 
 # Walkthrough Descriptions
-enchantment.sharpness.walkthrough = Increases melee damage by {amount}% per level. Applies to swords and axes.
-enchantment.life_leech.walkthrough = Heals attacker for {amount}% of damage dealt. Applies to melee weapons.
-enchantment.durability.walkthrough = Reduces durability loss chance by {amount}% per level. Applies to all weapons, tools, and armor.
-enchantment.sturdy.walkthrough = Prevents max durability loss when repairing. Applies to all weapons, tools, and armor.
-enchantment.dexterity.walkthrough = Reduces stamina costs by {amount}% per level. Applies to melee weapons, shields, and staffs.
-enchantment.protection.walkthrough = Reduces incoming physical damage by {amount}% per armor piece per level. Applies to armor.
-enchantment.efficiency.walkthrough = Increases mining speed by {amount}% per level. Applies to pickaxes, axes, and shovels.
-enchantment.fortune.walkthrough = Increases chance for extra ore/crystal drops by {amount}% per level. Applies to pickaxes. Not combinable with Pick Perfect or Smelting.
-enchantment.smelting.walkthrough = Automatically smelts mined blocks. Applies to pickaxes. Not combinable with Pick Perfect or Fortune.
-enchantment.strength.walkthrough = Increases projectile damage by {amount}% per level. Applies to ranged weapons.
-enchantment.eagles_eye.walkthrough = Increases projectile damage by up to {amount}% based on distance per level. Applies to ranged weapons.
-enchantment.looting.walkthrough = Increases mob max drop rates by {amount}% per level and boosts the chance of rare drops. Applies to melee weapons, ranged weapons, and staffs.
-enchantment.feather_falling.walkthrough = Reduces fall damage by {amount}% per level. Applies to boots.
-enchantment.waterbreathing.walkthrough = Reduces oxygen drain by {amount}% per level. Applies to helmets.
-enchantment.burn.walkthrough = Sets target on fire and lets it drop cooked variants of its drops. Applies to melee and ranged weapons. Not combinable with Freeze.
-enchantment.freeze.walkthrough = Applies severe slow (50%) to target on hit. Applies to melee and ranged weapons. Not combinable with Burn.
-enchantment.eternal_shot.walkthrough = Lets you shoot arrows without consuming them. Applies to ranged weapons.
-enchantment.pick_perfect.walkthrough = Mined blocks drop themselves instead of their usual drops. Applies to pickaxes, axes, and shovels. Not combinable with Fortune or Smelting.
-enchantment.thrift.walkthrough = Restores {amount}% of mana spent on hit per level. Applies to mana staffs.
-enchantment.elemental_heart.walkthrough = Elemental Staffs do not consume essence when casting. Applies to essence staffs.
-enchantment.knockback.walkthrough = Knocks targets back on hit. Applies to melee weapons.
-enchantment.reflection.walkthrough = Reflects {amount}% of blocked damage back to the attacker per level. Applies to shields. Not combinable with Absorption.
-enchantment.absorption.walkthrough = Heals blocker for {amount}% of blocked damage per level. Applies to shields. Not combinable with Reflection.
-enchantment.fast_swim.walkthrough = Increases swim speed by {amount}% per level. Applies to gloves.
-enchantment.night_vision.walkthrough = Enhances visibility in dark environments such as caves, nighttime, and underwater. Applies to helmets.
-enchantment.ranged_protection.walkthrough = Reduces incoming projectile and magic damage by {amount}% per armor piece per level. Applies to armor.
-enchantment.frenzy.walkthrough = Increases signature charge rate by {amount}% per level. Applies to all weapons and staffs.
-enchantment.riposte.walkthrough = Increases counter attack damage by {amount}% per level. Applies to melee weapons.
-enchantment.coup_de_grace.walkthrough = Increases damage to stunned enemies by {amount}% per level. Applies to melee weapons.
+enchantment.sharpness.walkthrough = Aumenta o dano corpo a corpo em {amount}% por nível. Aplica-se a espadas e machados.
+enchantment.life_leech.walkthrough = Cura o atacante em {amount}% do dano causado. Aplica-se a armas corpo a corpo.
+enchantment.durability.walkthrough = Reduz a chance de perda de durabilidade em {amount}% por nível. Aplica-se a todas as armas, ferramentas e armaduras.
+enchantment.sturdy.walkthrough = Previne a perda de durabilidade máxima ao reparar. Aplica-se a todas as armas, ferramentas e armaduras.
+enchantment.dexterity.walkthrough = Reduz os custos de estamina em {amount}% por nível. Aplica-se a armas corpo a corpo, escudos e cajados.
+enchantment.protection.walkthrough = Reduz o dano físico recebido em {amount}% por peça de armadura por nível. Aplica-se a armaduras.
+enchantment.efficiency.walkthrough = Aumenta a velocidade de mineração em {amount}% por nível. Aplica-se a picaretas, machados e pás.\n\nPor enquanto, este encantamento só pode aumentar a velocidade de quebra de blocos, não a velocidade de balanço da picareta, devido a limitações do Hytale.
+enchantment.fortune.walkthrough = Aumenta a chance de minérios/cristais extras em {amount}% por nível. Aplica-se a picaretas. Não combinável com Toque Perfeito ou Fundição.
+enchantment.smelting.walkthrough = Funde automaticamente os blocos minerados. Aplica-se a picaretas. Não combinável com Toque Perfeito ou Fortuna.
+enchantment.strength.walkthrough = Aumenta o dano de projéteis em {amount}% por nível. Aplica-se a armas de longo alcance.
+enchantment.eagles_eye.walkthrough = Aumenta o dano de projéteis em até {amount}% baseado na distância por nível. Aplica-se a armas de longo alcance.
+enchantment.looting.walkthrough = Aumenta as taxas máximas de drop de monstros em {amount}% por nível e melhora a chance de drops raros. Aplica-se a armas corpo a corpo, de longo alcance e cajados.
+enchantment.feather_falling.walkthrough = Reduz o dano de queda em {amount}% por nível. Aplica-se a botas.
+enchantment.waterbreathing.walkthrough = Reduz o consumo de oxigênio em {amount}% por nível. Aplica-se a capacetes.
+enchantment.burn.walkthrough = Incendeia o alvo e faz com que ele solte variantes cozidas de seus drops. Aplica-se a armas corpo a corpo e de longo alcance. Não combinável com Congelamento.
+enchantment.freeze.walkthrough = Aplica lentidão severa (50%) ao alvo ao acertar. Aplica-se a armas corpo a corpo e de longo alcance. Não combinável com Queimadura.
+enchantment.eternal_shot.walkthrough = Permite disparar flechas sem consumi-las. Você ainda precisa de 1 flecha no inventário. Aplica-se a armas de longo alcance.
+enchantment.pick_perfect.walkthrough = Blocos minerados soltam a si mesmos em vez de seus drops habituais. Aplica-se a picaretas, machados e pás. Não combinável com Fortuna ou Fundição.
+enchantment.thrift.walkthrough = Restaura {amount}% da mana gasta ao acertar por nível. Aplica-se a cajados de mana.
+enchantment.elemental_heart.walkthrough = Cajados Elementais não consomem essência ao lançar. Aplica-se a cajados de essência.
+enchantment.knockback.walkthrough = Empurra alvos para trás ao acertar. Aplica-se a armas corpo a corpo.
+enchantment.reflection.walkthrough = Reflete {amount}% do dano bloqueado de volta ao atacante por nível. Aplica-se a escudos. Não combinável com Absorção.
+enchantment.absorption.walkthrough = Cura o bloqueador em {amount}% do dano bloqueado por nível. Aplica-se a escudos. Não combinável com Reflexão.
+enchantment.fast_swim.walkthrough = Aumenta a velocidade de nado em {amount}% por nível. Aplica-se a luvas.
+enchantment.night_vision.walkthrough = Melhora a visibilidade em ambientes escuros como cavernas, noite e embaixo d'água. Aplica-se a capacetes.\n\nEste encantamento está desabilitado por padrão, pois não estou muito satisfeito com a qualidade do efeito. Mas é o melhor possível com as limitações atuais do Hytale.
+enchantment.ranged_protection.walkthrough = Reduz o dano de projéteis e magia recebido em {amount}% por peça de armadura por nível. Aplica-se a armaduras.
+enchantment.frenzy.walkthrough = Aumenta a taxa de carregamento da habilidade especial em {amount}% por nível. Aplica-se a todas as armas e cajados.
+enchantment.riposte.walkthrough = Este é um Encantamento colaborativo com o mod Perfect Parries e só funcionará se ambos os mods estiverem instalados.\n\nAumenta o dano de contra-ataque em {amount}% por nível. Aplica-se a armas corpo a corpo.
+enchantment.coup_de_grace.walkthrough = Este é um Encantamento colaborativo com o mod Perfect Parries e só funcionará se ambos os mods estiverem instalados.\n\nAumenta o dano contra inimigos atordoados em {amount}% por nível. Aplica-se a armas corpo a corpo.
