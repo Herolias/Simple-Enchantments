@@ -36,7 +36,9 @@ public class ConfigManager {
             logger.atWarning().log("Config failed to load even after smart merge fallback. Using defaults.");
         }
         
-        // No need to manually populate defaults or save again, SmartConfigManager handles that.
+        // Migrate legacy per-field multipliers to unified map (v1.x -> v2.0)
+        this.config.migrateFromLegacy();
+        
         logger.atInfo().log("Configuration loaded.");
     }
 

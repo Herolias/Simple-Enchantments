@@ -71,45 +71,23 @@ public class EnchantConfigPage extends InteractiveCustomUIPage<EnchantConfigPage
     private boolean showSaveFeedback = false;
     private boolean showResetConfirmation = false;
     
-    // Mapping of enchantment types to their config field names for multipliers
+    // Mapping of enchantment types to their enchantment ID keys in enchantmentMultipliers map
+    // Enchantments with defaultMultiplierPerLevel > 0 get a multiplier row in the UI
     private static final Map<EnchantmentType, String> ENCHANTMENT_MULTIPLIERS = new LinkedHashMap<>();
-    // Secondary multipliers for enchantments with multiple configurable effects
+    // Secondary multipliers for enchantments with multiple configurable effects (legacy fields)
     private static final Map<EnchantmentType, String> ENCHANTMENT_SECONDARY_MULTIPLIERS = new LinkedHashMap<>();
-    // Display labels for secondary multipliers
     private static final Map<String, String> SECONDARY_MULTIPLIER_LABELS = new LinkedHashMap<>();
     static {
-        ENCHANTMENT_MULTIPLIERS.put(EnchantmentType.SHARPNESS, "sharpnessDamageMultiplierPerLevel");
-        ENCHANTMENT_MULTIPLIERS.put(EnchantmentType.LIFE_LEECH, "lifeLeechPercentage");
-        ENCHANTMENT_MULTIPLIERS.put(EnchantmentType.DURABILITY, "durabilityReductionPerLevel");
-        ENCHANTMENT_MULTIPLIERS.put(EnchantmentType.DEXTERITY, "dexterityStaminaReductionPerLevel");
-        ENCHANTMENT_MULTIPLIERS.put(EnchantmentType.PROTECTION, "protectionDamageReductionPerLevel");
-        ENCHANTMENT_MULTIPLIERS.put(EnchantmentType.EFFICIENCY, "efficiencyMiningSpeedPerLevel");
-        ENCHANTMENT_MULTIPLIERS.put(EnchantmentType.FORTUNE, "fortuneRollChancePerLevel");
-        ENCHANTMENT_MULTIPLIERS.put(EnchantmentType.STRENGTH, "strengthDamageMultiplierPerLevel");
-        ENCHANTMENT_MULTIPLIERS.put(EnchantmentType.EAGLES_EYE, "eaglesEyeDistanceBonusPerLevel");
-        ENCHANTMENT_MULTIPLIERS.put(EnchantmentType.LOOTING, "lootingChanceMultiplierPerLevel");
-        ENCHANTMENT_MULTIPLIERS.put(EnchantmentType.FEATHER_FALLING, "featherFallingReductionPerLevel");
-        ENCHANTMENT_MULTIPLIERS.put(EnchantmentType.WATERBREATHING, "waterBreathingReductionPerLevel");
-        ENCHANTMENT_MULTIPLIERS.put(EnchantmentType.KNOCKBACK, "knockbackStrengthPerLevel");
-        ENCHANTMENT_MULTIPLIERS.put(EnchantmentType.REFLECTION, "reflectionDamagePercentagePerLevel");
-        ENCHANTMENT_MULTIPLIERS.put(EnchantmentType.ABSORPTION, "absorptionHealPercentagePerLevel");
-        ENCHANTMENT_MULTIPLIERS.put(EnchantmentType.FAST_SWIM, "fastSwimSpeedBonusPerLevel");
-        ENCHANTMENT_MULTIPLIERS.put(EnchantmentType.THRIFT, "thriftRestoreAmountPerLevel");
-        ENCHANTMENT_MULTIPLIERS.put(EnchantmentType.ELEMENTAL_HEART, "elementalHeartSaveChancePerLevel");
-        ENCHANTMENT_MULTIPLIERS.put(EnchantmentType.FRENZY, "frenzyChargeSpeedMultiplierPerLevel");
-        ENCHANTMENT_MULTIPLIERS.put(EnchantmentType.RIPOSTE, "riposteDamageMultiplierPerLevel");
-        ENCHANTMENT_MULTIPLIERS.put(EnchantmentType.COUP_DE_GRACE, "coupDeGraceDamageMultiplierPerLevel");
-        ENCHANTMENT_MULTIPLIERS.put(EnchantmentType.RANGED_PROTECTION, "rangedProtectionDamageReductionPerLevel");
+        // Populate from registry: only enchantments with a non-zero default multiplier get a UI row
+        for (EnchantmentType type : EnchantmentType.values()) {
+            if (type.getDefaultMultiplierPerLevel() > 0) {
+                ENCHANTMENT_MULTIPLIERS.put(type, type.getId());
+            }
+        }
 
-        // Secondary multipliers for enchantments with multiple effects
-        // ENCHANTMENT_SECONDARY_MULTIPLIERS.put(EnchantmentType.STRENGTH, "strengthRangeMultiplierPerLevel");
+        // Secondary multipliers for enchantments with multiple effects (still legacy fields on config)
         ENCHANTMENT_SECONDARY_MULTIPLIERS.put(EnchantmentType.LOOTING, "lootingQuantityMultiplierPerLevel");
-
-        SECONDARY_MULTIPLIER_LABELS.put("strengthRangeMultiplierPerLevel", "config.secondary.range_speed_bonus");
         SECONDARY_MULTIPLIER_LABELS.put("lootingQuantityMultiplierPerLevel", "config.secondary.quantity_bonus");
-        
-        // ENCHANTMENT_SECONDARY_MULTIPLIERS.put(EnchantmentType.EFFICIENCY, "efficiencySwingSpeedMultiplier");
-        // SECONDARY_MULTIPLIER_LABELS.put("efficiencySwingSpeedMultiplier", "Swing Speed Bonus");
     }
     
     // Default config instance for reset functionality - uses values from EnchantingConfig.java
@@ -149,33 +127,15 @@ public class EnchantConfigPage extends InteractiveCustomUIPage<EnchantConfigPage
         copy.hasAutoDisabledBanner = original.hasAutoDisabledBanner;
         copy.enableEnchantmentGlow = original.enableEnchantmentGlow;
         copy.allowSameScrollUpgrades = original.allowSameScrollUpgrades;
-        copy.sharpnessDamageMultiplierPerLevel = original.sharpnessDamageMultiplierPerLevel;
-        copy.lifeLeechPercentage = original.lifeLeechPercentage;
-        copy.durabilityReductionPerLevel = original.durabilityReductionPerLevel;
-        copy.dexterityStaminaReductionPerLevel = original.dexterityStaminaReductionPerLevel;
-        copy.protectionDamageReductionPerLevel = original.protectionDamageReductionPerLevel;
-        copy.efficiencyMiningSpeedPerLevel = original.efficiencyMiningSpeedPerLevel;
-        // copy.efficiencySwingSpeedMultiplier = original.efficiencySwingSpeedMultiplier;
-        copy.fortuneRollChancePerLevel = original.fortuneRollChancePerLevel;
-        copy.strengthDamageMultiplierPerLevel = original.strengthDamageMultiplierPerLevel;
-        copy.strengthRangeMultiplierPerLevel = original.strengthRangeMultiplierPerLevel;
-        copy.frenzyChargeSpeedMultiplierPerLevel = original.frenzyChargeSpeedMultiplierPerLevel;
-        copy.riposteDamageMultiplierPerLevel = original.riposteDamageMultiplierPerLevel;
-        copy.coupDeGraceDamageMultiplierPerLevel = original.coupDeGraceDamageMultiplierPerLevel;
-        copy.rangedProtectionDamageReductionPerLevel = original.rangedProtectionDamageReductionPerLevel;
         
-        copy.disableEnchantmentCrafting = original.disableEnchantmentCrafting;
-        copy.eaglesEyeDistanceBonusPerLevel = original.eaglesEyeDistanceBonusPerLevel;
-        copy.lootingChanceMultiplierPerLevel = original.lootingChanceMultiplierPerLevel;
+        // Clone enchantment multipliers map
+        copy.enchantmentMultipliers = new LinkedHashMap<>(original.enchantmentMultipliers);
+        
+        // Clone legacy secondary fields (still used for looting quantity etc.)
+        copy.strengthRangeMultiplierPerLevel = original.strengthRangeMultiplierPerLevel;
         copy.lootingQuantityMultiplierPerLevel = original.lootingQuantityMultiplierPerLevel;
-        copy.featherFallingReductionPerLevel = original.featherFallingReductionPerLevel;
-        copy.waterBreathingReductionPerLevel = original.waterBreathingReductionPerLevel;
-        copy.knockbackStrengthPerLevel = original.knockbackStrengthPerLevel;
-        copy.reflectionDamagePercentagePerLevel = original.reflectionDamagePercentagePerLevel;
-        copy.absorptionHealPercentagePerLevel = original.absorptionHealPercentagePerLevel;
-        copy.fastSwimSpeedBonusPerLevel = original.fastSwimSpeedBonusPerLevel;
-        copy.thriftRestoreAmountPerLevel = original.thriftRestoreAmountPerLevel;
-        copy.elementalHeartSaveChancePerLevel = original.elementalHeartSaveChancePerLevel;
+
+        copy.disableEnchantmentCrafting = original.disableEnchantmentCrafting;
         copy.returnEnchantmentOnCleanse = original.returnEnchantmentOnCleanse;
         copy.salvagerYieldsScroll = original.salvagerYieldsScroll;
         copy.enchantingTableCraftingTier = original.enchantingTableCraftingTier;
@@ -1194,33 +1154,15 @@ public class EnchantConfigPage extends InteractiveCustomUIPage<EnchantConfigPage
         return "items." + name + ".name";
     }
     
-    private double getMultiplierValue(String fieldName) {
-        return switch (fieldName) {
-            case "sharpnessDamageMultiplierPerLevel" -> workingConfig.sharpnessDamageMultiplierPerLevel;
-            case "lifeLeechPercentage" -> workingConfig.lifeLeechPercentage;
-            case "durabilityReductionPerLevel" -> workingConfig.durabilityReductionPerLevel;
-            case "dexterityStaminaReductionPerLevel" -> workingConfig.dexterityStaminaReductionPerLevel;
-            case "protectionDamageReductionPerLevel" -> workingConfig.protectionDamageReductionPerLevel;
-            case "efficiencyMiningSpeedPerLevel" -> workingConfig.efficiencyMiningSpeedPerLevel;
-            // case "efficiencySwingSpeedMultiplier" -> workingConfig.efficiencySwingSpeedMultiplier;
-            case "fortuneRollChancePerLevel" -> workingConfig.fortuneRollChancePerLevel;
-            case "strengthDamageMultiplierPerLevel" -> workingConfig.strengthDamageMultiplierPerLevel;
-            case "strengthRangeMultiplierPerLevel" -> workingConfig.strengthRangeMultiplierPerLevel;
-            case "eaglesEyeDistanceBonusPerLevel" -> workingConfig.eaglesEyeDistanceBonusPerLevel;
-            case "lootingChanceMultiplierPerLevel" -> workingConfig.lootingChanceMultiplierPerLevel;
-            case "lootingQuantityMultiplierPerLevel" -> workingConfig.lootingQuantityMultiplierPerLevel;
-            case "featherFallingReductionPerLevel" -> workingConfig.featherFallingReductionPerLevel;
-            case "waterBreathingReductionPerLevel" -> workingConfig.waterBreathingReductionPerLevel;
-            case "knockbackStrengthPerLevel" -> workingConfig.knockbackStrengthPerLevel;
-            case "reflectionDamagePercentagePerLevel" -> workingConfig.reflectionDamagePercentagePerLevel;
-            case "thriftRestoreAmountPerLevel" -> workingConfig.thriftRestoreAmountPerLevel;
-            case "absorptionHealPercentagePerLevel" -> workingConfig.absorptionHealPercentagePerLevel;
-            case "fastSwimSpeedBonusPerLevel" -> workingConfig.fastSwimSpeedBonusPerLevel;
-            case "elementalHeartSaveChancePerLevel" -> workingConfig.elementalHeartSaveChancePerLevel;
-            case "frenzyChargeSpeedMultiplierPerLevel" -> workingConfig.frenzyChargeSpeedMultiplierPerLevel;
-            case "riposteDamageMultiplierPerLevel" -> workingConfig.riposteDamageMultiplierPerLevel;
-            case "coupDeGraceDamageMultiplierPerLevel" -> workingConfig.coupDeGraceDamageMultiplierPerLevel;
-            case "rangedProtectionDamageReductionPerLevel" -> workingConfig.rangedProtectionDamageReductionPerLevel;
+    private double getMultiplierValue(String key) {
+        // First check enchantmentMultipliers map (handles all enchantment IDs)
+        if (workingConfig.enchantmentMultipliers.containsKey(key)) {
+            return workingConfig.enchantmentMultipliers.getOrDefault(key, 0.0);
+        }
+        // Legacy secondary multiplier fields
+        return switch (key) {
+            case "strengthRangeMultiplierPerLevel" -> workingConfig.strengthRangeMultiplierPerLevel != null ? workingConfig.strengthRangeMultiplierPerLevel : 0.15;
+            case "lootingQuantityMultiplierPerLevel" -> workingConfig.lootingQuantityMultiplierPerLevel != null ? workingConfig.lootingQuantityMultiplierPerLevel : 0.25;
             default -> 0.0;
         };
     }
@@ -1237,46 +1179,29 @@ public class EnchantConfigPage extends InteractiveCustomUIPage<EnchantConfigPage
         
         // Ignore empty values (e.g. while deleting text) without logging warning
         if (value == null || value.trim().isEmpty()) {
-            markUnsavedChange(); // Still mark as unsaved because user touched it, even if invalid state
+            markUnsavedChange();
             return;
         }
         
         try {
-            switch (key) {
-                case "maxEnchantmentsPerItem" -> workingConfig.maxEnchantmentsPerItem = Math.max(1, Integer.parseInt(value));
-                case "showEnchantmentBanner" -> workingConfig.showEnchantmentBanner = Boolean.parseBoolean(value);
-                case "enableEnchantmentGlow" -> workingConfig.enableEnchantmentGlow = Boolean.parseBoolean(value);
-                case "allowSameScrollUpgrades" -> workingConfig.allowSameScrollUpgrades = Boolean.parseBoolean(value);
-                case "disableEnchantmentCrafting" -> workingConfig.disableEnchantmentCrafting = Boolean.parseBoolean(value);
-                case "returnEnchantmentOnCleanse" -> workingConfig.returnEnchantmentOnCleanse = Boolean.parseBoolean(value);
-                case "enchantingTableCraftingTier" -> workingConfig.enchantingTableCraftingTier = Math.max(1, Integer.parseInt(value));
-                case "sharpnessDamageMultiplierPerLevel" -> workingConfig.sharpnessDamageMultiplierPerLevel = Double.parseDouble(value);
-                case "lifeLeechPercentage" -> workingConfig.lifeLeechPercentage = Double.parseDouble(value);
-                case "durabilityReductionPerLevel" -> workingConfig.durabilityReductionPerLevel = Double.parseDouble(value);
-                case "dexterityStaminaReductionPerLevel" -> workingConfig.dexterityStaminaReductionPerLevel = Double.parseDouble(value);
-                case "protectionDamageReductionPerLevel" -> workingConfig.protectionDamageReductionPerLevel = Double.parseDouble(value);
-                case "efficiencyMiningSpeedPerLevel" -> workingConfig.efficiencyMiningSpeedPerLevel = Double.parseDouble(value);
-                // case "efficiencySwingSpeedMultiplier" -> workingConfig.efficiencySwingSpeedMultiplier = Double.parseDouble(value);
-                case "fortuneRollChancePerLevel" -> workingConfig.fortuneRollChancePerLevel = Double.parseDouble(value);
-                case "strengthDamageMultiplierPerLevel" -> workingConfig.strengthDamageMultiplierPerLevel = Double.parseDouble(value);
-                case "strengthRangeMultiplierPerLevel" -> workingConfig.strengthRangeMultiplierPerLevel = Double.parseDouble(value);
-                case "eaglesEyeDistanceBonusPerLevel" -> workingConfig.eaglesEyeDistanceBonusPerLevel = Double.parseDouble(value);
-                case "lootingChanceMultiplierPerLevel" -> workingConfig.lootingChanceMultiplierPerLevel = Double.parseDouble(value);
-                case "lootingQuantityMultiplierPerLevel" -> workingConfig.lootingQuantityMultiplierPerLevel = Double.parseDouble(value);
-                case "featherFallingReductionPerLevel" -> workingConfig.featherFallingReductionPerLevel = Double.parseDouble(value);
-                case "waterBreathingReductionPerLevel" -> workingConfig.waterBreathingReductionPerLevel = Double.parseDouble(value);
-                case "knockbackStrengthPerLevel" -> workingConfig.knockbackStrengthPerLevel = Double.parseDouble(value);
-                case "reflectionDamagePercentagePerLevel" -> workingConfig.reflectionDamagePercentagePerLevel = Double.parseDouble(value);
-                case "thriftRestoreAmountPerLevel" -> workingConfig.thriftRestoreAmountPerLevel = Double.parseDouble(value);
-                case "absorptionHealPercentagePerLevel" -> workingConfig.absorptionHealPercentagePerLevel = Double.parseDouble(value);
-                case "fastSwimSpeedBonusPerLevel" -> workingConfig.fastSwimSpeedBonusPerLevel = Double.parseDouble(value);
-                case "elementalHeartSaveChancePerLevel" -> workingConfig.elementalHeartSaveChancePerLevel = Double.parseDouble(value);
-                case "frenzyChargeSpeedMultiplierPerLevel" -> workingConfig.frenzyChargeSpeedMultiplierPerLevel = Double.parseDouble(value);
-                case "riposteDamageMultiplierPerLevel" -> workingConfig.riposteDamageMultiplierPerLevel = Double.parseDouble(value);
-                case "coupDeGraceDamageMultiplierPerLevel" -> workingConfig.coupDeGraceDamageMultiplierPerLevel = Double.parseDouble(value);
-                case "rangedProtectionDamageReductionPerLevel" -> workingConfig.rangedProtectionDamageReductionPerLevel = Double.parseDouble(value);
-                case "salvagerYieldsScroll" -> workingConfig.salvagerYieldsScroll = Boolean.parseBoolean(value);
-                case "showWelcomeMessage" -> workingConfig.showWelcomeMessage = Boolean.parseBoolean(value);
+            // Check if key is an enchantment ID in the multipliers map
+            if (workingConfig.enchantmentMultipliers.containsKey(key)) {
+                workingConfig.enchantmentMultipliers.put(key, Double.parseDouble(value));
+            } else {
+                // General settings and legacy secondary fields
+                switch (key) {
+                    case "maxEnchantmentsPerItem" -> workingConfig.maxEnchantmentsPerItem = Math.max(1, Integer.parseInt(value));
+                    case "showEnchantmentBanner" -> workingConfig.showEnchantmentBanner = Boolean.parseBoolean(value);
+                    case "enableEnchantmentGlow" -> workingConfig.enableEnchantmentGlow = Boolean.parseBoolean(value);
+                    case "allowSameScrollUpgrades" -> workingConfig.allowSameScrollUpgrades = Boolean.parseBoolean(value);
+                    case "disableEnchantmentCrafting" -> workingConfig.disableEnchantmentCrafting = Boolean.parseBoolean(value);
+                    case "returnEnchantmentOnCleanse" -> workingConfig.returnEnchantmentOnCleanse = Boolean.parseBoolean(value);
+                    case "enchantingTableCraftingTier" -> workingConfig.enchantingTableCraftingTier = Math.max(1, Integer.parseInt(value));
+                    case "strengthRangeMultiplierPerLevel" -> workingConfig.strengthRangeMultiplierPerLevel = Double.parseDouble(value);
+                    case "lootingQuantityMultiplierPerLevel" -> workingConfig.lootingQuantityMultiplierPerLevel = Double.parseDouble(value);
+                    case "salvagerYieldsScroll" -> workingConfig.salvagerYieldsScroll = Boolean.parseBoolean(value);
+                    case "showWelcomeMessage" -> workingConfig.showWelcomeMessage = Boolean.parseBoolean(value);
+                }
             }
         } catch (NumberFormatException e) {
             LOGGER.atWarning().log("Failed to parse setting value: " + key + " = " + value);
@@ -1343,37 +1268,18 @@ public class EnchantConfigPage extends InteractiveCustomUIPage<EnchantConfigPage
      * Gets the default value for a setting from DEFAULT_CONFIG.
      */
     private String getDefaultValue(String key) {
+        // Check enchantment multipliers map first
+        if (DEFAULT_CONFIG.enchantmentMultipliers.containsKey(key)) {
+            return String.valueOf(DEFAULT_CONFIG.enchantmentMultipliers.get(key));
+        }
         return switch (key) {
             case "maxEnchantmentsPerItem" -> String.valueOf(DEFAULT_CONFIG.maxEnchantmentsPerItem);
             case "allowSameScrollUpgrades" -> String.valueOf(DEFAULT_CONFIG.allowSameScrollUpgrades);
             case "enchantingTableCraftingTier" -> String.valueOf(DEFAULT_CONFIG.enchantingTableCraftingTier);
-            case "sharpnessDamageMultiplierPerLevel" -> String.valueOf(DEFAULT_CONFIG.sharpnessDamageMultiplierPerLevel);
-            case "lifeLeechPercentage" -> String.valueOf(DEFAULT_CONFIG.lifeLeechPercentage);
-            case "durabilityReductionPerLevel" -> String.valueOf(DEFAULT_CONFIG.durabilityReductionPerLevel);
-            case "dexterityStaminaReductionPerLevel" -> String.valueOf(DEFAULT_CONFIG.dexterityStaminaReductionPerLevel);
-            case "protectionDamageReductionPerLevel" -> String.valueOf(DEFAULT_CONFIG.protectionDamageReductionPerLevel);
-            case "efficiencyMiningSpeedPerLevel" -> String.valueOf(DEFAULT_CONFIG.efficiencyMiningSpeedPerLevel);
-            // case "efficiencySwingSpeedMultiplier" -> String.valueOf(DEFAULT_CONFIG.efficiencySwingSpeedMultiplier);
-            case "fortuneRollChancePerLevel" -> String.valueOf(DEFAULT_CONFIG.fortuneRollChancePerLevel);
-            case "strengthDamageMultiplierPerLevel" -> String.valueOf(DEFAULT_CONFIG.strengthDamageMultiplierPerLevel);
-            case "strengthRangeMultiplierPerLevel" -> String.valueOf(DEFAULT_CONFIG.strengthRangeMultiplierPerLevel);
-            case "eaglesEyeDistanceBonusPerLevel" -> String.valueOf(DEFAULT_CONFIG.eaglesEyeDistanceBonusPerLevel);
-            case "lootingChanceMultiplierPerLevel" -> String.valueOf(DEFAULT_CONFIG.lootingChanceMultiplierPerLevel);
-            case "lootingQuantityMultiplierPerLevel" -> String.valueOf(DEFAULT_CONFIG.lootingQuantityMultiplierPerLevel);
-            case "featherFallingReductionPerLevel" -> String.valueOf(DEFAULT_CONFIG.featherFallingReductionPerLevel);
-            case "waterBreathingReductionPerLevel" -> String.valueOf(DEFAULT_CONFIG.waterBreathingReductionPerLevel);
-            case "knockbackStrengthPerLevel" -> String.valueOf(DEFAULT_CONFIG.knockbackStrengthPerLevel);
-            case "reflectionDamagePercentagePerLevel" -> String.valueOf(DEFAULT_CONFIG.reflectionDamagePercentagePerLevel);
-            case "thriftRestoreAmountPerLevel" -> String.valueOf(DEFAULT_CONFIG.thriftRestoreAmountPerLevel);
-            case "absorptionHealPercentagePerLevel" -> String.valueOf(DEFAULT_CONFIG.absorptionHealPercentagePerLevel);
-            case "fastSwimSpeedBonusPerLevel" -> String.valueOf(DEFAULT_CONFIG.fastSwimSpeedBonusPerLevel);
-            case "elementalHeartSaveChancePerLevel" -> String.valueOf(DEFAULT_CONFIG.elementalHeartSaveChancePerLevel);
+            case "strengthRangeMultiplierPerLevel" -> String.valueOf(DEFAULT_CONFIG.strengthRangeMultiplierPerLevel != null ? DEFAULT_CONFIG.strengthRangeMultiplierPerLevel : 0.15);
+            case "lootingQuantityMultiplierPerLevel" -> String.valueOf(DEFAULT_CONFIG.lootingQuantityMultiplierPerLevel != null ? DEFAULT_CONFIG.lootingQuantityMultiplierPerLevel : 0.25);
             case "returnEnchantmentOnCleanse" -> String.valueOf(DEFAULT_CONFIG.returnEnchantmentOnCleanse);
-            case "frenzyChargeSpeedMultiplierPerLevel" -> String.valueOf(DEFAULT_CONFIG.frenzyChargeSpeedMultiplierPerLevel);
             case "disableEnchantmentCrafting" -> String.valueOf(DEFAULT_CONFIG.disableEnchantmentCrafting);
-            case "riposteDamageMultiplierPerLevel" -> String.valueOf(DEFAULT_CONFIG.riposteDamageMultiplierPerLevel);
-            case "coupDeGraceDamageMultiplierPerLevel" -> String.valueOf(DEFAULT_CONFIG.coupDeGraceDamageMultiplierPerLevel);
-            case "rangedProtectionDamageReductionPerLevel" -> String.valueOf(DEFAULT_CONFIG.rangedProtectionDamageReductionPerLevel);
             case "salvagerYieldsScroll" -> String.valueOf(DEFAULT_CONFIG.salvagerYieldsScroll);
             case "showWelcomeMessage" -> String.valueOf(DEFAULT_CONFIG.showWelcomeMessage);
             default -> null;
@@ -1389,34 +1295,17 @@ public class EnchantConfigPage extends InteractiveCustomUIPage<EnchantConfigPage
         actualConfig.enableEnchantmentGlow = workingConfig.enableEnchantmentGlow;
         actualConfig.allowSameScrollUpgrades = workingConfig.allowSameScrollUpgrades;
         actualConfig.enchantingTableCraftingTier = workingConfig.enchantingTableCraftingTier;
-        actualConfig.sharpnessDamageMultiplierPerLevel = workingConfig.sharpnessDamageMultiplierPerLevel;
-        actualConfig.lifeLeechPercentage = workingConfig.lifeLeechPercentage;
-        actualConfig.durabilityReductionPerLevel = workingConfig.durabilityReductionPerLevel;
-        actualConfig.dexterityStaminaReductionPerLevel = workingConfig.dexterityStaminaReductionPerLevel;
-        actualConfig.protectionDamageReductionPerLevel = workingConfig.protectionDamageReductionPerLevel;
-        actualConfig.efficiencyMiningSpeedPerLevel = workingConfig.efficiencyMiningSpeedPerLevel;
-        // actualConfig.efficiencySwingSpeedMultiplier = workingConfig.efficiencySwingSpeedMultiplier;
-        actualConfig.fortuneRollChancePerLevel = workingConfig.fortuneRollChancePerLevel;
-        actualConfig.strengthDamageMultiplierPerLevel = workingConfig.strengthDamageMultiplierPerLevel;
+        
+        // Copy enchantment multipliers map
+        actualConfig.enchantmentMultipliers = new LinkedHashMap<>(workingConfig.enchantmentMultipliers);
+        
+        // Legacy secondary fields
         actualConfig.strengthRangeMultiplierPerLevel = workingConfig.strengthRangeMultiplierPerLevel;
-        actualConfig.eaglesEyeDistanceBonusPerLevel = workingConfig.eaglesEyeDistanceBonusPerLevel;
-        actualConfig.lootingChanceMultiplierPerLevel = workingConfig.lootingChanceMultiplierPerLevel;
         actualConfig.lootingQuantityMultiplierPerLevel = workingConfig.lootingQuantityMultiplierPerLevel;
-        actualConfig.featherFallingReductionPerLevel = workingConfig.featherFallingReductionPerLevel;
-        actualConfig.waterBreathingReductionPerLevel = workingConfig.waterBreathingReductionPerLevel;
-        actualConfig.knockbackStrengthPerLevel = workingConfig.knockbackStrengthPerLevel;
-        actualConfig.reflectionDamagePercentagePerLevel = workingConfig.reflectionDamagePercentagePerLevel;
-        actualConfig.thriftRestoreAmountPerLevel = workingConfig.thriftRestoreAmountPerLevel;
-        actualConfig.absorptionHealPercentagePerLevel = workingConfig.absorptionHealPercentagePerLevel;
-        actualConfig.fastSwimSpeedBonusPerLevel = workingConfig.fastSwimSpeedBonusPerLevel;
-        actualConfig.elementalHeartSaveChancePerLevel = workingConfig.elementalHeartSaveChancePerLevel;
-        actualConfig.frenzyChargeSpeedMultiplierPerLevel = workingConfig.frenzyChargeSpeedMultiplierPerLevel;
+        
         actualConfig.returnEnchantmentOnCleanse = workingConfig.returnEnchantmentOnCleanse;
         actualConfig.disableEnchantmentCrafting = workingConfig.disableEnchantmentCrafting;
         actualConfig.salvagerYieldsScroll = workingConfig.salvagerYieldsScroll;
-        actualConfig.riposteDamageMultiplierPerLevel = workingConfig.riposteDamageMultiplierPerLevel;
-        actualConfig.coupDeGraceDamageMultiplierPerLevel = workingConfig.coupDeGraceDamageMultiplierPerLevel;
-        actualConfig.rangedProtectionDamageReductionPerLevel = workingConfig.rangedProtectionDamageReductionPerLevel;
         actualConfig.showWelcomeMessage = workingConfig.showWelcomeMessage;
         actualConfig.disabledEnchantments = new LinkedHashMap<>(workingConfig.disabledEnchantments);
         actualConfig.scrollRecipes = new LinkedHashMap<>();
@@ -1489,31 +1378,14 @@ public class EnchantConfigPage extends InteractiveCustomUIPage<EnchantConfigPage
         
         workingConfig.enableEnchantmentGlow = defaults.enableEnchantmentGlow;
         workingConfig.enchantingTableCraftingTier = defaults.enchantingTableCraftingTier;
-        workingConfig.sharpnessDamageMultiplierPerLevel = defaults.sharpnessDamageMultiplierPerLevel;
-        workingConfig.lifeLeechPercentage = defaults.lifeLeechPercentage;
-        workingConfig.durabilityReductionPerLevel = defaults.durabilityReductionPerLevel;
-        workingConfig.dexterityStaminaReductionPerLevel = defaults.dexterityStaminaReductionPerLevel;
-        workingConfig.protectionDamageReductionPerLevel = defaults.protectionDamageReductionPerLevel;
-        workingConfig.efficiencyMiningSpeedPerLevel = defaults.efficiencyMiningSpeedPerLevel;
-        // workingConfig.efficiencySwingSpeedMultiplier = defaults.efficiencySwingSpeedMultiplier;
-        workingConfig.fortuneRollChancePerLevel = defaults.fortuneRollChancePerLevel;
-        workingConfig.strengthDamageMultiplierPerLevel = defaults.strengthDamageMultiplierPerLevel;
+        
+        // Reset enchantment multipliers map
+        workingConfig.enchantmentMultipliers = new LinkedHashMap<>(defaults.enchantmentMultipliers);
+        
+        // Reset legacy secondary fields
         workingConfig.strengthRangeMultiplierPerLevel = defaults.strengthRangeMultiplierPerLevel;
-        workingConfig.eaglesEyeDistanceBonusPerLevel = defaults.eaglesEyeDistanceBonusPerLevel;
-        workingConfig.lootingChanceMultiplierPerLevel = defaults.lootingChanceMultiplierPerLevel;
         workingConfig.lootingQuantityMultiplierPerLevel = defaults.lootingQuantityMultiplierPerLevel;
-        workingConfig.featherFallingReductionPerLevel = defaults.featherFallingReductionPerLevel;
-        workingConfig.waterBreathingReductionPerLevel = defaults.waterBreathingReductionPerLevel;
-        workingConfig.knockbackStrengthPerLevel = defaults.knockbackStrengthPerLevel;
-        workingConfig.reflectionDamagePercentagePerLevel = defaults.reflectionDamagePercentagePerLevel;
-        workingConfig.thriftRestoreAmountPerLevel = defaults.thriftRestoreAmountPerLevel;
-        workingConfig.absorptionHealPercentagePerLevel = defaults.absorptionHealPercentagePerLevel;
-        workingConfig.fastSwimSpeedBonusPerLevel = defaults.fastSwimSpeedBonusPerLevel;
-        workingConfig.elementalHeartSaveChancePerLevel = defaults.elementalHeartSaveChancePerLevel;
-        workingConfig.frenzyChargeSpeedMultiplierPerLevel = defaults.frenzyChargeSpeedMultiplierPerLevel;
-        workingConfig.riposteDamageMultiplierPerLevel = defaults.riposteDamageMultiplierPerLevel;
-        workingConfig.coupDeGraceDamageMultiplierPerLevel = defaults.coupDeGraceDamageMultiplierPerLevel;
-        workingConfig.rangedProtectionDamageReductionPerLevel = defaults.rangedProtectionDamageReductionPerLevel;
+        
         workingConfig.returnEnchantmentOnCleanse = defaults.returnEnchantmentOnCleanse;
         workingConfig.disableEnchantmentCrafting = defaults.disableEnchantmentCrafting;
         workingConfig.salvagerYieldsScroll = defaults.salvagerYieldsScroll;

@@ -171,15 +171,7 @@ public class EnchantmentRecipeManager {
      * Converts enchantment ID to scroll naming convention.
      */
     private static String getScrollBaseName(EnchantmentType type) {
-        // Convert snake_case to Title_Case for scroll names
-        String[] parts = type.getId().split("_");
-        StringBuilder sb = new StringBuilder("Scroll");
-        for (String part : parts) {
-            sb.append("_");
-            sb.append(Character.toUpperCase(part.charAt(0)));
-            sb.append(part.substring(1));
-        }
-        return sb.toString();
+        return type.getScrollBaseName();
     }
     
     /**

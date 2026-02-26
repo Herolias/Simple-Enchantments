@@ -89,15 +89,13 @@ public class ProjectileEnchantmentData {
      * @return The level, or 0 if not applicable
      */
     public int getLevel(EnchantmentType type) {
-        return switch (type) {
-            case STRENGTH -> strengthLevel;
-            case EAGLES_EYE -> eaglesEyeLevel;
-            case LOOTING -> lootingLevel;
-            case FREEZE -> freezeLevel;
-            case BURN -> burnLevel;
-            case ETERNAL_SHOT -> eternalShotLevel;
-            default -> 0;
-        };
+        if (type == EnchantmentType.STRENGTH) return strengthLevel;
+        if (type == EnchantmentType.EAGLES_EYE) return eaglesEyeLevel;
+        if (type == EnchantmentType.LOOTING) return lootingLevel;
+        if (type == EnchantmentType.FREEZE) return freezeLevel;
+        if (type == EnchantmentType.BURN) return burnLevel;
+        if (type == EnchantmentType.ETERNAL_SHOT) return eternalShotLevel;
+        return 0;
     }
 
     public boolean hasAny() {

@@ -7,57 +7,61 @@ import java.util.Map;
 
 /**
  * Data class for the plugin configuration.
+ * <p>
+ * Enchantment multipliers are stored in a unified map keyed by enchantment ID.
+ * Legacy per-field config values are auto-migrated on load.
  */
 public class EnchantingConfig {
-    public double configVersion = 1.4; // Versioning for migration
+    public double configVersion = 2.0; // Bumped for enchantment multipliers migration
     public int maxEnchantmentsPerItem = 5;
-    public boolean showEnchantmentBanner = true; // Default to true so people see it without the lib
-    public boolean hasAutoDisabledBanner = false; // Tracks if we've already auto-disabled it for the user
-    public boolean enableEnchantmentGlow = true; // Renamed from showEnchantmentGlow to force enable on update
+    public boolean showEnchantmentBanner = true;
+    public boolean hasAutoDisabledBanner = false;
+    public boolean enableEnchantmentGlow = true;
     public boolean allowSameScrollUpgrades = true;
     
-    // Enchantment specific settings
-    public double sharpnessDamageMultiplierPerLevel = 0.10;
-    public double lifeLeechPercentage = 0.10;
-    public double durabilityReductionPerLevel = 0.25;
-    public double dexterityStaminaReductionPerLevel = 0.20;
-    public double protectionDamageReductionPerLevel = 0.04;
-    public double efficiencyMiningSpeedPerLevel = 0.20;
-
-    public double fortuneRollChancePerLevel = 0.25;
-    public double strengthDamageMultiplierPerLevel = 0.10;
-    public double strengthRangeMultiplierPerLevel = 0.15;
+    // ===== Unified enchantment multipliers (keyed by enchantment ID) =====
+    // Replaces all individual per-enchantment fields (sharpnessDamageMultiplierPerLevel, etc.)
+    public Map<String, Double> enchantmentMultipliers = new LinkedHashMap<>();
     
+    // ===== Legacy per-enchantment fields (kept for auto-migration from old configs) =====
+    // These are read once during migration, then written into enchantmentMultipliers.
+    // After migration, these fields are ignored. GSON will simply skip them if absent.
+    public Double sharpnessDamageMultiplierPerLevel;
+    public Double lifeLeechPercentage;
+    public Double durabilityReductionPerLevel;
+    public Double dexterityStaminaReductionPerLevel;
+    public Double protectionDamageReductionPerLevel;
+    public Double efficiencyMiningSpeedPerLevel;
+    public Double fortuneRollChancePerLevel;
+    public Double strengthDamageMultiplierPerLevel;
+    public Double strengthRangeMultiplierPerLevel;
+    public Double eaglesEyeDistanceBonusPerLevel;
+    public Double lootingChanceMultiplierPerLevel;
+    public Double lootingQuantityMultiplierPerLevel;
+    public Double featherFallingReductionPerLevel;
+    public Double waterBreathingReductionPerLevel;
+    public Double knockbackStrengthPerLevel;
+    public Double reflectionDamagePercentagePerLevel;
+    public Double absorptionHealPercentagePerLevel;
+    public Double fastSwimSpeedBonusPerLevel;
+    public Double rangedProtectionDamageReductionPerLevel;
+    public Double frenzyChargeSpeedMultiplierPerLevel;
+    public Double riposteDamageMultiplierPerLevel;
+    public Double coupDeGraceDamageMultiplierPerLevel;
+    public Double thriftRestoreAmountPerLevel;
+    public Double elementalHeartSaveChancePerLevel;
+    
+    // ===== Other settings =====
     public boolean disableEnchantmentCrafting = false;
-    public double eaglesEyeDistanceBonusPerLevel = 0.005;
-    public double lootingChanceMultiplierPerLevel = 0.25;
-    public double lootingQuantityMultiplierPerLevel = 0.25;
-    public double featherFallingReductionPerLevel = 0.20;
-    public double waterBreathingReductionPerLevel = 0.20;
-    public double knockbackStrengthPerLevel = 0.6;
-    public double reflectionDamagePercentagePerLevel = 0.10;
-    public double absorptionHealPercentagePerLevel = 0.10;
-    public double fastSwimSpeedBonusPerLevel = 0.25;
-    public double rangedProtectionDamageReductionPerLevel = 0.04;
-    public double frenzyChargeSpeedMultiplierPerLevel = 0.15;
-    public double riposteDamageMultiplierPerLevel = 0.10;
-    public double coupDeGraceDamageMultiplierPerLevel = 0.15;
-
-
-    // Staff Enchantments
-    public double thriftRestoreAmountPerLevel = 0.20; // Percentage of spent mana refunded per level (0.10 = 10%)
-    public double elementalHeartSaveChancePerLevel = 1.0; // Chance to save essence (1.0 = 100% at level 1)
-    
-    // Cleansing Scroll settings
-    public boolean returnEnchantmentOnCleanse = false; // If true, gives back the scroll of the removed enchantment
-    public boolean salvagerYieldsScroll = true; // If true, successfully salvaged items yield their highest rarity scroll
+    public boolean returnEnchantmentOnCleanse = false;
+    public boolean salvagerYieldsScroll = true;
     
     public Map<String, Boolean> disabledEnchantments = new LinkedHashMap<>();
     
     public Map<String, List<ConfigIngredient>> scrollRecipes = new LinkedHashMap<>();
     
     public List<ConfigIngredient> enchantingTableRecipe;
-    public int enchantingTableCraftingTier = 2; // Default tier for crafting the table
+    public int enchantingTableCraftingTier = 2;
     
     public Map<String, List<ConfigIngredient>> enchantingTableUpgrades;
     
@@ -70,10 +74,115 @@ public class EnchantingConfig {
      */
     public static EnchantingConfig createDefault() {
         EnchantingConfig config = new EnchantingConfig();
+        config.initializeDefaultMultipliers();
         config.initializeDefaultRecipes();
         config.initializeDefaultDisabledEnchantments();
         if (config.notifiedPlayers == null) config.notifiedPlayers = new ArrayList<>();
         return config;
+    }
+
+    /**
+     * Populates enchantmentMultipliers from the registry defaults.
+     * Called for fresh installs or when new enchantments are added.
+     */
+    public void initializeDefaultMultipliers() {
+        if (enchantmentMultipliers == null) {
+            enchantmentMultipliers = new LinkedHashMap<>();
+        }
+        for (org.herolias.plugin.enchantment.EnchantmentType type : org.herolias.plugin.enchantment.EnchantmentType.values()) {
+            enchantmentMultipliers.putIfAbsent(type.getId(), type.getDefaultMultiplierPerLevel());
+        }
+    }
+
+    /**
+     * Migrates legacy per-field config values into the unified enchantmentMultipliers map.
+     * Called after GSON deserialization to handle configs from v1.x.
+     * Only migrates non-null legacy fields (i.e., values that were present in the old config).
+     */
+    public void migrateFromLegacy() {
+        if (enchantmentMultipliers == null) {
+            enchantmentMultipliers = new LinkedHashMap<>();
+        }
+        
+        // Only migrate if we have legacy fields but the map is empty (old config format)
+        boolean hasLegacyFields = sharpnessDamageMultiplierPerLevel != null 
+                               || lifeLeechPercentage != null
+                               || durabilityReductionPerLevel != null;
+        
+        if (hasLegacyFields && enchantmentMultipliers.isEmpty()) {
+            migrateLegacyField("sharpness", sharpnessDamageMultiplierPerLevel, 0.10);
+            migrateLegacyField("life_leech", lifeLeechPercentage, 0.10);
+            migrateLegacyField("durability", durabilityReductionPerLevel, 0.25);
+            migrateLegacyField("dexterity", dexterityStaminaReductionPerLevel, 0.20);
+            migrateLegacyField("protection", protectionDamageReductionPerLevel, 0.04);
+            migrateLegacyField("efficiency", efficiencyMiningSpeedPerLevel, 0.20);
+            migrateLegacyField("fortune", fortuneRollChancePerLevel, 0.25);
+            migrateLegacyField("strength", strengthDamageMultiplierPerLevel, 0.10);
+            migrateLegacyField("eagles_eye", eaglesEyeDistanceBonusPerLevel, 0.005);
+            migrateLegacyField("looting", lootingChanceMultiplierPerLevel, 0.25);
+            migrateLegacyField("feather_falling", featherFallingReductionPerLevel, 0.20);
+            migrateLegacyField("waterbreathing", waterBreathingReductionPerLevel, 0.20);
+            migrateLegacyField("knockback", knockbackStrengthPerLevel, 0.6);
+            migrateLegacyField("reflection", reflectionDamagePercentagePerLevel, 0.10);
+            migrateLegacyField("absorption", absorptionHealPercentagePerLevel, 0.10);
+            migrateLegacyField("fast_swim", fastSwimSpeedBonusPerLevel, 0.25);
+            migrateLegacyField("ranged_protection", rangedProtectionDamageReductionPerLevel, 0.04);
+            migrateLegacyField("frenzy", frenzyChargeSpeedMultiplierPerLevel, 0.15);
+            migrateLegacyField("riposte", riposteDamageMultiplierPerLevel, 0.10);
+            migrateLegacyField("coup_de_grace", coupDeGraceDamageMultiplierPerLevel, 0.15);
+            migrateLegacyField("thrift", thriftRestoreAmountPerLevel, 0.20);
+            migrateLegacyField("elemental_heart", elementalHeartSaveChancePerLevel, 1.0);
+            
+            // Set zero-multiplier enchantments
+            enchantmentMultipliers.putIfAbsent("burn", 0.0);
+            enchantmentMultipliers.putIfAbsent("freeze", 0.0);
+            enchantmentMultipliers.putIfAbsent("eternal_shot", 0.0);
+            enchantmentMultipliers.putIfAbsent("pick_perfect", 0.0);
+            enchantmentMultipliers.putIfAbsent("smelting", 0.0);
+            enchantmentMultipliers.putIfAbsent("sturdy", 0.0);
+            enchantmentMultipliers.putIfAbsent("night_vision", 0.0);
+            
+            // Null out legacy fields after migration 
+            clearLegacyFields();
+            
+            // Update config version
+            this.configVersion = 2.0;
+        }
+        
+        // Always ensure all registered enchantments have an entry
+        initializeDefaultMultipliers();
+    }
+    
+    private void migrateLegacyField(String enchantmentId, Double legacyValue, double defaultValue) {
+        enchantmentMultipliers.put(enchantmentId, legacyValue != null ? legacyValue : defaultValue);
+    }
+    
+    
+    private void clearLegacyFields() {
+        sharpnessDamageMultiplierPerLevel = null;
+        lifeLeechPercentage = null;
+        durabilityReductionPerLevel = null;
+        dexterityStaminaReductionPerLevel = null;
+        protectionDamageReductionPerLevel = null;
+        efficiencyMiningSpeedPerLevel = null;
+        fortuneRollChancePerLevel = null;
+        strengthDamageMultiplierPerLevel = null;
+        strengthRangeMultiplierPerLevel = null;
+        eaglesEyeDistanceBonusPerLevel = null;
+        lootingChanceMultiplierPerLevel = null;
+        lootingQuantityMultiplierPerLevel = null;
+        featherFallingReductionPerLevel = null;
+        waterBreathingReductionPerLevel = null;
+        knockbackStrengthPerLevel = null;
+        reflectionDamagePercentagePerLevel = null;
+        absorptionHealPercentagePerLevel = null;
+        fastSwimSpeedBonusPerLevel = null;
+        rangedProtectionDamageReductionPerLevel = null;
+        frenzyChargeSpeedMultiplierPerLevel = null;
+        riposteDamageMultiplierPerLevel = null;
+        coupDeGraceDamageMultiplierPerLevel = null;
+        thriftRestoreAmountPerLevel = null;
+        elementalHeartSaveChancePerLevel = null;
     }
 
     private void initializeDefaultDisabledEnchantments() {
@@ -184,18 +293,10 @@ public class EnchantingConfig {
 
         if (enchantingTableUpgrades == null) {
             enchantingTableUpgrades = new LinkedHashMap<>();
-            
-            // Upgrade 1 (Tier 1 -> 2)
             addTableUpgrade("Upgrade_1", "Ingredient_Bar_Gold", 15, "Ingredient_Life_Essence", 30, "Ingredient_Fire_Essence", 10, "Ingredient_Ice_Essence", 10);
-
-            // Upgrade 2 (Tier 2 -> 3)
             addTableUpgrade("Upgrade_2", "Ingredient_Bar_Adamantite", 10, "Ingredient_Life_Essence", 35, "Rock_Gem_Sapphire", 1, "Rock_Gem_Emerald", 1);
-
-            // Upgrade 3 (Tier 3 -> 4)
             addTableUpgrade("Upgrade_3", "Rock_Gem_Ruby", 1, "Ingredient_Voidheart", 1, "Ingredient_Life_Essence", 40, "Ingredient_Void_Essence", 20);
         }
-        
-        // All tiers are now applied in addScrollRecipe calls above
     }
     
     private void addScrollRecipe(String name, int defaultTier, Object... ingredients) {
@@ -206,7 +307,6 @@ public class EnchantingConfig {
             int amount = (Integer) ingredients[i + 1];
             list.add(new ConfigIngredient(item, amount));
         }
-        // Add default tier
         list.add(new ConfigIngredient(defaultTier));
         scrollRecipes.put(name, list);
     }
@@ -229,7 +329,7 @@ public class EnchantingConfig {
     public static class ConfigIngredient {
         public String item;
         public Integer amount;
-        public Integer UnlocksAtTier; // Null if it's a regular ingredient
+        public Integer UnlocksAtTier;
         
         public ConfigIngredient() {}
         
@@ -239,23 +339,18 @@ public class EnchantingConfig {
             this.UnlocksAtTier = null;
         }
         
-        // Constructor for Tier definition
         public ConfigIngredient(int tier) {
             this.UnlocksAtTier = tier;
-            this.amount = null; // Explicitly null
-            this.item = null;   // Explicitly null
+            this.amount = null;
+            this.item = null;
         }
     }
     
 
-
     // Track players who have seen the "Tooltips are here" welcome message
-    // Moved to bottom to keep config readable
     public List<String> notifiedPlayers = new ArrayList<>();
     
-    // Used to skip the tooltip announcement for everyone on fresh installs
     public boolean hasSkippedTooltipAnnouncement = false;
     
-    // If true, the welcome messages will be shown
     public boolean showWelcomeMessage = true;
 }

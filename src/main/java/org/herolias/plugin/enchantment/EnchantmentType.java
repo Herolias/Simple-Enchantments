@@ -1,427 +1,22 @@
 package org.herolias.plugin.enchantment;
 
-import java.util.Set;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.*;
 
 /**
- * Defines all available enchantments in the SimpleEnchanting plugin.
- * 
- * The system is designed to be extensible - new enchantments can be added 
- * by adding new enum values with their properties.
+ * Defines an enchantment in the SimpleEnchanting system.
+ * <p>
+ * Converted from enum to class to allow dynamic registration by addon mods.
+ * All 27 built-in enchantments are preserved as public static final constants
+ * for full backward compatibility.
+ * <p>
+ * Addon mods register new enchantments via the API; Simple Enchantments handles
+ * scrolls, config, commands, and UI automatically.
  */
-public enum EnchantmentType {
-    
-    /**
-     * Sharpness - Increases melee damage by 10% per level
-     * Applicable to: Swords, Axes (melee weapons)
-     */
-    SHARPNESS(
-        "sharpness",
-        "Sharpness",
-        "Increases melee damage",
-        3,  // max level
-        false, // requiresDurability
-        false, // isLegendary
-        ItemCategory.MELEE_WEAPON
-    ),
+public final class EnchantmentType {
 
-    /**
-     * Life Leech - Heals the attacker for a portion of damage dealt
-     * Applicable to: Melee weapons
-     */
-    LIFE_LEECH(
-        "life_leech",
-        "Life Leech",
-        "Heals for a portion of damage dealt",
-        1,  // max level
-        false, // requiresDurability
-        true, // isLegendary
-        ItemCategory.MELEE_WEAPON   
-    ),
-    
-    /**
-     * Durability - Reduces durability loss by 25%/50%/75% per level
-     * Applicable to: All equipment (weapons, tools, armor)
-     */
-    DURABILITY(
-        "durability",
-        "Durability",
-        "Reduces durability loss",
-        3,  // max level
-        true, // requires durability
-        false, // isLegendary
-        ItemCategory.MELEE_WEAPON, ItemCategory.RANGED_WEAPON, ItemCategory.TOOL, ItemCategory.PICKAXE,
-        ItemCategory.SHOVEL, ItemCategory.AXE, ItemCategory.ARMOR,
-        ItemCategory.STAFF, ItemCategory.STAFF_MANA, ItemCategory.STAFF_ESSENCE
-    ),
-
-    /**
-     * Sturdy - Prevents repair-kit max durability loss
-     * Applicable to: All equipment (weapons, tools, armor)
-     */
-    STURDY(
-        "sturdy",
-        "Sturdy",
-        "Prevents repair durability penalty",
-        1,  // max level
-        true, // requires durability
-        true, // isLegendary
-        ItemCategory.MELEE_WEAPON, ItemCategory.RANGED_WEAPON, ItemCategory.TOOL, ItemCategory.PICKAXE,
-        ItemCategory.SHOVEL, ItemCategory.AXE, ItemCategory.ARMOR,
-        ItemCategory.STAFF, ItemCategory.STAFF_MANA, ItemCategory.STAFF_ESSENCE
-    ),
-
-    /**
-     * Dexterity - Reduces stamina costs for blocking and abilities
-     * Applicable to: Shields and melee weapons
-     */
-    DEXTERITY(
-        "dexterity",
-        "Dexterity",
-        "Reduces stamina costs",
-        3,  // max level
-        false, // requiresDurability
-        false, // isLegendary
-        ItemCategory.MELEE_WEAPON, ItemCategory.SHIELD,
-        ItemCategory.STAFF, ItemCategory.STAFF_MANA, ItemCategory.STAFF_ESSENCE
-    ),
-
-    /**
-     * Protection - Reduces incoming physical damage by 4% per level (per armor piece)
-     * Applicable to: Armor
-     */
-    PROTECTION(
-        "protection",
-        "Protection",
-        "Increases physical damage resistance",
-        3,  // max level
-        false, // requiresDurability
-        false, // isLegendary
-        ItemCategory.ARMOR
-    ),
-
-    /**
-     * Efficiency - Increases mining speed by 20% per level
-     * Applicable to: Pickaxes, Axes, Shovels
-     */
-    EFFICIENCY(
-        "efficiency",
-        "Efficiency",
-        "Increases mining speed",
-        3,  // max level
-        false, // requiresDurability
-        false, // isLegendary
-        ItemCategory.PICKAXE, ItemCategory.AXE, ItemCategory.SHOVEL
-    ),
-
-    /**
-     * Fortune - Adds a chance for extra ore/crystal drops
-     * Applicable to: Pickaxes
-     */
-    FORTUNE(
-        "fortune",
-        "Fortune",
-        "Chance for extra ore/crystal drops",
-        3,  // max level
-        false, // requiresDurability
-        false, // isLegendary
-        ItemCategory.PICKAXE
-    ),
-
-    /**
-     * Smelting - Automatically smelts mined blocks
-     * Applicable to: Pickaxes
-     */
-    SMELTING(
-        "smelting",
-        "Smelting",
-        "Automatically smelts mined blocks",
-        1,  // max level
-        false, // requiresDurability
-        true, // isLegendary
-        ItemCategory.PICKAXE
-    ),
-
-    /**
-     * Strength - Increases projectile damage and range
-     * Applicable to: Ranged weapons
-     */
-    STRENGTH(
-        "strength",
-        "Strength",
-        "Increases projectile damage and range",
-        3,  // max level
-        false, // requiresDurability
-        false, // isLegendary
-        ItemCategory.RANGED_WEAPON
-    ),
-
-    /**
-     * Eagle's Eye - Increases projectile damage based on distance
-     * Applicable to: Ranged weapons
-     */
-    EAGLES_EYE(
-        "eagles_eye",
-        "Eagle's Eye",
-        "Increases damage with distance",
-        3,  // max level
-        false, // requiresDurability
-        false, // isLegendary
-        ItemCategory.RANGED_WEAPON
-    ),
-
-    /**
-     * Looting - Increases enemy drops and rare drop chance
-     * Applicable to: Melee and ranged weapons
-     */
-    LOOTING(
-        "looting",
-        "Looting",
-        "Increases enemy drops and rare drop chance",
-        3,  // max level
-        false, // requiresDurability
-        false, // isLegendary
-        ItemCategory.MELEE_WEAPON, ItemCategory.RANGED_WEAPON,
-        ItemCategory.STAFF, ItemCategory.STAFF_MANA, ItemCategory.STAFF_ESSENCE
-    ),
-    
-    /**
-     * Feather Falling - Reduces fall damage by 20% per level
-     * Applicable to: Boots only
-     */
-    FEATHER_FALLING(
-        "feather_falling",
-        "Feather Falling",
-        "Reduces fall damage",
-        3,  // max level
-        false, // requiresDurability
-        false, // isLegendary
-        ItemCategory.BOOTS
-    ),
-
-    /**
-     * Waterbreathing - Reduces oxygen drain underwater by 20% per level
-     * Applicable to: Helmets only
-     */
-    WATERBREATHING(
-        "waterbreathing",
-        "Waterbreathing",
-        "Breathe underwater longer",
-        3,  // max level
-        false, // requiresDurability
-        false, // isLegendary
-        ItemCategory.HELMET
-    ),
-
-    /**
-     * Burn - Sets targets on fire, dealing 3 fire damage per second for 3 seconds
-     * Applicable to: Melee weapons
-     */
-    BURN(
-        "burn",
-        "Burn",
-        "Sets target on fire",
-        1,  // max level (single level)
-        false, // requiresDurability
-        true, // isLegendary
-        ItemCategory.MELEE_WEAPON, ItemCategory.RANGED_WEAPON
-    ),
-
-    /**
-     * Freeze - Immobilizes targets with the Freeze status effect
-     * Applicable to: Ranged and Melee weapons
-     */
-    FREEZE(
-        "freeze",
-        "Freeze",
-        "Slows targets on hit",
-        1,  // max level (single level)
-        false, // requiresDurability
-        true, // isLegendary
-        ItemCategory.RANGED_WEAPON, ItemCategory.MELEE_WEAPON
-    ),
-
-    /**
-     * Eternal Shot - Allows shooting arrows without consuming them (like Minecraft Infinity)
-     * Applicable to: Bows and Crossbows (ranged weapons)
-     */
-    ETERNAL_SHOT(
-        "eternal_shot",
-        "Eternal Shot",
-        "Shoot without consuming arrows",
-        1,  // max level (single level)
-        false, // requiresDurability
-        false, // isLegendary
-        ItemCategory.RANGED_WEAPON
-    ),
-    /**
-     * Pick Perfect - Drops the block itself when mined
-     * Applicable to: Pickaxes, Axes, Shovels
-     */
-    PICK_PERFECT(
-        "pick_perfect",
-        "Pick Perfect",
-        "Drops the block itself when mined",
-        1,  // max level
-        false, // requiresDurability
-        true, // isLegendary
-        ItemCategory.PICKAXE, ItemCategory.AXE, ItemCategory.SHOVEL
-    ),
-
-    /**
-     * Thrift - Restores mana on hit
-     * Applicable to: Any item that consumes Mana or MagicCharges (e.g., Staves)
-     */
-    THRIFT(
-        "thrift",
-        "Thrift",
-        "Restores mana on hit",
-        3,  // max level
-        false, // requiresDurability
-        false, // isLegendary
-        ItemCategory.STAFF_MANA
-    ),
-
-    /**
-     * Elemental Heart - Chance to save essence properties when casting
-     * Applicable to: Staffs
-     */
-    ELEMENTAL_HEART(
-        "elemental_heart",
-        "Elemental Heart",
-        "Chance to save essence",
-        1,  // max level
-        false, // requiresDurability
-        true, // isLegendary
-        ItemCategory.STAFF_ESSENCE
-    ),
-
-    /**
-     * Knockback - Knocks targets back
-     * Applicable to: Melee weapons
-     */
-    KNOCKBACK(
-        "knockback",
-        "Knockback",
-        "Knocks targets back",
-        3,  // max level
-        false, // requiresDurability
-        false, // isLegendary
-        ItemCategory.MELEE_WEAPON
-    ),
-
-    /**
-     * Reflection - Reflects damage when blocking
-     * Applicable to: Shields
-     */
-    REFLECTION(
-        "reflection",
-        "Reflection",
-        "Reflects damage when blocking",
-        3,  // max level
-        false, // requiresDurability
-        false, // isLegendary
-        ItemCategory.SHIELD
-    ),
-    
-    /**
-     * Absorption - Heals the blocker by a part of the blocked damage
-     * Applicable to: Shields
-     */
-    ABSORPTION(
-        "absorption",
-        "Absorption",
-        "Heals directly from blocked damage",
-        3,  // max level
-        false, // requiresDurability
-        false, // isLegendary
-        ItemCategory.SHIELD
-    ),
-
-    /**
-     * Fast Swim - Increases swim speed
-     * Applicable to: Gloves
-     */
-    FAST_SWIM(
-        "fast_swim",
-        "Swift Swim",
-        "Increases swimming speed",
-        3,  // max level
-        false, // requiresDurability
-        false, // isLegendary
-        ItemCategory.GLOVES
-    ),
-
-    /**
-     * Night Vision - Increases sight in dark places (caves, nighttime, underwater)
-     * Applicable to: Helmets only
-     */
-    NIGHT_VISION(
-        "night_vision",
-        "Night Vision",
-        "Increases visibility in dark environments",
-        1,  // max level
-        false, // requiresDurability
-        true, // isLegendary
-        ItemCategory.HELMET
-    ),
-
-    /**
-     * Ranged Protection - Reduces incoming projectile and magic damage by 4% per level (per armor piece)
-     * Applicable to: Armor
-     */
-    RANGED_PROTECTION(
-        "ranged_protection",
-        "Ranged Protection",
-        "Reduces projectile and magic damage",
-        3,  // max level
-        false, // requiresDurability
-        false, // isLegendary
-        ItemCategory.ARMOR
-    ),
-
-    /**
-     * Frenzy - Increases ability charge rate
-     * Applicable to: All weapons
-     */
-    FRENZY(
-        "frenzy",
-        "Frenzy",
-        "Increases ability charge rate",
-        3,  // max level
-        false, // requiresDurability
-        false, // isLegendary
-        ItemCategory.MELEE_WEAPON, ItemCategory.RANGED_WEAPON, 
-        ItemCategory.STAFF, ItemCategory.STAFF_MANA, ItemCategory.STAFF_ESSENCE
-    ),
-
-    /**
-     * Riposte - Increases damage dealt by counter attacks
-     * Applicable to: Melee weapons
-     */
-    RIPOSTE(
-        "riposte",
-        "Riposte",
-        "Increases counter attack damage",
-        3,  // max level
-        false, // requiresDurability
-        false, // isLegendary
-        ItemCategory.MELEE_WEAPON
-    ),
-
-    /**
-     * Coup de Grâce - Increases damage towards stunned/downed enemies
-     * Applicable to: Melee weapons
-     */
-    COUP_DE_GRACE(
-        "coup_de_grace",
-        "Coup de Grâce",
-        "Increases damage to stunned enemies",
-        3,  // max level
-        false, // requiresDurability
-        false, // isLegendary
-        ItemCategory.MELEE_WEAPON
-    )
-    ;
+    // ============================== Fields ==============================
 
     private final String id;
     private final String displayName;
@@ -430,19 +25,189 @@ public enum EnchantmentType {
     private final Set<ItemCategory> applicableCategories;
     private final boolean requiresDurability;
     private final boolean isLegendary;
+    private final String ownerModId; // null = built-in
+    private final double defaultMultiplierPerLevel;
+    private final String bonusDescriptionTemplate; // e.g. "Melee damage increased by {amount}%"
+    private final String scrollBaseName; // override for special naming, null = auto-generated
 
-    private static final java.util.Map<String, EnchantmentType> BY_ID = new java.util.HashMap<>();
-    private static final java.util.Map<String, EnchantmentType> BY_DISPLAY_NAME = new java.util.HashMap<>();
+    // Addon enchantment configuration (mutable, set by builder after construction)
+    private java.util.List<org.herolias.plugin.api.ScrollDefinition> scrollDefinitions = java.util.List.of();
+    private String craftingCategory; // e.g. "Enchanting_Melee"
+
+    // ============================== Built-in Enchantments ==============================
+
+    public static final EnchantmentType SHARPNESS = builtin("sharpness", "Sharpness",
+            "Increases melee damage", 3, false, false, 0.10,
+            "Melee damage increased by {amount}%",
+            ItemCategory.MELEE_WEAPON);
+
+    public static final EnchantmentType LIFE_LEECH = builtin("life_leech", "Life Leech",
+            "Heals for a portion of damage dealt", 1, false, true, 0.10,
+            "Heals for {amount}% of damage dealt",
+            ItemCategory.MELEE_WEAPON);
+
+    public static final EnchantmentType DURABILITY = builtin("durability", "Durability",
+            "Reduces durability loss", 3, true, false, 0.25,
+            "Durability loss reduced by {amount}%",
+            ItemCategory.MELEE_WEAPON, ItemCategory.RANGED_WEAPON, ItemCategory.TOOL, ItemCategory.PICKAXE,
+            ItemCategory.SHOVEL, ItemCategory.AXE, ItemCategory.ARMOR,
+            ItemCategory.STAFF, ItemCategory.STAFF_MANA, ItemCategory.STAFF_ESSENCE);
+
+    public static final EnchantmentType STURDY = builtin("sturdy", "Sturdy",
+            "Prevents repair durability penalty", 1, true, true, 0.0,
+            "Prevents durability loss on repair",
+            ItemCategory.MELEE_WEAPON, ItemCategory.RANGED_WEAPON, ItemCategory.TOOL, ItemCategory.PICKAXE,
+            ItemCategory.SHOVEL, ItemCategory.AXE, ItemCategory.ARMOR,
+            ItemCategory.STAFF, ItemCategory.STAFF_MANA, ItemCategory.STAFF_ESSENCE);
+
+    public static final EnchantmentType DEXTERITY = builtin("dexterity", "Dexterity",
+            "Reduces stamina costs", 3, false, false, 0.20,
+            "Stamina costs reduced by {amount}%",
+            ItemCategory.MELEE_WEAPON, ItemCategory.SHIELD,
+            ItemCategory.STAFF, ItemCategory.STAFF_MANA, ItemCategory.STAFF_ESSENCE);
+
+    public static final EnchantmentType PROTECTION = builtin("protection", "Protection",
+            "Increases physical damage resistance", 3, false, false, 0.04,
+            "Physical damage reduced by {amount}%",
+            ItemCategory.ARMOR);
+
+    public static final EnchantmentType EFFICIENCY = builtin("efficiency", "Efficiency",
+            "Increases mining speed", 3, false, false, 0.20,
+            "Mining speed increased by {amount}%",
+            ItemCategory.PICKAXE, ItemCategory.AXE, ItemCategory.SHOVEL);
+
+    public static final EnchantmentType FORTUNE = builtin("fortune", "Fortune",
+            "Chance for extra ore/crystal drops", 3, false, false, 0.25,
+            "Extra drop chance increased by {amount}%",
+            ItemCategory.PICKAXE);
+
+    public static final EnchantmentType SMELTING = builtin("smelting", "Smelting",
+            "Automatically smelts mined blocks", 1, false, true, 0.0,
+            "Automatically smelts mined blocks",
+            ItemCategory.PICKAXE);
+
+    public static final EnchantmentType STRENGTH = builtin("strength", "Strength",
+            "Increases projectile damage and range", 3, false, false, 0.10,
+            "Projectile damage increased by {amount}%",
+            ItemCategory.RANGED_WEAPON);
+
+    public static final EnchantmentType EAGLES_EYE = builtin("eagles_eye", "Eagle's Eye",
+            "Increases damage with distance", 3, false, false, 0.005,
+            "Damage increases with distance up to {amount}%",
+            ItemCategory.RANGED_WEAPON);
+
+    public static final EnchantmentType LOOTING = builtin("looting", "Looting",
+            "Increases enemy drops and rare drop chance", 3, false, false, 0.25,
+            "Drop rates increased by {amount}%",
+            ItemCategory.MELEE_WEAPON, ItemCategory.RANGED_WEAPON,
+            ItemCategory.STAFF, ItemCategory.STAFF_MANA, ItemCategory.STAFF_ESSENCE);
+
+    public static final EnchantmentType FEATHER_FALLING = builtin("feather_falling", "Feather Falling",
+            "Reduces fall damage", 3, false, false, 0.20,
+            "Fall damage reduced by {amount}%",
+            ItemCategory.BOOTS);
+
+    public static final EnchantmentType WATERBREATHING = builtin("waterbreathing", "Waterbreathing",
+            "Breathe underwater longer", 3, false, false, 0.20,
+            "Oxygen drain reduced by {amount}%",
+            ItemCategory.HELMET);
+
+    public static final EnchantmentType BURN = builtin("burn", "Burn",
+            "Sets target on fire", 1, false, true, 0.0,
+            "Sets target on fire",
+            ItemCategory.MELEE_WEAPON, ItemCategory.RANGED_WEAPON);
+
+    public static final EnchantmentType FREEZE = builtin("freeze", "Freeze",
+            "Slows targets on hit", 1, false, true, 0.0,
+            "Slows target on hit",
+            ItemCategory.RANGED_WEAPON, ItemCategory.MELEE_WEAPON);
+
+    public static final EnchantmentType ETERNAL_SHOT = builtin("eternal_shot", "Eternal Shot",
+            "Shoot without consuming arrows", 1, false, false, 0.0,
+            "Does not consume arrows",
+            ItemCategory.RANGED_WEAPON);
+
+    public static final EnchantmentType PICK_PERFECT = builtinCustomScroll("pick_perfect", "Pick Perfect",
+            "Drops the block itself when mined", 1, false, true, 0.0,
+            "Drops the block itself when mined", "Scroll_Silktouch",
+            ItemCategory.PICKAXE, ItemCategory.AXE, ItemCategory.SHOVEL);
+
+    public static final EnchantmentType THRIFT = builtin("thrift", "Thrift",
+            "Restores mana on hit", 3, false, false, 0.20,
+            "Restores {amount}% of mana on hit",
+            ItemCategory.STAFF_MANA);
+
+    public static final EnchantmentType ELEMENTAL_HEART = builtinCustomScroll("elemental_heart", "Elemental Heart",
+            "Chance to save essence", 1, false, true, 1.0,
+            "Does not consume essence when casting", "Scroll_ElementalHeart",
+            ItemCategory.STAFF_ESSENCE);
+
+    public static final EnchantmentType KNOCKBACK = builtin("knockback", "Knockback",
+            "Knocks targets back", 3, false, false, 0.6,
+            "Knocks targets back",
+            ItemCategory.MELEE_WEAPON);
+
+    public static final EnchantmentType REFLECTION = builtin("reflection", "Reflection",
+            "Reflects damage when blocking", 3, false, false, 0.10,
+            "Reflects {amount}% of damage",
+            ItemCategory.SHIELD);
+
+    public static final EnchantmentType ABSORPTION = builtin("absorption", "Absorption",
+            "Heals directly from blocked damage", 3, false, false, 0.10,
+            "Heals for {amount}% of blocked damage",
+            ItemCategory.SHIELD);
+
+    public static final EnchantmentType FAST_SWIM = builtinCustomScroll("fast_swim", "Swift Swim",
+            "Increases swimming speed", 3, false, false, 0.25,
+            "Swim speed increased by {amount}%", "Scroll_FastSwim",
+            ItemCategory.GLOVES);
+
+    public static final EnchantmentType NIGHT_VISION = builtin("night_vision", "Night Vision",
+            "Increases visibility in dark environments", 1, false, true, 0.0,
+            "Enhances vision in dark environments",
+            ItemCategory.HELMET);
+
+    public static final EnchantmentType RANGED_PROTECTION = builtin("ranged_protection", "Ranged Protection",
+            "Reduces projectile and magic damage", 3, false, false, 0.04,
+            "Projectile/magic damage reduced by {amount}%",
+            ItemCategory.ARMOR);
+
+    public static final EnchantmentType FRENZY = builtin("frenzy", "Frenzy",
+            "Increases ability charge rate", 3, false, false, 0.15,
+            "Ability charge speed increased by {amount}%",
+            ItemCategory.MELEE_WEAPON, ItemCategory.RANGED_WEAPON,
+            ItemCategory.STAFF, ItemCategory.STAFF_MANA, ItemCategory.STAFF_ESSENCE);
+
+    public static final EnchantmentType RIPOSTE = builtin("riposte", "Riposte",
+            "Increases counter attack damage", 3, false, false, 0.10,
+            "Counter attack damage increased by {amount}%",
+            ItemCategory.MELEE_WEAPON);
+
+    public static final EnchantmentType COUP_DE_GRACE = builtin("coup_de_grace", "Coup de Grâce",
+            "Increases damage to stunned enemies", 3, false, false, 0.15,
+            "Damage to stunned enemies increased by {amount}%",
+            ItemCategory.MELEE_WEAPON);
+
+    // ============================== Static Initialization ==============================
 
     static {
-        for (EnchantmentType type : values()) {
-            BY_ID.put(type.id, type);
-            BY_DISPLAY_NAME.put(type.displayName.toLowerCase(), type);
-        }
+        // Register built-in conflict pairs
+        EnchantmentRegistry registry = EnchantmentRegistry.getInstance();
+        registry.addConflict("burn", "freeze");
+        registry.addConflict("pick_perfect", "fortune");
+        registry.addConflict("pick_perfect", "smelting");
+        registry.addConflict("reflection", "absorption");
     }
 
-    EnchantmentType(String id, String displayName, String description, 
-            int maxLevel, boolean requiresDurability, boolean isLegendary, ItemCategory... categories) {
+    // ============================== Constructors ==============================
+
+    /**
+     * Internal constructor for built-in enchantments.
+     */
+    private EnchantmentType(String id, String displayName, String description,
+                            int maxLevel, boolean requiresDurability, boolean isLegendary,
+                            double defaultMultiplierPerLevel, String bonusDescriptionTemplate,
+                            String scrollBaseName, ItemCategory... categories) {
         this.id = id;
         this.displayName = displayName;
         this.description = description;
@@ -450,79 +215,151 @@ public enum EnchantmentType {
         this.requiresDurability = requiresDurability;
         this.isLegendary = isLegendary;
         this.applicableCategories = Set.of(categories);
-    }
-    
-    public boolean requiresDurability() {
-        return requiresDurability;
+        this.ownerModId = null; // built-in
+        this.defaultMultiplierPerLevel = defaultMultiplierPerLevel;
+        this.bonusDescriptionTemplate = bonusDescriptionTemplate;
+        this.scrollBaseName = scrollBaseName;
     }
 
-    public boolean isLegendary() {
-        return isLegendary;
-    }
-    
     /**
-     * Checks if this enchantment conflicts with another enchantment.
+     * Public constructor for addon enchantments.
+     * Use EnchantmentBuilder via the API for a fluent interface.
+     *
+     * @param id Must be namespaced for addons (e.g. "my_mod:lightning")
      */
-    private static final Set<Set<EnchantmentType>> CONFLICT_PAIRS = Set.of(
-        Set.of(BURN, FREEZE),
-        Set.of(PICK_PERFECT, FORTUNE),
-        Set.of(PICK_PERFECT, SMELTING),
-        Set.of(REFLECTION, ABSORPTION)
-    );
+    public EnchantmentType(String id, String displayName, String description,
+                           int maxLevel, boolean requiresDurability, boolean isLegendary,
+                           double defaultMultiplierPerLevel, String bonusDescriptionTemplate,
+                           String ownerModId, Set<ItemCategory> applicableCategories) {
+        if (ownerModId != null && !id.contains(":")) {
+            throw new IllegalArgumentException(
+                    "Addon enchantment IDs must be namespaced (e.g. 'my_mod:lightning'), got: '" + id + "'");
+        }
+        this.id = id;
+        this.displayName = displayName;
+        this.description = description;
+        this.maxLevel = maxLevel;
+        this.requiresDurability = requiresDurability;
+        this.isLegendary = isLegendary;
+        this.applicableCategories = Set.copyOf(applicableCategories);
+        this.ownerModId = ownerModId;
+        this.defaultMultiplierPerLevel = defaultMultiplierPerLevel;
+        this.bonusDescriptionTemplate = bonusDescriptionTemplate;
+        this.scrollBaseName = null; // auto-generated for addons
+    }
 
+    // ============================== Factory Methods ==============================
+
+    private static EnchantmentType builtin(String id, String displayName, String description,
+                                           int maxLevel, boolean requiresDurability, boolean isLegendary,
+                                           double defaultMultiplier, String bonusTemplate,
+                                           ItemCategory... categories) {
+        EnchantmentType type = new EnchantmentType(id, displayName, description, maxLevel,
+                requiresDurability, isLegendary, defaultMultiplier, bonusTemplate, null, categories);
+        EnchantmentRegistry.getInstance().register(type);
+        return type;
+    }
+
+    private static EnchantmentType builtinCustomScroll(String id, String displayName, String description,
+                                                       int maxLevel, boolean requiresDurability, boolean isLegendary,
+                                                       double defaultMultiplier, String bonusTemplate,
+                                                       String scrollBaseName, ItemCategory... categories) {
+        EnchantmentType type = new EnchantmentType(id, displayName, description, maxLevel,
+                requiresDurability, isLegendary, defaultMultiplier, bonusTemplate, scrollBaseName, categories);
+        EnchantmentRegistry.getInstance().register(type);
+        return type;
+    }
+
+    // ============================== Accessors ==============================
+
+    public String getId() { return id; }
+    public String getDisplayName() { return displayName; }
+    public String getDescription() { return description; }
+    public int getMaxLevel() { return maxLevel; }
+    public boolean requiresDurability() { return requiresDurability; }
+    public boolean isLegendary() { return isLegendary; }
+    public Set<ItemCategory> getApplicableCategories() { return applicableCategories; }
+    @Nullable public String getOwnerModId() { return ownerModId; }
+    public double getDefaultMultiplierPerLevel() { return defaultMultiplierPerLevel; }
+    public String getBonusDescriptionTemplate() { return bonusDescriptionTemplate; }
+
+    /** Returns true if this is a built-in Simple Enchantments enchantment. */
+    public boolean isBuiltIn() { return ownerModId == null; }
+
+    /**
+     * Backward-compatible replacement for the old enum {@code name()} method.
+     * Returns the ID in uppercase (e.g. "SHARPNESS", "LIFE_LEECH").
+     */
+    public String name() { return id.toUpperCase(); }
+
+    /** Gets the scroll definitions for addon enchantments. Empty list for built-in. */
+    public java.util.List<org.herolias.plugin.api.ScrollDefinition> getScrollDefinitions() { return scrollDefinitions; }
+
+    /** Sets scroll definitions. Called by EnchantmentBuilder. */
+    public void setScrollDefinitions(java.util.List<org.herolias.plugin.api.ScrollDefinition> definitions) {
+        this.scrollDefinitions = definitions != null ? java.util.List.copyOf(definitions) : java.util.List.of();
+    }
+
+    /** Gets the crafting category for the Enchanting Table. */
+    @Nullable public String getCraftingCategory() { return craftingCategory; }
+
+    /** Sets the crafting category. Called by EnchantmentBuilder. */
+    public void setCraftingCategory(String category) { this.craftingCategory = category; }
+
+    // ============================== Backward Compat Static Methods ==============================
+
+    /**
+     * Gets the enchantment by its ID. Drop-in replacement for old enum method.
+     */
+    @Nullable
+    public static EnchantmentType fromId(String id) {
+        if (id == null) return null;
+        return EnchantmentRegistry.getInstance().getById(id);
+    }
+
+    /**
+     * Gets the enchantment by its display name (case-insensitive).
+     */
+    @Nullable
+    public static EnchantmentType findByDisplayName(String displayName) {
+        if (displayName == null) return null;
+        return EnchantmentRegistry.getInstance().getByDisplayName(displayName);
+    }
+
+    /**
+     * Returns all registered enchantments, analogous to the old enum values().
+     */
+    public static EnchantmentType[] values() {
+        return EnchantmentRegistry.getInstance().values();
+    }
+
+    // ============================== Conflict Checking ==============================
+
+    /**
+     * Checks if this enchantment conflicts with another.
+     */
     public boolean conflictsWith(EnchantmentType other) {
-        if (this == other) return true;
-        return CONFLICT_PAIRS.contains(Set.of(this, other));
+        if (this.equals(other)) return true;
+        return EnchantmentRegistry.getInstance().areConflicting(this.id, other.id);
     }
 
-    public String getId() {
-        return id;
-    }
-
-    public String getDisplayName() {
-        return displayName;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public int getMaxLevel() {
-        return maxLevel;
-    }
+    // ============================== Config Integration ==============================
 
     /**
      * Gets the effect multiplier per level from the active configuration.
+     * Falls back to the default if not configured.
      */
     public double getEffectMultiplier() {
-        org.herolias.plugin.config.EnchantingConfig config = org.herolias.plugin.SimpleEnchanting.getInstance().getConfigManager().getConfig();
-        return switch (this) {
-            case SHARPNESS -> config.sharpnessDamageMultiplierPerLevel;
-            case LIFE_LEECH -> config.lifeLeechPercentage;
-            case DURABILITY -> config.durabilityReductionPerLevel;
-            case DEXTERITY -> config.dexterityStaminaReductionPerLevel;
-            case PROTECTION -> config.protectionDamageReductionPerLevel;
-            case EFFICIENCY -> config.efficiencyMiningSpeedPerLevel;
-            case FORTUNE -> config.fortuneRollChancePerLevel;
-            case STRENGTH -> config.strengthDamageMultiplierPerLevel;
-            case EAGLES_EYE -> config.eaglesEyeDistanceBonusPerLevel;
-            case LOOTING -> config.lootingChanceMultiplierPerLevel;
-            case FEATHER_FALLING -> config.featherFallingReductionPerLevel;
-            case WATERBREATHING -> config.waterBreathingReductionPerLevel;
-            case THRIFT -> config.thriftRestoreAmountPerLevel;
-            case ELEMENTAL_HEART -> config.elementalHeartSaveChancePerLevel;
-            case KNOCKBACK -> config.knockbackStrengthPerLevel;
-            case REFLECTION -> config.reflectionDamagePercentagePerLevel;
-            case ABSORPTION -> config.absorptionHealPercentagePerLevel;
-            case FAST_SWIM -> config.fastSwimSpeedBonusPerLevel;
-            case RANGED_PROTECTION -> config.rangedProtectionDamageReductionPerLevel;
-            case FRENZY -> config.frenzyChargeSpeedMultiplierPerLevel;
-            case RIPOSTE -> config.riposteDamageMultiplierPerLevel;
-            case COUP_DE_GRACE -> config.coupDeGraceDamageMultiplierPerLevel;
-            //case BURN -> config.burnDamagePerSecond;
-            default -> 0.0;
-        };
+        try {
+            org.herolias.plugin.config.EnchantingConfig config = 
+                org.herolias.plugin.SimpleEnchanting.getInstance().getConfigManager().getConfig();
+            return config.enchantmentMultipliers.getOrDefault(this.id, this.defaultMultiplierPerLevel);
+        } catch (Exception e) {
+            return this.defaultMultiplierPerLevel;
+        }
     }
+
+    // ============================== Category Checking ==============================
 
     /**
      * Checks if this enchantment can be applied to items of the given category.
@@ -531,54 +368,30 @@ public enum EnchantmentType {
         if (applicableCategories.contains(category)) {
             return true;
         }
-        // Allow HELMET and BOOTS to accept enchantments targeting ARMOR
+        // Allow HELMET, BOOTS, GLOVES to accept enchantments targeting ARMOR
         if ((category == ItemCategory.HELMET || category == ItemCategory.BOOTS || category == ItemCategory.GLOVES) 
                 && applicableCategories.contains(ItemCategory.ARMOR)) {
             return true;
         }
         return false;
     }
-    
-    /**
-     * Gets the enchantment by its ID.
-     */
-    public static EnchantmentType fromId(String id) {
-        if (id == null) return null;
-        return BY_ID.get(id.toLowerCase());
-    }
 
-    /**
-     * Gets the enchantment by its display name (case-insensitive).
-     */
-    public static EnchantmentType findByDisplayName(String displayName) {
-        if (displayName == null) return null;
-        return BY_DISPLAY_NAME.get(displayName.toLowerCase());
-    }
+    // ============================== Translation Keys ==============================
 
-    /**
-     * Gets the translation key for the enchantment name.
-     * Format: enchantment.[id].name
-     */
-    public String getNameKey() {
-        return "enchantment." + id + ".name";
-    }
+    public String getNameKey() { return "enchantment." + id + ".name"; }
+    public String getDescriptionKey() { return "enchantment." + id + ".description"; }
+    public String getBonusTranslationKey() { return "enchantment." + id + ".bonus"; }
+    public String getWalkthroughKey() { return "enchantment." + id + ".walkthrough"; }
 
-    /**
-     * Gets the translation key for the enchantment description.
-     * Format: enchantment.[id].description
-     */
-    public String getDescriptionKey() {
-        return "enchantment." + id + ".description";
-    }
+    // ============================== Display Formatting ==============================
 
     /**
      * Gets a formatted display string with level (e.g., "Sharpness I")
-     * Note: This returns a raw string. For UI components, use Message.translation(getNameKey()).
      */
     public String getFormattedName(int level) {
         return displayName + " " + toRoman(level);
     }
-    
+
     /**
      * Gets formatted bonus text for the specific level (default English).
      */
@@ -590,42 +403,19 @@ public enum EnchantmentType {
      * Gets localized bonus text for the specific level.
      */
     public String getBonusDescription(int level, String langCode, String clientLangCode) {
-         if (level <= 0) return "";
-         double mult = getEffectMultiplier() * level;
-         float percentage = (float) (mult * 100);
+        if (level <= 0) return "";
+        double mult = getEffectMultiplier() * level;
+        float percentage = (float) (mult * 100);
 
-         return switch (this) {
-             case SHARPNESS -> resolve(langCode, clientLangCode, "Melee damage increased by {amount}%", percentage);
-             case LIFE_LEECH -> resolve(langCode, clientLangCode, "Heals for {amount}% of damage dealt", percentage);
-             case DURABILITY -> resolve(langCode, clientLangCode, "Durability loss reduced by {amount}%", percentage);
-             case STURDY -> resolve(langCode, clientLangCode, "Prevents durability loss on repair", null);
-             case DEXTERITY -> resolve(langCode, clientLangCode, "Stamina costs reduced by {amount}%", percentage);
-             case PROTECTION -> resolve(langCode, clientLangCode, "Physical damage reduced by {amount}%", percentage);
-             case EFFICIENCY -> resolve(langCode, clientLangCode, "Mining speed increased by {amount}%", percentage);
-             case FORTUNE -> resolve(langCode, clientLangCode, "Extra drop chance increased by {amount}%", percentage);
-             case SMELTING -> resolve(langCode, clientLangCode, "Automatically smelts mined blocks", null);
-             case STRENGTH -> resolve(langCode, clientLangCode, "Projectile damage increased by {amount}%", percentage);
-             case EAGLES_EYE -> resolve(langCode, clientLangCode, "Damage increases with distance up to {amount}%", percentage * 50);
-             case LOOTING -> resolve(langCode, clientLangCode, "Drop rates increased by {amount}%", percentage);
-             case FEATHER_FALLING -> resolve(langCode, clientLangCode, "Fall damage reduced by {amount}%", percentage);
-             case WATERBREATHING -> resolve(langCode, clientLangCode, "Oxygen drain reduced by {amount}%", percentage);
-             case BURN -> resolve(langCode, clientLangCode, "Sets target on fire", null);
-             case FREEZE -> resolve(langCode, clientLangCode, "Slows target on hit", null);
-             case ETERNAL_SHOT -> resolve(langCode, clientLangCode, "Does not consume arrows", null);
-             case PICK_PERFECT -> resolve(langCode, clientLangCode, "Drops the block itself when mined", null);
-             case THRIFT -> resolve(langCode, clientLangCode, "Restores {amount}% of mana on hit", percentage);
-             case ELEMENTAL_HEART -> resolve(langCode, clientLangCode, "Does not consume essence when casting", null); 
-             case KNOCKBACK -> resolve(langCode, clientLangCode, "Knocks targets back", null);
-             case REFLECTION -> resolve(langCode, clientLangCode, "Reflects {amount}% of damage", percentage);
-             case ABSORPTION -> resolve(langCode, clientLangCode, "Heals for {amount}% of blocked damage", percentage);
-             case FAST_SWIM -> resolve(langCode, clientLangCode, "Swim speed increased by {amount}%", percentage);
-             case NIGHT_VISION -> resolve(langCode, clientLangCode, "Enhances vision in dark environments", null);
-             case RANGED_PROTECTION -> resolve(langCode, clientLangCode, "Projectile/magic damage reduced by {amount}%", percentage);
-             case FRENZY -> resolve(langCode, clientLangCode, "Ability charge speed increased by {amount}%", percentage);
-             case RIPOSTE -> resolve(langCode, clientLangCode, "Counter attack damage increased by {amount}%", percentage);
-             case COUP_DE_GRACE -> resolve(langCode, clientLangCode, "Damage to stunned enemies increased by {amount}%", percentage);
-             default -> "";
-         };
+        // Special handling for Eagle's Eye which scales differently
+        float displayAmount = percentage;
+        if (this.equals(EAGLES_EYE)) {
+            displayAmount = percentage * 50;
+        }
+
+        String template = bonusDescriptionTemplate;
+        return resolve(langCode, clientLangCode, template, 
+                template.contains("{amount}") ? displayAmount : null);
     }
 
     private String resolve(String langCode, String clientLangCode, String defaultPattern, Float amount) {
@@ -646,26 +436,10 @@ public enum EnchantmentType {
         return template;
     }
 
-    /**
-     * Gets the translation key for the enchantment bonus.
-     * Format: enchantment.[id].bonus
-     */
-    public String getBonusTranslationKey() {
-        return "enchantment." + id + ".bonus";
-    }
-
-    /**
-     * Gets the translation key for the enchantment walkthrough description.
-     * Format: enchantment.[id].walkthrough
-     */
-    public String getWalkthroughKey() {
-        return "enchantment." + id + ".walkthrough";
-    }
+    // ============================== Walkthrough ==============================
 
     /**
      * Gets the localized walkthrough description with dynamic config values.
-     * Replaces {amount} with the per-level effect multiplier percentage from config.
-     * Falls back to the existing description key if no walkthrough key exists.
      */
     public String getWalkthroughDescription(String langCode, String clientLangCode) {
         String key = getWalkthroughKey();
@@ -703,8 +477,34 @@ public enum EnchantmentType {
         return template;
     }
 
+    // ============================== Scroll Naming ==============================
+
     /**
-     * Converts an integer to Roman numerals (for enchantment levels)
+     * Gets the scroll base name for this enchantment (e.g., "Scroll_Sharpness").
+     * Some built-in enchantments have custom overrides (e.g., pick_perfect -> Scroll_Silktouch).
+     */
+    @Nonnull
+    public String getScrollBaseName() {
+        if (scrollBaseName != null) {
+            return scrollBaseName;
+        }
+        // Standard behavior: Scroll_PascalCase
+        String[] parts = id.split(":");
+        String rawId = parts.length > 1 ? parts[1] : parts[0]; // strip namespace for addons
+        String[] idParts = rawId.split("_");
+        StringBuilder sb = new StringBuilder("Scroll");
+        for (String part : idParts) {
+            sb.append("_");
+            sb.append(Character.toUpperCase(part.charAt(0)));
+            sb.append(part.substring(1));
+        }
+        return sb.toString();
+    }
+
+    // ============================== Utility ==============================
+
+    /**
+     * Converts an integer to Roman numerals (for enchantment levels).
      */
     public static String toRoman(int number) {
         return switch (number) {
@@ -720,5 +520,25 @@ public enum EnchantmentType {
             case 10 -> "X";
             default -> String.valueOf(number);
         };
+    }
+
+    // ============================== Object Identity ==============================
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        EnchantmentType that = (EnchantmentType) o;
+        return Objects.equals(id, that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
+
+    @Override
+    public String toString() {
+        return "EnchantmentType{" + id + "}";
     }
 }

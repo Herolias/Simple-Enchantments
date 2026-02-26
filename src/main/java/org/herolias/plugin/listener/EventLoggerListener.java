@@ -14,10 +14,10 @@ public class EventLoggerListener {
         String enchantmentName = event.getEnchantment() != null ? event.getEnchantment().name() : "Unknown Enchantment";
         int level = event.getLevel();
 
-        /*LOGGER.atInfo().log("[DEBUG] EnchantmentActivatedEvent fired! Player: " + playerName +
+        LOGGER.atInfo().log("[DEBUG] EnchantmentActivatedEvent fired! Player: " + playerName +
                 ", Item: " + itemName +
                 ", Enchantment: " + enchantmentName +
-                ", Level: " + level);*/
+                ", Level: " + level);
     }
 
     public void onItemEnchanted(ItemEnchantedEvent event) {
@@ -26,9 +26,9 @@ public class EventLoggerListener {
         String enchantmentName = event.getEnchantment() != null ? event.getEnchantment().name() : "Unknown Enchantment";
         int level = event.getLevel();
 
-        /*LOGGER.atInfo().log("[DEBUG] ItemEnchantedEvent fired! Player: " + playerName +
+        LOGGER.atInfo().log("[DEBUG] ItemEnchantedEvent fired! Player: " + playerName +
                 ", Item: " + itemName +
                 ", Enchantment: " + enchantmentName +
-                ", Level: " + level);*/
+                ", Level: " + level);
     }
 }

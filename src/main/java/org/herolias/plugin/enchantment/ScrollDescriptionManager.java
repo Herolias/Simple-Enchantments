@@ -99,25 +99,7 @@ public class ScrollDescriptionManager {
     }
 
     private static String getScrollBaseName(EnchantmentType type) {
-        // Special cases for scrolls that don't follow the standard naming convention
-        switch (type) {
-            case PICK_PERFECT:
-                return "Scroll_Silktouch";
-            case ELEMENTAL_HEART:
-                return "Scroll_ElementalHeart";
-            case FAST_SWIM:
-                return "Scroll_FastSwim";
-            default:
-                // Standard behavior: Scroll_PascalCase_...
-                String[] parts = type.getId().split("_");
-                StringBuilder sb = new StringBuilder("Scroll");
-                for (String part : parts) {
-                    sb.append("_");
-                    sb.append(Character.toUpperCase(part.charAt(0)));
-                    sb.append(part.substring(1));
-                }
-                return sb.toString();
-        }
+        return type.getScrollBaseName();
     }
     
     // Kept for backward compatibility if called from elsewhere, though deprecated behavior

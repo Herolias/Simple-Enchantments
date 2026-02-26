@@ -70,5 +70,69 @@ public interface EnchantmentApi {
      */
     void registerItemToCategory(@Nonnull String itemId, @Nonnull String categoryId);
 
-}
+    // ==================== Enchantment Registration ====================
 
+    /**
+     * Starts building a new addon enchantment.
+     * <p>
+     * Example:
+     * <pre>{@code
+     * EnchantmentType lightning = api.registerEnchantment("my_mod:lightning", "Lightning Strike")
+     *     .description("Chance to strike enemies with lightning")
+     *     .maxLevel(3)
+     *     .multiplierPerLevel(0.15)
+     *     .bonusDescription("Lightning strike chance: {amount}%")
+     *     .appliesTo(ItemCategory.MELEE_WEAPON)
+     *     .build();
+     * }</pre>
+     *
+     * @param id          Namespaced enchantment ID (e.g. "my_mod:lightning"). Must contain ':'
+     * @param displayName Human-readable name (e.g. "Lightning Strike")
+     * @return A builder to configure and register the enchantment
+     */
+    @Nonnull
+    EnchantmentBuilder registerEnchantment(@Nonnull String id, @Nonnull String displayName);
+
+    /**
+     * Gets a registered enchantment by its ID.
+     *
+     * @param id The enchantment ID (e.g. "sharpness" or "my_mod:lightning")
+     * @return The enchantment type, or null if not registered
+     */
+    @Nullable
+    org.herolias.plugin.enchantment.EnchantmentType getRegisteredEnchantment(@Nonnull String id);
+
+    /**
+     * Checks if an enchantment ID is registered.
+     *
+     * @param id The enchantment ID
+     * @return True if registered
+     */
+    boolean isEnchantmentRegistered(@Nonnull String id);
+
+    /**
+     * Declares two enchantments as conflicting (cannot be on the same item).
+     *
+     * @param enchantmentId1 First enchantment ID
+     * @param enchantmentId2 Second enchantment ID
+     */
+    void addConflict(@Nonnull String enchantmentId1, @Nonnull String enchantmentId2);
+
+    /**
+     * Registers a new crafting category (tab) in the Enchanting Table.
+     * <p>
+     * Built-in categories are: "Enchanting_Melee", "Enchanting_Ranged",
+     * "Enchanting_Armor", "Enchanting_Shield", "Enchanting_Staff", "Enchanting_Tools".
+     * <p>
+     * Use this to add a new tab for your mod's scrolls when they don't fit
+     * into the existing categories.
+     *
+     * @param categoryId   Unique ID for the category (e.g. "Enchanting_Magic")
+     * @param displayName  Displayed name in the Enchanting Table UI
+     * @param iconPath     Path to the tab icon (relative to mod assets).
+     *                     Use null to use the default enchanting icon.
+     */
+    void registerCraftingCategory(@Nonnull String categoryId, @Nonnull String displayName,
+                                  @Nullable String iconPath);
+
+}

@@ -125,5 +125,34 @@ public class EnchantmentApiImpl implements EnchantmentApi {
         ItemCategoryManager.getInstance().registerApiItem(itemId, category);
     }
 
+    @Override
+    @Nonnull
+    public EnchantmentBuilder registerEnchantment(@Nonnull String id, @Nonnull String displayName) {
+        return new EnchantmentBuilder(id, displayName);
+    }
+
+    @Override
+    @javax.annotation.Nullable
+    public EnchantmentType getRegisteredEnchantment(@Nonnull String id) {
+        return EnchantmentType.fromId(id);
+    }
+
+    @Override
+    public boolean isEnchantmentRegistered(@Nonnull String id) {
+        return EnchantmentType.fromId(id) != null;
+    }
+
+    @Override
+    public void addConflict(@Nonnull String enchantmentId1, @Nonnull String enchantmentId2) {
+        org.herolias.plugin.enchantment.EnchantmentRegistry.getInstance().addConflict(enchantmentId1, enchantmentId2);
+    }
+
+    @Override
+    public void registerCraftingCategory(@Nonnull String categoryId, @Nonnull String displayName,
+                                          @javax.annotation.Nullable String iconPath) {
+        CraftingCategoryDefinition.register(categoryId, displayName, iconPath);
+        LOGGER.atInfo().log("Registered crafting category: " + categoryId + " (" + displayName + ")");
+    }
+
 }
 
