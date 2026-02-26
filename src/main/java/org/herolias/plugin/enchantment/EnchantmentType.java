@@ -463,43 +463,16 @@ public enum EnchantmentType {
     /**
      * Checks if this enchantment conflicts with another enchantment.
      */
+    private static final Set<Set<EnchantmentType>> CONFLICT_PAIRS = Set.of(
+        Set.of(BURN, FREEZE),
+        Set.of(PICK_PERFECT, FORTUNE),
+        Set.of(PICK_PERFECT, SMELTING),
+        Set.of(REFLECTION, ABSORPTION)
+    );
+
     public boolean conflictsWith(EnchantmentType other) {
-        if (this == other) {
-            return true;
-        }
-        
-        // Burn and Freeze are mutually exclusive
-        if (this == BURN && other == FREEZE) {
-            return true;
-        }
-        if (this == FREEZE && other == BURN) {
-            return true;
-        }
-
-        // Pick Perfect and Fortune are mutually exclusive
-        if (this == PICK_PERFECT && other == FORTUNE) {
-            return true;
-        }
-        if (this == FORTUNE && other == PICK_PERFECT) {
-            return true;
-        }
-          // Smelting and Pick Perfect are mutually exclusive
-        if (this == SMELTING && other == PICK_PERFECT) {
-            return true;
-        }
-        if (this == PICK_PERFECT && other == SMELTING) {
-            return true;
-        }
-        
-        // Reflection and Absorption are mutually exclusive
-        if (this == REFLECTION && other == ABSORPTION) {
-            return true;
-        }
-        if (this == ABSORPTION && other == REFLECTION) {
-            return true;
-        }
-
-        return false;
+        if (this == other) return true;
+        return CONFLICT_PAIRS.contains(Set.of(this, other));
     }
 
     public String getId() {
@@ -606,10 +579,6 @@ public enum EnchantmentType {
         return displayName + " " + toRoman(level);
     }
     
-    /**
-     * Gets formatted bonus text for the specific level.
-     * e.g. "Damage increased by 20%"
-     */
     /**
      * Gets formatted bonus text for the specific level (default English).
      */

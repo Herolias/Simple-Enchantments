@@ -92,10 +92,8 @@ public class EnchantmentAbsorptionSystem extends DamageEventSystem {
         if (statMap != null) {
             statMap.addStatValue(DefaultEntityStatTypes.getHealth(), healAmount);
             com.hypixel.hytale.server.core.universe.PlayerRef playerRef = store.getComponent(archetypeChunk.getReferenceTo(index), com.hypixel.hytale.server.core.universe.PlayerRef.getComponentType());
-            org.herolias.plugin.api.event.EnchantmentActivatedEvent ev = new org.herolias.plugin.api.event.EnchantmentActivatedEvent(playerRef, blocker, EnchantmentType.ABSORPTION, absorptionLevel);
-            com.hypixel.hytale.server.core.HytaleServer.get().getEventBus().dispatchFor(org.herolias.plugin.api.event.EnchantmentActivatedEvent.class).dispatch(ev);
+            EnchantmentEventHelper.fireActivated(playerRef, blocker, EnchantmentType.ABSORPTION, absorptionLevel);
             // Visual feedback could be added here (particles etc.)
-            // LOGGER.atInfo().log("Absorption healed " + healAmount + " health");
         }
     }
 }

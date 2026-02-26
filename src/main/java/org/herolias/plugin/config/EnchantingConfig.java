@@ -23,7 +23,7 @@ public class EnchantingConfig {
     public double dexterityStaminaReductionPerLevel = 0.20;
     public double protectionDamageReductionPerLevel = 0.04;
     public double efficiencyMiningSpeedPerLevel = 0.20;
-    // public double efficiencySwingSpeedMultiplier = 0.10;
+
     public double fortuneRollChancePerLevel = 0.25;
     public double strengthDamageMultiplierPerLevel = 0.10;
     public double strengthRangeMultiplierPerLevel = 0.15;
@@ -42,7 +42,7 @@ public class EnchantingConfig {
     public double frenzyChargeSpeedMultiplierPerLevel = 0.15;
     public double riposteDamageMultiplierPerLevel = 0.10;
     public double coupDeGraceDamageMultiplierPerLevel = 0.15;
-    //public double burnDamagePerSecond = 3.0;
+
 
     // Staff Enchantments
     public double thriftRestoreAmountPerLevel = 0.20; // Percentage of spent mana refunded per level (0.10 = 10%)

@@ -161,9 +161,6 @@ public class EnchantmentThriftSystem extends EntityTickingSystem<EntityStore> im
              com.hypixel.hytale.server.core.HytaleServer.get().getEventBus().dispatchFor(org.herolias.plugin.api.event.EnchantmentActivatedEvent.class).dispatch(ev);
         }
         
-        if (LOGGER.atInfo().isEnabled()) {
-            // LOGGER.atInfo().log("Thrift refunded " + refund + " mana (Spent: " + manaSpent + ").");
-        }
     }
 
     private int getThriftLevel(@Nullable ItemStack item) {

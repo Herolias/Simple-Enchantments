@@ -79,7 +79,7 @@ public class EnchantmentApiImpl implements EnchantmentApi {
         ItemStack newItem = item.withMetadata(EnchantmentData.METADATA_KEY, bson);
         
         // Update visuals
-        return manager.updateItemVisuals(newItem);
+        return newItem;
     }
 
     @Override

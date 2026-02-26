@@ -1130,7 +1130,7 @@ customUI.walkthrough.scrolls.title = 2. Verzauberungsschriftrollen
 customUI.walkthrough.scrolls.desc = Stelle Schriftrollen direkt am Verzauberungstisch mit Essenzen, Edelsteinen, Barren und Pflanzen her. Einmal hergestellt, klicke mit der rechten Maustaste auf die Schriftrolle, während du sie hältst, um die Verzauberung auf eine Waffe, Rüstung oder ein Werkzeug in deinem Inventar anzuwenden. Schriftrollen haben verschiedene Seltenheiten, die zeigen, wie stark oder einzigartig die Verzauberung ist. Die meisten Verzauberungen haben 3 Stufen, aber es gibt Ausnahmen. Legendäre Verzauberungen sind besonders mächtig oder einzigartig.
 
 customUI.walkthrough.removing.title = 3. Verzauberungen entfernen
-customUI.walkthrough.removing.desc = Einen Fehler gemacht? Du kannst eine Reinigungsschriftrolle herstellen, um Verzauberungen von einem Gegenstand zu entfernen. Auf diesem Server {returnScroll} du die Schriftrolle zurückerhalten.
+customUI.walkthrough.removing.desc = Einen Fehler gemacht? Du kannst eine Reinigungsschriftrolle herstellen, um Verzauberungen von einem Gegenstand zu entfernen. Auf diesem Server wirst du die Schriftrolle {returnScroll} zurückerhalten.
 
 customUI.walkthrough.salvaging.title = 4. Verwertung
 customUI.walkthrough.salvaging.desc = Wenn du ein verzaubertes Ausrüstungsteil hast, das du nicht mehr brauchst, lege es in die Verwertungsstation, um die Verzauberungsschriftrolle der höchsten Stufe zurückzuerhalten, wenn auf dem Server aktiviert.
@@ -1144,8 +1144,8 @@ customUI.walkthrough.enchantments.desc = Eine vollständige Liste der Verzauberu
 config.general.allow_same_scroll_upgrades = Gleiche Schriftrollen-Upgrades erlauben (I+I = II)
 
 customUI.walkthrough.enabledOnServer = Auf diesem Server aktiviert: 
-customUI.walkthrough.returnScroll.yes = wirst
-customUI.walkthrough.returnScroll.no = wirst nicht
+customUI.walkthrough.returnScroll.yes =
+customUI.walkthrough.returnScroll.no = nicht
 
 
 # Walkthrough Descriptions

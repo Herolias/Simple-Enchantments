@@ -71,8 +71,7 @@ public class EnchantmentBlockDamageSystem extends EntityEventSystem<EntityStore,
         int effLevel = enchantmentManager.getEnchantmentLevel(tool, EnchantmentType.EFFICIENCY);
         if (effLevel > 0) {
             com.hypixel.hytale.server.core.universe.PlayerRef playerRef = store.getComponent(com.hypixel.hytale.server.core.entity.EntityUtils.getEntity(index, archetypeChunk).getReference(), com.hypixel.hytale.server.core.universe.PlayerRef.getComponentType());
-            org.herolias.plugin.api.event.EnchantmentActivatedEvent apiEvent = new org.herolias.plugin.api.event.EnchantmentActivatedEvent(playerRef, tool, EnchantmentType.EFFICIENCY, effLevel);
-            com.hypixel.hytale.server.core.HytaleServer.get().getEventBus().dispatchFor(org.herolias.plugin.api.event.EnchantmentActivatedEvent.class).dispatch(apiEvent);
+            EnchantmentEventHelper.fireActivated(playerRef, tool, EnchantmentType.EFFICIENCY, effLevel);
         }
     }
 }

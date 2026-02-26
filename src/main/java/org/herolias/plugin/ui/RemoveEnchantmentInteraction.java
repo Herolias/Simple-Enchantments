@@ -80,8 +80,7 @@ public class RemoveEnchantmentInteraction extends ChoiceInteraction {
         org.bson.BsonDocument bson = data.isEmpty() ? null : data.toBson();
         ItemStack cleanedItem = itemStack.withMetadata(EnchantmentData.METADATA_KEY, bson);
 
-        // Update visuals
-        cleanedItem = enchantmentManager.updateItemVisuals(cleanedItem);
+
 
         // Consume the scroll
         ItemContainer heldItemContainer = this.heldItemContext.getContainer();
@@ -142,40 +141,6 @@ public class RemoveEnchantmentInteraction extends ChoiceInteraction {
      * Attempts to construct the scroll item ID for a given enchantment type and level.
      */
     private String getScrollItemId(EnchantmentType type, int level) {
-        // Convert enchantment ID to scroll name format
-        // e.g. "sharpness" -> "Scroll_Sharpness_I", "life_leech" -> "Scroll_Life_Leech_I"
-        String id = type.getId();
-        
-        // Convert to title case with underscores
-        StringBuilder sb = new StringBuilder("Scroll_");
-        boolean capitalizeNext = true;
-        for (char c : id.toCharArray()) {
-            if (c == '_') {
-                sb.append('_');
-                capitalizeNext = true;
-            } else if (capitalizeNext) {
-                sb.append(Character.toUpperCase(c));
-                capitalizeNext = false;
-            } else {
-                sb.append(c);
-            }
-        }
-        
-        // Append roman numeral level
-        sb.append('_');
-        sb.append(toRoman(level));
-        
-        return sb.toString();
-    }
-
-    private String toRoman(int level) {
-        return switch (level) {
-            case 1 -> "I";
-            case 2 -> "II";
-            case 3 -> "III";
-            case 4 -> "IV";
-            case 5 -> "V";
-            default -> "I";
-        };
+        return org.herolias.plugin.util.ScrollIdHelper.getScrollItemId(type, level);
     }
 }

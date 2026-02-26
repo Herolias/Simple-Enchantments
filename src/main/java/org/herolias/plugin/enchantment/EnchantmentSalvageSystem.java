@@ -15,16 +15,15 @@ import com.hypixel.hytale.server.core.inventory.transaction.SlotTransaction;
 import com.hypixel.hytale.server.core.inventory.transaction.Transaction;
 import com.hypixel.hytale.server.core.inventory.transaction.ItemStackTransaction;
 import org.bson.BsonDocument;
-import org.herolias.plugin.enchantment.EnchantmentData;
-import org.herolias.plugin.enchantment.EnchantmentType;
+import org.herolias.plugin.util.ScrollIdHelper;
 
 import javax.annotation.Nonnull;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * System to handle salvaging of enchanted items.
@@ -37,12 +36,17 @@ public class EnchantmentSalvageSystem {
     private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
     private static final String BENCH_ID = "Salvagebench";
     
+    private final EnchantmentManager enchantmentManager;
+    
     // Tracks active sessions for players.
     // Key: Player UUID
     // Value: Session Data
     private final Map<UUID, SalvageSession> sessions = new ConcurrentHashMap<>();
+    /** Timeout for stale sessions (30 seconds). */
+    private static final long SESSION_TIMEOUT_MS = 30_000;
     
-    public EnchantmentSalvageSystem() {
+    public EnchantmentSalvageSystem(EnchantmentManager enchantmentManager) {
+        this.enchantmentManager = enchantmentManager;
     }
 
     /**
@@ -162,13 +166,23 @@ public class EnchantmentSalvageSystem {
     }
     
     private boolean hasEnchantments(ItemStack item) {
-        // Use EnchantmentManager to check if any enchantments are present
-        org.herolias.plugin.SimpleEnchanting.getInstance().getEnchantmentManager().getEnchantmentsFromItem(item);
-        return !org.herolias.plugin.SimpleEnchanting.getInstance().getEnchantmentManager().getEnchantmentsFromItem(item).isEmpty();
+        return !enchantmentManager.getEnchantmentsFromItem(item).isEmpty();
     }
     
-    // --- Storage for Bench Slots ---
-    private final Map<String, BsonDocument> benchSlotStorage = new ConcurrentHashMap<>();
+    // --- Storage for Bench Slots (M-3: now has timestamps for leak prevention) ---
+    
+    private static class TimestampedMeta {
+        final BsonDocument metadata;
+        final long timestamp;
+        TimestampedMeta(BsonDocument metadata) {
+            this.metadata = metadata;
+            this.timestamp = System.currentTimeMillis();
+        }
+    }
+    
+    private final Map<String, TimestampedMeta> benchSlotStorage = new ConcurrentHashMap<>();
+    /** Timeout for stale bench slot entries (60 seconds). */
+    private static final long BENCH_SLOT_TIMEOUT_MS = 60_000;
     
     private String getSlotKey(ProcessingBenchState bench, short slot) {
         Vector3i pos = bench.getBlockPosition();
@@ -179,16 +193,23 @@ public class EnchantmentSalvageSystem {
         // Save ALL metadata to preserve names, etc. and to be sure we strip everything that blocks the recipe
         BsonDocument data = item.getMetadata();
         if (data != null) {
-            benchSlotStorage.put(getSlotKey(bench, slot), data);
+            benchSlotStorage.put(getSlotKey(bench, slot), new TimestampedMeta(data));
         }
     }
     
     private BsonDocument getSavedEnchantmentData(ProcessingBenchState bench, short slot) {
-        return benchSlotStorage.get(getSlotKey(bench, slot));
+        TimestampedMeta entry = benchSlotStorage.get(getSlotKey(bench, slot));
+        return entry != null ? entry.metadata : null;
     }
     
     private void clearSavedEnchantmentData(ProcessingBenchState bench, short slot) {
         benchSlotStorage.remove(getSlotKey(bench, slot));
+    }
+    
+    /** Periodically evict stale bench slot entries that survived beyond the timeout. */
+    private void cleanupStaleBenchSlots() {
+        long now = System.currentTimeMillis();
+        benchSlotStorage.entrySet().removeIf(e -> (now - e.getValue().timestamp) > BENCH_SLOT_TIMEOUT_MS);
     }
     
     // --- Global Restore Queue ---
@@ -205,10 +226,12 @@ public class EnchantmentSalvageSystem {
         }
     }
     
-    private final List<FloatingRestore> floatingRestores = new CopyOnWriteArrayList<>();
+    private final List<FloatingRestore> floatingRestores = new ArrayList<>();
     
-    private void queueGlobalRestore(String itemId, BsonDocument meta) { 
-         floatingRestores.add(new FloatingRestore(itemId, meta));
+    private void queueGlobalRestore(String itemId, BsonDocument meta) {
+        synchronized (floatingRestores) {
+            floatingRestores.add(new FloatingRestore(itemId, meta));
+        }
     }
     
     /**
@@ -263,30 +286,44 @@ public class EnchantmentSalvageSystem {
             return;
         }
         
-        long now = System.currentTimeMillis();
-        floatingRestores.removeIf(r -> (now - r.timestamp) > 500); // 0.5 sec expiration
-        
-        if (floatingRestores.isEmpty()) {
+        if (hasEnchantments(newItem)) {
             return;
         }
         
-        if (hasEnchantments(newItem)) {
-            return; 
+        synchronized (floatingRestores) {
+            long now = System.currentTimeMillis();
+            floatingRestores.removeIf(r -> (now - r.timestamp) > 500); // 0.5 sec expiration
+            
+            if (floatingRestores.isEmpty()) {
+                return;
+            }
+            
+            Iterator<FloatingRestore> it = floatingRestores.iterator();
+            while (it.hasNext()) {
+                FloatingRestore r = it.next();
+                if (r.itemId.equals(newItem.getItemId())) {
+                    // Restore ALL metadata
+                    ItemStack restored = newItem.withMetadata(r.metadata);
+                    it.remove();
+                    container.setItemStackForSlot(transaction.getSlot(), restored);
+                    break;
+                }
+            }
         }
         
-        Iterator<FloatingRestore> it = floatingRestores.iterator();
-        while (it.hasNext()) {
-             FloatingRestore r = it.next();
-             if (r.itemId.equals(newItem.getItemId())) {
-                 // Restore ALL metadata
-                 ItemStack restored = newItem.withMetadata(r.metadata);
-                 floatingRestores.remove(r);
-                 container.setItemStackForSlot(transaction.getSlot(), restored);
-                 break;
-             }
-        }
+        // Periodically clean up stale bench slot and session entries
+        cleanupStaleBenchSlots();
+        cleanupStaleSessions();
     }
 
+    /**
+     * Determines whether the current item change originates from bench processing
+     * by checking the call stack for ProcessingBenchState.tick().
+     *
+     * This only fires on bench item changes (not per-tick), so the performance
+     * impact is acceptable. Alternative approaches (ThreadLocal, state heuristic)
+     * proved unreliable because we cannot instrument ProcessingBenchState directly.
+     */
     private boolean isProcessedByBench() {
         for (StackTraceElement element : Thread.currentThread().getStackTrace()) {
             if (element.getClassName().equals("com.hypixel.hytale.builtin.crafting.state.ProcessingBenchState") &&
@@ -298,9 +335,9 @@ public class EnchantmentSalvageSystem {
     }
 
     private void yieldScroll(ProcessingBenchState bench, BsonDocument savedMeta) {
+        // Create a dummy item to deserialize the enchantment data from saved metadata
         ItemStack temp = new ItemStack("dummy", 1).withMetadata(savedMeta);
-        EnchantmentData data = org.herolias.plugin.SimpleEnchanting.getInstance()
-                .getEnchantmentManager().getEnchantmentsFromItem(temp);
+        EnchantmentData data = enchantmentManager.getEnchantmentsFromItem(temp);
 
         if (data.isEmpty()) return;
 
@@ -346,7 +383,7 @@ public class EnchantmentSalvageSystem {
         EnchantmentType chosenType = candidates.get(java.util.concurrent.ThreadLocalRandom.current().nextInt(candidates.size()));
         int chosenLevel = data.getLevel(chosenType);
 
-        String scrollId = getScrollItemId(chosenType, chosenLevel);
+        String scrollId = ScrollIdHelper.getScrollItemId(chosenType, chosenLevel);
         
         try {
             ItemStack scrollStack = new ItemStack(scrollId, 1);
@@ -371,34 +408,29 @@ public class EnchantmentSalvageSystem {
         }
     }
 
-    private String getScrollItemId(EnchantmentType type, int level) {
-        String id = type.getId();
-        StringBuilder sb = new StringBuilder("Scroll_");
-        boolean capitalizeNext = true;
-        for (char c : id.toCharArray()) {
-            if (c == '_') {
-                sb.append('_');
-                capitalizeNext = true;
-            } else if (capitalizeNext) {
-                sb.append(Character.toUpperCase(c));
-                capitalizeNext = false;
-            } else {
-                sb.append(c);
-            }
-        }
-        sb.append('_');
-        sb.append(EnchantmentType.toRoman(level));
-        return sb.toString();
+    /**
+     * Ends a salvage session for the given player (M-2: prevents session map leak).
+     */
+    public void endSession(UUID playerId) {
+        sessions.remove(playerId);
+    }
+    
+    /** Evict sessions older than SESSION_TIMEOUT_MS. */
+    private void cleanupStaleSessions() {
+        long now = System.currentTimeMillis();
+        sessions.entrySet().removeIf(e -> (now - e.getValue().timestamp) > SESSION_TIMEOUT_MS);
     }
 
     // Session tracking class
     private static class SalvageSession {
         final UUID playerId;
         final Vector3i benchPos;
+        final long timestamp;
         
         SalvageSession(UUID playerId, Vector3i benchPos) {
             this.playerId = playerId;
             this.benchPos = benchPos;
+            this.timestamp = System.currentTimeMillis();
         }
     }
 }

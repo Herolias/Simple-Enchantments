@@ -141,7 +141,6 @@ public class EnchantmentSilktouchSystem extends EntityEventSystem<EntityStore, B
         if (breakerRef != null && breakerRef.isValid()) {
             playerRef = store.getComponent(breakerRef, com.hypixel.hytale.server.core.universe.PlayerRef.getComponentType());
         }
-        org.herolias.plugin.api.event.EnchantmentActivatedEvent ev = new org.herolias.plugin.api.event.EnchantmentActivatedEvent(playerRef, tool, EnchantmentType.PICK_PERFECT, enchantmentManager.getEnchantmentLevel(tool, EnchantmentType.PICK_PERFECT));
-        com.hypixel.hytale.server.core.HytaleServer.get().getEventBus().dispatchFor(org.herolias.plugin.api.event.EnchantmentActivatedEvent.class).dispatch(ev);
+        EnchantmentEventHelper.fireActivated(playerRef, tool, EnchantmentType.PICK_PERFECT, enchantmentManager.getEnchantmentLevel(tool, EnchantmentType.PICK_PERFECT));
     }
 }

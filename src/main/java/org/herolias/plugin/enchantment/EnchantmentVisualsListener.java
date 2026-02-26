@@ -42,7 +42,7 @@ public class EnchantmentVisualsListener {
             }
             Store<EntityStore> store = player.getWorld().getEntityStore().getStore();
             
-            if (entityRef != null && store != null) {
+            if (store != null) {
                 // Update glow stats when inventory content changes
                 // This covers: Armor equip/unequip, Picking up items, Dropping items, Consuming items
                 EnchantmentVisualsHelper.updateGlowStats(entityRef, store, player, enchantmentManager);

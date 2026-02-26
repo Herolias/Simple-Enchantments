@@ -198,8 +198,7 @@ public class EnchantmentLootingSystem extends DeathSystems.OnDeathSystem {
             if (levels.lootingLevel() > 0 && attackerRef != null && enchantmentManager.getWeaponFromEntity(EntityUtils.getEntity(attackerRef, commandBuffer)) != null) {
                 com.hypixel.hytale.server.core.universe.PlayerRef playerRef = store.getComponent(attackerRef, com.hypixel.hytale.server.core.universe.PlayerRef.getComponentType());
                 ItemStack weapon = enchantmentManager.getWeaponFromEntity(EntityUtils.getEntity(attackerRef, commandBuffer));
-                org.herolias.plugin.api.event.EnchantmentActivatedEvent apiEvent = new org.herolias.plugin.api.event.EnchantmentActivatedEvent(playerRef, weapon, EnchantmentType.LOOTING, levels.lootingLevel());
-                com.hypixel.hytale.server.core.HytaleServer.get().getEventBus().dispatchFor(org.herolias.plugin.api.event.EnchantmentActivatedEvent.class).dispatch(apiEvent);
+                EnchantmentEventHelper.fireActivated(playerRef, weapon, EnchantmentType.LOOTING, levels.lootingLevel());
             }
         }
         

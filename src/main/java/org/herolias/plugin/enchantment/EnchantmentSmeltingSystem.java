@@ -74,7 +74,7 @@ public class EnchantmentSmeltingSystem extends EntityEventSystem<EntityStore, Br
             return;
         }
 
-        if (!enchantmentManager.isPickaxeItem(tool.getItemId())) {
+        if (enchantmentManager.categorizeItem(tool) != ItemCategory.PICKAXE) {
             return;
         }
 
@@ -120,7 +120,6 @@ public class EnchantmentSmeltingSystem extends EntityEventSystem<EntityStore, Br
             return;
         }
 
-        // Apply Fortune extra rolls on top of smelted drops (if applicable).
         // Apply Fortune extra rolls on top of smelted drops (if applicable).
         int fortuneLevel = enchantmentManager.getEnchantmentLevel(tool, EnchantmentType.FORTUNE);
         if (fortuneLevel > 0) {
@@ -181,7 +180,6 @@ public class EnchantmentSmeltingSystem extends EntityEventSystem<EntityStore, Br
         if (breakerRef != null && breakerRef.isValid()) {
             playerRef = store.getComponent(breakerRef, com.hypixel.hytale.server.core.universe.PlayerRef.getComponentType());
         }
-        org.herolias.plugin.api.event.EnchantmentActivatedEvent ev = new org.herolias.plugin.api.event.EnchantmentActivatedEvent(playerRef, tool, EnchantmentType.SMELTING, enchantmentManager.getEnchantmentLevel(tool, EnchantmentType.SMELTING));
-        com.hypixel.hytale.server.core.HytaleServer.get().getEventBus().dispatchFor(org.herolias.plugin.api.event.EnchantmentActivatedEvent.class).dispatch(ev);
+        EnchantmentEventHelper.fireActivated(playerRef, tool, EnchantmentType.SMELTING, enchantmentManager.getEnchantmentLevel(tool, EnchantmentType.SMELTING));
     }
 }

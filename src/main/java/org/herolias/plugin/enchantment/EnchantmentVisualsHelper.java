@@ -127,13 +127,7 @@ public class EnchantmentVisualsHelper {
         return utilityItem == null ? ItemStack.EMPTY : utilityItem;
     }
 
-    /**
-     * Checks if an item has any enabled enchantment.
-     * Delegates to the optimized BSON-only check in EnchantmentManager.
-     */
-    private static boolean hasEnchantments(ItemStack item, EnchantmentManager manager) {
-        return manager.hasAnyEnabledEnchantment(item);
-    }
+
 
     private static void setGlowStat(EntityStatMap statMap, String statId, boolean enabled) {
         int index = EntityStatType.getAssetMap().getIndex(statId);
@@ -152,7 +146,7 @@ public class EnchantmentVisualsHelper {
         // Check each armor slot: Head (0), Chest (1), Hands (2), Legs (3)
         for (ItemArmorSlot slot : ItemArmorSlot.VALUES) {
             ItemStack armorItem = armorContainer.getItemStack((short) slot.ordinal());
-            boolean isEnchanted = hasEnchantments(armorItem, manager);
+            boolean isEnchanted = manager.hasAnyEnabledEnchantment(armorItem);
             
             String statId = switch (slot) {
                 case Head -> STAT_GLOW_HEAD;

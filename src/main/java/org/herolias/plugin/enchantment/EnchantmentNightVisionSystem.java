@@ -118,8 +118,7 @@ public class EnchantmentNightVisionSystem extends EntityTickingSystem<EntityStor
                 
                 com.hypixel.hytale.server.core.universe.PlayerRef playerRef = store.getComponent(ref, com.hypixel.hytale.server.core.universe.PlayerRef.getComponentType());
                 int level = enchantmentManager.getEnchantmentLevel(inventory.getArmor().getItemStack(HELMET_SLOT), EnchantmentType.NIGHT_VISION);
-                org.herolias.plugin.api.event.EnchantmentActivatedEvent ev = new org.herolias.plugin.api.event.EnchantmentActivatedEvent(playerRef, inventory.getArmor().getItemStack(HELMET_SLOT), EnchantmentType.NIGHT_VISION, level);
-                com.hypixel.hytale.server.core.HytaleServer.get().getEventBus().dispatchFor(org.herolias.plugin.api.event.EnchantmentActivatedEvent.class).dispatch(ev);
+                EnchantmentEventHelper.fireActivated(playerRef, inventory.getArmor().getItemStack(HELMET_SLOT), EnchantmentType.NIGHT_VISION, level);
             } else if (!hasNightVision && wasActive) {
                 // Remove the light from this player only
                 viewer.queueRemove(ref, ComponentUpdateType.DynamicLight);

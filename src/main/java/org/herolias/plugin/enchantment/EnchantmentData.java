@@ -26,7 +26,6 @@ public class EnchantmentData {
     public static final String METADATA_KEY = "Enchantments";
 
     /** Shared immutable empty instance — avoids allocations for items without enchantments. */
-    /** Shared immutable empty instance — avoids allocations for items without enchantments. */
     public static final EnchantmentData EMPTY = new EnchantmentData(Collections.emptyMap(), true);
     
     private final Map<EnchantmentType, Integer> enchantments;
@@ -225,28 +224,7 @@ public class EnchantmentData {
         return null;
     }
     
-    // ========== Legacy String Serialization (kept for compatibility) ==========
-    
-    /**
-     * Serializes enchantment data to a string for storage.
-     * Format: "enchantmentId:level,enchantmentId:level,..."
-     * @deprecated Use {@link #toBson()} for ItemStack metadata storage
-     */
-    @Deprecated
-    public String serialize() {
-        if (enchantments.isEmpty()) {
-            return "";
-        }
-        
-        StringBuilder sb = new StringBuilder();
-        enchantments.forEach((type, level) -> {
-            if (sb.length() > 0) {
-                sb.append(",");
-            }
-            sb.append(type.getId()).append(":").append(level);
-        });
-        return sb.toString();
-    }
+    // ========== Legacy String Deserialization (kept for GiveEnchantedCommand and legacy item fallback) ==========
     
     /**
      * Deserializes enchantment data from a string.

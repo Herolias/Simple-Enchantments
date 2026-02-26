@@ -107,8 +107,7 @@ public class EnchantmentFreezeSystem extends DamageEventSystem {
              ItemStack weapon = enchantmentManager.getWeaponFromEntity(shooterEntity);
              if (weapon != null) {
                   com.hypixel.hytale.server.core.universe.PlayerRef playerRef = store.getComponent(ctx.attackerRef(), com.hypixel.hytale.server.core.universe.PlayerRef.getComponentType());
-                  org.herolias.plugin.api.event.EnchantmentActivatedEvent ev = new org.herolias.plugin.api.event.EnchantmentActivatedEvent(playerRef, weapon, EnchantmentType.FREEZE, freezeLevel);
-                  com.hypixel.hytale.server.core.HytaleServer.get().getEventBus().dispatchFor(org.herolias.plugin.api.event.EnchantmentActivatedEvent.class).dispatch(ev);
+                  EnchantmentEventHelper.fireActivated(playerRef, weapon, EnchantmentType.FREEZE, freezeLevel);
              }
         }
     }

@@ -55,14 +55,12 @@ public class EnchantmentSlotTracker implements Runnable {
                 world.execute(() -> {
                     for (PlayerRef playerRef : world.getPlayerRefs()) {
                         checkPlayerSlot(playerRef);
+                        // Collect online UUIDs within world.execute() to avoid race (M-1)
+                        if (playerRef != null && playerRef.isValid()) {
+                            onlinePlayers.add(playerRef.getUuid());
+                        }
                     }
                 });
-                // Collect online UUIDs (best-effort, may race slightly)
-                for (PlayerRef playerRef : world.getPlayerRefs()) {
-                    if (playerRef != null && playerRef.isValid()) {
-                        onlinePlayers.add(playerRef.getUuid());
-                    }
-                }
             }
 
             // Clean up disconnected players

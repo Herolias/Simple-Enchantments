@@ -23,19 +23,6 @@ public class ProjectileEnchantmentData {
     private final int burnLevel;
     private final int eternalShotLevel;
 
-    // Legacy constructors for backwards compatibility
-    public ProjectileEnchantmentData(int strengthLevel, int eaglesEyeLevel, int lootingLevel) {
-        this(strengthLevel, eaglesEyeLevel, lootingLevel, 0, 0, 0);
-    }
-
-    public ProjectileEnchantmentData(int strengthLevel, int eaglesEyeLevel, int lootingLevel, int freezeLevel) {
-        this(strengthLevel, eaglesEyeLevel, lootingLevel, freezeLevel, 0, 0);
-    }
-
-    public ProjectileEnchantmentData(int strengthLevel, int eaglesEyeLevel, int lootingLevel, int freezeLevel, int burnLevel) {
-        this(strengthLevel, eaglesEyeLevel, lootingLevel, freezeLevel, burnLevel, 0);
-    }
-
     public ProjectileEnchantmentData(int strengthLevel, int eaglesEyeLevel, int lootingLevel, int freezeLevel, int burnLevel, int eternalShotLevel) {
         this.strengthLevel = strengthLevel;
         this.eaglesEyeLevel = eaglesEyeLevel;

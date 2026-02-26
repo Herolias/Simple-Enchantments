@@ -235,8 +235,7 @@ public class EnchantmentEternalShotSystem extends AbstractRefundSystem {
         
         if (player.getWorld() != null && player.getReference() != null) {
             com.hypixel.hytale.server.core.universe.PlayerRef playerRef = player.getWorld().getEntityStore().getStore().getComponent(player.getReference(), com.hypixel.hytale.server.core.universe.PlayerRef.getComponentType());
-            org.herolias.plugin.api.event.EnchantmentActivatedEvent ev = new org.herolias.plugin.api.event.EnchantmentActivatedEvent(playerRef, weapon, EnchantmentType.ETERNAL_SHOT, level);
-            com.hypixel.hytale.server.core.HytaleServer.get().getEventBus().dispatchFor(org.herolias.plugin.api.event.EnchantmentActivatedEvent.class).dispatch(ev);
+            EnchantmentEventHelper.fireActivated(playerRef, weapon, EnchantmentType.ETERNAL_SHOT, level);
         }
 
         // Track this refund for crossbow swap-from duplication prevention.

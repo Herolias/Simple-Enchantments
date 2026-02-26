@@ -87,7 +87,7 @@ public class EnchantmentReflectionSystem extends DamageEventSystem {
 
         if (reflectedAmount <= 0) return;
         
-       // LOGGER.atInfo().log("Reflection: Level " + reflectionLevel + ", Original: " + originalAmount + ", Reflected: " + reflectedAmount);
+
 
         DamageCause attackCause = DamageCause.getAssetMap().getAsset("EntityAttack");
         if (attackCause == null) {
@@ -101,8 +101,7 @@ public class EnchantmentReflectionSystem extends DamageEventSystem {
             DamageSystems.executeDamage(ctx.attackerRef(), commandBuffer, reflectionDamage);
             
             com.hypixel.hytale.server.core.universe.PlayerRef playerRef = store.getComponent(archetypeChunk.getReferenceTo(index), com.hypixel.hytale.server.core.universe.PlayerRef.getComponentType());
-            org.herolias.plugin.api.event.EnchantmentActivatedEvent ev = new org.herolias.plugin.api.event.EnchantmentActivatedEvent(playerRef, blocker, EnchantmentType.REFLECTION, reflectionLevel);
-            com.hypixel.hytale.server.core.HytaleServer.get().getEventBus().dispatchFor(org.herolias.plugin.api.event.EnchantmentActivatedEvent.class).dispatch(ev);
+            EnchantmentEventHelper.fireActivated(playerRef, blocker, EnchantmentType.REFLECTION, reflectionLevel);
         }
     }
 }

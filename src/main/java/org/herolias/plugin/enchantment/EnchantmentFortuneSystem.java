@@ -61,7 +61,7 @@ public class EnchantmentFortuneSystem extends EntityEventSystem<EntityStore, Bre
             return;
         }
 
-        if (!enchantmentManager.isPickaxeItem(tool.getItemId())) {
+        if (enchantmentManager.categorizeItem(tool) != ItemCategory.PICKAXE) {
             return;
         }
 
@@ -93,8 +93,7 @@ public class EnchantmentFortuneSystem extends EntityEventSystem<EntityStore, Bre
         enchantmentManager.spawnDrops(commandBuffer, extraDrops, dropPosition);
         
         com.hypixel.hytale.server.core.universe.PlayerRef playerRef = store.getComponent(com.hypixel.hytale.server.core.entity.EntityUtils.getEntity(index, archetypeChunk).getReference(), com.hypixel.hytale.server.core.universe.PlayerRef.getComponentType());
-        org.herolias.plugin.api.event.EnchantmentActivatedEvent apiEvent = new org.herolias.plugin.api.event.EnchantmentActivatedEvent(playerRef, tool, EnchantmentType.FORTUNE, fortuneLevel);
-        com.hypixel.hytale.server.core.HytaleServer.get().getEventBus().dispatchFor(org.herolias.plugin.api.event.EnchantmentActivatedEvent.class).dispatch(apiEvent);
+        EnchantmentEventHelper.fireActivated(playerRef, tool, EnchantmentType.FORTUNE, fortuneLevel);
     }
 
 }

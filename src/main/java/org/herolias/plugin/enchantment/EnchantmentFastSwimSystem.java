@@ -99,8 +99,7 @@ public class EnchantmentFastSwimSystem extends EntityTickingSystem<EntityStore> 
             PlayerRef playerRef = archetypeChunk.getComponent(index, PlayerRef.getComponentType());
             if (playerRef != null) {
                 ItemStack gloves = player.getInventory().getArmor().getItemStack((short) com.hypixel.hytale.protocol.ItemArmorSlot.Hands.getValue());
-                org.herolias.plugin.api.event.EnchantmentActivatedEvent ev = new org.herolias.plugin.api.event.EnchantmentActivatedEvent(playerRef, gloves, EnchantmentType.FAST_SWIM, level);
-                com.hypixel.hytale.server.core.HytaleServer.get().getEventBus().dispatchFor(org.herolias.plugin.api.event.EnchantmentActivatedEvent.class).dispatch(ev);
+                EnchantmentEventHelper.fireActivated(playerRef, gloves, EnchantmentType.FAST_SWIM, level);
             }
         }
         
@@ -108,7 +107,7 @@ public class EnchantmentFastSwimSystem extends EntityTickingSystem<EntityStore> 
             playerLastFluidState.put(entityId, inFluid);
         }
         
-        //LOGGER.atInfo().log("FastSwim Update [Player %s]: Level %d -> %d", player.getLegacyDisplayName(), lastLevel, level);
+
     }
 
     private void sendFluidUpdate(PlayerRef playerRef, int level) {
@@ -152,5 +151,14 @@ public class EnchantmentFastSwimSystem extends EntityTickingSystem<EntityStore> 
 
         // Send to player
         ((com.hypixel.hytale.server.core.receiver.IPacketReceiver) playerRef.getPacketHandler()).writeNoCache(packet);
+    }
+    
+    /**
+     * Removes tracking data for a player who has disconnected (M-4: prevents memory leak).
+     * @param networkId the network ID of the disconnected player
+     */
+    public void cleanupPlayer(int networkId) {
+        playerLastLevels.remove(networkId);
+        playerLastFluidState.remove(networkId);
     }
 }

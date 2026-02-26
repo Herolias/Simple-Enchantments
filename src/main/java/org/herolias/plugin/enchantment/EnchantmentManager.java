@@ -251,8 +251,7 @@ public class EnchantmentManager {
         // Store back to item metadata
         ItemStack enchantedItem = item.withMetadata(EnchantmentData.METADATA_KEY, data.toBson());
         
-        // Update visual indicators (Tooltip and Quality)
-        enchantedItem = updateItemVisuals(enchantedItem);
+
         
         LOGGER.atInfo().log("Applied " + type.getFormattedName(appliedLevel) + " to " + item.getItemId());
         
@@ -382,11 +381,7 @@ public class EnchantmentManager {
     }
 
     /**
-     * Checks if an item is consumed mana or magic charges to function.
-     * Used for determining eligibility for Mana Weaving enchantment.
-     */
-    /**
-     * Checks if an item is consumed mana or magic charges to function.
+     * Checks if an item consumes mana or magic charges to function.
      * Used for determining eligibility for Thrift enchantment.
      */
     public boolean isManaConsuming(@Nonnull ItemStack item) {
@@ -506,27 +501,7 @@ public class EnchantmentManager {
         return false;
     }
 
-    private Object2FloatMap<String> getProtectedStringFloatMap(Object target, Class<?> clazz, String fieldName) {
-        try {
-            Field field = clazz.getDeclaredField(fieldName);
-            field.setAccessible(true);
-            return (Object2FloatMap<String>) field.get(target);
-        } catch (Exception e) {
-            return null;
-        }
-    }
 
-    private Int2FloatMap getProtectedInt2FloatMap(Object target, Class<?> clazz, String fieldName) {
-        try {
-            Field field = clazz.getDeclaredField(fieldName);
-            field.setAccessible(true);
-            return (Int2FloatMap) field.get(target);
-        } catch (Exception e) {
-            // Log once per failure type to avoid spam, or just debug
-            LOGGER.atWarning().log("Failed to access field " + fieldName + " on " + clazz.getSimpleName() + ": " + e.getMessage());
-            return null;
-        }
-    }
 
     /**
      * Gets the enchantment data from an ItemStack's metadata.
@@ -725,23 +700,16 @@ public class EnchantmentManager {
 
     /**
      * Calculates the durability loss multiplier from Durability enchantment.
-     * 
+     * Optimized to use direct BSON key lookup instead of full deserialization.
+     *
      * @param item The item losing durability
      * @return The durability loss multiplier (1.0 = normal, 0.5 = half loss, etc.)
      */
     public double calculateDurabilityMultiplier(@Nullable ItemStack item) {
-        EnchantmentData data = getEnchantmentsFromItem(item);
-        if (data.isEmpty()) {
-            return 1.0;
+        int durabilityLevel = getEnchantmentLevel(item, EnchantmentType.DURABILITY);
+        if (durabilityLevel > 0) {
+            return Math.max(0.0, 1.0 - (durabilityLevel * EnchantmentType.DURABILITY.getEffectMultiplier()));
         }
-        
-        // Check for Durability enchantment
-        int durabilityLevel = data.getLevel(EnchantmentType.DURABILITY);
-        if (durabilityLevel > 0 && isEnchantmentEnabled(EnchantmentType.DURABILITY)) {
-            org.herolias.plugin.config.EnchantingConfig config = getConfig();
-            return Math.max(0.0, 1.0 - (durabilityLevel * config.durabilityReductionPerLevel));
-        }
-        
         return 1.0;
     }
 
@@ -761,19 +729,7 @@ public class EnchantmentManager {
         return 1.0;
     }
 
-    /**
-     * Calculates the swing speed multiplier from Efficiency enchantment.
-     *
-     * @param item The weapon/tool being swung
-     * @return The swing speed multiplier (1.0 = normal, 1.1 = +10%, etc.)
-     */
-    public double calculateSwingSpeedMultiplier(@Nullable ItemStack item) {
-        int efficiencyLevel = getEnchantmentLevel(item, EnchantmentType.EFFICIENCY);
-        if (efficiencyLevel > 0) {
-            // return 1.0 + (efficiencyLevel * getConfig().efficiencySwingSpeedMultiplier);
-        }
-        return 1.0;
-    }
+
 
     /**
      * Calculates the ability charge speed multiplier from Frenzy enchantment.
@@ -817,24 +773,6 @@ public class EnchantmentManager {
     }
 
     /**
-     * Calculates the projectile range multiplier from Strength enchantment.
-     *
-     * @param weapon The ranged weapon used to fire the projectile
-     * @return The projectile range multiplier (1.0 = no change)
-     */
-    public double calculateProjectileRangeMultiplier(@Nullable ItemStack weapon) {
-        if (weapon == null || weapon.isEmpty()) {
-            return 1.0;
-        }
-        if (!ItemCategory.RANGED_WEAPON.equals(categorizeItem(weapon))) {
-            return 1.0;
-        }
-
-        int strengthLevel = getEnchantmentLevel(weapon, EnchantmentType.STRENGTH);
-        return calculateProjectileRangeMultiplier(strengthLevel);
-    }
-
-    /**
      * Calculates projectile damage multipliers from raw enchantment levels.
      */
     public double calculateProjectileDamageMultiplier(int strengthLevel, int eaglesEyeLevel, double distance) {
@@ -854,76 +792,22 @@ public class EnchantmentManager {
         return multiplier;
     }
 
-    /**
-     * Calculates projectile range multipliers from Strength level.
-     */
-    public double calculateProjectileRangeMultiplier(int strengthLevel) {
-        if (strengthLevel <= 0) {
-            return 1.0;
-        }
-        // Disabled due to buggy behavior - always return 1.0 (no range bonus)
-        return 1.0; 
-        // org.herolias.plugin.config.EnchantingConfig config = getConfig();
-        // return 1.0 + (strengthLevel * config.strengthRangeMultiplierPerLevel);
-    }
+
 
     /**
-     * Calculates the protection multiplier from Protection enchantment on armor.
+     * Calculates an armor protection multiplier for the given enchantment type.
+     * Works for both PROTECTION (melee/general) and RANGED_PROTECTION (projectile/magic).
      *
      * @param armorContainer The armor inventory container
+     * @param type           The protection enchantment type to check
      * @return The damage multiplier (1.0 = normal, 0.9 = 10% reduction, etc.)
      */
-    public double calculateProtectionMultiplier(@Nullable ItemContainer armorContainer) {
+    public double calculateArmorProtectionMultiplier(@Nullable ItemContainer armorContainer, @Nonnull EnchantmentType type) {
         if (armorContainer == null) {
             return 1.0;
         }
 
-        // Single check — if Protection is disabled globally, skip all armor slots.
-        if (!isEnchantmentEnabled(EnchantmentType.PROTECTION)) {
-            return 1.0;
-        }
-
-        double multiplier = 1.0;
-        for (short slot = 0; slot < armorContainer.getCapacity(); slot = (short) (slot + 1)) {
-            ItemStack armorPiece = armorContainer.getItemStack(slot);
-            if (armorPiece == null || armorPiece.isEmpty()) {
-                continue;
-            }
-
-            // Read BSON directly — enabled check already done above.
-            BsonDocument enchBson = armorPiece.getFromMetadataOrNull(
-                    EnchantmentData.METADATA_KEY, Codec.BSON_DOCUMENT);
-            if (enchBson == null || enchBson.isEmpty()) continue;
-
-            int level = 0;
-            if (enchBson.containsKey(EnchantmentType.PROTECTION.getDisplayName())) {
-                level = parseBsonLevel(enchBson.get(EnchantmentType.PROTECTION.getDisplayName()));
-            } else if (enchBson.containsKey(EnchantmentType.PROTECTION.getId())) {
-                level = parseBsonLevel(enchBson.get(EnchantmentType.PROTECTION.getId()));
-            }
-
-            if (level > 0) {
-                double pieceMultiplier = 1.0 - (level * EnchantmentType.PROTECTION.getEffectMultiplier());
-                multiplier *= Math.max(0.0, pieceMultiplier);
-            }
-        }
-
-        return multiplier;
-    }
-
-    /**
-     * Calculates the ranged protection multiplier from Ranged Protection enchantment on armor.
-     * Reduces incoming projectile and magic damage.
-     *
-     * @param armorContainer The armor inventory container
-     * @return The damage multiplier (1.0 = normal, 0.9 = 10% reduction, etc.)
-     */
-    public double calculateRangedProtectionMultiplier(@Nullable ItemContainer armorContainer) {
-        if (armorContainer == null) {
-            return 1.0;
-        }
-
-        if (!isEnchantmentEnabled(EnchantmentType.RANGED_PROTECTION)) {
+        if (!isEnchantmentEnabled(type)) {
             return 1.0;
         }
 
@@ -939,20 +823,22 @@ public class EnchantmentManager {
             if (enchBson == null || enchBson.isEmpty()) continue;
 
             int level = 0;
-            if (enchBson.containsKey(EnchantmentType.RANGED_PROTECTION.getDisplayName())) {
-                level = parseBsonLevel(enchBson.get(EnchantmentType.RANGED_PROTECTION.getDisplayName()));
-            } else if (enchBson.containsKey(EnchantmentType.RANGED_PROTECTION.getId())) {
-                level = parseBsonLevel(enchBson.get(EnchantmentType.RANGED_PROTECTION.getId()));
+            if (enchBson.containsKey(type.getDisplayName())) {
+                level = parseBsonLevel(enchBson.get(type.getDisplayName()));
+            } else if (enchBson.containsKey(type.getId())) {
+                level = parseBsonLevel(enchBson.get(type.getId()));
             }
 
             if (level > 0) {
-                double pieceMultiplier = 1.0 - (level * EnchantmentType.RANGED_PROTECTION.getEffectMultiplier());
+                double pieceMultiplier = 1.0 - (level * type.getEffectMultiplier());
                 multiplier *= Math.max(0.0, pieceMultiplier);
             }
         }
 
         return multiplier;
     }
+
+
 
     /**
      * Rolls for extra Fortune drops.
@@ -978,9 +864,6 @@ public class EnchantmentManager {
 
 
 
-    /**
-     * Stores projectile enchantment levels for later calculations.
-     */
     /**
      * Stores projectile enchantment levels for later calculations.
      */
@@ -1124,12 +1007,6 @@ public class EnchantmentManager {
 
     /**
      * Determines the category of an item based on its ID.
-     * 
-     * Note: This is a simplified implementation. In production, you would
-     * want to query the item's actual properties or tags from the game.
-     */
-    /**
-     * Determines the category of an item based on its ID.
      * Delegates to ItemCategoryManager.
      */
     public ItemCategory categorizeItem(String itemTypeId) {
@@ -1144,21 +1021,7 @@ public class EnchantmentManager {
         return ItemCategoryManager.getInstance().categorizeItem(item);
     }
 
-    // Helper methods restored for compatibility, now delegating to ItemCategory logic where possible
-    @Deprecated
-    public boolean isPickaxeItem(@Nonnull String itemTypeId) {
-        return ItemCategory.PICKAXE.equals(categorizeItem(itemTypeId));
-    }
 
-    @Deprecated
-    public boolean isAxeItem(@Nonnull String itemTypeId) {
-        return ItemCategory.AXE.equals(categorizeItem(itemTypeId));
-    }
-
-    @Deprecated
-    public boolean isShovelItem(@Nonnull String itemTypeId) {
-        return ItemCategory.SHOVEL.equals(categorizeItem(itemTypeId));
-    }
 
     /**
      * Generates tooltip lines for an enchanted item.
@@ -1181,16 +1044,7 @@ public class EnchantmentManager {
         return lines.toArray(new String[0]);
     }
 
-    /**
-     * Updates the item's visual indicators.
-     * Currently a no-op as we use the Action Bar/Title system.
-     * 
-     * @param item The item to update
-     * @return The item (unmodified)
-     */
-    public ItemStack updateItemVisuals(@Nonnull ItemStack item) {
-        return item;
-    }
+
 
     /**
      * Generates a display message for the item's enchantments.

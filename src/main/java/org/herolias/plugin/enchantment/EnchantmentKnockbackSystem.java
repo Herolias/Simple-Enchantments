@@ -112,18 +112,20 @@ public class EnchantmentKnockbackSystem extends DamageEventSystem {
             knockbackComponent.setDuration(DEFAULT_KNOCKBACK_DURATION);
             damage.putMetaObject(Damage.KNOCKBACK_COMPONENT, knockbackComponent);
         } else {
+            // Enhance existing knockback with additional velocity (horizontal + vertical lift)
             double horizontalStrength = BASE_HORIZONTAL_KNOCKBACK * knockbackLevel;
             Vector3d currentVelocity = knockbackComponent.getVelocity();
             currentVelocity.x += dirX * horizontalStrength;
+            currentVelocity.y += VERTICAL_LIFT * knockbackLevel;
             currentVelocity.z += dirZ * horizontalStrength;
         }
 
+        // Apply multiplier to scale existing knockback velocity
         double multiplierPerLevel = EnchantmentType.KNOCKBACK.getEffectMultiplier();
         double knockbackMultiplier = 1.0 + (knockbackLevel * multiplierPerLevel);
         knockbackComponent.addModifier(knockbackMultiplier);
         
         com.hypixel.hytale.server.core.universe.PlayerRef playerRef = store.getComponent(ctx.attackerRef(), com.hypixel.hytale.server.core.universe.PlayerRef.getComponentType());
-        org.herolias.plugin.api.event.EnchantmentActivatedEvent ev = new org.herolias.plugin.api.event.EnchantmentActivatedEvent(playerRef, weapon, EnchantmentType.KNOCKBACK, knockbackLevel);
-        com.hypixel.hytale.server.core.HytaleServer.get().getEventBus().dispatchFor(org.herolias.plugin.api.event.EnchantmentActivatedEvent.class).dispatch(ev);
+        EnchantmentEventHelper.fireActivated(playerRef, weapon, EnchantmentType.KNOCKBACK, knockbackLevel);
     }
 }

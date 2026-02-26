@@ -113,7 +113,6 @@ public class WorkbenchRefreshSystem extends EntityTickingSystem<EntityStore> {
         if (currentTierLevel != lastTierLevel) {
             activeBenchWindow.invalidateExtraResources();
             playerLastTierLevel.put(networkId, currentTierLevel);
-            //LOGGER.atInfo().log("Invalidated ExtraResources for player %s due to bench tier upgrade (%d -> %d)", player.getLegacyDisplayName(), lastTierLevel, currentTierLevel);
         }
     }
 }

@@ -153,8 +153,7 @@ public class EnchantmentAbilityStaminaSystem extends EntityTickingSystem<EntityS
              com.hypixel.hytale.server.core.universe.PlayerRef playerRef = store.getComponent(ref, com.hypixel.hytale.server.core.universe.PlayerRef.getComponentType());
              ItemStack activeItem = getDexterityItem(inventory, ref, commandBuffer);
              if (activeItem != null) {
-                 org.herolias.plugin.api.event.EnchantmentActivatedEvent ev = new org.herolias.plugin.api.event.EnchantmentActivatedEvent(playerRef, activeItem, EnchantmentType.DEXTERITY, dexterityLevel);
-                 com.hypixel.hytale.server.core.HytaleServer.get().getEventBus().dispatchFor(org.herolias.plugin.api.event.EnchantmentActivatedEvent.class).dispatch(ev);
+             EnchantmentEventHelper.fireActivated(playerRef, activeItem, EnchantmentType.DEXTERITY, dexterityLevel);
              }
         }
         

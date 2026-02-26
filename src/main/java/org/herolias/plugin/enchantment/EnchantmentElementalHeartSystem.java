@@ -89,11 +89,8 @@ public class EnchantmentElementalHeartSystem extends AbstractRefundSystem {
             container.replaceItemStackInSlot(slotTransaction.getSlot(), slotAfter, slotBefore)
         );
         
-        if (player.getWorld() != null && player.getReference() != null) {
-            com.hypixel.hytale.server.core.universe.PlayerRef playerRef = player.getWorld().getEntityStore().getStore().getComponent(player.getReference(), com.hypixel.hytale.server.core.universe.PlayerRef.getComponentType());
-            org.herolias.plugin.api.event.EnchantmentActivatedEvent ev = new org.herolias.plugin.api.event.EnchantmentActivatedEvent(playerRef, weapon, EnchantmentType.ELEMENTAL_HEART, level);
-            com.hypixel.hytale.server.core.HytaleServer.get().getEventBus().dispatchFor(org.herolias.plugin.api.event.EnchantmentActivatedEvent.class).dispatch(ev);
-        }
+        com.hypixel.hytale.server.core.universe.PlayerRef playerRef = player.getWorld().getEntityStore().getStore().getComponent(player.getReference(), com.hypixel.hytale.server.core.universe.PlayerRef.getComponentType());
+        EnchantmentEventHelper.fireActivated(playerRef, weapon, EnchantmentType.ELEMENTAL_HEART, level);
     }
 
     private boolean isEssenceItem(String itemId) {

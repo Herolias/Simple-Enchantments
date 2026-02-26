@@ -43,7 +43,7 @@ import org.herolias.plugin.enchantment.EnchantmentAbsorptionSystem;
 import org.herolias.plugin.enchantment.EnchantmentFastSwimSystem;
 
 import com.al3x.HStats;
-import org.herolias.plugin.listener.EnchantingTableListener;
+
 import org.herolias.plugin.ui.EnchantScrollPageSupplier;
 import com.hypixel.hytale.server.core.event.events.entity.LivingEntityInventoryChangeEvent;
 import com.hypixel.hytale.server.core.event.events.ecs.SwitchActiveSlotEvent;
@@ -92,7 +92,6 @@ public class SimpleEnchanting extends JavaPlugin {
     private EnchantmentAbilityStaminaSystem enchantmentAbilityStaminaSystem;
     private EnchantmentProjectileSpeedSystem enchantmentProjectileSpeedSystem;
     private EnchantmentEternalShotSystem eternalShotSystem;
-    private EnchantingTableListener enchantingTableListener;
     private boolean tooltipsEnabled;
     private org.herolias.plugin.config.ConfigManager configManager;
     private org.herolias.plugin.config.UserSettingsManager userSettingsManager;
@@ -311,7 +310,7 @@ public class SimpleEnchanting extends JavaPlugin {
 
         // Register EnchantmentSalvageSystem (Event Listener for Salvager Bench)
         // This handles stripping metadata from enchanted items so they can be salvaged
-        EnchantmentSalvageSystem salvageSystem = new EnchantmentSalvageSystem();
+        EnchantmentSalvageSystem salvageSystem = new EnchantmentSalvageSystem(enchantmentManager);
         // Register interaction system with ECS
         this.getEntityStoreRegistry().registerSystem(new SalvagerInteractionSystem(salvageSystem));
         // Register inventory change listener globally
@@ -352,9 +351,7 @@ public class SimpleEnchanting extends JavaPlugin {
                     + "Install DynamicTooltipsLib for rich enchantment tooltips.");
         }
 
-        // Initialize enchanting table listener
-        this.enchantingTableListener = new EnchantingTableListener(this);
-        
+
         // Auto-disable enchantment banner if tooltips are present and we haven't done it yet
         if (tooltipsEnabled) {
             EnchantingConfig config = configManager.getConfig();
@@ -441,12 +438,7 @@ public class SimpleEnchanting extends JavaPlugin {
         return enchantmentDamageSystem;
     }
     
-    /**
-     * Gets the enchanting table listener.
-     */
-    public EnchantingTableListener getEnchantingTableListener() {
-        return enchantingTableListener;
-    }
+
 
     /**
      * Returns whether enchantment tooltips are active (DynamicTooltipsLib present).

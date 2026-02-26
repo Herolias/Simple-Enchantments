@@ -86,8 +86,7 @@ public class EnchantmentStaminaSystem extends DamageEventSystem {
         damage.putMetaObject(Damage.STAMINA_DRAIN_MULTIPLIER, multiplier);
         if (targetEntity instanceof com.hypixel.hytale.server.core.entity.entities.Player) {
              com.hypixel.hytale.server.core.universe.PlayerRef playerRef = store.getComponent(targetEntity.getReference(), com.hypixel.hytale.server.core.universe.PlayerRef.getComponentType());
-             org.herolias.plugin.api.event.EnchantmentActivatedEvent ev = new org.herolias.plugin.api.event.EnchantmentActivatedEvent(playerRef, blocker, EnchantmentType.DEXTERITY, dexterityLevel);
-             com.hypixel.hytale.server.core.HytaleServer.get().getEventBus().dispatchFor(org.herolias.plugin.api.event.EnchantmentActivatedEvent.class).dispatch(ev);
+             EnchantmentEventHelper.fireActivated(playerRef, blocker, EnchantmentType.DEXTERITY, dexterityLevel);
         }
     }
 }
