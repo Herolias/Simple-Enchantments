@@ -82,6 +82,7 @@ Each [EnchantmentType](file:///c:/Users/Elias/Documents/Simple-Enchantments/src/
 | [craftingCategory](file:///c:/Users/Elias/Documents/Simple-Enchantments/src/main/java/org/herolias/plugin/api/ScrollBuilder.java#92-105) | Tab in the Enchanting Table | Auto-derived from item category |
 | `recipe` | List of [Ingredient(itemId, quantity)](file:///c:/Users/Elias/Documents/Simple-Enchantments/src/main/java/org/herolias/plugin/api/ScrollDefinition.java#54-67) | Empty (uses SE defaults) |
 | `icon/model/texture` | Visual overrides | SE's default scroll assets |
+| `iconProperties` | Scroll icon [scale, translation, rotation](file:///c:/Users/Elias/Documents/Simple-Enchantments/src/main/java/org/herolias/plugin/api/ScrollDefinition.java#69-97) properties | Scale: 0.84, Translation: [5, 15], Rotation: [90, 45, 0] |
 
 ### 4. Crafting Categories
 
@@ -137,6 +138,7 @@ EnchantmentType lightning = api.registerEnchantment("my_mod:lightning", "Lightni
         .ingredient("My_Mod_Lightning_Shard", 15)
         .texture("Items/Scrolls/LightningScroll.png")
         .icon("Icons/LightningScroll.png")
+        .iconProperties(0.9f, 6f, 16f, 90f, 45f, 0f)
         .done()
     .build();
 
@@ -167,3 +169,23 @@ After calling `.build()`, the enchantment is automatically:
 | `EnchantmentType.SHARPNESS` etc. | Preserved as `public static final` constants |
 | Existing API ([addEnchantment](file:///c:/Users/Elias/Documents/Simple-Enchantments/src/main/java/org/herolias/plugin/api/EnchantmentApiImpl.java#26-50), [hasEnchantment](file:///c:/Users/Elias/Documents/Simple-Enchantments/src/main/java/org/herolias/plugin/enchantment/EnchantmentData.java#90-96), etc.) | Unchanged, works identically |
 | Per-field config access in internal code | Fully replaced with map lookups |
+
+---
+
+## Configuration Directory Migration
+
+To address user feedback regarding configuration files cluttering the base `config/` directory, the system now stores all configuration files inside `mods/Simple_Enchantments_Config/`. 
+
+### Migrated Files
+The following files are now located in `mods/Simple_Enchantments_Config/`:
+1. `simple_enchanting_config.json`
+2. `.simple_enchanting_config.json.snapshot`
+3. `simple_enchantments_user_config.json`
+4. `simple_enchanting_custom_items.json`
+5. `.simple_enchanting_custom_items.json.snapshot`
+
+### Automatic Migration
+The system automatically handles the transition for existing users:
+- During server startup, if the old `config/` directory contains any of the above files, they are automatically moved to the new `mods/Simple_Enchantments_Config/` directory.
+- The old `config/` folder is safely deleted if it becomes empty after the migration.
+- For new users, the old `config/` folder is never created, ensuring a clean installation.

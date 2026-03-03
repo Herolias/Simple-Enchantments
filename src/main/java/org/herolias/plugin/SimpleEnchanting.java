@@ -109,8 +109,51 @@ public class SimpleEnchanting extends JavaPlugin {
         LOGGER.atInfo().log("Setting up SimpleEnchanting...");
         super.setup();
         new HStats("b04768bd-4189-4ecc-b29c-0f644d7c95cc", this.getManifest().getVersion().toString());
+        
+        // --- CONFIG MIGRATION ---
+        java.io.File oldConfigDir = new java.io.File("config");
+        java.io.File newConfigDir = new java.io.File("mods/Simple_Enchantments_Config");
+        
+        if (oldConfigDir.exists() && oldConfigDir.isDirectory()) {
+            String[] filesToMigrate = {
+                "simple_enchanting_config.json",
+                ".simple_enchanting_config.json.snapshot",
+                "simple_enchantments_user_config.json",
+                "simple_enchanting_custom_items.json",
+                ".simple_enchanting_custom_items.json.snapshot"
+            };
+            
+            for (String fileName : filesToMigrate) {
+                java.io.File oldFile = new java.io.File(oldConfigDir, fileName);
+                if (oldFile.exists()) {
+                    if (!newConfigDir.exists()) {
+                        newConfigDir.mkdirs();
+                    }
+                    java.io.File newFile = new java.io.File(newConfigDir, fileName);
+                    if (!newFile.exists()) {
+                        boolean success = oldFile.renameTo(newFile);
+                        if (success) {
+                            LOGGER.atInfo().log("Migrated " + fileName + " to new config directory.");
+                        } else {
+                            LOGGER.atWarning().log("Failed to migrate " + fileName + " to new config directory.");
+                        }
+                    } else {
+                        // Ensure we cleanup the old file if it already exists in the new directory
+                        oldFile.delete();
+                        LOGGER.atInfo().log("Cleaned up old " + fileName + " as it already exists in new directory.");
+                    }
+                }
+            }
+            // Attempt to clean up old directory if it's now empty (requires it to be empty)
+            oldConfigDir.delete();
+            if (!oldConfigDir.exists()) {
+                LOGGER.atInfo().log("Deleted old empty 'config' directory.");
+            }
+        }
+        // ------------------------
+
         // Initialize Config
-        this.configManager = new org.herolias.plugin.config.ConfigManager(new java.io.File("config"));
+        this.configManager = new org.herolias.plugin.config.ConfigManager(newConfigDir);
         
         // Check if this is a fresh install (no config file yet)
         boolean isFreshInstall = !this.configManager.getConfigFile().exists();
@@ -118,7 +161,7 @@ public class SimpleEnchanting extends JavaPlugin {
         this.configManager.loadConfig();
 
         // Initialize User Settings
-        this.userSettingsManager = new org.herolias.plugin.config.UserSettingsManager(new java.io.File("config"), this.configManager);
+        this.userSettingsManager = new org.herolias.plugin.config.UserSettingsManager(newConfigDir, this.configManager);
         this.userSettingsManager.loadSettings();
         
         // Initialize Language Manager

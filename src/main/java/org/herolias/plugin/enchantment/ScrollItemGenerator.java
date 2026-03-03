@@ -7,6 +7,7 @@ import com.hypixel.hytale.logger.HytaleLogger;
 import com.hypixel.hytale.protocol.BenchRequirement;
 import com.hypixel.hytale.protocol.BenchType;
 import com.hypixel.hytale.protocol.InteractionType;
+import com.hypixel.hytale.server.core.asset.type.item.config.AssetIconProperties;
 import com.hypixel.hytale.server.core.asset.type.item.config.CraftingRecipe;
 import com.hypixel.hytale.server.core.asset.type.item.config.Item;
 import com.hypixel.hytale.server.core.asset.type.item.config.ItemEntityConfig;
@@ -16,6 +17,8 @@ import com.hypixel.hytale.server.core.modules.interaction.interaction.config.Int
 import com.hypixel.hytale.server.core.modules.interaction.interaction.config.InteractionConfiguration;
 import com.hypixel.hytale.server.core.modules.interaction.interaction.config.RootInteraction;
 import com.hypixel.hytale.server.core.modules.interaction.interaction.config.server.OpenCustomUIInteraction;
+import com.hypixel.hytale.protocol.Vector2f;
+import com.hypixel.hytale.protocol.Vector3f;
 import org.herolias.plugin.SimpleEnchanting;
 import org.herolias.plugin.config.EnchantingConfig;
 import org.herolias.plugin.config.EnchantingConfig.ConfigIngredient;
@@ -145,6 +148,8 @@ public class ScrollItemGenerator {
                     if (cat == null) cat = guessCraftingCategory(type);
                     craftingCategories = new String[]{ cat };
 
+                    org.herolias.plugin.api.ScrollDefinition.IconProperties iconProps = def.getIconProperties();
+
                     for (org.herolias.plugin.api.ScrollDefinition.Ingredient ing : def.getRecipe()) {
                         ConfigIngredient ci = new ConfigIngredient();
                         ci.item = ing.getItemId();
@@ -185,7 +190,21 @@ public class ScrollItemGenerator {
                 rootInteractionsToRegister.add(new RootInteraction(rootSecondaryId, interactionId));
 
                 // 3. Item (with safe defaults — processConfig runs in Phase 2)
-                Item item = createScrollItem(scrollItemId, itemLevel, quality, rootPrimaryId, rootSecondaryId);
+                org.herolias.plugin.api.ScrollDefinition.IconProperties iconProps = null;
+                if (isAddon) {
+                    final int lvl = level;
+                    org.herolias.plugin.api.ScrollDefinition def = addonScrollDefs.stream()
+                            .filter(d -> d.getLevel() == lvl).findFirst().orElse(null);
+                    if (def != null) {
+                        iconProps = def.getIconProperties();
+                    }
+                }
+                if (iconProps == null) {
+                    // Default fallback properties for built-in or if addon def is missing
+                    iconProps = new org.herolias.plugin.api.ScrollDefinition.IconProperties(0.84f, 5f, 15f, 90f, 45f, 0f);
+                }
+
+                Item item = createScrollItem(scrollItemId, itemLevel, quality, rootPrimaryId, rootSecondaryId, iconProps);
                 if (item != null) generatedItems.add(item);
 
                 // 3b. Register translations for addon scroll items
@@ -252,6 +271,25 @@ public class ScrollItemGenerator {
                 processConfig.setAccessible(true);
                 processConfig.invoke(item);
 
+                // Check if this scroll's enchantment is disabled in the config
+                try {
+                    String itemId = item.getId();
+                    boolean isDisabled = false;
+                    for (EnchantmentType type : EnchantmentType.values()) {
+                        if (itemId.startsWith(type.getScrollBaseName() + "_")) {
+                            EnchantingConfig config = plugin.getConfigManager().getConfig();
+                            if (config.disabledEnchantments.getOrDefault(type.getId(), false)) {
+                                isDisabled = true;
+                                break;
+                            }
+                        }
+                    }
+                    if (isDisabled) {
+                        // Clear categories to immediately hide it from the creative menu if disabled
+                        setField(Item.class, item, "categories", new String[0]);
+                    }
+                } catch (Exception ignore) {}
+
                 // Clear cached packet so toPacket() regenerates with new values
                 Field cachedPacketField = Item.class.getDeclaredField("cachedPacket");
                 cachedPacketField.setAccessible(true);
@@ -312,11 +350,23 @@ public class ScrollItemGenerator {
      * fallbacks, etc.
      */
     private static Item createScrollItem(String itemId, int level, String quality,
-                                          String rootPrimaryId, String rootSecondaryId) {
+                                          String rootPrimaryId, String rootSecondaryId,
+                                          org.herolias.plugin.api.ScrollDefinition.IconProperties iconProps) {
         try {
             Item item = new Item(itemId);
 
             setField(Item.class, item, "icon", DEFAULT_ICON);
+
+            // Create Hytale's internal AssetIconProperties object using the provided iconProps
+            if (iconProps != null) {
+                AssetIconProperties aip = new AssetIconProperties(
+                        iconProps.getScale(),
+                        new Vector2f(iconProps.getTranslationX(), iconProps.getTranslationY()),
+                        new Vector3f(iconProps.getRotationX(), iconProps.getRotationY(), iconProps.getRotationZ())
+                );
+                setField(Item.class, item, "iconProperties", aip);
+            }
+
             setField(Item.class, item, "model", DEFAULT_MODEL);
             setField(Item.class, item, "texture", DEFAULT_TEXTURE);
             setField(Item.class, item, "playerAnimationsId", DEFAULT_PLAYER_ANIMATIONS_ID);

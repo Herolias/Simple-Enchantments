@@ -52,6 +52,12 @@ public class EnchantScrollPageSupplier implements OpenCustomUIInteraction.Custom
             return null;
         }
 
+        org.herolias.plugin.config.EnchantingConfig config = org.herolias.plugin.SimpleEnchanting.getInstance().getConfigManager().getConfig();
+        if (config.disabledEnchantments.getOrDefault(type.getId(), false)) {
+            playerRef.sendMessage(Message.raw("This enchantment is currently disabled!").color("#FF5555"));
+            return null;
+        }
+
         int targetLevel = Math.max(1, Math.min(this.level, type.getMaxLevel()));
         Player playerComponent = componentAccessor.getComponent(ref, Player.getComponentType());
         if (playerComponent == null) {

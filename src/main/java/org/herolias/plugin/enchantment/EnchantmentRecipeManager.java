@@ -198,14 +198,8 @@ public class EnchantmentRecipeManager {
             EnchantmentRecipeManager::onRecipeLoad
         );
 
-        // Register event listener for when items are loaded (to hide from creative menu)
-        plugin.getEventRegistry().register(
-            LoadedAssetsEvent.class,
-            Item.class,
-            EnchantmentRecipeManager::onItemLoad
-        );
-
-
+        // Note: We no longer remove Item assets on load so that existing scrolls don't become 'Invalid Items'.
+        // Disabled logic is handled via hide-from-creative (ScrollItemGenerator), name prefix, and usage block.
 
         plugin.getEventRegistry().register(
             LoadedAssetsEvent.class,
@@ -717,46 +711,6 @@ public class EnchantmentRecipeManager {
     }
 
     /**
-     * Event handler called when items are loaded.
-     * Removes disabled enchantment scrolls from the registry so they don't appear in game or creative menu.
+     * Former onItemLoad logic removed to prevent disabled scrolls from becoming 'Invalid Items'.
      */
-    private static void onItemLoad(LoadedAssetsEvent<String, Item, DefaultAssetMap<String, Item>> event) {
-        if (plugin == null) return;
-        
-        // Debug logging
-        if (DISABLED_SCROLL_ITEM_IDS.isEmpty()) {
-            LOGGER.atInfo().log("DISABLED_SCROLL_ITEM_IDS is empty! Auto-disable logic might have failed.");
-        } else {
-             LOGGER.atInfo().log("Disabled Scroll IDs: " + String.join(", ", DISABLED_SCROLL_ITEM_IDS));
-        }
-
-        List<String> itemsToRemove = new ArrayList<>();
-        int checkedCount = 0;
-
-        for (Map.Entry<String, Item> entry : event.getLoadedAssets().entrySet()) {
-            String itemId = entry.getKey();
-            
-            // Log first few items to verify ID format/namespacing
-            if (checkedCount < 5) {
-                LOGGER.atInfo().log("Loaded Item ID: " + itemId);
-            }
-            checkedCount++;
-
-            // Check if this item is a disabled scroll
-            if (DISABLED_SCROLL_ITEM_IDS.contains(itemId)) {
-                itemsToRemove.add(itemId);
-            }
-        }
-        
-        if (!itemsToRemove.isEmpty()) {
-            try {
-                // Remove the assets entirely - this ensures they are gone from creative menu, search, etc.
-                Item.getAssetStore().removeAssets(itemsToRemove);
-                LOGGER.atInfo().log("Removed " + itemsToRemove.size() + " disabled enchantment scroll items.");
-            } catch (Exception e) {
-                LOGGER.atSevere().log("Failed to remove disabled scroll items: " + e.getMessage());
-                e.printStackTrace();
-            }
-        }
-    }
 }

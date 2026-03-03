@@ -399,7 +399,12 @@ public class EnchantmentSalvageSystem {
                         com.hypixel.hytale.server.core.modules.entity.item.ItemComponent.generateItemDrops(
                             entityStore, java.util.Collections.singletonList(scrollStack), dropPosition, com.hypixel.hytale.math.vector.Vector3f.ZERO);
                     if (itemEntityHolders.length > 0) {
-                        world.execute(() -> entityStore.addEntities(itemEntityHolders, com.hypixel.hytale.component.AddReason.SPAWN));
+                        if (world.isAlive()) {
+                            try {
+                                world.execute(() -> entityStore.addEntities(itemEntityHolders, com.hypixel.hytale.component.AddReason.SPAWN));
+                            } catch (Exception ignored) {
+                            }
+                        }
                     }
                 }
             }

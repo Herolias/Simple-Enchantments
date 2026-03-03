@@ -139,66 +139,72 @@ public class GiveEnchantedCommand extends AbstractPlayerCommand {
             }
             Store<EntityStore> store = ref.getStore();
             World world = store.getExternalData().getWorld();
-            world.execute(() -> {
-                Player playerComponent = store.getComponent(ref, Player.getComponentType());
-                if (playerComponent == null) {
-                    context.sendMessage(MESSAGE_COMMANDS_ERRORS_PLAYER_NOT_IN_WORLD);
-                    return;
-                }
-                PlayerRef playerRefComponent = store.getComponent(ref, PlayerRef.getComponentType());
-                assert (playerRefComponent != null);
-                Item item = (Item)this.itemArg.get(context);
-                Integer quantity = (Integer)this.quantityArg.get(context);
-                double durability = Double.MAX_VALUE;
-                if (this.durabilityArg.provided(context)) {
-                    durability = (Double)this.durabilityArg.get(context);
-                }
-                
-                BsonDocument metadata = new BsonDocument();
-                
-                // 1. Parse base metadata
-                if (this.metadataArg.provided(context)) {
-                    String metadataStr = (String)this.metadataArg.get(context);
-                    try {
-                        metadata = BsonDocument.parse(metadataStr);
-                    }
-                    catch (Exception e) {
-                        context.sendMessage(Message.translation("server.commands.give.invalidMetadata").param("error", e.getMessage()));
-                        return;
-                    }
-                }
-                
-                // 2. Parse enchants
-                if (this.enchantsArg.provided(context)) {
-                    String enchantsStr = (String)this.enchantsArg.get(context);
-                    
-                    try {
-                        EnchantmentData data = EnchantmentData.deserialize(enchantsStr);
-                        if (!data.isEmpty()) {
-                            metadata.put(EnchantmentData.METADATA_KEY, data.toBson());
+            if (world.isAlive()) {
+                try {
+                    world.execute(() -> {
+                        Player playerComponent = store.getComponent(ref, Player.getComponentType());
+                        if (playerComponent == null) {
+                            context.sendMessage(MESSAGE_COMMANDS_ERRORS_PLAYER_NOT_IN_WORLD);
+                            return;
                         }
-                    } catch (Exception e) {
-                         context.sendMessage(Message.translation("server.commands.give.invalidMetadata").param("error", "Invalid enchants format: " + e.getMessage()));
-                         return;
-                    }
-                }
-                
-                BsonDocument finalMetadata = metadata.isEmpty() ? null : metadata;
+                        PlayerRef playerRefComponent = store.getComponent(ref, PlayerRef.getComponentType());
+                        assert (playerRefComponent != null);
+                        Item item = (Item)this.itemArg.get(context);
+                        Integer quantity = (Integer)this.quantityArg.get(context);
+                        double durability = Double.MAX_VALUE;
+                        if (this.durabilityArg.provided(context)) {
+                            durability = (Double)this.durabilityArg.get(context);
+                        }
+                        
+                        BsonDocument metadata = new BsonDocument();
+                        
+                        // 1. Parse base metadata
+                        if (this.metadataArg.provided(context)) {
+                            String metadataStr = (String)this.metadataArg.get(context);
+                            try {
+                                metadata = BsonDocument.parse(metadataStr);
+                            }
+                            catch (Exception e) {
+                                context.sendMessage(Message.translation("server.commands.give.invalidMetadata").param("error", e.getMessage()));
+                                return;
+                            }
+                        }
+                        
+                        // 2. Parse enchants
+                        if (this.enchantsArg.provided(context)) {
+                            String enchantsStr = (String)this.enchantsArg.get(context);
+                            
+                            try {
+                                EnchantmentData data = EnchantmentData.deserialize(enchantsStr);
+                                if (!data.isEmpty()) {
+                                    metadata.put(EnchantmentData.METADATA_KEY, data.toBson());
+                                }
+                            } catch (Exception e) {
+                                 context.sendMessage(Message.translation("server.commands.give.invalidMetadata").param("error", "Invalid enchants format: " + e.getMessage()));
+                                 return;
+                            }
+                        }
+                        
+                        BsonDocument finalMetadata = metadata.isEmpty() ? null : metadata;
 
-                ItemStack stack = new ItemStack(item.getId(), quantity, finalMetadata).withDurability(durability);
-                ItemStackTransaction transaction = playerComponent.getInventory().getCombinedHotbarFirst().addItemStack(stack);
-                ItemStack remainder = transaction.getRemainder();
-                Message itemNameMessage = Message.translation(item.getTranslationKey());
-                if (remainder == null || remainder.isEmpty()) {
-                    context.sendMessage(Message.translation("server.commands.give.gave").param("targetUsername", targetPlayerRef.getUsername()).param("quantity", quantity).param("item", itemNameMessage));
-                    // Feedback for enchantments
-                    if (finalMetadata != null && finalMetadata.containsKey(EnchantmentData.METADATA_KEY)) {
-                        context.sendMessage(Message.raw("With enchantments: " + this.enchantsArg.get(context)));
-                    }
-                } else {
-                    context.sendMessage(Message.translation("server.commands.give.insufficientInvSpace").param("quantity", quantity).param("item", itemNameMessage));
+                        ItemStack stack = new ItemStack(item.getId(), quantity, finalMetadata).withDurability(durability);
+                        ItemStackTransaction transaction = playerComponent.getInventory().getCombinedHotbarFirst().addItemStack(stack);
+                        ItemStack remainder = transaction.getRemainder();
+                        Message itemNameMessage = Message.translation(item.getTranslationKey());
+                        if (remainder == null || remainder.isEmpty()) {
+                            context.sendMessage(Message.translation("server.commands.give.gave").param("targetUsername", targetPlayerRef.getUsername()).param("quantity", quantity).param("item", itemNameMessage));
+                            // Feedback for enchantments
+                            if (finalMetadata != null && finalMetadata.containsKey(EnchantmentData.METADATA_KEY)) {
+                                context.sendMessage(Message.raw("With enchantments: " + this.enchantsArg.get(context)));
+                            }
+                        } else {
+                            context.sendMessage(Message.translation("server.commands.give.insufficientInvSpace").param("quantity", quantity).param("item", itemNameMessage));
+                        }
+                    });
+                } catch (Exception ignored) {
+                    // Ignore exceptions during shutdown phase
                 }
-            });
+            }
         }
     }
 }

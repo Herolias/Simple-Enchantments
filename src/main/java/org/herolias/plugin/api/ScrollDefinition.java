@@ -27,8 +27,11 @@ public class ScrollDefinition {
     private final String model;           // e.g. "Items/Scrolls/EnchantmentScroll.blockymodel"
     private final String texture;         // e.g. "Items/Scrolls/EnchScroll.png"
 
+    private final IconProperties iconProperties;
+
     ScrollDefinition(int level, String quality, int craftingTier, String craftingCategory,
-                     List<Ingredient> recipe, String icon, String model, String texture) {
+                     List<Ingredient> recipe, String icon, String model, String texture,
+                     IconProperties iconProperties) {
         this.level = level;
         this.quality = quality;
         this.craftingTier = craftingTier;
@@ -37,6 +40,7 @@ public class ScrollDefinition {
         this.icon = icon;
         this.model = model;
         this.texture = texture;
+        this.iconProperties = iconProperties;
     }
 
     public int getLevel() { return level; }
@@ -47,6 +51,7 @@ public class ScrollDefinition {
     @Nullable public String getIcon() { return icon; }
     @Nullable public String getModel() { return model; }
     @Nullable public String getTexture() { return texture; }
+    @Nonnull public IconProperties getIconProperties() { return iconProperties; }
 
     /**
      * A single crafting ingredient (item ID + quantity).
@@ -63,5 +68,34 @@ public class ScrollDefinition {
 
         public String getItemId() { return itemId; }
         public int getQuantity() { return quantity; }
+    }
+
+    /**
+     * Holds the icon properties for a scroll item.
+     */
+    public static class IconProperties {
+        private final float scale;
+        private final float translationX;
+        private final float translationY;
+        private final float rotationX;
+        private final float rotationY;
+        private final float rotationZ;
+
+        public IconProperties(float scale, float translationX, float translationY,
+                              float rotationX, float rotationY, float rotationZ) {
+            this.scale = scale;
+            this.translationX = translationX;
+            this.translationY = translationY;
+            this.rotationX = rotationX;
+            this.rotationY = rotationY;
+            this.rotationZ = rotationZ;
+        }
+
+        public float getScale() { return scale; }
+        public float getTranslationX() { return translationX; }
+        public float getTranslationY() { return translationY; }
+        public float getRotationX() { return rotationX; }
+        public float getRotationY() { return rotationY; }
+        public float getRotationZ() { return rotationZ; }
     }
 }

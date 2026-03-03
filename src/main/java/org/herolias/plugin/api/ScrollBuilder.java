@@ -50,6 +50,10 @@ public class ScrollBuilder {
     private String icon = null;
     private String model = null;
     private String texture = null;
+    
+    // Default scroll icon properties
+    private ScrollDefinition.IconProperties iconProperties = 
+            new ScrollDefinition.IconProperties(0.84f, 5f, 15f, 90f, 45f, 0f);
 
     /**
      * Creates a standalone ScrollBuilder (not chained from EnchantmentBuilder).
@@ -148,6 +152,18 @@ public class ScrollBuilder {
     }
 
     /**
+     * Overrides the scroll icon properties for this level.
+     * If not set, uses the default SE scroll properties:
+     * scale: 0.84, translation: [5, 15], rotation: [90, 45, 0].
+     */
+    public ScrollBuilder iconProperties(float scale, float translationX, float translationY,
+                                        float rotationX, float rotationY, float rotationZ) {
+        this.iconProperties = new ScrollDefinition.IconProperties(
+                scale, translationX, translationY, rotationX, rotationY, rotationZ);
+        return this;
+    }
+
+    /**
      * Returns to the parent EnchantmentBuilder (when chained).
      * Only available when created via {@link EnchantmentBuilder#scroll(int)}.
      *
@@ -173,6 +189,6 @@ public class ScrollBuilder {
     @Nonnull
     ScrollDefinition buildDefinition() {
         return new ScrollDefinition(level, quality, craftingTier, craftingCategory,
-                ingredients, icon, model, texture);
+                ingredients, icon, model, texture, iconProperties);
     }
 }

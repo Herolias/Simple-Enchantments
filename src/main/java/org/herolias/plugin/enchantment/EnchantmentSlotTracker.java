@@ -51,16 +51,28 @@ public class EnchantmentSlotTracker implements Runnable {
             Set<UUID> onlinePlayers = new HashSet<>();
 
             for (World world : Universe.get().getWorlds().values()) {
-                if (world == null) continue;
-                world.execute(() -> {
-                    for (PlayerRef playerRef : world.getPlayerRefs()) {
-                        checkPlayerSlot(playerRef);
-                        // Collect online UUIDs within world.execute() to avoid race (M-1)
-                        if (playerRef != null && playerRef.isValid()) {
-                            onlinePlayers.add(playerRef.getUuid());
-                        }
+                if (world == null || !world.isAlive() || !world.isTicking()) continue;
+
+                // Safely iterate players to track who is currently online
+                for (PlayerRef playerRef : world.getPlayerRefs()) {
+                    if (playerRef != null && playerRef.isValid()) {
+                        onlinePlayers.add(playerRef.getUuid());
                     }
-                });
+                }
+
+                try {
+                    world.execute(() -> {
+                        for (PlayerRef playerRef : world.getPlayerRefs()) {
+                            checkPlayerSlot(playerRef);
+                        }
+                    });
+                } catch (Exception e) {
+                    if (e.getCause() instanceof IllegalThreadStateException || e.toString().contains("IllegalThreadStateException")) {
+                        // Ignore thread state exceptions when worlds are shutting down
+                    } else {
+                        HytaleLogger.getLogger().atSevere().log("Error queueing EnchantmentSlotTracker task: " + e.getMessage());
+                    }
+                }
             }
 
             // Clean up disconnected players

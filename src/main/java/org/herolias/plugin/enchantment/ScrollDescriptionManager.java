@@ -55,12 +55,27 @@ public class ScrollDescriptionManager {
             // Generate translations for this player's locale definition
             Map<String, String> translations = new HashMap<>();
 
+            org.herolias.plugin.lang.LanguageManager lm = null;
+            org.herolias.plugin.config.EnchantingConfig config = null;
+            try {
+                org.herolias.plugin.SimpleEnchanting plugin = org.herolias.plugin.SimpleEnchanting.getInstance();
+                if (plugin != null) {
+                    lm = plugin.getLanguageManager();
+                    if (plugin.getConfigManager() != null) {
+                        config = plugin.getConfigManager().getConfig();
+                    }
+                }
+            } catch (Exception ignored) {}
+
             for (EnchantmentType type : EnchantmentType.values()) {
                 String baseName = getScrollBaseName(type);
+                boolean isDisabled = config != null && config.disabledEnchantments.getOrDefault(type.getId(), false);
+
                 for (int level = 1; level <= type.getMaxLevel(); level++) {
                     // Key format: items.Scroll_Name_Level.description
                     String scrollId = baseName + "_" + EnchantmentType.toRoman(level);
-                    String translationKey = "server.items." + scrollId + ".description";
+                    String descKey = "server.items." + scrollId + ".description";
+                    String nameKey = "server.items." + scrollId + ".name";
                     
                     // Resolve description using custom language and client fallback
                     String dynamicDescription = type.getBonusDescription(level, langCode, clientLocale);
@@ -70,9 +85,32 @@ public class ScrollDescriptionManager {
                             && type.getOwnerModId() != null) {
                         dynamicDescription += "\n<color is=\"#AAAAAA\">Added by " + type.getOwnerModId() + "</color>";
                     }
+
+                    if (isDisabled) {
+                        dynamicDescription = "<color is=\"#FF5555\">Disabled</color>\n\n" + (dynamicDescription == null ? "" : dynamicDescription);
+                        
+                        String baseTranslatedName = scrollId.replace("_", " ");
+                        if (lm != null) {
+                            String maybeTrans = lm.getRawMessage("items." + scrollId + ".name", langCode, clientLocale);
+                            if (maybeTrans != null && !maybeTrans.startsWith("items.")) {
+                                baseTranslatedName = maybeTrans;
+                            }
+                        }
+                        translations.put(nameKey, baseTranslatedName + " (Disabled)");
+                    } else {
+                        // Crucial: overwrite any existing "(Disabled)" tag if re-enabled
+                        String baseTranslatedName = scrollId.replace("_", " ");
+                        if (lm != null) {
+                            String maybeTrans = lm.getRawMessage("items." + scrollId + ".name", langCode, clientLocale);
+                            if (maybeTrans != null && !maybeTrans.startsWith("items.")) {
+                                baseTranslatedName = maybeTrans;
+                            }
+                        }
+                        translations.put(nameKey, baseTranslatedName);
+                    }
                     
                     if (dynamicDescription != null && !dynamicDescription.isEmpty()) {
-                        translations.put(translationKey, dynamicDescription);
+                        translations.put(descKey, dynamicDescription);
                     }
                 }
             }
