@@ -323,6 +323,14 @@ public class EnchantingPage extends InteractiveCustomUIPage<EnchantingPageEventD
                 commandBuilder.set("#ContentArea[0] #Desc.TextSpans", Message.raw(walkthroughDesc));
                 commandBuilder.set("#ContentArea[0] #DiscordBtn.Visible", false);
 
+                if (type.getOwnerModId() != null) {
+                    String modDisplay = type.getOwnerModName() != null ? type.getOwnerModName() : type.getOwnerModId();
+                    commandBuilder.set("#ContentArea[0] #ModNameLabel.Visible", true);
+                    commandBuilder.set("#ContentArea[0] #ModNameLabel.TextSpans", Message.raw("Added by " + modDisplay));
+                } else {
+                    commandBuilder.set("#ContentArea[0] #ModNameLabel.Visible", false);
+                }
+
                 // Set server enabled Label
                 boolean isEnabled = plugin.getEnchantmentManager().isEnchantmentEnabled(type);
                 String enabledKey = isEnabled 

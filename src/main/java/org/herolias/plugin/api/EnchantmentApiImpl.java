@@ -130,6 +130,38 @@ public class EnchantmentApiImpl implements EnchantmentApi {
 
     @Override
     @Nonnull
+    public ItemCategory registerCategoryByFamily(@Nonnull String categoryId, @Nonnull String family) {
+        ItemCategory category = ItemCategoryManager.getInstance().getCategoryById(categoryId);
+        if (category == null) {
+            category = new ItemCategory(categoryId);
+            ItemCategoryManager.getInstance().registerCategory(category);
+        }
+        ItemCategoryManager.getInstance().registerFamilyMapping(family, category);
+        return category;
+    }
+
+    @Override
+    @Nonnull
+    public ItemCategory registerCategoryByItems(@Nonnull String categoryId, @Nonnull String... itemIds) {
+        ItemCategory category = ItemCategoryManager.getInstance().getCategoryById(categoryId);
+        if (category == null) {
+            category = new ItemCategory(categoryId);
+            ItemCategoryManager.getInstance().registerCategory(category);
+        }
+        for (String itemId : itemIds) {
+            ItemCategoryManager.getInstance().registerApiItem(itemId, category);
+        }
+        return category;
+    }
+
+    @Override
+    @Nullable
+    public ItemCategory getCategory(@Nonnull String categoryId) {
+        return ItemCategoryManager.getInstance().getCategoryById(categoryId);
+    }
+
+    @Override
+    @Nonnull
     public EnchantmentBuilder registerEnchantment(@Nonnull String id, @Nonnull String displayName) {
         return new EnchantmentBuilder(id, displayName);
     }

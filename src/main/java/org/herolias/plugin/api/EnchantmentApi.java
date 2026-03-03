@@ -71,6 +71,37 @@ public interface EnchantmentApi {
      */
     void registerItemToCategory(@Nonnull String itemId, @Nonnull String categoryId);
 
+    /**
+     * Registers a custom item category based on an item family.
+     * Use the returned ItemCategory to specify which items an enchantment applies to.
+     *
+     * @param categoryId Unique ID for the new or existing category (e.g. "MY_MOD_WEAPON")
+     * @param family The item tag family (e.g. "katana")
+     * @return The registered ItemCategory
+     */
+    @Nonnull
+    org.herolias.plugin.enchantment.ItemCategory registerCategoryByFamily(@Nonnull String categoryId, @Nonnull String family);
+
+    /**
+     * Registers a custom item category and explicitly assigns an array of item IDs to it.
+     * Use the returned ItemCategory to specify which items an enchantment applies to.
+     *
+     * @param categoryId Unique ID for the new or existing category (e.g. "MY_MOD_TOOLS")
+     * @param itemIds The item IDs to associate with this category
+     * @return The registered ItemCategory
+     */
+    @Nonnull
+    org.herolias.plugin.enchantment.ItemCategory registerCategoryByItems(@Nonnull String categoryId, @Nonnull String... itemIds);
+
+    /**
+     * Retrieves a registered item category by its ID.
+     *
+     * @param categoryId The category ID
+     * @return The ItemCategory, or null if not found
+     */
+    @Nullable
+    org.herolias.plugin.enchantment.ItemCategory getCategory(@Nonnull String categoryId);
+
     // ==================== Enchantment Registration ====================
 
     /**

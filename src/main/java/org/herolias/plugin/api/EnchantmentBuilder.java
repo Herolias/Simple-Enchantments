@@ -46,6 +46,7 @@ public class EnchantmentBuilder {
     private String craftingCategory = null; // null = auto-derive from item categories
     private IntToDoubleFunction scaleFunction = null; // null = linear (default)
     private String walkthroughText = null; // null = fallback to bonusDescription
+    private String modDisplayName = null; // null = fallback to ownerModId
     private final Set<ItemCategory> categories = new LinkedHashSet<>();
     private final List<ScrollDefinition> scrollDefinitions = new ArrayList<>();
 
@@ -62,6 +63,12 @@ public class EnchantmentBuilder {
         }
         this.id = id;
         this.displayName = displayName;
+    }
+
+    /** Sets the mod display name shown in scroll descriptions and the walkthrough. */
+    public EnchantmentBuilder modDisplayName(@Nonnull String modDisplayName) {
+        this.modDisplayName = modDisplayName;
+        return this;
     }
 
     /** Sets the enchantment description. */
@@ -285,7 +292,7 @@ public class EnchantmentBuilder {
                 id, displayName, description, maxLevel,
                 requiresDurability, isLegendary,
                 multiplierPerLevel, bonusDescriptionTemplate,
-                ownerModId, categories
+                ownerModId, modDisplayName, categories
         );
 
         // Store scroll definitions and crafting category on the type

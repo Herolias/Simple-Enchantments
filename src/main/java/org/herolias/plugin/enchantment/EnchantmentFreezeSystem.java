@@ -31,7 +31,7 @@ import java.util.Set;
 public class EnchantmentFreezeSystem extends DamageEventSystem {
 
     private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
-    private static final String FREEZE_EFFECT_ID = "Freeze_I";
+    private static final String FREEZE_EFFECT_ID = "FreezeEnchantment";
     
     private final EnchantmentManager enchantmentManager;
     

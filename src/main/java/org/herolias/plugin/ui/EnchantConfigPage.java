@@ -90,6 +90,12 @@ public class EnchantConfigPage extends InteractiveCustomUIPage<EnchantConfigPage
         // Secondary multipliers for enchantments with multiple effects (still legacy fields on config)
         ENCHANTMENT_SECONDARY_MULTIPLIERS.put(EnchantmentType.LOOTING, "lootingQuantityMultiplierPerLevel");
         SECONDARY_MULTIPLIER_LABELS.put("lootingQuantityMultiplierPerLevel", "config.secondary.quantity_bonus");
+
+        ENCHANTMENT_SECONDARY_MULTIPLIERS.put(EnchantmentType.BURN, "burnDuration");
+        SECONDARY_MULTIPLIER_LABELS.put("burnDuration", "config.secondary.burn_duration");
+
+        ENCHANTMENT_SECONDARY_MULTIPLIERS.put(EnchantmentType.FREEZE, "freezeDuration");
+        SECONDARY_MULTIPLIER_LABELS.put("freezeDuration", "config.secondary.freeze_duration");
     }
     
     // Default config instance for reset functionality - uses values from EnchantingConfig.java
@@ -136,6 +142,8 @@ public class EnchantConfigPage extends InteractiveCustomUIPage<EnchantConfigPage
         // Clone legacy secondary fields (still used for looting quantity etc.)
         copy.strengthRangeMultiplierPerLevel = original.strengthRangeMultiplierPerLevel;
         copy.lootingQuantityMultiplierPerLevel = original.lootingQuantityMultiplierPerLevel;
+        copy.burnDuration = original.burnDuration;
+        copy.freezeDuration = original.freezeDuration;
 
         copy.disableEnchantmentCrafting = original.disableEnchantmentCrafting;
         copy.returnEnchantmentOnCleanse = original.returnEnchantmentOnCleanse;
@@ -1247,6 +1255,8 @@ public class EnchantConfigPage extends InteractiveCustomUIPage<EnchantConfigPage
         return switch (key) {
             case "strengthRangeMultiplierPerLevel" -> workingConfig.strengthRangeMultiplierPerLevel != null ? workingConfig.strengthRangeMultiplierPerLevel : 0.15;
             case "lootingQuantityMultiplierPerLevel" -> workingConfig.lootingQuantityMultiplierPerLevel != null ? workingConfig.lootingQuantityMultiplierPerLevel : 0.25;
+            case "burnDuration" -> workingConfig.burnDuration;
+            case "freezeDuration" -> workingConfig.freezeDuration;
             default -> 0.0;
         };
     }
@@ -1283,6 +1293,8 @@ public class EnchantConfigPage extends InteractiveCustomUIPage<EnchantConfigPage
                     case "enchantingTableCraftingTier" -> workingConfig.enchantingTableCraftingTier = Math.max(1, Integer.parseInt(value));
                     case "strengthRangeMultiplierPerLevel" -> workingConfig.strengthRangeMultiplierPerLevel = Double.parseDouble(value);
                     case "lootingQuantityMultiplierPerLevel" -> workingConfig.lootingQuantityMultiplierPerLevel = Double.parseDouble(value);
+                    case "burnDuration" -> workingConfig.burnDuration = Double.parseDouble(value);
+                    case "freezeDuration" -> workingConfig.freezeDuration = Double.parseDouble(value);
                     case "salvagerYieldsScroll" -> workingConfig.salvagerYieldsScroll = Boolean.parseBoolean(value);
                     case "showWelcomeMessage" -> workingConfig.showWelcomeMessage = Boolean.parseBoolean(value);
                 }
@@ -1374,6 +1386,8 @@ public class EnchantConfigPage extends InteractiveCustomUIPage<EnchantConfigPage
             case "enchantingTableCraftingTier" -> String.valueOf(DEFAULT_CONFIG.enchantingTableCraftingTier);
             case "strengthRangeMultiplierPerLevel" -> String.valueOf(DEFAULT_CONFIG.strengthRangeMultiplierPerLevel != null ? DEFAULT_CONFIG.strengthRangeMultiplierPerLevel : 0.15);
             case "lootingQuantityMultiplierPerLevel" -> String.valueOf(DEFAULT_CONFIG.lootingQuantityMultiplierPerLevel != null ? DEFAULT_CONFIG.lootingQuantityMultiplierPerLevel : 0.25);
+            case "burnDuration" -> String.valueOf(DEFAULT_CONFIG.burnDuration);
+            case "freezeDuration" -> String.valueOf(DEFAULT_CONFIG.freezeDuration);
             case "returnEnchantmentOnCleanse" -> String.valueOf(DEFAULT_CONFIG.returnEnchantmentOnCleanse);
             case "disableEnchantmentCrafting" -> String.valueOf(DEFAULT_CONFIG.disableEnchantmentCrafting);
             case "salvagerYieldsScroll" -> String.valueOf(DEFAULT_CONFIG.salvagerYieldsScroll);
@@ -1398,6 +1412,8 @@ public class EnchantConfigPage extends InteractiveCustomUIPage<EnchantConfigPage
         // Legacy secondary fields
         actualConfig.strengthRangeMultiplierPerLevel = workingConfig.strengthRangeMultiplierPerLevel;
         actualConfig.lootingQuantityMultiplierPerLevel = workingConfig.lootingQuantityMultiplierPerLevel;
+        actualConfig.burnDuration = workingConfig.burnDuration;
+        actualConfig.freezeDuration = workingConfig.freezeDuration;
         
         actualConfig.returnEnchantmentOnCleanse = workingConfig.returnEnchantmentOnCleanse;
         actualConfig.disableEnchantmentCrafting = workingConfig.disableEnchantmentCrafting;
@@ -1484,6 +1500,8 @@ public class EnchantConfigPage extends InteractiveCustomUIPage<EnchantConfigPage
         // Reset legacy secondary fields
         workingConfig.strengthRangeMultiplierPerLevel = defaults.strengthRangeMultiplierPerLevel;
         workingConfig.lootingQuantityMultiplierPerLevel = defaults.lootingQuantityMultiplierPerLevel;
+        workingConfig.burnDuration = defaults.burnDuration;
+        workingConfig.freezeDuration = defaults.freezeDuration;
         
         workingConfig.returnEnchantmentOnCleanse = defaults.returnEnchantmentOnCleanse;
         workingConfig.disableEnchantmentCrafting = defaults.disableEnchantmentCrafting;

@@ -153,6 +153,7 @@ public class EnchantmentRecipeManager {
      * Scroll items follow the pattern: Scroll_{EnchantmentName}_{Level}
      */
     private static void initializeScrollItemMap() {
+        ENCHANTMENT_SCROLL_ITEMS.clear();
         for (EnchantmentType type : EnchantmentType.values()) {
             List<String> scrollItemIds = new ArrayList<>();
             String baseName = getScrollBaseName(type);
@@ -221,6 +222,9 @@ public class EnchantmentRecipeManager {
      * Builds the set of disabled scroll item IDs based on current config.
      */
     private static void buildDisabledScrollSet() {
+        // Re-initialize map to capture any late-registered addon enchantments
+        initializeScrollItemMap();
+        
         DISABLED_SCROLL_ITEM_IDS.clear();
         
         if (plugin == null) {
@@ -234,6 +238,9 @@ public class EnchantmentRecipeManager {
             for (List<String> scrollIds : ENCHANTMENT_SCROLL_ITEMS.values()) {
                 DISABLED_SCROLL_ITEM_IDS.addAll(scrollIds);
             }
+            // Explicitly disable the Cleansing scroll as well, since it's not a standard enchantment type
+            DISABLED_SCROLL_ITEM_IDS.add("Scroll_Cleansing");
+            
             LOGGER.atInfo().log("All enchantment crafting disabled by config. All scroll recipes will be removed.");
             return;
         }
@@ -271,6 +278,9 @@ public class EnchantmentRecipeManager {
         if (plugin == null) {
             return;
         }
+        
+        // Rebuild the disabled scroll set here to catch any late-registered enchantments from Addon mods!
+        buildDisabledScrollSet();
         
         EnchantingConfig config = plugin.getConfigManager().getConfig();
         Map<String, List<ConfigIngredient>> recipeOverrides = config.scrollRecipes;

@@ -29,7 +29,7 @@ import java.util.Set;
 public class EnchantmentBurnSystem extends DamageEventSystem {
 
     private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
-    private static final String BURN_EFFECT_ID = "Burn";
+    private static final String BURN_EFFECT_ID = "BurnEnchantment";
     
     private final EnchantmentManager enchantmentManager;
     

@@ -51,6 +51,10 @@ public class EnchantingConfig {
     public Double thriftRestoreAmountPerLevel;
     public Double elementalHeartSaveChancePerLevel;
     
+    // ===== Effect Duration Settings =====
+    public double burnDuration = 3.0; // In seconds
+    public double freezeDuration = 5.0; // In seconds
+
     // ===== Other settings =====
     public boolean disableEnchantmentCrafting = false;
     public boolean returnEnchantmentOnCleanse = false;
@@ -134,8 +138,6 @@ public class EnchantingConfig {
             migrateLegacyField("elemental_heart", elementalHeartSaveChancePerLevel, 1.0);
             
             // Set zero-multiplier enchantments
-            enchantmentMultipliers.putIfAbsent("burn", 0.0);
-            enchantmentMultipliers.putIfAbsent("freeze", 0.0);
             enchantmentMultipliers.putIfAbsent("eternal_shot", 0.0);
             enchantmentMultipliers.putIfAbsent("pick_perfect", 0.0);
             enchantmentMultipliers.putIfAbsent("smelting", 0.0);

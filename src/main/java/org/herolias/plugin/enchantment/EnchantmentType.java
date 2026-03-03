@@ -26,6 +26,7 @@ public final class EnchantmentType {
     private final boolean requiresDurability;
     private final boolean isLegendary;
     private final String ownerModId; // null = built-in
+    private final String ownerModName; // overrides ownerModId for display, null = built-in or unset
     private final double defaultMultiplierPerLevel;
     private final String bonusDescriptionTemplate; // e.g. "Melee damage increased by {amount}%"
     private final String scrollBaseName; // override for special naming, null = auto-generated
@@ -115,12 +116,12 @@ public final class EnchantmentType {
             ItemCategory.HELMET);
 
     public static final EnchantmentType BURN = builtin("burn", "Burn",
-            "Sets target on fire", 1, false, true, 0.0,
+            "Sets target on fire", 1, false, true, 5.0,
             "Sets target on fire",
             ItemCategory.MELEE_WEAPON, ItemCategory.RANGED_WEAPON);
 
     public static final EnchantmentType FREEZE = builtin("freeze", "Freeze",
-            "Slows targets on hit", 1, false, true, 0.0,
+            "Slows targets on hit", 1, false, true, 0.5,
             "Slows target on hit",
             ItemCategory.RANGED_WEAPON, ItemCategory.MELEE_WEAPON);
 
@@ -218,6 +219,7 @@ public final class EnchantmentType {
         this.isLegendary = isLegendary;
         this.applicableCategories = Set.of(categories);
         this.ownerModId = null; // built-in
+        this.ownerModName = null; // built-in
         this.defaultMultiplierPerLevel = defaultMultiplierPerLevel;
         this.bonusDescriptionTemplate = bonusDescriptionTemplate;
         this.scrollBaseName = scrollBaseName;
@@ -232,7 +234,7 @@ public final class EnchantmentType {
     public EnchantmentType(String id, String displayName, String description,
                            int maxLevel, boolean requiresDurability, boolean isLegendary,
                            double defaultMultiplierPerLevel, String bonusDescriptionTemplate,
-                           String ownerModId, Set<ItemCategory> applicableCategories) {
+                           String ownerModId, String ownerModName, Set<ItemCategory> applicableCategories) {
         if (ownerModId != null && !id.contains(":")) {
             throw new IllegalArgumentException(
                     "Addon enchantment IDs must be namespaced (e.g. 'my_mod:lightning'), got: '" + id + "'");
@@ -245,6 +247,7 @@ public final class EnchantmentType {
         this.isLegendary = isLegendary;
         this.applicableCategories = Set.copyOf(applicableCategories);
         this.ownerModId = ownerModId;
+        this.ownerModName = ownerModName;
         this.defaultMultiplierPerLevel = defaultMultiplierPerLevel;
         this.bonusDescriptionTemplate = bonusDescriptionTemplate;
         this.scrollBaseName = null; // auto-generated for addons
@@ -282,6 +285,7 @@ public final class EnchantmentType {
     public boolean isLegendary() { return isLegendary; }
     public Set<ItemCategory> getApplicableCategories() { return applicableCategories; }
     @Nullable public String getOwnerModId() { return ownerModId; }
+    @Nullable public String getOwnerModName() { return ownerModName; }
     public double getDefaultMultiplierPerLevel() { return defaultMultiplierPerLevel; }
     public String getBonusDescriptionTemplate() { return bonusDescriptionTemplate; }
 

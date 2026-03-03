@@ -618,6 +618,8 @@ config.common.disabled = Disabled
 
 config.secondary.range_speed_bonus = Range/Speed Bonus
 config.secondary.quantity_bonus = Quantity Bonus
+config.secondary.burn_duration = Burn Duration
+config.secondary.freeze_duration = Freeze Duration
 
 config.recipe.active_title = {0} - Ingredients
 config.recipe.crafting_tier = Crafting Tier

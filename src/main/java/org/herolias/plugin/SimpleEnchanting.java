@@ -202,6 +202,9 @@ public class SimpleEnchanting extends JavaPlugin {
         org.herolias.plugin.api.EnchantmentApiProvider.register(api);
 
 
+        // Register Event listener for dynamic adjustments of Burn and Freeze EntityEffects
+        org.herolias.plugin.enchantment.EnchantmentDynamicEffects.registerEventListener(this);
+
         // Register custom UI page for enchantment scrolls
         this.getCodecRegistry(OpenCustomUIInteraction.PAGE_CODEC).register(
             "EnchantScroll",

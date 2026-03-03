@@ -36,6 +36,16 @@ Group {
       }
     }
 
+    Label #ModNameLabel {
+      Style: (
+        FontSize: 14,
+        TextColor: #aaaaaa,
+        HorizontalAlignment: Start
+      );
+      Padding: (Bottom: 15);
+      Visible: false;
+    }
+
     Label #Desc {
       Style: (
         FontSize: 16,

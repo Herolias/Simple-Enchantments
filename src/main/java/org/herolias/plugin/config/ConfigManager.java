@@ -39,6 +39,9 @@ public class ConfigManager {
         // Migrate legacy per-field multipliers to unified map (v1.x -> v2.0)
         this.config.migrateFromLegacy();
         
+        // Apply dynamic effect overrides for Burn and Freeze
+        org.herolias.plugin.enchantment.EnchantmentDynamicEffects.applyOverrides(this.config);
+        
         logger.atInfo().log("Configuration loaded.");
     }
 

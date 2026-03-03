@@ -6,5 +6,9 @@
         "ScreenEffect": "ScreenEffects/Snow.png",
         "EntityTopTint": "#da72ff",
         "HorizontalSpeedMultiplier": 0.5
-    }
+    },
+    "OverlapBehavior": "Overwrite",
+    "StatusEffectIcon": "UI/StatusEffects/Freeze.png",
+    "Infinite": false,
+    "Debuff": true
 }
