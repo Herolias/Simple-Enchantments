@@ -41,14 +41,19 @@ public class EnchantmentBuilder {
     private int maxLevel = 1;
     private boolean requiresDurability = false;
     private boolean isLegendary = false;
-    private double multiplierPerLevel = 0.0;
     private String bonusDescriptionTemplate = "";
+    private String walkthroughText = null;
+    private String modDisplayName = null;
+    private double multiplierPerLevel = 0.0;
+    private String multiplierLabel = null;
     private String craftingCategory = null; // null = auto-derive from item categories
     private IntToDoubleFunction scaleFunction = null; // null = linear (default)
-    private String walkthroughText = null; // null = fallback to bonusDescription
-    private String modDisplayName = null; // null = fallback to ownerModId
     private final Set<ItemCategory> categories = new LinkedHashSet<>();
     private final List<ScrollDefinition> scrollDefinitions = new ArrayList<>();
+    private final List<AdditionalMultiplier> additionalMultipliers = new ArrayList<>();
+
+    /** Holder for additional multiplier definitions added via addMultiplier(). */
+    private record AdditionalMultiplier(String keySuffix, double defaultValue, String label) {}
 
     /**
      * Creates a new builder. Use {@link EnchantmentApi#registerEnchantment(String, String)} instead.
@@ -97,13 +102,59 @@ public class EnchantmentBuilder {
     }
 
     /**
-     * Sets the effect multiplier per level (default: 0.0).
+     * Sets the effect multiplier per level (default: 0.0), without a custom label.
      * <p>
      * When > 0, the enchantment gets a multiplier slider in the config UI.
      * When 0, the enchantment is treated as binary (on/off).
+     * The label will fallback to using the enchantment's config translation key.
      */
     public EnchantmentBuilder multiplierPerLevel(double multiplier) {
+        return multiplierPerLevel(multiplier, null);
+    }
+
+    /**
+     * Sets the effect multiplier per level and specifies a custom label for the config UI.
+     * <p>
+     * When > 0, the enchantment gets a multiplier slider in the config UI.
+     * When 0, the enchantment is treated as binary (on/off).
+     * 
+     * @param multiplier The effect multiplier per level.
+     * @param label      The custom label to display next to the slider in the config UI.
+     */
+    public EnchantmentBuilder multiplierPerLevel(double multiplier, String label) {
         this.multiplierPerLevel = multiplier;
+        this.multiplierLabel = label;
+        return this;
+    }
+
+    /**
+     * Adds an additional named multiplier to this enchantment.
+     * <p>
+     * Use this when your enchantment has multiple configurable effects.
+     * For example, Burn has both a damage-per-tick multiplier (primary) and a duration.
+     * <p>
+     * The key is automatically prefixed with the enchantment ID using a colon separator.
+     * For example, if the enchantment ID is {@code "my_mod:lightning"} and key is {@code "stun_chance"},
+     * the full config key becomes {@code "my_mod:lightning:stun_chance"}.
+     * <p>
+     * Example:
+     * <pre>{@code
+     * api.registerEnchantment("my_mod:lightning", "Lightning Strike")
+     *     .multiplierPerLevel(0.15)
+     *     .addMultiplier("stun_duration", 2.0, "Stun Duration (seconds)")
+     *     .addMultiplier("stun_chance", 0.3, "Stun Chance")
+     *     .build();
+     * }</pre>
+     *
+     * @param key          Short key for this multiplier (e.g. "duration", "chance")
+     * @param defaultValue The default value for this multiplier
+     * @param label        Human-readable label displayed in the config UI
+     * @return this builder for chaining
+     */
+    public EnchantmentBuilder addMultiplier(@Nonnull String key, double defaultValue, @Nonnull String label) {
+        if (key == null || key.isEmpty()) throw new IllegalArgumentException("Multiplier key must not be null or empty");
+        if (label == null || label.isEmpty()) throw new IllegalArgumentException("Multiplier label must not be null or empty");
+        this.additionalMultipliers.add(new AdditionalMultiplier(key, defaultValue, label));
         return this;
     }
 
@@ -310,19 +361,36 @@ public class EnchantmentBuilder {
             type.setScaleFunction(resolvedScale);
         }
 
+        // Build multiplier definitions (primary + additional)
+        List<MultiplierDefinition> definitions = new ArrayList<>();
+        if (multiplierPerLevel > 0) {
+            // Primary multiplier label: use enchantment's namespace key
+            String primaryLabelKey = "config.multiplier." + id;
+            definitions.add(new MultiplierDefinition(id, multiplierPerLevel, primaryLabelKey));
+        }
+        for (AdditionalMultiplier am : additionalMultipliers) {
+            String fullKey = id + ":" + am.keySuffix();
+            String labelKey = "config.multiplier." + fullKey;
+            definitions.add(new MultiplierDefinition(fullKey, am.defaultValue(), labelKey));
+        }
+        type.setMultiplierDefinitions(definitions);
+
         // Register in the global registry
         EnchantmentRegistry.getInstance().register(type);
 
-        // Ensure the config has a multiplier entry for this enchantment
+        // Ensure the config has multiplier entries for this enchantment
         try {
             org.herolias.plugin.config.EnchantingConfig config =
                     org.herolias.plugin.SimpleEnchanting.getInstance().getConfigManager().getConfig();
             config.enchantmentMultipliers.putIfAbsent(id, multiplierPerLevel);
+            for (MultiplierDefinition def : definitions) {
+                config.enchantmentMultipliers.putIfAbsent(def.key(), def.defaultValue());
+            }
         } catch (Exception e) {
             // Plugin not yet initialized — will be populated on next config load
         }
 
-        // Register translations so the name/description displays correctly in UIs
+        // Register translations so the name/description/labels display correctly in UIs
         try {
             org.herolias.plugin.lang.LanguageManager langMgr = org.herolias.plugin.SimpleEnchanting.getInstance().getLanguageManager();
             if (langMgr != null) {
@@ -330,6 +398,18 @@ public class EnchantmentBuilder {
                 langMgr.putTranslation("enchantment." + ownerModId + "_" + id.substring(id.indexOf(':') + 1) + ".description", description);
                 if (bonusDescriptionTemplate != null && !bonusDescriptionTemplate.isEmpty()) {
                     langMgr.putTranslation("enchantment." + ownerModId + "_" + id.substring(id.indexOf(':') + 1) + ".bonus", bonusDescriptionTemplate);
+                }
+                
+                // Register primary multiplier label if provided
+                if (multiplierLabel != null) {
+                    langMgr.putTranslation("config.multiplier." + id, multiplierLabel);
+                }
+                
+                // Register secondary multiplier labels
+                for (AdditionalMultiplier am : additionalMultipliers) {
+                    String fullKey = id + ":" + am.keySuffix();
+                    String labelKey = "config.multiplier." + fullKey;
+                    langMgr.putTranslation(labelKey, am.label());
                 }
             }
         } catch (Exception e) {

@@ -1,0 +1,31 @@
+Button #Button {
+  LayoutMode: Left;
+  Padding: (Full: 6);
+  Style: (
+    Hovered: (
+      Background: #000000(0.2),
+    )
+  );
+
+  Group {
+    LayoutMode: Top;
+    FlexWeight: 1;
+    Padding: (Left: 10);
+    
+    Label #Name {
+      Padding: (Vertical: 2);
+      Style: (RenderBold: true);
+    }
+
+    Label #Detail {
+      Padding: (Vertical: 2);
+      Style: (TextColor: #ffffff(0.6));
+    }
+  }
+
+  Group {
+    LayoutMode: Full;
+    Anchor: (Height: 2);
+    Background: #ffffff(0.6);
+  }
+}

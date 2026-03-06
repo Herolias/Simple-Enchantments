@@ -109,22 +109,26 @@ public class RemoveEnchantmentInteraction extends ChoiceInteraction {
         // Check config for returning enchantment as scroll
         boolean returnEnchantment = SimpleEnchanting.getInstance().getConfigManager().getConfig().returnEnchantmentOnCleanse;
         if (returnEnchantment) {
-            // Try to give back the scroll for this enchantment
-            String scrollId = getScrollItemId(enchantmentType, removedLevel);
-            if (scrollId != null) {
-                try {
-                    // Use the ItemStack constructor with item ID string
-                    ItemStack scrollStack = new ItemStack(scrollId, 1);
-                    // Verify the item exists by checking if it's valid
-                    if (scrollStack.isValid() && !scrollStack.isEmpty()) {
-                        ItemContainer playerInventory = playerComponent.getInventory().getCombinedArmorHotbarUtilityStorage();
-                        SimpleItemContainer.addOrDropItemStack(store, ref, playerInventory, (short) 0, scrollStack);
-                        String translatedName = languageManager.getRawMessage(enchantmentType.getNameKey(), lang, clientLang) + " " + EnchantmentType.toRoman(removedLevel);
-                        playerRef.sendMessage(Message.raw("Returned: " + translatedName));
-                    }
-                } catch (Exception e) {
-                    // Scroll doesn't exist, don't return anything
+            try {
+                ItemStack scrollStack;
+                if (removedLevel > enchantmentType.getMaxLevel()) {
+                    // Level exceeds max — create a Custom Scroll with the enchantment in metadata
+                    EnchantmentData customScrollData = new EnchantmentData();
+                    customScrollData.addEnchantment(enchantmentType, removedLevel);
+                    scrollStack = new ItemStack("Scroll_Custom", 1)
+                        .withMetadata(EnchantmentData.METADATA_KEY, customScrollData.toBson());
+                } else {
+                    String scrollId = getScrollItemId(enchantmentType, removedLevel);
+                    scrollStack = new ItemStack(scrollId, 1);
                 }
+                if (scrollStack.isValid() && !scrollStack.isEmpty()) {
+                    ItemContainer playerInventory = playerComponent.getInventory().getCombinedArmorHotbarUtilityStorage();
+                    SimpleItemContainer.addOrDropItemStack(store, ref, playerInventory, (short) 0, scrollStack);
+                    String translatedName = languageManager.getRawMessage(enchantmentType.getNameKey(), lang, clientLang) + " " + EnchantmentType.toRoman(removedLevel);
+                    playerRef.sendMessage(Message.raw("Returned: " + translatedName));
+                }
+            } catch (Exception e) {
+                // Scroll doesn't exist, don't return anything
             }
         }
 

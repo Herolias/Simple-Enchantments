@@ -1,5 +1,7 @@
 package org.herolias.plugin.enchantment;
 
+import org.herolias.plugin.api.MultiplierDefinition;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.*;
@@ -36,6 +38,7 @@ public final class EnchantmentType {
     private String craftingCategory; // e.g. "Enchanting_Melee"
     private java.util.function.IntToDoubleFunction scaleFunction; // null = linear (level * multiplier)
     private String walkthroughText; // custom walkthrough text from addon mods, null = use lang key / bonus desc
+    private java.util.List<MultiplierDefinition> multiplierDefinitions = java.util.List.of();
 
     // ============================== Built-in Enchantments ==============================
 
@@ -211,6 +214,64 @@ public final class EnchantmentType {
         registry.addConflict("pick_perfect", "fortune");
         registry.addConflict("pick_perfect", "smelting");
         registry.addConflict("reflection", "absorption");
+
+        // Register MultiplierDefinitions for all built-in enchantments
+        SHARPNESS.setMultiplierDefinitions(java.util.List.of(
+                new MultiplierDefinition("sharpness", 0.10, "config.multiplier.sharpness")));
+        LIFE_LEECH.setMultiplierDefinitions(java.util.List.of(
+                new MultiplierDefinition("life_leech", 0.10, "config.multiplier.life_leech")));
+        DURABILITY.setMultiplierDefinitions(java.util.List.of(
+                new MultiplierDefinition("durability", 0.25, "config.multiplier.durability")));
+        DEXTERITY.setMultiplierDefinitions(java.util.List.of(
+                new MultiplierDefinition("dexterity", 0.20, "config.multiplier.dexterity")));
+        PROTECTION.setMultiplierDefinitions(java.util.List.of(
+                new MultiplierDefinition("protection", 0.04, "config.multiplier.protection")));
+        EFFICIENCY.setMultiplierDefinitions(java.util.List.of(
+                new MultiplierDefinition("efficiency", 0.20, "config.multiplier.efficiency")));
+        FORTUNE.setMultiplierDefinitions(java.util.List.of(
+                new MultiplierDefinition("fortune", 0.25, "config.multiplier.fortune")));
+        STRENGTH.setMultiplierDefinitions(java.util.List.of(
+                new MultiplierDefinition("strength", 0.10, "config.multiplier.strength")));
+        EAGLES_EYE.setMultiplierDefinitions(java.util.List.of(
+                new MultiplierDefinition("eagles_eye", 0.005, "config.multiplier.eagles_eye")));
+        LOOTING.setMultiplierDefinitions(java.util.List.of(
+                new MultiplierDefinition("looting", 0.25, "config.multiplier.looting"),
+                new MultiplierDefinition("looting:quantity", 0.25, "config.multiplier.looting:quantity")));
+        FEATHER_FALLING.setMultiplierDefinitions(java.util.List.of(
+                new MultiplierDefinition("feather_falling", 0.20, "config.multiplier.feather_falling")));
+        WATERBREATHING.setMultiplierDefinitions(java.util.List.of(
+                new MultiplierDefinition("waterbreathing", 0.20, "config.multiplier.waterbreathing")));
+        BURN.setMultiplierDefinitions(java.util.List.of(
+                new MultiplierDefinition("burn", 5.0, "config.multiplier.burn"),
+                new MultiplierDefinition("burn:duration", 3.0, "config.multiplier.burn:duration")));
+        FREEZE.setMultiplierDefinitions(java.util.List.of(
+                new MultiplierDefinition("freeze", 0.5, "config.multiplier.freeze"),
+                new MultiplierDefinition("freeze:duration", 5.0, "config.multiplier.freeze:duration")));
+        KNOCKBACK.setMultiplierDefinitions(java.util.List.of(
+                new MultiplierDefinition("knockback", 0.6, "config.multiplier.knockback")));
+        REFLECTION.setMultiplierDefinitions(java.util.List.of(
+                new MultiplierDefinition("reflection", 0.10, "config.multiplier.reflection")));
+        ABSORPTION.setMultiplierDefinitions(java.util.List.of(
+                new MultiplierDefinition("absorption", 0.10, "config.multiplier.absorption")));
+        FAST_SWIM.setMultiplierDefinitions(java.util.List.of(
+                new MultiplierDefinition("fast_swim", 0.25, "config.multiplier.fast_swim")));
+        RANGED_PROTECTION.setMultiplierDefinitions(java.util.List.of(
+                new MultiplierDefinition("ranged_protection", 0.04, "config.multiplier.ranged_protection")));
+        FRENZY.setMultiplierDefinitions(java.util.List.of(
+                new MultiplierDefinition("frenzy", 0.15, "config.multiplier.frenzy")));
+        RIPOSTE.setMultiplierDefinitions(java.util.List.of(
+                new MultiplierDefinition("riposte", 0.10, "config.multiplier.riposte")));
+        COUP_DE_GRACE.setMultiplierDefinitions(java.util.List.of(
+                new MultiplierDefinition("coup_de_grace", 0.15, "config.multiplier.coup_de_grace")));
+        THRIFT.setMultiplierDefinitions(java.util.List.of(
+                new MultiplierDefinition("thrift", 0.20, "config.multiplier.thrift")));
+        ELEMENTAL_HEART.setMultiplierDefinitions(java.util.List.of(
+                new MultiplierDefinition("elemental_heart", 1.0, "config.multiplier.elemental_heart")));
+        POISON.setMultiplierDefinitions(java.util.List.of(
+                new MultiplierDefinition("poison", 3.0, "config.multiplier.poison"),
+                new MultiplierDefinition("poison:duration", 4.0, "config.multiplier.poison:duration")));
+        ENVIRONMENTAL_PROTECTION.setMultiplierDefinitions(java.util.List.of(
+                new MultiplierDefinition("environmental_protection", 0.04, "config.multiplier.environmental_protection")));
     }
 
     // ============================== Constructors ==============================
@@ -345,6 +406,40 @@ public final class EnchantmentType {
     /** Sets custom walkthrough text. Called by EnchantmentBuilder. */
     public void setWalkthroughText(String walkthroughText) { this.walkthroughText = walkthroughText; }
 
+    /** Gets the multiplier definitions for this enchantment (primary + additional). */
+    @Nonnull public java.util.List<MultiplierDefinition> getMultiplierDefinitions() { return multiplierDefinitions; }
+
+    /** Sets multiplier definitions. Called by EnchantmentBuilder or static init. */
+    public void setMultiplierDefinitions(java.util.List<MultiplierDefinition> definitions) {
+        this.multiplierDefinitions = definitions != null ? java.util.List.copyOf(definitions) : java.util.List.of();
+    }
+
+    /**
+     * Gets the value of a specific multiplier from the active configuration.
+     * Falls back to the default value from the MultiplierDefinition if not configured.
+     *
+     * @param key the multiplier key (e.g. "burn:duration")
+     * @return the configured value, or the definition's default, or 0.0 if not found
+     */
+    public double getMultiplierValue(String key) {
+        try {
+            org.herolias.plugin.config.EnchantingConfig config =
+                org.herolias.plugin.SimpleEnchanting.getInstance().getConfigManager().getConfig();
+            if (config.enchantmentMultipliers.containsKey(key)) {
+                return config.enchantmentMultipliers.get(key);
+            }
+        } catch (Exception e) {
+            // Plugin not initialized yet
+        }
+        // Fall back to definition default
+        for (MultiplierDefinition def : multiplierDefinitions) {
+            if (def.key().equals(key)) {
+                return def.defaultValue();
+            }
+        }
+        return 0.0;
+    }
+
     /**
      * Computes the total scaled multiplier for a given level.
      * <p>
@@ -478,10 +573,17 @@ public final class EnchantmentType {
         if (this.equals(EAGLES_EYE)) {
             displayAmount = percentage * 50;
         }
+        // For freeze, show the slow percentage instead of the raw multiplier
+        if (this.equals(FREEZE)) {
+            displayAmount = (float) ((1.0 - getEffectMultiplier()) * 100);
+        }
+        // For burn and poison, show the raw DPS value, not percentage
+        if (this.equals(BURN) || this.equals(POISON)) {
+            displayAmount = (float) getEffectMultiplier();
+        }
 
         String template = bonusDescriptionTemplate;
-        return resolve(langCode, clientLangCode, template, 
-                template.contains("{amount}") ? displayAmount : null);
+        return resolve(langCode, clientLangCode, template, displayAmount);
     }
 
     private String resolve(String langCode, String clientLangCode, String defaultPattern, Float amount) {
@@ -497,8 +599,15 @@ public final class EnchantmentType {
         if (template == null || template.equals(key)) template = defaultPattern;
         
         if (amount != null) {
-            return template.replace("{amount}", String.valueOf(amount));
+            template = template.replace("{amount}", String.valueOf(amount));
         }
+
+        // Replace {duration} with the duration multiplier value
+        if (template.contains("{duration}")) {
+            double duration = getMultiplierValue(this.id + ":duration");
+            template = template.replace("{duration}", String.valueOf((float) duration));
+        }
+
         return template;
     }
 
@@ -547,7 +656,23 @@ public final class EnchantmentType {
         double mult = getScaledMultiplier(1);
         float percentage = (float) (mult * 100);
         if (template.contains("{amount}")) {
-            template = template.replace("{amount}", String.valueOf(percentage));
+            // For freeze, show the slow percentage (1 - speedMultiplier) * 100
+            if (this.equals(FREEZE)) {
+                float slowPercent = (float) ((1.0 - getEffectMultiplier()) * 100);
+                template = template.replace("{amount}", String.valueOf(slowPercent));
+            } else if (this.equals(BURN) || this.equals(POISON)) {
+                // For burn and poison, show the raw DPS value, not percentage
+                float dps = (float) getEffectMultiplier();
+                template = template.replace("{amount}", String.valueOf(dps));
+            } else {
+                template = template.replace("{amount}", String.valueOf(percentage));
+            }
+        }
+
+        // Replace {duration} with the duration multiplier value
+        if (template.contains("{duration}")) {
+            double duration = getMultiplierValue(this.id + ":duration");
+            template = template.replace("{duration}", String.valueOf((float) duration));
         }
 
         return template;

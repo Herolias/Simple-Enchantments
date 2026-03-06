@@ -11,6 +11,8 @@ import com.hypixel.hytale.server.core.inventory.transaction.Transaction;
 import com.hypixel.hytale.server.core.inventory.transaction.SlotTransaction;
 import com.hypixel.hytale.server.core.inventory.transaction.ItemStackTransaction;
 import com.hypixel.hytale.server.core.inventory.transaction.ItemStackSlotTransaction;
+import com.hypixel.hytale.server.core.inventory.transaction.MoveTransaction;
+import com.hypixel.hytale.server.core.inventory.transaction.ListTransaction;
 import org.herolias.plugin.util.ProcessingGuard;
 import java.util.UUID;
 
@@ -40,6 +42,13 @@ public class EnchantmentElementalHeartSystem extends AbstractRefundSystem {
         Transaction transaction = event.getTransaction();
         ItemContainer container = event.getItemContainer();
 
+        // MoveTransaction = item transfer between containers (quickstack etc.) — not consumption.
+        if (transaction instanceof MoveTransaction) return;
+
+        // ListTransaction<MoveTransaction> = bulk transfer from quickStackTo — not consumption.
+        if (transaction instanceof ListTransaction<?> lt && !lt.getList().isEmpty()
+                && lt.getList().stream().allMatch(t -> t instanceof MoveTransaction)) return;
+
         if (player.getWorld() == null || player.getReference() == null) return;
         com.hypixel.hytale.server.core.entity.UUIDComponent uComp = player.getWorld().getEntityStore().getStore().getComponent(player.getReference(), com.hypixel.hytale.server.core.entity.UUIDComponent.getComponentType());
         if (uComp == null) return;
@@ -51,8 +60,8 @@ public class EnchantmentElementalHeartSystem extends AbstractRefundSystem {
             for (ItemStackSlotTransaction slotTx : itemStackTransaction.getSlotTransactions()) {
                 processSlotTransaction(player, playerUuid, container, slotTx);
             }
-        } else if (transaction instanceof SlotTransaction slotTransaction) {
-            processSlotTransaction(player, playerUuid, container, slotTransaction);
+        } else if (transaction instanceof SlotTransaction) {
+            // Top-level SlotTransaction = direct-slot operation (e.g. Lectern), NOT consumption.
         }
     }
 
@@ -68,6 +77,7 @@ public class EnchantmentElementalHeartSystem extends AbstractRefundSystem {
 
         int beforeQty = slotBefore.getQuantity();
         int afterQty = (slotAfter == null || slotAfter.isEmpty()) ? 0 : slotAfter.getQuantity();
+
         if (beforeQty <= afterQty) return;
 
         Inventory inventory = player.getInventory();
@@ -83,7 +93,8 @@ public class EnchantmentElementalHeartSystem extends AbstractRefundSystem {
         if (level <= 0) return;
         
         double chance = level * EnchantmentType.ELEMENTAL_HEART.getEffectMultiplier();
-        if (Math.random() > chance) return;
+        double roll = Math.random();
+        if (roll > chance) return;
 
         guard.runGuarded(() -> 
             container.replaceItemStackInSlot(slotTransaction.getSlot(), slotAfter, slotBefore)

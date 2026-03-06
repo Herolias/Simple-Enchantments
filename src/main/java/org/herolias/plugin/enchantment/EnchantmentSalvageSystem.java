@@ -383,10 +383,20 @@ public class EnchantmentSalvageSystem {
         EnchantmentType chosenType = candidates.get(java.util.concurrent.ThreadLocalRandom.current().nextInt(candidates.size()));
         int chosenLevel = data.getLevel(chosenType);
 
-        String scrollId = ScrollIdHelper.getScrollItemId(chosenType, chosenLevel);
-        
         try {
-            ItemStack scrollStack = new ItemStack(scrollId, 1);
+            ItemStack scrollStack;
+
+            if (chosenLevel > chosenType.getMaxLevel()) {
+                // Level exceeds max — create a Custom Scroll with the enchantment in metadata
+                EnchantmentData customScrollData = new EnchantmentData();
+                customScrollData.addEnchantment(chosenType, chosenLevel);
+                scrollStack = new ItemStack("Scroll_Custom", 1)
+                    .withMetadata(EnchantmentData.METADATA_KEY, customScrollData.toBson());
+            } else {
+                String scrollId = ScrollIdHelper.getScrollItemId(chosenType, chosenLevel);
+                scrollStack = new ItemStack(scrollId, 1);
+            }
+
             if (scrollStack.isValid() && !scrollStack.isEmpty()) {
                 ListTransaction<ItemStackTransaction> tx = bench.getItemContainer().addItemStacks(
                     java.util.Collections.singletonList(scrollStack), false, false, false);

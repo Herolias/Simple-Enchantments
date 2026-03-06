@@ -1,0 +1,55 @@
+{
+    "TranslationProperties": {
+        "Name": "server.items.Scroll_Custom.name",
+        "Description": "server.items.Scroll_Custom.description"
+    },
+    "Icon": "Icons/ItemsGenerated/Scroll.png",
+    "Categories": [
+        "Items.Magic"
+    ],
+    "Model": "Items/Scrolls/EnchantmentScroll.blockymodel",
+    "Texture": "Items/Scrolls/EnchScroll.png",
+    "Interactions": {
+        "Primary": {
+            "Interactions": [
+                {
+                    "Type": "OpenCustomUI",
+                    "Page": {
+                        "Id": "CustomScroll"
+                    }
+                }
+            ]
+        },
+        "Secondary": {
+            "Interactions": [
+                {
+                    "Type": "OpenCustomUI",
+                    "Page": {
+                        "Id": "CustomScroll"
+                    }
+                }
+            ]
+        }
+    },
+    "PlayerAnimationsId": "Item",
+    "IconProperties": {
+        "Scale": 0.84,
+        "Translation": [
+            5,
+            15
+        ],
+        "Rotation": [
+            90,
+            45,
+            0
+        ]
+    },
+    "MaxStack": 1,
+    "ItemLevel": 0,
+    "Quality": "Tool",
+    "Tags": {
+        "Type": [
+            "CustomScroll"
+        ]
+    }
+}

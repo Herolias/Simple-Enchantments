@@ -1,0 +1,35 @@
+$C = "../Common.ui";
+
+$C.@PageOverlay {}
+
+$C.@DecoratedContainer {
+  Anchor: (Width: 550, Height: 380);
+
+  #Title {
+    Group {
+      $C.@Title #TitleLabel {
+        @Text = %server.customUI.customScrollEnchantmentPage.title;
+      }
+    }
+  }
+
+  #Content {
+    Group {
+      LayoutMode: Left;
+      Padding: (Right: 15, Bottom: 5);
+
+      Label #SelectHintLabel {
+        Text: %server.customUI.customScrollEnchantmentPage.selectHint;
+        Style: (TextColor: #ffffff(0.7));
+      }
+    }
+
+    Group #ElementList {
+      FlexWeight: 1;
+      LayoutMode: TopScrolling;
+      ScrollbarStyle: $C.@DefaultScrollbarStyle;
+    }
+  }
+}
+
+$C.@BackButton {}

@@ -100,30 +100,77 @@ public class EnchantmentFreezeSystem extends DamageEventSystem {
         if (targetRef == null || !targetRef.isValid()) return;
         
         // Use centralized status effect application
-        if (!enchantmentManager.applyStatusEffect(targetRef, FREEZE_EFFECT_ID, store, commandBuffer)) {
-            LOGGER.atWarning().log("Freeze effect " + FREEZE_EFFECT_ID + " not found in asset map");
-        } else {
-            // Check target's Environment Protection level and apply speed buff respectively
-            Entity targetEntity = EntityUtils.getEntity(index, archetypeChunk);
-            if (targetEntity instanceof LivingEntity targetLiving) {
-                Inventory targetInventory = targetLiving.getInventory();
-                if (targetInventory != null) {
-                    com.hypixel.hytale.server.core.inventory.container.ItemContainer armorContainer = targetInventory.getArmor();
-                    int totalEnvProtection = 0;
-                    for (short i = 0; i < armorContainer.getCapacity(); i++) {
-                        ItemStack armorPiece = armorContainer.getItemStack(i);
-                        if (armorPiece != null && !armorPiece.isEmpty()) {
-                            totalEnvProtection += enchantmentManager.getEnchantmentLevel(armorPiece, EnchantmentType.ENVIRONMENTAL_PROTECTION);
-                        }
-                    }
-                    if (totalEnvProtection > 0) {
-                        int buffLevel = Math.min(12, totalEnvProtection);
-                        String buffEffectId = "EnvProtectionSpeedBuff_" + buffLevel;
-                        enchantmentManager.applyStatusEffect(targetRef, buffEffectId, store, commandBuffer);
+        // Check target's Environment Protection level to reduce freeze slow intensity
+        int totalEnvProtection = 0;
+        Entity targetEntity = EntityUtils.getEntity(index, archetypeChunk);
+        if (targetEntity instanceof LivingEntity targetLiving) {
+            Inventory targetInventory = targetLiving.getInventory();
+            if (targetInventory != null) {
+                com.hypixel.hytale.server.core.inventory.container.ItemContainer armorContainer = targetInventory.getArmor();
+                for (short i = 0; i < armorContainer.getCapacity(); i++) {
+                    ItemStack armorPiece = armorContainer.getItemStack(i);
+                    if (armorPiece != null && !armorPiece.isEmpty()) {
+                        totalEnvProtection += enchantmentManager.getEnchantmentLevel(armorPiece, EnchantmentType.ENVIRONMENTAL_PROTECTION);
                     }
                 }
             }
+        }
 
+        // If the target has env protection, reduce the freeze slow intensity
+        float originalSpeedMult = Float.MIN_VALUE; // sentinel: not modified
+        com.hypixel.hytale.server.core.asset.type.entityeffect.config.EntityEffect freezeEffect = null;
+        if (totalEnvProtection > 0) {
+            freezeEffect = com.hypixel.hytale.server.core.asset.type.entityeffect.config.EntityEffect.getAssetMap().getAsset(FREEZE_EFFECT_ID);
+            if (freezeEffect != null) {
+                try {
+                    java.lang.reflect.Field appEffectsField = com.hypixel.hytale.server.core.asset.type.entityeffect.config.EntityEffect.class.getDeclaredField("applicationEffects");
+                    appEffectsField.setAccessible(true);
+                    com.hypixel.hytale.server.core.asset.type.entityeffect.config.ApplicationEffects appEffects =
+                        (com.hypixel.hytale.server.core.asset.type.entityeffect.config.ApplicationEffects) appEffectsField.get(freezeEffect);
+                    if (appEffects != null) {
+                        java.lang.reflect.Field speedMultField = com.hypixel.hytale.server.core.asset.type.entityeffect.config.ApplicationEffects.class.getDeclaredField("horizontalSpeedMultiplier");
+                        speedMultField.setAccessible(true);
+                        originalSpeedMult = (float) speedMultField.get(appEffects);
+
+                        // Calculate mitigated slow: reduce the slow amount by envProtLevel * multiplier
+                        double envProtMultiplier = EnchantmentType.ENVIRONMENTAL_PROTECTION.getEffectMultiplier();
+                        double mitigationFraction = Math.min(1.0, totalEnvProtection * envProtMultiplier);
+                        // slowAmount = 1.0 - originalSpeedMult (e.g., 0.5 means 50% slow)
+                        // Reduce the slow by the mitigation fraction
+                        double slowAmount = 1.0 - originalSpeedMult;
+                        double mitigatedSlow = slowAmount * (1.0 - mitigationFraction);
+                        float newSpeedMult = (float) (1.0 - mitigatedSlow);
+
+                        speedMultField.set(appEffects, newSpeedMult);
+                    }
+                } catch (Exception e) {
+                    LOGGER.atWarning().log("Failed to modify freeze slow for EnvProtection: " + e.getMessage());
+                }
+            }
+        }
+
+        boolean applied = enchantmentManager.applyStatusEffect(targetRef, FREEZE_EFFECT_ID, store, commandBuffer);
+
+        // Restore the original freeze speed multiplier so other targets aren't affected
+        if (originalSpeedMult != Float.MIN_VALUE && freezeEffect != null) {
+            try {
+                java.lang.reflect.Field appEffectsField = com.hypixel.hytale.server.core.asset.type.entityeffect.config.EntityEffect.class.getDeclaredField("applicationEffects");
+                appEffectsField.setAccessible(true);
+                com.hypixel.hytale.server.core.asset.type.entityeffect.config.ApplicationEffects appEffects =
+                    (com.hypixel.hytale.server.core.asset.type.entityeffect.config.ApplicationEffects) appEffectsField.get(freezeEffect);
+                if (appEffects != null) {
+                    java.lang.reflect.Field speedMultField = com.hypixel.hytale.server.core.asset.type.entityeffect.config.ApplicationEffects.class.getDeclaredField("horizontalSpeedMultiplier");
+                    speedMultField.setAccessible(true);
+                    speedMultField.set(appEffects, originalSpeedMult);
+                }
+            } catch (Exception e) {
+                LOGGER.atWarning().log("Failed to restore freeze slow: " + e.getMessage());
+            }
+        }
+
+        if (!applied) {
+            LOGGER.atWarning().log("Freeze effect " + FREEZE_EFFECT_ID + " not found in asset map");
+        } else {
             if (ctx.hasAttacker()) {
                  Entity shooterEntity = EntityUtils.getEntity(ctx.attackerRef(), commandBuffer);
                  ItemStack weapon = enchantmentManager.getWeaponFromEntity(shooterEntity);

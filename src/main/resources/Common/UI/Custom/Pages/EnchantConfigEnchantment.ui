@@ -15,17 +15,32 @@ Group {
     );
   }
 
+  TextButton #EnableToggle {
+    Style: $C.@SecondaryTextButtonStyle;
+    Anchor: (Width: 120, Height: 34, Left: 8);
+    Padding: (Horizontal: 8);
+  }
+
   Group {
     FlexWeight: 1;
   }
 
   Group #MultiplierSection {
     LayoutMode: Left;
-    Anchor: (Width: 270, Right: 15);
+    Anchor: (Width: 520, Right: 8);
+
+    Label #MultiplierLabel {
+      Anchor: (Width: 220);
+      Style: (
+        FontSize: 13,
+        VerticalAlignment: Center,
+        TextColor: #aaaaaa
+      );
+    }
 
     TextButton #ResetMultiplier {
       Style: $C.@TertiaryTextButtonStyle;
-      Anchor: (Width: 120, Height: 28, Right: 6);
+      Anchor: (Width: 110, Height: 28, Right: 6);
       Padding: (Horizontal: 4);
       Text: "Reset";
       TooltipText: "Reset to default";
@@ -52,11 +67,5 @@ Group {
       Padding: (Horizontal: 6);
       Text: "+";
     }
-  }
-
-  TextButton #EnableToggle {
-    Style: $C.@SecondaryTextButtonStyle;
-    Anchor: (Width: 200, Height: 34);
-    Padding: (Horizontal: 12);
   }
 }

@@ -222,6 +222,14 @@ public class SimpleEnchanting extends JavaPlugin {
         );
         LOGGER.atInfo().log("Registered CleansingScroll UI page supplier");
 
+        // Register custom UI page for custom scroll (multi-enchantment transfer scroll)
+        this.getCodecRegistry(OpenCustomUIInteraction.PAGE_CODEC).register(
+            "CustomScroll",
+            org.herolias.plugin.ui.CustomScrollPageSupplier.class,
+            org.herolias.plugin.ui.CustomScrollPageSupplier.CODEC
+        );
+        LOGGER.atInfo().log("Registered CustomScroll UI page supplier");
+
         // Register custom Ammo Consumption interaction
         this.getCodecRegistry(com.hypixel.hytale.server.core.modules.interaction.interaction.config.Interaction.CODEC).register(
             "ConsumeAmmo",

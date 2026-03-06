@@ -96,6 +96,10 @@ public class EnchantingConfig {
         }
         for (org.herolias.plugin.enchantment.EnchantmentType type : org.herolias.plugin.enchantment.EnchantmentType.values()) {
             enchantmentMultipliers.putIfAbsent(type.getId(), type.getDefaultMultiplierPerLevel());
+            // Also register additional multiplier definitions (e.g. burn:duration, looting:quantity)
+            for (org.herolias.plugin.api.MultiplierDefinition def : type.getMultiplierDefinitions()) {
+                enchantmentMultipliers.putIfAbsent(def.key(), def.defaultValue());
+            }
         }
     }
 
@@ -144,6 +148,15 @@ public class EnchantingConfig {
             enchantmentMultipliers.putIfAbsent("smelting", 0.0);
             enchantmentMultipliers.putIfAbsent("sturdy", 0.0);
             enchantmentMultipliers.putIfAbsent("night_vision", 0.0);
+            
+            // Migrate legacy secondary multipliers into unified map
+            if (lootingQuantityMultiplierPerLevel != null) {
+                enchantmentMultipliers.put("looting:quantity", lootingQuantityMultiplierPerLevel);
+            }
+            enchantmentMultipliers.putIfAbsent("looting:quantity", 0.25);
+            enchantmentMultipliers.putIfAbsent("burn:duration", burnDuration);
+            enchantmentMultipliers.putIfAbsent("freeze:duration", freezeDuration);
+            enchantmentMultipliers.putIfAbsent("poison:duration", poisonDuration);
             
             // Null out legacy fields after migration 
             clearLegacyFields();

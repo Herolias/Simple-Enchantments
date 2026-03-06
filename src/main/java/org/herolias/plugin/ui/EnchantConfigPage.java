@@ -73,34 +73,6 @@ public class EnchantConfigPage extends InteractiveCustomUIPage<EnchantConfigPage
     private boolean showSaveFeedback = false;
     private boolean showResetConfirmation = false;
     
-    // Mapping of enchantment types to their enchantment ID keys in enchantmentMultipliers map
-    // Enchantments with defaultMultiplierPerLevel > 0 get a multiplier row in the UI
-    private static final Map<EnchantmentType, String> ENCHANTMENT_MULTIPLIERS = new LinkedHashMap<>();
-    // Secondary multipliers for enchantments with multiple configurable effects (legacy fields)
-    private static final Map<EnchantmentType, String> ENCHANTMENT_SECONDARY_MULTIPLIERS = new LinkedHashMap<>();
-    private static final Map<String, String> SECONDARY_MULTIPLIER_LABELS = new LinkedHashMap<>();
-    static {
-        // Populate from registry: only enchantments with a non-zero default multiplier get a UI row
-        for (EnchantmentType type : EnchantmentType.values()) {
-            if (type.getDefaultMultiplierPerLevel() > 0) {
-                ENCHANTMENT_MULTIPLIERS.put(type, type.getId());
-            }
-        }
-
-        // Secondary multipliers for enchantments with multiple effects (still legacy fields on config)
-        ENCHANTMENT_SECONDARY_MULTIPLIERS.put(EnchantmentType.LOOTING, "lootingQuantityMultiplierPerLevel");
-        SECONDARY_MULTIPLIER_LABELS.put("lootingQuantityMultiplierPerLevel", "config.secondary.quantity_bonus");
-
-        ENCHANTMENT_SECONDARY_MULTIPLIERS.put(EnchantmentType.BURN, "burnDuration");
-        SECONDARY_MULTIPLIER_LABELS.put("burnDuration", "config.secondary.burn_duration");
-
-        ENCHANTMENT_SECONDARY_MULTIPLIERS.put(EnchantmentType.FREEZE, "freezeDuration");
-        SECONDARY_MULTIPLIER_LABELS.put("freezeDuration", "config.secondary.freeze_duration");
-
-        ENCHANTMENT_SECONDARY_MULTIPLIERS.put(EnchantmentType.POISON, "poisonDuration");
-        SECONDARY_MULTIPLIER_LABELS.put("poisonDuration", "config.secondary.poison_duration");
-    }
-    
     // Default config instance for reset functionality - uses values from EnchantingConfig.java
     private static final EnchantingConfig DEFAULT_CONFIG = EnchantingConfig.createDefault();
     
@@ -141,13 +113,6 @@ public class EnchantConfigPage extends InteractiveCustomUIPage<EnchantConfigPage
         
         // Clone enchantment multipliers map
         copy.enchantmentMultipliers = new LinkedHashMap<>(original.enchantmentMultipliers);
-        
-        // Clone legacy secondary fields (still used for looting quantity etc.)
-        copy.strengthRangeMultiplierPerLevel = original.strengthRangeMultiplierPerLevel;
-        copy.lootingQuantityMultiplierPerLevel = original.lootingQuantityMultiplierPerLevel;
-        copy.burnDuration = original.burnDuration;
-        copy.freezeDuration = original.freezeDuration;
-        copy.poisonDuration = original.poisonDuration;
 
         copy.disableEnchantmentCrafting = original.disableEnchantmentCrafting;
         copy.returnEnchantmentOnCleanse = original.returnEnchantmentOnCleanse;
@@ -248,8 +213,18 @@ public class EnchantConfigPage extends InteractiveCustomUIPage<EnchantConfigPage
                 updateSetting(key, value);
                 updateActionBarIndicators(commandBuilder);
                 this.sendUpdate(commandBuilder, eventBuilder, false);
+            } else if (data.settingValue.contains("|")) {
+                // Button click - format is "key|value" (using | to avoid conflict with composite keys like burn:duration)
+                String[] parts = data.settingValue.split("\\|", 2);
+                key = parts[0];
+                value = parts[1];
+                
+                updateSetting(key, value);
+                buildTabContent(commandBuilder, eventBuilder);
+                updateActionBarIndicators(commandBuilder);
+                this.sendUpdate(commandBuilder, eventBuilder, false);
             } else if (data.settingValue.contains(":")) {
-                // Button click - format is "key:value"
+                // Legacy format (general settings like maxEnchantmentsPerItem:5, recipeTier:name:value)
                 String[] parts = data.settingValue.split(":", 2);
                 key = parts[0];
                 value = parts[1];
@@ -717,66 +692,71 @@ public class EnchantConfigPage extends InteractiveCustomUIPage<EnchantConfigPage
                 continue;
             }
 
-            commandBuilder.append("#ContentArea", "Pages/EnchantConfigEnchantment.ui");
-            
-            // Enchantment name
-            commandBuilder.set("#ContentArea[" + index + "] #EnchantName.TextSpans", languageManager.getMessage(type.getNameKey(), lang, this.playerRef.getLanguage()));
-            
-            // Multiplier value (if this enchantment has one)
-            String multiplierField = ENCHANTMENT_MULTIPLIERS.get(type);
-            if (multiplierField != null) {
-                double value = getMultiplierValue(multiplierField);
-                double step = calculateStep(value);
-                commandBuilder.set("#ContentArea[" + index + "] #MultiplierInput.Value", value);
-                commandBuilder.set("#ContentArea[" + index + "] #MultiplierInput.Value", value);
-                commandBuilder.set("#ContentArea[" + index + "] #MultiplierSection.Visible", true);
-                commandBuilder.set("#ContentArea[" + index + "] #ResetMultiplier.TextSpans", languageManager.getMessage("config.button.reset", lang, this.playerRef.getLanguage()));
-                // Reset button
-                eventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#ContentArea[" + index + "] #ResetMultiplier",
-                    EventData.of("ResetValue", multiplierField));
-                // Decrease/Increase by dynamic step
-                eventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#ContentArea[" + index + "] #MultiplierDecrease",
-                    EventData.of("SettingValue", multiplierField + ":" + String.format("%.3f", Math.max(0, value - step))));
-                eventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#ContentArea[" + index + "] #MultiplierIncrease",
-                    EventData.of("SettingValue", multiplierField + ":" + String.format("%.3f", value + step)));
-                // Direct input via ValueChanged
-                eventBuilder.addEventBinding(CustomUIEventBindingType.ValueChanged, "#ContentArea[" + index + "] #MultiplierInput",
-                    EventData.of("SettingValue", multiplierField).append("@InputValue", "#ContentArea[" + index + "] #MultiplierInput.Value"), false);
-            } else {
-                commandBuilder.set("#ContentArea[" + index + "] #MultiplierSection.Visible", false);
-            }
-            
-            // Toggle enabled/disabled
+            java.util.List<org.herolias.plugin.api.MultiplierDefinition> definitions = type.getMultiplierDefinitions();
             boolean isDisabled = workingConfig.disabledEnchantments.getOrDefault(type.getId(), false);
-            commandBuilder.set("#ContentArea[" + index + "] #EnableToggle.TextSpans", 
-                languageManager.getMessage(isDisabled ? "config.common.disabled" : "config.common.enabled", lang, this.playerRef.getLanguage()));
-            eventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#ContentArea[" + index + "] #EnableToggle",
-                EventData.of("ToggleEnchantment", type.getId()));
             
-            index++;
-            
-            // Secondary multiplier row (e.g., Strength range bonus, Looting quantity bonus)
-            String secondaryField = ENCHANTMENT_SECONDARY_MULTIPLIERS.get(type);
-            if (secondaryField != null) {
-                String getOrDefault = SECONDARY_MULTIPLIER_LABELS.getOrDefault(secondaryField, secondaryField);
-                double secValue = getMultiplierValue(secondaryField);
-                double secStep = calculateStep(secValue);
+            if (definitions.isEmpty()) {
+                // No multipliers — just show name + toggle, hide multiplier section
+                commandBuilder.append("#ContentArea", "Pages/EnchantConfigEnchantment.ui");
+                commandBuilder.set("#ContentArea[" + index + "] #EnchantName.TextSpans", languageManager.getMessage(type.getNameKey(), lang, this.playerRef.getLanguage()));
+                commandBuilder.set("#ContentArea[" + index + "] #MultiplierSection.Visible", false);
                 
-                commandBuilder.append("#ContentArea", "Pages/EnchantConfigItem.ui");
-                commandBuilder.set("#ContentArea[" + index + "] #SettingName.TextSpans", languageManager.getMessage(getOrDefault, lang, this.playerRef.getLanguage()));
-                commandBuilder.set("#ContentArea[" + index + "] #SettingName.TextSpans", languageManager.getMessage(getOrDefault, lang, this.playerRef.getLanguage()));
-                commandBuilder.set("#ContentArea[" + index + "] #SettingInput.Value", secValue);
-                commandBuilder.set("#ContentArea[" + index + "] #ResetBtn.TextSpans", languageManager.getMessage("config.button.reset", lang, this.playerRef.getLanguage()));
-                eventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#ContentArea[" + index + "] #ResetBtn",
-                    EventData.of("ResetValue", secondaryField));
-                eventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#ContentArea[" + index + "] #DecreaseBtn",
-                    EventData.of("SettingValue", secondaryField + ":" + String.format("%.3f", Math.max(0, secValue - secStep))));
-                eventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#ContentArea[" + index + "] #IncreaseBtn",
-                    EventData.of("SettingValue", secondaryField + ":" + String.format("%.3f", secValue + secStep)));
-                eventBuilder.addEventBinding(CustomUIEventBindingType.ValueChanged, "#ContentArea[" + index + "] #SettingInput",
-                    EventData.of("SettingValue", secondaryField).append("@InputValue", "#ContentArea[" + index + "] #SettingInput.Value"), false);
+                // Toggle enabled/disabled
+                commandBuilder.set("#ContentArea[" + index + "] #EnableToggle.TextSpans", 
+                    languageManager.getMessage(isDisabled ? "config.common.disabled" : "config.common.enabled", lang, this.playerRef.getLanguage()));
+                eventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#ContentArea[" + index + "] #EnableToggle",
+                    EventData.of("ToggleEnchantment", type.getId()));
                 
                 index++;
+            } else {
+                // One row per multiplier definition
+                for (int defIdx = 0; defIdx < definitions.size(); defIdx++) {
+                    org.herolias.plugin.api.MultiplierDefinition def = definitions.get(defIdx);
+                    
+                    commandBuilder.append("#ContentArea", "Pages/EnchantConfigEnchantment.ui");
+                    
+                    if (defIdx == 0) {
+                        // First row: show enchantment name + toggle
+                        commandBuilder.set("#ContentArea[" + index + "] #EnchantName.TextSpans", languageManager.getMessage(type.getNameKey(), lang, this.playerRef.getLanguage()));
+                        commandBuilder.set("#ContentArea[" + index + "] #EnableToggle.Visible", true);
+                        commandBuilder.set("#ContentArea[" + index + "] #EnableToggle.TextSpans", 
+                            languageManager.getMessage(isDisabled ? "config.common.disabled" : "config.common.enabled", lang, this.playerRef.getLanguage()));
+                        eventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#ContentArea[" + index + "] #EnableToggle",
+                            EventData.of("ToggleEnchantment", type.getId()));
+                    } else {
+                        // Subsequent rows: hide enchantment name + toggle (only show multiplier)
+                        commandBuilder.set("#ContentArea[" + index + "] #EnchantName.TextSpans", Message.raw(""));
+                        commandBuilder.set("#ContentArea[" + index + "] #EnableToggle.Visible", false);
+                    }
+                    
+                    // Multiplier controls
+                    String multiplierKey = def.key();
+                    double value = getMultiplierValue(multiplierKey);
+                    double step = calculateStep(value);
+                    
+                    commandBuilder.set("#ContentArea[" + index + "] #MultiplierSection.Visible", true);
+                    String rawLabel = languageManager.getRawMessage(def.labelKey(), lang, this.playerRef.getLanguage());
+                    if (rawLabel.equals(def.labelKey())) {
+                        rawLabel = ""; // Fallback to empty if translation doesn't exist
+                    }
+                    commandBuilder.set("#ContentArea[" + index + "] #MultiplierLabel.TextSpans", Message.raw(rawLabel));
+                    commandBuilder.set("#ContentArea[" + index + "] #MultiplierInput.Value", value);
+                    commandBuilder.set("#ContentArea[" + index + "] #ResetMultiplier.TextSpans", languageManager.getMessage("config.button.reset", lang, this.playerRef.getLanguage()));
+                    
+                    // Reset button
+                    eventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#ContentArea[" + index + "] #ResetMultiplier",
+                        EventData.of("ResetValue", multiplierKey));
+                    // Decrease/Increase by dynamic step (using | separator to avoid conflict with composite keys)
+                    eventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#ContentArea[" + index + "] #MultiplierDecrease",
+                        EventData.of("SettingValue", multiplierKey + "|" + String.format("%.3f", Math.max(0, value - step))));
+                    eventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#ContentArea[" + index + "] #MultiplierIncrease",
+                        EventData.of("SettingValue", multiplierKey + "|" + String.format("%.3f", value + step)));
+                    // Direct input via ValueChanged
+                    eventBuilder.addEventBinding(CustomUIEventBindingType.ValueChanged, "#ContentArea[" + index + "] #MultiplierInput",
+                        EventData.of("SettingValue", multiplierKey).append("@InputValue", "#ContentArea[" + index + "] #MultiplierInput.Value"), false);
+                    
+                    index++;
+                }
             }
         }
     }
@@ -1251,19 +1231,19 @@ public class EnchantConfigPage extends InteractiveCustomUIPage<EnchantConfigPage
     }
     
     private double getMultiplierValue(String key) {
-        // First check enchantmentMultipliers map (handles all enchantment IDs)
+        // All multipliers are now in the unified enchantmentMultipliers map
         if (workingConfig.enchantmentMultipliers.containsKey(key)) {
-            return workingConfig.enchantmentMultipliers.getOrDefault(key, 0.0);
+            return workingConfig.enchantmentMultipliers.get(key);
         }
-        // Legacy secondary multiplier fields
-        return switch (key) {
-            case "strengthRangeMultiplierPerLevel" -> workingConfig.strengthRangeMultiplierPerLevel != null ? workingConfig.strengthRangeMultiplierPerLevel : 0.15;
-            case "lootingQuantityMultiplierPerLevel" -> workingConfig.lootingQuantityMultiplierPerLevel != null ? workingConfig.lootingQuantityMultiplierPerLevel : 0.25;
-            case "burnDuration" -> workingConfig.burnDuration;
-            case "freezeDuration" -> workingConfig.freezeDuration;
-            case "poisonDuration" -> workingConfig.poisonDuration;
-            default -> 0.0;
-        };
+        // Fallback: look up from MultiplierDefinition defaults
+        for (EnchantmentType type : EnchantmentType.values()) {
+            for (org.herolias.plugin.api.MultiplierDefinition def : type.getMultiplierDefinitions()) {
+                if (def.key().equals(key)) {
+                    return def.defaultValue();
+                }
+            }
+        }
+        return 0.0;
     }
     
     private void updateSetting(String key, String value) {
@@ -1283,11 +1263,11 @@ public class EnchantConfigPage extends InteractiveCustomUIPage<EnchantConfigPage
         }
         
         try {
-            // Check if key is an enchantment ID in the multipliers map
+            // All multiplier keys (including composite ones like burn:duration) are in the map
             if (workingConfig.enchantmentMultipliers.containsKey(key)) {
                 workingConfig.enchantmentMultipliers.put(key, Double.parseDouble(value));
             } else {
-                // General settings and legacy secondary fields
+                // General settings
                 switch (key) {
                     case "maxEnchantmentsPerItem" -> workingConfig.maxEnchantmentsPerItem = Math.max(1, Integer.parseInt(value));
                     case "showEnchantmentBanner" -> workingConfig.showEnchantmentBanner = Boolean.parseBoolean(value);
@@ -1296,11 +1276,6 @@ public class EnchantConfigPage extends InteractiveCustomUIPage<EnchantConfigPage
                     case "disableEnchantmentCrafting" -> workingConfig.disableEnchantmentCrafting = Boolean.parseBoolean(value);
                     case "returnEnchantmentOnCleanse" -> workingConfig.returnEnchantmentOnCleanse = Boolean.parseBoolean(value);
                     case "enchantingTableCraftingTier" -> workingConfig.enchantingTableCraftingTier = Math.max(1, Integer.parseInt(value));
-                    case "strengthRangeMultiplierPerLevel" -> workingConfig.strengthRangeMultiplierPerLevel = Double.parseDouble(value);
-                    case "lootingQuantityMultiplierPerLevel" -> workingConfig.lootingQuantityMultiplierPerLevel = Double.parseDouble(value);
-                    case "burnDuration" -> workingConfig.burnDuration = Double.parseDouble(value);
-                    case "freezeDuration" -> workingConfig.freezeDuration = Double.parseDouble(value);
-                    case "poisonDuration" -> workingConfig.poisonDuration = Double.parseDouble(value);
                     case "salvagerYieldsScroll" -> workingConfig.salvagerYieldsScroll = Boolean.parseBoolean(value);
                     case "showWelcomeMessage" -> workingConfig.showWelcomeMessage = Boolean.parseBoolean(value);
                 }
@@ -1382,19 +1357,22 @@ public class EnchantConfigPage extends InteractiveCustomUIPage<EnchantConfigPage
      * Gets the default value for a setting from DEFAULT_CONFIG.
      */
     private String getDefaultValue(String key) {
-        // Check enchantment multipliers map first
+        // Check enchantment multipliers map first (includes all composite keys)
         if (DEFAULT_CONFIG.enchantmentMultipliers.containsKey(key)) {
             return String.valueOf(DEFAULT_CONFIG.enchantmentMultipliers.get(key));
+        }
+        // Check MultiplierDefinition defaults from the registry
+        for (EnchantmentType type : EnchantmentType.values()) {
+            for (org.herolias.plugin.api.MultiplierDefinition def : type.getMultiplierDefinitions()) {
+                if (def.key().equals(key)) {
+                    return String.valueOf(def.defaultValue());
+                }
+            }
         }
         return switch (key) {
             case "maxEnchantmentsPerItem" -> String.valueOf(DEFAULT_CONFIG.maxEnchantmentsPerItem);
             case "allowSameScrollUpgrades" -> String.valueOf(DEFAULT_CONFIG.allowSameScrollUpgrades);
             case "enchantingTableCraftingTier" -> String.valueOf(DEFAULT_CONFIG.enchantingTableCraftingTier);
-            case "strengthRangeMultiplierPerLevel" -> String.valueOf(DEFAULT_CONFIG.strengthRangeMultiplierPerLevel != null ? DEFAULT_CONFIG.strengthRangeMultiplierPerLevel : 0.15);
-            case "lootingQuantityMultiplierPerLevel" -> String.valueOf(DEFAULT_CONFIG.lootingQuantityMultiplierPerLevel != null ? DEFAULT_CONFIG.lootingQuantityMultiplierPerLevel : 0.25);
-            case "burnDuration" -> String.valueOf(DEFAULT_CONFIG.burnDuration);
-            case "freezeDuration" -> String.valueOf(DEFAULT_CONFIG.freezeDuration);
-            case "poisonDuration" -> String.valueOf(DEFAULT_CONFIG.poisonDuration);
             case "returnEnchantmentOnCleanse" -> String.valueOf(DEFAULT_CONFIG.returnEnchantmentOnCleanse);
             case "disableEnchantmentCrafting" -> String.valueOf(DEFAULT_CONFIG.disableEnchantmentCrafting);
             case "salvagerYieldsScroll" -> String.valueOf(DEFAULT_CONFIG.salvagerYieldsScroll);
@@ -1415,12 +1393,6 @@ public class EnchantConfigPage extends InteractiveCustomUIPage<EnchantConfigPage
         
         // Copy enchantment multipliers map
         actualConfig.enchantmentMultipliers = new LinkedHashMap<>(workingConfig.enchantmentMultipliers);
-        
-        // Legacy secondary fields
-        actualConfig.strengthRangeMultiplierPerLevel = workingConfig.strengthRangeMultiplierPerLevel;
-        actualConfig.lootingQuantityMultiplierPerLevel = workingConfig.lootingQuantityMultiplierPerLevel;
-        actualConfig.burnDuration = workingConfig.burnDuration;
-        actualConfig.freezeDuration = workingConfig.freezeDuration;
         
         actualConfig.returnEnchantmentOnCleanse = workingConfig.returnEnchantmentOnCleanse;
         actualConfig.disableEnchantmentCrafting = workingConfig.disableEnchantmentCrafting;
@@ -1503,12 +1475,6 @@ public class EnchantConfigPage extends InteractiveCustomUIPage<EnchantConfigPage
         
         // Reset enchantment multipliers map
         workingConfig.enchantmentMultipliers = new LinkedHashMap<>(defaults.enchantmentMultipliers);
-        
-        // Reset legacy secondary fields
-        workingConfig.strengthRangeMultiplierPerLevel = defaults.strengthRangeMultiplierPerLevel;
-        workingConfig.lootingQuantityMultiplierPerLevel = defaults.lootingQuantityMultiplierPerLevel;
-        workingConfig.burnDuration = defaults.burnDuration;
-        workingConfig.freezeDuration = defaults.freezeDuration;
         
         workingConfig.returnEnchantmentOnCleanse = defaults.returnEnchantmentOnCleanse;
         workingConfig.disableEnchantmentCrafting = defaults.disableEnchantmentCrafting;

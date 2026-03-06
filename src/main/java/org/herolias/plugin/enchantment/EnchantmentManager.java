@@ -113,7 +113,8 @@ public class EnchantmentManager {
      * Calculates the drop quantity multiplier based on Looting level.
      */
     public double calculateLootingQuantityMultiplier(int lootingLevel) {
-        return calculateLootingMultiplier(lootingLevel, getConfig().lootingQuantityMultiplierPerLevel);
+        double quantityMultiplier = getConfig().enchantmentMultipliers.getOrDefault("looting:quantity", 0.25);
+        return calculateLootingMultiplier(lootingLevel, quantityMultiplier);
     }
 
     private double calculateLootingMultiplier(int level, double multiplierPerLevel) {
@@ -320,6 +321,11 @@ public class EnchantmentManager {
     private String checkCommonApplicability(ItemStack item, EnchantmentType type, org.herolias.plugin.config.EnchantingConfig config) {
         if (config.disabledEnchantments.getOrDefault(type.getId(), false)) {
              return "This enchantment is disabled in the server configuration.";
+        }
+
+        // Custom Scroll accepts all enchantment categories
+        if ("Scroll_Custom".equals(item.getItemId())) {
+            return null;
         }
 
         // Special check for Thrift
@@ -1379,12 +1385,8 @@ public class EnchantmentManager {
     }
 
     public boolean isEnvironmentalDamage(@Nullable com.hypixel.hytale.server.core.modules.entity.damage.DamageCause cause) {
-        return checkDamageCause(cause, "Fire") ||
-               checkDamageCause(cause, "Lava") ||
-               checkDamageCause(cause, "Drowning") ||
-               checkDamageCause(cause, "Drown") ||
-               checkDamageCause(cause, "Thorns") ||
-               checkDamageCause(cause, "Cactus");
+        return checkDamageCause(cause, "Elemental") ||
+               checkDamageCause(cause, "Environmental");
     }
 
     /**

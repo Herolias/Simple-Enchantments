@@ -11,6 +11,9 @@ import com.hypixel.hytale.server.core.inventory.transaction.Transaction;
 import com.hypixel.hytale.server.core.inventory.transaction.SlotTransaction;
 import com.hypixel.hytale.server.core.inventory.transaction.ItemStackTransaction;
 import com.hypixel.hytale.server.core.inventory.transaction.ItemStackSlotTransaction;
+import com.hypixel.hytale.server.core.inventory.transaction.MoveTransaction;
+import com.hypixel.hytale.server.core.inventory.transaction.MoveType;
+import com.hypixel.hytale.server.core.inventory.transaction.ListTransaction;
 import com.hypixel.hytale.server.core.asset.type.item.config.Item;
 import org.herolias.plugin.util.ProcessingGuard;
 
@@ -104,12 +107,79 @@ public class EnchantmentEternalShotSystem extends AbstractRefundSystem {
         Transaction transaction = event.getTransaction();
         ItemContainer container = event.getItemContainer();
 
+        // Before any early exits, check if a loaded Eternal Shot crossbow is being moved
+        // OUT of the active hotbar slot via drag-and-drop (MoveTransaction MOVE_FROM_SELF).
+        // This must run before the MoveTransaction return because drag-and-drop IS a MoveTransaction.
+        if (transaction instanceof MoveTransaction<?> moveTx
+                && moveTx.getMoveType() == MoveType.MOVE_FROM_SELF) {
+            checkForCrossbowDraggedFromHotbar(player, container, moveTx.getRemoveTransaction());
+        } else if (transaction instanceof ListTransaction<?> lt) {
+            // Bulk move (e.g. quickStackTo) — check each inner MoveTransaction's remove side.
+            for (Object inner : lt.getList()) {
+                if (inner instanceof MoveTransaction<?> mt
+                        && mt.getMoveType() == MoveType.MOVE_FROM_SELF) {
+                    checkForCrossbowDraggedFromHotbar(player, container, mt.getRemoveTransaction());
+                }
+            }
+        }
+
+        // MoveTransaction = item transfer between containers (quickstack etc.) — not consumption.
+        if (transaction instanceof MoveTransaction) return;
+
+        // ListTransaction<MoveTransaction> = bulk transfer from quickStackTo — not consumption.
+        if (transaction instanceof ListTransaction<?> lt && !lt.getList().isEmpty()
+                && lt.getList().stream().allMatch(t -> t instanceof MoveTransaction)) return;
+
+        // Detect crossbow being drag-dropped out of the active hotbar slot via non-move operations
+        // (e.g. shift-click produces ItemStackTransaction, direct slot ops produce SlotTransaction).
         if (transaction instanceof ItemStackTransaction itemStackTransaction) {
+            checkForCrossbowDraggedFromHotbar(player, container, itemStackTransaction);
             for (ItemStackSlotTransaction slotTx : itemStackTransaction.getSlotTransactions()) {
                 processSlotTransaction(player, container, slotTx, itemStackTransaction);
             }
         } else if (transaction instanceof SlotTransaction slotTransaction) {
-            processSlotTransaction(player, container, slotTransaction, null);
+            // Top-level SlotTransaction = direct-slot operation (e.g. Lectern), NOT consumption.
+            checkForCrossbowDraggedFromHotbar(player, container, slotTransaction);
+        }
+    }
+
+    /**
+     * Checks whether this inventory change moved/replaced an Eternal Shot crossbow
+     * out of the player's active hotbar slot (e.g. by drag-and-drop).
+     * If so, runs the same cleanup that {@link #onSlotChanged} would.
+     */
+    private void checkForCrossbowDraggedFromHotbar(Player player, ItemContainer container, SlotTransaction tx) {
+        Inventory inv = player.getInventory();
+        if (inv == null) return;
+
+        // Only care about changes to the hotbar container
+        ItemContainer hotbar = inv.getHotbar();
+        if (hotbar == null || container != hotbar) return;
+
+        int activeSlot = inv.getActiveHotbarSlot();
+        if (activeSlot < 0) return;
+
+        // Is the transaction touching the active hotbar slot?
+        if (!tx.wasSlotModified((short) activeSlot)) return;
+
+        ItemStack before = tx.getSlotBefore();
+        if (before == null || before.isEmpty()) return;
+
+        // Was the item there an Eternal Shot crossbow?
+        if (!enchantmentManager.isCrossbow(before)) return;
+        if (enchantmentManager.getEnchantmentLevel(before, EnchantmentType.ETERNAL_SHOT) <= 0) return;
+
+        // Yes — treat this exactly like a hotbar slot switch away from the crossbow.
+        onSlotChanged(player, before);
+    }
+
+    /**
+     * Overload for ItemStackTransaction (which wraps multiple slot transactions).
+     * Checks if any of the inner slot transactions match the active hotbar slot.
+     */
+    private void checkForCrossbowDraggedFromHotbar(Player player, ItemContainer container, ItemStackTransaction tx) {
+        for (ItemStackSlotTransaction slotTx : tx.getSlotTransactions()) {
+            checkForCrossbowDraggedFromHotbar(player, container, (SlotTransaction) slotTx);
         }
     }
 
@@ -217,7 +287,9 @@ public class EnchantmentEternalShotSystem extends AbstractRefundSystem {
         if (uuidComp == null) return;
         UUID playerUuid = uuidComp.getUuid();
 
-        if (wasRecentlyDropped(playerUuid, slot)) return;
+        if (wasRecentlyDropped(playerUuid, slot)) {
+            return;
+        }
 
         Inventory inventory = player.getInventory();
         if (inventory == null) return;

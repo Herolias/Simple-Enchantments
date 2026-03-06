@@ -140,7 +140,7 @@ public class ItemCategoryManager {
         }
         
         // 2. Check Blacklist
-        if (isBlacklisted(lowerItemId)) {
+        if (isBlacklisted(lowerItemId) || isFamilyBlacklisted(item)) {
             categoryCache.put(lowerItemId, ItemCategory.UNKNOWN);
             return ItemCategory.UNKNOWN;
         }
@@ -259,6 +259,14 @@ public class ItemCategoryManager {
                     blacklistedItems.add(id.toLowerCase());
                 }
                 LOGGER.atInfo().log("Loaded " + config.blacklist.size() + " blacklisted items.");
+            }
+
+            // Load Family Blacklist
+            if (config.familyBlacklist != null) {
+                for (String family : config.familyBlacklist) {
+                    blacklistedFamilies.add(family.toLowerCase());
+                }
+                LOGGER.atInfo().log("Loaded " + config.familyBlacklist.size() + " blacklisted families.");
             }
         }
     }
@@ -416,6 +424,9 @@ public class ItemCategoryManager {
         
         @com.google.gson.annotations.SerializedName("blacklist")
         public java.util.List<String> blacklist; // List of Item IDs or Families to exclude entirely
+        
+        @com.google.gson.annotations.SerializedName("family_blacklist")
+        public java.util.List<String> familyBlacklist; // List of Item Families to exclude entirely
     }
 
     /**
@@ -444,6 +455,10 @@ public class ItemCategoryManager {
         bringTheBoom.put("Bomb", "UNKNOWN");
         bringTheBoom.put("Bullet", "UNKNOWN");
         defaultConfig.familyMappings.put("Bring The Boom", bringTheBoom);
+
+        defaultConfig.familyBlacklist = java.util.Arrays.asList(
+             "Deployable", "Bomb", "Bullet"
+        );
         
         // Standard Blacklist (Projectiles, Throwables, Totems, Guns, Magical Items)
         defaultConfig.blacklist = java.util.Arrays.asList(
@@ -474,11 +489,41 @@ public class ItemCategoryManager {
 
     // Blacklist cache
     private final java.util.Set<String> blacklistedItems = ConcurrentHashMap.newKeySet();
+    private final java.util.Set<String> blacklistedFamilies = ConcurrentHashMap.newKeySet();
 
     /**
      * Checks if an item is blacklisted from being categorized (and thus enchanted).
      */
     public boolean isBlacklisted(String itemId) {
         return itemId != null && blacklistedItems.contains(itemId.toLowerCase());
+    }
+
+    /**
+     * Checks if an item stack is blacklisted from being categorized (and thus enchanted).
+     * Checks both the item ID and the item's family tags.
+     */
+    public boolean isBlacklisted(com.hypixel.hytale.server.core.inventory.ItemStack itemStack) {
+        if (itemStack == null || itemStack.isEmpty()) return false;
+        return isBlacklisted(itemStack.getItemId()) || isFamilyBlacklisted(itemStack.getItem());
+    }
+
+    /**
+     * Checks if an item is blacklisted from being categorized based on its families.
+     */
+    public boolean isFamilyBlacklisted(com.hypixel.hytale.server.core.asset.type.item.config.Item item) {
+        if (item != null && item.getData() != null) {
+            java.util.Map<String, String[]> tags = item.getData().getRawTags();
+            if (tags != null) {
+                String[] families = tags.get("Family");
+                if (families != null) {
+                    for (String family : families) {
+                        if (family != null && blacklistedFamilies.contains(family.toLowerCase())) {
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+        return false;
     }
 }

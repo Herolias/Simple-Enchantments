@@ -216,13 +216,13 @@ items.Scroll_Waterbreathing_III.description = Reduces oxygen drain by 60%.
 
 items.Scroll_Burn_I.name = Scroll of Burn
 
-items.Scroll_Burn_I.description = Sets target on fire and lets it drop cooked variants of its drops. Not combinable with Freeze.
+items.Scroll_Burn_I.description = Sets target on fire ({amount} damage/s for {duration}s) and lets it drop cooked variants of its drops. Not combinable with Freeze.
 
 
 
 items.Scroll_Freeze_I.name = Scroll of Freeze
 
-items.Scroll_Freeze_I.description = Applies severe slow (50%) to target on hit. Not combinable with Burn.
+items.Scroll_Freeze_I.description = Slows target by {amount}% for {duration}s on hit. Not combinable with Burn.
 
 
 
@@ -260,7 +260,7 @@ items.Scroll_ElementalHeart_I.description = Elemental Staffs do not consume esse
 
 items.Scroll_Poison_I.name = Scroll of Poison
 
-items.Scroll_Poison_I.description = Poisons targets on hit for 3 damage per second. Not combinable with Burn.
+items.Scroll_Poison_I.description = Poisons targets on hit ({amount} damage/s for {duration}s). Not combinable with Burn.
 
 
 
@@ -446,11 +446,11 @@ enchantment.waterbreathing.description = Reduces oxygen drain by 20%.
 
 enchantment.burn.name = Burn
 
-enchantment.burn.description = Sets target on fire and lets it drop cooked variants of its drops. Not combinable with Freeze.
+enchantment.burn.description = Sets target on fire ({amount} damage/s for {duration}s) and lets it drop cooked variants of its drops. Not combinable with Freeze.
 
 enchantment.freeze.name = Freeze
 
-enchantment.freeze.description = Applies severe slow (50%) to target on hit. Not combinable with Burn.
+enchantment.freeze.description = Slows target by {amount}% for {duration}s on hit. Not combinable with Burn.
 
 enchantment.eternal_shot.name = Eternal Shot
 
@@ -488,7 +488,7 @@ enchantment.fast_swim.description = Increases swim speed by 25%.
 
 enchantment.poison.name = Poison
 
-enchantment.poison.description = Poisons targets on hit for 3 damage per second. Not combinable with Burn.
+enchantment.poison.description = Poisons targets on hit ({amount} damage/s for {duration}s). Not combinable with Burn.
 
 
 
@@ -596,8 +596,8 @@ enchantment.eagles_eye.bonus = Damage increases with distance up to {amount}%
 enchantment.looting.bonus = Drop rates increased by {amount}%
 enchantment.feather_falling.bonus = Fall damage reduced by {amount}%
 enchantment.waterbreathing.bonus = Oxygen drain reduced by {amount}%
-enchantment.burn.bonus = Sets target on fire
-enchantment.freeze.bonus = Slows target on hit
+enchantment.burn.bonus = Sets target on fire ({amount} damage/s for {duration}s)
+enchantment.freeze.bonus = Slows target by {amount}% for {duration}s
 enchantment.eternal_shot.bonus = Does not consume arrows
 enchantment.pick_perfect.bonus = Drops the block itself when mined
 enchantment.thrift.bonus = Restores {amount}% of mana on hit
@@ -611,7 +611,7 @@ enchantment.ranged_protection.bonus = Projectile/magic damage reduced by {amount
 enchantment.frenzy.bonus = Ability charge speed increased by {amount}%
 enchantment.riposte.bonus = Counter attack damage increased by {amount}%
 enchantment.coup_de_grace.bonus = Damage to stunned enemies increased by {amount}%
-enchantment.poison.bonus = Poisons targets on hit
+enchantment.poison.bonus = Poisons targets on hit ({amount} damage/s for {duration}s)
 enchantment.environmental_protection.bonus = Environmental damage reduced by {amount}%
 
 # Config UI
@@ -650,11 +650,37 @@ config.recipe.ingredients = Ingredients
 config.common.enabled = Enabled
 config.common.disabled = Disabled
 
-config.secondary.range_speed_bonus = Range/Speed Bonus
-config.secondary.quantity_bonus = Quantity Bonus
-config.secondary.burn_duration = Burn Duration
-config.secondary.freeze_duration = Freeze Duration
-config.secondary.poison_duration = Poison Duration
+config.multiplier.sharpness = Damage Per Level
+config.multiplier.life_leech = Heal % Per Level
+config.multiplier.durability = Reduction Per Level
+config.multiplier.dexterity = Stamina Reduction Per Level
+config.multiplier.protection = Damage Reduction Per Level
+config.multiplier.efficiency = Speed Per Level
+config.multiplier.fortune = Drop Chance Per Level
+config.multiplier.strength = Damage Per Level
+config.multiplier.eagles_eye = Distance Bonus Per Level
+config.multiplier.looting = Drop Chance Per Level
+config.multiplier.looting:quantity = Quantity Bonus Per Level
+config.multiplier.feather_falling = Reduction Per Level
+config.multiplier.waterbreathing = Drain Reduction Per Level
+config.multiplier.burn = Damage Per Second
+config.multiplier.burn:duration = Duration (Seconds)
+config.multiplier.freeze = Slow Amount
+config.multiplier.freeze:duration = Duration (Seconds)
+config.multiplier.knockback = Strength Per Level
+config.multiplier.reflection = Reflect % Per Level
+config.multiplier.absorption = Heal % Per Level
+config.multiplier.fast_swim = Speed Per Level
+config.multiplier.ranged_protection = Damage Reduction Per Level
+config.multiplier.frenzy = Charge Speed Per Level
+config.multiplier.riposte = Damage Per Level
+config.multiplier.coup_de_grace = Damage Per Level
+config.multiplier.thrift = Restore % Per Level
+config.multiplier.elemental_heart = Save Chance Per Level
+config.multiplier.poison = Damage Per Second
+config.multiplier.poison:duration = Duration (Seconds)
+config.multiplier.environmental_protection = Reduction Per Level
+
 
 config.recipe.active_title = {0} - Ingredients
 config.recipe.crafting_tier = Crafting Tier
@@ -714,8 +740,8 @@ enchantment.eagles_eye.walkthrough = Increases projectile damage by up to {amoun
 enchantment.looting.walkthrough = Increases mob max drop rates by {amount}% per level and boosts the chance of rare drops. Applies to melee weapons, ranged weapons, and staffs.
 enchantment.feather_falling.walkthrough = Reduces fall damage by {amount}% per level. Applies to boots.
 enchantment.waterbreathing.walkthrough = Reduces oxygen drain by {amount}% per level. Applies to helmets.
-enchantment.burn.walkthrough = Sets target on fire and lets it drop cooked variants of its drops. Applies to melee and ranged weapons. Not combinable with Freeze.
-enchantment.freeze.walkthrough = Applies severe slow (50%) to target on hit. Applies to melee and ranged weapons. Not combinable with Burn.
+enchantment.burn.walkthrough = Sets target on fire, dealing {amount} damage per second for {duration} seconds, and lets it drop cooked variants of its drops. Applies to melee and ranged weapons. Not combinable with Freeze.
+enchantment.freeze.walkthrough = Slows target by {amount}% for {duration} seconds on hit. Applies to melee and ranged weapons. Not combinable with Burn.
 enchantment.eternal_shot.walkthrough = Lets you shoot arrows without consuming them. You still need 1 arrow in your inventory. Applies to ranged weapons.
 enchantment.pick_perfect.walkthrough = Mined blocks drop themselves instead of their usual drops. Applies to pickaxes, axes, and shovels. Not combinable with Fortune or Smelting.
 enchantment.thrift.walkthrough = Restores {amount}% of mana spent on hit per level. Applies to mana staffs.
@@ -729,8 +755,32 @@ enchantment.ranged_protection.walkthrough = Reduces incoming projectile and magi
 enchantment.frenzy.walkthrough = Increases signature charge rate by {amount}% per level. Applies to all weapons and staffs.
 enchantment.riposte.walkthrough = This is a collab Enchantment with the Perfect Parries mod and will only work if both mods are installed.\n\nIncreases counter attack damage by {amount}% per level. Applies to melee weapons.
 enchantment.coup_de_grace.walkthrough = This is a collab Enchantment with the Perfect Parries mod and will only work if both mods are installed.\n\nIncreases damage to stunned enemies by {amount}% per level. Applies to melee weapons.
-enchantment.poison.walkthrough = Poisons targets on hit. Applies to melee and ranged weapons. Not combinable with Burn.
-enchantment.environmental_protection.walkthrough = Reduces incoming environmental damage (fire, lava, drowning, cacti) by {amount}% per armor piece per level, and proportionally mitigates the slow severity of the Freeze enchantment. Applies to armor.
+enchantment.poison.walkthrough = Poisons targets on hit, dealing {amount} damage per second for {duration} seconds. Applies to melee and ranged weapons. Not combinable with Burn.
+enchantment.environmental_protection.walkthrough = Reduces incoming elemental and environmental damage (fire, ice, cacti, and other hazards) by {amount}% per armor piece per level, and proportionally mitigates the slow intensity of the Freeze enchantment. Applies to armor.
 
 
 tooltip.enchantments = Enchantments:
+
+
+
+items.Scroll_Custom.name = Custom Scroll
+
+items.Scroll_Custom.description = A magical scroll that can hold multiple enchantments. Use it to transfer enchantments to items.
+
+
+
+customUI.customScrollEnchantmentPage.title = Custom Scroll
+
+customUI.customScrollEnchantmentPage.selectHint = Select an enchantment to transfer
+
+customUI.customScrollEnchantmentPage.noEnchantments = No enchantments on this scroll
+
+
+
+customUI.customScrollItemPage.title = Select Target Item
+
+customUI.customScrollItemPage.item = Item
+
+customUI.customScrollItemPage.enchantment = Enchantment
+
+customUI.customScrollItemPage.noItems = No matching items in your inventory

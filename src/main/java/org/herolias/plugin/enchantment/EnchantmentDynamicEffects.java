@@ -66,7 +66,7 @@ public class EnchantmentDynamicEffects {
 
     private static void onEffectsLoaded(LoadedAssetsEvent<String, EntityEffect, DefaultAssetMap<String, EntityEffect>> event) {
         // Only run config applicator once when our effects show up
-        if (event.getLoadedAssets().containsKey(BURN_EFFECT_ID) || event.getLoadedAssets().containsKey(FREEZE_EFFECT_ID) || event.getLoadedAssets().containsKey(POISON_EFFECT_ID) || event.getLoadedAssets().containsKey("EnvProtectionSpeedBuff_1")) {
+        if (event.getLoadedAssets().containsKey(BURN_EFFECT_ID) || event.getLoadedAssets().containsKey(FREEZE_EFFECT_ID) || event.getLoadedAssets().containsKey(POISON_EFFECT_ID)) {
             EnchantingConfig config = SimpleEnchanting.getInstance().getConfigManager().getConfig();
             applyOverrides(config, event.getLoadedAssets());
         }
@@ -87,8 +87,6 @@ public class EnchantmentDynamicEffects {
                 if (burn != null) applyBurnOverrides(burn, config);
                 if (freeze != null) applyFreezeOverrides(freeze, config);
                 if (poison != null) applyPoisonOverrides(poison, config);
-                
-                applyEnvProtectionOverrides(config, null);
             }
         } catch (Exception e) {
             LOGGER.atSevere().log("Failed to apply dynamic effect overrides: " + e.getMessage());
@@ -103,14 +101,13 @@ public class EnchantmentDynamicEffects {
         if (burn != null) applyBurnOverrides(burn, config);
         if (freeze != null) applyFreezeOverrides(freeze, config);
         if (poison != null) applyPoisonOverrides(poison, config);
-        
-        applyEnvProtectionOverrides(config, loadedAssets);
     }
 
     private static void applyBurnOverrides(EntityEffect burnEffect, EnchantingConfig config) {
         if (effectDurationField == null) return;
         try {
-            effectDurationField.set(burnEffect, (float) config.burnDuration);
+            double burnDuration = config.enchantmentMultipliers.getOrDefault("burn:duration", 3.0);
+            effectDurationField.set(burnEffect, (float) burnDuration);
             
             DamageCalculator calculator = (DamageCalculator) effectDamageCalcField.get(burnEffect);
             if (calculator != null) {
@@ -125,7 +122,7 @@ public class EnchantmentDynamicEffects {
                     baseDamage.put(fireIndex, (float) dps);
                 }
             }
-            LOGGER.atInfo().log("Applied dynamic overrides to BurnEnchantment. Duration: " + config.burnDuration + "s, DPS: " + config.enchantmentMultipliers.get("burn"));
+            LOGGER.atInfo().log("Applied dynamic overrides to BurnEnchantment. Duration: " + burnDuration + "s, DPS: " + config.enchantmentMultipliers.get("burn"));
         } catch (Exception e) {
             LOGGER.atSevere().log("Failed to override BurnEnchantment values: " + e.getMessage());
         }
@@ -134,14 +131,15 @@ public class EnchantmentDynamicEffects {
     private static void applyFreezeOverrides(EntityEffect freezeEffect, EnchantingConfig config) {
         if (effectDurationField == null) return;
         try {
-            effectDurationField.set(freezeEffect, (float) config.freezeDuration);
+            double freezeDuration = config.enchantmentMultipliers.getOrDefault("freeze:duration", 5.0);
+            effectDurationField.set(freezeEffect, (float) freezeDuration);
             
             ApplicationEffects appEffects = (ApplicationEffects) effectAppEffectsField.get(freezeEffect);
             if (appEffects != null) {
                 double slow = config.enchantmentMultipliers.getOrDefault("freeze", 0.5);
                 appEffectsSpeedMultField.set(appEffects, (float) slow);
             }
-            LOGGER.atInfo().log("Applied dynamic overrides to FreezeEnchantment. Duration: " + config.freezeDuration + "s, Slow: " + config.enchantmentMultipliers.get("freeze"));
+            LOGGER.atInfo().log("Applied dynamic overrides to FreezeEnchantment. Duration: " + freezeDuration + "s, Slow: " + config.enchantmentMultipliers.get("freeze"));
         } catch (Exception e) {
             LOGGER.atSevere().log("Failed to override FreezeEnchantment values: " + e.getMessage());
         }
@@ -150,7 +148,8 @@ public class EnchantmentDynamicEffects {
     private static void applyPoisonOverrides(EntityEffect poisonEffect, EnchantingConfig config) {
         if (effectDurationField == null) return;
         try {
-            effectDurationField.set(poisonEffect, (float) config.poisonDuration);
+            double poisonDuration = config.enchantmentMultipliers.getOrDefault("poison:duration", 4.0);
+            effectDurationField.set(poisonEffect, (float) poisonDuration);
             
             DamageCalculator calculator = (DamageCalculator) effectDamageCalcField.get(poisonEffect);
             if (calculator != null) {
@@ -165,52 +164,10 @@ public class EnchantmentDynamicEffects {
                     baseDamage.put(poisonIndex, (float) dps);
                 }
             }
-            LOGGER.atInfo().log("Applied dynamic overrides to PoisonEnchantment. Duration: " + config.poisonDuration + "s, DPS: " + config.enchantmentMultipliers.get("poison"));
+            LOGGER.atInfo().log("Applied dynamic overrides to PoisonEnchantment. Duration: " + poisonDuration + "s, DPS: " + config.enchantmentMultipliers.get("poison"));
         } catch (Exception e) {
             LOGGER.atSevere().log("Failed to override PoisonEnchantment values: " + e.getMessage());
         }
     }
 
-    private static void applyEnvProtectionOverrides(EnchantingConfig config, Map<String, EntityEffect> loadedAssets) {
-        if (effectDurationField == null || appEffectsSpeedMultField == null) return;
-        
-        double freezeMult = config.enchantmentMultipliers.getOrDefault("freeze", 0.5);
-        double envProtBase = config.enchantmentMultipliers.getOrDefault("environmental_protection", 0.04);
-        
-        for (int i = 1; i <= 12; i++) {
-            String effectId = "EnvProtectionSpeedBuff_" + i;
-            EntityEffect buff = loadedAssets == null ? EntityEffect.getAssetMap().getAsset(effectId) : loadedAssets.get(effectId);
-            
-            if (buff != null) {
-                try {
-                    // Match duration strictly to freeze
-                    effectDurationField.set(buff, (float) config.freezeDuration);
-                    
-                    ApplicationEffects appEffects = (ApplicationEffects) effectAppEffectsField.get(buff);
-                    if (appEffects != null) {
-                        double slowAmount = 1.0 - freezeMult;
-                        if (slowAmount < 0) slowAmount = 0;
-                        
-                        // Mitigate freeze slow by 4% per level
-                        double mitigationFraction = i * envProtBase;
-                        if (mitigationFraction > 1.0) mitigationFraction = 1.0;
-                        
-                        double mitigatedSlowAmount = slowAmount * (1.0 - mitigationFraction);
-                        double finalDesiredSpeedMult = 1.0 - mitigatedSlowAmount;
-                        
-                        // Hytale multiplies speed multipliers: final = freezeMult * buffMult
-                        double requiredBuffMult = 1.0;
-                        if (freezeMult > 0) {
-                            requiredBuffMult = finalDesiredSpeedMult / freezeMult;
-                        }
-                        
-                        appEffectsSpeedMultField.set(appEffects, (float) requiredBuffMult);
-                    }
-                } catch (Exception e) {
-                    LOGGER.atWarning().log("Failed to override " + effectId + " values: " + e.getMessage());
-                }
-            }
-        }
-        LOGGER.atInfo().log("Applied dynamic modifiers to EnvProtection speed buffs based on Freeze Config (" + config.freezeDuration + "s duration)");
-    }
 }

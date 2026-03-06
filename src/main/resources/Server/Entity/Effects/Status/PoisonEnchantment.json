@@ -22,7 +22,6 @@
         "PlayerSoundEventId": "SFX_Effect_Poison_Local"
     },
     "OverlapBehavior": "Overwrite",
-    "RemovalBehavior": "Duration",
     "Infinite": false,
     "Debuff": true,
     "StatusEffectIcon": "UI/StatusEffects/Poison.png",
