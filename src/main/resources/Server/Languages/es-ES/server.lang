@@ -1,4 +1,4 @@
-benchCategories.enchantingArmor = Armadura
+﻿benchCategories.enchantingArmor = Armadura
 benchCategories.enchantingTools = Herramientas
 benchCategories.enchantingMelee = Cuerpo a cuerpo
 benchCategories.enchantingRanged = Largo Alcance
@@ -69,7 +69,7 @@ items.Scroll_Smelting_I.description = El calor arcano funde al instante lo que e
 
 
 
-items.Scroll_Life_Leech_I.name = Pergamino de Robo de Vida I
+items.Scroll_Life_Leech_I.name = Pergamino de Robo de Vida
 items.Scroll_Life_Leech_I.description = Cada herida que infliges te devuelve vitalidad. Cura el 10% del daño causado.
 items.Scroll_Life_Leech_II.name = Pergamino de Robo de Vida II
 items.Scroll_Life_Leech_II.description = Cada herida que infliges te devuelve vitalidad. Cura el 20% del daño causado.
@@ -138,12 +138,12 @@ items.Scroll_Waterbreathing_III.description = El agua deja de ser tu enemiga. Re
 
 
 items.Scroll_Burn_I.name = Pergamino de Combustión
-items.Scroll_Burn_I.description = Tus golpes prenden fuego al objetivo, que caerá chamuscado. No combinable con Congelación.
+items.Scroll_Burn_I.description = Prende fuego al objetivo ({amount} daño/s durante {duration}s), que soltará variantes cocinadas de sus botines. No combinable con Congelación.
 
 
 
 items.Scroll_Freeze_I.name = Pergamino de Congelación
-items.Scroll_Freeze_I.description = El frío arcano encadena al objetivo en su lugar. Aplica una ralentización severa del 50% al golpear. No combinable con Combustión.
+items.Scroll_Freeze_I.description = Ralentiza al objetivo un {amount}% durante {duration}s al golpear. No combinable con Combustión.
 
 
 
@@ -282,10 +282,10 @@ enchantment.waterbreathing.name = Respiración Acuática
 enchantment.waterbreathing.description = Reduce el consumo de oxígeno en un 20%.
 
 enchantment.burn.name = Combustión
-enchantment.burn.description = Prende fuego al objetivo al golpear. No combinable con Congelación.
+enchantment.burn.description = Prende fuego al objetivo ({amount} daño/s durante {duration}s) y hace que suelte variantes cocinadas de sus botines. No combinable con Congelación.
 
 enchantment.freeze.name = Congelación
-enchantment.freeze.description = Ralentiza al objetivo un 50% al golpear. No combinable con Combustión.
+enchantment.freeze.description = Ralentiza al objetivo un {amount}% durante {duration}s al golpear. No combinable con Combustión.
 
 enchantment.eternal_shot.name = Flecha Eterna
 enchantment.eternal_shot.description = Dispara flechas sin consumirlas.
@@ -385,8 +385,8 @@ enchantment.eagles_eye.bonus = Daño por distancia hasta +{amount}%
 enchantment.looting.bonus = Botín máximo +{amount}%
 enchantment.feather_falling.bonus = Daño por caída -{amount}%
 enchantment.waterbreathing.bonus = Consumo de oxígeno -{amount}%
-enchantment.burn.bonus = Prende fuego al objetivo
-enchantment.freeze.bonus = Ralentiza al objetivo al golpear
+enchantment.burn.bonus = Prende fuego al objetivo ({amount} daño/s durante {duration}s)
+enchantment.freeze.bonus = Ralentiza al objetivo un {amount}% durante {duration}s
 enchantment.eternal_shot.bonus = No consume flechas
 enchantment.pick_perfect.bonus = Extrae el bloque intacto
 enchantment.thrift.bonus = Restaura el {amount}% del maná al atacar
@@ -470,7 +470,7 @@ customUI.walkthrough.welcome.desc = Este mod te permite mejorar tu equipo y arma
 customUI.walkthrough.table.title = 1. Mesa de Encantamiento
 customUI.walkthrough.table.desc = Crea una Mesa de Encantamiento en el Banco de Trabajo. Colócala e interactúa con ella para ver todos los Pergaminos de Encantamiento disponibles que puedes crear. También puedes mejorar la mesa para acceder a encantamientos de mayor nivel.
 customUI.walkthrough.scrolls.title = 2. Pergaminos de Encantamiento
-customUI.walkthrough.scrolls.desc = Crea pergaminos directamente en la Mesa de Encantamiento usando esencias, gemas, lingotes y plantas. Una vez creado, haz clic derecho en el pergamino mientras lo sostienes para aplicar el encantamiento a un arma, armadura o herramienta en tu inventario. Los pergaminos tienen diferentes rarezas, indicando la potencia o singularidad del encantamiento. La mayoría de los encantamientos tienen 3 Niveles, pero hay algunas excepciones. Los encantamientos legendarios son especialmente potentes o únicos.
+customUI.walkthrough.scrolls.desc = Crea pergaminos directamente en la Mesa de Encantamiento usando esencias, gemas, lingotes y plantas. Una vez creado, haz clic derecho en el pergamino mientras lo sostienes para aplicar el encantamiento a un arma, armadura o herramienta en tu inventario. Los pergaminos tienen diferentes rarezas, indicando la potencia o singularidad del encantamiento. La mayoría de los encantamientos tienen 3 Niveles, pero hay algunas excepciones. Los encantamientos legendarios son especialmente potentes o únicos. También puedes combinar o mejorar pergaminos. Simplemente selecciona otro pergamino en lugar de un objeto al aplicar encantamientos y los pergaminos se combinarán.
 customUI.walkthrough.removing.title = 3. Eliminar Encantamientos
 customUI.walkthrough.removing.desc = ¿Cometiste un error? Puedes crear un Pergamino de Purificación para eliminar los encantamientos de un objeto. En este servidor, {returnScroll} recuperar el pergamino.
 customUI.walkthrough.salvaging.title = 4. Reciclaje
@@ -500,8 +500,8 @@ enchantment.eagles_eye.walkthrough = Aumenta el daño de proyectiles hasta {amou
 enchantment.looting.walkthrough = Aumenta las tasas máximas de botín de enemigos en {amount}% por nivel y mejora la probabilidad de objetos raros. Se aplica a armas cuerpo a cuerpo, a distancia y bastones.
 enchantment.feather_falling.walkthrough = Reduce el daño por caída en {amount}% por nivel. Se aplica a botas.
 enchantment.waterbreathing.walkthrough = Reduce el consumo de oxígeno en {amount}% por nivel. Se aplica a cascos.
-enchantment.burn.walkthrough = Prende fuego al objetivo y hace que suelte variantes cocinadas de sus botines. Se aplica a armas cuerpo a cuerpo y a distancia. No combinable con Congelar.
-enchantment.freeze.walkthrough = Aplica ralentización severa (50%) al objetivo al golpear. Se aplica a armas cuerpo a cuerpo y a distancia. No combinable con Quemar.
+enchantment.burn.walkthrough = Prende fuego al objetivo, causando {amount} daño por segundo durante {duration} segundos, y hace que suelte variantes cocinadas de sus botines. Se aplica a armas cuerpo a cuerpo y a distancia. No combinable con Congelar.
+enchantment.freeze.walkthrough = Ralentiza al objetivo un {amount}% durante {duration} segundos al golpear. Se aplica a armas cuerpo a cuerpo y a distancia. No combinable con Quemar.
 enchantment.eternal_shot.walkthrough = Permite disparar flechas sin consumirlas. Aún necesitas 1 flecha en el inventario. Se aplica a armas a distancia.
 enchantment.pick_perfect.walkthrough = Los bloques minados se sueltan a sí mismos en lugar de sus botines habituales. Se aplica a picos, hachas y palas. No combinable con Fortuna o Fundición.
 enchantment.thrift.walkthrough = Restaura {amount}% del maná gastado al golpear por nivel. Se aplica a bastones de maná.
@@ -519,3 +519,127 @@ enchantment.coup_de_grace.walkthrough = Este es un Encantamiento en colaboració
 
 
 tooltip.enchantments = Encantamientos:
+
+items.Scroll_Poison_I.name = Pergamino de Veneno
+
+items.Scroll_Poison_I.description = Envenena a los objetivos al golpear ({amount} daño/s durante {duration}s). No combinable con Combustión.
+
+
+
+items.Scroll_Environmental_Protection_I.name = Pergamino de Protección Ambiental I
+
+items.Scroll_Environmental_Protection_I.description = Reduce el daño ambiental en un 4% por pieza de armadura.
+
+items.Scroll_Environmental_Protection_II.name = Pergamino de Protección Ambiental II
+
+items.Scroll_Environmental_Protection_II.description = Reduce el daño ambiental en un 8% por pieza de armadura.
+
+items.Scroll_Environmental_Protection_III.name = Pergamino de Protección Ambiental III
+
+items.Scroll_Environmental_Protection_III.description = Reduce el daño ambiental en un 12% por pieza de armadura.
+
+
+
+enchantment.poison.name = Veneno
+
+enchantment.poison.description = Envenena a los objetivos al golpear ({amount} daño/s durante {duration}s). No combinable con Combustión.
+
+
+
+enchantment.environmental_protection.name = Protección Ambiental
+
+enchantment.environmental_protection.description = Reduce el daño ambiental en un 4% por pieza de armadura.
+
+enchantment.poison.bonus = Envenena al objetivo al golpear ({amount} daño/s durante {duration}s)
+enchantment.environmental_protection.bonus = Daño ambiental -{amount}%
+
+enchantment.poison.walkthrough = Envenena a los objetivos al golpear, causando {amount} daño por segundo durante {duration} segundos. Se aplica a armas cuerpo a cuerpo y a distancia. No combinable con Combustión.
+enchantment.environmental_protection.walkthrough = Reduce el daño elemental y ambiental entrante (fuego, hielo, cactus y otros peligros) en {amount}% por pieza de armadura por nivel, y mitiga proporcionalmente la intensidad de ralentización del encantamiento de Congelación. Se aplica a armaduras.
+
+
+items.Scroll_Custom.name = Pergamino Personalizado
+
+items.Scroll_Custom.description = Un pergamino mágico que puede contener múltiples encantamientos. Úsalo para transferir encantamientos a objetos.
+
+
+
+customUI.customScrollEnchantmentPage.title = Pergamino Personalizado
+
+customUI.customScrollEnchantmentPage.selectHint = Selecciona un encantamiento para transferir
+
+customUI.customScrollEnchantmentPage.noEnchantments = No hay encantamientos en este pergamino
+
+
+
+customUI.customScrollItemPage.title = Seleccionar Objeto Destino
+
+customUI.customScrollItemPage.item = Objeto
+
+customUI.customScrollItemPage.enchantment = Encantamiento
+
+customUI.customScrollItemPage.noItems = No hay objetos compatibles en tu inventario
+
+
+
+scroll.category.applies_to = Se puede aplicar a: 
+
+itemCategory.MELEE_WEAPON = Armas Cuerpo a Cuerpo
+
+itemCategory.RANGED_WEAPON = Armas a Distancia
+
+itemCategory.TOOL = Herramientas
+
+itemCategory.PICKAXE = Picos
+
+itemCategory.SHOVEL = Palas
+
+itemCategory.AXE = Hachas
+
+itemCategory.SHIELD = Escudos
+
+itemCategory.BOOTS = Botas
+
+itemCategory.HELMET = Cascos
+
+itemCategory.ARMOR = Armadura
+
+itemCategory.GLOVES = Guantes
+
+itemCategory.STAFF = Bastones
+
+itemCategory.STAFF_MANA = Bastones de Maná
+
+itemCategory.STAFF_ESSENCE = Bastones de Esencia
+
+itemCategory.UNKNOWN = Desconocido
+
+config.multiplier.sharpness = Daño por Nivel
+config.multiplier.life_leech = Curación % por Nivel
+config.multiplier.durability = Reducción por Nivel
+config.multiplier.dexterity = Reducción de Stamina por Nivel
+config.multiplier.protection = Reducción de Daño por Nivel
+config.multiplier.efficiency = Velocidad por Nivel
+config.multiplier.fortune = Probabilidad de Drop por Nivel
+config.multiplier.strength = Daño por Nivel
+config.multiplier.eagles_eye = Bonificación de Distancia por Nivel
+config.multiplier.looting = Probabilidad de Drop por Nivel
+config.multiplier.looting:quantity = Bonificación de Cantidad por Nivel
+config.multiplier.feather_falling = Reducción por Nivel
+config.multiplier.waterbreathing = Reducción de Consumo por Nivel
+config.multiplier.burn = Daño por Segundo
+config.multiplier.burn:duration = Duración (Segundos)
+config.multiplier.freeze = Intensidad de Ralentización
+config.multiplier.freeze:duration = Duración (Segundos)
+config.multiplier.knockback = Fuerza por Nivel
+config.multiplier.reflection = Reflexión % por Nivel
+config.multiplier.absorption = Curación % por Nivel
+config.multiplier.fast_swim = Velocidad por Nivel
+config.multiplier.ranged_protection = Reducción de Daño por Nivel
+config.multiplier.frenzy = Velocidad de Carga por Nivel
+config.multiplier.riposte = Daño por Nivel
+config.multiplier.coup_de_grace = Daño por Nivel
+config.multiplier.thrift = Restauración % por Nivel
+config.multiplier.elemental_heart = Probabilidad de Ahorro por Nivel
+config.multiplier.poison = Daño por Segundo
+config.multiplier.poison:duration = Duración (Segundos)
+config.multiplier.environmental_protection = Reducción por Nivel

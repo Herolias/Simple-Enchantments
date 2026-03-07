@@ -108,7 +108,7 @@ items.Scroll_Smelting_I.description = Smälter automatiskt brutna block.
 
 
 
-items.Scroll_Life_Leech_I.name = Livssugningsrulle I
+items.Scroll_Life_Leech_I.name = Livssugningsrulle
 
 items.Scroll_Life_Leech_I.description = Läker anfallaren för 10% av utdelad skada.
 
@@ -214,13 +214,13 @@ items.Scroll_Waterbreathing_III.description = Minskar syreförbrukningen med 60%
 
 items.Scroll_Burn_I.name = Brännrulle
 
-items.Scroll_Burn_I.description = Tänder eld på målet och får det att släppa tillagat kött. Kan ej kombineras med Frysning.
+items.Scroll_Burn_I.description = Tänder eld på målet ({amount} skada/s under {duration}s) och får det att släppa tillagade varianter av sina byten. Kan ej kombineras med Frysning.
 
 
 
 items.Scroll_Freeze_I.name = Frysrulle
 
-items.Scroll_Freeze_I.description = Saktar ner målet kraftigt (50%) vid träff. Ej kompatibel med Bränning.
+items.Scroll_Freeze_I.description = Saktar ner målet med {amount}% under {duration}s vid träff. Ej kompatibel med Bränning.
 
 
 
@@ -418,11 +418,11 @@ enchantment.waterbreathing.description = Minskar syreförbrukningen med 20%.
 
 enchantment.burn.name = Bränna
 
-enchantment.burn.description = Tänder eld på målet och får det att släppa tillagat kött. Kan ej kombineras med Frysning.
+enchantment.burn.description = Tänder eld på målet ({amount} skada/s under {duration}s) och får det att släppa tillagade varianter av sina byten. Kan ej kombineras med Frysning.
 
 enchantment.freeze.name = Frysning
 
-enchantment.freeze.description = Saktar ner målet kraftigt (50%) vid träff. Ej kompatibel med Bränning.
+enchantment.freeze.description = Saktar ner målet med {amount}% under {duration}s vid träff. Ej kompatibel med Bränning.
 
 enchantment.eternal_shot.name = Evighetsskott
 
@@ -542,8 +542,8 @@ enchantment.eagles_eye.bonus = Skadan ökar med avståndet upp till {amount}%
 enchantment.looting.bonus = Bytesfrekvens ökad med {amount}%
 enchantment.feather_falling.bonus = Fallskada minskad med {amount}%
 enchantment.waterbreathing.bonus = Syreförbrukning minskad med {amount}%
-enchantment.burn.bonus = Sätter målet i brand
-enchantment.freeze.bonus = Sakta ner målet vid träff
+enchantment.burn.bonus = Tänder eld på målet ({amount} skada/s under {duration}s)
+enchantment.freeze.bonus = Saktar ner målet med {amount}% under {duration}s vid träff
 enchantment.eternal_shot.bonus = Förbrukar inga pilar
 enchantment.pick_perfect.bonus = Släpper själva blocket
 enchantment.thrift.bonus = Återställer {amount}% mana vid träff
@@ -620,7 +620,7 @@ customUI.walkthrough.table.title = 1. Förtrollningsbordet
 customUI.walkthrough.table.desc = Tillverka ett Förtrollningsbord vid Arbetsbänken. Placera det och interagera med det för att bläddra bland alla tillgängliga Förtrollningsrullar du kan tillverka. Du kan också uppgradera bordet för att komma åt förtrollningar på högre nivå.
 
 customUI.walkthrough.scrolls.title = 2. Förtrollningsrullar
-customUI.walkthrough.scrolls.desc = Tillverka rullar direkt vid Förtrollningsbordet med essenser, ädelstenar, tackor och växter. När de är tillverkade, högerklicka på rullen medan du håller den för att applicera förtrollningen på ett vapen, rustning eller verktyg i din inventarie. Rullar har olika sällsynthet, som visar hur stark eller unik förtrollningen är. De flesta förtrollningar har 3 nivåer, men det finns undantag. Legendariska förtrollningar är särskilt starka eller unika.
+customUI.walkthrough.scrolls.desc = Tillverka rullar direkt vid Förtrollningsbordet med essenser, ädelstenar, tackor och växter. När de är tillverkade, högerklicka på rullen medan du håller den för att applicera förtrollningen på ett vapen, rustning eller verktyg i din inventarie. Rullar har olika sällsynthet, som visar hur stark eller unik förtrollningen är. De flesta förtrollningar har 3 nivåer, men det finns undantag. Legendariska förtrollningar är särskilt starka eller unika. Du kan också kombinera eller uppgradera rullar. Välj bara en annan rulle i stället för ett föremål när du applicerar förtrollningar och rullarna kommer att kombineras.
 
 customUI.walkthrough.removing.title = 3. Ta Bort Förtrollningar
 customUI.walkthrough.removing.desc = Gjort ett misstag? Du kan tillverka en Reningsrulle för att ta bort förtrollningar från ett föremål. På denna server {returnScroll} du få tillbaka rullen.
@@ -656,8 +656,8 @@ enchantment.eagles_eye.walkthrough = Ökar projektilskada med upp till {amount}%
 enchantment.looting.walkthrough = Ökar maximala droppfrekvenser från monster med {amount}% per nivå och ökar chansen för sällsynta droppar. Gäller för närstridsvapen, avståndsvapen och stavar.
 enchantment.feather_falling.walkthrough = Minskar fallskada med {amount}% per nivå. Gäller för stövlar.
 enchantment.waterbreathing.walkthrough = Minskar syreförbrukning med {amount}% per nivå. Gäller för hjälmar.
-enchantment.burn.walkthrough = Sätter målet i brand och låter det droppa kokta varianter av sina droppar. Gäller för närstrids- och avståndsvapen. Inte kombinerbar med Frysning.
-enchantment.freeze.walkthrough = Applicerar kraftig avmattning (50%) på målet vid träff. Gäller för närstrids- och avståndsvapen. Inte kombinerbar med Bränning.
+enchantment.burn.walkthrough = Tänder eld på målet, gör {amount} skada per sekund i {duration} sekunder, och får det att släppa tillagade varianter av sina byten. Gäller för närstrids- och avståndsvapen. Inte kombinerbar med Frysning.
+enchantment.freeze.walkthrough = Saktar ner målet med {amount}% i {duration} sekunder vid träff. Gäller för närstrids- och avståndsvapen. Inte kombinerbar med Bränning.
 enchantment.eternal_shot.walkthrough = Låter dig skjuta pilar utan att förbruka dem. Du behöver fortfarande 1 pil i din inventarie. Gäller för avståndsvapen.
 enchantment.pick_perfect.walkthrough = Brutna block droppar sig själva istället för sina vanliga droppar. Gäller för hackor, yxor och spadar. Inte kombinerbar med Tur eller Smältning.
 enchantment.thrift.walkthrough = Återställer {amount}% av förbrukad mana per träff per nivå. Gäller för manastavar.
@@ -674,3 +674,134 @@ enchantment.coup_de_grace.walkthrough = Detta är en samarbetsförtrollning med 
 
 
 tooltip.enchantments = Förtrollningar:
+
+customUI.enchantScrollPage.current = Nuvarande:
+customUI.enchantScrollPage.apply = Applicera:
+customUI.enchantScrollPage.upgrade = Uppgradera:
+customUI.cleansingScrollPage.enchantment.singular = förtrollning
+customUI.cleansingEnchantmentPage.clickToRemove = Klicka för att ta bort
+
+items.Scroll_Poison_I.name = Giftförtrollningsrulle
+
+items.Scroll_Poison_I.description = Förgiftar mål vid träff ({amount} skada/s under {duration}s). Ej kompatibel med Bränning.
+
+
+
+items.Scroll_Environmental_Protection_I.name = Miljöskyddsrulle I
+
+items.Scroll_Environmental_Protection_I.description = Minskar miljöskada med 4% per rustningsdel.
+
+items.Scroll_Environmental_Protection_II.name = Miljöskyddsrulle II
+
+items.Scroll_Environmental_Protection_II.description = Minskar miljöskada med 8% per rustningsdel.
+
+items.Scroll_Environmental_Protection_III.name = Miljöskyddsrulle III
+
+items.Scroll_Environmental_Protection_III.description = Minskar miljöskada med 12% per rustningsdel.
+
+
+
+enchantment.poison.name = Gift
+
+enchantment.poison.description = Förgiftar mål vid träff ({amount} skada/s under {duration}s). Ej kompatibel med Bränning.
+
+
+
+enchantment.environmental_protection.name = Miljöskydd
+
+enchantment.environmental_protection.description = Minskar miljöskada med 4% per rustningsdel.
+
+enchantment.poison.bonus = Förgiftar mål ({amount} skada/s under {duration}s)
+enchantment.environmental_protection.bonus = Miljöskada minskad med {amount}%
+
+enchantment.poison.walkthrough = Förgiftar mål vid träff, gör {amount} skada per sekund i {duration} sekunder. Gäller för närstrids- och avståndsvapen. Ej kompatibel med Bränning.
+enchantment.environmental_protection.walkthrough = Minskar inkommande elementär och miljöskada (eld, is, kaktusar och andra faror) med {amount}% per rustningsdel per nivå, och motverkar proportionellt avmattningen av frysning. Gäller för rustningar.
+
+
+items.Scroll_Custom.name = Anpassad Rulle
+
+items.Scroll_Custom.description = En magisk rulle som kan innehålla flera förtrollningar. Använd den för att överföra förtrollningar till föremål.
+
+
+
+customUI.customScrollEnchantmentPage.title = Anpassad Rulle
+
+customUI.customScrollEnchantmentPage.selectHint = Välj en förtrollning att överföra
+
+customUI.customScrollEnchantmentPage.noEnchantments = Inga förtrollningar på rullen
+
+
+
+customUI.customScrollItemPage.title = Välj Målföremål
+
+customUI.customScrollItemPage.item = Föremål
+
+customUI.customScrollItemPage.enchantment = Förtrollning
+
+customUI.customScrollItemPage.noItems = Inga lämpliga föremål i inventariet
+
+
+
+scroll.category.applies_to = Kan appliceras på: 
+
+itemCategory.MELEE_WEAPON = Närstridsvapen
+
+itemCategory.RANGED_WEAPON = Avståndsvapen
+
+itemCategory.TOOL = Verktyg
+
+itemCategory.PICKAXE = Hackor
+
+itemCategory.SHOVEL = Spadar
+
+itemCategory.AXE = Yxor
+
+itemCategory.SHIELD = Sköldar
+
+itemCategory.BOOTS = Stövlar
+
+itemCategory.HELMET = Hjälmar
+
+itemCategory.ARMOR = Rustning
+
+itemCategory.GLOVES = Handskar
+
+itemCategory.STAFF = Stavar
+
+itemCategory.STAFF_MANA = Manastavar
+
+itemCategory.STAFF_ESSENCE = Essensstavar
+
+itemCategory.UNKNOWN = Okänd
+
+config.multiplier.sharpness = Skada per Nivå
+config.multiplier.life_leech = Läkande % per Nivå
+config.multiplier.durability = Minskning per Nivå
+config.multiplier.dexterity = Uthållighetsminskning per Nivå
+config.multiplier.protection = Skademinskning per Nivå
+config.multiplier.efficiency = Hastighet per Nivå
+config.multiplier.fortune = Droppchans per Nivå
+config.multiplier.strength = Skada per Nivå
+config.multiplier.eagles_eye = Avståndsbonus per Nivå
+config.multiplier.looting = Droppchans per Nivå
+config.multiplier.looting:quantity = Mängdbonus per Nivå
+config.multiplier.feather_falling = Minskning per Nivå
+config.multiplier.waterbreathing = Förbrukningsminskning per Nivå
+config.multiplier.burn = Skada per Sekund
+config.multiplier.burn:duration = Längd (Sekunder)
+config.multiplier.freeze = Avmattning
+config.multiplier.freeze:duration = Längd (Sekunder)
+config.multiplier.knockback = Kraft per Nivå
+config.multiplier.reflection = Reflektion % per Nivå
+config.multiplier.absorption = Läkande % per Nivå
+config.multiplier.fast_swim = Simhastighet per Nivå
+config.multiplier.ranged_protection = Skademinskning per Nivå
+config.multiplier.frenzy = Laddningshastighet per Nivå
+config.multiplier.riposte = Skada per Nivå
+config.multiplier.coup_de_grace = Skada per Nivå
+config.multiplier.thrift = Återställande % per Nivå
+config.multiplier.elemental_heart = Essenssparande Chans per Nivå
+config.multiplier.poison = Skada per Sekund
+config.multiplier.poison:duration = Längd (Sekunder)
+config.multiplier.environmental_protection = Minskning per Nivå
+

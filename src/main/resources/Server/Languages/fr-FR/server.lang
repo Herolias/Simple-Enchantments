@@ -108,7 +108,7 @@ items.Scroll_Smelting_I.description = Fond automatiquement les blocs minés.
 
 
 
-items.Scroll_Life_Leech_I.name = Parchemin de Vol de Vie I
+items.Scroll_Life_Leech_I.name = Parchemin de Vol de Vie
 
 items.Scroll_Life_Leech_I.description = Soigne l'attaquant pour 10% des dégâts infligés.
 
@@ -214,13 +214,13 @@ items.Scroll_Waterbreathing_III.description = Réduit la consommation d'oxygène
 
 items.Scroll_Burn_I.name = Parchemin de Brûlure
 
-items.Scroll_Burn_I.description = Enflamme la cible et fait tomber des variantes cuites de ses butins. Incompatible avec Gel.
+items.Scroll_Burn_I.description = Enflamme la cible ({amount} dégâts/s pendant {duration}s) et fait tomber des variantes cuites de ses butins. Incompatible avec Gel.
 
 
 
 items.Scroll_Freeze_I.name = Parchemin de Gel
 
-items.Scroll_Freeze_I.description = Applique un fort ralentissement (50%) à la cible touchée. Incompatible avec Brûlure.
+items.Scroll_Freeze_I.description = Ralentit la cible de {amount}% pendant {duration}s. Incompatible avec Brûlure.
 
 
 
@@ -418,11 +418,11 @@ enchantment.waterbreathing.description = Réduit la consommation d'oxygène de 2
 
 enchantment.burn.name = Brûlure
 
-enchantment.burn.description = Enflamme la cible et fait tomber des variantes cuites de ses butins. Incompatible avec Gel.
+enchantment.burn.description = Enflamme la cible ({amount} dégâts/s pendant {duration}s) et fait tomber des variantes cuites de ses butins. Incompatible avec Gel.
 
 enchantment.freeze.name = Gel
 
-enchantment.freeze.description = Applique un fort ralentissement (50%) à la cible touchée. Incompatible avec Brûlure.
+enchantment.freeze.description = Ralentit la cible de {amount}% pendant {duration}s. Incompatible avec Brûlure.
 
 enchantment.eternal_shot.name = Tir Éternel
 
@@ -541,8 +541,8 @@ enchantment.eagles_eye.bonus = Dégâts augmentent avec la distance jusqu'à {am
 enchantment.looting.bonus = Taux de butin augmenté de {amount}%
 enchantment.feather_falling.bonus = Dégâts de chute réduits de {amount}%
 enchantment.waterbreathing.bonus = Consommation d'oxygène réduite de {amount}%
-enchantment.burn.bonus = Enflamme la cible
-enchantment.freeze.bonus = Ralentit la cible touchée
+enchantment.burn.bonus = Enflamme la cible ({amount} dégâts/s pendant {duration}s)
+enchantment.freeze.bonus = Ralentit la cible de {amount}% pendant {duration}s
 enchantment.eternal_shot.bonus = Ne consomme pas de flèches
 enchantment.pick_perfect.bonus = Fait tomber le bloc lui-même
 enchantment.thrift.bonus = Restaure {amount}% du mana au coup
@@ -619,7 +619,7 @@ customUI.walkthrough.table.title = 1. La Table d'Enchantement
 customUI.walkthrough.table.desc = Fabriquez une Table d'Enchantement à l'Établi. Placez-la et interagissez avec pour parcourir tous les Parchemins d'Enchantement disponibles que vous pouvez fabriquer. Vous pouvez aussi améliorer la table pour accéder à des enchantements de niveau supérieur.
 
 customUI.walkthrough.scrolls.title = 2. Parchemins d'Enchantement
-customUI.walkthrough.scrolls.desc = Fabriquez des parchemins directement à la Table d'Enchantement en utilisant des essences, gemmes, lingots et plantes. Une fois fabriqué, faites un clic droit sur le parchemin en le tenant pour appliquer l'enchantement à une arme, armure ou outil dans votre inventaire. Les parchemins ont différentes raretés, indiquant la puissance ou l'unicité de l'enchantement. La plupart des enchantements ont 3 niveaux, mais il y a des exceptions. Les enchantements légendaires sont particulièrement puissants ou uniques.
+customUI.walkthrough.scrolls.desc = Fabriquez des parchemins directement à la Table d'Enchantement en utilisant des essences, gemmes, lingots et plantes. Une fois fabriqué, faites un clic droit sur le parchemin en le tenant pour appliquer l'enchantement à une arme, armure ou outil dans votre inventaire. Les parchemins ont différentes raretés, indiquant la puissance ou l'unicité de l'enchantement. La plupart des enchantements ont 3 niveaux, mais il y a des exceptions. Les enchantements légendaires sont particulièrement puissants ou uniques. Vous pouvez également combiner ou améliorer des parchemins. Sélectionnez simplement un autre parchemin au lieu d'un objet lors de l'application d'enchantements et les parchemins seront combinés.
 
 customUI.walkthrough.removing.title = 3. Retirer des Enchantements
 customUI.walkthrough.removing.desc = Vous avez fait une erreur ? Vous pouvez fabriquer un Parchemin de Purification pour retirer les enchantements d'un objet. Sur ce serveur, vous {returnScroll} récupérer le parchemin.
@@ -654,8 +654,8 @@ enchantment.eagles_eye.walkthrough = Augmente les dégâts des projectiles jusqu
 enchantment.looting.walkthrough = Augmente les taux de butin maximum des mobs de {amount}% par niveau et améliore la chance de butins rares. S'applique aux armes de mêlée, armes à distance et bâtons.
 enchantment.feather_falling.walkthrough = Réduit les dégâts de chute de {amount}% par niveau. S'applique aux bottes.
 enchantment.waterbreathing.walkthrough = Réduit la consommation d'oxygène de {amount}% par niveau. S'applique aux casques.
-enchantment.burn.walkthrough = Enflamme la cible et lui fait lâcher des variantes cuites de ses butins. S'applique aux armes de mêlée et à distance. Non combinable avec Gel.
-enchantment.freeze.walkthrough = Applique un ralentissement sévère (50%) à la cible lors d'un coup. S'applique aux armes de mêlée et à distance. Non combinable avec Brûlure.
+enchantment.burn.walkthrough = Enflamme la cible, infligeant {amount} dégâts par seconde pendant {duration} secondes, et lui fait lâcher des variantes cuites de ses butins. S'applique aux armes de mêlée et à distance. Non combinable avec Gel.
+enchantment.freeze.walkthrough = Ralentit la cible de {amount}% pendant {duration} secondes. S'applique aux armes de mêlée et à distance. Non combinable avec Brûlure.
 enchantment.eternal_shot.walkthrough = Permet de tirer des flèches sans les consommer. Il faut toujours 1 flèche dans l'inventaire. S'applique aux armes à distance.
 enchantment.pick_perfect.walkthrough = Les blocs minés se lâchent eux-mêmes au lieu de leurs butins habituels. S'applique aux pioches, haches et pelles. Non combinable avec Fortune ou Fonte.
 enchantment.thrift.walkthrough = Restaure {amount}% du mana dépensé par coup par niveau. S'applique aux bâtons de mana.
@@ -672,3 +672,133 @@ enchantment.coup_de_grace.walkthrough = Ceci est un Enchantement en collaboratio
 
 
 tooltip.enchantments = Enchantements:
+
+customUI.enchantScrollPage.current = Actuel :
+customUI.enchantScrollPage.apply = Appliquer :
+customUI.enchantScrollPage.upgrade = Améliorer :
+customUI.cleansingScrollPage.enchantment.singular = enchantement
+customUI.cleansingEnchantmentPage.clickToRemove = Cliquer pour retirer
+
+items.Scroll_Poison_I.name = Parchemin de Poison
+
+items.Scroll_Poison_I.description = Empoisonne les cibles touchées ({amount} dégâts/s pendant {duration}s). Incompatible avec Brûlure.
+
+
+
+items.Scroll_Environmental_Protection_I.name = Parchemin de Protection Environnementale I
+
+items.Scroll_Environmental_Protection_I.description = Réduit les dégâts environnementaux de 4% par pièce d'armure.
+
+items.Scroll_Environmental_Protection_II.name = Parchemin de Protection Environnementale II
+
+items.Scroll_Environmental_Protection_II.description = Réduit les dégâts environnementaux de 8% par pièce d'armure.
+
+items.Scroll_Environmental_Protection_III.name = Parchemin de Protection Environnementale III
+
+items.Scroll_Environmental_Protection_III.description = Réduit les dégâts environnementaux de 12% par pièce d'armure.
+
+
+
+enchantment.poison.name = Poison
+
+enchantment.poison.description = Empoisonne les cibles touchées ({amount} dégâts/s pendant {duration}s). Incompatible avec Brûlure.
+
+
+
+enchantment.environmental_protection.name = Protection Environnementale
+
+enchantment.environmental_protection.description = Réduit les dégâts environnementaux de 4% par pièce d'armure.
+
+enchantment.poison.bonus = Empoisonne les cibles ({amount} dégâts/s pendant {duration}s)
+enchantment.environmental_protection.bonus = Dégâts environnementaux réduits de {amount}%
+
+enchantment.poison.walkthrough = Empoisonne les cibles touchées, infligeant {amount} dégâts par seconde pendant {duration} secondes. S'applique aux armes de mêlée et à distance. Incompatible avec Brûlure.
+enchantment.environmental_protection.walkthrough = Réduit les dégâts élémentaires et environnementaux (feu, glace, cactus et autres dangers) de {amount}% par pièce d'armure par niveau, et atténue proportionnellement l'intensité du ralentissement de l'enchantement Gel. S'applique aux armures.
+
+
+items.Scroll_Custom.name = Parchemin Personnalisé
+
+items.Scroll_Custom.description = Un parchemin magique pouvant contenir plusieurs enchantements. Utilisez-le pour transférer des enchantements sur des objets.
+
+
+
+customUI.customScrollEnchantmentPage.title = Parchemin Personnalisé
+
+customUI.customScrollEnchantmentPage.selectHint = Sélectionnez un enchantement à transférer
+
+customUI.customScrollEnchantmentPage.noEnchantments = Aucun enchantement sur ce parchemin
+
+
+
+customUI.customScrollItemPage.title = Sélectionner l'Objet Cible
+
+customUI.customScrollItemPage.item = Objet
+
+customUI.customScrollItemPage.enchantment = Enchantement
+
+customUI.customScrollItemPage.noItems = Aucun objet compatible dans votre inventaire
+
+
+
+scroll.category.applies_to = Peut être appliqué sur : 
+
+itemCategory.MELEE_WEAPON = Armes de Mêlée
+
+itemCategory.RANGED_WEAPON = Armes à Distance
+
+itemCategory.TOOL = Outils
+
+itemCategory.PICKAXE = Pioches
+
+itemCategory.SHOVEL = Pelles
+
+itemCategory.AXE = Haches
+
+itemCategory.SHIELD = Boucliers
+
+itemCategory.BOOTS = Bottes
+
+itemCategory.HELMET = Casques
+
+itemCategory.ARMOR = Armure
+
+itemCategory.GLOVES = Gants
+
+itemCategory.STAFF = Bâtons
+
+itemCategory.STAFF_MANA = Bâtons de Mana
+
+itemCategory.STAFF_ESSENCE = Bâtons d'Essence
+
+itemCategory.UNKNOWN = Inconnu
+
+config.multiplier.sharpness = Dégâts par Niveau
+config.multiplier.life_leech = Soin % par Niveau
+config.multiplier.durability = Réduction par Niveau
+config.multiplier.dexterity = Réduction Endurance par Niveau
+config.multiplier.protection = Réduction Dégâts par Niveau
+config.multiplier.efficiency = Vitesse par Niveau
+config.multiplier.fortune = Chance de Butin par Niveau
+config.multiplier.strength = Dégâts par Niveau
+config.multiplier.eagles_eye = Bonus Distance par Niveau
+config.multiplier.looting = Chance de Butin par Niveau
+config.multiplier.looting:quantity = Bonus Quantité par Niveau
+config.multiplier.feather_falling = Réduction par Niveau
+config.multiplier.waterbreathing = Réduction Consommation par Niveau
+config.multiplier.burn = Dégâts par Seconde
+config.multiplier.burn:duration = Durée (Secondes)
+config.multiplier.freeze = Intensité Ralentissement
+config.multiplier.freeze:duration = Durée (Secondes)
+config.multiplier.knockback = Force par Niveau
+config.multiplier.reflection = Réflexion % par Niveau
+config.multiplier.absorption = Soin % par Niveau
+config.multiplier.fast_swim = Vitesse par Niveau
+config.multiplier.ranged_protection = Réduction Dégâts par Niveau
+config.multiplier.frenzy = Vitesse de Charge par Niveau
+config.multiplier.riposte = Dégâts par Niveau
+config.multiplier.coup_de_grace = Dégâts par Niveau
+config.multiplier.thrift = Restauration % par Niveau
+config.multiplier.elemental_heart = Chance d'Économie par Niveau
+config.multiplier.poison = Dégâts par Seconde
+config.multiplier.poison:duration = Durée (Secondes)
+config.multiplier.environmental_protection = Réduction par Niveau

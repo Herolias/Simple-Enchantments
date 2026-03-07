@@ -104,7 +104,7 @@ items.Scroll_Smelting_I.description = Fonde automaticamente i minerali scavati.
 
 
 
-items.Scroll_Life_Leech_I.name = Pergamena del Risucchio Vitale I
+items.Scroll_Life_Leech_I.name = Pergamena del Risucchio Vitale
 
 items.Scroll_Life_Leech_I.description = Cura l'attaccante del 10% del danno inflitto.
 
@@ -210,13 +210,13 @@ items.Scroll_Waterbreathing_III.description = Riduce il consumo di ossigeno del 
 
 items.Scroll_Burn_I.name = Pergamena del Fuoco
 
-items.Scroll_Burn_I.description = Incendia il bersaglio e fa cadere carne cotta. Non combinabile con la pergamena del Ghiaccio.
+items.Scroll_Burn_I.description = Incendia il bersaglio ({amount} danni/s per {duration}s) e fa cadere varianti cotte dei suoi bottini. Non combinabile con la pergamena del Ghiaccio.
 
 
 
 items.Scroll_Freeze_I.name = Pergamena del Ghiaccio
 
-items.Scroll_Freeze_I.description = Applica un forte rallentamento (50%) al bersaglio colpito. Non combinabile con la pergamena del Fuoco.
+items.Scroll_Freeze_I.description = Rallenta il bersaglio del {amount}% per {duration}s al colpo. Non combinabile con la pergamena del Fuoco.
 
 
 
@@ -414,11 +414,11 @@ enchantment.waterbreathing.description = Riduce il consumo di ossigeno del 20%.
 
 enchantment.burn.name = Fuoco
 
-enchantment.burn.description = Incendia il bersaglio e fa cadere carne cotta. Non combinabile con Congelamento.
+enchantment.burn.description = Incendia il bersaglio ({amount} danni/s per {duration}s) e fa cadere varianti cotte dei suoi bottini. Non combinabile con Congelamento.
 
 enchantment.freeze.name = Ghiaccio
 
-enchantment.freeze.description = Applica un forte rallentamento (50%) al bersaglio colpito. Non combinabile con Arsura.
+enchantment.freeze.description = Rallenta il bersaglio del {amount}% per {duration}s al colpo. Non combinabile con Arsura.
 
 enchantment.eternal_shot.name = Infinità
 
@@ -538,8 +538,8 @@ enchantment.eagles_eye.bonus = I danni aumentano con la distanza fino al {amount
 enchantment.looting.bonus = Tassi di bottino aumentati del {amount}%
 enchantment.feather_falling.bonus = Danni da caduta ridotti del {amount}%
 enchantment.waterbreathing.bonus = Consumo di ossigeno ridotto del {amount}%
-enchantment.burn.bonus = Dà fuoco al bersaglio
-enchantment.freeze.bonus = Rallenta il bersaglio dopo aver colpito
+enchantment.burn.bonus = Incendia il bersaglio ({amount} danni/s per {duration}s)
+enchantment.freeze.bonus = Rallenta il bersaglio del {amount}% per {duration}s
 enchantment.eternal_shot.bonus = Non consuma frecce
 enchantment.pick_perfect.bonus = Lascia cadere il blocco stesso
 enchantment.thrift.bonus = Ripristina il {amount}% del mana al colpo
@@ -620,7 +620,7 @@ customUI.walkthrough.welcome.desc = Questa mod ti permette di migliorare il tuo 
 customUI.walkthrough.table.title = 1. Tavolo degli Incantesimi
 customUI.walkthrough.table.desc = Crea un Tavolo degli Incantesimi al Banco di Lavoro. Posizionalo e interagisci per sfogliare tutte le Pergamene d'Incantesimo disponibili che puoi creare. Puoi anche migliorare il tavolo per accedere a incantesimi di livello superiore.
 customUI.walkthrough.scrolls.title = 2. Pergamene d'Incantesimo
-customUI.walkthrough.scrolls.desc = Crea pergamene direttamente al Tavolo degli Incantesimi usando essenze, gemme, lingotti e piante. Una volta creata, fai clic destro sulla pergamena mentre la tieni in mano per applicare l'incantesimo a un'arma, un'armatura o uno strumento nel tuo inventario. Le pergamene hanno diverse rarità, che indicano quanto sia potente o unico l'incantesimo. La maggior parte degli incantesimi ha 3 Livelli, ma ci sono alcune eccezioni. Gli incantesimi leggendari sono particolarmente potenti o unici.
+customUI.walkthrough.scrolls.desc = Crea pergamene direttamente al Tavolo degli Incantesimi usando essenze, gemme, lingotti e piante. Una volta creata, fai clic destro sulla pergamena mentre la tieni in mano per applicare l'incantesimo a un'arma, un'armatura o uno strumento nel tuo inventario. Le pergamene hanno diverse rarità, che indicano quanto sia potente o unico l'incantesimo. La maggior parte degli incantesimi ha 3 Livelli, ma ci sono alcune eccezioni. Gli incantesimi leggendari sono particolarmente potenti o unici. Puoi anche combinare o potenziare le pergamene. Seleziona semplicemente un'altra pergamena al posto di un oggetto quando applichi gli incantesimi e le pergamene verranno combinate.
 customUI.walkthrough.removing.title = 3. Rimuovere Incantesimi
 customUI.walkthrough.removing.desc = Hai commesso un errore? Puoi creare una Pergamena della Purificazione per rimuovere gli incantesimi da un oggetto. Su questo server, {returnScroll} riottenere la pergamena.
 customUI.walkthrough.salvaging.title = 4. Riciclaggio
@@ -650,8 +650,8 @@ enchantment.eagles_eye.walkthrough = Aumenta il danno dei proiettili fino al {am
 enchantment.looting.walkthrough = Aumenta le probabilità massime di bottino dei nemici del {amount}% per livello e migliora la probabilità di oggetti rari. Si applica ad armi da mischia, a distanza e bastoni.
 enchantment.feather_falling.walkthrough = Riduce il danno da caduta del {amount}% per livello. Si applica agli stivali.
 enchantment.waterbreathing.walkthrough = Riduce il consumo di ossigeno del {amount}% per livello. Si applica agli elmi.
-enchantment.burn.walkthrough = Incendia il bersaglio e fa cadere varianti cotte dei suoi bottini. Si applica ad armi da mischia e a distanza. Non combinabile con Gelo.
-enchantment.freeze.walkthrough = Applica un rallentamento severo (50%) al bersaglio al colpo. Si applica ad armi da mischia e a distanza. Non combinabile con Bruciatura.
+enchantment.burn.walkthrough = Incendia il bersaglio, infliggendo {amount} danni al secondo per {duration} secondi, e fa cadere varianti cotte dei suoi bottini. Si applica ad armi da mischia e a distanza. Non combinabile con Gelo.
+enchantment.freeze.walkthrough = Rallenta il bersaglio del {amount}% per {duration} secondi al colpo. Si applica ad armi da mischia e a distanza. Non combinabile con Bruciatura.
 enchantment.eternal_shot.walkthrough = Permette di sparare frecce senza consumarle. Hai ancora bisogno di 1 freccia nell'inventario. Si applica alle armi a distanza.
 enchantment.pick_perfect.walkthrough = I blocchi estratti rilasciano se stessi invece dei loro bottini abituali. Si applica a picconi, asce e pale. Non combinabile con Fortuna o Fusione.
 enchantment.thrift.walkthrough = Ripristina il {amount}% del mana speso al colpo per livello. Si applica ai bastoni di mana.
@@ -669,3 +669,133 @@ enchantment.coup_de_grace.walkthrough = Questo è un Incantesimo in collaborazio
 
 
 tooltip.enchantments = Incantesimi:
+
+customUI.enchantScrollPage.current = Attuale:
+customUI.enchantScrollPage.apply = Applica:
+customUI.enchantScrollPage.upgrade = Potenzia:
+customUI.cleansingScrollPage.enchantment.singular = incantesimo
+customUI.cleansingEnchantmentPage.clickToRemove = Clicca per rimuovere
+
+items.Scroll_Poison_I.name = Pergamena del Veleno
+
+items.Scroll_Poison_I.description = Avvelena i bersagli al colpo ({amount} danni/s per {duration}s). Non combinabile con Combustione.
+
+
+
+items.Scroll_Environmental_Protection_I.name = Pergamena di Protezione Ambientale I
+
+items.Scroll_Environmental_Protection_I.description = Riduce i danni ambientali del 4% per pezzo di armatura.
+
+items.Scroll_Environmental_Protection_II.name = Pergamena di Protezione Ambientale II
+
+items.Scroll_Environmental_Protection_II.description = Riduce i danni ambientali dell'8% per pezzo di armatura.
+
+items.Scroll_Environmental_Protection_III.name = Pergamena di Protezione Ambientale III
+
+items.Scroll_Environmental_Protection_III.description = Riduce i danni ambientali del 12% per pezzo di armatura.
+
+
+
+enchantment.poison.name = Veleno
+
+enchantment.poison.description = Avvelena i bersagli al colpo ({amount} danni/s per {duration}s). Non combinabile con Combustione.
+
+
+
+enchantment.environmental_protection.name = Protezione Ambientale
+
+enchantment.environmental_protection.description = Riduce i danni ambientali del 4% per pezzo di armatura.
+
+enchantment.poison.bonus = Avvelena i bersagli ({amount} danni/s per {duration}s)
+enchantment.environmental_protection.bonus = Danni ambientali ridotti del {amount}%
+
+enchantment.poison.walkthrough = Avvelena i bersagli al colpo, infliggendo {amount} danni al secondo per {duration} secondi. Si applica ad armi corpo a corpo e a distanza. Non combinabile con Combustione.
+enchantment.environmental_protection.walkthrough = Riduce i danni elementali e ambientali in arrivo (fuoco, ghiaccio, cactus e altri pericoli) del {amount}% per pezzo di armatura per livello, e mitiga proporzionalmente l'intensità del rallentamento dell'incantesimo Gelo. Si applica all'armatura.
+
+
+items.Scroll_Custom.name = Pergamena Personalizzata
+
+items.Scroll_Custom.description = Una pergamena magica che può contenere più incantesimi. Usala per trasferire incantesimi sugli oggetti.
+
+
+
+customUI.customScrollEnchantmentPage.title = Pergamena Personalizzata
+
+customUI.customScrollEnchantmentPage.selectHint = Seleziona un incantesimo da trasferire
+
+customUI.customScrollEnchantmentPage.noEnchantments = Nessun incantesimo su questa pergamena
+
+
+
+customUI.customScrollItemPage.title = Seleziona Oggetto Bersaglio
+
+customUI.customScrollItemPage.item = Oggetto
+
+customUI.customScrollItemPage.enchantment = Incantesimo
+
+customUI.customScrollItemPage.noItems = Nessun oggetto compatibile nel tuo inventario
+
+
+
+scroll.category.applies_to = Può essere applicato a: 
+
+itemCategory.MELEE_WEAPON = Armi Corpo a Corpo
+
+itemCategory.RANGED_WEAPON = Armi a Distanza
+
+itemCategory.TOOL = Strumenti
+
+itemCategory.PICKAXE = Picconi
+
+itemCategory.SHOVEL = Pale
+
+itemCategory.AXE = Asce
+
+itemCategory.SHIELD = Scudi
+
+itemCategory.BOOTS = Stivali
+
+itemCategory.HELMET = Elmi
+
+itemCategory.ARMOR = Armatura
+
+itemCategory.GLOVES = Guanti
+
+itemCategory.STAFF = Bastoni
+
+itemCategory.STAFF_MANA = Bastoni di Mana
+
+itemCategory.STAFF_ESSENCE = Bastoni di Essenza
+
+itemCategory.UNKNOWN = Sconosciuto
+
+config.multiplier.sharpness = Danni per Livello
+config.multiplier.life_leech = Cura % per Livello
+config.multiplier.durability = Riduzione per Livello
+config.multiplier.dexterity = Riduzione Stamina per Livello
+config.multiplier.protection = Riduzione Danni per Livello
+config.multiplier.efficiency = Velocità per Livello
+config.multiplier.fortune = Probabilità Drop per Livello
+config.multiplier.strength = Danni per Livello
+config.multiplier.eagles_eye = Bonus Distanza per Livello
+config.multiplier.looting = Probabilità Drop per Livello
+config.multiplier.looting:quantity = Bonus Quantità per Livello
+config.multiplier.feather_falling = Riduzione per Livello
+config.multiplier.waterbreathing = Riduzione Consumo per Livello
+config.multiplier.burn = Danni al Secondo
+config.multiplier.burn:duration = Durata (Secondi)
+config.multiplier.freeze = Intensità Rallentamento
+config.multiplier.freeze:duration = Durata (Secondi)
+config.multiplier.knockback = Forza per Livello
+config.multiplier.reflection = Riflessione % per Livello
+config.multiplier.absorption = Cura % per Livello
+config.multiplier.fast_swim = Velocità per Livello
+config.multiplier.ranged_protection = Riduzione Danni per Livello
+config.multiplier.frenzy = Velocità di Carica per Livello
+config.multiplier.riposte = Danni per Livello
+config.multiplier.coup_de_grace = Danni per Livello
+config.multiplier.thrift = Ripristino % per Livello
+config.multiplier.elemental_heart = Probabilità Risparmio per Livello
+config.multiplier.poison = Danni al Secondo
+config.multiplier.poison:duration = Durata (Secondi)
+config.multiplier.environmental_protection = Riduzione per Livello

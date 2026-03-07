@@ -108,7 +108,7 @@ items.Scroll_Smelting_I.description = Melebur blok yang ditambang secara otomati
 
 
 
-items.Scroll_Life_Leech_I.name = Gulungan Penyerap Nyawa I
+items.Scroll_Life_Leech_I.name = Gulungan Penyerap Nyawa
 
 items.Scroll_Life_Leech_I.description = Menyembuhkan penyerang sebesar 10% dari kerusakan yang diberikan.
 
@@ -214,13 +214,13 @@ items.Scroll_Waterbreathing_III.description = Mengurangi penggunaan oksigen sebe
 
 items.Scroll_Burn_I.name = Gulungan Pembakaran
 
-items.Scroll_Burn_I.description = Membakar target dan membuat daging yang jatuh matang. Tidak bisa digabung dengan Beku.
+items.Scroll_Burn_I.description = Membakar target ({amount} damage/detik selama {duration} detik) dan membuat mereka menjatuhkan varian matang dari dropnya. Tidak bisa digabung dengan Beku.
 
 
 
 items.Scroll_Freeze_I.name = Gulungan Pembekuan
 
-items.Scroll_Freeze_I.description = Memberikan efek lambat yang parah (50%) ke target saat dipukul. Tidak bisa digabung dengan Bakar.
+items.Scroll_Freeze_I.description = Memperlambat target sebesar {amount}% selama {duration} detik saat dipukul. Tidak bisa digabung dengan Bakar.
 
 
 
@@ -418,11 +418,11 @@ enchantment.waterbreathing.description = Mengurangi penggunaan oksigen sebesar 2
 
 enchantment.burn.name = Pembakaran
 
-enchantment.burn.description = Membakar target dan membuat daging yang jatuh matang. Tidak bisa digabung dengan Beku.
+enchantment.burn.description = Membakar target ({amount} damage/detik selama {duration} detik) dan membuat mereka menjatuhkan varian matang dari dropnya. Tidak bisa digabung dengan Beku.
 
 enchantment.freeze.name = Pembekuan
 
-enchantment.freeze.description = Memberikan efek lambat yang parah (50%) ke target saat dipukul. Tidak bisa digabung dengan Bakar.
+enchantment.freeze.description = Memperlambat target sebesar {amount}% selama {duration} detik saat dipukul. Tidak bisa digabung dengan Bakar.
 
 enchantment.eternal_shot.name = Tembakan Abadi
 
@@ -542,8 +542,8 @@ enchantment.eagles_eye.bonus = Kerusakan meningkat dengan jarak hingga {amount}%
 enchantment.looting.bonus = Tingkat jarahan meningkat {amount}%
 enchantment.feather_falling.bonus = Kerusakan jatuh berkurang {amount}%
 enchantment.waterbreathing.bonus = Penggunaan oksigen berkurang {amount}%
-enchantment.burn.bonus = Membakar target
-enchantment.freeze.bonus = Memperlambat target
+enchantment.burn.bonus = Membakar target ({amount} damage/detik selama {duration} detik)
+enchantment.freeze.bonus = Memperlambat target sebesar {amount}% selama {duration} detik
 enchantment.eternal_shot.bonus = Tidak menggunakan panah
 enchantment.pick_perfect.bonus = Menjatuhkan blok itu sendiri
 enchantment.thrift.bonus = Mengembalikan {amount}% mana
@@ -620,7 +620,7 @@ customUI.walkthrough.table.title = 1. Meja Sihir
 customUI.walkthrough.table.desc = Buat Meja Sihir di Meja Kerja. Letakkan dan berinteraksi dengannya untuk melihat semua Gulungan Sihir yang tersedia yang dapat Anda buat. Anda juga dapat meningkatkan meja untuk mengakses pesona tingkat lebih tinggi.
 
 customUI.walkthrough.scrolls.title = 2. Gulungan Sihir
-customUI.walkthrough.scrolls.desc = Buat gulungan langsung di Meja Sihir menggunakan esensi, permata, batangan dan tanaman. Setelah dibuat, klik kanan gulungan saat memegangnya untuk menerapkan pesona ke senjata, baju zirah, atau alat di inventaris Anda. Gulungan memiliki tingkat kelangkaan berbeda, menunjukkan seberapa kuat atau unik pesona tersebut. Sebagian besar pesona memiliki 3 Level, tetapi ada beberapa pengecualian. Pesona legendaris sangat kuat atau unik.
+customUI.walkthrough.scrolls.desc = Buat gulungan langsung di Meja Sihir menggunakan esensi, permata, batangan dan tanaman. Setelah dibuat, klik kanan gulungan saat memegangnya untuk menerapkan pesona ke senjata, baju zirah, atau alat di inventaris Anda. Gulungan memiliki tingkat kelangkaan berbeda, menunjukkan seberapa kuat atau unik pesona tersebut. Sebagian besar pesona memiliki 3 Level, tetapi ada beberapa pengecualian. Pesona legendaris sangat kuat atau unik. Anda juga dapat menggabungkan atau meningkatkan gulungan. Cukup pilih gulungan lain alih-alih item saat menerapkan pesona dan gulungan akan digabungkan.
 
 customUI.walkthrough.removing.title = 3. Menghapus Pesona
 customUI.walkthrough.removing.desc = Membuat kesalahan? Anda dapat membuat Gulungan Pembersihan untuk menghapus pesona dari item. Di server ini, Anda {returnScroll} mendapatkan gulungan kembali.
@@ -655,8 +655,8 @@ enchantment.eagles_eye.walkthrough = Meningkatkan kerusakan proyektil hingga {am
 enchantment.looting.walkthrough = Meningkatkan tingkat jarahan maksimum monster sebesar {amount}% per level dan meningkatkan peluang jarahan langka. Berlaku untuk senjata jarak dekat, senjata jarak jauh, dan tongkat.
 enchantment.feather_falling.walkthrough = Mengurangi kerusakan jatuh sebesar {amount}% per level. Berlaku untuk sepatu bot.
 enchantment.waterbreathing.walkthrough = Mengurangi konsumsi oksigen sebesar {amount}% per level. Berlaku untuk helm.
-enchantment.burn.walkthrough = Membakar target dan membuatnya menjatuhkan varian matang dari jarahannya. Berlaku untuk senjata jarak dekat dan jarak jauh. Tidak dapat dikombinasikan dengan Beku.
-enchantment.freeze.walkthrough = Memberikan perlambatan parah (50%) pada target saat terkena. Berlaku untuk senjata jarak dekat dan jarak jauh. Tidak dapat dikombinasikan dengan Bakar.
+enchantment.burn.walkthrough = Membakar target, memberikan {amount} damage per detik selama {duration} detik, dan membuatnya menjatuhkan varian matang dari jarahannya. Berlaku untuk senjata jarak dekat dan jarak jauh. Tidak dapat dikombinasikan dengan Beku.
+enchantment.freeze.walkthrough = Memperlambat target sebesar {amount}% selama {duration} detik saat terkena. Berlaku untuk senjata jarak dekat dan jarak jauh. Tidak dapat dikombinasikan dengan Bakar.
 enchantment.eternal_shot.walkthrough = Memungkinkan menembakkan panah tanpa mengkonsumsinya. Anda masih membutuhkan 1 panah di inventaris. Berlaku untuk senjata jarak jauh.
 enchantment.pick_perfect.walkthrough = Blok yang ditambang menjatuhkan diri sendiri alih-alih jarahan biasa. Berlaku untuk beliung, kapak, dan sekop. Tidak dapat dikombinasikan dengan Keberuntungan atau Peleburan.
 enchantment.thrift.walkthrough = Mengembalikan {amount}% mana yang digunakan per pukulan per level. Berlaku untuk tongkat mana.
@@ -673,3 +673,133 @@ enchantment.coup_de_grace.walkthrough = Ini adalah Pesona kolaborasi dengan mod 
 
 
 tooltip.enchantments = Pesona:
+
+customUI.enchantScrollPage.current = Saat ini:
+customUI.enchantScrollPage.apply = Terapkan:
+customUI.enchantScrollPage.upgrade = Tingkatkan:
+customUI.cleansingScrollPage.enchantment.singular = pesona
+customUI.cleansingEnchantmentPage.clickToRemove = Klik untuk menghapus
+
+items.Scroll_Poison_I.name = Gulungan Racun
+
+items.Scroll_Poison_I.description = Meracuni target saat terkena ({amount} damage/detik selama {duration} detik). Tidak bisa digabungkan dengan Bakar.
+
+
+
+items.Scroll_Environmental_Protection_I.name = Gulungan Perlindungan Lingkungan I
+
+items.Scroll_Environmental_Protection_I.description = Mengurangi kerusakan lingkungan sebesar 4% per bagian baju zirah.
+
+items.Scroll_Environmental_Protection_II.name = Gulungan Perlindungan Lingkungan II
+
+items.Scroll_Environmental_Protection_II.description = Mengurangi kerusakan lingkungan sebesar 8% per bagian baju zirah.
+
+items.Scroll_Environmental_Protection_III.name = Gulungan Perlindungan Lingkungan III
+
+items.Scroll_Environmental_Protection_III.description = Mengurangi kerusakan lingkungan sebesar 12% per bagian baju zirah.
+
+
+
+enchantment.poison.name = Racun
+
+enchantment.poison.description = Meracuni target saat terkena ({amount} damage/detik selama {duration} detik). Tidak bisa digabungkan dengan Bakar.
+
+
+
+enchantment.environmental_protection.name = Perlindungan Lingkungan
+
+enchantment.environmental_protection.description = Mengurangi kerusakan lingkungan sebesar 4% per bagian baju zirah.
+
+enchantment.poison.bonus = Meracuni target ({amount} damage/detik selama {duration} detik)
+enchantment.environmental_protection.bonus = Kerusakan lingkungan berkurang sebesar {amount}%
+
+enchantment.poison.walkthrough = Meracuni target saat terkena, memberikan {amount} kerusakan per detik selama {duration} detik. Berlaku untuk senjata jarak dekat dan jarak jauh. Tidak dapat dikombinasikan dengan Bakar.
+enchantment.environmental_protection.walkthrough = Mengurangi kerusakan elemen dan lingkungan masuk (api, es, kaktus, dan bahaya lainnya) sebesar {amount}% per bagian baju zirah per level, dan secara proporsional mengurangi intensitas efek perlambatan dari pesona Beku. Berlaku untuk baju zirah.
+
+
+items.Scroll_Custom.name = Gulungan Kustom
+
+items.Scroll_Custom.description = Gulungan ajaib yang dapat berisi banyak pesona. Gunakan untuk mentransfer pesona ke item.
+
+
+
+customUI.customScrollEnchantmentPage.title = Gulungan Kustom
+
+customUI.customScrollEnchantmentPage.selectHint = Pilih pesona untuk ditransfer
+
+customUI.customScrollEnchantmentPage.noEnchantments = Tidak ada pesona pada gulungan ini
+
+
+
+customUI.customScrollItemPage.title = Pilih Item Target
+
+customUI.customScrollItemPage.item = Item
+
+customUI.customScrollItemPage.enchantment = Pesona
+
+customUI.customScrollItemPage.noItems = Tidak ada item yang memenuhi syarat di inventaris Anda
+
+
+
+scroll.category.applies_to = Dapat diterapkan pada: 
+
+itemCategory.MELEE_WEAPON = Senjata Jarak Dekat
+
+itemCategory.RANGED_WEAPON = Senjata Jarak Jauh
+
+itemCategory.TOOL = Alat
+
+itemCategory.PICKAXE = Beliung
+
+itemCategory.SHOVEL = Sekop
+
+itemCategory.AXE = Kapak
+
+itemCategory.SHIELD = Perisai
+
+itemCategory.BOOTS = Sepatu Bot
+
+itemCategory.HELMET = Helm
+
+itemCategory.ARMOR = Baju Zirah
+
+itemCategory.GLOVES = Sarung Tangan
+
+itemCategory.STAFF = Tongkat
+
+itemCategory.STAFF_MANA = Tongkat Mana
+
+itemCategory.STAFF_ESSENCE = Tongkat Esensi
+
+itemCategory.UNKNOWN = Tidak Diketahui
+
+config.multiplier.sharpness = Kerusakan per Level
+config.multiplier.life_leech = % Penyembuhan per Level
+config.multiplier.durability = Pengurangan per Level
+config.multiplier.dexterity = Pengurangan Biaya Stamina per Level
+config.multiplier.protection = Pengurangan Kerusakan per Level
+config.multiplier.efficiency = Kecepatan per Level
+config.multiplier.fortune = Peluang Jarahan per Level
+config.multiplier.strength = Kerusakan per Level
+config.multiplier.eagles_eye = Bonus Jarak per Level
+config.multiplier.looting = Peluang Jarahan per Level
+config.multiplier.looting:quantity = Bonus Kuantitas per Level
+config.multiplier.feather_falling = Pengurangan per Level
+config.multiplier.waterbreathing = Pengurangan Konsumsi Oksigen per Level
+config.multiplier.burn = Kerusakan per Detik
+config.multiplier.burn:duration = Durasi (Detik)
+config.multiplier.freeze = Intensitas Perlambatan
+config.multiplier.freeze:duration = Durasi (Detik)
+config.multiplier.knockback = Kekuatan per Level
+config.multiplier.reflection = % Pantulan per Level
+config.multiplier.absorption = % Penyembuhan per Level
+config.multiplier.fast_swim = Kecepatan per Level
+config.multiplier.ranged_protection = Pengurangan Kerusakan per Level
+config.multiplier.frenzy = Kecepatan Pengisian per Level
+config.multiplier.riposte = Kerusakan per Level
+config.multiplier.coup_de_grace = Kerusakan per Level
+config.multiplier.thrift = % Pemulihan per Level
+config.multiplier.elemental_heart = Peluang Penghematan Esensi per Level
+config.multiplier.poison = Kerusakan per Detik
+config.multiplier.poison:duration = Durasi (Detik)
+config.multiplier.environmental_protection = Pengurangan per Level

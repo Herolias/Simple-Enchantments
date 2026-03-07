@@ -214,7 +214,7 @@ items.Scroll_Smelting_I.description = Schmilzt abgebaute Blöcke automatisch.
 
 
 
-items.Scroll_Life_Leech_I.name = Schriftrolle des Lebensentzugs I
+items.Scroll_Life_Leech_I.name = Schriftrolle des Lebensentzugs
 
 
 
@@ -426,7 +426,7 @@ items.Scroll_Burn_I.name = Schriftrolle des Verbrennens
 
 
 
-items.Scroll_Burn_I.description = Setzt das Ziel in Brand und lässt es gekochtes Fleisch fallen. Nicht kombinierbar mit Frost.
+items.Scroll_Burn_I.description = Setzt das Ziel in Brand ({amount} Schaden/s für {duration}s) und lässt es gekochte Varianten seiner Beute fallen. Nicht kombinierbar mit Frost.
 
 
 
@@ -438,7 +438,7 @@ items.Scroll_Freeze_I.name = Schriftrolle des Frosts
 
 
 
-items.Scroll_Freeze_I.description = Verlangsamt das Ziel bei Treffern stark (50%). Nicht kombinierbar mit Verbrennen.
+items.Scroll_Freeze_I.description = Verlangsamt das Ziel um {amount}% für {duration}s bei Treffern. Nicht kombinierbar mit Verbrennen.
 
 
 
@@ -838,7 +838,7 @@ enchantment.burn.name = Verbrennung
 
 
 
-enchantment.burn.description = Setzt das Ziel in Brand und lässt es gekochtes Fleisch fallen. Nicht kombinierbar mit Frost.
+enchantment.burn.description = Setzt das Ziel in Brand ({amount} Schaden/s für {duration}s) und lässt es gekochte Varianten seiner Beute fallen. Nicht kombinierbar mit Frost.
 
 
 
@@ -846,7 +846,7 @@ enchantment.freeze.name = Frost
 
 
 
-enchantment.freeze.description = Verlangsamt das Ziel bei Treffern stark (50%). Nicht kombinierbar mit Verbrennen.
+enchantment.freeze.description = Verlangsamt das Ziel um {amount}% für {duration}s bei Treffern. Nicht kombinierbar mit Verbrennen.
 
 
 
@@ -1048,8 +1048,8 @@ enchantment.eagles_eye.bonus = Schaden steigt mit Distanz bis zu {amount}%
 enchantment.looting.bonus = Beuterate um {amount}% erhöht
 enchantment.feather_falling.bonus = Fallschaden um {amount}% reduziert
 enchantment.waterbreathing.bonus = Sauerstoffverbrauch um {amount}% reduziert
-enchantment.burn.bonus = Setzt Ziel in Brand
-enchantment.freeze.bonus = Verlangsamt Ziel bei Treffer
+enchantment.burn.bonus = Setzt Ziel in Brand ({amount} Schaden/s für {duration}s)
+enchantment.freeze.bonus = Verlangsamt Ziel um {amount}% für {duration}s
 enchantment.eternal_shot.bonus = Verbraucht keine Pfeile
 enchantment.pick_perfect.bonus = Lässt den Block selbst fallen
 enchantment.thrift.bonus = Stellt {amount}% Mana bei Treffer wieder her
@@ -1127,7 +1127,7 @@ customUI.walkthrough.table.title = 1. Der Verzauberungstisch
 customUI.walkthrough.table.desc = Stelle einen Verzauberungstisch an der Werkbank her. Platziere ihn und interagiere mit ihm, um alle verfügbaren Verzauberungsschriftrollen zu durchstöbern, die du herstellen kannst. Du kannst den Tisch auch aufwerten, um Zugang zu höherstufigen Verzauberungen zu erhalten.
 
 customUI.walkthrough.scrolls.title = 2. Verzauberungsschriftrollen
-customUI.walkthrough.scrolls.desc = Stelle Schriftrollen direkt am Verzauberungstisch mit Essenzen, Edelsteinen, Barren und Pflanzen her. Einmal hergestellt, klicke mit der rechten Maustaste auf die Schriftrolle, während du sie hältst, um die Verzauberung auf eine Waffe, Rüstung oder ein Werkzeug in deinem Inventar anzuwenden. Schriftrollen haben verschiedene Seltenheiten, die zeigen, wie stark oder einzigartig die Verzauberung ist. Die meisten Verzauberungen haben 3 Stufen, aber es gibt Ausnahmen. Legendäre Verzauberungen sind besonders mächtig oder einzigartig.
+customUI.walkthrough.scrolls.desc = Stelle Schriftrollen direkt am Verzauberungstisch mit Essenzen, Edelsteinen, Barren und Pflanzen her. Einmal hergestellt, klicke mit der rechten Maustaste auf die Schriftrolle, während du sie hältst, um die Verzauberung auf eine Waffe, Rüstung oder ein Werkzeug in deinem Inventar anzuwenden. Schriftrollen haben verschiedene Seltenheiten, die zeigen, wie stark oder einzigartig die Verzauberung ist. Die meisten Verzauberungen haben 3 Stufen, aber es gibt Ausnahmen. Legendäre Verzauberungen sind besonders mächtig oder einzigartig. Du kannst Schriftrollen auch kombinieren oder aufwerten. Wähle einfach eine andere Schriftrolle anstelle eines Gegenstands beim Anwenden von Verzauberungen und die Schriftrollen werden kombiniert.
 
 customUI.walkthrough.removing.title = 3. Verzauberungen entfernen
 customUI.walkthrough.removing.desc = Einen Fehler gemacht? Du kannst eine Reinigungsschriftrolle herstellen, um Verzauberungen von einem Gegenstand zu entfernen. Auf diesem Server wirst du die Schriftrolle {returnScroll} zurückerhalten.
@@ -1163,8 +1163,8 @@ enchantment.eagles_eye.walkthrough = Erhöht Projektilschaden je nach Distanz um
 enchantment.looting.walkthrough = Erhöht die maximale Beuterate von Monstern um {amount}% pro Stufe und verbessert die Chance auf seltene Beute. Gilt für Nahkampfwaffen, Fernkampfwaffen und Stäbe.
 enchantment.feather_falling.walkthrough = Verringert Fallschaden um {amount}% pro Stufe. Gilt für Stiefel.
 enchantment.waterbreathing.walkthrough = Verringert Sauerstoffverbrauch um {amount}% pro Stufe. Gilt für Helme.
-enchantment.burn.walkthrough = Setzt das Ziel in Brand und lässt es gekochte Varianten seiner Beute fallen. Gilt für Nahkampf- und Fernkampfwaffen. Nicht kombinierbar mit Frost.
-enchantment.freeze.walkthrough = Verlangsamt das Ziel bei Treffern stark (50%). Gilt für Nahkampf- und Fernkampfwaffen. Nicht kombinierbar mit Verbrennung.
+enchantment.burn.walkthrough = Setzt das Ziel in Brand und verursacht {amount} Schaden pro Sekunde für {duration} Sekunden und lässt es gekochte Varianten seiner Beute fallen. Gilt für Nahkampf- und Fernkampfwaffen. Nicht kombinierbar mit Frost.
+enchantment.freeze.walkthrough = Verlangsamt das Ziel um {amount}% für {duration} Sekunden bei Treffern. Gilt für Nahkampf- und Fernkampfwaffen. Nicht kombinierbar mit Verbrennung.
 enchantment.eternal_shot.walkthrough = Erlaubt das Schießen von Pfeilen ohne Verbrauch. Du brauchst immer noch 1 Pfeil im Inventar. Gilt für Fernkampfwaffen.
 enchantment.pick_perfect.walkthrough = Abgebaute Blöcke droppen sich selbst anstatt ihrer üblichen Beute. Gilt für Spitzhacken, Äxte und Schaufeln. Nicht kombinierbar mit Glück oder Schmelzen.
 enchantment.thrift.walkthrough = Stellt {amount}% des bei einem Treffer verbrauchten Manas wieder her pro Stufe. Gilt für Manastäbe.
@@ -1181,3 +1181,127 @@ enchantment.coup_de_grace.walkthrough = Dies ist eine Kollaborations-Verzauberun
 
 
 tooltip.enchantments = Verzauberungen:
+
+items.Scroll_Poison_I.name = Schriftrolle des Gifts
+
+items.Scroll_Poison_I.description = Vergiftet Ziele bei Treffern ({amount} Schaden/s für {duration}s). Nicht kombinierbar mit Verbrennen.
+
+
+
+items.Scroll_Environmental_Protection_I.name = Schriftrolle des Umweltschutzes I
+
+items.Scroll_Environmental_Protection_I.description = Verringert Umweltschaden um 4% pro Rüstungsteil.
+
+items.Scroll_Environmental_Protection_II.name = Schriftrolle des Umweltschutzes II
+
+items.Scroll_Environmental_Protection_II.description = Verringert Umweltschaden um 8% pro Rüstungsteil.
+
+items.Scroll_Environmental_Protection_III.name = Schriftrolle des Umweltschutzes III
+
+items.Scroll_Environmental_Protection_III.description = Verringert Umweltschaden um 12% pro Rüstungsteil.
+
+
+
+enchantment.poison.name = Gift
+
+enchantment.poison.description = Vergiftet Ziele bei Treffern ({amount} Schaden/s für {duration}s). Nicht kombinierbar mit Verbrennen.
+
+
+
+enchantment.environmental_protection.name = Umweltschutz
+
+enchantment.environmental_protection.description = Verringert Umweltschaden um 4% pro Rüstungsteil.
+
+enchantment.poison.bonus = Vergiftet Ziele bei Treffer ({amount} Schaden/s für {duration}s)
+enchantment.environmental_protection.bonus = Umweltschaden um {amount}% reduziert
+
+enchantment.poison.walkthrough = Vergiftet Ziele bei Treffern und verursacht {amount} Schaden pro Sekunde für {duration} Sekunden. Gilt für Nahkampf- und Fernkampfwaffen. Nicht kombinierbar mit Verbrennen.
+enchantment.environmental_protection.walkthrough = Verringert eingehenden elementaren und Umweltschaden (Feuer, Eis, Kakteen und andere Gefahren) um {amount}% pro Rüstungsteil pro Stufe und mildert proportional die Verlangsamungsintensität der Frost-Verzauberung. Gilt für Rüstungen.
+
+
+items.Scroll_Custom.name = Benutzerdefinierte Schriftrolle
+
+items.Scroll_Custom.description = Eine magische Schriftrolle, die mehrere Verzauberungen enthalten kann. Verwende sie, um Verzauberungen auf Gegenstände zu übertragen.
+
+
+
+customUI.customScrollEnchantmentPage.title = Benutzerdefinierte Schriftrolle
+
+customUI.customScrollEnchantmentPage.selectHint = Wähle eine Verzauberung zum Übertragen
+
+customUI.customScrollEnchantmentPage.noEnchantments = Keine Verzauberungen auf dieser Schriftrolle
+
+
+
+customUI.customScrollItemPage.title = Zielgegenstand auswählen
+
+customUI.customScrollItemPage.item = Gegenstand
+
+customUI.customScrollItemPage.enchantment = Verzauberung
+
+customUI.customScrollItemPage.noItems = Keine passenden Gegenstände in deinem Inventar
+
+
+
+scroll.category.applies_to = Kann angewendet werden auf: 
+
+itemCategory.MELEE_WEAPON = Nahkampfwaffen
+
+itemCategory.RANGED_WEAPON = Fernkampfwaffen
+
+itemCategory.TOOL = Werkzeuge
+
+itemCategory.PICKAXE = Spitzhacken
+
+itemCategory.SHOVEL = Schaufeln
+
+itemCategory.AXE = Äxte
+
+itemCategory.SHIELD = Schilde
+
+itemCategory.BOOTS = Stiefel
+
+itemCategory.HELMET = Helme
+
+itemCategory.ARMOR = Rüstung
+
+itemCategory.GLOVES = Handschuhe
+
+itemCategory.STAFF = Stäbe
+
+itemCategory.STAFF_MANA = Manastäbe
+
+itemCategory.STAFF_ESSENCE = Essenzstäbe
+
+itemCategory.UNKNOWN = Unbekannt
+
+config.multiplier.sharpness = Schaden pro Stufe
+config.multiplier.life_leech = Heilung % pro Stufe
+config.multiplier.durability = Reduktion pro Stufe
+config.multiplier.dexterity = Ausdauerreduktion pro Stufe
+config.multiplier.protection = Schadensreduktion pro Stufe
+config.multiplier.efficiency = Geschwindigkeit pro Stufe
+config.multiplier.fortune = Dropchance pro Stufe
+config.multiplier.strength = Schaden pro Stufe
+config.multiplier.eagles_eye = Distanzbonus pro Stufe
+config.multiplier.looting = Dropchance pro Stufe
+config.multiplier.looting:quantity = Mengenbonus pro Stufe
+config.multiplier.feather_falling = Reduktion pro Stufe
+config.multiplier.waterbreathing = Verbrauchsreduktion pro Stufe
+config.multiplier.burn = Schaden pro Sekunde
+config.multiplier.burn:duration = Dauer (Sekunden)
+config.multiplier.freeze = Verlangsamungsstärke
+config.multiplier.freeze:duration = Dauer (Sekunden)
+config.multiplier.knockback = Stärke pro Stufe
+config.multiplier.reflection = Reflexion % pro Stufe
+config.multiplier.absorption = Heilung % pro Stufe
+config.multiplier.fast_swim = Geschwindigkeit pro Stufe
+config.multiplier.ranged_protection = Schadensreduktion pro Stufe
+config.multiplier.frenzy = Aufladegeschwindigkeit pro Stufe
+config.multiplier.riposte = Schaden pro Stufe
+config.multiplier.coup_de_grace = Schaden pro Stufe
+config.multiplier.thrift = Wiederherstellung % pro Stufe
+config.multiplier.elemental_heart = Sparchance pro Stufe
+config.multiplier.poison = Schaden pro Sekunde
+config.multiplier.poison:duration = Dauer (Sekunden)
+config.multiplier.environmental_protection = Reduktion pro Stufe

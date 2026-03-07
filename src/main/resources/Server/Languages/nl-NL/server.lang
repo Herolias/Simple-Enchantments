@@ -108,7 +108,7 @@ items.Scroll_Smelting_I.description = Smelt gedolven blokken automatisch.
 
 
 
-items.Scroll_Life_Leech_I.name = Rol van Levensroof I
+items.Scroll_Life_Leech_I.name = Rol van Levensroof
 
 items.Scroll_Life_Leech_I.description = Geneest aanvaller voor 10% van toegebrachte schade.
 
@@ -214,13 +214,13 @@ items.Scroll_Waterbreathing_III.description = Vermindert zuurstofverbruik met 60
 
 items.Scroll_Burn_I.name = Rol van Verbranding
 
-items.Scroll_Burn_I.description = Steekt doelwit in brand en laat gekookt vlees droppen. Niet compatibel met Bevriezing.
+items.Scroll_Burn_I.description = Steekt doelwit in brand ({amount} schade/s gedurende {duration}s) en laat gekookte varianten van zijn buit vallen. Niet compatibel met Bevriezing.
 
 
 
 items.Scroll_Freeze_I.name = Rol van Bevriezing
 
-items.Scroll_Freeze_I.description = Vertraagt doelwit sterk (50%) bij een treffer. Niet compatibel met Verbranding.
+items.Scroll_Freeze_I.description = Vertraagt doelwit met {amount}% gedurende {duration}s bij een treffer. Niet compatibel met Verbranding.
 
 
 
@@ -418,11 +418,11 @@ enchantment.waterbreathing.description = Vermindert zuurstofverbruik met 20%.
 
 enchantment.burn.name = Verbranding
 
-enchantment.burn.description = Steekt doelwit in brand en laat gekookt vlees droppen. Niet compatibel met Bevriezing.
+enchantment.burn.description = Steekt doelwit in brand ({amount} schade/s gedurende {duration}s) en laat gekookte varianten van zijn buit vallen. Niet compatibel met Bevriezing.
 
 enchantment.freeze.name = Bevriezing
 
-enchantment.freeze.description = Vertraagt doelwit sterk (50%) bij een treffer. Niet compatibel met Verbranding.
+enchantment.freeze.description = Vertraagt doelwit met {amount}% gedurende {duration}s bij een treffer. Niet compatibel met Verbranding.
 
 enchantment.eternal_shot.name = Eeuwig Schot
 
@@ -542,8 +542,8 @@ enchantment.eagles_eye.bonus = Schade neemt toe met afstand tot {amount}%
 enchantment.looting.bonus = Buitkans verhoogd met {amount}%
 enchantment.feather_falling.bonus = Valschade verminderd met {amount}%
 enchantment.waterbreathing.bonus = Zuurstofverbruik verminderd met {amount}%
-enchantment.burn.bonus = Zet doelwit in brand
-enchantment.freeze.bonus = Vertraagt doelwit bij treffer
+enchantment.burn.bonus = Steekt doelwit in brand ({amount} schade/s gedurende {duration}s)
+enchantment.freeze.bonus = Vertraagt doelwit met {amount}% gedurende {duration}s
 enchantment.eternal_shot.bonus = Verbruikt geen pijlen
 enchantment.pick_perfect.bonus = Dropt het blok zelf
 enchantment.thrift.bonus = Herstelt {amount}% mana bij treffer
@@ -620,7 +620,7 @@ customUI.walkthrough.table.title = 1. De Betoveringstafel
 customUI.walkthrough.table.desc = Maak een Betoveringstafel op de Werkbank. Plaats deze en interacteer ermee om alle beschikbare Betoveringsrollen te bekijken die je kunt maken. Je kunt de tafel ook upgraden om betoveringen van een hoger niveau te ontgrendelen.
 
 customUI.walkthrough.scrolls.title = 2. Betoveringsrollen
-customUI.walkthrough.scrolls.desc = Maak rollen direct op de Betoveringstafel met essenties, edelstenen, staven en planten. Eenmaal gemaakt, klik met de rechtermuisknop op de rol terwijl je deze vasthoudt om de betovering toe te passen op een wapen, harnas of gereedschap in je inventaris. Rollen hebben verschillende zeldzaamheden, die aangeven hoe sterk of uniek de betovering is. De meeste betoveringen hebben 3 niveaus, maar er zijn uitzonderingen. Legendarische betoveringen zijn bijzonder krachtig of uniek.
+customUI.walkthrough.scrolls.desc = Maak rollen direct op de Betoveringstafel met essenties, edelstenen, staven en planten. Eenmaal gemaakt, klik met de rechtermuisknop op de rol terwijl je deze vasthoudt om de betovering toe te passen op een wapen, harnas of gereedschap in je inventaris. Rollen hebben verschillende zeldzaamheden, die aangeven hoe sterk of uniek de betovering is. De meeste betoveringen hebben 3 niveaus, maar er zijn uitzonderingen. Legendarische betoveringen zijn bijzonder krachtig of uniek. Je kunt ook rollen combineren of upgraden. Selecteer gewoon een andere rol in plaats van een item bij het toepassen van betoveringen en de rollen worden gecombineerd.
 
 customUI.walkthrough.removing.title = 3. Betoveringen Verwijderen
 customUI.walkthrough.removing.desc = Een fout gemaakt? Je kunt een Reinigingsrol maken om betoveringen van een item te verwijderen. Op deze server {returnScroll} je de rol terugkrijgen.
@@ -655,8 +655,8 @@ enchantment.eagles_eye.walkthrough = Verhoogt projectielschade tot {amount}% op 
 enchantment.looting.walkthrough = Verhoogt maximale buitpercentages van mobs met {amount}% per niveau en verhoogt de kans op zeldzame buit. Van toepassing op melee-wapens, afstandswapens en staven.
 enchantment.feather_falling.walkthrough = Vermindert valschade met {amount}% per niveau. Van toepassing op laarzen.
 enchantment.waterbreathing.walkthrough = Vermindert zuurstofverbruik met {amount}% per niveau. Van toepassing op helmen.
-enchantment.burn.walkthrough = Steekt het doelwit in brand en laat het gekookte varianten van zijn buit vallen. Van toepassing op melee- en afstandswapens. Niet combineerbaar met Bevriezen.
-enchantment.freeze.walkthrough = Past ernstige vertraging (50%) toe op het doelwit bij een treffer. Van toepassing op melee- en afstandswapens. Niet combineerbaar met Verbranden.
+enchantment.burn.walkthrough = Steekt het doelwit in brand, veroorzaakt {amount} schade per seconde gedurende {duration} seconden, en laat het gekookte varianten van zijn buit vallen. Van toepassing op melee- en afstandswapens. Niet combineerbaar met Bevriezen.
+enchantment.freeze.walkthrough = Vertraagt het doelwit met {amount}% gedurende {duration} seconden bij een treffer. Van toepassing op melee- en afstandswapens. Niet combineerbaar met Verbranden.
 enchantment.eternal_shot.walkthrough = Laat je pijlen schieten zonder ze te verbruiken. Je hebt nog steeds 1 pijl nodig in je inventaris. Van toepassing op afstandswapens.
 enchantment.pick_perfect.walkthrough = Gedolven blokken laten zichzelf vallen in plaats van hun gebruikelijke buit. Van toepassing op pikhouwelen, bijlen en schoppen. Niet combineerbaar met Fortuin of Smelten.
 enchantment.thrift.walkthrough = Herstelt {amount}% van het gebruikte mana per treffer per niveau. Van toepassing op manastaven.
@@ -673,3 +673,133 @@ enchantment.coup_de_grace.walkthrough = Dit is een samenwerkingsbetovering met d
 
 
 tooltip.enchantments = Betoveringen:
+
+customUI.enchantScrollPage.current = Huidig:
+customUI.enchantScrollPage.apply = Toepassen:
+customUI.enchantScrollPage.upgrade = Upgraden:
+customUI.cleansingScrollPage.enchantment.singular = betovering
+customUI.cleansingEnchantmentPage.clickToRemove = Klik om te verwijderen
+
+items.Scroll_Poison_I.name = Rol van Vergif
+
+items.Scroll_Poison_I.description = Vergiftigt doelen bij het raken ({amount} schade/s gedurende {duration}s). Niet compatibel met Verbranding.
+
+
+
+items.Scroll_Environmental_Protection_I.name = Rol van Milieubescherming I
+
+items.Scroll_Environmental_Protection_I.description = Vermindert omgevingsschade met 4% per pantseronderdeel.
+
+items.Scroll_Environmental_Protection_II.name = Rol van Milieubescherming II
+
+items.Scroll_Environmental_Protection_II.description = Vermindert omgevingsschade met 8% per pantseronderdeel.
+
+items.Scroll_Environmental_Protection_III.name = Rol van Milieubescherming III
+
+items.Scroll_Environmental_Protection_III.description = Vermindert omgevingsschade met 12% per pantseronderdeel.
+
+
+
+enchantment.poison.name = Vergif
+
+enchantment.poison.description = Vergiftigt doelen bij het raken ({amount} schade/s gedurende {duration}s). Niet compatibel met Verbranding.
+
+
+
+enchantment.environmental_protection.name = Milieubescherming
+
+enchantment.environmental_protection.description = Vermindert omgevingsschade met 4% per pantseronderdeel.
+
+enchantment.poison.bonus = Vergiftigt doelen ({amount} schade/s gedurende {duration}s)
+enchantment.environmental_protection.bonus = Omgevingsschade verminderd met {amount}%
+
+enchantment.poison.walkthrough = Vergiftigt doelen bij het raken, veroorzaakt {amount} schade per seconde gedurende {duration} seconden. Van toepassing op melee- en afstandswapens. Niet compatibel met Verbranding.
+enchantment.environmental_protection.walkthrough = Vermindert inkomende elementaire en omgevingsschade (vuur, ijs, cactussen en andere gevaren) met {amount}% per pantseronderdeel per niveau, en vermindert proportioneel de vertragingsintensiteit van de Bevriezing-betovering. Van toepassing op pantsers.
+
+
+items.Scroll_Custom.name = Aangepaste Rol
+
+items.Scroll_Custom.description = Een magische rol die meerdere betoveringen kan bevatten. Gebruik het om betoveringen naar items over te brengen.
+
+
+
+customUI.customScrollEnchantmentPage.title = Aangepaste Rol
+
+customUI.customScrollEnchantmentPage.selectHint = Selecteer een betovering om over te brengen
+
+customUI.customScrollEnchantmentPage.noEnchantments = Geen betoveringen op deze rol
+
+
+
+customUI.customScrollItemPage.title = Selecteer Doelitem
+
+customUI.customScrollItemPage.item = Item
+
+customUI.customScrollItemPage.enchantment = Betovering
+
+customUI.customScrollItemPage.noItems = Geen geschikte items in je inventaris
+
+
+
+scroll.category.applies_to = Kan worden toegepast op: 
+
+itemCategory.MELEE_WEAPON = Melee Wapens
+
+itemCategory.RANGED_WEAPON = Afstandswapens
+
+itemCategory.TOOL = Gereedschap
+
+itemCategory.PICKAXE = Pikhouwelen
+
+itemCategory.SHOVEL = Schoppen
+
+itemCategory.AXE = Bijlen
+
+itemCategory.SHIELD = Schilden
+
+itemCategory.BOOTS = Laarzen
+
+itemCategory.HELMET = Helmen
+
+itemCategory.ARMOR = Pantser
+
+itemCategory.GLOVES = Handschoenen
+
+itemCategory.STAFF = Staven
+
+itemCategory.STAFF_MANA = Manastaven
+
+itemCategory.STAFF_ESSENCE = Essentiestaven
+
+itemCategory.UNKNOWN = Onbekend
+
+config.multiplier.sharpness = Schade per Niveau
+config.multiplier.life_leech = Genezing % per Niveau
+config.multiplier.durability = Reductie per Niveau
+config.multiplier.dexterity = Stamina Reductie per Niveau
+config.multiplier.protection = Schade Reductie per Niveau
+config.multiplier.efficiency = Snelheid per Niveau
+config.multiplier.fortune = Dropkans per Niveau
+config.multiplier.strength = Schade per Niveau
+config.multiplier.eagles_eye = Afstandsbonus per Niveau
+config.multiplier.looting = Dropkans per Niveau
+config.multiplier.looting:quantity = Hoeveelheidsbonus per Niveau
+config.multiplier.feather_falling = Reductie per Niveau
+config.multiplier.waterbreathing = Verbruiksreductie per Niveau
+config.multiplier.burn = Schade per Seconde
+config.multiplier.burn:duration = Duur (Seconden)
+config.multiplier.freeze = Vertragingsintensiteit
+config.multiplier.freeze:duration = Duur (Seconden)
+config.multiplier.knockback = Kracht per Niveau
+config.multiplier.reflection = Reflectie % per Niveau
+config.multiplier.absorption = Genezing % per Niveau
+config.multiplier.fast_swim = Snelheid per Niveau
+config.multiplier.ranged_protection = Schade Reductie per Niveau
+config.multiplier.frenzy = Oplaadsnelheid per Niveau
+config.multiplier.riposte = Schade per Niveau
+config.multiplier.coup_de_grace = Schade per Niveau
+config.multiplier.thrift = Herstel % per Niveau
+config.multiplier.elemental_heart = Besparingskans per Niveau
+config.multiplier.poison = Schade per Seconde
+config.multiplier.poison:duration = Duur (Seconden)
+config.multiplier.environmental_protection = Reductie per Niveau
