@@ -199,14 +199,28 @@ public class EnchantItemInteraction extends ChoiceInteraction {
             return;
         }
 
-        // Replace the target scroll with the result
-        ItemStackSlotTransaction replaceTarget =
-            this.itemContext.getContainer().replaceItemStackInSlot(this.itemContext.getSlot(), targetStack, resultStack);
-        if (!replaceTarget.succeeded()) {
-            // Rollback: give back the held scroll
-            SimpleItemContainer.addOrDropItemStack(store, ref, heldItemContainer, heldItemSlot, heldItemStack.withQuantity(1));
-            pageManager.setPage(ref, store, Page.None);
-            return;
+        if (targetStack.getQuantity() == 1) {
+            // Replace the target scroll with the result
+            ItemStackSlotTransaction replaceTarget =
+                this.itemContext.getContainer().replaceItemStackInSlot(this.itemContext.getSlot(), targetStack, resultStack);
+            if (!replaceTarget.succeeded()) {
+                // Rollback: give back the held scroll
+                SimpleItemContainer.addOrDropItemStack(store, ref, heldItemContainer, heldItemSlot, heldItemStack.withQuantity(1));
+                pageManager.setPage(ref, store, Page.None);
+                return;
+            }
+        } else {
+            // Remove 1 from the target stack
+            ItemStackSlotTransaction removeTarget =
+                this.itemContext.getContainer().removeItemStackFromSlot(this.itemContext.getSlot(), targetStack, 1);
+            if (!removeTarget.succeeded()) {
+                // Rollback: give back the held scroll
+                SimpleItemContainer.addOrDropItemStack(store, ref, heldItemContainer, heldItemSlot, heldItemStack.withQuantity(1));
+                pageManager.setPage(ref, store, Page.None);
+                return;
+            }
+            // Give the new Custom Scroll back to the player
+            SimpleItemContainer.addOrDropItemStack(store, ref, this.itemContext.getContainer(), this.itemContext.getSlot(), resultStack);
         }
 
         // Send success message

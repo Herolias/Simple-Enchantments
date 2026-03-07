@@ -705,7 +705,7 @@ customUI.walkthrough.table.title = 1. The Enchanting Table
 customUI.walkthrough.table.desc = Craft an Enchanting Table at the Workbench. Place it down and interact with it to browse all available Enchantment Scrolls that you can craft. You can also upgrade the table to access higher tier enchantments.
 
 customUI.walkthrough.scrolls.title = 2. Enchantment Scrolls
-customUI.walkthrough.scrolls.desc = Craft scrolls directly at the Enchanting Table using essences, gems, ingots and plants. Once crafted, right-click the scroll while holding it to apply the enchantment to a weapon, armor, or tool in your inventory. Scrolls have different rarities, showing how strong or unique the enchantment is. Most enchantments have 3 Levels, but there are some exceptions. Legendary enchantments are especially strong or unique.
+customUI.walkthrough.scrolls.desc = Craft scrolls directly at the Enchanting Table using essences, gems, ingots and plants. Once crafted, right-click the scroll while holding it to apply the enchantment to a weapon, armor, or tool in your inventory. Scrolls have different rarities, showing how strong or unique the enchantment is. Most enchantments have 3 Levels, but there are some exceptions. Legendary enchantments are especially strong or unique. You can also combine or upgrade scrolls. Just select another scroll instead of a Item when applying enchantments and the scrolls will be combined.
 
 customUI.walkthrough.removing.title = 3. Removing Enchantments
 customUI.walkthrough.removing.desc = Made a mistake? You can craft a Cleansing Scroll to strip off enchantments from an item. On this server, you {returnScroll} get the scroll back.
@@ -784,3 +784,37 @@ customUI.customScrollItemPage.item = Item
 customUI.customScrollItemPage.enchantment = Enchantment
 
 customUI.customScrollItemPage.noItems = No matching items in your inventory
+
+
+
+scroll.category.applies_to = Can be applied to: 
+
+itemCategory.MELEE_WEAPON = Melee Weapons
+
+itemCategory.RANGED_WEAPON = Ranged Weapons
+
+itemCategory.TOOL = Tools
+
+itemCategory.PICKAXE = Pickaxes
+
+itemCategory.SHOVEL = Shovels
+
+itemCategory.AXE = Axes
+
+itemCategory.SHIELD = Shields
+
+itemCategory.BOOTS = Boots
+
+itemCategory.HELMET = Helmets
+
+itemCategory.ARMOR = Armor
+
+itemCategory.GLOVES = Gloves
+
+itemCategory.STAFF = Staffs
+
+itemCategory.STAFF_MANA = Mana Staffs
+
+itemCategory.STAFF_ESSENCE = Essence Staffs
+
+itemCategory.UNKNOWN = Unknown

@@ -93,10 +93,16 @@ public class EnchantmentEternalShotSystem extends AbstractRefundSystem {
     }
 
     public void onInventoryChange(@Nonnull LivingEntityInventoryChangeEvent event) {
-        if (guard.isProcessing()) return;
-
         LivingEntity entity = event.getEntity();
         if (!(entity instanceof Player player)) return;
+
+        if (player.getWorld() != null && !player.getWorld().isInThread()) {
+            player.getWorld().execute(() -> onInventoryChange(event));
+            return;
+        }
+
+        if (guard.isProcessing()) return;
+
 
         if (player.getWorld() == null || player.getReference() == null) return;
         com.hypixel.hytale.server.core.entity.UUIDComponent uComp = player.getWorld().getEntityStore().getStore().getComponent(player.getReference(), com.hypixel.hytale.server.core.entity.UUIDComponent.getComponentType());

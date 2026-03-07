@@ -30,6 +30,14 @@ public class EnchantmentDurabilitySystem {
     }
 
     public void onInventoryChange(LivingEntityInventoryChangeEvent event) {
+        LivingEntity entity = event.getEntity();
+        if (!(entity instanceof com.hypixel.hytale.server.core.entity.entities.Player player)) return;
+
+        if (player.getWorld() != null && !player.getWorld().isInThread()) {
+            player.getWorld().execute(() -> onInventoryChange(event));
+            return;
+        }
+
         if (guard.isProcessing()) return;
 
         Transaction transaction = event.getTransaction();
@@ -51,9 +59,9 @@ public class EnchantmentDurabilitySystem {
                 event.getItemContainer().replaceItemStackInSlot(slotTransaction.getSlot(), after, correctedStack);
                 
                 LivingEntity targetEntity = event.getEntity();
-                if (targetEntity instanceof com.hypixel.hytale.server.core.entity.entities.Player player) {
-                    if (player.getWorld() != null && player.getReference() != null) {
-                        com.hypixel.hytale.server.core.universe.PlayerRef playerRef = player.getWorld().getEntityStore().getStore().getComponent(player.getReference(), com.hypixel.hytale.server.core.universe.PlayerRef.getComponentType());
+                if (targetEntity instanceof com.hypixel.hytale.server.core.entity.entities.Player p) {
+                    if (p.getWorld() != null && p.getReference() != null) {
+                        com.hypixel.hytale.server.core.universe.PlayerRef playerRef = p.getWorld().getEntityStore().getStore().getComponent(p.getReference(), com.hypixel.hytale.server.core.universe.PlayerRef.getComponentType());
                         EnchantmentEventHelper.fireActivated(playerRef, before, EnchantmentType.STURDY, enchantmentManager.getEnchantmentLevel(before, EnchantmentType.STURDY));
                     }
                 }
@@ -80,9 +88,9 @@ public class EnchantmentDurabilitySystem {
                 event.getItemContainer().replaceItemStackInSlot(slotTransaction.getSlot(), after, correctedStack);
                 
                 LivingEntity targetEntity = event.getEntity();
-                if (targetEntity instanceof com.hypixel.hytale.server.core.entity.entities.Player player) {
-                    if (player.getWorld() != null && player.getReference() != null) {
-                        com.hypixel.hytale.server.core.universe.PlayerRef playerRef = player.getWorld().getEntityStore().getStore().getComponent(player.getReference(), com.hypixel.hytale.server.core.universe.PlayerRef.getComponentType());
+                if (targetEntity instanceof com.hypixel.hytale.server.core.entity.entities.Player p) {
+                    if (p.getWorld() != null && p.getReference() != null) {
+                        com.hypixel.hytale.server.core.universe.PlayerRef playerRef = p.getWorld().getEntityStore().getStore().getComponent(p.getReference(), com.hypixel.hytale.server.core.universe.PlayerRef.getComponentType());
                         EnchantmentEventHelper.fireActivated(playerRef, before, EnchantmentType.DURABILITY, enchantmentManager.getEnchantmentLevel(before, EnchantmentType.DURABILITY));
                     }
                 }

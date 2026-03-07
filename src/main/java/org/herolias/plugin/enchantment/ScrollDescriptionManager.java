@@ -79,9 +79,46 @@ public class ScrollDescriptionManager {
                     
                     // Resolve description using custom language and client fallback
                     String dynamicDescription = type.getBonusDescription(level, langCode, clientLocale);
+                    if (dynamicDescription == null) dynamicDescription = "";
+
+                    // Append category string
+                    String categoryPrefixKey = "scroll.category.applies_to";
+                    String categoryPrefix = categoryPrefixKey;
+                    if (lm != null) {
+                        String resolved = lm.getRawMessage(categoryPrefixKey, langCode, clientLocale);
+                        if (resolved != null && !resolved.startsWith("scroll.category.")) {
+                            categoryPrefix = resolved;
+                        }
+                    }
+                    if (categoryPrefix.equals(categoryPrefixKey)) {
+                        categoryPrefix = "Can be applied to: ";
+                    }
+
+                    java.util.List<String> categoryNames = new java.util.ArrayList<>();
+                    for (ItemCategory cat : type.getApplicableCategories()) {
+                        String catKey = "itemCategory." + cat.getId();
+                        String catName = catKey;
+                        if (lm != null) {
+                            String resolved = lm.getRawMessage(catKey, langCode, clientLocale);
+                            if (resolved != null && !resolved.startsWith("itemCategory.")) {
+                                catName = resolved;
+                            }
+                        }
+                        if (catName.equals(catKey)) {
+                            catName = formatCategoryId(cat.getId());
+                        }
+                        categoryNames.add(catName);
+                    }
+                    if (!categoryNames.isEmpty()) {
+                        java.util.Collections.sort(categoryNames);
+                        if (!dynamicDescription.isEmpty()) {
+                            dynamicDescription += "\n\n";
+                        }
+                        dynamicDescription += "<color is=\"#AAAAAA\">" + categoryPrefix + "\n" + String.join(", ", categoryNames) + "</color>";
+                    }
 
                     // Append addon attribution for non-built-in enchantments
-                    if (dynamicDescription != null && !dynamicDescription.isEmpty()
+                    if (!dynamicDescription.isEmpty()
                             && (type.getOwnerModId() != null || type.getOwnerModName() != null)) {
                         String modDisplay = type.getOwnerModName() != null ? type.getOwnerModName() : type.getOwnerModId();
                         dynamicDescription += "\n\n<color is=\"#AAAAAA\">Added by " + modDisplay + "</color>";
@@ -151,5 +188,19 @@ public class ScrollDescriptionManager {
     public static void reloadTranslations() {
        // No-op or trigger broadcast
        broadcastUpdatePacket(); 
+    }
+
+    private static String formatCategoryId(String id) {
+        if (id == null || id.isEmpty()) return "";
+        String[] words = id.split("_");
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < words.length; i++) {
+            if (words[i].length() > 0) {
+                sb.append(Character.toUpperCase(words[i].charAt(0)));
+                sb.append(words[i].substring(1).toLowerCase());
+            }
+            if (i < words.length - 1) sb.append(" ");
+        }
+        return sb.toString();
     }
 }

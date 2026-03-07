@@ -240,6 +240,14 @@ public class EnchantScrollPage extends ChoiceBasePage {
             ));
         }
 
+        elements.sort((a, b) -> {
+            boolean aIsScroll = ((EnchantScrollElement) a).getItemStack().getItemId().startsWith("Scroll_");
+            boolean bIsScroll = ((EnchantScrollElement) b).getItemStack().getItemId().startsWith("Scroll_");
+            if (aIsScroll && !bIsScroll) return 1;
+            if (!aIsScroll && bIsScroll) return -1;
+            return 0;
+        });
+
         return elements.toArray(ChoiceElement[]::new);
     }
 }

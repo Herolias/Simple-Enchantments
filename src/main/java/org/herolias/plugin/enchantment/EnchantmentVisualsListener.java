@@ -31,6 +31,11 @@ public class EnchantmentVisualsListener {
                 return;
             }
 
+            if (player.getWorld() != null && !player.getWorld().isInThread()) {
+                player.getWorld().execute(() -> onInventoryChange(event));
+                return;
+            }
+
             Ref<EntityStore> entityRef = player.getReference();
             if (entityRef == null || !entityRef.isValid()) {
                 return;

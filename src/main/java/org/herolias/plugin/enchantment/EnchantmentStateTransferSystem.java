@@ -1,6 +1,7 @@
 package org.herolias.plugin.enchantment;
 
 import com.hypixel.hytale.server.core.asset.type.item.config.Item;
+import com.hypixel.hytale.server.core.entity.LivingEntity;
 import com.hypixel.hytale.server.core.event.events.entity.LivingEntityInventoryChangeEvent;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
 import com.hypixel.hytale.server.core.inventory.container.ItemContainer;
@@ -60,6 +61,14 @@ public class EnchantmentStateTransferSystem {
      * Handles inventory change events. Registered as a global listener.
      */
     public void onInventoryChange(@Nonnull LivingEntityInventoryChangeEvent event) {
+        LivingEntity entity = event.getEntity();
+        if (!(entity instanceof com.hypixel.hytale.server.core.entity.entities.Player player)) return;
+
+        if (player.getWorld() != null && !player.getWorld().isInThread()) {
+            player.getWorld().execute(() -> onInventoryChange(event));
+            return;
+        }
+
         if (guard.isProcessing()) return;
 
         Transaction transaction = event.getTransaction();

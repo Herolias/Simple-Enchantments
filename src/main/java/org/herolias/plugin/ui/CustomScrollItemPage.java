@@ -153,6 +153,14 @@ public class CustomScrollItemPage extends ChoiceBasePage {
             ));
         }
 
+        elements.sort((a, b) -> {
+            boolean aIsScroll = ((CustomScrollItemElement) a).getItemStack().getItemId().startsWith("Scroll_");
+            boolean bIsScroll = ((CustomScrollItemElement) b).getItemStack().getItemId().startsWith("Scroll_");
+            if (aIsScroll && !bIsScroll) return 1;
+            if (!aIsScroll && bIsScroll) return -1;
+            return 0; // maintain original order otherwise
+        });
+
         return elements.toArray(ChoiceElement[]::new);
     }
 }

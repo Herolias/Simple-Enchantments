@@ -85,4 +85,8 @@ public class CustomScrollItemElement extends ChoiceElement {
 
         commandBuilder.set(selector + " #Detail.Text", detailBuilder.toString());
     }
+
+    public ItemStack getItemStack() {
+        return this.itemStack;
+    }
 }

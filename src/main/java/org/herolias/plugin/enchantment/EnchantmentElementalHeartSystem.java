@@ -34,10 +34,15 @@ public class EnchantmentElementalHeartSystem extends AbstractRefundSystem {
     }
 
     public void onInventoryChange(LivingEntityInventoryChangeEvent event) {
-        if (guard.isProcessing()) return;
-
         LivingEntity entity = event.getEntity();
         if (!(entity instanceof Player player)) return;
+
+        if (player.getWorld() != null && !player.getWorld().isInThread()) {
+            player.getWorld().execute(() -> onInventoryChange(event));
+            return;
+        }
+
+        if (guard.isProcessing()) return;
 
         Transaction transaction = event.getTransaction();
         ItemContainer container = event.getItemContainer();
