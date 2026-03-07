@@ -57,6 +57,8 @@ public class ScrollItemGenerator {
     private static boolean itemsRegistered = false;
     /** Phase 2 done: processConfig called after engine assets loaded */
     private static boolean itemsProcessed = false;
+    /** Re-entrance guard: true while we are inside generateAndRegisterItems/processRegisteredItems */
+    private static boolean generating = false;
     /** Items we generated, kept for Phase 2 processConfig */
     private static final List<Item> generatedItems = new ArrayList<>();
 
@@ -81,16 +83,30 @@ public class ScrollItemGenerator {
      * Phase 2 (subsequent call): Call processConfig() now that engine assets are loaded.
      */
     private static void onItemsLoaded(LoadedAssetsEvent<String, Item, DefaultAssetMap<String, Item>> event) {
+        // Guard: AssetStore.loadAssets() fires nested LoadedAssetsEvent<Item> synchronously.
+        // Without this guard, Phase 1's loadAssets triggers Phase 2 prematurely (or infinite recursion).
+        if (generating) return;
+
         if (!itemsRegistered) {
             // Phase 1: Generate and register items (mod loads first, before /Server)
-            LOGGER.atInfo().log("ScrollItemGenerator: Phase 1 — Generating scroll items...");
-            generateAndRegisterItems();
             itemsRegistered = true;
+            generating = true;
+            try {
+                LOGGER.atInfo().log("ScrollItemGenerator: Phase 1 — Generating scroll items...");
+                generateAndRegisterItems();
+            } finally {
+                generating = false;
+            }
         } else if (!itemsProcessed) {
             // Phase 2: Engine /Server assets are now loaded — call processConfig
-            LOGGER.atInfo().log("ScrollItemGenerator: Phase 2 — Running processConfig (engine assets now available)...");
-            processRegisteredItems();
             itemsProcessed = true;
+            generating = true;
+            try {
+                LOGGER.atInfo().log("ScrollItemGenerator: Phase 2 — Running processConfig (engine assets now available)...");
+                processRegisteredItems();
+            } finally {
+                generating = false;
+            }
         }
     }
 

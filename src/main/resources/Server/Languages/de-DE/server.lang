@@ -1144,7 +1144,7 @@ customUI.walkthrough.enchantments.desc = Eine vollständige Liste der Verzauberu
 config.general.allow_same_scroll_upgrades = Gleiche Schriftrollen-Upgrades erlauben (I+I = II)
 
 customUI.walkthrough.enabledOnServer = Auf diesem Server aktiviert: 
-customUI.walkthrough.returnScroll.yes =
+customUI.walkthrough.returnScroll.yes =  
 customUI.walkthrough.returnScroll.no = nicht
 
 

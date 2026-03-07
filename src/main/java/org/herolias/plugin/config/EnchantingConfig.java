@@ -299,7 +299,7 @@ public class EnchantingConfig {
         addScrollRecipe("Scroll_Coup_De_Grace_II", 2, "Ingredient_Fabric_Scrap_Cindercloth", 5, "Plant_Crop_Stamina2", 5, "Ingredient_Crystal_Yellow", 20, "Ingredient_Void_Essence", 15);
         addScrollRecipe("Scroll_Coup_De_Grace_III", 3, "Ingredient_Fabric_Scrap_Cindercloth", 5, "Plant_Crop_Stamina2", 7, "Ingredient_Crystal_Yellow", 25, "Ingredient_Void_Essence", 20);
 
-        addScrollRecipe("Scroll_Poison_I", 4, "Ingredient_Fabric_Scrap_Cindercloth", 5, "Ingredient_Water_Essence", 30, "Ingredient_Crystal_Green", 20, "Plant_Crop_Mushroom_Poison", 15);
+        addScrollRecipe("Scroll_Poison_I", 4, "Ingredient_Fabric_Scrap_Cindercloth", 5, "Ingredient_Sac_Venom", 25, "Ingredient_Crystal_Green", 30, "Plant_Crop_Mushroom_Cap_Green", 20);
 
         addScrollRecipe("Scroll_Environmental_Protection_I", 1, "Ingredient_Fabric_Scrap_Cindercloth", 5, "Ingredient_Life_Essence", 10, "Ingredient_Fire_Essence", 5, "Ingredient_Water_Essence", 5);
         addScrollRecipe("Scroll_Environmental_Protection_II", 2, "Ingredient_Fabric_Scrap_Cindercloth", 5, "Ingredient_Life_Essence", 20, "Ingredient_Fire_Essence", 10, "Ingredient_Water_Essence", 10);
