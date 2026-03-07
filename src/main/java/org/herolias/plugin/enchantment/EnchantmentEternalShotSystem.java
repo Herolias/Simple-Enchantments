@@ -1,5 +1,6 @@
 package org.herolias.plugin.enchantment;
 
+import com.hypixel.hytale.codec.Codec;
 import com.hypixel.hytale.logger.HytaleLogger;
 import com.hypixel.hytale.server.core.entity.LivingEntity;
 import com.hypixel.hytale.server.core.entity.entities.Player;
@@ -15,6 +16,7 @@ import com.hypixel.hytale.server.core.inventory.transaction.MoveTransaction;
 import com.hypixel.hytale.server.core.inventory.transaction.MoveType;
 import com.hypixel.hytale.server.core.inventory.transaction.ListTransaction;
 import com.hypixel.hytale.server.core.asset.type.item.config.Item;
+import com.hypixel.hytale.server.core.modules.entitystats.asset.DefaultEntityStatTypes;
 import org.herolias.plugin.util.ProcessingGuard;
 
 import javax.annotation.Nonnull;
@@ -50,6 +52,7 @@ public class EnchantmentEternalShotSystem extends AbstractRefundSystem {
      * the slot change. The slot tracker polls every 50ms, so 300ms is generous.
      */
     private static final long SWAP_VERIFY_WINDOW_MS = 300;
+    private static final long PRELOAD_KICKSTART_WINDOW_MS = 1500;
 
     /**
      * Tracks the ammo type and total quantity refunded by Eternal Shot when
@@ -57,11 +60,9 @@ public class EnchantmentEternalShotSystem extends AbstractRefundSystem {
      */
     private static class LoadedAmmoRecord {
         final String ammoId;
-        int totalQtyRefunded;
 
-        LoadedAmmoRecord(String ammoId, int qty) {
+        LoadedAmmoRecord(String ammoId) {
             this.ammoId = ammoId;
-            this.totalQtyRefunded = qty;
         }
     }
 
@@ -84,8 +85,42 @@ public class EnchantmentEternalShotSystem extends AbstractRefundSystem {
         }
     }
 
+    /**
+     * Some reloadable modded weapons fire an initial single-ammo consume before the
+     * actual multi-ammo reload transaction. Eternal Shot refunds that first remove,
+     * then refunds the real reload as well, creating a +1 dupe. We keep the first
+     * refund as "suspect" for a short window and retroactively remove it if a
+     * follow-up ammo consume arrives for the same weapon/ammo pair.
+     */
+    private static class SuspectPreloadRefund {
+        final long timestamp;
+        final String weaponId;
+        final String ammoId;
+        final ItemContainer container;
+        final short slot;
+        final int qty;
+
+        SuspectPreloadRefund(long timestamp, String weaponId, String ammoId, ItemContainer container, short slot, int qty) {
+            this.timestamp = timestamp;
+            this.weaponId = weaponId;
+            this.ammoId = ammoId;
+            this.container = container;
+            this.slot = slot;
+            this.qty = qty;
+        }
+    }
+
+    private static class SuspectReconciliationResult {
+        final ItemStack adjustedSlotBefore;
+
+        SuspectReconciliationResult(ItemStack adjustedSlotBefore) {
+            this.adjustedSlotBefore = adjustedSlotBefore;
+        }
+    }
+
     private final Map<UUID, LoadedAmmoRecord> loadedCrossbowAmmo = new ConcurrentHashMap<>();
     private final Map<UUID, List<PendingAddition>> pendingSwapVerifications = new ConcurrentHashMap<>();
+    private final Map<UUID, SuspectPreloadRefund> suspectPreloadRefunds = new ConcurrentHashMap<>();
 
     public EnchantmentEternalShotSystem(EnchantmentManager enchantmentManager) {
         this.enchantmentManager = enchantmentManager;
@@ -108,6 +143,7 @@ public class EnchantmentEternalShotSystem extends AbstractRefundSystem {
         com.hypixel.hytale.server.core.entity.UUIDComponent uComp = player.getWorld().getEntityStore().getStore().getComponent(player.getReference(), com.hypixel.hytale.server.core.entity.UUIDComponent.getComponentType());
         if (uComp != null) {
             cleanupOldDropRecords(uComp.getUuid());
+            cleanupOldSuspectRefund(uComp.getUuid());
         }
 
         Transaction transaction = event.getTransaction();
@@ -171,8 +207,8 @@ public class EnchantmentEternalShotSystem extends AbstractRefundSystem {
         ItemStack before = tx.getSlotBefore();
         if (before == null || before.isEmpty()) return;
 
-        // Was the item there an Eternal Shot crossbow?
-        if (!enchantmentManager.isCrossbow(before)) return;
+        // Was the item there a reloadable Eternal Shot weapon?
+        if (!shouldTrackLoadedAmmo(before)) return;
         if (enchantmentManager.getEnchantmentLevel(before, EnchantmentType.ETERNAL_SHOT) <= 0) return;
 
         // Yes — treat this exactly like a hotbar slot switch away from the crossbow.
@@ -207,15 +243,16 @@ public class EnchantmentEternalShotSystem extends AbstractRefundSystem {
         LoadedAmmoRecord record = loadedCrossbowAmmo.get(uuid);
         if (record == null) return;
 
-        // Check if the PREVIOUS item was an Eternal Shot crossbow
-        boolean wasCrossbow = previousItem != null && !previousItem.isEmpty()
-                && enchantmentManager.isCrossbow(previousItem)
+        // Check if the PREVIOUS item was a reloadable Eternal Shot weapon
+        boolean wasReloadableWeapon = previousItem != null && !previousItem.isEmpty()
+                && shouldTrackLoadedAmmo(previousItem)
                 && enchantmentManager.getEnchantmentLevel(previousItem, EnchantmentType.ETERNAL_SHOT) > 0;
 
-        if (!wasCrossbow) {
-            // Previous item wasn't an Eternal Shot crossbow → stale record
+        if (!wasReloadableWeapon) {
+            // Previous item wasn't a reloadable Eternal Shot weapon → stale record
             loadedCrossbowAmmo.remove(uuid);
             pendingSwapVerifications.remove(uuid);
+            suspectPreloadRefunds.remove(uuid);
             return;
         }
 
@@ -224,13 +261,10 @@ public class EnchantmentEternalShotSystem extends AbstractRefundSystem {
         List<PendingAddition> pendings = pendingSwapVerifications.remove(uuid);
         if (pendings != null && !pendings.isEmpty()) {
             long now = System.currentTimeMillis();
-            int totalRemoved = 0;
             for (PendingAddition pending : pendings) {
                 if ((now - pending.timestamp) < SWAP_VERIFY_WINDOW_MS) {
                     // Remove from the exact container and slot where the arrows were added
-                    if (removeFromExactSlot(pending.container, record.ammoId, pending.slot, pending.addedQty)) {
-                        totalRemoved += pending.addedQty;
-                    }
+                    removeFromExactSlot(pending.container, record.ammoId, pending.slot, pending.addedQty);
                 }
             }
         } else {
@@ -239,6 +273,7 @@ public class EnchantmentEternalShotSystem extends AbstractRefundSystem {
 
         // Clear the loaded record for this cycle
         loadedCrossbowAmmo.remove(uuid);
+        suspectPreloadRefunds.remove(uuid);
     }
 
     /**
@@ -249,7 +284,9 @@ public class EnchantmentEternalShotSystem extends AbstractRefundSystem {
         if (container == null || slot < 0 || slot >= container.getCapacity()) return false;
 
         ItemStack stack = container.getItemStack(slot);
-        if (stack == null || stack.isEmpty() || !ammoId.equals(stack.getItemId())) return false;
+        if (stack == null || stack.isEmpty() || !ammoId.equals(stack.getItemId())) {
+            return false;
+        }
 
         int newQty = stack.getQuantity() - qtyToRemove;
         if (newQty > 0) {
@@ -309,33 +346,111 @@ public class EnchantmentEternalShotSystem extends AbstractRefundSystem {
         int level = enchantmentManager.getEnchantmentLevel(weapon, EnchantmentType.ETERNAL_SHOT);
         if (level <= 0) return;
 
-        guard.runGuarded(() -> container.replaceItemStackInSlot(slot, slotAfter, slotBefore));
+        String trackingReason = getLoadedAmmoTrackingReason(weapon);
+        SuspectReconciliationResult suspectResult = reconcileSuspectPreloadRefund(
+                playerUuid,
+                weapon,
+                slotBefore,
+                container,
+                slot,
+                beforeQty,
+                afterQty,
+                trackingReason
+        );
+        ItemStack refundSlotBefore = suspectResult.adjustedSlotBefore;
+        int refundedQty = (refundSlotBefore == null || refundSlotBefore.isEmpty()) ? 0 : refundSlotBefore.getQuantity() - afterQty;
+
+        guard.runGuarded(() -> container.replaceItemStackInSlot(slot, slotAfter, refundSlotBefore));
         
         if (player.getWorld() != null && player.getReference() != null) {
             com.hypixel.hytale.server.core.universe.PlayerRef playerRef = player.getWorld().getEntityStore().getStore().getComponent(player.getReference(), com.hypixel.hytale.server.core.universe.PlayerRef.getComponentType());
             EnchantmentEventHelper.fireActivated(playerRef, weapon, EnchantmentType.ETERNAL_SHOT, level);
         }
 
-        // Track this refund for crossbow swap-from duplication prevention.
-        if (enchantmentManager.isCrossbow(weapon)) {
-            int consumed = beforeQty - afterQty;
+        // Only weapons that keep a loaded round/projectile need the later swap/unload cleanup.
+        if (trackingReason != null) {
+            int consumed = refundedQty;
             if (player.getWorld() == null || player.getReference() == null) return;
             com.hypixel.hytale.server.core.entity.UUIDComponent uuidComp2 = player.getWorld().getEntityStore().getStore().getComponent(player.getReference(), com.hypixel.hytale.server.core.entity.UUIDComponent.getComponentType());
             if (uuidComp2 != null) {
                 UUID uuid = uuidComp2.getUuid();
 
                 // Accumulate refund quantity (crossbow may load multiple arrows)
-                LoadedAmmoRecord existing = loadedCrossbowAmmo.get(uuid);
-                if (existing != null && existing.ammoId.equals(slotBefore.getItemId())) {
-                    existing.totalQtyRefunded += consumed;
-                } else {
-                    loadedCrossbowAmmo.put(uuid, new LoadedAmmoRecord(slotBefore.getItemId(), consumed));
+                if (consumed > 0) {
+                    LoadedAmmoRecord existing = loadedCrossbowAmmo.get(uuid);
+                    if (existing != null && existing.ammoId.equals(slotBefore.getItemId())) {
+                    } else {
+                        loadedCrossbowAmmo.put(uuid, new LoadedAmmoRecord(slotBefore.getItemId()));
+                    }
                 }
 
                 // Clear any stale pending verifications from a previous cycle
                 pendingSwapVerifications.remove(uuid);
             }
         }
+
+        maybeRecordSuspectPreloadRefund(playerUuid, weapon, slotBefore, container, slot, beforeQty - afterQty, trackingReason);
+    }
+
+    /**
+     * Determines whether a weapon can hold/refund loaded ammo separately from the
+     * current inventory stack. Those weapons need the extra anti-duplication
+     * bookkeeping when Eternal Shot refunds their load cost.
+     */
+    private boolean shouldTrackLoadedAmmo(@Nullable ItemStack weapon) {
+        return getLoadedAmmoTrackingReason(weapon) != null;
+    }
+
+    @Nullable
+    private String getLoadedAmmoTrackingReason(@Nullable ItemStack weapon) {
+        if (weapon == null || weapon.isEmpty()) return null;
+
+        if (enchantmentManager.isCrossbow(weapon)) {
+            return "crossbow-id";
+        }
+
+        if (weapon.getFromMetadataOrNull("LoadedAmmoId", Codec.STRING) != null) {
+            return "loaded-ammo-metadata";
+        }
+
+        try {
+            Item item = weapon.getItem();
+            if (item == null) {
+                return null;
+            }
+
+            com.hypixel.hytale.server.core.asset.type.item.config.ItemWeapon itemWeapon = item.getWeapon();
+            if (itemWeapon != null) {
+                int ammoStatId = DefaultEntityStatTypes.getAmmo();
+                if (ammoStatId != Integer.MIN_VALUE) {
+                    if (itemWeapon.getStatModifiers() != null && itemWeapon.getStatModifiers().containsKey(ammoStatId)) {
+                        return "weapon-ammo-stat-modifier";
+                    }
+
+                    int[] entityStatsToClear = itemWeapon.getEntityStatsToClear();
+                    if (entityStatsToClear != null) {
+                        for (int statId : entityStatsToClear) {
+                            if (statId == ammoStatId) {
+                                return "weapon-clears-ammo-stat";
+                            }
+                        }
+                    }
+                }
+            }
+
+            if (item.getInteractions() != null) {
+                for (String rootInteraction : item.getInteractions().values()) {
+                    if (rootInteraction != null && rootInteraction.toLowerCase().contains("reload")) {
+                        return "reload-root-interaction:" + rootInteraction;
+                    }
+                }
+            }
+        } catch (Exception e) {
+            // If asset inspection fails, default to "not reload-tracked" rather than
+            // treating every ranged weapon like a crossbow and risking duplication.
+        }
+
+        return null;
     }
 
     /**
@@ -369,6 +484,84 @@ public class EnchantmentEternalShotSystem extends AbstractRefundSystem {
         pendingSwapVerifications
             .computeIfAbsent(playerUuid, k -> new ArrayList<>())
             .add(new PendingAddition(System.currentTimeMillis(), container, slot, addedQty));
+    }
+
+    private void cleanupOldSuspectRefund(@Nonnull UUID playerUuid) {
+        SuspectPreloadRefund suspect = suspectPreloadRefunds.get(playerUuid);
+        if (suspect == null) return;
+        if ((System.currentTimeMillis() - suspect.timestamp) > PRELOAD_KICKSTART_WINDOW_MS) {
+            suspectPreloadRefunds.remove(playerUuid);
+        }
+    }
+
+    @Nonnull
+    private SuspectReconciliationResult reconcileSuspectPreloadRefund(@Nonnull UUID playerUuid,
+                                                                      @Nullable ItemStack weapon,
+                                                                      @Nullable ItemStack ammo,
+                                                                      @Nonnull ItemContainer currentContainer,
+                                                                      short currentSlot,
+                                                                      int beforeQty,
+                                                                      int afterQty,
+                                                                      @Nullable String trackingReason) {
+        SuspectPreloadRefund suspect = suspectPreloadRefunds.get(playerUuid);
+        if (suspect == null) return new SuspectReconciliationResult(ammo);
+
+        long ageMs = System.currentTimeMillis() - suspect.timestamp;
+        if (ageMs > PRELOAD_KICKSTART_WINDOW_MS) {
+            suspectPreloadRefunds.remove(playerUuid);
+            return new SuspectReconciliationResult(ammo);
+        }
+
+        String weaponId = weapon != null ? weapon.getItemId() : null;
+        String ammoId = ammo != null ? ammo.getItemId() : null;
+        if (weaponId == null || ammoId == null) {
+            return new SuspectReconciliationResult(ammo);
+        }
+
+        if (!weaponId.equals(suspect.weaponId) || !ammoId.equals(suspect.ammoId)) {
+            return new SuspectReconciliationResult(ammo);
+        }
+
+        if (!isAmmoStatTrackedWeapon(trackingReason)) {
+            return new SuspectReconciliationResult(ammo);
+        }
+
+        if (suspect.container == currentContainer && suspect.slot == currentSlot) {
+            int adjustedQty = Math.max(afterQty, beforeQty - suspect.qty);
+            ItemStack adjustedBefore = adjustedQty > 0 ? ammo.withQuantity(adjustedQty) : ItemStack.EMPTY;
+            suspectPreloadRefunds.remove(playerUuid);
+            return new SuspectReconciliationResult(adjustedBefore);
+        }
+
+        removeFromExactSlot(suspect.container, suspect.ammoId, suspect.slot, suspect.qty);
+        suspectPreloadRefunds.remove(playerUuid);
+        return new SuspectReconciliationResult(ammo);
+    }
+
+    private void maybeRecordSuspectPreloadRefund(@Nonnull UUID playerUuid,
+                                                 @Nullable ItemStack weapon,
+                                                 @Nullable ItemStack ammo,
+                                                 @Nonnull ItemContainer container,
+                                                 short slot,
+                                                 int consumed,
+                                                 @Nullable String trackingReason) {
+        if (!isAmmoStatTrackedWeapon(trackingReason) || consumed != 1 || weapon == null || ammo == null) {
+            return;
+        }
+
+        suspectPreloadRefunds.put(playerUuid, new SuspectPreloadRefund(
+                System.currentTimeMillis(),
+                weapon.getItemId(),
+                ammo.getItemId(),
+                container,
+                slot,
+                consumed
+        ));
+    }
+
+    private boolean isAmmoStatTrackedWeapon(@Nullable String trackingReason) {
+        return "weapon-ammo-stat-modifier".equals(trackingReason)
+                || "weapon-clears-ammo-stat".equals(trackingReason);
     }
 
     /**
