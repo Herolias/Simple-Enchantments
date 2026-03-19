@@ -35,21 +35,19 @@ import java.util.Set;
  * Applies Thrift mana restoration to mana costs.
  * Uses predictable mana stat updates to refund a portion of mana spent
  * when the player is wielding a Thrift-enchanted staff.
- * 
- * Replaces the previous "On Hit" implementation to satisfy "Always refund when shooting".
  */
-public class EnchantmentThriftSystem extends EntityTickingSystem<EntityStore> implements EntityStatsSystems.StatModifyingSystem {
+public class EnchantmentThriftSystem extends EntityTickingSystem<EntityStore>
+        implements EntityStatsSystems.StatModifyingSystem {
 
     private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
 
     private final EnchantmentManager enchantmentManager;
-    private final Query<EntityStore> query = Query.and(AllLegacyLivingEntityTypesQuery.INSTANCE, EntityStatMap.getComponentType());
+    private final Query<EntityStore> query = Query.and(AllLegacyLivingEntityTypesQuery.INSTANCE,
+            EntityStatMap.getComponentType());
     private final Set<Dependency<EntityStore>> dependencies = Set.of(
-        new SystemDependency<EntityStore, InteractionSystems.TickInteractionManagerSystem>(
-            Order.AFTER,
-            InteractionSystems.TickInteractionManagerSystem.class
-        )
-    );
+            new SystemDependency<EntityStore, InteractionSystems.TickInteractionManagerSystem>(
+                    Order.AFTER,
+                    InteractionSystems.TickInteractionManagerSystem.class));
 
     public EnchantmentThriftSystem(EnchantmentManager enchantmentManager) {
         this.enchantmentManager = enchantmentManager;
@@ -77,10 +75,10 @@ public class EnchantmentThriftSystem extends EntityTickingSystem<EntityStore> im
 
     @Override
     public void tick(float dt,
-                     int index,
-                     @Nonnull ArchetypeChunk<EntityStore> archetypeChunk,
-                     @Nonnull Store<EntityStore> store,
-                     @Nonnull CommandBuffer<EntityStore> commandBuffer) {
+            int index,
+            @Nonnull ArchetypeChunk<EntityStore> archetypeChunk,
+            @Nonnull Store<EntityStore> store,
+            @Nonnull CommandBuffer<EntityStore> commandBuffer) {
         EntityStatMap statMap = archetypeChunk.getComponent(index, EntityStatMap.getComponentType());
         if (statMap == null) {
             return;
@@ -111,29 +109,31 @@ public class EnchantmentThriftSystem extends EntityTickingSystem<EntityStore> im
         // Check for Thrift Enchantment
         ItemStack weapon = inventory.getItemInHand();
         int thriftLevel = getThriftLevel(weapon);
-        
+
         if (thriftLevel <= 0) {
             return;
         }
 
         // Calculate Refund Rate
         float multiplierIndex = (float) EnchantmentType.THRIFT.getEffectMultiplier();
-        float refundPercentage = multiplierIndex * thriftLevel; 
-        
+        float refundPercentage = multiplierIndex * thriftLevel;
+
         // Safety cap at 100% refund (free spells)
-        if (refundPercentage > 1.0f) refundPercentage = 1.0f;
-        if (refundPercentage <= 0.0f) return;
+        if (refundPercentage > 1.0f)
+            refundPercentage = 1.0f;
+        if (refundPercentage <= 0.0f)
+            return;
 
         int maxPairs = Math.min(updates.size(), values.size() / 2);
         float manaSpent = 0.0f;
-        
+
         for (int i = 0; i < maxPairs; i++) {
             EntityStatUpdate update = updates.get(i);
-            // We care about ANY mana update that reduces mana, predictable or not, 
-            // but "predictable" usually covers player actions like casting.
             if (update == null || !update.predictable) {
-                 if (update == null) continue;
-                 if (!update.predictable) continue; 
+                if (update == null)
+                    continue;
+                if (!update.predictable)
+                    continue;
             }
             float previous = values.getFloat(i * 2);
             float current = values.getFloat(i * 2 + 1);
@@ -154,13 +154,17 @@ public class EnchantmentThriftSystem extends EntityTickingSystem<EntityStore> im
 
         // Apply Refund
         statMap.addStatValue(DefaultEntityStatTypes.getMana(), refund);
-        
+
         if (entity instanceof com.hypixel.hytale.server.core.entity.entities.Player player) {
-             com.hypixel.hytale.server.core.universe.PlayerRef playerRef = store.getComponent(EntityUtils.getEntity(index, archetypeChunk).getReference(), com.hypixel.hytale.server.core.universe.PlayerRef.getComponentType());
-             org.herolias.plugin.api.event.EnchantmentActivatedEvent ev = new org.herolias.plugin.api.event.EnchantmentActivatedEvent(playerRef, weapon, EnchantmentType.THRIFT, thriftLevel);
-             com.hypixel.hytale.server.core.HytaleServer.get().getEventBus().dispatchFor(org.herolias.plugin.api.event.EnchantmentActivatedEvent.class).dispatch(ev);
+            com.hypixel.hytale.server.core.universe.PlayerRef playerRef = store.getComponent(
+                    EntityUtils.getEntity(index, archetypeChunk).getReference(),
+                    com.hypixel.hytale.server.core.universe.PlayerRef.getComponentType());
+            org.herolias.plugin.api.event.EnchantmentActivatedEvent ev = new org.herolias.plugin.api.event.EnchantmentActivatedEvent(
+                    playerRef, weapon, EnchantmentType.THRIFT, thriftLevel);
+            com.hypixel.hytale.server.core.HytaleServer.get().getEventBus()
+                    .dispatchFor(org.herolias.plugin.api.event.EnchantmentActivatedEvent.class).dispatch(ev);
         }
-        
+
     }
 
     private int getThriftLevel(@Nullable ItemStack item) {
