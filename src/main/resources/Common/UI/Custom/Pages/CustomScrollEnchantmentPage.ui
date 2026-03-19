@@ -2,18 +2,22 @@ $C = "../Common.ui";
 
 $C.@PageOverlay {}
 
-$C.@DecoratedContainer {
-  Anchor: (Width: 550, Height: 380);
+Group {
+  Anchor: (Width: 512, Height: 690);
+  Background: "../Common/Enchantment UI/Scroll_Enchanting_Page.png";
 
-  #Title {
+  Group {
+    LayoutMode: Top;
+    Padding: (Horizontal: 55, Top: 75, Bottom: 65);
+
     Group {
+      Anchor: (Height: 30, Bottom: 5);
+      
       $C.@Title #TitleLabel {
         @Text = %server.customUI.customScrollEnchantmentPage.title;
       }
     }
-  }
 
-  #Content {
     Group {
       LayoutMode: Left;
       Padding: (Right: 15, Bottom: 5);

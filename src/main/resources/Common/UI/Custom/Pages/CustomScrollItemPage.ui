@@ -2,18 +2,22 @@ $C = "../Common.ui";
 
 $C.@PageOverlay {}
 
-$C.@DecoratedContainer {
-  Anchor: (Width: 600, Height: 400);
+Group {
+  Anchor: (Width: 512, Height: 690);
+  Background: "../Common/Enchantment UI/Scroll_Enchanting_Page.png";
 
-  #Title {
+  Group {
+    LayoutMode: Top;
+    Padding: (Horizontal: 60, Top: 80, Bottom: 70);
+
     Group {
+      Anchor: (Height: 30, Bottom: 5);
+      
       $C.@Title #TitleLabel {
         @Text = %server.customUI.customScrollItemPage.title;
       }
     }
-  }
 
-  #Content {
     Group {
       LayoutMode: Left;
       Padding: (Right: 15, Bottom: 5);
@@ -21,12 +25,12 @@ $C.@DecoratedContainer {
       Label #ItemLabel {
         FlexWeight: 1;
         Text: %server.customUI.customScrollItemPage.item;
-        Style: (RenderBold: true);
+        Style: (RenderBold: true, TextColor: #2b2b2b);
       }
 
       Label #EnchantmentLabel {
         Text: %server.customUI.customScrollItemPage.enchantment;
-        Style: (RenderBold: true);
+        Style: (RenderBold: true, TextColor: #2b2b2b);
       }
     }
 

@@ -55,7 +55,7 @@ public class CleansingScrollElement extends ChoiceElement {
         String selector,
         PlayerRef playerRef
     ) {
-        commandBuilder.append("#ElementList", "Pages/EnchantScrollElement.ui");
+        commandBuilder.append("#ElementList", "Pages/CleansingScrollElement.ui");
         commandBuilder.set(selector + " #Icon.ItemId", this.itemStack.getItemId().toString());
         org.herolias.plugin.lang.LanguageManager langManager = enchantmentManager.getPlugin().getLanguageManager();
         String lang = enchantmentManager.getPlugin().getUserSettingsManager().getLanguage(playerRef.getUuid());

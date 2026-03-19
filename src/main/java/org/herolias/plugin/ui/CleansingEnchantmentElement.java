@@ -43,8 +43,8 @@ public class CleansingEnchantmentElement extends ChoiceElement {
         String selector,
         PlayerRef playerRef
     ) {
-        // Reuse the same element UI as enchant scrolls
-        commandBuilder.append("#ElementList", "Pages/EnchantScrollElement.ui");
+        // Use the new element UI for light backgrounds
+        commandBuilder.append("#ElementList", "Pages/CleansingScrollElement.ui");
         
         org.herolias.plugin.lang.LanguageManager languageManager = enchantmentManager.getPlugin().getLanguageManager();
         String lang = enchantmentManager.getPlugin().getUserSettingsManager().getLanguage(playerRef.getUuid());

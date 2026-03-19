@@ -55,7 +55,7 @@ public class CleansingScrollPage extends ChoiceBasePage {
         commandBuilder.clear("#ElementList");
         commandBuilder.appendInline(
             "#ElementList",
-            "Label #NoItemsLabel { Style: (Alignment: Center); }"
+            "Label #NoItemsLabel { Style: (Alignment: Center, TextColor: #333333); }"
         );
         translateLabels(commandBuilder);
     }

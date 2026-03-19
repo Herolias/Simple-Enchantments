@@ -4,7 +4,8 @@ plugins {
 }
 
 ext {
-    hytaleHome = "${System.getProperty("user.home")}/AppData/Roaming/Hytale"
+   //For Windows uncomment this line: hytaleHome = "${System.getProperty("user.home")}/AppData/Roaming/Hytale"
+  hytaleHome = "/home/elias/.var/app/com.hypixel.HytaleLauncher/data/Hytale"
 }
 
 java {

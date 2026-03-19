@@ -9,73 +9,78 @@ Group {
     Anchor: (Width: 330, Left: 80);   // Width for sidebar
   }
 
-  $C.@DecoratedContainer {
+  Group {
     Anchor: (Width: 1050, Height: 700, Left: 410);
-
-  #Title {
-    Group {
-      $C.@Title #PageTitle {
-      }
-    }
-  }
-
-  #Content {
-    LayoutMode: Top;
-
-    Group #TabBar {
-      LayoutMode: Left;
-      Anchor: (Height: 50, Bottom: 10);
-      Padding: (Horizontal: 5);
-
-      TextButton #TabWalkthrough {
-        Style: $C.@SecondaryTextButtonStyle;
-        Anchor: (Width: 200, Height: 40, Right: 8);
-        Padding: (Horizontal: 16);
-        Text: "Walkthrough";
-      }
-
-      TextButton #TabSettings {
-        Style: $C.@SecondaryTextButtonStyle;
-        Anchor: (Width: 280, Height: 40, Right: 8);
-        Padding: (Horizontal: 16);
-        Text: "User Settings";
-      }
-    }
+    Background: "../Common/Enchantment UI/Settings_Page.png";
 
     Group {
-      Anchor: (Height: 1, Bottom: 10);
-      Background: (Color: #5e512c);
-    }
-
-    Group #ContentArea {
-      FlexWeight: 1;
-      LayoutMode: TopScrolling;
-      ScrollbarStyle: $C.@DefaultScrollbarStyle;
-      Padding: (Right: 10);
-    }
-
-    Group {
-      Anchor: (Height: 1, Top: 10);
-      Background: (Color: #5e512c);
-    }
-
-    Group #ActionBar {
-      LayoutMode: Left;
-      Anchor: (Height: 50, Top: 10);
+      LayoutMode: Top;
+      Padding: (Horizontal: 50, Top: 55, Bottom: 50);
 
       Group {
-        FlexWeight: 1;
+        Anchor: (Height: 38, Bottom: 5);
+        Padding: (Top: 7);
+
+        Group {
+          $C.@Title #PageTitle {
+          }
+        }
       }
 
-      TextButton #CloseButton {
-        Style: $C.@DefaultTextButtonStyle;
-        Anchor: (Width: 120, Height: 40);
-        Padding: (Horizontal: 16);
-        Text: "Close";
+      Group #TabBar {
+        LayoutMode: Left;
+        Anchor: (Height: 50, Bottom: 10);
+        Padding: (Horizontal: 5);
+
+        TextButton #TabWalkthrough {
+          Style: $C.@SecondaryTextButtonStyle;
+          Anchor: (Width: 200, Height: 40, Right: 8);
+          Padding: (Horizontal: 16);
+          Text: "Walkthrough";
+        }
+
+        TextButton #TabSettings {
+          Style: $C.@SecondaryTextButtonStyle;
+          Anchor: (Width: 280, Height: 40, Right: 8);
+          Padding: (Horizontal: 16);
+          Text: "User Settings";
+        }
+      }
+
+      Group {
+        Anchor: (Height: 1, Bottom: 10);
+        Background: (Color: #5e512c);
+      }
+
+      Group #ContentArea {
+        FlexWeight: 1;
+        LayoutMode: TopScrolling;
+        ScrollbarStyle: $C.@DefaultScrollbarStyle;
+        Padding: (Right: 10);
+      }
+
+      Group {
+        Anchor: (Height: 1, Top: 10);
+        Background: (Color: #5e512c);
+      }
+
+      Group #ActionBar {
+        LayoutMode: Left;
+        Anchor: (Height: 50, Top: 10);
+
+        Group {
+          FlexWeight: 1;
+        }
+
+        TextButton #CloseButton {
+          Style: $C.@DefaultTextButtonStyle;
+          Anchor: (Width: 120, Height: 40);
+          Padding: (Horizontal: 16);
+          Text: "Close";
+        }
       }
     }
   }
-}
 }
 
 
