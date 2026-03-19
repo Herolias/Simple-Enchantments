@@ -11,7 +11,11 @@ Group {
 
   Group {
     Anchor: (Width: 1050, Height: 700, Left: 410);
-    Background: "../Common/Enchantment UI/Settings_Page.png";
+
+    Group {
+      Anchor: (Left: -50, Right: -50, Top: -50, Bottom: -50);
+     Background: (TexturePath: "../Common/Enchantment UI/Settings_Page.png", Border: 100);
+    }
 
     Group {
       LayoutMode: Top;

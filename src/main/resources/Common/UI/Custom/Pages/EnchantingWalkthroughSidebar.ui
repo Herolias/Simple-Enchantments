@@ -10,7 +10,8 @@ $C = "../Common.ui";
 );
 
 // This file is appended directly into #WalkthroughSidebarContainer
-$C.@Panel {
+Group {
+  Background: (TexturePath: "../Common/Enchantment UI/Settings_Page.png", Border: 100);
   Padding: (Horizontal: 15, Vertical: 15);
   LayoutMode: Top;
 

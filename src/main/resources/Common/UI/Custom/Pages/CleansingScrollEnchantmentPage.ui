@@ -7,16 +7,16 @@ Group {
   Background: "../Common/Enchantment UI/Scroll_Cleansing_Page.png";
 
   Group {
+    Anchor: (Top: 15, Left: 0, Right: 0, Height: 30);
+    Label #TitleLabel {
+      Text: %server.customUI.cleansingEnchantmentPage.title;
+      Style: (FontSize: 22, RenderBold: true, TextColor: #7da1c0cb, HorizontalAlignment: Center, VerticalAlignment: Center);
+    }
+  }
+
+  Group {
     LayoutMode: Top;
     Padding: (Horizontal: 50, Top: 70, Bottom: 60);
-
-    Group {
-      Anchor: (Height: 30, Bottom: 5);
-      
-      $C.@Title #TitleLabel {
-        @Text = %server.customUI.cleansingEnchantmentPage.title;
-      }
-    }
 
     Group {
       LayoutMode: Left;

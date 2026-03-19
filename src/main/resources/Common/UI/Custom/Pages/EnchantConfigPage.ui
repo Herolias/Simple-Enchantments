@@ -3,15 +3,15 @@ $C = "../Common.ui";
 $C.@PageOverlay {}
 
 Group {
-  Anchor: (Width: 1770, Height: 700);
+  Anchor: (Width: 1770, Height: 900);
 
   Group #ItemSearchSidebarContainer {
     Anchor: (Width: 350, Left: 1420);
   }
 
   Group {
-    Anchor: (Width: 1050, Height: 700, Left: 360);
-    Background: "../Common/Enchantment UI/Settings_Page.png";
+    Anchor: (Width: 1150, Height: 850, Left: 310);
+    Background: (TexturePath: "../Common/Enchantment UI/Settings_Page.png", Border: 100);
 
     Group {
       LayoutMode: Top;

@@ -7,16 +7,16 @@ Group {
   Background: "../Common/Enchantment UI/Scroll_Enchanting_Page.png";
 
   Group {
+    Anchor: (Top: 15, Left: 0, Right: 0, Height: 30);
+    Label #TitleLabel {
+      Text: %server.customUI.customScrollItemPage.title;
+      Style: (FontSize: 22, RenderBold: true, TextColor: #ffffff, HorizontalAlignment: Center, VerticalAlignment: Center);
+    }
+  }
+
+  Group {
     LayoutMode: Top;
     Padding: (Horizontal: 60, Top: 80, Bottom: 70);
-
-    Group {
-      Anchor: (Height: 30, Bottom: 5);
-      
-      $C.@Title #TitleLabel {
-        @Text = %server.customUI.customScrollItemPage.title;
-      }
-    }
 
     Group {
       LayoutMode: Left;
