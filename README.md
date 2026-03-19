@@ -4,8 +4,10 @@ A comprehensive enchanting system for **Hytale** — craft scrolls, enchant your
 
 Simple Enchantments adds an **Enchanting Table**, **31 built-in enchantments**, an **enchantment scroll system**, **usefull commands**, in-game **configuration UI**, **localisation** for 11 languages, and a **public API** that lets other mods register their own enchantments, categories, and scrolls at runtime.
 
-> **Version:** 0.9.1 · **Java:** 25 · **License:** _see below_
+> **Version:** 0.9.1 · **Java:** 25 · **License:** _see below_ · **Wiki/Documentation:** _coming soon_
 
+#### If you are looking for a Hytale Server, consider using my code and link at BisectHosting. That way you get 25% off and we get a commission which helps with further development:
+[![https://www.bisecthosting.com/Herolias](https://www.bisecthosting.com/partners/custom-banners/87d24680-40cb-471d-b1a9-bc3c9eb9ce68.webp)](https://www.bisecthosting.com/Herolias?r=GitHub)
 ---
 
 ## Table of Contents
@@ -438,15 +440,24 @@ The mod bundles a complete asset pack containing:
 
 | Mod | Integration |
 |---|---|
-| **[DynamicTooltipsLib](https://github.com/Herolias/DynamicTooltipsLib)** | Provides rich enchantment tooltips on item hover. Loaded via `TooltipBridge` (class isolated to prevent `NoClassDefFoundError`). When detected, the enchantment banner is auto-disabled. |
+| **[DynamicTooltipsLib](https://github.com/Herolias/DynamicTooltipsLib)** | Provides enchantment tooltips on item hover. Loaded via `TooltipBridge` (class isolated to prevent `NoClassDefFoundError`). When detected, the enchantment banner is auto-disabled. Note: This mod will become a full dependency in version 1.0.0. |
 | **Perfect Parries** | Enables the Riposte and Coup de Grâce enchantments (counter-attack and stun bonus damage). These enchantments are automatically disabled if the mod is not present. |
+| **MMO Skill Tree** | Adds Enchantment XP with unique rewards |
 | **[HStats](https://hstats.dev)** | Anonymous mod usage analytics. |
 
 ---
 
 ## Contributing
 
-Contributions are welcome! Please open issues or pull requests on GitHub. When adding new enchantments, use the public API (`EnchantmentBuilder`) so that scroll generation, config entries, and UI integration are handled automatically.
+### Contribution Guidelines
+Please do not add new features or enchantments without discussing it with the team. Generally this is my and Soraths passionate hobby project, and we want to keep it that way.
+
+But we are absolutely open to smaller contributions like bug fixes, performance improvements, and translations.
+Please open a pull request for that or write me up on [Discord](https://discord.com/users/herolias).
+
+### Contributors
+Huge thanks to Thanoz, Samu3k, and Ensō for helping improving the translations!
+
 
 ---
 
