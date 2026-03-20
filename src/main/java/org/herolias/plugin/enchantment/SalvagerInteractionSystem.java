@@ -11,7 +11,7 @@ import com.hypixel.hytale.logger.HytaleLogger;
 import com.hypixel.hytale.server.core.event.events.ecs.UseBlockEvent;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.core.entity.entities.Player;
-import com.hypixel.hytale.builtin.crafting.state.ProcessingBenchState;
+import com.hypixel.hytale.builtin.crafting.component.ProcessingBenchBlock;
 import com.hypixel.hytale.math.vector.Vector3i;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.math.util.ChunkUtil;
@@ -79,12 +79,11 @@ public class SalvagerInteractionSystem extends EntityEventSystem<EntityStore, Us
             com.hypixel.hytale.component.Ref<com.hypixel.hytale.server.core.universe.world.storage.ChunkStore> blockRef = chunk
                     .getBlockComponentEntity(targetX, targetY, targetZ);
             if (blockRef != null && blockRef.isValid()) {
-                ProcessingBenchState benchState = player.getWorld().getChunkStore().getStore().getComponent(blockRef,
-                        com.hypixel.hytale.server.core.universe.world.meta.BlockStateModule.get()
-                                .getComponentType(ProcessingBenchState.class));
+                ProcessingBenchBlock benchState = player.getWorld().getChunkStore().getStore().getComponent(blockRef,
+                        ProcessingBenchBlock.getComponentType());
                 if (benchState != null && benchState.getBench() != null) {
                     if (BENCH_ID.equals(benchState.getBench().getId())) {
-                        salvageSystem.startSession(player, benchState);
+                        salvageSystem.startSession(player, benchState, new Vector3i(targetX, targetY, targetZ));
                     }
                 }
             }

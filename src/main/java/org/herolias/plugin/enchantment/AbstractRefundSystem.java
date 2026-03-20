@@ -5,6 +5,10 @@ import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hypixel.hytale.server.core.event.events.ecs.DropItemEvent;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
+import com.hypixel.hytale.component.system.EntityEventSystem;
+import com.hypixel.hytale.server.core.inventory.InventoryChangeEvent;
+import com.hypixel.hytale.component.query.Query;
+import com.hypixel.hytale.component.Archetype;
 
 import javax.annotation.Nonnull;
 import java.util.Iterator;
@@ -20,7 +24,17 @@ import java.util.UUID;
  * items
  * are NOT refunded, preventing infinite item duplication exploits.
  */
-public abstract class AbstractRefundSystem {
+public abstract class AbstractRefundSystem extends EntityEventSystem<EntityStore, InventoryChangeEvent> {
+
+    public AbstractRefundSystem() {
+        super(InventoryChangeEvent.class);
+    }
+
+    @Override
+    @Nonnull
+    public Query<EntityStore> getQuery() {
+        return Archetype.empty();
+    }
 
     // Key: Player UUID, Value: Map of (slot -> timestamp)
     protected final Map<UUID, Map<Short, Long>> recentDrops = new ConcurrentHashMap<>();

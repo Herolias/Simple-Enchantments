@@ -1,7 +1,16 @@
 package org.herolias.plugin.enchantment;
 
 import com.hypixel.hytale.logger.HytaleLogger;
-import com.hypixel.hytale.server.core.event.events.entity.LivingEntityInventoryChangeEvent;
+import com.hypixel.hytale.component.ArchetypeChunk;
+import com.hypixel.hytale.component.CommandBuffer;
+import com.hypixel.hytale.component.Store;
+import com.hypixel.hytale.component.system.EntityEventSystem;
+import com.hypixel.hytale.server.core.entity.EntityUtils;
+import com.hypixel.hytale.server.core.inventory.InventoryChangeEvent;
+import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
+import com.hypixel.hytale.component.query.Query;
+import com.hypixel.hytale.component.Archetype;
+import javax.annotation.Nonnull;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
 import com.hypixel.hytale.server.core.inventory.transaction.SlotTransaction;
 import com.hypixel.hytale.server.core.inventory.transaction.Transaction;
@@ -18,7 +27,7 @@ import java.util.Objects;
  * and if the item has the Durability enchantment, we "refund" a portion of the
  * loss.
  */
-public class EnchantmentDurabilitySystem {
+public class EnchantmentDurabilitySystem extends EntityEventSystem<EntityStore, InventoryChangeEvent> {
 
     private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
 
@@ -26,17 +35,25 @@ public class EnchantmentDurabilitySystem {
     private final ProcessingGuard guard = new ProcessingGuard();
 
     public EnchantmentDurabilitySystem(EnchantmentManager enchantmentManager) {
+        super(InventoryChangeEvent.class);
         this.enchantmentManager = enchantmentManager;
         LOGGER.atInfo().log("EnchantmentDurabilitySystem initialized");
     }
 
-    public void onInventoryChange(LivingEntityInventoryChangeEvent event) {
-        LivingEntity entity = event.getEntity();
+    @Override
+    @Nonnull
+    public Query<EntityStore> getQuery() {
+        return Archetype.empty();
+    }
+
+    @Override
+    public void handle(int index, @Nonnull ArchetypeChunk<EntityStore> archetypeChunk, @Nonnull Store<EntityStore> store, @Nonnull CommandBuffer<EntityStore> commandBuffer, @Nonnull InventoryChangeEvent event) {
+        LivingEntity entity = (LivingEntity) EntityUtils.getEntity(index, archetypeChunk);
         if (!(entity instanceof com.hypixel.hytale.server.core.entity.entities.Player player))
             return;
 
         if (player.getWorld() != null && !player.getWorld().isInThread()) {
-            player.getWorld().execute(() -> onInventoryChange(event));
+            player.getWorld().execute(() -> handle(index, archetypeChunk, store, commandBuffer, event));
             return;
         }
 
@@ -65,7 +82,7 @@ public class EnchantmentDurabilitySystem {
                 ItemStack correctedStack = after.withRestoredDurability(beforeMax);
                 event.getItemContainer().replaceItemStackInSlot(slotTransaction.getSlot(), after, correctedStack);
 
-                LivingEntity targetEntity = event.getEntity();
+                LivingEntity targetEntity = (LivingEntity) EntityUtils.getEntity(index, archetypeChunk);
                 if (targetEntity instanceof com.hypixel.hytale.server.core.entity.entities.Player p) {
                     if (p.getWorld() != null && p.getReference() != null) {
                         com.hypixel.hytale.server.core.universe.PlayerRef playerRef = p.getWorld().getEntityStore()
@@ -101,7 +118,7 @@ public class EnchantmentDurabilitySystem {
                 ItemStack correctedStack = after.withIncreasedDurability(loss);
                 event.getItemContainer().replaceItemStackInSlot(slotTransaction.getSlot(), after, correctedStack);
 
-                LivingEntity targetEntity = event.getEntity();
+                LivingEntity targetEntity = (LivingEntity) EntityUtils.getEntity(index, archetypeChunk);
                 if (targetEntity instanceof com.hypixel.hytale.server.core.entity.entities.Player p) {
                     if (p.getWorld() != null && p.getReference() != null) {
                         com.hypixel.hytale.server.core.universe.PlayerRef playerRef = p.getWorld().getEntityStore()

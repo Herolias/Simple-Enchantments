@@ -47,7 +47,7 @@ import org.herolias.plugin.enchantment.ScrollItemGenerator;
 import com.al3x.HStats;
 
 import org.herolias.plugin.ui.EnchantScrollPageSupplier;
-import com.hypixel.hytale.server.core.event.events.entity.LivingEntityInventoryChangeEvent;
+
 import com.hypixel.hytale.server.core.event.events.ecs.SwitchActiveSlotEvent;
 import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hypixel.hytale.server.core.event.events.player.PlayerReadyEvent;
@@ -329,22 +329,19 @@ public class SimpleEnchanting extends JavaPlugin {
         // Initialize and register the state transfer system (preserves enchantments on
         // item state changes)
         EnchantmentStateTransferSystem stateTransferSystem = new EnchantmentStateTransferSystem(enchantmentManager);
-        this.getEventRegistry().registerGlobal(LivingEntityInventoryChangeEvent.class,
-                stateTransferSystem::onInventoryChange);
+        this.getEntityStoreRegistry().registerSystem(stateTransferSystem);
         LOGGER.atInfo().log("Registered EnchantmentStateTransferSystem listener");
 
         // Initialize and register the durability system (Event Listener)
         EnchantmentDurabilitySystem durabilitySystem = new EnchantmentDurabilitySystem(enchantmentManager);
-        this.getEventRegistry().registerGlobal(LivingEntityInventoryChangeEvent.class,
-                durabilitySystem::onInventoryChange);
+        this.getEntityStoreRegistry().registerSystem(durabilitySystem);
         LOGGER.atInfo().log("Registered EnchantmentDurabilitySystem listener");
 
         // Initialize and register the Eternal Shot system (Event Listener)
         // This intercepts arrow consumption and restores arrows when weapon has Eternal
         // Shot enchantment
         eternalShotSystem = new EnchantmentEternalShotSystem(enchantmentManager);
-        this.getEventRegistry().registerGlobal(LivingEntityInventoryChangeEvent.class,
-                eternalShotSystem::onInventoryChange);
+        this.getEntityStoreRegistry().registerSystem(eternalShotSystem);
 
         // Register SwitchActiveSlot handler to clear stale records when switching from
         // unloaded crossbows
@@ -355,8 +352,7 @@ public class SimpleEnchanting extends JavaPlugin {
 
         // Initialize and register Elemental Heart System (Essence Saver)
         EnchantmentElementalHeartSystem elementalHeartSystem = new EnchantmentElementalHeartSystem(enchantmentManager);
-        this.getEventRegistry().registerGlobal(LivingEntityInventoryChangeEvent.class,
-                elementalHeartSystem::onInventoryChange);
+        this.getEntityStoreRegistry().registerSystem(elementalHeartSystem);
         LOGGER.atInfo().log("Registered EnchantmentElementalHeartSystem listener");
 
         // Register DropItemEventSystem to track manual drops for Eternal Shot fix
@@ -375,15 +371,13 @@ public class SimpleEnchanting extends JavaPlugin {
         // Register interaction system with ECS
         this.getEntityStoreRegistry().registerSystem(new SalvagerInteractionSystem(salvageSystem));
         // Register inventory change listener globally
-        this.getEventRegistry().registerGlobal(LivingEntityInventoryChangeEvent.class,
-                salvageSystem::onEntityInventoryChange);
+        this.getEntityStoreRegistry().registerSystem(salvageSystem);
         LOGGER.atInfo().log("Registered EnchantmentSalvageSystem listener");
 
         // Register EnchantmentVisualsListener (Event driven visual updates)
         // Optimized to replace heavy per-tick polling
         EnchantmentVisualsListener visualsListener = new EnchantmentVisualsListener(enchantmentManager);
-        this.getEventRegistry().registerGlobal(LivingEntityInventoryChangeEvent.class,
-                visualsListener::onInventoryChange);
+        this.getEntityStoreRegistry().registerSystem(visualsListener);
         LOGGER.atInfo().log("Registered EnchantmentVisualsListener");
 
         // Register ScrollDescriptionManager to send global translation updates on join
