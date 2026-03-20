@@ -16,7 +16,7 @@ import org.herolias.plugin.SimpleEnchanting;
  * Replaces the heavy polling mechanism for inventory content changes.
  */
 public class EnchantmentVisualsListener {
-    
+
     private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
     private final EnchantmentManager enchantmentManager;
 
@@ -40,16 +40,17 @@ public class EnchantmentVisualsListener {
             if (entityRef == null || !entityRef.isValid()) {
                 return;
             }
-            
+
             // Get the ECS store from the world
             if (player.getWorld() == null) {
                 return;
             }
             Store<EntityStore> store = player.getWorld().getEntityStore().getStore();
-            
+
             if (store != null) {
                 // Update glow stats when inventory content changes
-                // This covers: Armor equip/unequip, Picking up items, Dropping items, Consuming items
+                // This covers: Armor equip/unequip, Picking up items, Dropping items, Consuming
+                // items
                 EnchantmentVisualsHelper.updateGlowStats(entityRef, store, player, enchantmentManager);
             }
         } catch (Exception e) {

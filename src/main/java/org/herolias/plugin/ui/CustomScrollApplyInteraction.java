@@ -20,7 +20,8 @@ import org.herolias.plugin.enchantment.EnchantmentManager;
 import org.herolias.plugin.enchantment.EnchantmentType;
 
 /**
- * Interaction that transfers an enchantment from the Custom Scroll to a target item.
+ * Interaction that transfers an enchantment from the Custom Scroll to a target
+ * item.
  * <p>
  * Steps:
  * 1. Apply the enchantment to the target item
@@ -36,12 +37,11 @@ public class CustomScrollApplyInteraction extends ChoiceInteraction {
     private final EnchantmentManager enchantmentManager;
 
     public CustomScrollApplyInteraction(
-        ItemContext itemContext,
-        ItemContext heldItemContext,
-        EnchantmentType enchantmentType,
-        int level,
-        EnchantmentManager enchantmentManager
-    ) {
+            ItemContext itemContext,
+            ItemContext heldItemContext,
+            EnchantmentType enchantmentType,
+            int level,
+            EnchantmentManager enchantmentManager) {
         this.itemContext = itemContext;
         this.heldItemContext = heldItemContext;
         this.enchantmentType = enchantmentType;
@@ -69,8 +69,8 @@ public class CustomScrollApplyInteraction extends ChoiceInteraction {
         String clientLang = playerRef.getLanguage();
 
         // 1. Apply enchantment to target item
-        org.herolias.plugin.enchantment.EnchantmentApplicationResult result =
-            enchantmentManager.applyEnchantmentToItem(playerRef, targetItemStack, enchantmentType, targetLevel, true);
+        org.herolias.plugin.enchantment.EnchantmentApplicationResult result = enchantmentManager
+                .applyEnchantmentToItem(playerRef, targetItemStack, enchantmentType, targetLevel, true);
         if (!result.success()) {
             playerRef.sendMessage(Message.raw(result.message()));
             pageManager.setPage(ref, store, Page.None);
@@ -80,8 +80,8 @@ public class CustomScrollApplyInteraction extends ChoiceInteraction {
         ItemStack enchantedItem = result.item();
 
         // 2. Replace the target item with the enchanted version
-        ItemStackSlotTransaction replaceTransaction =
-            this.itemContext.getContainer().replaceItemStackInSlot(this.itemContext.getSlot(), targetItemStack, enchantedItem);
+        ItemStackSlotTransaction replaceTransaction = this.itemContext.getContainer()
+                .replaceItemStackInSlot(this.itemContext.getSlot(), targetItemStack, enchantedItem);
         if (!replaceTransaction.succeeded()) {
             pageManager.setPage(ref, store, Page.None);
             return;
@@ -100,7 +100,8 @@ public class CustomScrollApplyInteraction extends ChoiceInteraction {
                 scrollContainer.removeItemStackFromSlot(this.heldItemContext.getSlot(), scrollItemStack, 1);
             } else {
                 // Update scroll metadata with remaining enchantments
-                ItemStack updatedScroll = scrollItemStack.withMetadata(EnchantmentData.METADATA_KEY, updatedData.toBson());
+                ItemStack updatedScroll = scrollItemStack.withMetadata(EnchantmentData.METADATA_KEY,
+                        updatedData.toBson());
                 ItemContainer scrollContainer = this.heldItemContext.getContainer();
                 scrollContainer.replaceItemStackInSlot(this.heldItemContext.getSlot(), scrollItemStack, updatedScroll);
             }
@@ -108,7 +109,8 @@ public class CustomScrollApplyInteraction extends ChoiceInteraction {
 
         // 4. Send success message and close UI
         Message itemName = languageManager.getMessage(enchantedItem.getItem().getTranslationKey(), lang, clientLang);
-        String translatedName = languageManager.getRawMessage(enchantmentType.getNameKey(), lang, clientLang) + " " + EnchantmentType.toRoman(targetLevel);
+        String translatedName = languageManager.getRawMessage(enchantmentType.getNameKey(), lang, clientLang) + " "
+                + EnchantmentType.toRoman(targetLevel);
         Message appliedMessage = Message.raw("Transferred " + translatedName + " to ").insert(itemName);
         playerRef.sendMessage(appliedMessage);
         pageManager.setPage(ref, store, Page.None);

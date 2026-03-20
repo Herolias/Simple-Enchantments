@@ -5,16 +5,19 @@ import java.util.function.IntToDoubleFunction;
 /**
  * Predefined scaling curves for enchantment multipliers.
  * <p>
- * Each scale type defines how the effect multiplier changes with enchantment level.
- * The returned function takes a level and a base multiplier-per-level, and returns
+ * Each scale type defines how the effect multiplier changes with enchantment
+ * level.
+ * The returned function takes a level and a base multiplier-per-level, and
+ * returns
  * the total scaled value for that level.
  * <p>
  * Example usage:
+ * 
  * <pre>{@code
  * api.registerEnchantment("my_mod:lightning", "Lightning Strike")
- *     .multiplierPerLevel(0.15)
- *     .scale(ScaleType.DIMINISHING)
- *     .build();
+ *         .multiplierPerLevel(0.15)
+ *         .scale(ScaleType.DIMINISHING)
+ *         .build();
  * }</pre>
  *
  * @see EnchantmentBuilder#scale(ScaleType)

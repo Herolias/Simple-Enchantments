@@ -7,7 +7,8 @@ import java.util.Map;
 /**
  * Utility for constructing scroll item IDs from enchantment type and level,
  * and reversing scroll IDs back to enchantment types.
- * Shared by EnchantmentSalvageSystem, RemoveEnchantmentInteraction, and merge logic.
+ * Shared by EnchantmentSalvageSystem, RemoveEnchantmentInteraction, and merge
+ * logic.
  */
 public final class ScrollIdHelper {
 
@@ -31,7 +32,8 @@ public final class ScrollIdHelper {
     /**
      * Result of reverse-mapping a scroll item ID to enchantment type and level.
      */
-    public static record ScrollEnchantment(EnchantmentType type, int level) {}
+    public static record ScrollEnchantment(EnchantmentType type, int level) {
+    }
 
     /**
      * Reverse-maps a scroll item ID to its enchantment type and level.
@@ -42,7 +44,8 @@ public final class ScrollIdHelper {
      * @return the enchantment type and level, or null if no match
      */
     public static ScrollEnchantment getEnchantmentFromScrollId(String itemId) {
-        if (itemId == null || !itemId.startsWith("Scroll_")) return null;
+        if (itemId == null || !itemId.startsWith("Scroll_"))
+            return null;
 
         for (EnchantmentType type : EnchantmentType.values()) {
             String baseName = type.getScrollBaseName();

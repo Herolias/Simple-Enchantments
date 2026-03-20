@@ -75,8 +75,6 @@ Simple Enchantments adds an **Enchanting Table**, **31 built-in enchantments**, 
 
 3. **Build the plugin**
 
-   Make sure Hytale home is set to the correct path for your OS in `build.gradle`. I use Linux as my main OS, so if you use Windows you will need to change the path to the commented out Windows path.
-   Then run
    ```bash
    ./gradlew build
    ```

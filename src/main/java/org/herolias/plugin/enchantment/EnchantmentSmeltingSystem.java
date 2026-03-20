@@ -57,10 +57,10 @@ public class EnchantmentSmeltingSystem extends EntityEventSystem<EntityStore, Br
 
     @Override
     public void handle(int index,
-                       @Nonnull ArchetypeChunk<EntityStore> archetypeChunk,
-                       @Nonnull Store<EntityStore> store,
-                       @Nonnull CommandBuffer<EntityStore> commandBuffer,
-                       @Nonnull BreakBlockEvent event) {
+            @Nonnull ArchetypeChunk<EntityStore> archetypeChunk,
+            @Nonnull Store<EntityStore> store,
+            @Nonnull CommandBuffer<EntityStore> commandBuffer,
+            @Nonnull BreakBlockEvent event) {
         if (event.isCancelled()) {
             return;
         }
@@ -89,7 +89,8 @@ public class EnchantmentSmeltingSystem extends EntityEventSystem<EntityStore, Br
             return;
         }
 
-        List<ItemStack> baseDrops = BlockHarvestUtils.getDrops(blockType, breaking.getQuantity(), breaking.getItemId(), breaking.getDropListId());
+        List<ItemStack> baseDrops = BlockHarvestUtils.getDrops(blockType, breaking.getQuantity(), breaking.getItemId(),
+                breaking.getDropListId());
         if (baseDrops.isEmpty()) {
             return;
         }
@@ -142,8 +143,7 @@ public class EnchantmentSmeltingSystem extends EntityEventSystem<EntityStore, Br
         World world = store.getExternalData().getWorld();
         Store<ChunkStore> chunkStore = world.getChunkStore().getStore();
         Ref<ChunkStore> chunkRef = chunkStore.getExternalData().getChunkReference(
-            ChunkUtil.indexChunkFromBlock(targetBlock.getX(), targetBlock.getZ())
-        );
+                ChunkUtil.indexChunkFromBlock(targetBlock.getX(), targetBlock.getZ()));
         if (chunkRef == null || !chunkRef.isValid()) {
             return;
         }
@@ -158,8 +158,8 @@ public class EnchantmentSmeltingSystem extends EntityEventSystem<EntityStore, Br
 
         Ref<EntityStore> breakerRef = archetypeChunk.getReferenceTo(index);
         boolean naturalAction = breakerRef != null && breakerRef.isValid()
-            ? BlockInteractionUtils.isNaturalAction(breakerRef, store)
-            : BlockInteractionUtils.isNaturalAction(null, store);
+                ? BlockInteractionUtils.isNaturalAction(breakerRef, store)
+                : BlockInteractionUtils.isNaturalAction(null, store);
 
         int setBlockSettings = 0;
         setBlockSettings |= 0x100;
@@ -168,18 +168,22 @@ public class EnchantmentSmeltingSystem extends EntityEventSystem<EntityStore, Br
         }
 
         event.setCancelled(true);
-        BlockHarvestUtils.naturallyRemoveBlock(targetBlock, blockType, filler, 0, null, null, setBlockSettings, chunkRef, store, chunkStore);
+        BlockHarvestUtils.naturallyRemoveBlock(targetBlock, blockType, filler, 0, null, null, setBlockSettings,
+                chunkRef, store, chunkStore);
 
         Vector3d dropPosition = new Vector3d(targetBlock.getX() + 0.5, targetBlock.getY(), targetBlock.getZ() + 0.5);
-        Holder<EntityStore>[] itemEntities = ItemComponent.generateItemDrops(commandBuffer, smeltedDrops, dropPosition, Vector3f.ZERO);
+        Holder<EntityStore>[] itemEntities = ItemComponent.generateItemDrops(commandBuffer, smeltedDrops, dropPosition,
+                Vector3f.ZERO);
         if (itemEntities.length > 0) {
             commandBuffer.addEntities(itemEntities, AddReason.SPAWN);
         }
-        
+
         com.hypixel.hytale.server.core.universe.PlayerRef playerRef = null;
         if (breakerRef != null && breakerRef.isValid()) {
-            playerRef = store.getComponent(breakerRef, com.hypixel.hytale.server.core.universe.PlayerRef.getComponentType());
+            playerRef = store.getComponent(breakerRef,
+                    com.hypixel.hytale.server.core.universe.PlayerRef.getComponentType());
         }
-        EnchantmentEventHelper.fireActivated(playerRef, tool, EnchantmentType.SMELTING, enchantmentManager.getEnchantmentLevel(tool, EnchantmentType.SMELTING));
+        EnchantmentEventHelper.fireActivated(playerRef, tool, EnchantmentType.SMELTING,
+                enchantmentManager.getEnchantmentLevel(tool, EnchantmentType.SMELTING));
     }
 }

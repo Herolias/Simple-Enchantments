@@ -23,17 +23,18 @@ public final class EnchantmentEventHelper {
      * Fires an {@link EnchantmentActivatedEvent} to notify listeners that an
      * enchantment effect was triggered.
      *
-     * @param playerRef The player who triggered the enchantment (nullable for non-player entities)
+     * @param playerRef The player who triggered the enchantment (nullable for
+     *                  non-player entities)
      * @param item      The item bearing the enchantment
      * @param type      The enchantment that was activated
      * @param level     The level of the activated enchantment
      */
     public static void fireActivated(@Nullable PlayerRef playerRef,
-                                      @Nonnull ItemStack item,
-                                      @Nonnull EnchantmentType type,
-                                      int level) {
+            @Nonnull ItemStack item,
+            @Nonnull EnchantmentType type,
+            int level) {
         EnchantmentActivatedEvent event = new EnchantmentActivatedEvent(playerRef, item, type, level);
         HytaleServer.get().getEventBus()
-            .dispatchFor(EnchantmentActivatedEvent.class).dispatch(event);
+                .dispatchFor(EnchantmentActivatedEvent.class).dispatch(event);
     }
 }

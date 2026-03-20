@@ -27,7 +27,7 @@ public class EnchantmentElementalHeartSystem extends AbstractRefundSystem {
     private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
     private final EnchantmentManager enchantmentManager;
     private final ProcessingGuard guard = new ProcessingGuard();
-    
+
     public EnchantmentElementalHeartSystem(EnchantmentManager enchantmentManager) {
         this.enchantmentManager = enchantmentManager;
         LOGGER.atInfo().log("EnchantmentElementalHeartSystem initialized");
@@ -35,28 +35,38 @@ public class EnchantmentElementalHeartSystem extends AbstractRefundSystem {
 
     public void onInventoryChange(LivingEntityInventoryChangeEvent event) {
         LivingEntity entity = event.getEntity();
-        if (!(entity instanceof Player player)) return;
+        if (!(entity instanceof Player player))
+            return;
 
         if (player.getWorld() != null && !player.getWorld().isInThread()) {
             player.getWorld().execute(() -> onInventoryChange(event));
             return;
         }
 
-        if (guard.isProcessing()) return;
+        if (guard.isProcessing())
+            return;
 
         Transaction transaction = event.getTransaction();
         ItemContainer container = event.getItemContainer();
 
-        // MoveTransaction = item transfer between containers (quickstack etc.) — not consumption.
-        if (transaction instanceof MoveTransaction) return;
+        // MoveTransaction = item transfer between containers (quickstack etc.) — not
+        // consumption.
+        if (transaction instanceof MoveTransaction)
+            return;
 
-        // ListTransaction<MoveTransaction> = bulk transfer from quickStackTo — not consumption.
+        // ListTransaction<MoveTransaction> = bulk transfer from quickStackTo — not
+        // consumption.
         if (transaction instanceof ListTransaction<?> lt && !lt.getList().isEmpty()
-                && lt.getList().stream().allMatch(t -> t instanceof MoveTransaction)) return;
+                && lt.getList().stream().allMatch(t -> t instanceof MoveTransaction))
+            return;
 
-        if (player.getWorld() == null || player.getReference() == null) return;
-        com.hypixel.hytale.server.core.entity.UUIDComponent uComp = player.getWorld().getEntityStore().getStore().getComponent(player.getReference(), com.hypixel.hytale.server.core.entity.UUIDComponent.getComponentType());
-        if (uComp == null) return;
+        if (player.getWorld() == null || player.getReference() == null)
+            return;
+        com.hypixel.hytale.server.core.entity.UUIDComponent uComp = player.getWorld().getEntityStore().getStore()
+                .getComponent(player.getReference(),
+                        com.hypixel.hytale.server.core.entity.UUIDComponent.getComponentType());
+        if (uComp == null)
+            return;
         UUID playerUuid = uComp.getUuid();
 
         cleanupOldDropRecords(playerUuid);
@@ -66,46 +76,58 @@ public class EnchantmentElementalHeartSystem extends AbstractRefundSystem {
                 processSlotTransaction(player, playerUuid, container, slotTx);
             }
         } else if (transaction instanceof SlotTransaction) {
-            // Top-level SlotTransaction = direct-slot operation (e.g. Lectern), NOT consumption.
+            // Top-level SlotTransaction = direct-slot operation (e.g. Lectern), NOT
+            // consumption.
         }
     }
 
-    private void processSlotTransaction(Player player, UUID playerUuid, ItemContainer container, SlotTransaction slotTransaction) {
-        if (!slotTransaction.succeeded()) return;
+    private void processSlotTransaction(Player player, UUID playerUuid, ItemContainer container,
+            SlotTransaction slotTransaction) {
+        if (!slotTransaction.succeeded())
+            return;
 
         ItemStack slotBefore = slotTransaction.getSlotBefore();
         ItemStack slotAfter = slotTransaction.getSlotAfter();
 
-        if (slotBefore == null || slotBefore.isEmpty()) return;
-        if (!isEssenceItem(slotBefore.getItemId())) return;
-        if (wasRecentlyDropped(playerUuid, slotTransaction.getSlot())) return;
+        if (slotBefore == null || slotBefore.isEmpty())
+            return;
+        if (!isEssenceItem(slotBefore.getItemId()))
+            return;
+        if (wasRecentlyDropped(playerUuid, slotTransaction.getSlot()))
+            return;
 
         int beforeQty = slotBefore.getQuantity();
         int afterQty = (slotAfter == null || slotAfter.isEmpty()) ? 0 : slotAfter.getQuantity();
 
-        if (beforeQty <= afterQty) return;
+        if (beforeQty <= afterQty)
+            return;
 
         Inventory inventory = player.getInventory();
-        if (inventory == null) return;
+        if (inventory == null)
+            return;
 
         ItemStack weapon = inventory.getItemInHand();
-        if (weapon == null || weapon.isEmpty()) return;
+        if (weapon == null || weapon.isEmpty())
+            return;
 
         ItemCategory category = enchantmentManager.categorizeItem(weapon);
-        if (category != ItemCategory.STAFF && category != ItemCategory.STAFF_ESSENCE) return;
+        if (category != ItemCategory.STAFF && category != ItemCategory.STAFF_ESSENCE)
+            return;
 
         int level = enchantmentManager.getEnchantmentLevel(weapon, EnchantmentType.ELEMENTAL_HEART);
-        if (level <= 0) return;
-        
+        if (level <= 0)
+            return;
+
         double chance = level * EnchantmentType.ELEMENTAL_HEART.getEffectMultiplier();
         double roll = Math.random();
-        if (roll > chance) return;
+        if (roll > chance)
+            return;
 
-        guard.runGuarded(() -> 
-            container.replaceItemStackInSlot(slotTransaction.getSlot(), slotAfter, slotBefore)
-        );
-        
-        com.hypixel.hytale.server.core.universe.PlayerRef playerRef = player.getWorld().getEntityStore().getStore().getComponent(player.getReference(), com.hypixel.hytale.server.core.universe.PlayerRef.getComponentType());
+        guard.runGuarded(() -> container.replaceItemStackInSlot(slotTransaction.getSlot(), slotAfter, slotBefore));
+
+        com.hypixel.hytale.server.core.universe.PlayerRef playerRef = player.getWorld().getEntityStore().getStore()
+                .getComponent(player.getReference(),
+                        com.hypixel.hytale.server.core.universe.PlayerRef.getComponentType());
         EnchantmentEventHelper.fireActivated(playerRef, weapon, EnchantmentType.ELEMENTAL_HEART, level);
     }
 

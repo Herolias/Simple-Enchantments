@@ -44,10 +44,10 @@ public class EnchantmentFortuneSystem extends EntityEventSystem<EntityStore, Bre
 
     @Override
     public void handle(int index,
-                       @Nonnull ArchetypeChunk<EntityStore> archetypeChunk,
-                       @Nonnull Store<EntityStore> store,
-                       @Nonnull CommandBuffer<EntityStore> commandBuffer,
-                       @Nonnull BreakBlockEvent event) {
+            @Nonnull ArchetypeChunk<EntityStore> archetypeChunk,
+            @Nonnull Store<EntityStore> store,
+            @Nonnull CommandBuffer<EntityStore> commandBuffer,
+            @Nonnull BreakBlockEvent event) {
         if (event.isCancelled()) {
             return;
         }
@@ -89,10 +89,12 @@ public class EnchantmentFortuneSystem extends EntityEventSystem<EntityStore, Bre
 
         Vector3i targetBlock = event.getTargetBlock();
         Vector3d dropPosition = new Vector3d(targetBlock.getX() + 0.5, targetBlock.getY(), targetBlock.getZ() + 0.5);
-        
+
         enchantmentManager.spawnDrops(commandBuffer, extraDrops, dropPosition);
-        
-        com.hypixel.hytale.server.core.universe.PlayerRef playerRef = store.getComponent(com.hypixel.hytale.server.core.entity.EntityUtils.getEntity(index, archetypeChunk).getReference(), com.hypixel.hytale.server.core.universe.PlayerRef.getComponentType());
+
+        com.hypixel.hytale.server.core.universe.PlayerRef playerRef = store.getComponent(
+                com.hypixel.hytale.server.core.entity.EntityUtils.getEntity(index, archetypeChunk).getReference(),
+                com.hypixel.hytale.server.core.universe.PlayerRef.getComponentType());
         EnchantmentEventHelper.fireActivated(playerRef, tool, EnchantmentType.FORTUNE, fortuneLevel);
     }
 

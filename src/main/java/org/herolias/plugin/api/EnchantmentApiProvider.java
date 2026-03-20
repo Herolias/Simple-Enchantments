@@ -8,7 +8,7 @@ import javax.annotation.Nullable;
  * Access point for other mods.
  */
 public class EnchantmentApiProvider {
-    
+
     private static EnchantmentApi instance;
     private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
 

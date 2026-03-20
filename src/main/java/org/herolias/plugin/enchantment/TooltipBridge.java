@@ -22,7 +22,8 @@ public final class TooltipBridge {
 
     private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
 
-    private TooltipBridge() {}
+    private TooltipBridge() {
+    }
 
     /**
      * Registers the {@link EnchantmentTooltipProvider} with DynamicTooltipsLib.
@@ -33,7 +34,7 @@ public final class TooltipBridge {
         DynamicTooltipsApi api = DynamicTooltipsApiProvider.get();
         if (api != null) {
             api.registerProvider(new EnchantmentTooltipProvider(enchantmentManager));
-            
+
             api.setLanguageResolver(playerUuid -> {
                 try {
                     org.herolias.plugin.SimpleEnchanting plugin = org.herolias.plugin.SimpleEnchanting.getInstance();
@@ -43,10 +44,11 @@ public final class TooltipBridge {
                             return lang;
                         }
                     }
-                } catch (Exception ignored) {}
+                } catch (Exception ignored) {
+                }
                 return null;
             });
-            
+
             LOGGER.atInfo().log("Registered EnchantmentTooltipProvider with DynamicTooltipsLib");
             return true;
         } else {

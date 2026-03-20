@@ -17,21 +17,21 @@ import java.util.Objects;
 public class ScrollDefinition {
 
     private final int level;
-    private final String quality;         // "Common", "Uncommon", "Rare", "Epic", "Legendary"
-    private final int craftingTier;       // RequiredTierLevel in JSON (1-4)
+    private final String quality; // "Common", "Uncommon", "Rare", "Epic", "Legendary"
+    private final int craftingTier; // RequiredTierLevel in JSON (1-4)
     private final String craftingCategory; // e.g. "Enchanting_Melee", or custom category ID
     private final List<Ingredient> recipe;
 
     // Visual overrides (null = use SE defaults)
-    private final String icon;            // e.g. "Icons/ItemsGenerated/Scroll.png"
-    private final String model;           // e.g. "Items/Scrolls/EnchantmentScroll.blockymodel"
-    private final String texture;         // e.g. "Items/Scrolls/EnchScroll.png"
+    private final String icon; // e.g. "Icons/ItemsGenerated/Scroll.png"
+    private final String model; // e.g. "Items/Scrolls/EnchantmentScroll.blockymodel"
+    private final String texture; // e.g. "Items/Scrolls/EnchScroll.png"
 
     private final IconProperties iconProperties;
 
     ScrollDefinition(int level, String quality, int craftingTier, String craftingCategory,
-                     List<Ingredient> recipe, String icon, String model, String texture,
-                     IconProperties iconProperties) {
+            List<Ingredient> recipe, String icon, String model, String texture,
+            IconProperties iconProperties) {
         this.level = level;
         this.quality = quality;
         this.craftingTier = craftingTier;
@@ -43,15 +43,45 @@ public class ScrollDefinition {
         this.iconProperties = iconProperties;
     }
 
-    public int getLevel() { return level; }
-    public String getQuality() { return quality; }
-    public int getCraftingTier() { return craftingTier; }
-    public String getCraftingCategory() { return craftingCategory; }
-    public List<Ingredient> getRecipe() { return recipe; }
-    @Nullable public String getIcon() { return icon; }
-    @Nullable public String getModel() { return model; }
-    @Nullable public String getTexture() { return texture; }
-    @Nonnull public IconProperties getIconProperties() { return iconProperties; }
+    public int getLevel() {
+        return level;
+    }
+
+    public String getQuality() {
+        return quality;
+    }
+
+    public int getCraftingTier() {
+        return craftingTier;
+    }
+
+    public String getCraftingCategory() {
+        return craftingCategory;
+    }
+
+    public List<Ingredient> getRecipe() {
+        return recipe;
+    }
+
+    @Nullable
+    public String getIcon() {
+        return icon;
+    }
+
+    @Nullable
+    public String getModel() {
+        return model;
+    }
+
+    @Nullable
+    public String getTexture() {
+        return texture;
+    }
+
+    @Nonnull
+    public IconProperties getIconProperties() {
+        return iconProperties;
+    }
 
     /**
      * A single crafting ingredient (item ID + quantity).
@@ -62,12 +92,18 @@ public class ScrollDefinition {
 
         public Ingredient(@Nonnull String itemId, int quantity) {
             this.itemId = Objects.requireNonNull(itemId);
-            if (quantity < 1) throw new IllegalArgumentException("Quantity must be >= 1");
+            if (quantity < 1)
+                throw new IllegalArgumentException("Quantity must be >= 1");
             this.quantity = quantity;
         }
 
-        public String getItemId() { return itemId; }
-        public int getQuantity() { return quantity; }
+        public String getItemId() {
+            return itemId;
+        }
+
+        public int getQuantity() {
+            return quantity;
+        }
     }
 
     /**
@@ -82,7 +118,7 @@ public class ScrollDefinition {
         private final float rotationZ;
 
         public IconProperties(float scale, float translationX, float translationY,
-                              float rotationX, float rotationY, float rotationZ) {
+                float rotationX, float rotationY, float rotationZ) {
             this.scale = scale;
             this.translationX = translationX;
             this.translationY = translationY;
@@ -91,11 +127,28 @@ public class ScrollDefinition {
             this.rotationZ = rotationZ;
         }
 
-        public float getScale() { return scale; }
-        public float getTranslationX() { return translationX; }
-        public float getTranslationY() { return translationY; }
-        public float getRotationX() { return rotationX; }
-        public float getRotationY() { return rotationY; }
-        public float getRotationZ() { return rotationZ; }
+        public float getScale() {
+            return scale;
+        }
+
+        public float getTranslationX() {
+            return translationX;
+        }
+
+        public float getTranslationY() {
+            return translationY;
+        }
+
+        public float getRotationX() {
+            return rotationX;
+        }
+
+        public float getRotationY() {
+            return rotationY;
+        }
+
+        public float getRotationZ() {
+            return rotationZ;
+        }
     }
 }

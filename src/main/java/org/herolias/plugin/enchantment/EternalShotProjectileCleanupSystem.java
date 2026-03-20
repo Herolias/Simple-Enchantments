@@ -26,14 +26,14 @@ public class EternalShotProjectileCleanupSystem extends EntityTickingSystem<Enti
     @Nonnull
     public Query<EntityStore> getQuery() {
         return Query.and(
-            Projectile.getComponentType(),
-            StandardPhysicsProvider.getComponentType(),
-            UUIDComponent.getComponentType()
-        );
+                Projectile.getComponentType(),
+                StandardPhysicsProvider.getComponentType(),
+                UUIDComponent.getComponentType());
     }
 
     @Override
-    public void tick(float dt, int index, @Nonnull ArchetypeChunk<EntityStore> chunk, @Nonnull Store<EntityStore> store, @Nonnull CommandBuffer<EntityStore> buffer) {
+    public void tick(float dt, int index, @Nonnull ArchetypeChunk<EntityStore> chunk, @Nonnull Store<EntityStore> store,
+            @Nonnull CommandBuffer<EntityStore> buffer) {
         UUIDComponent uuidComp = chunk.getComponent(index, UUIDComponent.getComponentType());
         if (uuidComp == null) {
             return;
@@ -41,7 +41,7 @@ public class EternalShotProjectileCleanupSystem extends EntityTickingSystem<Enti
 
         UUID uuid = uuidComp.getUuid();
         ProjectileEnchantmentData data = enchantmentManager.getProjectileEnchantments(uuid);
-        
+
         // If it's not an Eternal Shot projectile, ignore it
         if (data == null || data.getEternalShotLevel() <= 0) {
             return;
@@ -56,9 +56,7 @@ public class EternalShotProjectileCleanupSystem extends EntityTickingSystem<Enti
         if (physics.isOnGround() || physics.getState() == StandardPhysicsProvider.STATE.RESTING) {
             Ref<EntityStore> ref = chunk.getReferenceTo(index);
             buffer.removeEntity(ref, RemoveReason.REMOVE);
-            
-            // Clean up the data from EnchantmentManager to prevent memory leaks
-            // though EnchantmentManager doesn't seem to have a periodic cleanup for these?
+
             enchantmentManager.removeProjectileEnchantments(uuid);
         }
     }

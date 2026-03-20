@@ -14,7 +14,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 /**
- * Manages configuration loading with "Smart Merge" logic using a sidecar snapshot.
+ * Manages configuration loading with "Smart Merge" logic using a sidecar
+ * snapshot.
  * Structure:
  * - config.json (User's active config)
  * - .config.json.snapshot (Hidden snapshot of defaults from the last run)
@@ -27,10 +28,10 @@ public class SmartConfigManager {
     /**
      * Loads the config, merging upgrades if necessary.
      *
-     * @param configFile   The user's configuration file.
-     * @param configClass  The class of the configuration object.
-     * @param newDefaults  The fresh, code-generated default configuration.
-     * @param <T>          The type of the config.
+     * @param configFile  The user's configuration file.
+     * @param configClass The class of the configuration object.
+     * @param newDefaults The fresh, code-generated default configuration.
+     * @param <T>         The type of the config.
      * @return The merged configuration object.
      */
     public static <T> T loadAndMerge(File configFile, Class<T> configClass, T newDefaults) {
@@ -45,7 +46,8 @@ public class SmartConfigManager {
         }
 
         // Scenario 2: Migration (Config exists, No snapshot)
-        // User Request: PROCEED -> Force update to new defaults to ensure everyone gets new balance changes.
+        // User Request: PROCEED -> Force update to new defaults to ensure everyone gets
+        // new balance changes.
         if (configFile.exists() && !snapshotFile.exists()) {
             LOGGER.atInfo().log("Migration detected (No snapshot found). Force updating config to latest defaults.");
             // Backup old config just in case
@@ -66,7 +68,7 @@ public class SmartConfigManager {
 
             if (userConfigJson == null || snapshotJson == null) {
                 LOGGER.atWarning().log("Failed to parse config or snapshot. Resetting to defaults.");
-                return newDefaults; 
+                return newDefaults;
             }
 
             // Perform Smart Merge
@@ -83,7 +85,8 @@ public class SmartConfigManager {
 
         } catch (Exception e) {
             LOGGER.atSevere().log("Error during smart config merge: " + e.getMessage(), e);
-            // Fallback: Return defaults but don't overwrite user file to avoid data loss on error
+            // Fallback: Return defaults but don't overwrite user file to avoid data loss on
+            // error
             return newDefaults;
         }
     }
@@ -98,7 +101,8 @@ public class SmartConfigManager {
 
     private static <T> void saveConfig(File file, T configObject) {
         try {
-            if (file.getParentFile() != null) file.getParentFile().mkdirs();
+            if (file.getParentFile() != null)
+                file.getParentFile().mkdirs();
             try (FileWriter writer = new FileWriter(file)) {
                 GSON.toJson(configObject, writer);
             }
@@ -115,14 +119,16 @@ public class SmartConfigManager {
      * - NewDefault + User additions (Structure merge)
      */
     private static JsonElement merge(JsonElement user, JsonElement snapshot, JsonElement newDef) {
-        // 1. Structure Mismatch: If types differ, New Default wins (Code structure changed)
+        // 1. Structure Mismatch: If types differ, New Default wins (Code structure
+        // changed)
         if (!isSameType(user, newDef)) {
             return newDef.deepCopy();
         }
 
         // 2. Primitives: Value comparison
         if (user.isJsonPrimitive()) {
-            // If User value matches the Old Default (Snapshot), safely update to New Default.
+            // If User value matches the Old Default (Snapshot), safely update to New
+            // Default.
             if (user.equals(snapshot)) {
                 return newDef.deepCopy();
             } else {
@@ -160,12 +166,9 @@ public class SmartConfigManager {
                     result.add(key, defVal.deepCopy());
                 } else if (snapVal == null) {
                     // Key exists in User but not in Snapshot?
-                    // Means it was added by user manually or from a version skipped without snapshot.
-                    // Or it was a previous version key.
-                    // We treat it as user data, but we are iterating DEF keys.
-                    // So this case (snapVal == null) technically means "New key vs Existing User Key".
-                    // Let's recurse.
-                     result.add(key, merge(userVal, new JsonObject(), defVal));
+                    // Means it was added by user manually or from a version skipped without
+                    // snapshot.
+                    result.add(key, merge(userVal, new JsonObject(), defVal));
                 } else {
                     // Standard merge
                     result.add(key, merge(userVal, snapVal, defVal));
@@ -187,10 +190,14 @@ public class SmartConfigManager {
     }
 
     private static boolean isSameType(JsonElement a, JsonElement b) {
-        if (a.isJsonObject() && b.isJsonObject()) return true;
-        if (a.isJsonArray() && b.isJsonArray()) return true;
-        if (a.isJsonPrimitive() && b.isJsonPrimitive()) return true;
-        if (a.isJsonNull() && b.isJsonNull()) return true;
+        if (a.isJsonObject() && b.isJsonObject())
+            return true;
+        if (a.isJsonArray() && b.isJsonArray())
+            return true;
+        if (a.isJsonPrimitive() && b.isJsonPrimitive())
+            return true;
+        if (a.isJsonNull() && b.isJsonNull())
+            return true;
         return false;
     }
 }

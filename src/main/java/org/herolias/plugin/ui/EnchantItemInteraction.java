@@ -28,12 +28,11 @@ public class EnchantItemInteraction extends ChoiceInteraction {
     private final EnchantmentManager enchantmentManager;
 
     public EnchantItemInteraction(
-        ItemContext itemContext,
-        ItemContext heldItemContext,
-        EnchantmentType enchantmentType,
-        int level,
-        EnchantmentManager enchantmentManager
-    ) {
+            ItemContext itemContext,
+            ItemContext heldItemContext,
+            EnchantmentType enchantmentType,
+            int level,
+            EnchantmentManager enchantmentManager) {
         this.itemContext = itemContext;
         this.heldItemContext = heldItemContext;
         this.enchantmentType = enchantmentType;
@@ -62,14 +61,14 @@ public class EnchantItemInteraction extends ChoiceInteraction {
         // --- Scroll merge handling ---
         String targetItemId = itemStack.getItemId();
         boolean isTargetCustomScroll = "Scroll_Custom".equals(targetItemId);
-        org.herolias.plugin.util.ScrollIdHelper.ScrollEnchantment targetScrollEnch =
-            org.herolias.plugin.util.ScrollIdHelper.getEnchantmentFromScrollId(targetItemId);
+        org.herolias.plugin.util.ScrollIdHelper.ScrollEnchantment targetScrollEnch = org.herolias.plugin.util.ScrollIdHelper
+                .getEnchantmentFromScrollId(targetItemId);
         boolean isTargetRegularScroll = targetScrollEnch != null;
 
         if (isTargetCustomScroll || isTargetRegularScroll) {
             // Scroll-to-scroll merge
             handleScrollMerge(store, ref, playerRef, pageManager, itemStack,
-                isTargetCustomScroll, targetScrollEnch, languageManager, lang, clientLang);
+                    isTargetCustomScroll, targetScrollEnch, languageManager, lang, clientLang);
             return;
         }
 
@@ -87,13 +86,15 @@ public class EnchantItemInteraction extends ChoiceInteraction {
         EnchantmentData data = enchantmentManager.getEnchantmentsFromItem(itemStack);
         int currentLevel = data.getLevel(enchantmentType);
         if (currentLevel >= targetLevel) {
-            String translatedName = languageManager.getRawMessage(enchantmentType.getNameKey(), lang, clientLang) + " " + EnchantmentType.toRoman(currentLevel);
+            String translatedName = languageManager.getRawMessage(enchantmentType.getNameKey(), lang, clientLang) + " "
+                    + EnchantmentType.toRoman(currentLevel);
             playerRef.sendMessage(Message.raw("That item already has " + translatedName + "."));
             pageManager.setPage(ref, store, Page.None);
             return;
         }
 
-        org.herolias.plugin.enchantment.EnchantmentApplicationResult result = enchantmentManager.applyEnchantmentToItem(playerRef, itemStack, enchantmentType, targetLevel);
+        org.herolias.plugin.enchantment.EnchantmentApplicationResult result = enchantmentManager
+                .applyEnchantmentToItem(playerRef, itemStack, enchantmentType, targetLevel);
         if (!result.success()) {
             playerRef.sendMessage(Message.raw(result.message()));
             pageManager.setPage(ref, store, Page.None);
@@ -106,23 +107,25 @@ public class EnchantItemInteraction extends ChoiceInteraction {
         ItemStack heldItemStack = this.heldItemContext.getItemStack();
         short heldItemSlot = this.heldItemContext.getSlot();
 
-        ItemStackSlotTransaction removeTransaction =
-            heldItemContainer.removeItemStackFromSlot(heldItemSlot, heldItemStack, 1);
+        ItemStackSlotTransaction removeTransaction = heldItemContainer.removeItemStackFromSlot(heldItemSlot,
+                heldItemStack, 1);
         if (!removeTransaction.succeeded()) {
             pageManager.setPage(ref, store, Page.None);
             return;
         }
 
-        ItemStackSlotTransaction replaceTransaction =
-            this.itemContext.getContainer().replaceItemStackInSlot(this.itemContext.getSlot(), itemStack, enchantedItem);
+        ItemStackSlotTransaction replaceTransaction = this.itemContext.getContainer()
+                .replaceItemStackInSlot(this.itemContext.getSlot(), itemStack, enchantedItem);
         if (!replaceTransaction.succeeded()) {
-            SimpleItemContainer.addOrDropItemStack(store, ref, heldItemContainer, heldItemSlot, heldItemStack.withQuantity(1));
+            SimpleItemContainer.addOrDropItemStack(store, ref, heldItemContainer, heldItemSlot,
+                    heldItemStack.withQuantity(1));
             pageManager.setPage(ref, store, Page.None);
             return;
         }
 
         Message itemName = languageManager.getMessage(enchantedItem.getItem().getTranslationKey(), lang, clientLang);
-        String translatedName = languageManager.getRawMessage(enchantmentType.getNameKey(), lang, clientLang) + " " + EnchantmentType.toRoman(targetLevel);
+        String translatedName = languageManager.getRawMessage(enchantmentType.getNameKey(), lang, clientLang) + " "
+                + EnchantmentType.toRoman(targetLevel);
         Message appliedMessage = Message.raw("Applied " + translatedName + " to ").insert(itemName);
         playerRef.sendMessage(appliedMessage);
         pageManager.setPage(ref, store, Page.None);
@@ -130,16 +133,16 @@ public class EnchantItemInteraction extends ChoiceInteraction {
 
     /**
      * Handles merging two scrolls together.
-     * - Same enchantment + same level: upgrade to next level (replaces target scroll)
+     * - Same enchantment + same level: upgrade to next level (replaces target
+     * scroll)
      * - Different enchantment: combines into a Custom Scroll with both enchantments
      */
     private void handleScrollMerge(
-        Store<EntityStore> store, Ref<EntityStore> ref, PlayerRef playerRef,
-        PageManager pageManager, ItemStack targetStack,
-        boolean isTargetCustomScroll,
-        org.herolias.plugin.util.ScrollIdHelper.ScrollEnchantment targetScrollEnch,
-        org.herolias.plugin.lang.LanguageManager languageManager, String lang, String clientLang
-    ) {
+            Store<EntityStore> store, Ref<EntityStore> ref, PlayerRef playerRef,
+            PageManager pageManager, ItemStack targetStack,
+            boolean isTargetCustomScroll,
+            org.herolias.plugin.util.ScrollIdHelper.ScrollEnchantment targetScrollEnch,
+            org.herolias.plugin.lang.LanguageManager languageManager, String lang, String clientLang) {
         // Build the merged enchantment data
         EnchantmentData mergedData = new EnchantmentData();
 
@@ -174,17 +177,17 @@ public class EnchantItemInteraction extends ChoiceInteraction {
                 if (!resultStack.isValid() || resultStack.isEmpty()) {
                     // Fallback to Custom Scroll if the scroll item doesn't exist
                     resultStack = new ItemStack("Scroll_Custom", 1)
-                        .withMetadata(EnchantmentData.METADATA_KEY, mergedData.toBson());
+                            .withMetadata(EnchantmentData.METADATA_KEY, mergedData.toBson());
                 }
             } else {
                 // Level exceeds max — must be a Custom Scroll
                 resultStack = new ItemStack("Scroll_Custom", 1)
-                    .withMetadata(EnchantmentData.METADATA_KEY, mergedData.toBson());
+                        .withMetadata(EnchantmentData.METADATA_KEY, mergedData.toBson());
             }
         } else {
             // Multiple enchantments — always a Custom Scroll
             resultStack = new ItemStack("Scroll_Custom", 1)
-                .withMetadata(EnchantmentData.METADATA_KEY, mergedData.toBson());
+                    .withMetadata(EnchantmentData.METADATA_KEY, mergedData.toBson());
         }
 
         // Remove the held scroll (source)
@@ -192,8 +195,7 @@ public class EnchantItemInteraction extends ChoiceInteraction {
         ItemStack heldItemStack = this.heldItemContext.getItemStack();
         short heldItemSlot = this.heldItemContext.getSlot();
 
-        ItemStackSlotTransaction removeHeld =
-            heldItemContainer.removeItemStackFromSlot(heldItemSlot, heldItemStack, 1);
+        ItemStackSlotTransaction removeHeld = heldItemContainer.removeItemStackFromSlot(heldItemSlot, heldItemStack, 1);
         if (!removeHeld.succeeded()) {
             pageManager.setPage(ref, store, Page.None);
             return;
@@ -201,30 +203,34 @@ public class EnchantItemInteraction extends ChoiceInteraction {
 
         if (targetStack.getQuantity() == 1) {
             // Replace the target scroll with the result
-            ItemStackSlotTransaction replaceTarget =
-                this.itemContext.getContainer().replaceItemStackInSlot(this.itemContext.getSlot(), targetStack, resultStack);
+            ItemStackSlotTransaction replaceTarget = this.itemContext.getContainer()
+                    .replaceItemStackInSlot(this.itemContext.getSlot(), targetStack, resultStack);
             if (!replaceTarget.succeeded()) {
                 // Rollback: give back the held scroll
-                SimpleItemContainer.addOrDropItemStack(store, ref, heldItemContainer, heldItemSlot, heldItemStack.withQuantity(1));
+                SimpleItemContainer.addOrDropItemStack(store, ref, heldItemContainer, heldItemSlot,
+                        heldItemStack.withQuantity(1));
                 pageManager.setPage(ref, store, Page.None);
                 return;
             }
         } else {
             // Remove 1 from the target stack
-            ItemStackSlotTransaction removeTarget =
-                this.itemContext.getContainer().removeItemStackFromSlot(this.itemContext.getSlot(), targetStack, 1);
+            ItemStackSlotTransaction removeTarget = this.itemContext.getContainer()
+                    .removeItemStackFromSlot(this.itemContext.getSlot(), targetStack, 1);
             if (!removeTarget.succeeded()) {
                 // Rollback: give back the held scroll
-                SimpleItemContainer.addOrDropItemStack(store, ref, heldItemContainer, heldItemSlot, heldItemStack.withQuantity(1));
+                SimpleItemContainer.addOrDropItemStack(store, ref, heldItemContainer, heldItemSlot,
+                        heldItemStack.withQuantity(1));
                 pageManager.setPage(ref, store, Page.None);
                 return;
             }
             // Give the new Custom Scroll back to the player
-            SimpleItemContainer.addOrDropItemStack(store, ref, this.itemContext.getContainer(), this.itemContext.getSlot(), resultStack);
+            SimpleItemContainer.addOrDropItemStack(store, ref, this.itemContext.getContainer(),
+                    this.itemContext.getSlot(), resultStack);
         }
 
         // Send success message
-        String enchantName = languageManager.getRawMessage(enchantmentType.getNameKey(), lang, clientLang) + " " + EnchantmentType.toRoman(targetLevel);
+        String enchantName = languageManager.getRawMessage(enchantmentType.getNameKey(), lang, clientLang) + " "
+                + EnchantmentType.toRoman(targetLevel);
         if (allEnchants.size() == 1) {
             playerRef.sendMessage(Message.raw("Upgraded scroll to " + enchantName + "."));
         } else {

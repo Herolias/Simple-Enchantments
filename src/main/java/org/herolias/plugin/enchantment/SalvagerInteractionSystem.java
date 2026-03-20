@@ -39,42 +39,49 @@ public class SalvagerInteractionSystem extends EntityEventSystem<EntityStore, Us
 
     @Override
     public void handle(int index,
-                       @Nonnull ArchetypeChunk<EntityStore> archetypeChunk,
-                       @Nonnull Store<EntityStore> store,
-                       @Nonnull CommandBuffer<EntityStore> commandBuffer,
-                       @Nonnull UseBlockEvent.Pre event) {
-        
-        if (event.isCancelled()) return;
-        
+            @Nonnull ArchetypeChunk<EntityStore> archetypeChunk,
+            @Nonnull Store<EntityStore> store,
+            @Nonnull CommandBuffer<EntityStore> commandBuffer,
+            @Nonnull UseBlockEvent.Pre event) {
+
+        if (event.isCancelled())
+            return;
+
         Ref<EntityStore> ref = archetypeChunk.getReferenceTo(index);
         Player player = commandBuffer.getComponent(ref, Player.getComponentType());
-        
-        if (player == null) return;
-        
-        Vector3i pos = event.getTargetBlock();
-        if (pos == null) return;
 
-        if (player.getWorld() == null) return;
+        if (player == null)
+            return;
+
+        Vector3i pos = event.getTargetBlock();
+        if (pos == null)
+            return;
+
+        if (player.getWorld() == null)
+            return;
 
         // Helper to get BlockState respecting filler blocks (Multi-block structures)
         long chunkIndex = ChunkUtil.indexChunkFromBlock(pos.x, pos.z);
         WorldChunk chunk = player.getWorld().getChunk(chunkIndex);
-        
+
         if (chunk != null) {
             int filler = chunk.getBlockChunk().getSectionAtBlockY(pos.y).getFiller(pos.x, pos.y, pos.z);
             int targetX = pos.x;
             int targetY = pos.y;
             int targetZ = pos.z;
-            
+
             if (filler != 0) {
                 targetX -= FillerBlockUtil.unpackX(filler);
                 targetY -= FillerBlockUtil.unpackY(filler);
                 targetZ -= FillerBlockUtil.unpackZ(filler);
             }
-            
-            com.hypixel.hytale.component.Ref<com.hypixel.hytale.server.core.universe.world.storage.ChunkStore> blockRef = chunk.getBlockComponentEntity(targetX, targetY, targetZ);
+
+            com.hypixel.hytale.component.Ref<com.hypixel.hytale.server.core.universe.world.storage.ChunkStore> blockRef = chunk
+                    .getBlockComponentEntity(targetX, targetY, targetZ);
             if (blockRef != null && blockRef.isValid()) {
-                ProcessingBenchState benchState = player.getWorld().getChunkStore().getStore().getComponent(blockRef, com.hypixel.hytale.server.core.universe.world.meta.BlockStateModule.get().getComponentType(ProcessingBenchState.class));
+                ProcessingBenchState benchState = player.getWorld().getChunkStore().getStore().getComponent(blockRef,
+                        com.hypixel.hytale.server.core.universe.world.meta.BlockStateModule.get()
+                                .getComponentType(ProcessingBenchState.class));
                 if (benchState != null && benchState.getBench() != null) {
                     if (BENCH_ID.equals(benchState.getBench().getId())) {
                         salvageSystem.startSession(player, benchState);

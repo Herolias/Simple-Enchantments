@@ -22,13 +22,17 @@ public class WelcomeListener {
 
     public void onPlayerReady(PlayerReadyEvent event) {
         Player player = event.getPlayer();
-        if (player.getWorld() == null || player.getReference() == null) return;
-        
+        if (player.getWorld() == null || player.getReference() == null)
+            return;
+
         player.getWorld().execute(() -> {
-            com.hypixel.hytale.server.core.universe.PlayerRef playerRef = player.getWorld().getEntityStore().getStore().getComponent(player.getReference(), com.hypixel.hytale.server.core.universe.PlayerRef.getComponentType());
-            if (playerRef == null) return;
+            com.hypixel.hytale.server.core.universe.PlayerRef playerRef = player.getWorld().getEntityStore().getStore()
+                    .getComponent(player.getReference(),
+                            com.hypixel.hytale.server.core.universe.PlayerRef.getComponentType());
+            if (playerRef == null)
+                return;
             String uuid = playerRef.getUuid().toString();
-            
+
             UserSettingsManager userSettingsManager = plugin.getUserSettingsManager();
             EnchantingConfig config = plugin.getConfigManager().getConfig();
 
@@ -37,8 +41,9 @@ public class WelcomeListener {
                 if (config.showWelcomeMessage) {
                     String clientLangCode = playerRef.getLanguage();
                     String langCode = userSettingsManager.getLanguage(playerRef.getUuid());
-                    
-                    Message greeting = plugin.getLanguageManager().getMessage("chat.greeting", langCode, clientLangCode).color("#AA00AA").bold(true); // Changed to purple hex
+
+                    Message greeting = plugin.getLanguageManager().getMessage("chat.greeting", langCode, clientLangCode)
+                            .color("#AA00AA").bold(true); // Changed to purple hex
                     player.sendMessage(greeting);
                 }
                 userSettingsManager.setHasSeenGreeting(playerRef.getUuid(), true);
@@ -49,18 +54,20 @@ public class WelcomeListener {
                 return;
             }
 
-            // Check if player has already been notified, or if it was globally skipped for fresh installs
-            if (config.hasSkippedTooltipAnnouncement || (config.notifiedPlayers != null && config.notifiedPlayers.contains(uuid))) {
+            // Check if player has already been notified, or if it was globally skipped for
+            // fresh installs
+            if (config.hasSkippedTooltipAnnouncement
+                    || (config.notifiedPlayers != null && config.notifiedPlayers.contains(uuid))) {
                 return;
             }
-            
+
             // Mark player as notified and save
             if (config.notifiedPlayers == null) {
                 config.notifiedPlayers = new java.util.ArrayList<>();
             }
             config.notifiedPlayers.add(uuid);
             plugin.getConfigManager().saveConfig();
-            
+
             // Check if welcome message is disabled
             if (!config.showWelcomeMessage) {
                 return;
@@ -68,20 +75,21 @@ public class WelcomeListener {
 
             // Show Title
             EventTitleUtil.showEventTitleToPlayer(
-                playerRef,
-                Message.raw(""), // Title
-                Message.raw("Enchantment Tooltips are here!").color("#FFAA00"), // Subtitle (Gold)
-                false,
-                null,
-                1.5f,
-                0.1f,
-                2.0f
-            );
+                    playerRef,
+                    Message.raw(""), // Title
+                    Message.raw("Enchantment Tooltips are here!").color("#FFAA00"), // Subtitle (Gold)
+                    false,
+                    null,
+                    1.5f,
+                    0.1f,
+                    2.0f);
 
             // Send Chat Message
             String border = "--------------------------------------------------";
             player.sendMessage(Message.raw(border).color("#FFAA00").bold(true));
-            player.sendMessage(Message.raw("            Enchantment Tooltips are here! ").color("#FFAA00").bold(true)); // Centered Gold Bold
+            player.sendMessage(Message.raw("            Enchantment Tooltips are here! ").color("#FFAA00").bold(true)); // Centered
+                                                                                                                        // Gold
+                                                                                                                        // Bold
             player.sendMessage(Message.raw(" They replace the banner by default, but you can ").color("YELLOW"));
             player.sendMessage(Message.raw("                turn it back on in the config.").color("YELLOW"));
             player.sendMessage(Message.raw(border).color("#FFAA00").bold(true));

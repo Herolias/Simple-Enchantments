@@ -3,9 +3,34 @@ plugins {
     id 'org.jetbrains.gradle.plugin.idea-ext' version '1.3'
 }
 
+import org.gradle.internal.os.OperatingSystem
+
 ext {
-   //For Windows uncomment this line: hytaleHome = "${System.getProperty("user.home")}/AppData/Roaming/Hytale"
-  hytaleHome = "/home/elias/.var/app/com.hypixel.HytaleLauncher/data/Hytale"
+    if (project.hasProperty('hytale_home')) {
+        hytaleHome = project.findProperty('hytale_home')
+    }
+    else {
+        def os = OperatingSystem.current()
+        if (os.isWindows()) {
+            hytaleHome = "${System.getProperty("user.home")}/AppData/Roaming/Hytale"
+        }
+        else if (os.isMacOsX()) {
+            hytaleHome = "${System.getProperty("user.home")}/Library/Application Support/Hytale"
+        }
+        else if (os.isLinux()) {
+            hytaleHome = "${System.getProperty("user.home")}/.var/app/com.hypixel.HytaleLauncher/data/Hytale"
+            if (!file(hytaleHome).exists()) {
+                hytaleHome = "${System.getProperty("user.home")}/.local/share/Hytale"
+            }
+        }
+    }
+}
+
+if (!project.hasProperty('hytaleHome')) {
+    throw new GradleException('Your Hytale install could not be detected automatically. If you are on an unsupported platform or using a custom install location, please define the install location using the hytale_home property.');
+}
+else if (!file(project.findProperty('hytaleHome')).exists()) {
+    throw new GradleException("Failed to find Hytale at the expected location. Please make sure you have installed the game. The expected location can be changed using the hytale_home property. Currently looking in ${project.findProperty('hytaleHome')}")
 }
 
 java {
@@ -13,14 +38,6 @@ java {
     withSourcesJar()
     withJavadocJar()
 }
-
-// Ensure UTF-8 encoding for all text operations.
-// This prevents special characters in .lang translation files from being
-// corrupted when building on Windows (which defaults to Windows-1252).
-compileJava.options.encoding = 'UTF-8'
-tasks.withType(Javadoc).configureEach { options.encoding = 'UTF-8' }
-tasks.withType(Copy).configureEach { filteringCharset = 'UTF-8' }
-tasks.withType(JavaCompile).configureEach { options.encoding = 'UTF-8' }
 
 // Quiet warnings about missing Javadocs.
 javadoc {
@@ -82,83 +99,6 @@ idea.project.settings.runConfigurations {
             programParameters += " --mods=$hytaleHome/UserData/Mods"
         }
         workingDirectory = serverRunDir.absolutePath
-    }
-}
-task inspectCommandBase {
-    doLast {
-        def url = configurations.runtimeClasspath.find { it.name.contains('HytaleServer') }?.toURI()?.toURL()
-        if (url == null) { println 'HytaleServer.jar not found'; return }
-        def loader = new URLClassLoader([url] as URL[], ClassLoader.systemClassLoader)
-        def clazz = loader.loadClass('com.hypixel.hytale.server.core.command.system.basecommands.CommandBase')
-        println 'Methods of CommandBase:'
-        clazz.methods.each { println it }
-    }
-}
-
-task inspectComponentUpdate {
-    doLast {
-        def url = configurations.compileClasspath.find { it.name.contains('HytaleServer') }?.toURI()?.toURL()
-        if (url == null) { println 'HytaleServer.jar not found'; return }
-        def loader = new java.net.URLClassLoader([url] as java.net.URL[], ClassLoader.systemClassLoader)
-        
-        println '--- ComponentUpdate Inspection ---'
-        try {
-            def clazz = loader.loadClass('com.hypixel.hytale.protocol.ComponentUpdate')
-            println 'ComponentUpdate modifiers: ' + java.lang.reflect.Modifier.toString(clazz.getModifiers())
-            
-            // List all classes in the jar to find subclasses
-            def jarFile = new java.util.jar.JarFile(new File(url.toURI()))
-            def entries = jarFile.entries()
-            while (entries.hasMoreElements()) {
-                def entry = entries.nextElement()
-                if (entry.name.endsWith('.class') && entry.name.contains('protocol')) {
-                    def className = entry.name.replace('/', '.').replace('.class', '')
-                    try {
-                        def c = loader.loadClass(className)
-                        if (clazz.isAssignableFrom(c) && c != clazz) {
-                            println 'Subclass: ' + className
-                            // Check for 'item' field
-                             try {
-                                c.getDeclaredField('item')
-                                println '  -> Has item field!'
-                            } catch (NoSuchFieldException e) {}
-                        }
-                    } catch (Throwable t) {}
-                }
-            }
-        } catch (Throwable t) {
-            t.printStackTrace()
-        }
-
-        println '--- Entity Inspection ---'
-        try {
-             def entityClass = loader.loadClass('com.hypixel.hytale.server.core.entity.Entity')
-             println 'Entity methods:'
-             entityClass.methods.each { if (it.name.contains('uid') || it.name.contains('Id')) println it }
-        } catch (Throwable t) {}
-    }
-}
-
-
-task inspectSubclasses {
-    doLast {
-        def url = configurations.compileClasspath.find { it.name.contains('HytaleServer') }?.toURI()?.toURL()
-        if (url == null) { logger.lifecycle 'HytaleServer.jar not found'; return }
-        def loader = new java.net.URLClassLoader([url] as java.net.URL[], ClassLoader.systemClassLoader)
-        
-        ['com.hypixel.hytale.protocol.ItemUpdate', 'com.hypixel.hytale.protocol.DynamicLightUpdate'].each { className ->
-            logger.lifecycle '--- Inspecting ' + className + ' ---'
-            try {
-                def clazz = loader.loadClass(className)
-                logger.lifecycle 'Fields:'
-                clazz.getDeclaredFields().each { logger.lifecycle '  ' + it.toString() }
-                logger.lifecycle 'Constructors:'
-                clazz.getConstructors().each { logger.lifecycle '  ' + it.toString() }
-            } catch (Throwable t) {
-                logger.lifecycle 'Failed to inspect ' + className
-                t.printStackTrace()
-            }
-        }
     }
 }
 

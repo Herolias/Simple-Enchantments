@@ -41,7 +41,8 @@ public class UserSettingsManager {
         }
 
         try (FileReader reader = new FileReader(settingsFile)) {
-            Type type = new TypeToken<ConcurrentHashMap<UUID, UserSettings>>(){}.getType();
+            Type type = new TypeToken<ConcurrentHashMap<UUID, UserSettings>>() {
+            }.getType();
             Map<UUID, UserSettings> loaded = gson.fromJson(reader, type);
             if (loaded != null) {
                 userSettingsMap = new ConcurrentHashMap<>(loaded);

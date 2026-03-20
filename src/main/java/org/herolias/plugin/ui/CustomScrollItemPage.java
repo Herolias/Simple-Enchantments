@@ -22,7 +22,8 @@ import org.herolias.plugin.enchantment.ItemCategory;
  * Step 2 page for Custom Scroll: lists all items in the player's inventory
  * that can accept the selected enchantment.
  * <p>
- * Filtering logic mirrors {@link EnchantScrollPage}: category check, conflict check,
+ * Filtering logic mirrors {@link EnchantScrollPage}: category check, conflict
+ * check,
  * level check, blacklist check.
  */
 public class CustomScrollItemPage extends ChoiceBasePage {
@@ -30,29 +31,26 @@ public class CustomScrollItemPage extends ChoiceBasePage {
     private final PlayerRef playerRef;
 
     public CustomScrollItemPage(
-        @Nonnull PlayerRef playerRef,
-        @Nonnull ItemContainer itemContainer,
-        @Nonnull EnchantmentManager enchantmentManager,
-        @Nonnull EnchantmentType enchantmentType,
-        int level,
-        @Nonnull ItemContext heldItemContext
-    ) {
+            @Nonnull PlayerRef playerRef,
+            @Nonnull ItemContainer itemContainer,
+            @Nonnull EnchantmentManager enchantmentManager,
+            @Nonnull EnchantmentType enchantmentType,
+            int level,
+            @Nonnull ItemContext heldItemContext) {
         super(
-            playerRef,
-            getItemElements(itemContainer, enchantmentManager, enchantmentType, level, heldItemContext),
-            "Pages/CustomScrollItemPage.ui"
-        );
+                playerRef,
+                getItemElements(itemContainer, enchantmentManager, enchantmentType, level, heldItemContext),
+                "Pages/CustomScrollItemPage.ui");
         this.enchantmentManager = enchantmentManager;
         this.playerRef = playerRef;
     }
 
     @Override
     public void build(
-        @Nonnull Ref<EntityStore> ref,
-        @Nonnull UICommandBuilder commandBuilder,
-        @Nonnull UIEventBuilder eventBuilder,
-        @Nonnull Store<EntityStore> store
-    ) {
+            @Nonnull Ref<EntityStore> ref,
+            @Nonnull UICommandBuilder commandBuilder,
+            @Nonnull UIEventBuilder eventBuilder,
+            @Nonnull Store<EntityStore> store) {
         if (this.getElements().length > 0) {
             super.build(ref, commandBuilder, eventBuilder, store);
             translateLabels(commandBuilder);
@@ -61,9 +59,8 @@ public class CustomScrollItemPage extends ChoiceBasePage {
         commandBuilder.append(this.getPageLayout());
         commandBuilder.clear("#ElementList");
         commandBuilder.appendInline(
-            "#ElementList",
-            "Label #NoItemsLabel { Style: (Alignment: Center); }"
-        );
+                "#ElementList",
+                "Label #NoItemsLabel { Style: (Alignment: Center); }");
         translateLabels(commandBuilder);
     }
 
@@ -72,26 +69,30 @@ public class CustomScrollItemPage extends ChoiceBasePage {
         String lang = enchantmentManager.getPlugin().getUserSettingsManager().getLanguage(this.playerRef.getUuid());
         String clientLang = this.playerRef.getLanguage();
 
-        commandBuilder.set("#TitleLabel.TextSpans", languageManager.getMessage("customUI.customScrollItemPage.title", lang, clientLang));
-        commandBuilder.set("#ItemLabel.TextSpans", languageManager.getMessage("customUI.customScrollItemPage.item", lang, clientLang));
-        commandBuilder.set("#EnchantmentLabel.TextSpans", languageManager.getMessage("customUI.customScrollItemPage.enchantment", lang, clientLang));
+        commandBuilder.set("#TitleLabel.TextSpans",
+                languageManager.getMessage("customUI.customScrollItemPage.title", lang, clientLang));
+        commandBuilder.set("#ItemLabel.TextSpans",
+                languageManager.getMessage("customUI.customScrollItemPage.item", lang, clientLang));
+        commandBuilder.set("#EnchantmentLabel.TextSpans",
+                languageManager.getMessage("customUI.customScrollItemPage.enchantment", lang, clientLang));
 
         if (this.getElements().length == 0) {
-            commandBuilder.set("#NoItemsLabel.TextSpans", languageManager.getMessage("customUI.customScrollItemPage.noItems", lang, clientLang));
+            commandBuilder.set("#NoItemsLabel.TextSpans",
+                    languageManager.getMessage("customUI.customScrollItemPage.noItems", lang, clientLang));
         }
     }
 
     @Nonnull
     protected static ChoiceElement[] getItemElements(
-        @Nonnull ItemContainer itemContainer,
-        @Nonnull EnchantmentManager enchantmentManager,
-        @Nonnull EnchantmentType enchantmentType,
-        int level,
-        @Nonnull ItemContext heldItemContext
-    ) {
+            @Nonnull ItemContainer itemContainer,
+            @Nonnull EnchantmentManager enchantmentManager,
+            @Nonnull EnchantmentType enchantmentType,
+            int level,
+            @Nonnull ItemContext heldItemContext) {
         ObjectArrayList<ChoiceElement> elements = new ObjectArrayList<>();
         int scrollLevel = Math.max(1, level);
-        boolean allowSameScrollUpgrades = enchantmentManager.getPlugin().getConfigManager().getConfig().allowSameScrollUpgrades;
+        boolean allowSameScrollUpgrades = enchantmentManager.getPlugin().getConfigManager()
+                .getConfig().allowSameScrollUpgrades;
 
         for (short slot = 0; slot < itemContainer.getCapacity(); slot = (short) (slot + 1)) {
             ItemStack itemStack = itemContainer.getItemStack(slot);
@@ -144,20 +145,22 @@ public class CustomScrollItemPage extends ChoiceBasePage {
 
             ItemContext itemContext = new ItemContext(itemContainer, slot, itemStack);
             elements.add(new CustomScrollItemElement(
-                itemStack,
-                enchantmentType,
-                interactionTargetLevel,
-                currentLevel,
-                new CustomScrollApplyInteraction(itemContext, heldItemContext, enchantmentType, interactionTargetLevel, enchantmentManager),
-                enchantmentManager
-            ));
+                    itemStack,
+                    enchantmentType,
+                    interactionTargetLevel,
+                    currentLevel,
+                    new CustomScrollApplyInteraction(itemContext, heldItemContext, enchantmentType,
+                            interactionTargetLevel, enchantmentManager),
+                    enchantmentManager));
         }
 
         elements.sort((a, b) -> {
             boolean aIsScroll = ((CustomScrollItemElement) a).getItemStack().getItemId().startsWith("Scroll_");
             boolean bIsScroll = ((CustomScrollItemElement) b).getItemStack().getItemId().startsWith("Scroll_");
-            if (aIsScroll && !bIsScroll) return 1;
-            if (!aIsScroll && bIsScroll) return -1;
+            if (aIsScroll && !bIsScroll)
+                return 1;
+            if (!aIsScroll && bIsScroll)
+                return -1;
             return 0; // maintain original order otherwise
         });
 

@@ -30,18 +30,18 @@ public class ConfigManager {
     public void loadConfig() {
         EnchantingConfig defaults = EnchantingConfig.createDefault();
         this.config = SmartConfigManager.loadAndMerge(this.configFile, EnchantingConfig.class, defaults);
-        
+
         if (this.config == null) {
             this.config = defaults;
             logger.atWarning().log("Config failed to load even after smart merge fallback. Using defaults.");
         }
-        
+
         // Migrate legacy per-field multipliers to unified map (v1.x -> v2.0)
         this.config.migrateFromLegacy();
-        
+
         // Apply dynamic effect overrides for Burn and Freeze
         org.herolias.plugin.enchantment.EnchantmentDynamicEffects.applyOverrides(this.config);
-        
+
         logger.atInfo().log("Configuration loaded.");
     }
 

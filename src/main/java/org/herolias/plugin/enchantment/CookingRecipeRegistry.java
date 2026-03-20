@@ -17,12 +17,14 @@ public class CookingRecipeRegistry extends AbstractRecipeRegistry<CookingRecipeR
     }
 
     @Override
-    protected CookingRecipe createRecipe(@Nonnull MaterialQuantity output, int inputQuantity, @Nullable String inputItemId, @Nullable String inputResourceTypeId) {
+    protected CookingRecipe createRecipe(@Nonnull MaterialQuantity output, int inputQuantity,
+            @Nullable String inputItemId, @Nullable String inputResourceTypeId) {
         return new CookingRecipe(output, inputQuantity, inputItemId, inputResourceTypeId);
     }
 
     public static class CookingRecipe extends AbstractRecipeRegistry.Recipe {
-        public CookingRecipe(@Nonnull MaterialQuantity output, int inputQuantity, @Nullable String inputItemId, @Nullable String inputResourceTypeId) {
+        public CookingRecipe(@Nonnull MaterialQuantity output, int inputQuantity, @Nullable String inputItemId,
+                @Nullable String inputResourceTypeId) {
             super(output, inputQuantity, inputItemId, inputResourceTypeId);
         }
     }

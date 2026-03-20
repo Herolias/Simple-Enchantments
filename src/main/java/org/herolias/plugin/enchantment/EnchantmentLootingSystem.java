@@ -55,23 +55,22 @@ import java.util.function.DoubleSupplier;
  * Also cooks bonus drops if the weapon has the Burn enchantment.
  *
  * Overhauled Logic:
- * Instead of extra rolls, this system boosts the drop chance of rare items (weight &lt; 100)
+ * Instead of extra rolls, this system boosts the drop chance of rare items
+ * (weight &lt; 100)
  * by a multiplicative factor based on Looting level.
  */
 public class EnchantmentLootingSystem extends DeathSystems.OnDeathSystem {
 
     private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
     private static final Query<EntityStore> QUERY = Query.and(
-        NPCEntity.getComponentType(),
-        TransformComponent.getComponentType(),
-        HeadRotation.getComponentType(),
-        Query.not(Player.getComponentType())
-    );
+            NPCEntity.getComponentType(),
+            TransformComponent.getComponentType(),
+            HeadRotation.getComponentType(),
+            Query.not(Player.getComponentType()));
 
     // Run BEFORE built-in drop system to suppress and replace drops
     private final Set<Dependency<EntityStore>> dependencies = Set.of(
-        new SystemDependency(Order.BEFORE, NPCDamageSystems.DropDeathItems.class)
-    );
+            new SystemDependency(Order.BEFORE, NPCDamageSystems.DropDeathItems.class));
 
     private static final Field MULTIPLE_CONTAINERS_FIELD;
 
@@ -105,9 +104,9 @@ public class EnchantmentLootingSystem extends DeathSystems.OnDeathSystem {
 
     @Override
     public void onComponentAdded(@Nonnull Ref<EntityStore> ref,
-                                 @Nonnull DeathComponent component,
-                                 @Nonnull Store<EntityStore> store,
-                                 @Nonnull CommandBuffer<EntityStore> commandBuffer) {
+            @Nonnull DeathComponent component,
+            @Nonnull Store<EntityStore> store,
+            @Nonnull CommandBuffer<EntityStore> commandBuffer) {
         // Only process if the built-in system would also run
         if (component.getItemsLossMode() != DeathConfig.ItemsLossMode.ALL) {
             return;
@@ -119,7 +118,8 @@ public class EnchantmentLootingSystem extends DeathSystems.OnDeathSystem {
         }
 
         // Resolve both Looting and Burn levels
-        EnchantmentManager.DamageEnchantments levels = enchantmentManager.resolveDamageEnchantments(deathInfo, commandBuffer, ref);
+        EnchantmentManager.DamageEnchantments levels = enchantmentManager.resolveDamageEnchantments(deathInfo,
+                commandBuffer, ref);
         if (levels.lootingLevel() <= 0) {
             // If no Looting, return and let Burn system or built-in system handle it
             return;
@@ -184,35 +184,42 @@ public class EnchantmentLootingSystem extends DeathSystems.OnDeathSystem {
         Vector3d dropPosition = transformComponent.getPosition().clone().add(0.0, 1.0, 0.0);
         Vector3f headRotation = headRotationComponent.getRotation();
 
-        Holder<EntityStore>[] drops = ItemComponent.generateItemDrops(commandBuffer, allDrops, dropPosition, headRotation);
+        Holder<EntityStore>[] drops = ItemComponent.generateItemDrops(commandBuffer, allDrops, dropPosition,
+                headRotation);
         if (drops.length > 0) {
             commandBuffer.addEntities(drops, AddReason.SPAWN);
             LOGGER.atFine().log("Spawned " + drops.length + " Looting-boosted item(s)");
-            
+
             // Fire event if Looting triggered and we have a valid attacker
             Ref<EntityStore> attackerRef = null;
             if (deathInfo.getSource() instanceof Damage.EntitySource entitySource) {
                 attackerRef = entitySource.getRef();
             }
 
-            if (levels.lootingLevel() > 0 && attackerRef != null && enchantmentManager.getWeaponFromEntity(EntityUtils.getEntity(attackerRef, commandBuffer)) != null) {
-                com.hypixel.hytale.server.core.universe.PlayerRef playerRef = store.getComponent(attackerRef, com.hypixel.hytale.server.core.universe.PlayerRef.getComponentType());
-                ItemStack weapon = enchantmentManager.getWeaponFromEntity(EntityUtils.getEntity(attackerRef, commandBuffer));
+            if (levels.lootingLevel() > 0 && attackerRef != null && enchantmentManager
+                    .getWeaponFromEntity(EntityUtils.getEntity(attackerRef, commandBuffer)) != null) {
+                com.hypixel.hytale.server.core.universe.PlayerRef playerRef = store.getComponent(attackerRef,
+                        com.hypixel.hytale.server.core.universe.PlayerRef.getComponentType());
+                ItemStack weapon = enchantmentManager
+                        .getWeaponFromEntity(EntityUtils.getEntity(attackerRef, commandBuffer));
                 EnchantmentEventHelper.fireActivated(playerRef, weapon, EnchantmentType.LOOTING, levels.lootingLevel());
             }
         }
-        
+
         // Clean up stored enchantment data
-        com.hypixel.hytale.server.core.entity.UUIDComponent uuidComp = commandBuffer.getComponent(ref, com.hypixel.hytale.server.core.entity.UUIDComponent.getComponentType());
+        com.hypixel.hytale.server.core.entity.UUIDComponent uuidComp = commandBuffer.getComponent(ref,
+                com.hypixel.hytale.server.core.entity.UUIDComponent.getComponentType());
         if (uuidComp != null) {
             enchantmentManager.removeBurnEnchantments(uuidComp.getUuid());
         }
     }
 
     /**
-     * Recursively collects drops, applying chance multiplier to low-probability items in MultipleItemDropContainer.
+     * Recursively collects drops, applying chance multiplier to low-probability
+     * items in MultipleItemDropContainer.
      */
-    private void collectBoostedDrops(ItemDropContainer container, double multiplier, int lootingLevel, String dropListId, List<ItemStack> results) {
+    private void collectBoostedDrops(ItemDropContainer container, double multiplier, int lootingLevel,
+            String dropListId, List<ItemStack> results) {
         ThreadLocalRandom random = ThreadLocalRandom.current();
         DoubleSupplier chanceProvider = random::nextDouble;
         Set<String> droplistReferences = new HashSet<>();
@@ -221,20 +228,20 @@ public class EnchantmentLootingSystem extends DeathSystems.OnDeathSystem {
         if (container instanceof MultipleItemDropContainer multipleContainer) {
             try {
                 ItemDropContainer[] children = (ItemDropContainer[]) MULTIPLE_CONTAINERS_FIELD.get(multipleContainer);
-                
+
                 for (ItemDropContainer child : children) {
                     double weight = child.getWeight();
-                    
+
                     double effectiveWeight = weight;
                     if (weight < 100.0) {
                         effectiveWeight = Math.min(100.0, weight * multiplier);
                     }
-                    
+
                     if (effectiveWeight >= random.nextDouble() * 100.0) {
                         collectBoostedDrops(child, multiplier, lootingLevel, dropListId, results);
                     }
                 }
-                
+
             } catch (IllegalAccessException e) {
                 LOGGER.atWarning().log("Failed to reflectively access MultipleItemDropContainer: " + e.getMessage());
                 ObjectArrayList<ItemDrop> fallbackDrops = new ObjectArrayList<>();
@@ -253,20 +260,22 @@ public class EnchantmentLootingSystem extends DeathSystems.OnDeathSystem {
         double quantityMultiplier = enchantmentManager.calculateLootingQuantityMultiplier(lootingLevel);
 
         for (ItemDrop drop : drops) {
-            if (drop == null || drop.getItemId() == null) continue;
-            
+            if (drop == null || drop.getItemId() == null)
+                continue;
+
             int min = drop.getQuantityMin();
             int baseMax = drop.getQuantityMax();
-            
+
             // Apply quantity multiplier to max quantity
             // e.g., 6 max * 1.75 (Looting III) = ~10.5 -> 11
             int newMax = (int) Math.round(baseMax * quantityMultiplier);
-            
-            // Ensure min <= newMax and at least 1 (unless base was 0, but drops usually aren't 0)
+
+            // Ensure min <= newMax and at least 1 (unless base was 0, but drops usually
+            // aren't 0)
             newMax = Math.max(Math.max(newMax, min), 1);
-            
+
             int amount = random.nextInt(newMax - min + 1) + min;
-            
+
             if (amount > 0) {
                 results.add(new ItemStack(drop.getItemId(), amount, drop.getMetadata()));
             }
@@ -279,30 +288,29 @@ public class EnchantmentLootingSystem extends DeathSystems.OnDeathSystem {
     private List<ItemStack> cookDrops(List<ItemStack> drops) {
         CookingRecipeRegistry cookingRegistry = enchantmentManager.getCookingRecipeRegistry();
         List<ItemStack> cookedDrops = new ArrayList<>();
-        
+
         for (ItemStack drop : drops) {
             if (drop == null || drop.isEmpty()) {
                 continue;
             }
-            
+
             CookingRecipeRegistry.CookingRecipe recipe = cookingRegistry.getRecipe(drop);
             if (recipe == null) {
                 cookedDrops.add(drop);
                 continue;
             }
-            
+
             ItemStack cookedOutput = recipe.createOutput(drop.getQuantity());
             if (cookedOutput == null || cookedOutput.isEmpty() || cookedOutput.getItemId().equals(drop.getItemId())) {
                 cookedDrops.add(drop);
                 continue;
             }
-            
+
             cookedDrops.add(cookedOutput);
             LOGGER.atFine().log("Looting+Burn cooked " + drop.getItemId() + " -> " + cookedOutput.getItemId());
         }
-        
+
         return cookedDrops;
     }
-
 
 }

@@ -23,17 +23,16 @@ import org.herolias.plugin.enchantment.EnchantmentManager;
  * Opens a UI showing all enchanted items in the player's inventory.
  */
 public class CleansingScrollPageSupplier implements OpenCustomUIInteraction.CustomPageSupplier {
-    public static final BuilderCodec<CleansingScrollPageSupplier> CODEC =
-        BuilderCodec.builder(CleansingScrollPageSupplier.class, CleansingScrollPageSupplier::new)
+    public static final BuilderCodec<CleansingScrollPageSupplier> CODEC = BuilderCodec
+            .builder(CleansingScrollPageSupplier.class, CleansingScrollPageSupplier::new)
             .build();
 
     @Override
     public CustomUIPage tryCreate(
-        @Nonnull Ref<EntityStore> ref,
-        @Nonnull ComponentAccessor<EntityStore> componentAccessor,
-        @Nonnull PlayerRef playerRef,
-        @Nonnull InteractionContext context
-    ) {
+            @Nonnull Ref<EntityStore> ref,
+            @Nonnull ComponentAccessor<EntityStore> componentAccessor,
+            @Nonnull PlayerRef playerRef,
+            @Nonnull InteractionContext context) {
         Player playerComponent = componentAccessor.getComponent(ref, Player.getComponentType());
         if (playerComponent == null) {
             return null;

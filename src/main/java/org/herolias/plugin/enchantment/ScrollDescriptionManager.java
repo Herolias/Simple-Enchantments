@@ -14,35 +14,43 @@ import java.util.Map;
 import java.util.UUID;
 
 /**
- * Manages dynamic descriptions for Enchantment Scrolls by sending per-player translation updates.
- * This ensures that descriptions are correct and localized even in the Crafting UI and Creative Menu.
+ * Manages dynamic descriptions for Enchantment Scrolls by sending per-player
+ * translation updates.
+ * This ensures that descriptions are correct and localized even in the Crafting
+ * UI and Creative Menu.
  */
 public class ScrollDescriptionManager {
 
     private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
 
     /**
-     * Sends the current translation overrides to a specific player, localized to their client language.
+     * Sends the current translation overrides to a specific player, localized to
+     * their client language.
      */
     public static void sendUpdatePacket(Player player) {
-        if (player == null || player.getWorld() == null || player.getReference() == null) return;
-        com.hypixel.hytale.server.core.universe.PlayerRef ref = player.getWorld().getEntityStore().getStore().getComponent(player.getReference(), com.hypixel.hytale.server.core.universe.PlayerRef.getComponentType());
+        if (player == null || player.getWorld() == null || player.getReference() == null)
+            return;
+        com.hypixel.hytale.server.core.universe.PlayerRef ref = player.getWorld().getEntityStore().getStore()
+                .getComponent(player.getReference(),
+                        com.hypixel.hytale.server.core.universe.PlayerRef.getComponentType());
         sendUpdatePacket(ref);
     }
-    
+
     /**
-     * Sends the current translation overrides to a specific player via ref, localized to their client language.
+     * Sends the current translation overrides to a specific player via ref,
+     * localized to their client language.
      */
     public static void sendUpdatePacket(PlayerRef playerRef) {
-        if (playerRef == null || !playerRef.isValid()) return;
-        
+        if (playerRef == null || !playerRef.isValid())
+            return;
+
         try {
             // Determine player locale (client language)
             String clientLocale = playerRef.getLanguage();
             if (clientLocale == null || clientLocale.isEmpty()) {
                 clientLocale = "en-US";
             }
-            
+
             // Get user custom language from settings
             String langCode = "default";
             try {
@@ -50,7 +58,8 @@ public class ScrollDescriptionManager {
                 if (plugin != null && plugin.getUserSettingsManager() != null) {
                     langCode = plugin.getUserSettingsManager().getLanguage(playerRef.getUuid());
                 }
-            } catch (Exception ignored) {}
+            } catch (Exception ignored) {
+            }
 
             // Generate translations for this player's locale definition
             Map<String, String> translations = new HashMap<>();
@@ -65,7 +74,8 @@ public class ScrollDescriptionManager {
                         config = plugin.getConfigManager().getConfig();
                     }
                 }
-            } catch (Exception ignored) {}
+            } catch (Exception ignored) {
+            }
 
             for (EnchantmentType type : EnchantmentType.values()) {
                 String baseName = getScrollBaseName(type);
@@ -76,10 +86,11 @@ public class ScrollDescriptionManager {
                     String scrollId = baseName + "_" + EnchantmentType.toRoman(level);
                     String descKey = "server.items." + scrollId + ".description";
                     String nameKey = "server.items." + scrollId + ".name";
-                    
+
                     // Resolve description using custom language and client fallback
                     String dynamicDescription = type.getBonusDescription(level, langCode, clientLocale);
-                    if (dynamicDescription == null) dynamicDescription = "";
+                    if (dynamicDescription == null)
+                        dynamicDescription = "";
 
                     // Append category string
                     String categoryPrefixKey = "scroll.category.applies_to";
@@ -114,19 +125,22 @@ public class ScrollDescriptionManager {
                         if (!dynamicDescription.isEmpty()) {
                             dynamicDescription += "\n\n";
                         }
-                        dynamicDescription += "<color is=\"#AAAAAA\">" + categoryPrefix + "\n" + String.join(", ", categoryNames) + "</color>";
+                        dynamicDescription += "<color is=\"#AAAAAA\">" + categoryPrefix + "\n"
+                                + String.join(", ", categoryNames) + "</color>";
                     }
 
                     // Append addon attribution for non-built-in enchantments
                     if (!dynamicDescription.isEmpty()
                             && (type.getOwnerModId() != null || type.getOwnerModName() != null)) {
-                        String modDisplay = type.getOwnerModName() != null ? type.getOwnerModName() : type.getOwnerModId();
+                        String modDisplay = type.getOwnerModName() != null ? type.getOwnerModName()
+                                : type.getOwnerModId();
                         dynamicDescription += "\n\n<color is=\"#AAAAAA\">Added by " + modDisplay + "</color>";
                     }
 
                     if (isDisabled) {
-                        dynamicDescription = "<color is=\"#FF5555\">Disabled</color>\n\n" + (dynamicDescription == null ? "" : dynamicDescription);
-                        
+                        dynamicDescription = "<color is=\"#FF5555\">Disabled</color>\n\n"
+                                + (dynamicDescription == null ? "" : dynamicDescription);
+
                         String baseTranslatedName = scrollId.replace("_", " ");
                         if (lm != null) {
                             String maybeTrans = lm.getRawMessage("items." + scrollId + ".name", langCode, clientLocale);
@@ -146,25 +160,26 @@ public class ScrollDescriptionManager {
                         }
                         translations.put(nameKey, baseTranslatedName);
                     }
-                    
+
                     if (dynamicDescription != null && !dynamicDescription.isEmpty()) {
                         translations.put(descKey, dynamicDescription);
                     }
                 }
             }
-            
+
             if (!translations.isEmpty()) {
                 // Create packet with correct constructor: (UpdateType, Map<String, String>)
                 UpdateTranslations packet = new UpdateTranslations(UpdateType.AddOrUpdate, translations);
-                
+
                 if (playerRef.getPacketHandler() != null) {
-                    ((com.hypixel.hytale.server.core.receiver.IPacketReceiver) playerRef.getPacketHandler()).writeNoCache(packet);
+                    ((com.hypixel.hytale.server.core.receiver.IPacketReceiver) playerRef.getPacketHandler())
+                            .writeNoCache(packet);
                 }
             }
 
         } catch (Exception e) {
-             // Log error but don't crash
-             LOGGER.atWarning().log("Failed to send scroll description update: " + e.getMessage());
+            // Log error but don't crash
+            LOGGER.atWarning().log("Failed to send scroll description update: " + e.getMessage());
         }
     }
 
@@ -183,15 +198,17 @@ public class ScrollDescriptionManager {
     private static String getScrollBaseName(EnchantmentType type) {
         return type.getScrollBaseName();
     }
-    
-    // Kept for backward compatibility if called from elsewhere, though deprecated behavior
+
+    // Kept for backward compatibility if called from elsewhere, though deprecated
+    // behavior
     public static void reloadTranslations() {
-       // No-op or trigger broadcast
-       broadcastUpdatePacket(); 
+        // No-op or trigger broadcast
+        broadcastUpdatePacket();
     }
 
     private static String formatCategoryId(String id) {
-        if (id == null || id.isEmpty()) return "";
+        if (id == null || id.isEmpty())
+            return "";
         String[] words = id.split("_");
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < words.length; i++) {
@@ -199,7 +216,8 @@ public class ScrollDescriptionManager {
                 sb.append(Character.toUpperCase(words[i].charAt(0)));
                 sb.append(words[i].substring(1).toLowerCase());
             }
-            if (i < words.length - 1) sb.append(" ");
+            if (i < words.length - 1)
+                sb.append(" ");
         }
         return sb.toString();
     }

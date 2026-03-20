@@ -28,7 +28,7 @@ import java.util.Map;
 public class EnchantmentGlowInjector {
 
     private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
-    
+
     // Stat keys that the condition is mapped to (must match EntityStatType assets)
     private static final String STAT_GLOW_PRIMARY = "EnchantmentGlow_Primary";
     private static final String STAT_GLOW_PRIMARY_SINGLE = "EnchantmentGlow_Primary_Single";
@@ -37,17 +37,16 @@ public class EnchantmentGlowInjector {
     private static final String STAT_GLOW_HANDS = "EnchantmentGlow_Hands";
     private static final String STAT_GLOW_LEGS = "EnchantmentGlow_Legs";
     private static final String STAT_GLOW_SHIELD = "EnchantmentGlow_Shield";
-    
+
     // The VFX to apply when condition is met
     private static final String MODEL_VFX_ID = "Enchantment_Glow";
     private static final String MODEL_VFX_ID_SMALL = "Enchantment_Glow_small";
-    
+
     // Keywords for identifying items that should use the small glow effect
     private static final java.util.Set<String> SMALL_WEAPON_KEYWORDS = java.util.Set.of(
-        "dagger", "mace", "shortbow", "short_bow", "shovel", "battleaxe", "longsword",
-        "staff", "spellbook"
-    );
-    
+            "dagger", "mace", "shortbow", "short_bow", "shovel", "battleaxe", "longsword",
+            "staff", "spellbook");
+
     // Reflection field for accessing protected itemAppearanceConditions
     private static Field itemAppearanceConditionsField;
     private static Field conditionField;
@@ -58,13 +57,13 @@ public class EnchantmentGlowInjector {
         try {
             itemAppearanceConditionsField = Item.class.getDeclaredField("itemAppearanceConditions");
             itemAppearanceConditionsField.setAccessible(true);
-            
+
             conditionField = ItemAppearanceCondition.class.getDeclaredField("condition");
             conditionField.setAccessible(true);
-            
+
             conditionValueTypeField = ItemAppearanceCondition.class.getDeclaredField("conditionValueType");
             conditionValueTypeField.setAccessible(true);
-            
+
             modelVFXIdField = ItemAppearanceCondition.class.getDeclaredField("modelVFXId");
             modelVFXIdField.setAccessible(true);
         } catch (NoSuchFieldException e) {
@@ -77,10 +76,9 @@ public class EnchantmentGlowInjector {
      */
     public static void registerEventListener(@Nonnull SimpleEnchanting plugin) {
         plugin.getEventRegistry().register(
-            LoadedAssetsEvent.class, 
-            Item.class, 
-            EnchantmentGlowInjector::onItemsLoaded
-        );
+                LoadedAssetsEvent.class,
+                Item.class,
+                EnchantmentGlowInjector::onItemsLoaded);
         LOGGER.atInfo().log("EnchantmentGlowInjector registered");
     }
 
@@ -93,7 +91,7 @@ public class EnchantmentGlowInjector {
         int weaponCount = 0;
         int toolCount = 0;
         int armorCount = 0;
-        
+
         ItemCategoryManager categoryManager = ItemCategoryManager.getInstance();
 
         for (Map.Entry<String, Item> entry : event.getLoadedAssets().entrySet()) {
@@ -102,8 +100,9 @@ public class EnchantmentGlowInjector {
 
             try {
                 ItemCategory category = categoryManager.categorizeItem(itemId, item);
-                
-                if (category == ItemCategory.UNKNOWN) continue;
+
+                if (category == ItemCategory.UNKNOWN)
+                    continue;
 
                 // Determine appropriate VFX (normal or small)
                 String vfxId = getGlowVfxFor(item, itemId);
@@ -132,18 +131,18 @@ public class EnchantmentGlowInjector {
             }
         }
 
-        LOGGER.atInfo().log("EnchantmentGlowInjector: Injected glow conditions for " 
-            + weaponCount + " weapons, " 
-            + toolCount + " tools, " 
-            + armorCount + " armor pieces");
+        LOGGER.atInfo().log("EnchantmentGlowInjector: Injected glow conditions for "
+                + weaponCount + " weapons, "
+                + toolCount + " tools, "
+                + armorCount + " armor pieces");
     }
-    
+
     /**
      * Determines which glow VFX to use based on item type/category.
      */
     private static String getGlowVfxFor(Item item, String itemId) {
         String idLower = itemId.toLowerCase();
-        
+
         // Check Categories first
         if (item.getCategories() != null) {
             for (String category : item.getCategories()) {
@@ -155,14 +154,14 @@ public class EnchantmentGlowInjector {
                 }
             }
         }
-        
+
         // Fallback checks on ID
         for (String keyword : SMALL_WEAPON_KEYWORDS) {
             if (idLower.contains(keyword)) {
                 return MODEL_VFX_ID_SMALL;
             }
         }
-        
+
         return MODEL_VFX_ID;
     }
 
@@ -181,23 +180,26 @@ public class EnchantmentGlowInjector {
         return STAT_GLOW_PRIMARY;
     }
 
-    private static void injectGlowCondition(Item item, String statKey, String vfxId, float targetValue) throws IllegalAccessException {
+    private static void injectGlowCondition(Item item, String statKey, String vfxId, float targetValue)
+            throws IllegalAccessException {
         // Get existing conditions map or create new one
-        Map<String, ItemAppearanceCondition[]> conditions = 
-            (Map<String, ItemAppearanceCondition[]>) itemAppearanceConditionsField.get(item);
-        
+        Map<String, ItemAppearanceCondition[]> conditions = (Map<String, ItemAppearanceCondition[]>) itemAppearanceConditionsField
+                .get(item);
+
         if (conditions == null) {
             conditions = new HashMap<>();
             itemAppearanceConditionsField.set(item, conditions);
         } else {
-             // If map exists, we might need to APPEND to the array for this statKey if it exists
-             // But first ensure we have a mutable map
-             conditions = new HashMap<>(conditions);
-             itemAppearanceConditionsField.set(item, conditions);
+            // If map exists, we might need to APPEND to the array for this statKey if it
+            // exists
+            // But first ensure we have a mutable map
+            conditions = new HashMap<>(conditions);
+            itemAppearanceConditionsField.set(item, conditions);
         }
 
         ItemAppearanceCondition glowCondition = createGlowCondition(vfxId, targetValue);
-        if (glowCondition == null) return;
+        if (glowCondition == null)
+            return;
 
         if (conditions.containsKey(statKey)) {
             // Append to existing array
@@ -208,24 +210,24 @@ public class EnchantmentGlowInjector {
             conditions.put(statKey, newArray);
         } else {
             // New entry
-            conditions.put(statKey, new ItemAppearanceCondition[]{ glowCondition });
+            conditions.put(statKey, new ItemAppearanceCondition[] { glowCondition });
         }
     }
 
     private static ItemAppearanceCondition createGlowCondition(String vfxId, float targetValue) {
         try {
             ItemAppearanceCondition condition = new ItemAppearanceCondition();
-            
+
             // Set condition range: [X, X] means "when stat value equals X"
             FloatRange range = new FloatRange(targetValue, targetValue);
             conditionField.set(condition, range);
-            
+
             // Set value type to Absolute
             conditionValueTypeField.set(condition, ValueType.Absolute);
-            
+
             // Set the VFX to apply
             modelVFXIdField.set(condition, vfxId);
-            
+
             return condition;
         } catch (Exception e) {
             LOGGER.atSevere().log("Failed to create glow condition: " + e.getMessage());

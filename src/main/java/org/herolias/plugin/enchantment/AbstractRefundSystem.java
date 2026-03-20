@@ -13,16 +13,18 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.UUID;
 
 /**
- * Abstract base class for systems that refund items (like Eternal Shot or Soulbound).
+ * Abstract base class for systems that refund items (like Eternal Shot or
+ * Elemental Heart).
  * 
- * Handles the tracking of manual player drops to ensure that manually dropped items
+ * Handles the tracking of manual player drops to ensure that manually dropped
+ * items
  * are NOT refunded, preventing infinite item duplication exploits.
  */
 public abstract class AbstractRefundSystem {
 
     // Key: Player UUID, Value: Map of (slot -> timestamp)
     protected final Map<UUID, Map<Short, Long>> recentDrops = new ConcurrentHashMap<>();
-    
+
     // How long to consider a drop "recent" (in milliseconds)
     protected static final long DROP_TRACKING_WINDOW_MS = 500;
 
@@ -31,26 +33,27 @@ public abstract class AbstractRefundSystem {
      * Records when a player manually drops an item so we don't refund it.
      */
 
-    public void onDropItemRequest(@Nonnull DropItemEvent.PlayerRequest event, 
-                                   @Nonnull Ref<EntityStore> ref, 
-                                   @Nonnull Store<EntityStore> store) {
+    public void onDropItemRequest(@Nonnull DropItemEvent.PlayerRequest event,
+            @Nonnull Ref<EntityStore> ref,
+            @Nonnull Store<EntityStore> store) {
         // Get the player component
         Player player = store.getComponent(ref, Player.getComponentType());
         if (player == null) {
             return;
         }
-        
-        com.hypixel.hytale.server.core.entity.UUIDComponent uuidComp = store.getComponent(ref, com.hypixel.hytale.server.core.entity.UUIDComponent.getComponentType());
+
+        com.hypixel.hytale.server.core.entity.UUIDComponent uuidComp = store.getComponent(ref,
+                com.hypixel.hytale.server.core.entity.UUIDComponent.getComponentType());
         if (uuidComp == null) {
             return;
         }
-        
+
         short slotId = event.getSlotId();
         UUID playerKey = uuidComp.getUuid();
-        
+
         // Record this drop with current timestamp
         recentDrops.computeIfAbsent(playerKey, k -> new ConcurrentHashMap<>())
-                   .put(slotId, System.currentTimeMillis());
+                .put(slotId, System.currentTimeMillis());
     }
 
     /**
@@ -62,7 +65,7 @@ public abstract class AbstractRefundSystem {
         if (playerDrops == null) {
             return;
         }
-        
+
         long now = System.currentTimeMillis();
         Iterator<Map.Entry<Short, Long>> iterator = playerDrops.entrySet().iterator();
         while (iterator.hasNext()) {
@@ -71,7 +74,7 @@ public abstract class AbstractRefundSystem {
                 iterator.remove();
             }
         }
-        
+
         // Remove the player's entry if empty
         if (playerDrops.isEmpty()) {
             recentDrops.remove(playerKey);
@@ -88,19 +91,19 @@ public abstract class AbstractRefundSystem {
         if (playerDrops == null) {
             return false;
         }
-        
+
         Long dropTime = playerDrops.get(slot);
         if (dropTime == null) {
             return false;
         }
-        
+
         long elapsed = System.currentTimeMillis() - dropTime;
         if (elapsed <= DROP_TRACKING_WINDOW_MS) {
             // This was a recent drop - remove the record and return true
             playerDrops.remove(slot);
             return true;
         }
-        
+
         return false;
     }
 }

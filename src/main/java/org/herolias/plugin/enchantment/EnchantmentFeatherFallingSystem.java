@@ -25,7 +25,8 @@ import javax.annotation.Nonnull;
 import java.util.Set;
 
 /**
- * ECS system that reduces fall damage based on Feather Falling enchantment on boots.
+ * ECS system that reduces fall damage based on Feather Falling enchantment on
+ * boots.
  * 
  * Effect: Reduces fall damage by 20% per level (up to 60% at level 3)
  * Applicable to: Boots only
@@ -33,15 +34,14 @@ import java.util.Set;
 public class EnchantmentFeatherFallingSystem extends DamageEventSystem {
 
     private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
-    
+
     // Boots slot index in armor container (typically slot 3 for feet)
     private static final short BOOTS_SLOT = 3;
-    
+
     private final EnchantmentManager enchantmentManager;
-    
+
     private final Set<Dependency<EntityStore>> dependencies = Set.of(
-        new SystemDependency(Order.BEFORE, DamageSystems.ApplyDamage.class)
-    );
+            new SystemDependency(Order.BEFORE, DamageSystems.ApplyDamage.class));
 
     public EnchantmentFeatherFallingSystem(EnchantmentManager enchantmentManager) {
         this.enchantmentManager = enchantmentManager;
@@ -62,66 +62,69 @@ public class EnchantmentFeatherFallingSystem extends DamageEventSystem {
 
     @Override
     public void handle(int index,
-                       @Nonnull ArchetypeChunk<EntityStore> archetypeChunk,
-                       @Nonnull Store<EntityStore> store,
-                       @Nonnull CommandBuffer<EntityStore> commandBuffer,
-                       @Nonnull Damage damage) {
-        
+            @Nonnull ArchetypeChunk<EntityStore> archetypeChunk,
+            @Nonnull Store<EntityStore> store,
+            @Nonnull CommandBuffer<EntityStore> commandBuffer,
+            @Nonnull Damage damage) {
+
         // Skip if damage is already zero
         if (damage.getAmount() <= 0) {
             return;
         }
-        
+
         // Only process fall damage
         DamageCause damageCause = DamageCause.getAssetMap().getAsset(damage.getDamageCauseIndex());
         if (damageCause == null || !enchantmentManager.isFallDamage(damageCause)) {
             return;
         }
-        
+
         try {
             Entity targetEntity = EntityUtils.getEntity(index, archetypeChunk);
             if (!(targetEntity instanceof LivingEntity targetLiving)) {
                 return;
             }
-            
+
             Inventory inventory = targetLiving.getInventory();
             if (inventory == null) {
                 return;
             }
-            
+
             ItemContainer armorContainer = inventory.getArmor();
             if (armorContainer == null) {
                 return;
             }
-            
+
             // Get boots from armor slot
             ItemStack boots = armorContainer.getItemStack(BOOTS_SLOT);
             if (boots == null || boots.isEmpty()) {
                 return;
             }
-            
+
             // Check for Feather Falling enchantment
             int featherFallingLevel = enchantmentManager.getEnchantmentLevel(boots, EnchantmentType.FEATHER_FALLING);
             if (featherFallingLevel <= 0) {
                 return;
             }
-            
+
             // Calculate damage reduction (20% per level)
             double reductionPercent = featherFallingLevel * EnchantmentType.FEATHER_FALLING.getEffectMultiplier();
             double multiplier = 1.0 - reductionPercent;
-            
+
             float originalDamage = damage.getAmount();
             float reducedDamage = (float) (originalDamage * multiplier);
             damage.setAmount(reducedDamage);
-            
+
             if (targetEntity instanceof com.hypixel.hytale.server.core.entity.entities.Player) {
-                com.hypixel.hytale.server.core.universe.PlayerRef playerRef = store.getComponent(targetEntity.getReference(), com.hypixel.hytale.server.core.universe.PlayerRef.getComponentType());
-                EnchantmentEventHelper.fireActivated(playerRef, boots, EnchantmentType.FEATHER_FALLING, featherFallingLevel);
+                com.hypixel.hytale.server.core.universe.PlayerRef playerRef = store.getComponent(
+                        targetEntity.getReference(),
+                        com.hypixel.hytale.server.core.universe.PlayerRef.getComponentType());
+                EnchantmentEventHelper.fireActivated(playerRef, boots, EnchantmentType.FEATHER_FALLING,
+                        featherFallingLevel);
             }
-            
-            LOGGER.atFine().log("Feather Falling " + featherFallingLevel + " reduced fall damage: " 
-                + originalDamage + " -> " + reducedDamage);
-            
+
+            LOGGER.atFine().log("Feather Falling " + featherFallingLevel + " reduced fall damage: "
+                    + originalDamage + " -> " + reducedDamage);
+
         } catch (Exception e) {
             LOGGER.atWarning().log("Error in Feather Falling system: " + e.getMessage());
         }

@@ -16,7 +16,8 @@ import java.lang.reflect.Field;
 import java.util.Map;
 
 /**
- * Applies dynamic configuration values to the static JSON EntityEffects for Burn and Freeze.
+ * Applies dynamic configuration values to the static JSON EntityEffects for
+ * Burn and Freeze.
  * Uses Java reflection to modify the loaded asset objects.
  */
 public class EnchantmentDynamicEffects {
@@ -37,19 +38,19 @@ public class EnchantmentDynamicEffects {
         try {
             effectDurationField = EntityEffect.class.getDeclaredField("duration");
             effectDurationField.setAccessible(true);
-            
+
             effectAppEffectsField = EntityEffect.class.getDeclaredField("applicationEffects");
             effectAppEffectsField.setAccessible(true);
-            
+
             appEffectsSpeedMultField = ApplicationEffects.class.getDeclaredField("horizontalSpeedMultiplier");
             appEffectsSpeedMultField.setAccessible(true);
-            
+
             effectDamageCalcField = EntityEffect.class.getDeclaredField("damageCalculator");
             effectDamageCalcField.setAccessible(true);
-            
+
             damageCalcBaseDamageField = DamageCalculator.class.getDeclaredField("baseDamage");
             damageCalcBaseDamageField.setAccessible(true);
-            
+
         } catch (NoSuchFieldException e) {
             LOGGER.atSevere().log("Failed to initialize EnchantmentDynamicEffects reflection: " + e.getMessage());
         }
@@ -57,16 +58,17 @@ public class EnchantmentDynamicEffects {
 
     public static void registerEventListener(SimpleEnchanting plugin) {
         plugin.getEventRegistry().register(
-            LoadedAssetsEvent.class, 
-            EntityEffect.class, 
-            EnchantmentDynamicEffects::onEffectsLoaded
-        );
+                LoadedAssetsEvent.class,
+                EntityEffect.class,
+                EnchantmentDynamicEffects::onEffectsLoaded);
         LOGGER.atInfo().log("EnchantmentDynamicEffects registered");
     }
 
-    private static void onEffectsLoaded(LoadedAssetsEvent<String, EntityEffect, DefaultAssetMap<String, EntityEffect>> event) {
+    private static void onEffectsLoaded(
+            LoadedAssetsEvent<String, EntityEffect, DefaultAssetMap<String, EntityEffect>> event) {
         // Only run config applicator once when our effects show up
-        if (event.getLoadedAssets().containsKey(BURN_EFFECT_ID) || event.getLoadedAssets().containsKey(FREEZE_EFFECT_ID) || event.getLoadedAssets().containsKey(POISON_EFFECT_ID)) {
+        if (event.getLoadedAssets().containsKey(BURN_EFFECT_ID) || event.getLoadedAssets().containsKey(FREEZE_EFFECT_ID)
+                || event.getLoadedAssets().containsKey(POISON_EFFECT_ID)) {
             EnchantingConfig config = SimpleEnchanting.getInstance().getConfigManager().getConfig();
             applyOverrides(config, event.getLoadedAssets());
         }
@@ -83,32 +85,39 @@ public class EnchantmentDynamicEffects {
                 EntityEffect burn = EntityEffect.getAssetMap().getAsset(BURN_EFFECT_ID);
                 EntityEffect freeze = EntityEffect.getAssetMap().getAsset(FREEZE_EFFECT_ID);
                 EntityEffect poison = EntityEffect.getAssetMap().getAsset(POISON_EFFECT_ID);
-                
-                if (burn != null) applyBurnOverrides(burn, config);
-                if (freeze != null) applyFreezeOverrides(freeze, config);
-                if (poison != null) applyPoisonOverrides(poison, config);
+
+                if (burn != null)
+                    applyBurnOverrides(burn, config);
+                if (freeze != null)
+                    applyFreezeOverrides(freeze, config);
+                if (poison != null)
+                    applyPoisonOverrides(poison, config);
             }
         } catch (Exception e) {
             LOGGER.atSevere().log("Failed to apply dynamic effect overrides: " + e.getMessage());
         }
     }
-    
+
     private static void applyOverrides(EnchantingConfig config, Map<String, EntityEffect> loadedAssets) {
         EntityEffect burn = loadedAssets.get(BURN_EFFECT_ID);
         EntityEffect freeze = loadedAssets.get(FREEZE_EFFECT_ID);
         EntityEffect poison = loadedAssets.get(POISON_EFFECT_ID);
-        
-        if (burn != null) applyBurnOverrides(burn, config);
-        if (freeze != null) applyFreezeOverrides(freeze, config);
-        if (poison != null) applyPoisonOverrides(poison, config);
+
+        if (burn != null)
+            applyBurnOverrides(burn, config);
+        if (freeze != null)
+            applyFreezeOverrides(freeze, config);
+        if (poison != null)
+            applyPoisonOverrides(poison, config);
     }
 
     private static void applyBurnOverrides(EntityEffect burnEffect, EnchantingConfig config) {
-        if (effectDurationField == null) return;
+        if (effectDurationField == null)
+            return;
         try {
             double burnDuration = config.enchantmentMultipliers.getOrDefault("burn:duration", 3.0);
             effectDurationField.set(burnEffect, (float) burnDuration);
-            
+
             DamageCalculator calculator = (DamageCalculator) effectDamageCalcField.get(burnEffect);
             if (calculator != null) {
                 Int2FloatMap baseDamage = (Int2FloatMap) damageCalcBaseDamageField.get(calculator);
@@ -122,35 +131,39 @@ public class EnchantmentDynamicEffects {
                     baseDamage.put(fireIndex, (float) dps);
                 }
             }
-            LOGGER.atInfo().log("Applied dynamic overrides to BurnEnchantment. Duration: " + burnDuration + "s, DPS: " + config.enchantmentMultipliers.get("burn"));
+            LOGGER.atInfo().log("Applied dynamic overrides to BurnEnchantment. Duration: " + burnDuration + "s, DPS: "
+                    + config.enchantmentMultipliers.get("burn"));
         } catch (Exception e) {
             LOGGER.atSevere().log("Failed to override BurnEnchantment values: " + e.getMessage());
         }
     }
 
     private static void applyFreezeOverrides(EntityEffect freezeEffect, EnchantingConfig config) {
-        if (effectDurationField == null) return;
+        if (effectDurationField == null)
+            return;
         try {
             double freezeDuration = config.enchantmentMultipliers.getOrDefault("freeze:duration", 5.0);
             effectDurationField.set(freezeEffect, (float) freezeDuration);
-            
+
             ApplicationEffects appEffects = (ApplicationEffects) effectAppEffectsField.get(freezeEffect);
             if (appEffects != null) {
                 double slow = config.enchantmentMultipliers.getOrDefault("freeze", 0.5);
                 appEffectsSpeedMultField.set(appEffects, (float) slow);
             }
-            LOGGER.atInfo().log("Applied dynamic overrides to FreezeEnchantment. Duration: " + freezeDuration + "s, Slow: " + config.enchantmentMultipliers.get("freeze"));
+            LOGGER.atInfo().log("Applied dynamic overrides to FreezeEnchantment. Duration: " + freezeDuration
+                    + "s, Slow: " + config.enchantmentMultipliers.get("freeze"));
         } catch (Exception e) {
             LOGGER.atSevere().log("Failed to override FreezeEnchantment values: " + e.getMessage());
         }
     }
 
     private static void applyPoisonOverrides(EntityEffect poisonEffect, EnchantingConfig config) {
-        if (effectDurationField == null) return;
+        if (effectDurationField == null)
+            return;
         try {
             double poisonDuration = config.enchantmentMultipliers.getOrDefault("poison:duration", 4.0);
             effectDurationField.set(poisonEffect, (float) poisonDuration);
-            
+
             DamageCalculator calculator = (DamageCalculator) effectDamageCalcField.get(poisonEffect);
             if (calculator != null) {
                 Int2FloatMap baseDamage = (Int2FloatMap) damageCalcBaseDamageField.get(calculator);
@@ -164,7 +177,8 @@ public class EnchantmentDynamicEffects {
                     baseDamage.put(poisonIndex, (float) dps);
                 }
             }
-            LOGGER.atInfo().log("Applied dynamic overrides to PoisonEnchantment. Duration: " + poisonDuration + "s, DPS: " + config.enchantmentMultipliers.get("poison"));
+            LOGGER.atInfo().log("Applied dynamic overrides to PoisonEnchantment. Duration: " + poisonDuration
+                    + "s, DPS: " + config.enchantmentMultipliers.get("poison"));
         } catch (Exception e) {
             LOGGER.atSevere().log("Failed to override PoisonEnchantment values: " + e.getMessage());
         }

@@ -27,28 +27,26 @@ public class CleansingEnchantmentPage extends ChoiceBasePage {
     private final PlayerRef playerRef;
 
     public CleansingEnchantmentPage(
-        @Nonnull PlayerRef playerRef,
-        @Nonnull ItemContext itemContext,
-        @Nonnull ItemContext heldItemContext,
-        @Nonnull EnchantmentData enchantmentData,
-        @Nonnull EnchantmentManager enchantmentManager
-    ) {
+            @Nonnull PlayerRef playerRef,
+            @Nonnull ItemContext itemContext,
+            @Nonnull ItemContext heldItemContext,
+            @Nonnull EnchantmentData enchantmentData,
+            @Nonnull EnchantmentManager enchantmentManager) {
         super(
-            playerRef,
-            CleansingEnchantmentPage.getEnchantmentElements(itemContext, heldItemContext, enchantmentData, enchantmentManager),
-            "Pages/CleansingScrollEnchantmentPage.ui"
-        );
+                playerRef,
+                CleansingEnchantmentPage.getEnchantmentElements(itemContext, heldItemContext, enchantmentData,
+                        enchantmentManager),
+                "Pages/CleansingScrollEnchantmentPage.ui");
         this.enchantmentManager = enchantmentManager;
         this.playerRef = playerRef;
     }
 
     @Override
     public void build(
-        @Nonnull Ref<EntityStore> ref,
-        @Nonnull UICommandBuilder commandBuilder,
-        @Nonnull UIEventBuilder eventBuilder,
-        @Nonnull Store<EntityStore> store
-    ) {
+            @Nonnull Ref<EntityStore> ref,
+            @Nonnull UICommandBuilder commandBuilder,
+            @Nonnull UIEventBuilder eventBuilder,
+            @Nonnull Store<EntityStore> store) {
         super.build(ref, commandBuilder, eventBuilder, store);
         translateLabels(commandBuilder);
     }
@@ -58,17 +56,18 @@ public class CleansingEnchantmentPage extends ChoiceBasePage {
         String lang = enchantmentManager.getPlugin().getUserSettingsManager().getLanguage(this.playerRef.getUuid());
         String clientLang = this.playerRef.getLanguage();
 
-        commandBuilder.set("#TitleLabel.TextSpans", languageManager.getMessage("customUI.cleansingEnchantmentPage.title", lang, clientLang));
-        commandBuilder.set("#SelectHintLabel.TextSpans", languageManager.getMessage("customUI.cleansingEnchantmentPage.selectHint", lang, clientLang));
+        commandBuilder.set("#TitleLabel.TextSpans",
+                languageManager.getMessage("customUI.cleansingEnchantmentPage.title", lang, clientLang));
+        commandBuilder.set("#SelectHintLabel.TextSpans",
+                languageManager.getMessage("customUI.cleansingEnchantmentPage.selectHint", lang, clientLang));
     }
 
     @Nonnull
     protected static ChoiceElement[] getEnchantmentElements(
-        @Nonnull ItemContext itemContext,
-        @Nonnull ItemContext heldItemContext,
-        @Nonnull EnchantmentData enchantmentData,
-        @Nonnull EnchantmentManager enchantmentManager
-    ) {
+            @Nonnull ItemContext itemContext,
+            @Nonnull ItemContext heldItemContext,
+            @Nonnull EnchantmentData enchantmentData,
+            @Nonnull EnchantmentManager enchantmentManager) {
         ObjectArrayList<ChoiceElement> elements = new ObjectArrayList<>();
 
         for (Map.Entry<EnchantmentType, Integer> entry : enchantmentData.getAllEnchantments().entrySet()) {
@@ -76,12 +75,11 @@ public class CleansingEnchantmentPage extends ChoiceBasePage {
             int level = entry.getValue();
 
             elements.add(new CleansingEnchantmentElement(
-                type,
-                level,
-                itemContext,
-                heldItemContext,
-                enchantmentManager
-            ));
+                    type,
+                    level,
+                    itemContext,
+                    heldItemContext,
+                    enchantmentManager));
         }
 
         return elements.toArray(ChoiceElement[]::new);

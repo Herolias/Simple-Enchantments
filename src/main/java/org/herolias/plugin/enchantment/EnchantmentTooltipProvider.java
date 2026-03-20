@@ -16,7 +16,8 @@ import java.util.Map;
  * {@link TooltipProvider} implementation that displays enchantment information
  * on item tooltips via DynamicTooltipsLib.
  * <p>
- * This provider parses the item's metadata BSON to extract {@link EnchantmentData}
+ * This provider parses the item's metadata BSON to extract
+ * {@link EnchantmentData}
  * and produces formatted tooltip lines using the same rich-text style that was
  * previously baked into the old {@code VirtualItemRegistry}.
  */
@@ -60,14 +61,18 @@ public class EnchantmentTooltipProvider implements TooltipProvider {
     @Nullable
     @Override
     public TooltipData getTooltipData(@Nonnull String itemId, @Nullable String metadata,
-                                      @Nullable String locale) {
-        if (metadata == null || metadata.isEmpty()) return null;
+            @Nullable String locale) {
+        if (metadata == null || metadata.isEmpty())
+            return null;
 
-        // Quick string-contains check to avoid JSON parsing for items without enchantments
-        if (!metadata.contains("\"" + EnchantmentData.METADATA_KEY + "\"")) return null;
+        // Quick string-contains check to avoid JSON parsing for items without
+        // enchantments
+        if (!metadata.contains("\"" + EnchantmentData.METADATA_KEY + "\""))
+            return null;
 
         EnchantmentData data = parseEnchantments(metadata);
-        if (data == null || data.isEmpty()) return null;
+        if (data == null || data.isEmpty())
+            return null;
 
         // Use the stable hash from EnchantmentData for virtual ID generation
         String stableHash = data.computeStableHash();
@@ -102,7 +107,8 @@ public class EnchantmentTooltipProvider implements TooltipProvider {
             EnchantmentType type = entry.getKey();
             int level = entry.getValue();
 
-            if (!enchantmentManager.isEnchantmentEnabled(type)) continue;
+            if (!enchantmentManager.isEnchantmentEnabled(type))
+                continue;
 
             StringBuilder line = new StringBuilder();
             String color = type.isLegendary() ? LEGENDARY_COLOR : ENCHANTMENT_COLOR;
@@ -143,32 +149,38 @@ public class EnchantmentTooltipProvider implements TooltipProvider {
     }
 
     /**
-     * Resolves a translation key for the given locale, falling back to the default value.
+     * Resolves a translation key for the given locale, falling back to the default
+     * value.
      */
     @Nonnull
-    private static String resolveTranslation(@Nonnull String key, @Nonnull String locale, @Nonnull String defaultValue) {
+    private static String resolveTranslation(@Nonnull String key, @Nonnull String locale,
+            @Nonnull String defaultValue) {
         try {
             org.herolias.plugin.SimpleEnchanting plugin = org.herolias.plugin.SimpleEnchanting.getInstance();
             if (plugin != null) {
                 // The keys in LanguageManager do not have the "server." prefix!
                 String rawKey = key.startsWith("server.") ? key.substring(7) : key;
                 String resolved = plugin.getLanguageManager().getRawMessage(rawKey, "default", locale);
-                if (resolved != null && !resolved.equals(rawKey)) return resolved;
+                if (resolved != null && !resolved.equals(rawKey))
+                    return resolved;
             }
-        } catch (Exception ignored) {}
+        } catch (Exception ignored) {
+        }
         return defaultValue;
     }
 
     /**
      * Parses enchantment data from the packet's metadata JSON string.
-     * Same logic as the old {@code InventoryPacketAdapter.parseEnchantmentsFromPacket}.
+     * Same logic as the old
+     * {@code InventoryPacketAdapter.parseEnchantmentsFromPacket}.
      */
     @Nullable
     private static EnchantmentData parseEnchantments(@Nonnull String metadataJson) {
         try {
             BsonDocument doc = BsonDocument.parse(metadataJson);
             BsonValue enchBson = doc.get(EnchantmentData.METADATA_KEY);
-            if (enchBson == null || !enchBson.isDocument()) return null;
+            if (enchBson == null || !enchBson.isDocument())
+                return null;
 
             EnchantmentData data = EnchantmentData.fromBson(enchBson.asDocument());
             return data.isEmpty() ? null : data;

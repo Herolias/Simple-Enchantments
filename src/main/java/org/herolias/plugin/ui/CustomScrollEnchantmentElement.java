@@ -29,13 +29,12 @@ public class CustomScrollEnchantmentElement extends ChoiceElement {
     private final PlayerRef playerRef;
 
     public CustomScrollEnchantmentElement(
-        @Nonnull EnchantmentType enchantmentType,
-        int level,
-        @Nonnull ItemContext heldItemContext,
-        @Nonnull ItemContainer itemContainer,
-        @Nonnull EnchantmentManager enchantmentManager,
-        @Nonnull PlayerRef playerRef
-    ) {
+            @Nonnull EnchantmentType enchantmentType,
+            int level,
+            @Nonnull ItemContext heldItemContext,
+            @Nonnull ItemContainer itemContainer,
+            @Nonnull EnchantmentManager enchantmentManager,
+            @Nonnull PlayerRef playerRef) {
         this.enchantmentType = enchantmentType;
         this.level = level;
         this.heldItemContext = heldItemContext;
@@ -45,19 +44,17 @@ public class CustomScrollEnchantmentElement extends ChoiceElement {
 
         // The interaction opens the item selection page for this enchantment
         this.interactions = new ChoiceInteraction[] {
-            new CustomScrollSelectEnchantmentInteraction(
-                enchantmentType, level, heldItemContext, itemContainer, enchantmentManager
-            )
+                new CustomScrollSelectEnchantmentInteraction(
+                        enchantmentType, level, heldItemContext, itemContainer, enchantmentManager)
         };
     }
 
     @Override
     public void addButton(
-        @Nonnull UICommandBuilder commandBuilder,
-        UIEventBuilder eventBuilder,
-        String selector,
-        PlayerRef playerRef
-    ) {
+            @Nonnull UICommandBuilder commandBuilder,
+            UIEventBuilder eventBuilder,
+            String selector,
+            PlayerRef playerRef) {
         commandBuilder.append("#ElementList", "Pages/CustomScrollEnchantmentElement.ui");
 
         org.herolias.plugin.lang.LanguageManager languageManager = enchantmentManager.getPlugin().getLanguageManager();
@@ -73,7 +70,8 @@ public class CustomScrollEnchantmentElement extends ChoiceElement {
     }
 
     /**
-     * Interaction that opens the item selection page when an enchantment is selected.
+     * Interaction that opens the item selection page when an enchantment is
+     * selected.
      */
     static class CustomScrollSelectEnchantmentInteraction extends ChoiceInteraction {
         private final EnchantmentType enchantmentType;
@@ -83,12 +81,11 @@ public class CustomScrollEnchantmentElement extends ChoiceElement {
         private final EnchantmentManager enchantmentManager;
 
         CustomScrollSelectEnchantmentInteraction(
-            @Nonnull EnchantmentType enchantmentType,
-            int level,
-            @Nonnull ItemContext heldItemContext,
-            @Nonnull ItemContainer itemContainer,
-            @Nonnull EnchantmentManager enchantmentManager
-        ) {
+                @Nonnull EnchantmentType enchantmentType,
+                int level,
+                @Nonnull ItemContext heldItemContext,
+                @Nonnull ItemContainer itemContainer,
+                @Nonnull EnchantmentManager enchantmentManager) {
             this.enchantmentType = enchantmentType;
             this.level = level;
             this.heldItemContext = heldItemContext;
@@ -97,7 +94,8 @@ public class CustomScrollEnchantmentElement extends ChoiceElement {
         }
 
         @Override
-        public void run(@Nonnull Store<EntityStore> store, @Nonnull Ref<EntityStore> ref, @Nonnull PlayerRef playerRef) {
+        public void run(@Nonnull Store<EntityStore> store, @Nonnull Ref<EntityStore> ref,
+                @Nonnull PlayerRef playerRef) {
             Player playerComponent = store.getComponent(ref, Player.getComponentType());
             if (playerComponent == null) {
                 return;
@@ -105,8 +103,7 @@ public class CustomScrollEnchantmentElement extends ChoiceElement {
 
             PageManager pageManager = playerComponent.getPageManager();
             CustomScrollItemPage itemPage = new CustomScrollItemPage(
-                playerRef, itemContainer, enchantmentManager, enchantmentType, level, heldItemContext
-            );
+                    playerRef, itemContainer, enchantmentManager, enchantmentType, level, heldItemContext);
             pageManager.openCustomPage(ref, store, itemPage);
         }
     }

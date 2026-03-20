@@ -27,28 +27,25 @@ public class CustomScrollEnchantmentPage extends ChoiceBasePage {
     private final PlayerRef playerRef;
 
     public CustomScrollEnchantmentPage(
-        @Nonnull PlayerRef playerRef,
-        @Nonnull EnchantmentData scrollData,
-        @Nonnull ItemContext heldItemContext,
-        @Nonnull ItemContainer itemContainer,
-        @Nonnull EnchantmentManager enchantmentManager
-    ) {
+            @Nonnull PlayerRef playerRef,
+            @Nonnull EnchantmentData scrollData,
+            @Nonnull ItemContext heldItemContext,
+            @Nonnull ItemContainer itemContainer,
+            @Nonnull EnchantmentManager enchantmentManager) {
         super(
-            playerRef,
-            getEnchantmentElements(scrollData, heldItemContext, itemContainer, enchantmentManager, playerRef),
-            "Pages/CustomScrollEnchantmentPage.ui"
-        );
+                playerRef,
+                getEnchantmentElements(scrollData, heldItemContext, itemContainer, enchantmentManager, playerRef),
+                "Pages/CustomScrollEnchantmentPage.ui");
         this.enchantmentManager = enchantmentManager;
         this.playerRef = playerRef;
     }
 
     @Override
     public void build(
-        @Nonnull Ref<EntityStore> ref,
-        @Nonnull UICommandBuilder commandBuilder,
-        @Nonnull UIEventBuilder eventBuilder,
-        @Nonnull Store<EntityStore> store
-    ) {
+            @Nonnull Ref<EntityStore> ref,
+            @Nonnull UICommandBuilder commandBuilder,
+            @Nonnull UIEventBuilder eventBuilder,
+            @Nonnull Store<EntityStore> store) {
         if (this.getElements().length > 0) {
             super.build(ref, commandBuilder, eventBuilder, store);
             translateLabels(commandBuilder);
@@ -57,9 +54,8 @@ public class CustomScrollEnchantmentPage extends ChoiceBasePage {
         commandBuilder.append(this.getPageLayout());
         commandBuilder.clear("#ElementList");
         commandBuilder.appendInline(
-            "#ElementList",
-            "Label #NoEnchantmentsLabel { Style: (Alignment: Center); }"
-        );
+                "#ElementList",
+                "Label #NoEnchantmentsLabel { Style: (Alignment: Center); }");
         translateLabels(commandBuilder);
     }
 
@@ -68,22 +64,24 @@ public class CustomScrollEnchantmentPage extends ChoiceBasePage {
         String lang = enchantmentManager.getPlugin().getUserSettingsManager().getLanguage(this.playerRef.getUuid());
         String clientLang = this.playerRef.getLanguage();
 
-        commandBuilder.set("#TitleLabel.TextSpans", languageManager.getMessage("customUI.customScrollEnchantmentPage.title", lang, clientLang));
-        commandBuilder.set("#SelectHintLabel.TextSpans", languageManager.getMessage("customUI.customScrollEnchantmentPage.selectHint", lang, clientLang));
+        commandBuilder.set("#TitleLabel.TextSpans",
+                languageManager.getMessage("customUI.customScrollEnchantmentPage.title", lang, clientLang));
+        commandBuilder.set("#SelectHintLabel.TextSpans",
+                languageManager.getMessage("customUI.customScrollEnchantmentPage.selectHint", lang, clientLang));
 
         if (this.getElements().length == 0) {
-            commandBuilder.set("#NoEnchantmentsLabel.TextSpans", languageManager.getMessage("customUI.customScrollEnchantmentPage.noEnchantments", lang, clientLang));
+            commandBuilder.set("#NoEnchantmentsLabel.TextSpans", languageManager
+                    .getMessage("customUI.customScrollEnchantmentPage.noEnchantments", lang, clientLang));
         }
     }
 
     @Nonnull
     protected static ChoiceElement[] getEnchantmentElements(
-        @Nonnull EnchantmentData scrollData,
-        @Nonnull ItemContext heldItemContext,
-        @Nonnull ItemContainer itemContainer,
-        @Nonnull EnchantmentManager enchantmentManager,
-        @Nonnull PlayerRef playerRef
-    ) {
+            @Nonnull EnchantmentData scrollData,
+            @Nonnull ItemContext heldItemContext,
+            @Nonnull ItemContainer itemContainer,
+            @Nonnull EnchantmentManager enchantmentManager,
+            @Nonnull PlayerRef playerRef) {
         ObjectArrayList<ChoiceElement> elements = new ObjectArrayList<>();
 
         for (Map.Entry<EnchantmentType, Integer> entry : scrollData.getAllEnchantments().entrySet()) {
@@ -91,13 +89,12 @@ public class CustomScrollEnchantmentPage extends ChoiceBasePage {
             int level = entry.getValue();
 
             elements.add(new CustomScrollEnchantmentElement(
-                type,
-                level,
-                heldItemContext,
-                itemContainer,
-                enchantmentManager,
-                playerRef
-            ));
+                    type,
+                    level,
+                    heldItemContext,
+                    itemContainer,
+                    enchantmentManager,
+                    playerRef));
         }
 
         return elements.toArray(ChoiceElement[]::new);

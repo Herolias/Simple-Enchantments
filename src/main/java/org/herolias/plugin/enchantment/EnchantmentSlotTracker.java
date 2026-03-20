@@ -24,9 +24,11 @@ import java.util.concurrent.ConcurrentHashMap;
  *
  * Also handles:
  * <ul>
- *   <li>Detecting newly connected players and triggering initial tooltip setup</li>
- *   <li>Updating tooltip translations when the active slot changes (priority item may differ)</li>
- *   <li>Cleaning up tooltip data for disconnected players</li>
+ * <li>Detecting newly connected players and triggering initial tooltip
+ * setup</li>
+ * <li>Updating tooltip translations when the active slot changes (priority item
+ * may differ)</li>
+ * <li>Cleaning up tooltip data for disconnected players</li>
  * </ul>
  */
 public class EnchantmentSlotTracker implements Runnable {
@@ -37,7 +39,8 @@ public class EnchantmentSlotTracker implements Runnable {
     /** Set of player UUIDs we have already processed for initial tooltip setup. */
     private final Set<UUID> knownPlayers = ConcurrentHashMap.newKeySet();
 
-    public EnchantmentSlotTracker(EnchantmentManager enchantmentManager, EnchantmentEternalShotSystem eternalShotSystem) {
+    public EnchantmentSlotTracker(EnchantmentManager enchantmentManager,
+            EnchantmentEternalShotSystem eternalShotSystem) {
         this.enchantmentManager = enchantmentManager;
         this.eternalShotSystem = eternalShotSystem;
     }
@@ -45,13 +48,15 @@ public class EnchantmentSlotTracker implements Runnable {
     @Override
     public void run() {
         try {
-            if (Universe.get() == null) return;
+            if (Universe.get() == null)
+                return;
 
             // Collect currently online player UUIDs for disconnect detection
             Set<UUID> onlinePlayers = new HashSet<>();
 
             for (World world : Universe.get().getWorlds().values()) {
-                if (world == null || !world.isAlive() || !world.isTicking()) continue;
+                if (world == null || !world.isAlive() || !world.isTicking())
+                    continue;
 
                 // Safely iterate players to track who is currently online
                 for (PlayerRef playerRef : world.getPlayerRefs()) {
@@ -67,10 +72,12 @@ public class EnchantmentSlotTracker implements Runnable {
                         }
                     });
                 } catch (Exception e) {
-                    if (e.getCause() instanceof IllegalThreadStateException || e.toString().contains("IllegalThreadStateException")) {
+                    if (e.getCause() instanceof IllegalThreadStateException
+                            || e.toString().contains("IllegalThreadStateException")) {
                         // Ignore thread state exceptions when worlds are shutting down
                     } else {
-                        HytaleLogger.getLogger().atSevere().log("Error queueing EnchantmentSlotTracker task: " + e.getMessage());
+                        HytaleLogger.getLogger().atSevere()
+                                .log("Error queueing EnchantmentSlotTracker task: " + e.getMessage());
                     }
                 }
             }
@@ -96,14 +103,17 @@ public class EnchantmentSlotTracker implements Runnable {
         }
 
         var ref = playerRef.getReference();
-        if (ref == null || !ref.isValid()) return;
+        if (ref == null || !ref.isValid())
+            return;
 
         var store = ref.getStore();
         Player player = store.getComponent(ref, Player.getComponentType());
-        if (player == null) return;
+        if (player == null)
+            return;
 
         Inventory inventory = player.getInventory();
-        if (inventory == null) return;
+        if (inventory == null)
+            return;
 
         UUID uuid = playerRef.getUuid();
 
@@ -129,7 +139,7 @@ public class EnchantmentSlotTracker implements Runnable {
 
             // 2. Show Title (only if slot actually changed, not just offhand)
             // Mask out the offhand bit to check slot index
-            byte lastSlotIndex = lastState != null ? (byte)(lastState & 0x7F) : -1;
+            byte lastSlotIndex = lastState != null ? (byte) (lastState & 0x7F) : -1;
             if (currentSlot != lastSlotIndex) {
                 // Notify Eternal Shot system about slot change with the PREVIOUS item
                 if (lastSlotIndex >= 0) {
@@ -153,15 +163,14 @@ public class EnchantmentSlotTracker implements Runnable {
         if (displayMessage != null) {
             EventTitleUtil.hideEventTitleFromPlayer(playerRef, 0.0f);
             EventTitleUtil.showEventTitleToPlayer(
-                playerRef,
-                Message.raw(""),
-                displayMessage.color("GOLD"),
-                false,
-                null,
-                1.5f,
-                0.1f,
-                0.2f
-            );
+                    playerRef,
+                    Message.raw(""),
+                    displayMessage.color("GOLD"),
+                    false,
+                    null,
+                    1.5f,
+                    0.1f,
+                    0.2f);
         } else {
             EventTitleUtil.hideEventTitleFromPlayer(playerRef, 0.1f);
         }

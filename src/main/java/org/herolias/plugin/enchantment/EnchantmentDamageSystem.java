@@ -29,18 +29,18 @@ import java.util.Set;
 /**
  * ECS system that hooks into damage calculations to apply enchantment bonuses.
  * 
- * Supports: Sharpness (+10% damage/level), Protection (reduces physical damage),
+ * Supports: Sharpness (+10% damage/level), Protection (reduces physical
+ * damage),
  * Strength/Eagle's Eye (projectile damage), Life Leech (health on melee hit)
  */
 public class EnchantmentDamageSystem extends DamageEventSystem {
 
     private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
-    
+
     private final EnchantmentManager enchantmentManager;
 
     private final Set<Dependency<EntityStore>> dependencies = Set.of(
-        new SystemDependency(Order.BEFORE, DamageSystems.ApplyDamage.class)
-    );
+            new SystemDependency(Order.BEFORE, DamageSystems.ApplyDamage.class));
 
     public EnchantmentDamageSystem(EnchantmentManager enchantmentManager) {
         this.enchantmentManager = enchantmentManager;
@@ -60,18 +60,19 @@ public class EnchantmentDamageSystem extends DamageEventSystem {
     }
 
     @Override
-    public void handle(int index, 
-                       @Nonnull ArchetypeChunk<EntityStore> archetypeChunk,
-                       @Nonnull Store<EntityStore> store, 
-                       @Nonnull CommandBuffer<EntityStore> commandBuffer, 
-                       @Nonnull Damage damage) {
-        
+    public void handle(int index,
+            @Nonnull ArchetypeChunk<EntityStore> archetypeChunk,
+            @Nonnull Store<EntityStore> store,
+            @Nonnull CommandBuffer<EntityStore> commandBuffer,
+            @Nonnull Damage damage) {
+
         float currentDamage = damage.getAmount();
-        if (currentDamage <= 0) return;
-        
+        if (currentDamage <= 0)
+            return;
+
         // Use centralized damage context extraction
         EnchantmentManager.DamageContext ctx = enchantmentManager.getDamageContext(damage, commandBuffer);
-        
+
         // Apply Sharpness (melee entity damage)
         if (ctx.hasAttacker() && !ctx.hasProjectile()) {
             Entity attackerEntity = EntityUtils.getEntity(ctx.attackerRef(), commandBuffer);
@@ -80,11 +81,13 @@ public class EnchantmentDamageSystem extends DamageEventSystem {
                 double multiplier = enchantmentManager.calculateDamageMultiplier(weapon);
                 if (multiplier != 1.0) {
                     damage.setAmount((float) (damage.getAmount() * multiplier));
-                    
+
                     int level = enchantmentManager.getEnchantmentLevel(weapon, EnchantmentType.SHARPNESS);
-                    
+
                     if (level > 0) {
-                        com.hypixel.hytale.server.core.universe.PlayerRef playerRef = store.getComponent(ctx.attackerRef(), com.hypixel.hytale.server.core.universe.PlayerRef.getComponentType());
+                        com.hypixel.hytale.server.core.universe.PlayerRef playerRef = store.getComponent(
+                                ctx.attackerRef(),
+                                com.hypixel.hytale.server.core.universe.PlayerRef.getComponentType());
                         EnchantmentEventHelper.fireActivated(playerRef, weapon, EnchantmentType.SHARPNESS, level);
                     }
                 }
@@ -98,17 +101,21 @@ public class EnchantmentDamageSystem extends DamageEventSystem {
         }
 
         // Apply Protection enchantment (defender - physical damage)
-        if (damageCause != null && !damageCause.doesBypassResistances() && enchantmentManager.isPhysicalDamage(damageCause)) {
+        if (damageCause != null && !damageCause.doesBypassResistances()
+                && enchantmentManager.isPhysicalDamage(damageCause)) {
             applyArmorProtection(index, archetypeChunk, store, damage, EnchantmentType.PROTECTION);
         }
 
         // Apply Ranged Protection enchantment (defender - projectile/magic damage)
-        if (damageCause != null && !damageCause.doesBypassResistances() && enchantmentManager.isRangedDamage(damageCause)) {
+        if (damageCause != null && !damageCause.doesBypassResistances()
+                && enchantmentManager.isRangedDamage(damageCause)) {
             applyArmorProtection(index, archetypeChunk, store, damage, EnchantmentType.RANGED_PROTECTION);
         }
 
-        // Apply Environmental Protection enchantment (defender - fire/lava/drowning/thorns/cactus)
-        if (damageCause != null && !damageCause.doesBypassResistances() && enchantmentManager.isEnvironmentalDamage(damageCause)) {
+        // Apply Environmental Protection enchantment (defender -
+        // fire/lava/drowning/thorns/cactus)
+        if (damageCause != null && !damageCause.doesBypassResistances()
+                && enchantmentManager.isEnvironmentalDamage(damageCause)) {
             applyArmorProtection(index, archetypeChunk, store, damage, EnchantmentType.ENVIRONMENTAL_PROTECTION);
         }
 
@@ -120,17 +127,21 @@ public class EnchantmentDamageSystem extends DamageEventSystem {
     }
 
     private void applyArmorProtection(int index,
-                                      @Nonnull ArchetypeChunk<EntityStore> archetypeChunk,
-                                      @Nonnull Store<EntityStore> store,
-                                      @Nonnull Damage damage,
-                                      @Nonnull EnchantmentType protectionType) {
+            @Nonnull ArchetypeChunk<EntityStore> archetypeChunk,
+            @Nonnull Store<EntityStore> store,
+            @Nonnull Damage damage,
+            @Nonnull EnchantmentType protectionType) {
         Entity targetEntity = EntityUtils.getEntity(index, archetypeChunk);
-        if (!(targetEntity instanceof LivingEntity targetLiving)) return;
+        if (!(targetEntity instanceof LivingEntity targetLiving))
+            return;
         Inventory targetInventory = targetLiving.getInventory();
-        if (targetInventory == null) return;
+        if (targetInventory == null)
+            return;
 
-        double multiplier = enchantmentManager.calculateArmorProtectionMultiplier(targetInventory.getArmor(), protectionType);
-        if (multiplier >= 1.0) return;
+        double multiplier = enchantmentManager.calculateArmorProtectionMultiplier(targetInventory.getArmor(),
+                protectionType);
+        if (multiplier >= 1.0)
+            return;
 
         damage.setAmount((float) (damage.getAmount() * multiplier));
 
@@ -138,12 +149,14 @@ public class EnchantmentDamageSystem extends DamageEventSystem {
         com.hypixel.hytale.server.core.inventory.container.ItemContainer armorContainer = targetInventory.getArmor();
         for (short i = 0; i < armorContainer.getCapacity(); i++) {
             ItemStack armorPiece = armorContainer.getItemStack(i);
-            if (armorPiece == null || armorPiece.isEmpty()) continue;
+            if (armorPiece == null || armorPiece.isEmpty())
+                continue;
             int protLevel = enchantmentManager.getEnchantmentLevel(armorPiece, protectionType);
             if (protLevel > 0) {
                 com.hypixel.hytale.server.core.universe.PlayerRef playerRef = null;
                 if (targetEntity instanceof com.hypixel.hytale.server.core.entity.entities.Player) {
-                    playerRef = store.getComponent(targetEntity.getReference(), com.hypixel.hytale.server.core.universe.PlayerRef.getComponentType());
+                    playerRef = store.getComponent(targetEntity.getReference(),
+                            com.hypixel.hytale.server.core.universe.PlayerRef.getComponentType());
                 }
                 EnchantmentEventHelper.fireActivated(playerRef, armorPiece, protectionType, protLevel);
                 break; // Only fire once per hit
@@ -152,99 +165,121 @@ public class EnchantmentDamageSystem extends DamageEventSystem {
     }
 
     private void applyLifeLeech(EnchantmentManager.DamageContext ctx,
-                                Store<EntityStore> store,
-                                @Nonnull Damage damage, 
-                                @Nonnull CommandBuffer<EntityStore> commandBuffer) {
-        if (damage.getAmount() <= 0) return;
-        if (ctx.hasProjectile()) return;  // Melee only
-        if (!ctx.hasAttacker()) return;
+            Store<EntityStore> store,
+            @Nonnull Damage damage,
+            @Nonnull CommandBuffer<EntityStore> commandBuffer) {
+        if (damage.getAmount() <= 0)
+            return;
+        if (ctx.hasProjectile())
+            return; // Melee only
+        if (!ctx.hasAttacker())
+            return;
 
         Entity attackerEntity = EntityUtils.getEntity(ctx.attackerRef(), commandBuffer);
         ItemStack weapon = enchantmentManager.getWeaponFromEntity(attackerEntity);
-        if (weapon == null) return;
+        if (weapon == null)
+            return;
 
         ItemCategory category = enchantmentManager.categorizeItem(weapon);
-        if (category != ItemCategory.MELEE_WEAPON) return;
+        if (category != ItemCategory.MELEE_WEAPON)
+            return;
 
         int lifeLeechLevel = enchantmentManager.getEnchantmentLevel(weapon, EnchantmentType.LIFE_LEECH);
-        if (lifeLeechLevel <= 0) return;
+        if (lifeLeechLevel <= 0)
+            return;
 
-        float healAmount = (float) (damage.getAmount() * (lifeLeechLevel * EnchantmentType.LIFE_LEECH.getEffectMultiplier()));
-        if (healAmount <= 0.0f) return;
+        float healAmount = (float) (damage.getAmount()
+                * (lifeLeechLevel * EnchantmentType.LIFE_LEECH.getEffectMultiplier()));
+        if (healAmount <= 0.0f)
+            return;
 
         EntityStatMap statMap = commandBuffer.getComponent(ctx.attackerRef(), EntityStatMap.getComponentType());
         if (statMap != null) {
             statMap.addStatValue(DefaultEntityStatTypes.getHealth(), healAmount);
-            
-            com.hypixel.hytale.server.core.universe.PlayerRef playerRef = store.getComponent(ctx.attackerRef(), com.hypixel.hytale.server.core.universe.PlayerRef.getComponentType());
+
+            com.hypixel.hytale.server.core.universe.PlayerRef playerRef = store.getComponent(ctx.attackerRef(),
+                    com.hypixel.hytale.server.core.universe.PlayerRef.getComponentType());
             EnchantmentEventHelper.fireActivated(playerRef, weapon, EnchantmentType.LIFE_LEECH, lifeLeechLevel);
         }
     }
 
     private void applyFrenzy(EnchantmentManager.DamageContext ctx,
-                             Store<EntityStore> store,
-                             @Nonnull Damage damage,
-                             @Nonnull CommandBuffer<EntityStore> commandBuffer) {
-        if (damage.getAmount() <= 0) return;
-        if (!ctx.hasAttacker()) return;
+            Store<EntityStore> store,
+            @Nonnull Damage damage,
+            @Nonnull CommandBuffer<EntityStore> commandBuffer) {
+        if (damage.getAmount() <= 0)
+            return;
+        if (!ctx.hasAttacker())
+            return;
 
         Entity attackerEntity = EntityUtils.getEntity(ctx.attackerRef(), commandBuffer);
         ItemStack weapon = enchantmentManager.getWeaponFromEntity(attackerEntity);
-        if (weapon == null) return;
+        if (weapon == null)
+            return;
 
         // Frenzy applies to all weapons (Melee, Ranged, Staves)
         int frenzyLevel = enchantmentManager.getEnchantmentLevel(weapon, EnchantmentType.FRENZY);
-        if (frenzyLevel <= 0) return;
+        if (frenzyLevel <= 0)
+            return;
 
         // Calculate bonus charge amount
         float chargeAmount = 0.0f;
         boolean foundBase = false;
 
         // Try to get base charge from DamageSequence (native Hytale charge logic)
-        if (damage.hasMetaObject(com.hypixel.hytale.server.core.modules.entity.damage.DamageCalculatorSystems.DAMAGE_SEQUENCE)) {
-             com.hypixel.hytale.server.core.modules.entity.damage.DamageCalculatorSystems.DamageSequence seq = 
-                 damage.getMetaObject(com.hypixel.hytale.server.core.modules.entity.damage.DamageCalculatorSystems.DAMAGE_SEQUENCE);
-             
-             com.hypixel.hytale.server.core.modules.interaction.interaction.config.server.DamageEntityInteraction.EntityStatOnHit[] stats = seq.getEntityStatOnHit();
-             if (stats != null) {
-                 for (com.hypixel.hytale.server.core.modules.interaction.interaction.config.server.DamageEntityInteraction.EntityStatOnHit stat : stats) {
-                     // Access via toPacket to get public fields
-                     com.hypixel.hytale.protocol.EntityStatOnHit packet = stat.toPacket();
-                     if (packet.entityStatIndex == DefaultEntityStatTypes.getSignatureEnergy()) {
-                         chargeAmount += packet.amount;
-                         foundBase = true; // Found at least one source of charge
-                     }
-                 }
-             }
+        if (damage.hasMetaObject(
+                com.hypixel.hytale.server.core.modules.entity.damage.DamageCalculatorSystems.DAMAGE_SEQUENCE)) {
+            com.hypixel.hytale.server.core.modules.entity.damage.DamageCalculatorSystems.DamageSequence seq = damage
+                    .getMetaObject(
+                            com.hypixel.hytale.server.core.modules.entity.damage.DamageCalculatorSystems.DAMAGE_SEQUENCE);
+
+            com.hypixel.hytale.server.core.modules.interaction.interaction.config.server.DamageEntityInteraction.EntityStatOnHit[] stats = seq
+                    .getEntityStatOnHit();
+            if (stats != null) {
+                for (com.hypixel.hytale.server.core.modules.interaction.interaction.config.server.DamageEntityInteraction.EntityStatOnHit stat : stats) {
+                    // Access via toPacket to get public fields
+                    com.hypixel.hytale.protocol.EntityStatOnHit packet = stat.toPacket();
+                    if (packet.entityStatIndex == DefaultEntityStatTypes.getSignatureEnergy()) {
+                        chargeAmount += packet.amount;
+                        foundBase = true; // Found at least one source of charge
+                    }
+                }
+            }
         }
 
         if (foundBase) {
-             // If we found a base charge, increase it by the percentage (e.g. +10% per level)
-             chargeAmount = (float) (chargeAmount * enchantmentManager.calculateFrenzySpeedMultiplier(frenzyLevel));
+            // If we found a base charge, increase it by the percentage (e.g. +10% per
+            // level)
+            chargeAmount = (float) (chargeAmount * enchantmentManager.calculateFrenzySpeedMultiplier(frenzyLevel));
         } else {
-             // Fallback: 1% of damage * level (equivalent to +10% of an assumed 10% base charge)
-             // This ensures the enchantment works on non-charging attacks effectively adding a charge mechanic.
-             chargeAmount = (float) (damage.getAmount() * 0.01 * frenzyLevel); 
+            // Fallback: 1% of damage * level (equivalent to +10% of an assumed 10% base
+            // charge)
+            // This ensures the enchantment works on non-charging attacks effectively adding
+            // a charge mechanic.
+            chargeAmount = (float) (damage.getAmount() * 0.01 * frenzyLevel);
         }
-        
-        if (chargeAmount <= 0.0f) return;
+
+        if (chargeAmount <= 0.0f)
+            return;
 
         EntityStatMap statMap = commandBuffer.getComponent(ctx.attackerRef(), EntityStatMap.getComponentType());
         if (statMap != null) {
             statMap.addStatValue(DefaultEntityStatTypes.getSignatureEnergy(), chargeAmount);
-            
-            com.hypixel.hytale.server.core.universe.PlayerRef playerRef = store.getComponent(ctx.attackerRef(), com.hypixel.hytale.server.core.universe.PlayerRef.getComponentType());
+
+            com.hypixel.hytale.server.core.universe.PlayerRef playerRef = store.getComponent(ctx.attackerRef(),
+                    com.hypixel.hytale.server.core.universe.PlayerRef.getComponentType());
             EnchantmentEventHelper.fireActivated(playerRef, weapon, EnchantmentType.FRENZY, frenzyLevel);
         }
     }
 
     private void applyProjectileDamageModifiers(EnchantmentManager.DamageContext ctx,
-                                                int index,
-                                                @Nonnull ArchetypeChunk<EntityStore> archetypeChunk,
-                                                @Nonnull Store<EntityStore> store,
-                                                @Nonnull CommandBuffer<EntityStore> commandBuffer,
-                                                @Nonnull Damage damage) {
-        TransformComponent shooterTransform = commandBuffer.getComponent(ctx.attackerRef(), TransformComponent.getComponentType());
+            int index,
+            @Nonnull ArchetypeChunk<EntityStore> archetypeChunk,
+            @Nonnull Store<EntityStore> store,
+            @Nonnull CommandBuffer<EntityStore> commandBuffer,
+            @Nonnull Damage damage) {
+        TransformComponent shooterTransform = commandBuffer.getComponent(ctx.attackerRef(),
+                TransformComponent.getComponentType());
         TransformComponent targetTransform = archetypeChunk.getComponent(index, TransformComponent.getComponentType());
         double distance = 0.0;
         if (shooterTransform != null && targetTransform != null) {
@@ -252,66 +287,66 @@ public class EnchantmentDamageSystem extends DamageEventSystem {
         }
 
         ProjectileEnchantmentData projectileData = ctx.hasProjectile()
-            ? enchantmentManager.getProjectileEnchantmentData(ctx.projectileRef(), commandBuffer)
-            : null;
-            
+                ? enchantmentManager.getProjectileEnchantmentData(ctx.projectileRef(), commandBuffer)
+                : null;
+
         double multiplier = 1.0;
         if (projectileData != null && projectileData.hasAny()) {
             multiplier = enchantmentManager.calculateProjectileDamageMultiplier(
-                projectileData.getStrengthLevel(),
-                projectileData.getEaglesEyeLevel(),
-                distance
-            );
+                    projectileData.getStrengthLevel(),
+                    projectileData.getEaglesEyeLevel(),
+                    distance);
         } else if (ctx.hasAttacker()) {
             Entity shooterEntity = EntityUtils.getEntity(ctx.attackerRef(), commandBuffer);
             ItemStack weapon = enchantmentManager.getWeaponFromEntity(shooterEntity);
-            
+
             if (weapon != null) {
                 ItemCategory category = enchantmentManager.categorizeItem(weapon);
-                if (category == ItemCategory.RANGED_WEAPON || category == ItemCategory.STAFF || 
-                    category == ItemCategory.STAFF_MANA || category == ItemCategory.STAFF_ESSENCE) {
+                if (category == ItemCategory.RANGED_WEAPON || category == ItemCategory.STAFF ||
+                        category == ItemCategory.STAFF_MANA || category == ItemCategory.STAFF_ESSENCE) {
                     multiplier = enchantmentManager.calculateProjectileDamageMultiplier(weapon, distance);
                 }
             }
         }
-        
+
         if (multiplier != 1.0) {
             damage.setAmount((float) (damage.getAmount() * multiplier));
             // Determine primary driving enchantment for the event
             EnchantmentType activeType = null;
             int activeLevel = 0;
-            
+
             if (projectileData != null && projectileData.hasAny()) {
-                 if (projectileData.getStrengthLevel() > 0) {
-                     activeType = EnchantmentType.STRENGTH;
-                     activeLevel = projectileData.getStrengthLevel();
-                 } else if (projectileData.getEaglesEyeLevel() > 0) {
-                     activeType = EnchantmentType.EAGLES_EYE;
-                     activeLevel = projectileData.getEaglesEyeLevel();
-                 }
+                if (projectileData.getStrengthLevel() > 0) {
+                    activeType = EnchantmentType.STRENGTH;
+                    activeLevel = projectileData.getStrengthLevel();
+                } else if (projectileData.getEaglesEyeLevel() > 0) {
+                    activeType = EnchantmentType.EAGLES_EYE;
+                    activeLevel = projectileData.getEaglesEyeLevel();
+                }
             } else if (ctx.hasAttacker()) {
-                 Entity shooterEntity = EntityUtils.getEntity(ctx.attackerRef(), commandBuffer);
-                 ItemStack weapon = enchantmentManager.getWeaponFromEntity(shooterEntity);
-                 if (weapon != null) {
-                     int str = enchantmentManager.getEnchantmentLevel(weapon, EnchantmentType.STRENGTH);
-                     int ee = enchantmentManager.getEnchantmentLevel(weapon, EnchantmentType.EAGLES_EYE);
-                     if (str > 0) {
-                         activeType = EnchantmentType.STRENGTH;
-                         activeLevel = str;
-                     } else if (ee > 0) {
-                         activeType = EnchantmentType.EAGLES_EYE;
-                         activeLevel = ee;
-                     }
-                 }
+                Entity shooterEntity = EntityUtils.getEntity(ctx.attackerRef(), commandBuffer);
+                ItemStack weapon = enchantmentManager.getWeaponFromEntity(shooterEntity);
+                if (weapon != null) {
+                    int str = enchantmentManager.getEnchantmentLevel(weapon, EnchantmentType.STRENGTH);
+                    int ee = enchantmentManager.getEnchantmentLevel(weapon, EnchantmentType.EAGLES_EYE);
+                    if (str > 0) {
+                        activeType = EnchantmentType.STRENGTH;
+                        activeLevel = str;
+                    } else if (ee > 0) {
+                        activeType = EnchantmentType.EAGLES_EYE;
+                        activeLevel = ee;
+                    }
+                }
             }
-            
+
             if (activeType != null && ctx.hasAttacker()) {
-                 Entity shooterEntity = EntityUtils.getEntity(ctx.attackerRef(), commandBuffer);
-                 ItemStack weapon = enchantmentManager.getWeaponFromEntity(shooterEntity);
-                 if (weapon != null) {
-                     com.hypixel.hytale.server.core.universe.PlayerRef playerRef = store.getComponent(ctx.attackerRef(), com.hypixel.hytale.server.core.universe.PlayerRef.getComponentType());
-                     EnchantmentEventHelper.fireActivated(playerRef, weapon, activeType, activeLevel);
-                 }
+                Entity shooterEntity = EntityUtils.getEntity(ctx.attackerRef(), commandBuffer);
+                ItemStack weapon = enchantmentManager.getWeaponFromEntity(shooterEntity);
+                if (weapon != null) {
+                    com.hypixel.hytale.server.core.universe.PlayerRef playerRef = store.getComponent(ctx.attackerRef(),
+                            com.hypixel.hytale.server.core.universe.PlayerRef.getComponentType());
+                    EnchantmentEventHelper.fireActivated(playerRef, weapon, activeType, activeLevel);
+                }
             }
         }
     }

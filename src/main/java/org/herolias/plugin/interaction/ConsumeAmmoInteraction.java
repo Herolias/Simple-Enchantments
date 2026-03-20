@@ -27,14 +27,15 @@ import java.util.List;
 
 public class ConsumeAmmoInteraction extends SimpleInstantInteraction {
 
-    public static final BuilderCodec<ConsumeAmmoInteraction> CODEC = BuilderCodec.builder(ConsumeAmmoInteraction.class, ConsumeAmmoInteraction::new, SimpleInstantInteraction.CODEC)
-        .documentation("Consumes the first ammo item found in the player's inventory.")
-        .appendInherited(new KeyedCodec<>("RequiredGameMode", ProtocolCodecs.GAMEMODE), 
-            (interaction, s) -> interaction.requiredGameMode = s, 
-            interaction -> interaction.requiredGameMode, 
-            (interaction, parent) -> interaction.requiredGameMode = parent.requiredGameMode)
-        .add()
-        .build();
+    public static final BuilderCodec<ConsumeAmmoInteraction> CODEC = BuilderCodec
+            .builder(ConsumeAmmoInteraction.class, ConsumeAmmoInteraction::new, SimpleInstantInteraction.CODEC)
+            .documentation("Consumes the first ammo item found in the player's inventory.")
+            .appendInherited(new KeyedCodec<>("RequiredGameMode", ProtocolCodecs.GAMEMODE),
+                    (interaction, s) -> interaction.requiredGameMode = s,
+                    interaction -> interaction.requiredGameMode,
+                    (interaction, parent) -> interaction.requiredGameMode = parent.requiredGameMode)
+            .add()
+            .build();
 
     private GameMode requiredGameMode;
 
@@ -45,7 +46,8 @@ public class ConsumeAmmoInteraction extends SimpleInstantInteraction {
     }
 
     @Override
-    protected void firstRun(@Nonnull InteractionType type, @Nonnull InteractionContext context, @Nonnull CooldownHandler cooldownHandler) {
+    protected void firstRun(@Nonnull InteractionType type, @Nonnull InteractionContext context,
+            @Nonnull CooldownHandler cooldownHandler) {
         Ref<EntityStore> ref = context.getEntity();
         CommandBuffer<EntityStore> commandBuffer = context.getCommandBuffer();
         Player playerComponent = commandBuffer.getComponent(ref, Player.getComponentType());
@@ -55,7 +57,8 @@ public class ConsumeAmmoInteraction extends SimpleInstantInteraction {
             return;
         }
 
-        boolean hasRequiredGameMode = this.requiredGameMode == null || playerComponent.getGameMode() == this.requiredGameMode;
+        boolean hasRequiredGameMode = this.requiredGameMode == null
+                || playerComponent.getGameMode() == this.requiredGameMode;
         if (!hasRequiredGameMode) {
             return;
         }
@@ -70,16 +73,17 @@ public class ConsumeAmmoInteraction extends SimpleInstantInteraction {
         // and adding the metadata update.
 
         CombinedItemContainer inventory = playerComponent.getInventory().getCombinedHotbarFirst();
-        
+
         // Find ammo item
         ItemStack ammoItem = null;
         for (int i = 0; i < inventory.getCapacity(); i++) {
-            ItemStack stack = inventory.getItemStack((short)i);
+            ItemStack stack = inventory.getItemStack((short) i);
             if (stack != null && !stack.isEmpty()) {
                 Item item = stack.getItem();
-                if (item != null && item.getData() != null && item.getData().getRawTags().containsKey("Category:Ammunition")) {
-                     ammoItem = stack;
-                     break;
+                if (item != null && item.getData() != null
+                        && item.getData().getRawTags().containsKey("Category:Ammunition")) {
+                    ammoItem = stack;
+                    break;
                 }
             }
         }
@@ -93,18 +97,20 @@ public class ConsumeAmmoInteraction extends SimpleInstantInteraction {
                 // Store the used ammo ID on the crossbow (item in hand)
                 Inventory playerInventory = playerComponent.getInventory();
                 ItemStack crossbow = playerInventory.getItemInHand();
-                
+
                 if (crossbow != null && !crossbow.isEmpty()) {
-                     // We use a simple String codec for the ammo ID
-                     ItemStack updatedCrossbow = crossbow.withMetadata("LoadedAmmoId", com.hypixel.hytale.codec.Codec.STRING, ammoId);
-                     // Update the item in the inventory
-                     if (playerInventory.getActiveHotbarSlot() != -1) {
-                        playerInventory.getHotbar().setItemStackForSlot((short)playerInventory.getActiveHotbarSlot(), updatedCrossbow);
-                     }
+                    // We use a simple String codec for the ammo ID
+                    ItemStack updatedCrossbow = crossbow.withMetadata("LoadedAmmoId",
+                            com.hypixel.hytale.codec.Codec.STRING, ammoId);
+                    // Update the item in the inventory
+                    if (playerInventory.getActiveHotbarSlot() != -1) {
+                        playerInventory.getHotbar().setItemStackForSlot((short) playerInventory.getActiveHotbarSlot(),
+                                updatedCrossbow);
+                    }
                 }
             }
         } else {
-             context.getState().state = InteractionState.Failed;
+            context.getState().state = InteractionState.Failed;
         }
     }
 }

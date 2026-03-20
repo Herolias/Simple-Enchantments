@@ -32,8 +32,7 @@ public class EnchantmentAbsorptionSystem extends DamageEventSystem {
     private final EnchantmentManager enchantmentManager;
 
     private final Set<Dependency<EntityStore>> dependencies = Set.of(
-        new SystemDependency(Order.AFTER, DamageSystems.DamageStamina.class)
-    );
+            new SystemDependency(Order.AFTER, DamageSystems.DamageStamina.class));
 
     public EnchantmentAbsorptionSystem(EnchantmentManager enchantmentManager) {
         this.enchantmentManager = enchantmentManager;
@@ -54,44 +53,55 @@ public class EnchantmentAbsorptionSystem extends DamageEventSystem {
 
     @Override
     public void handle(int index,
-                       @Nonnull ArchetypeChunk<EntityStore> archetypeChunk,
-                       @Nonnull Store<EntityStore> store,
-                       @Nonnull CommandBuffer<EntityStore> commandBuffer,
-                       @Nonnull Damage damage) {
-        
-        if (damage.isCancelled()) return;
+            @Nonnull ArchetypeChunk<EntityStore> archetypeChunk,
+            @Nonnull Store<EntityStore> store,
+            @Nonnull CommandBuffer<EntityStore> commandBuffer,
+            @Nonnull Damage damage) {
+
+        if (damage.isCancelled())
+            return;
 
         // Check if the damage was blocked
         Boolean blocked = damage.getIfPresentMetaObject(Damage.BLOCKED);
-        if (blocked == null || !blocked) return;
+        if (blocked == null || !blocked)
+            return;
 
         // Get defender
         Entity defenderEntity = EntityUtils.getEntity(index, archetypeChunk);
-        if (!(defenderEntity instanceof LivingEntity defender)) return;
+        if (!(defenderEntity instanceof LivingEntity defender))
+            return;
 
         // Use centralized blocker detection
         ItemStack blocker = enchantmentManager.getActiveBlocker(defender);
-        if (blocker == null) return;
+        if (blocker == null)
+            return;
 
         int absorptionLevel = enchantmentManager.getEnchantmentLevel(blocker, EnchantmentType.ABSORPTION);
-        if (absorptionLevel <= 0) return;
+        if (absorptionLevel <= 0)
+            return;
 
         // Calculate healing amount
-        float originalAmount = damage.getInitialAmount(); 
-        float healAmount = (float) (originalAmount * absorptionLevel * EnchantmentType.ABSORPTION.getEffectMultiplier());
+        float originalAmount = damage.getInitialAmount();
+        float healAmount = (float) (originalAmount * absorptionLevel
+                * EnchantmentType.ABSORPTION.getEffectMultiplier());
 
-        if (healAmount <= 0) return;
-        
+        if (healAmount <= 0)
+            return;
+
         // Retrieve EntityStatMap to heal the defender
         EntityStatMap statMap = archetypeChunk.getComponent(index, EntityStatMap.getComponentType());
         if (statMap == null) {
-             // Fallback to command buffer if not in chunk (unlikely for index access but safe)
-             statMap = commandBuffer.getComponent(archetypeChunk.getReferenceTo(index), EntityStatMap.getComponentType());
+            // Fallback to command buffer if not in chunk (unlikely for index access but
+            // safe)
+            statMap = commandBuffer.getComponent(archetypeChunk.getReferenceTo(index),
+                    EntityStatMap.getComponentType());
         }
 
         if (statMap != null) {
             statMap.addStatValue(DefaultEntityStatTypes.getHealth(), healAmount);
-            com.hypixel.hytale.server.core.universe.PlayerRef playerRef = store.getComponent(archetypeChunk.getReferenceTo(index), com.hypixel.hytale.server.core.universe.PlayerRef.getComponentType());
+            com.hypixel.hytale.server.core.universe.PlayerRef playerRef = store.getComponent(
+                    archetypeChunk.getReferenceTo(index),
+                    com.hypixel.hytale.server.core.universe.PlayerRef.getComponentType());
             EnchantmentEventHelper.fireActivated(playerRef, blocker, EnchantmentType.ABSORPTION, absorptionLevel);
             // Visual feedback could be added here (particles etc.)
         }

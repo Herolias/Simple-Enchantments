@@ -22,7 +22,8 @@ public class EnchantmentActivatedEvent implements IEvent<Void> {
     private final EnchantmentType enchantment;
     private final int level;
 
-    public EnchantmentActivatedEvent(@Nullable PlayerRef playerRef, @Nonnull ItemStack item, @Nonnull EnchantmentType enchantment, int level) {
+    public EnchantmentActivatedEvent(@Nullable PlayerRef playerRef, @Nonnull ItemStack item,
+            @Nonnull EnchantmentType enchantment, int level) {
         this.playerRef = playerRef;
         this.item = item;
         this.enchantment = enchantment;
@@ -30,7 +31,8 @@ public class EnchantmentActivatedEvent implements IEvent<Void> {
     }
 
     /**
-     * @return The player whose enchantment activated, or null if it was triggered by a non-player entity.
+     * @return The player whose enchantment activated, or null if it was triggered
+     *         by a non-player entity.
      */
     @Nullable
     public PlayerRef getPlayerRef() {

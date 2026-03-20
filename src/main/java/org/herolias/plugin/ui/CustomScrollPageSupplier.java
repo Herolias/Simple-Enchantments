@@ -22,17 +22,16 @@ import org.herolias.plugin.enchantment.EnchantmentManager;
  * Opens a UI showing all enchantments stored on the scroll.
  */
 public class CustomScrollPageSupplier implements OpenCustomUIInteraction.CustomPageSupplier {
-    public static final BuilderCodec<CustomScrollPageSupplier> CODEC =
-        BuilderCodec.builder(CustomScrollPageSupplier.class, CustomScrollPageSupplier::new)
+    public static final BuilderCodec<CustomScrollPageSupplier> CODEC = BuilderCodec
+            .builder(CustomScrollPageSupplier.class, CustomScrollPageSupplier::new)
             .build();
 
     @Override
     public CustomUIPage tryCreate(
-        @Nonnull Ref<EntityStore> ref,
-        @Nonnull ComponentAccessor<EntityStore> componentAccessor,
-        @Nonnull PlayerRef playerRef,
-        @Nonnull InteractionContext context
-    ) {
+            @Nonnull Ref<EntityStore> ref,
+            @Nonnull ComponentAccessor<EntityStore> componentAccessor,
+            @Nonnull PlayerRef playerRef,
+            @Nonnull InteractionContext context) {
         Player playerComponent = componentAccessor.getComponent(ref, Player.getComponentType());
         if (playerComponent == null) {
             return null;

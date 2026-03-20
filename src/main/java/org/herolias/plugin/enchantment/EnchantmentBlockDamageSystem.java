@@ -36,15 +36,14 @@ public class EnchantmentBlockDamageSystem extends EntityEventSystem<EntityStore,
 
     @Override
     public void handle(int index,
-                       @Nonnull ArchetypeChunk<EntityStore> archetypeChunk,
-                       @Nonnull Store<EntityStore> store,
-                       @Nonnull CommandBuffer<EntityStore> commandBuffer,
-                       @Nonnull DamageBlockEvent event) {
+            @Nonnull ArchetypeChunk<EntityStore> archetypeChunk,
+            @Nonnull Store<EntityStore> store,
+            @Nonnull CommandBuffer<EntityStore> commandBuffer,
+            @Nonnull DamageBlockEvent event) {
         ItemStack tool = event.getItemInHand();
         if (tool == null || tool.isEmpty()) {
             return;
         }
-
 
         // Fast path: Only tools can have Efficiency (valid for block breaking)
         if (!enchantmentManager.isTool(tool)) {
@@ -67,10 +66,12 @@ public class EnchantmentBlockDamageSystem extends EntityEventSystem<EntityStore,
 
         float newDamage = (float) (currentDamage * multiplier);
         event.setDamage(newDamage);
-        
+
         int effLevel = enchantmentManager.getEnchantmentLevel(tool, EnchantmentType.EFFICIENCY);
         if (effLevel > 0) {
-            com.hypixel.hytale.server.core.universe.PlayerRef playerRef = store.getComponent(com.hypixel.hytale.server.core.entity.EntityUtils.getEntity(index, archetypeChunk).getReference(), com.hypixel.hytale.server.core.universe.PlayerRef.getComponentType());
+            com.hypixel.hytale.server.core.universe.PlayerRef playerRef = store.getComponent(
+                    com.hypixel.hytale.server.core.entity.EntityUtils.getEntity(index, archetypeChunk).getReference(),
+                    com.hypixel.hytale.server.core.universe.PlayerRef.getComponentType());
             EnchantmentEventHelper.fireActivated(playerRef, tool, EnchantmentType.EFFICIENCY, effLevel);
         }
     }

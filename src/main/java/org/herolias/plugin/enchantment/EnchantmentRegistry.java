@@ -46,11 +46,13 @@ public final class EnchantmentRegistry {
     }
 
     /**
-     * Registers an enchantment type. Called internally by EnchantmentType constructor
+     * Registers an enchantment type. Called internally by EnchantmentType
+     * constructor
      * and by the public API for addon enchantments.
      *
      * @param type The enchantment type to register
-     * @throws IllegalArgumentException if the ID or display name is already registered
+     * @throws IllegalArgumentException if the ID or display name is already
+     *                                  registered
      */
     public void register(@Nonnull EnchantmentType type) {
         Objects.requireNonNull(type, "EnchantmentType cannot be null");
@@ -63,8 +65,8 @@ public final class EnchantmentRegistry {
         String displayKey = type.getDisplayName().toLowerCase();
         if (byDisplayName.containsKey(displayKey)) {
             throw new IllegalArgumentException(
-                "Enchantment display name already registered: '" + type.getDisplayName() 
-                + "' (conflicts with '" + byDisplayName.get(displayKey).getId() + "')");
+                    "Enchantment display name already registered: '" + type.getDisplayName()
+                            + "' (conflicts with '" + byDisplayName.get(displayKey).getId() + "')");
         }
 
         byId.put(id, type);
@@ -86,7 +88,8 @@ public final class EnchantmentRegistry {
      * Checks if two enchantment IDs conflict with each other.
      */
     public boolean areConflicting(@Nonnull String id1, @Nonnull String id2) {
-        if (id1.equalsIgnoreCase(id2)) return true;
+        if (id1.equalsIgnoreCase(id2))
+            return true;
         return conflictPairs.contains(Set.of(id1.toLowerCase(), id2.toLowerCase()));
     }
 

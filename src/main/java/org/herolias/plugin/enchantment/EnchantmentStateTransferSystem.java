@@ -18,22 +18,31 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * Preserves enchantments across item state changes.
  *
- * <p>Some server interactions (e.g. {@code RefillContainerInteraction}) replace
- * an item with a <b>new</b> {@link ItemStack} when its state changes (empty → filled).
- * This discards all metadata, including enchantments.</p>
+ * <p>
+ * Some server interactions (e.g. {@code RefillContainerInteraction}) replace
+ * an item with a <b>new</b> {@link ItemStack} when its state changes (empty →
+ * filled).
+ * This discards all metadata, including enchantments.
+ * </p>
  *
- * <p>Since we cannot modify the server code, this system intercepts inventory
- * change events and re-applies enchantments when it detects a state transition:</p>
+ * <p>
+ * Since we cannot modify the server code, this system intercepts inventory
+ * change events and re-applies enchantments when it detects a state transition:
+ * </p>
  * <ol>
- *   <li><b>Phase 1 — Cache:</b> When an enchanted item is removed from a slot,
- *       its enchantment metadata is cached briefly.</li>
- *   <li><b>Phase 2 — Restore:</b> When a new item (without enchantments) appears
- *       in the same slot and is a <em>state variant</em> of the removed item,
- *       the cached enchantments are re-applied.</li>
+ * <li><b>Phase 1 — Cache:</b> When an enchanted item is removed from a slot,
+ * its enchantment metadata is cached briefly.</li>
+ * <li><b>Phase 2 — Restore:</b> When a new item (without enchantments) appears
+ * in the same slot and is a <em>state variant</em> of the removed item,
+ * the cached enchantments are re-applied.</li>
  * </ol>
  *
- * <p>State variants are items linked via the {@code stateToBlock} / {@code blockToState}
- * maps in their {@link Item} definition (e.g. empty Watering Can → filled Watering Can).</p>
+ * <p>
+ * State variants are items linked via the {@code stateToBlock} /
+ * {@code blockToState}
+ * maps in their {@link Item} definition (e.g. empty Watering Can → filled
+ * Watering Can).
+ * </p>
  */
 public class EnchantmentStateTransferSystem {
 
@@ -62,18 +71,22 @@ public class EnchantmentStateTransferSystem {
      */
     public void onInventoryChange(@Nonnull LivingEntityInventoryChangeEvent event) {
         LivingEntity entity = event.getEntity();
-        if (!(entity instanceof com.hypixel.hytale.server.core.entity.entities.Player player)) return;
+        if (!(entity instanceof com.hypixel.hytale.server.core.entity.entities.Player player))
+            return;
 
         if (player.getWorld() != null && !player.getWorld().isInThread()) {
             player.getWorld().execute(() -> onInventoryChange(event));
             return;
         }
 
-        if (guard.isProcessing()) return;
+        if (guard.isProcessing())
+            return;
 
         Transaction transaction = event.getTransaction();
-        if (!(transaction instanceof SlotTransaction slotTransaction)) return;
-        if (!slotTransaction.succeeded()) return;
+        if (!(transaction instanceof SlotTransaction slotTransaction))
+            return;
+        if (!slotTransaction.succeeded())
+            return;
 
         ItemStack before = slotTransaction.getSlotBefore();
         ItemStack after = slotTransaction.getSlotAfter();
@@ -92,10 +105,9 @@ public class EnchantmentStateTransferSystem {
             BsonDocument enchBson = getEnchantmentBson(before);
             if (enchBson != null && !enchBson.isEmpty()) {
                 cache.put(cacheKey, new CachedEnchantment(
-                    before.getItemId(),
-                    enchBson,
-                    System.currentTimeMillis()
-                ));
+                        before.getItemId(),
+                        enchBson,
+                        System.currentTimeMillis()));
             }
             return;
         }
@@ -103,17 +115,21 @@ public class EnchantmentStateTransferSystem {
         // ── Phase 2: Restore enchantments to newly added items ──
         if (!hasItem(before) && hasItem(after)) {
             CachedEnchantment cached = cache.remove(cacheKey);
-            if (cached == null) return;
+            if (cached == null)
+                return;
 
             // Check expiry
-            if (System.currentTimeMillis() - cached.timestamp > CACHE_EXPIRY_MS) return;
+            if (System.currentTimeMillis() - cached.timestamp > CACHE_EXPIRY_MS)
+                return;
 
             // Skip if the new item already has enchantments
             BsonDocument afterBson = getEnchantmentBson(after);
-            if (afterBson != null && !afterBson.isEmpty()) return;
+            if (afterBson != null && !afterBson.isEmpty())
+                return;
 
             // Verify items are state-related
-            if (!areStateVariants(cached.itemId, after.getItemId())) return;
+            if (!areStateVariants(cached.itemId, after.getItemId()))
+                return;
 
             // Re-apply enchantments
             guard.runGuarded(() -> {
@@ -144,7 +160,7 @@ public class EnchantmentStateTransferSystem {
     }
 
     // ────────────────────────────────────────────────────────────────────
-    //  Helpers
+    // Helpers
     // ────────────────────────────────────────────────────────────────────
 
     private static boolean hasItem(ItemStack item) {
@@ -155,12 +171,12 @@ public class EnchantmentStateTransferSystem {
      * Reads the enchantment BSON document from an item's metadata, or null.
      */
     private static BsonDocument getEnchantmentBson(ItemStack item) {
-        if (item == null || item.isEmpty()) return null;
+        if (item == null || item.isEmpty())
+            return null;
         try {
             return item.getFromMetadataOrNull(
-                EnchantmentData.METADATA_KEY,
-                com.hypixel.hytale.codec.Codec.BSON_DOCUMENT
-            );
+                    EnchantmentData.METADATA_KEY,
+                    com.hypixel.hytale.codec.Codec.BSON_DOCUMENT);
         } catch (Exception e) {
             return null;
         }
@@ -170,28 +186,34 @@ public class EnchantmentStateTransferSystem {
      * Checks whether two item IDs are state variants of each other.
      * Uses the Item's {@code getStateForItem()} / {@code blockToState} map.
      *
-     * <p>Example: For Watering Can, the parent item "Tool_Watering_Can" has
+     * <p>
+     * Example: For Watering Can, the parent item "Tool_Watering_Can" has
      * a state "Filled_Water" that maps to the state variant item ID.
      * The reverse map (blockToState) maps the variant ID back to the state name.
      * {@code getStateForItem(otherItemId)} checks if otherItemId is a value
-     * in this item's blockToState map.</p>
+     * in this item's blockToState map.
+     * </p>
      */
     private static boolean areStateVariants(String oldItemId, String newItemId) {
-        if (oldItemId == null || newItemId == null) return false;
-        if (oldItemId.equals(newItemId)) return false;
+        if (oldItemId == null || newItemId == null)
+            return false;
+        if (oldItemId.equals(newItemId))
+            return false;
 
         // Direction 1: Does oldItem's blockToState contain newItemId?
         Item oldItem = Item.getAssetMap().getAsset(oldItemId);
         if (oldItem != null) {
             String stateName = oldItem.getStateForItem(newItemId);
-            if (stateName != null) return true;
+            if (stateName != null)
+                return true;
         }
 
         // Direction 2: Does newItem's blockToState contain oldItemId?
         Item newItem = Item.getAssetMap().getAsset(newItemId);
         if (newItem != null) {
             String stateName = newItem.getStateForItem(oldItemId);
-            if (stateName != null) return true;
+            if (stateName != null)
+                return true;
         }
 
         return false;
@@ -218,9 +240,10 @@ public class EnchantmentStateTransferSystem {
     }
 
     // ────────────────────────────────────────────────────────────────────
-    //  Inner record
+    // Inner record
     // ────────────────────────────────────────────────────────────────────
 
     /** Short-lived cache entry for enchantment data removed from a slot. */
-    private record CachedEnchantment(String itemId, BsonDocument enchantmentBson, long timestamp) {}
+    private record CachedEnchantment(String itemId, BsonDocument enchantmentBson, long timestamp) {
+    }
 }

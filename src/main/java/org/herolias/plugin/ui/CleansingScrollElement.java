@@ -19,7 +19,8 @@ import org.herolias.plugin.enchantment.EnchantmentData;
 import org.herolias.plugin.enchantment.EnchantmentManager;
 
 /**
- * Element representing an enchanted item in the cleansing scroll selection list.
+ * Element representing an enchanted item in the cleansing scroll selection
+ * list.
  * Clicking opens the enchantment selection page.
  */
 public class CleansingScrollElement extends ChoiceElement {
@@ -30,39 +31,40 @@ public class CleansingScrollElement extends ChoiceElement {
     private final EnchantmentManager enchantmentManager;
 
     public CleansingScrollElement(
-        ItemStack itemStack,
-        EnchantmentData enchantmentData,
-        ItemContext itemContext,
-        ItemContext heldItemContext,
-        EnchantmentManager enchantmentManager
-    ) {
+            ItemStack itemStack,
+            EnchantmentData enchantmentData,
+            ItemContext itemContext,
+            ItemContext heldItemContext,
+            EnchantmentManager enchantmentManager) {
         this.itemStack = itemStack;
         this.enchantmentData = enchantmentData;
         this.itemContext = itemContext;
         this.heldItemContext = heldItemContext;
         this.enchantmentManager = enchantmentManager;
-        
+
         // Create the interaction that opens the enchantment selection page
-        this.interactions = new ChoiceInteraction[]{
-            new OpenEnchantmentPageInteraction(itemContext, heldItemContext, enchantmentData, enchantmentManager)
+        this.interactions = new ChoiceInteraction[] {
+                new OpenEnchantmentPageInteraction(itemContext, heldItemContext, enchantmentData, enchantmentManager)
         };
     }
 
     @Override
     public void addButton(
-        @Nonnull UICommandBuilder commandBuilder,
-        UIEventBuilder eventBuilder,
-        String selector,
-        PlayerRef playerRef
-    ) {
+            @Nonnull UICommandBuilder commandBuilder,
+            UIEventBuilder eventBuilder,
+            String selector,
+            PlayerRef playerRef) {
         commandBuilder.append("#ElementList", "Pages/CleansingScrollElement.ui");
         commandBuilder.set(selector + " #Icon.ItemId", this.itemStack.getItemId().toString());
         org.herolias.plugin.lang.LanguageManager langManager = enchantmentManager.getPlugin().getLanguageManager();
         String lang = enchantmentManager.getPlugin().getUserSettingsManager().getLanguage(playerRef.getUuid());
-        commandBuilder.set(selector + " #Name.TextSpans", langManager.getMessage(this.itemStack.getItem().getTranslationKey(), lang, playerRef.getLanguage()));
+        commandBuilder.set(selector + " #Name.TextSpans",
+                langManager.getMessage(this.itemStack.getItem().getTranslationKey(), lang, playerRef.getLanguage()));
 
         int enchantCount = enchantmentData.getAllEnchantments().size();
-        String enchantString = langManager.getRawMessage(enchantCount == 1 ? "customUI.cleansingScrollPage.enchantment.singular" : "customUI.cleansingScrollPage.enchantments", lang, playerRef.getLanguage());
+        String enchantString = langManager
+                .getRawMessage(enchantCount == 1 ? "customUI.cleansingScrollPage.enchantment.singular"
+                        : "customUI.cleansingScrollPage.enchantments", lang, playerRef.getLanguage());
         String detail = enchantCount + " " + enchantString;
         commandBuilder.set(selector + " #Detail.Text", detail);
     }
@@ -77,11 +79,10 @@ public class CleansingScrollElement extends ChoiceElement {
         private final EnchantmentManager enchantmentManager;
 
         public OpenEnchantmentPageInteraction(
-            ItemContext itemContext,
-            ItemContext heldItemContext,
-            EnchantmentData enchantmentData,
-            EnchantmentManager enchantmentManager
-        ) {
+                ItemContext itemContext,
+                ItemContext heldItemContext,
+                EnchantmentData enchantmentData,
+                EnchantmentManager enchantmentManager) {
             this.itemContext = itemContext;
             this.heldItemContext = heldItemContext;
             this.enchantmentData = enchantmentData;
@@ -89,7 +90,8 @@ public class CleansingScrollElement extends ChoiceElement {
         }
 
         @Override
-        public void run(@Nonnull Store<EntityStore> store, @Nonnull Ref<EntityStore> ref, @Nonnull PlayerRef playerRef) {
+        public void run(@Nonnull Store<EntityStore> store, @Nonnull Ref<EntityStore> ref,
+                @Nonnull PlayerRef playerRef) {
             Player playerComponent = store.getComponent(ref, Player.getComponentType());
             if (playerComponent == null) {
                 return;
@@ -112,12 +114,11 @@ public class CleansingScrollElement extends ChoiceElement {
 
             // Open the enchantment selection page
             CleansingEnchantmentPage enchantmentPage = new CleansingEnchantmentPage(
-                playerRef,
-                itemContext,
-                heldItemContext,
-                currentData,
-                enchantmentManager
-            );
+                    playerRef,
+                    itemContext,
+                    heldItemContext,
+                    currentData,
+                    enchantmentManager);
             pageManager.openCustomPage(ref, store, enchantmentPage);
         }
     }

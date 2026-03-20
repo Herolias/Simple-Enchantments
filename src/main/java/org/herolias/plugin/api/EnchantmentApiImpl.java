@@ -39,14 +39,14 @@ public class EnchantmentApiImpl implements EnchantmentApi {
         }
 
         // Delegate to manager's logic (handles checks, application, metadata update)
-        // Note: manager.applyEnchantmentToItem returns a Result object with the new ItemStack
+        // Note: manager.applyEnchantmentToItem returns a Result object with the new
+        // ItemStack
         var result = manager.applyEnchantmentToItem(null, item, type, level, true);
-        
+
         if (result.success()) {
-             return result.item();
+            return result.item();
         } else {
             // If failed (e.g. conflicts, max limit), return original item
-            // Could log failure reason if needed: result.getMessage()
             return item;
         }
     }
@@ -69,38 +69,36 @@ public class EnchantmentApiImpl implements EnchantmentApi {
         }
 
         // Create writable copy/modify
-        // Note: EnchantmentData returned from getEnchantmentsFromItem is usually a fresh object from BSON
-        // but we should verify if we need to check if it's mutable. 
-        // Based on analysis, getEnchantmentsFromItem creates a new EnchantmentData from BSON.
-        
         data.removeEnchantment(type);
-        
+
         // Write back to item metadata
-        // IMPORTANT: ItemStacks are immutable-ish, need to return the new one with updated metadata
-        // If data is empty, we MUST pass null to remove the key entirely to avoid "Enchantments": {} which corrupts the item on client
         org.bson.BsonDocument bson = data.isEmpty() ? null : data.toBson();
         ItemStack newItem = item.withMetadata(EnchantmentData.METADATA_KEY, bson);
-        
+
         // Update visuals
         return newItem;
     }
 
     @Override
     public int getEnchantmentLevel(@Nullable ItemStack item, @Nonnull String enchantmentId) {
-        if (item == null || item.isEmpty()) return 0;
-        
+        if (item == null || item.isEmpty())
+            return 0;
+
         EnchantmentType type = EnchantmentType.fromId(enchantmentId);
-        if (type == null) return 0;
-        
+        if (type == null)
+            return 0;
+
         return manager.getEnchantmentLevel(item, type);
     }
 
     @Override
     public boolean hasEnchantment(@Nullable ItemStack item, @Nonnull String enchantmentId) {
-        if (item == null || item.isEmpty()) return false;
+        if (item == null || item.isEmpty())
+            return false;
 
         EnchantmentType type = EnchantmentType.fromId(enchantmentId);
-        if (type == null) return false;
+        if (type == null)
+            return false;
 
         return manager.hasEnchantment(item, type);
     }
@@ -109,13 +107,14 @@ public class EnchantmentApiImpl implements EnchantmentApi {
     @Nonnull
     public Map<String, Integer> getEnchantments(@Nullable ItemStack item) {
         Map<String, Integer> result = new HashMap<>();
-        if (item == null || item.isEmpty()) return result;
+        if (item == null || item.isEmpty())
+            return result;
 
         EnchantmentData data = manager.getEnchantmentsFromItem(item);
         for (Map.Entry<EnchantmentType, Integer> entry : data.getAllEnchantments().entrySet()) {
             result.put(entry.getKey().getId(), entry.getValue());
         }
-        
+
         return result;
     }
 
@@ -184,7 +183,7 @@ public class EnchantmentApiImpl implements EnchantmentApi {
 
     @Override
     public void registerCraftingCategory(@Nonnull String categoryId, @Nonnull String displayName,
-                                          @javax.annotation.Nullable String iconPath) {
+            @javax.annotation.Nullable String iconPath) {
         CraftingCategoryDefinition.register(categoryId, displayName, iconPath);
         LOGGER.atInfo().log("Registered crafting category: " + categoryId + " (" + displayName + ")");
     }
@@ -193,10 +192,12 @@ public class EnchantmentApiImpl implements EnchantmentApi {
     @Nonnull
     public Map<String, Integer> equippedItemEnchantments(@Nonnull Player player) {
         Map<String, Integer> result = new HashMap<>();
-        if (player == null) return result;
+        if (player == null)
+            return result;
 
         Inventory inventory = player.getInventory();
-        if (inventory == null) return result;
+        if (inventory == null)
+            return result;
 
         // Main-hand
         collectEnchantments(inventory.getItemInHand(), result);
@@ -204,7 +205,7 @@ public class EnchantmentApiImpl implements EnchantmentApi {
         // Utility / off-hand
         collectEnchantments(inventory.getUtilityItem(), result);
 
-        // Armor slots (helmet=0, chestplate=1, leggings=2, boots=3)
+        // Armor slots (helmet=0, chestplate=1, gloves=2, boots=3)
         ItemContainer armorContainer = inventory.getArmor();
         if (armorContainer != null) {
             for (short slot = 0; slot < armorContainer.getCapacity(); slot++) {
@@ -216,11 +217,13 @@ public class EnchantmentApiImpl implements EnchantmentApi {
     }
 
     /**
-     * Helper: extracts enchantments from a single item and merges into the result map,
+     * Helper: extracts enchantments from a single item and merges into the result
+     * map,
      * keeping the highest level when duplicates exist.
      */
     private void collectEnchantments(@Nullable ItemStack item, @Nonnull Map<String, Integer> result) {
-        if (item == null || item.isEmpty()) return;
+        if (item == null || item.isEmpty())
+            return;
 
         EnchantmentData data = manager.getEnchantmentsFromItem(item);
         for (Map.Entry<EnchantmentType, Integer> entry : data.getAllEnchantments().entrySet()) {

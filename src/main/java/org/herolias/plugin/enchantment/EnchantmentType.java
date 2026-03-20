@@ -10,7 +10,7 @@ import java.util.*;
  * Defines an enchantment in the SimpleEnchanting system.
  * <p>
  * Converted from enum to class to allow dynamic registration by addon mods.
- * All 27 built-in enchantments are preserved as public static final constants
+ * All 31 built-in enchantments are preserved as public static final constants
  * for full backward compatibility.
  * <p>
  * Addon mods register new enchantments via the API; Simple Enchantments handles
@@ -40,7 +40,8 @@ public final class EnchantmentType {
     private String walkthroughText; // custom walkthrough text from addon mods, null = use lang key / bonus desc
     private java.util.List<MultiplierDefinition> multiplierDefinitions = java.util.List.of();
 
-    // ============================== Built-in Enchantments ==============================
+    // ============================== Built-in Enchantments
+    // ==============================
 
     public static final EnchantmentType SHARPNESS = builtin("sharpness", "Sharpness",
             "Increases melee damage", 3, false, false, 0.10,
@@ -199,12 +200,14 @@ public final class EnchantmentType {
             "Poisons targets on hit",
             ItemCategory.MELEE_WEAPON, ItemCategory.RANGED_WEAPON);
 
-    public static final EnchantmentType ENVIRONMENTAL_PROTECTION = builtin("environmental_protection", "Env. Protection",
+    public static final EnchantmentType ENVIRONMENTAL_PROTECTION = builtin("environmental_protection",
+            "Env. Protection",
             "Reduces environmental damage and alters status effects", 3, false, false, 0.04,
             "Environmental damage reduced by {amount}%",
             ItemCategory.ARMOR);
 
-    // ============================== Static Initialization ==============================
+    // ============================== Static Initialization
+    // ==============================
 
     static {
         // Register built-in conflict pairs
@@ -271,7 +274,8 @@ public final class EnchantmentType {
                 new MultiplierDefinition("poison", 3.0, "config.multiplier.poison"),
                 new MultiplierDefinition("poison:duration", 4.0, "config.multiplier.poison:duration")));
         ENVIRONMENTAL_PROTECTION.setMultiplierDefinitions(java.util.List.of(
-                new MultiplierDefinition("environmental_protection", 0.04, "config.multiplier.environmental_protection")));
+                new MultiplierDefinition("environmental_protection", 0.04,
+                        "config.multiplier.environmental_protection")));
     }
 
     // ============================== Constructors ==============================
@@ -280,9 +284,9 @@ public final class EnchantmentType {
      * Internal constructor for built-in enchantments.
      */
     private EnchantmentType(String id, String displayName, String description,
-                            int maxLevel, boolean requiresDurability, boolean isLegendary,
-                            double defaultMultiplierPerLevel, String bonusDescriptionTemplate,
-                            String scrollBaseName, String ownerModName, ItemCategory... categories) {
+            int maxLevel, boolean requiresDurability, boolean isLegendary,
+            double defaultMultiplierPerLevel, String bonusDescriptionTemplate,
+            String scrollBaseName, String ownerModName, ItemCategory... categories) {
         this.id = id;
         this.displayName = displayName;
         this.description = description;
@@ -304,9 +308,9 @@ public final class EnchantmentType {
      * @param id Must be namespaced for addons (e.g. "my_mod:lightning")
      */
     public EnchantmentType(String id, String displayName, String description,
-                           int maxLevel, boolean requiresDurability, boolean isLegendary,
-                           double defaultMultiplierPerLevel, String bonusDescriptionTemplate,
-                           String ownerModId, String ownerModName, Set<ItemCategory> applicableCategories) {
+            int maxLevel, boolean requiresDurability, boolean isLegendary,
+            double defaultMultiplierPerLevel, String bonusDescriptionTemplate,
+            String ownerModId, String ownerModName, Set<ItemCategory> applicableCategories) {
         if (ownerModId != null && !id.contains(":")) {
             throw new IllegalArgumentException(
                     "Addon enchantment IDs must be namespaced (e.g. 'my_mod:lightning'), got: '" + id + "'");
@@ -328,9 +332,9 @@ public final class EnchantmentType {
     // ============================== Factory Methods ==============================
 
     private static EnchantmentType builtin(String id, String displayName, String description,
-                                           int maxLevel, boolean requiresDurability, boolean isLegendary,
-                                           double defaultMultiplier, String bonusTemplate,
-                                           ItemCategory... categories) {
+            int maxLevel, boolean requiresDurability, boolean isLegendary,
+            double defaultMultiplier, String bonusTemplate,
+            ItemCategory... categories) {
         EnchantmentType type = new EnchantmentType(id, displayName, description, maxLevel,
                 requiresDurability, isLegendary, defaultMultiplier, bonusTemplate, null, null, categories);
         EnchantmentRegistry.getInstance().register(type);
@@ -338,9 +342,9 @@ public final class EnchantmentType {
     }
 
     private static EnchantmentType builtinCustomScroll(String id, String displayName, String description,
-                                                       int maxLevel, boolean requiresDurability, boolean isLegendary,
-                                                       double defaultMultiplier, String bonusTemplate,
-                                                       String scrollBaseName, ItemCategory... categories) {
+            int maxLevel, boolean requiresDurability, boolean isLegendary,
+            double defaultMultiplier, String bonusTemplate,
+            String scrollBaseName, ItemCategory... categories) {
         EnchantmentType type = new EnchantmentType(id, displayName, description, maxLevel,
                 requiresDurability, isLegendary, defaultMultiplier, bonusTemplate, scrollBaseName, null, categories);
         EnchantmentRegistry.getInstance().register(type);
@@ -348,9 +352,9 @@ public final class EnchantmentType {
     }
 
     private static EnchantmentType builtinCollab(String id, String displayName, String description,
-                                                 int maxLevel, boolean requiresDurability, boolean isLegendary,
-                                                 double defaultMultiplier, String bonusTemplate,
-                                                 String collabModName, ItemCategory... categories) {
+            int maxLevel, boolean requiresDurability, boolean isLegendary,
+            double defaultMultiplier, String bonusTemplate,
+            String collabModName, ItemCategory... categories) {
         EnchantmentType type = new EnchantmentType(id, displayName, description, maxLevel,
                 requiresDurability, isLegendary, defaultMultiplier, bonusTemplate, null, collabModName, categories);
         EnchantmentRegistry.getInstance().register(type);
@@ -359,29 +363,71 @@ public final class EnchantmentType {
 
     // ============================== Accessors ==============================
 
-    public String getId() { return id; }
-    public String getDisplayName() { return displayName; }
-    public String getDescription() { return description; }
-    public int getMaxLevel() { return maxLevel; }
-    public boolean requiresDurability() { return requiresDurability; }
-    public boolean isLegendary() { return isLegendary; }
-    public Set<ItemCategory> getApplicableCategories() { return applicableCategories; }
-    @Nullable public String getOwnerModId() { return ownerModId; }
-    @Nullable public String getOwnerModName() { return ownerModName; }
-    public double getDefaultMultiplierPerLevel() { return defaultMultiplierPerLevel; }
-    public String getBonusDescriptionTemplate() { return bonusDescriptionTemplate; }
+    public String getId() {
+        return id;
+    }
+
+    public String getDisplayName() {
+        return displayName;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public int getMaxLevel() {
+        return maxLevel;
+    }
+
+    public boolean requiresDurability() {
+        return requiresDurability;
+    }
+
+    public boolean isLegendary() {
+        return isLegendary;
+    }
+
+    public Set<ItemCategory> getApplicableCategories() {
+        return applicableCategories;
+    }
+
+    @Nullable
+    public String getOwnerModId() {
+        return ownerModId;
+    }
+
+    @Nullable
+    public String getOwnerModName() {
+        return ownerModName;
+    }
+
+    public double getDefaultMultiplierPerLevel() {
+        return defaultMultiplierPerLevel;
+    }
+
+    public String getBonusDescriptionTemplate() {
+        return bonusDescriptionTemplate;
+    }
 
     /** Returns true if this is a built-in Simple Enchantments enchantment. */
-    public boolean isBuiltIn() { return ownerModId == null; }
+    public boolean isBuiltIn() {
+        return ownerModId == null;
+    }
 
     /**
      * Backward-compatible replacement for the old enum {@code name()} method.
      * Returns the ID in uppercase (e.g. "SHARPNESS", "LIFE_LEECH").
      */
-    public String name() { return id.toUpperCase(); }
+    public String name() {
+        return id.toUpperCase();
+    }
 
-    /** Gets the scroll definitions for addon enchantments. Empty list for built-in. */
-    public java.util.List<org.herolias.plugin.api.ScrollDefinition> getScrollDefinitions() { return scrollDefinitions; }
+    /**
+     * Gets the scroll definitions for addon enchantments. Empty list for built-in.
+     */
+    public java.util.List<org.herolias.plugin.api.ScrollDefinition> getScrollDefinitions() {
+        return scrollDefinitions;
+    }
 
     /** Sets scroll definitions. Called by EnchantmentBuilder. */
     public void setScrollDefinitions(java.util.List<org.herolias.plugin.api.ScrollDefinition> definitions) {
@@ -389,25 +435,45 @@ public final class EnchantmentType {
     }
 
     /** Gets the crafting category for the Enchanting Table. */
-    @Nullable public String getCraftingCategory() { return craftingCategory; }
+    @Nullable
+    public String getCraftingCategory() {
+        return craftingCategory;
+    }
 
     /** Sets the crafting category. Called by EnchantmentBuilder. */
-    public void setCraftingCategory(String category) { this.craftingCategory = category; }
+    public void setCraftingCategory(String category) {
+        this.craftingCategory = category;
+    }
 
     /** Gets the custom scale function, or null if linear scaling. */
-    @Nullable public java.util.function.IntToDoubleFunction getScaleFunction() { return scaleFunction; }
+    @Nullable
+    public java.util.function.IntToDoubleFunction getScaleFunction() {
+        return scaleFunction;
+    }
 
     /** Sets the custom scale function. Called by EnchantmentBuilder. */
-    public void setScaleFunction(java.util.function.IntToDoubleFunction scaleFunction) { this.scaleFunction = scaleFunction; }
+    public void setScaleFunction(java.util.function.IntToDoubleFunction scaleFunction) {
+        this.scaleFunction = scaleFunction;
+    }
 
     /** Gets the custom walkthrough text, or null if using default fallback. */
-    @Nullable public String getWalkthroughText() { return walkthroughText; }
+    @Nullable
+    public String getWalkthroughText() {
+        return walkthroughText;
+    }
 
     /** Sets custom walkthrough text. Called by EnchantmentBuilder. */
-    public void setWalkthroughText(String walkthroughText) { this.walkthroughText = walkthroughText; }
+    public void setWalkthroughText(String walkthroughText) {
+        this.walkthroughText = walkthroughText;
+    }
 
-    /** Gets the multiplier definitions for this enchantment (primary + additional). */
-    @Nonnull public java.util.List<MultiplierDefinition> getMultiplierDefinitions() { return multiplierDefinitions; }
+    /**
+     * Gets the multiplier definitions for this enchantment (primary + additional).
+     */
+    @Nonnull
+    public java.util.List<MultiplierDefinition> getMultiplierDefinitions() {
+        return multiplierDefinitions;
+    }
 
     /** Sets multiplier definitions. Called by EnchantmentBuilder or static init. */
     public void setMultiplierDefinitions(java.util.List<MultiplierDefinition> definitions) {
@@ -416,15 +482,17 @@ public final class EnchantmentType {
 
     /**
      * Gets the value of a specific multiplier from the active configuration.
-     * Falls back to the default value from the MultiplierDefinition if not configured.
+     * Falls back to the default value from the MultiplierDefinition if not
+     * configured.
      *
      * @param key the multiplier key (e.g. "burn:duration")
-     * @return the configured value, or the definition's default, or 0.0 if not found
+     * @return the configured value, or the definition's default, or 0.0 if not
+     *         found
      */
     public double getMultiplierValue(String key) {
         try {
-            org.herolias.plugin.config.EnchantingConfig config =
-                org.herolias.plugin.SimpleEnchanting.getInstance().getConfigManager().getConfig();
+            org.herolias.plugin.config.EnchantingConfig config = org.herolias.plugin.SimpleEnchanting.getInstance()
+                    .getConfigManager().getConfig();
             if (config.enchantmentMultipliers.containsKey(key)) {
                 return config.enchantmentMultipliers.get(key);
             }
@@ -444,7 +512,8 @@ public final class EnchantmentType {
      * Computes the total scaled multiplier for a given level.
      * <p>
      * If a custom scale function was set via the builder, it is used.
-     * Otherwise falls back to linear scaling: {@code level * getEffectMultiplier()}.
+     * Otherwise falls back to linear scaling:
+     * {@code level * getEffectMultiplier()}.
      * <p>
      * Addon mods should call this method when computing effect values to
      * respect the server admin's configured multiplier and the chosen scale curve.
@@ -459,14 +528,16 @@ public final class EnchantmentType {
         return level * getEffectMultiplier();
     }
 
-    // ============================== Backward Compat Static Methods ==============================
+    // ============================== Backward Compat Static Methods
+    // ==============================
 
     /**
      * Gets the enchantment by its ID. Drop-in replacement for old enum method.
      */
     @Nullable
     public static EnchantmentType fromId(String id) {
-        if (id == null) return null;
+        if (id == null)
+            return null;
         return EnchantmentRegistry.getInstance().getById(id);
     }
 
@@ -475,7 +546,8 @@ public final class EnchantmentType {
      */
     @Nullable
     public static EnchantmentType findByDisplayName(String displayName) {
-        if (displayName == null) return null;
+        if (displayName == null)
+            return null;
         return EnchantmentRegistry.getInstance().getByDisplayName(displayName);
     }
 
@@ -486,17 +558,20 @@ public final class EnchantmentType {
         return EnchantmentRegistry.getInstance().values();
     }
 
-    // ============================== Conflict Checking ==============================
+    // ============================== Conflict Checking
+    // ==============================
 
     /**
      * Checks if this enchantment conflicts with another.
      */
     public boolean conflictsWith(EnchantmentType other) {
-        if (this.equals(other)) return true;
+        if (this.equals(other))
+            return true;
         return EnchantmentRegistry.getInstance().areConflicting(this.id, other.id);
     }
 
-    // ============================== Config Integration ==============================
+    // ============================== Config Integration
+    // ==============================
 
     /**
      * Gets the effect multiplier per level from the active configuration.
@@ -504,15 +579,16 @@ public final class EnchantmentType {
      */
     public double getEffectMultiplier() {
         try {
-            org.herolias.plugin.config.EnchantingConfig config = 
-                org.herolias.plugin.SimpleEnchanting.getInstance().getConfigManager().getConfig();
+            org.herolias.plugin.config.EnchantingConfig config = org.herolias.plugin.SimpleEnchanting.getInstance()
+                    .getConfigManager().getConfig();
             return config.enchantmentMultipliers.getOrDefault(this.id, this.defaultMultiplierPerLevel);
         } catch (Exception e) {
             return this.defaultMultiplierPerLevel;
         }
     }
 
-    // ============================== Category Checking ==============================
+    // ============================== Category Checking
+    // ==============================
 
     /**
      * Checks if this enchantment can be applied to items of the given category.
@@ -522,19 +598,31 @@ public final class EnchantmentType {
             return true;
         }
         // Allow HELMET, BOOTS, GLOVES to accept enchantments targeting ARMOR
-        if ((category == ItemCategory.HELMET || category == ItemCategory.BOOTS || category == ItemCategory.GLOVES) 
+        if ((category == ItemCategory.HELMET || category == ItemCategory.BOOTS || category == ItemCategory.GLOVES)
                 && applicableCategories.contains(ItemCategory.ARMOR)) {
             return true;
         }
         return false;
     }
 
-    // ============================== Translation Keys ==============================
+    // ============================== Translation Keys
+    // ==============================
 
-    public String getNameKey() { return formatTranslationKey("name"); }
-    public String getDescriptionKey() { return formatTranslationKey("description"); }
-    public String getBonusTranslationKey() { return formatTranslationKey("bonus"); }
-    public String getWalkthroughKey() { return formatTranslationKey("walkthrough"); }
+    public String getNameKey() {
+        return formatTranslationKey("name");
+    }
+
+    public String getDescriptionKey() {
+        return formatTranslationKey("description");
+    }
+
+    public String getBonusTranslationKey() {
+        return formatTranslationKey("bonus");
+    }
+
+    public String getWalkthroughKey() {
+        return formatTranslationKey("walkthrough");
+    }
 
     private String formatTranslationKey(String suffix) {
         if (id.contains(":")) {
@@ -544,7 +632,8 @@ public final class EnchantmentType {
         return "enchantment." + id + "." + suffix;
     }
 
-    // ============================== Display Formatting ==============================
+    // ============================== Display Formatting
+    // ==============================
 
     /**
      * Gets a formatted display string with level (e.g., "Sharpness I")
@@ -564,7 +653,8 @@ public final class EnchantmentType {
      * Gets localized bonus text for the specific level.
      */
     public String getBonusDescription(int level, String langCode, String clientLangCode) {
-        if (level <= 0) return "";
+        if (level <= 0)
+            return "";
         double mult = getScaledMultiplier(level);
         float percentage = (float) (mult * 100);
 
@@ -594,10 +684,12 @@ public final class EnchantmentType {
             if (plugin != null) {
                 template = plugin.getLanguageManager().getRawMessage(key, langCode, clientLangCode);
             }
-        } catch (Exception ignored) {}
-        
-        if (template == null || template.equals(key)) template = defaultPattern;
-        
+        } catch (Exception ignored) {
+        }
+
+        if (template == null || template.equals(key))
+            template = defaultPattern;
+
         if (amount != null) {
             template = template.replace("{amount}", String.valueOf(amount));
         }
@@ -635,7 +727,8 @@ public final class EnchantmentType {
                         template = resolved;
                     }
                 }
-            } catch (Exception ignored) {}
+            } catch (Exception ignored) {
+            }
         }
 
         // Priority 3: Localized description key, then hardcoded description
@@ -682,7 +775,8 @@ public final class EnchantmentType {
 
     /**
      * Gets the scroll base name for this enchantment (e.g., "Scroll_Sharpness").
-     * Some built-in enchantments have custom overrides (e.g., pick_perfect -> Scroll_Silktouch).
+     * Some built-in enchantments have custom overrides (e.g., pick_perfect ->
+     * Scroll_Silktouch).
      */
     @Nonnull
     public String getScrollBaseName() {
@@ -727,8 +821,10 @@ public final class EnchantmentType {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
         EnchantmentType that = (EnchantmentType) o;
         return Objects.equals(id, that.id);
     }

@@ -7,12 +7,13 @@ package org.herolias.plugin.enchantment;
  * are captured and stored with the projectile so they can be applied on hit.
  * 
  * Use the Builder for cleaner construction:
+ * 
  * <pre>
  * ProjectileEnchantmentData data = ProjectileEnchantmentData.builder()
- *     .strength(2)
- *     .looting(1)
- *     .burn(1)
- *     .build();
+ *         .strength(2)
+ *         .looting(1)
+ *         .burn(1)
+ *         .build();
  * </pre>
  */
 public class ProjectileEnchantmentData {
@@ -23,7 +24,8 @@ public class ProjectileEnchantmentData {
     private final int burnLevel;
     private final int eternalShotLevel;
 
-    public ProjectileEnchantmentData(int strengthLevel, int eaglesEyeLevel, int lootingLevel, int freezeLevel, int burnLevel, int eternalShotLevel) {
+    public ProjectileEnchantmentData(int strengthLevel, int eaglesEyeLevel, int lootingLevel, int freezeLevel,
+            int burnLevel, int eternalShotLevel) {
         this.strengthLevel = strengthLevel;
         this.eaglesEyeLevel = eaglesEyeLevel;
         this.lootingLevel = lootingLevel;
@@ -45,15 +47,39 @@ public class ProjectileEnchantmentData {
         private int burnLevel;
         private int eternalShotLevel;
 
-        public Builder strength(int level) { this.strengthLevel = level; return this; }
-        public Builder eaglesEye(int level) { this.eaglesEyeLevel = level; return this; }
-        public Builder looting(int level) { this.lootingLevel = level; return this; }
-        public Builder freeze(int level) { this.freezeLevel = level; return this; }
-        public Builder burn(int level) { this.burnLevel = level; return this; }
-        public Builder eternalShot(int level) { this.eternalShotLevel = level; return this; }
+        public Builder strength(int level) {
+            this.strengthLevel = level;
+            return this;
+        }
+
+        public Builder eaglesEye(int level) {
+            this.eaglesEyeLevel = level;
+            return this;
+        }
+
+        public Builder looting(int level) {
+            this.lootingLevel = level;
+            return this;
+        }
+
+        public Builder freeze(int level) {
+            this.freezeLevel = level;
+            return this;
+        }
+
+        public Builder burn(int level) {
+            this.burnLevel = level;
+            return this;
+        }
+
+        public Builder eternalShot(int level) {
+            this.eternalShotLevel = level;
+            return this;
+        }
 
         public ProjectileEnchantmentData build() {
-            return new ProjectileEnchantmentData(strengthLevel, eaglesEyeLevel, lootingLevel, freezeLevel, burnLevel, eternalShotLevel);
+            return new ProjectileEnchantmentData(strengthLevel, eaglesEyeLevel, lootingLevel, freezeLevel, burnLevel,
+                    eternalShotLevel);
         }
     }
 
@@ -68,11 +94,11 @@ public class ProjectileEnchantmentData {
     public int getLootingLevel() {
         return lootingLevel;
     }
-    
+
     public int getFreezeLevel() {
         return freezeLevel;
     }
-    
+
     public int getBurnLevel() {
         return burnLevel;
     }
@@ -89,16 +115,23 @@ public class ProjectileEnchantmentData {
      * @return The level, or 0 if not applicable
      */
     public int getLevel(EnchantmentType type) {
-        if (type == EnchantmentType.STRENGTH) return strengthLevel;
-        if (type == EnchantmentType.EAGLES_EYE) return eaglesEyeLevel;
-        if (type == EnchantmentType.LOOTING) return lootingLevel;
-        if (type == EnchantmentType.FREEZE) return freezeLevel;
-        if (type == EnchantmentType.BURN) return burnLevel;
-        if (type == EnchantmentType.ETERNAL_SHOT) return eternalShotLevel;
+        if (type == EnchantmentType.STRENGTH)
+            return strengthLevel;
+        if (type == EnchantmentType.EAGLES_EYE)
+            return eaglesEyeLevel;
+        if (type == EnchantmentType.LOOTING)
+            return lootingLevel;
+        if (type == EnchantmentType.FREEZE)
+            return freezeLevel;
+        if (type == EnchantmentType.BURN)
+            return burnLevel;
+        if (type == EnchantmentType.ETERNAL_SHOT)
+            return eternalShotLevel;
         return 0;
     }
 
     public boolean hasAny() {
-        return strengthLevel > 0 || eaglesEyeLevel > 0 || lootingLevel > 0 || freezeLevel > 0 || burnLevel > 0 || eternalShotLevel > 0;
+        return strengthLevel > 0 || eaglesEyeLevel > 0 || lootingLevel > 0 || freezeLevel > 0 || burnLevel > 0
+                || eternalShotLevel > 0;
     }
 }

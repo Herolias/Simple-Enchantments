@@ -34,10 +34,10 @@ public class SwitchActiveSlotSystem extends EntityEventSystem<EntityStore, Switc
 
     @Override
     public void handle(int index,
-                       @Nonnull ArchetypeChunk<EntityStore> archetypeChunk,
-                       @Nonnull Store<EntityStore> store,
-                       @Nonnull CommandBuffer<EntityStore> commandBuffer,
-                       @Nonnull SwitchActiveSlotEvent event) {
+            @Nonnull ArchetypeChunk<EntityStore> archetypeChunk,
+            @Nonnull Store<EntityStore> store,
+            @Nonnull CommandBuffer<EntityStore> commandBuffer,
+            @Nonnull SwitchActiveSlotEvent event) {
         // No-op: Slot switch detection is handled by EnchantmentSlotTracker
     }
 }

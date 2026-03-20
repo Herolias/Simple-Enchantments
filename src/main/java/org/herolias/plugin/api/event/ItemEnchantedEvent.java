@@ -21,7 +21,8 @@ public class ItemEnchantedEvent implements IEvent<Void> {
     private final EnchantmentType enchantment;
     private final int level;
 
-    public ItemEnchantedEvent(@Nullable PlayerRef playerRef, @Nonnull ItemStack item, @Nonnull EnchantmentType enchantment, int level) {
+    public ItemEnchantedEvent(@Nullable PlayerRef playerRef, @Nonnull ItemStack item,
+            @Nonnull EnchantmentType enchantment, int level) {
         this.playerRef = playerRef;
         this.item = item;
         this.enchantment = enchantment;
@@ -29,7 +30,8 @@ public class ItemEnchantedEvent implements IEvent<Void> {
     }
 
     /**
-     * @return The player who enchanted the item, or null if it was enchanted via command/console without a specific player context.
+     * @return The player who enchanted the item, or null if it was enchanted via
+     *         command/console without a specific player context.
      */
     @Nullable
     public PlayerRef getPlayerRef() {

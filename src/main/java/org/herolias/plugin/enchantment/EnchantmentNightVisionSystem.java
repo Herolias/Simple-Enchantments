@@ -29,8 +29,9 @@ import java.util.Set;
  * ECS ticking system that sends a per-player DynamicLight packet update
  * to players wearing a helmet with the Night Vision enchantment.
  * 
- * Instead of adding a real DynamicLight component (which broadcasts to all players),
- * this queues a ComponentUpdate with the DynamicLight data directly to the 
+ * Instead of adding a real DynamicLight component (which broadcasts to all
+ * players),
+ * this queues a ComponentUpdate with the DynamicLight data directly to the
  * wearing player's own EntityViewer — making the light visible only to them.
  */
 public class EnchantmentNightVisionSystem extends EntityTickingSystem<EntityStore> {
@@ -39,8 +40,6 @@ public class EnchantmentNightVisionSystem extends EntityTickingSystem<EntityStor
     private static final short HELMET_SLOT = 0;
 
     // Light config
-    // Radius 10. RGB (1, 1, 1) -> Effectively black?
-    // If client forces brightness, this will confirm it.
     private static final byte LIGHT_RADIUS = -1;
     // Minimal values
     private static final byte LIGHT_RED = (byte) 1;
@@ -49,9 +48,8 @@ public class EnchantmentNightVisionSystem extends EntityTickingSystem<EntityStor
 
     @Nonnull
     private static final Query<EntityStore> QUERY = Query.and(
-        EntityModule.get().getPlayerComponentType(),
-        EntityTrackerSystems.EntityViewer.getComponentType()
-    );
+            EntityModule.get().getPlayerComponentType(),
+            EntityTrackerSystems.EntityViewer.getComponentType());
 
     private final EnchantmentManager enchantmentManager;
 
@@ -71,9 +69,9 @@ public class EnchantmentNightVisionSystem extends EntityTickingSystem<EntityStor
 
     @Override
     public void tick(float dt, int index,
-                     @Nonnull ArchetypeChunk<EntityStore> archetypeChunk,
-                     @Nonnull Store<EntityStore> store,
-                     @Nonnull CommandBuffer<EntityStore> commandBuffer) {
+            @Nonnull ArchetypeChunk<EntityStore> archetypeChunk,
+            @Nonnull Store<EntityStore> store,
+            @Nonnull CommandBuffer<EntityStore> commandBuffer) {
         try {
             Entity entity = EntityUtils.getEntity(index, archetypeChunk);
             if (!(entity instanceof LivingEntity livingEntity)) {
@@ -103,7 +101,7 @@ public class EnchantmentNightVisionSystem extends EntityTickingSystem<EntityStor
 
             // Get the player's own EntityViewer component
             EntityTrackerSystems.EntityViewer viewer = archetypeChunk.getComponent(
-                index, EntityTrackerSystems.EntityViewer.getComponentType());
+                    index, EntityTrackerSystems.EntityViewer.getComponentType());
             if (viewer == null) {
                 return;
             }
@@ -115,10 +113,13 @@ public class EnchantmentNightVisionSystem extends EntityTickingSystem<EntityStor
                 update.dynamicLight = new ColorLight(LIGHT_RADIUS, LIGHT_RED, LIGHT_GREEN, LIGHT_BLUE);
                 viewer.queueUpdate(ref, update);
                 activeNightVision.add(ref);
-                
-                com.hypixel.hytale.server.core.universe.PlayerRef playerRef = store.getComponent(ref, com.hypixel.hytale.server.core.universe.PlayerRef.getComponentType());
-                int level = enchantmentManager.getEnchantmentLevel(inventory.getArmor().getItemStack(HELMET_SLOT), EnchantmentType.NIGHT_VISION);
-                EnchantmentEventHelper.fireActivated(playerRef, inventory.getArmor().getItemStack(HELMET_SLOT), EnchantmentType.NIGHT_VISION, level);
+
+                com.hypixel.hytale.server.core.universe.PlayerRef playerRef = store.getComponent(ref,
+                        com.hypixel.hytale.server.core.universe.PlayerRef.getComponentType());
+                int level = enchantmentManager.getEnchantmentLevel(inventory.getArmor().getItemStack(HELMET_SLOT),
+                        EnchantmentType.NIGHT_VISION);
+                EnchantmentEventHelper.fireActivated(playerRef, inventory.getArmor().getItemStack(HELMET_SLOT),
+                        EnchantmentType.NIGHT_VISION, level);
             } else if (!hasNightVision && wasActive) {
                 // Remove the light from this player only
                 viewer.queueRemove(ref, ComponentUpdateType.DynamicLight);
@@ -126,7 +127,7 @@ public class EnchantmentNightVisionSystem extends EntityTickingSystem<EntityStor
             }
             // Optimization: Do NOTHING if hasNightVision && wasActive.
             // This prevents spamming packets every tick.
-            
+
         } catch (Exception e) {
             LOGGER.atWarning().log("Error in NightVision system: " + e.getMessage());
         }

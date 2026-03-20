@@ -25,7 +25,8 @@ public class DropItemEventSystem extends EntityEventSystem<EntityStore, DropItem
     private final EnchantmentEternalShotSystem eternalShotSystem;
     private final EnchantmentElementalHeartSystem elementalHeartSystem;
 
-    public DropItemEventSystem(EnchantmentEternalShotSystem eternalShotSystem, EnchantmentElementalHeartSystem elementalHeartSystem) {
+    public DropItemEventSystem(EnchantmentEternalShotSystem eternalShotSystem,
+            EnchantmentElementalHeartSystem elementalHeartSystem) {
         super(DropItemEvent.PlayerRequest.class);
         this.eternalShotSystem = eternalShotSystem;
         this.elementalHeartSystem = elementalHeartSystem;
@@ -41,13 +42,13 @@ public class DropItemEventSystem extends EntityEventSystem<EntityStore, DropItem
 
     @Override
     public void handle(int index,
-                       @Nonnull ArchetypeChunk<EntityStore> archetypeChunk,
-                       @Nonnull Store<EntityStore> store,
-                       @Nonnull CommandBuffer<EntityStore> commandBuffer,
-                       @Nonnull DropItemEvent.PlayerRequest event) {
+            @Nonnull ArchetypeChunk<EntityStore> archetypeChunk,
+            @Nonnull Store<EntityStore> store,
+            @Nonnull CommandBuffer<EntityStore> commandBuffer,
+            @Nonnull DropItemEvent.PlayerRequest event) {
         // Get the entity ref from the archetype chunk at the current index
         Ref<EntityStore> ref = archetypeChunk.getReferenceTo(index);
-        
+
         // Delegate to the EternalShot system to track this drop
         eternalShotSystem.onDropItemRequest(event, ref, store);
         // Delegate to Elemental Heart system too

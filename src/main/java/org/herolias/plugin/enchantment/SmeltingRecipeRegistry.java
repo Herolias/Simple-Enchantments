@@ -17,12 +17,14 @@ public class SmeltingRecipeRegistry extends AbstractRecipeRegistry<SmeltingRecip
     }
 
     @Override
-    protected SmeltingRecipe createRecipe(@Nonnull MaterialQuantity output, int inputQuantity, @Nullable String inputItemId, @Nullable String inputResourceTypeId) {
+    protected SmeltingRecipe createRecipe(@Nonnull MaterialQuantity output, int inputQuantity,
+            @Nullable String inputItemId, @Nullable String inputResourceTypeId) {
         return new SmeltingRecipe(output, inputQuantity, inputItemId, inputResourceTypeId);
     }
 
     public static class SmeltingRecipe extends AbstractRecipeRegistry.Recipe {
-        public SmeltingRecipe(@Nonnull MaterialQuantity output, int inputQuantity, @Nullable String inputItemId, @Nullable String inputResourceTypeId) {
+        public SmeltingRecipe(@Nonnull MaterialQuantity output, int inputQuantity, @Nullable String inputItemId,
+                @Nullable String inputResourceTypeId) {
             super(output, inputQuantity, inputItemId, inputResourceTypeId);
         }
     }

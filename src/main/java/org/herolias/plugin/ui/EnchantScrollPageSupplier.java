@@ -20,19 +20,17 @@ import org.herolias.plugin.enchantment.EnchantmentManager;
 import org.herolias.plugin.enchantment.EnchantmentType;
 
 public class EnchantScrollPageSupplier implements OpenCustomUIInteraction.CustomPageSupplier {
-    public static final BuilderCodec<EnchantScrollPageSupplier> CODEC =
-        BuilderCodec.builder(EnchantScrollPageSupplier.class, EnchantScrollPageSupplier::new)
+    public static final BuilderCodec<EnchantScrollPageSupplier> CODEC = BuilderCodec
+            .builder(EnchantScrollPageSupplier.class, EnchantScrollPageSupplier::new)
             .append(
-                new KeyedCodec<String>("EnchantmentId", Codec.STRING),
-                (data, o) -> data.enchantmentId = o,
-                data -> data.enchantmentId
-            )
+                    new KeyedCodec<String>("EnchantmentId", Codec.STRING),
+                    (data, o) -> data.enchantmentId = o,
+                    data -> data.enchantmentId)
             .add()
             .append(
-                new KeyedCodec<Integer>("Level", Codec.INTEGER),
-                (data, o) -> data.level = o,
-                data -> data.level
-            )
+                    new KeyedCodec<Integer>("Level", Codec.INTEGER),
+                    (data, o) -> data.level = o,
+                    data -> data.level)
             .add()
             .build();
 
@@ -41,18 +39,18 @@ public class EnchantScrollPageSupplier implements OpenCustomUIInteraction.Custom
 
     @Override
     public CustomUIPage tryCreate(
-        @Nonnull Ref<EntityStore> ref,
-        @Nonnull ComponentAccessor<EntityStore> componentAccessor,
-        @Nonnull PlayerRef playerRef,
-        @Nonnull InteractionContext context
-    ) {
+            @Nonnull Ref<EntityStore> ref,
+            @Nonnull ComponentAccessor<EntityStore> componentAccessor,
+            @Nonnull PlayerRef playerRef,
+            @Nonnull InteractionContext context) {
         EnchantmentType type = EnchantmentType.fromId(this.enchantmentId);
         if (type == null) {
             playerRef.sendMessage(Message.raw("Unknown enchantment: " + this.enchantmentId));
             return null;
         }
 
-        org.herolias.plugin.config.EnchantingConfig config = org.herolias.plugin.SimpleEnchanting.getInstance().getConfigManager().getConfig();
+        org.herolias.plugin.config.EnchantingConfig config = org.herolias.plugin.SimpleEnchanting.getInstance()
+                .getConfigManager().getConfig();
         if (config.disabledEnchantments.getOrDefault(type.getId(), false)) {
             playerRef.sendMessage(Message.raw("This enchantment is currently disabled!").color("#FF5555"));
             return null;

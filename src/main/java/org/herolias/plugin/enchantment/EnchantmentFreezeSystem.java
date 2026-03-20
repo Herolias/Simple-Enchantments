@@ -23,21 +23,22 @@ import javax.annotation.Nonnull;
 import java.util.Set;
 
 /**
- * ECS system that applies the Slow status effect when hitting with a Freeze-enchanted weapon.
+ * ECS system that applies the Slow status effect when hitting with a
+ * Freeze-enchanted weapon.
  * 
- * Effect: Applies the in-game "Freeze" status effect to the target (speed reduction)
+ * Effect: Applies the in-game "Freeze" status effect to the target (speed
+ * reduction)
  * Applicable to: Ranged weapons (bow, crossbow, slingshot) and melee weapons
  */
 public class EnchantmentFreezeSystem extends DamageEventSystem {
 
     private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
     private static final String FREEZE_EFFECT_ID = "FreezeEnchantment";
-    
+
     private final EnchantmentManager enchantmentManager;
-    
+
     private final Set<Dependency<EntityStore>> dependencies = Set.of(
-        new SystemDependency(Order.AFTER, DamageSystems.ApplyDamage.class)
-    );
+            new SystemDependency(Order.AFTER, DamageSystems.ApplyDamage.class));
 
     public EnchantmentFreezeSystem(EnchantmentManager enchantmentManager) {
         this.enchantmentManager = enchantmentManager;
@@ -58,28 +59,31 @@ public class EnchantmentFreezeSystem extends DamageEventSystem {
 
     @Override
     public void handle(int index,
-                       @Nonnull ArchetypeChunk<EntityStore> archetypeChunk,
-                       @Nonnull Store<EntityStore> store,
-                       @Nonnull CommandBuffer<EntityStore> commandBuffer,
-                       @Nonnull Damage damage) {
-        
-        if (damage.getAmount() <= 0 || damage.isCancelled()) return;
-        
+            @Nonnull ArchetypeChunk<EntityStore> archetypeChunk,
+            @Nonnull Store<EntityStore> store,
+            @Nonnull CommandBuffer<EntityStore> commandBuffer,
+            @Nonnull Damage damage) {
+
+        if (damage.getAmount() <= 0 || damage.isCancelled())
+            return;
+
         // Use centralized damage context extraction
         EnchantmentManager.DamageContext ctx = enchantmentManager.getDamageContext(damage, commandBuffer);
         Boolean isReflection = damage.getIfPresentMetaObject(EnchantmentReflectionSystem.IS_REFLECTION);
-        if (isReflection != null && isReflection) return;
-        
+        if (isReflection != null && isReflection)
+            return;
+
         int freezeLevel = 0;
-        
+
         // 1. Try to get from projectile data (ranged)
         if (ctx.hasProjectile()) {
-            ProjectileEnchantmentData projectileData = enchantmentManager.getProjectileEnchantmentData(ctx.projectileRef(), commandBuffer);
+            ProjectileEnchantmentData projectileData = enchantmentManager
+                    .getProjectileEnchantmentData(ctx.projectileRef(), commandBuffer);
             if (projectileData != null) {
                 freezeLevel = projectileData.getFreezeLevel();
             }
         }
-        
+
         // 2. Fallback / Melee: check shooter's weapon directly
         if (freezeLevel <= 0 && ctx.hasAttacker()) {
             Entity shooterEntity = EntityUtils.getEntity(ctx.attackerRef(), commandBuffer);
@@ -93,12 +97,14 @@ public class EnchantmentFreezeSystem extends DamageEventSystem {
                 }
             }
         }
-        
-        if (freezeLevel <= 0) return;
-        
+
+        if (freezeLevel <= 0)
+            return;
+
         Ref<EntityStore> targetRef = archetypeChunk.getReferenceTo(index);
-        if (targetRef == null || !targetRef.isValid()) return;
-        
+        if (targetRef == null || !targetRef.isValid())
+            return;
+
         // Use centralized status effect application
         // Check target's Environment Protection level to reduce freeze slow intensity
         int totalEnvProtection = 0;
@@ -106,11 +112,13 @@ public class EnchantmentFreezeSystem extends DamageEventSystem {
         if (targetEntity instanceof LivingEntity targetLiving) {
             Inventory targetInventory = targetLiving.getInventory();
             if (targetInventory != null) {
-                com.hypixel.hytale.server.core.inventory.container.ItemContainer armorContainer = targetInventory.getArmor();
+                com.hypixel.hytale.server.core.inventory.container.ItemContainer armorContainer = targetInventory
+                        .getArmor();
                 for (short i = 0; i < armorContainer.getCapacity(); i++) {
                     ItemStack armorPiece = armorContainer.getItemStack(i);
                     if (armorPiece != null && !armorPiece.isEmpty()) {
-                        totalEnvProtection += enchantmentManager.getEnchantmentLevel(armorPiece, EnchantmentType.ENVIRONMENTAL_PROTECTION);
+                        totalEnvProtection += enchantmentManager.getEnchantmentLevel(armorPiece,
+                                EnchantmentType.ENVIRONMENTAL_PROTECTION);
                     }
                 }
             }
@@ -120,15 +128,18 @@ public class EnchantmentFreezeSystem extends DamageEventSystem {
         float originalSpeedMult = Float.MIN_VALUE; // sentinel: not modified
         com.hypixel.hytale.server.core.asset.type.entityeffect.config.EntityEffect freezeEffect = null;
         if (totalEnvProtection > 0) {
-            freezeEffect = com.hypixel.hytale.server.core.asset.type.entityeffect.config.EntityEffect.getAssetMap().getAsset(FREEZE_EFFECT_ID);
+            freezeEffect = com.hypixel.hytale.server.core.asset.type.entityeffect.config.EntityEffect.getAssetMap()
+                    .getAsset(FREEZE_EFFECT_ID);
             if (freezeEffect != null) {
                 try {
-                    java.lang.reflect.Field appEffectsField = com.hypixel.hytale.server.core.asset.type.entityeffect.config.EntityEffect.class.getDeclaredField("applicationEffects");
+                    java.lang.reflect.Field appEffectsField = com.hypixel.hytale.server.core.asset.type.entityeffect.config.EntityEffect.class
+                            .getDeclaredField("applicationEffects");
                     appEffectsField.setAccessible(true);
-                    com.hypixel.hytale.server.core.asset.type.entityeffect.config.ApplicationEffects appEffects =
-                        (com.hypixel.hytale.server.core.asset.type.entityeffect.config.ApplicationEffects) appEffectsField.get(freezeEffect);
+                    com.hypixel.hytale.server.core.asset.type.entityeffect.config.ApplicationEffects appEffects = (com.hypixel.hytale.server.core.asset.type.entityeffect.config.ApplicationEffects) appEffectsField
+                            .get(freezeEffect);
                     if (appEffects != null) {
-                        java.lang.reflect.Field speedMultField = com.hypixel.hytale.server.core.asset.type.entityeffect.config.ApplicationEffects.class.getDeclaredField("horizontalSpeedMultiplier");
+                        java.lang.reflect.Field speedMultField = com.hypixel.hytale.server.core.asset.type.entityeffect.config.ApplicationEffects.class
+                                .getDeclaredField("horizontalSpeedMultiplier");
                         speedMultField.setAccessible(true);
                         originalSpeedMult = (float) speedMultField.get(appEffects);
 
@@ -154,12 +165,14 @@ public class EnchantmentFreezeSystem extends DamageEventSystem {
         // Restore the original freeze speed multiplier so other targets aren't affected
         if (originalSpeedMult != Float.MIN_VALUE && freezeEffect != null) {
             try {
-                java.lang.reflect.Field appEffectsField = com.hypixel.hytale.server.core.asset.type.entityeffect.config.EntityEffect.class.getDeclaredField("applicationEffects");
+                java.lang.reflect.Field appEffectsField = com.hypixel.hytale.server.core.asset.type.entityeffect.config.EntityEffect.class
+                        .getDeclaredField("applicationEffects");
                 appEffectsField.setAccessible(true);
-                com.hypixel.hytale.server.core.asset.type.entityeffect.config.ApplicationEffects appEffects =
-                    (com.hypixel.hytale.server.core.asset.type.entityeffect.config.ApplicationEffects) appEffectsField.get(freezeEffect);
+                com.hypixel.hytale.server.core.asset.type.entityeffect.config.ApplicationEffects appEffects = (com.hypixel.hytale.server.core.asset.type.entityeffect.config.ApplicationEffects) appEffectsField
+                        .get(freezeEffect);
                 if (appEffects != null) {
-                    java.lang.reflect.Field speedMultField = com.hypixel.hytale.server.core.asset.type.entityeffect.config.ApplicationEffects.class.getDeclaredField("horizontalSpeedMultiplier");
+                    java.lang.reflect.Field speedMultField = com.hypixel.hytale.server.core.asset.type.entityeffect.config.ApplicationEffects.class
+                            .getDeclaredField("horizontalSpeedMultiplier");
                     speedMultField.setAccessible(true);
                     speedMultField.set(appEffects, originalSpeedMult);
                 }
@@ -172,12 +185,13 @@ public class EnchantmentFreezeSystem extends DamageEventSystem {
             LOGGER.atWarning().log("Freeze effect " + FREEZE_EFFECT_ID + " not found in asset map");
         } else {
             if (ctx.hasAttacker()) {
-                 Entity shooterEntity = EntityUtils.getEntity(ctx.attackerRef(), commandBuffer);
-                 ItemStack weapon = enchantmentManager.getWeaponFromEntity(shooterEntity);
-                 if (weapon != null) {
-                      com.hypixel.hytale.server.core.universe.PlayerRef playerRef = store.getComponent(ctx.attackerRef(), com.hypixel.hytale.server.core.universe.PlayerRef.getComponentType());
-                      EnchantmentEventHelper.fireActivated(playerRef, weapon, EnchantmentType.FREEZE, freezeLevel);
-                 }
+                Entity shooterEntity = EntityUtils.getEntity(ctx.attackerRef(), commandBuffer);
+                ItemStack weapon = enchantmentManager.getWeaponFromEntity(shooterEntity);
+                if (weapon != null) {
+                    com.hypixel.hytale.server.core.universe.PlayerRef playerRef = store.getComponent(ctx.attackerRef(),
+                            com.hypixel.hytale.server.core.universe.PlayerRef.getComponentType());
+                    EnchantmentEventHelper.fireActivated(playerRef, weapon, EnchantmentType.FREEZE, freezeLevel);
+                }
             }
         }
     }

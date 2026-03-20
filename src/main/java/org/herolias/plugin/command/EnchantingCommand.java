@@ -53,13 +53,12 @@ public class EnchantingCommand extends AbstractAsyncCommand {
         return CompletableFuture.runAsync(() -> {
             Player playerComponent = store.getComponent(playerRef, Player.getComponentType());
             PlayerRef playerRefComponent = store.getComponent(playerRef, PlayerRef.getComponentType());
-            
+
             if (playerComponent != null && playerRefComponent != null) {
                 playerComponent.getPageManager().openCustomPage(
-                    playerRef, 
-                    store, 
-                    new EnchantingPage(playerRefComponent, plugin)
-                );
+                        playerRef,
+                        store,
+                        new EnchantingPage(playerRefComponent, plugin));
             }
         }, world);
     }

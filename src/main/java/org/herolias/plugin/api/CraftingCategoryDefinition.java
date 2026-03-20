@@ -9,7 +9,8 @@ import java.util.Collection;
 /**
  * Represents a crafting category (tab) in the Enchanting Table.
  * <p>
- * Built-in categories are pre-registered. Addon mods can register custom categories
+ * Built-in categories are pre-registered. Addon mods can register custom
+ * categories
  * via {@link EnchantmentApi#registerCraftingCategory(String, String, String)}.
  */
 public class CraftingCategoryDefinition {
@@ -48,8 +49,8 @@ public class CraftingCategoryDefinition {
      * @throws IllegalArgumentException if the category ID is already registered
      */
     public static CraftingCategoryDefinition register(@Nonnull String categoryId,
-                                                       @Nonnull String displayName,
-                                                       @Nullable String iconPath) {
+            @Nonnull String displayName,
+            @Nullable String iconPath) {
         if (REGISTRY.containsKey(categoryId)) {
             throw new IllegalArgumentException("Crafting category already registered: '" + categoryId + "'");
         }
@@ -74,8 +75,20 @@ public class CraftingCategoryDefinition {
         return REGISTRY.values();
     }
 
-    public String getCategoryId() { return categoryId; }
-    public String getDisplayName() { return displayName; }
-    @Nullable public String getIconPath() { return iconPath; }
-    public boolean isBuiltIn() { return builtIn; }
+    public String getCategoryId() {
+        return categoryId;
+    }
+
+    public String getDisplayName() {
+        return displayName;
+    }
+
+    @Nullable
+    public String getIconPath() {
+        return iconPath;
+    }
+
+    public boolean isBuiltIn() {
+        return builtIn;
+    }
 }

@@ -72,31 +72,32 @@ public class EnchantmentManager {
         try {
             CHANGE_STAT_ENTITY_STAT_ASSETS = ChangeStatBaseInteraction.class.getDeclaredField("entityStatAssets");
             CHANGE_STAT_ENTITY_STAT_ASSETS.setAccessible(true);
-            
+
             CHANGE_STAT_ENTITY_STATS = ChangeStatBaseInteraction.class.getDeclaredField("entityStats");
             CHANGE_STAT_ENTITY_STATS.setAccessible(true);
-            
+
             STATS_CONDITION_RAW_COSTS = StatsConditionBaseInteraction.class.getDeclaredField("rawCosts");
             STATS_CONDITION_RAW_COSTS.setAccessible(true);
-            
+
             STATS_CONDITION_COSTS = StatsConditionBaseInteraction.class.getDeclaredField("costs");
             STATS_CONDITION_COSTS.setAccessible(true);
-            
-            PROJECTILE_CREATOR_FIELD = com.hypixel.hytale.server.core.entity.entities.ProjectileComponent.class.getDeclaredField("creatorUuid");
+
+            PROJECTILE_CREATOR_FIELD = com.hypixel.hytale.server.core.entity.entities.ProjectileComponent.class
+                    .getDeclaredField("creatorUuid");
             PROJECTILE_CREATOR_FIELD.setAccessible(true);
         } catch (Throwable e) {
             LOGGER.atSevere().log("Failed to initialize reflection fields: " + e.getMessage());
         }
     }
-    
+
     // Cache for expensive string checks
     private final ConcurrentHashMap<String, Boolean> oreOrCrystalCache = new ConcurrentHashMap<>();
     private final ConcurrentHashMap<String, Boolean> manaConsumingCache = new ConcurrentHashMap<>();
     // shieldCache removed - delegated to ItemCategoryManager
 
     /**
-     * Cached set of disabled enchantment IDs.  Rebuilt lazily when the config
-     * changes (via {@link #invalidateEnabledCache()}).  Avoids repeated
+     * Cached set of disabled enchantment IDs. Rebuilt lazily when the config
+     * changes (via {@link #invalidateEnabledCache()}). Avoids repeated
      * {@code getConfig().disabledEnchantments.getOrDefault()} lookups on every
      * {@link #isEnchantmentEnabled} call.
      */
@@ -119,10 +120,11 @@ public class EnchantmentManager {
     }
 
     private double calculateLootingMultiplier(int level, double multiplierPerLevel) {
-        if (level <= 0) return 1.0;
+        if (level <= 0)
+            return 1.0;
         return 1.0 + (level * multiplierPerLevel);
     }
-    
+
     private final ConcurrentHashMap<Integer, ProjectileEnchantmentData> projectileEnchantmentsByNetworkId = new ConcurrentHashMap<>();
     private final SmeltingRecipeRegistry smeltingRecipeRegistry = new SmeltingRecipeRegistry();
     private final CookingRecipeRegistry cookingRecipeRegistry = new CookingRecipeRegistry();
@@ -141,8 +143,9 @@ public class EnchantmentManager {
      * Parses EnchantmentData from a raw metadata string (JSON/BSON string).
      */
     public EnchantmentData getEnchantmentsFromMetadata(String metadata) {
-        if (metadata == null || metadata.isEmpty()) return EnchantmentData.EMPTY;
-        
+        if (metadata == null || metadata.isEmpty())
+            return EnchantmentData.EMPTY;
+
         try {
             BsonDocument doc = BsonDocument.parse(metadata);
             if (doc.containsKey(EnchantmentData.METADATA_KEY)) {
@@ -160,15 +163,18 @@ public class EnchantmentManager {
 
     /**
      * Stores enchantment data for an entity that is burning.
-     * This allows us to attribute the kill to the original attacker/weapon even if they die from the DoT.
+     * This allows us to attribute the kill to the original attacker/weapon even if
+     * they die from the DoT.
      */
     public void storeBurnEnchantments(@Nonnull UUID entityUuid, int burnLevel, int lootingLevel) {
         if (burnLevel <= 0 && lootingLevel <= 0) {
             burnEnchantmentsByEntityUuid.remove(entityUuid);
             return;
         }
-        // distinct from projectile data, but reusing the class since it holds the same fields we need
-        burnEnchantmentsByEntityUuid.put(entityUuid, new ProjectileEnchantmentData(0, 0, lootingLevel, 0, burnLevel, 0));
+        // distinct from projectile data, but reusing the class since it holds the same
+        // fields we need
+        burnEnchantmentsByEntityUuid.put(entityUuid,
+                new ProjectileEnchantmentData(0, 0, lootingLevel, 0, burnLevel, 0));
     }
 
     @Nullable
@@ -181,16 +187,19 @@ public class EnchantmentManager {
     }
 
     /**
-     * Applies an enchantment to an item. Allows unsafe levels (ignoring max level cap).
+     * Applies an enchantment to an item. Allows unsafe levels (ignoring max level
+     * cap).
      * 
      * @param playerRef The player applying the enchantment (nullable)
-     * @param item The item to enchant
-     * @param type The enchantment to apply
-     * @param level The level of the enchantment
-     * @param unsafe If true, bypasses max level checks
+     * @param item      The item to enchant
+     * @param type      The enchantment to apply
+     * @param level     The level of the enchantment
+     * @param unsafe    If true, bypasses max level checks
      * @return Result
      */
-    public EnchantmentApplicationResult applyEnchantmentToItem(@Nullable com.hypixel.hytale.server.core.universe.PlayerRef playerRef, @Nonnull ItemStack item, @Nonnull EnchantmentType type, int level, boolean unsafe) {
+    public EnchantmentApplicationResult applyEnchantmentToItem(
+            @Nullable com.hypixel.hytale.server.core.universe.PlayerRef playerRef, @Nonnull ItemStack item,
+            @Nonnull EnchantmentType type, int level, boolean unsafe) {
         if (item == null || item.isEmpty()) {
             LOGGER.atWarning().log("Cannot enchant null or empty item");
             return EnchantmentApplicationResult.failure("Cannot enchant null or empty item.");
@@ -203,17 +212,16 @@ public class EnchantmentManager {
         if (error != null) {
             return EnchantmentApplicationResult.failure(error);
         }
-        
+
         // Get existing enchantments from item metadata
         EnchantmentData data = getEnchantmentsFromItem(item);
-        
-        // If the data is the immutable EMPTY instance (or we want to be safe), create a mutable copy
+
+        // If the data is the immutable EMPTY instance (or we want to be safe), create a
+        // mutable copy
         if (data == EnchantmentData.EMPTY || data.isEmpty()) {
             data = new EnchantmentData();
         } else {
-             // We can't easily check for immutability without try-catch or exposing a method, 
-             // but 'copy()' is always safe and cheap enough for an action that happens once per anvil use.
-             data = data.copy();
+            data = data.copy();
         }
 
         // Check level limits (if not unsafe)
@@ -223,11 +231,12 @@ public class EnchantmentManager {
                 appliedLevel = type.getMaxLevel(); // Clamp for safe mode
             }
         } else {
-            // Even in unsafe mode, single-level enchants (maxLevel == 1) like Smelting/Burn should likely stay at 1
-            // unless we specifically want to break them (but usually they are boolean flags).
-            // User requested to keep these capped.
+            // Even in unsafe mode, single-level enchants (maxLevel == 1) like Smelting/Burn
+            // should likely stay at 1
+            // unless we specifically want to break them (but usually they are boolean
+            // flags).
             if (type.getMaxLevel() == 1 && appliedLevel > 1) {
-                 appliedLevel = 1;
+                appliedLevel = 1;
             }
         }
 
@@ -235,7 +244,7 @@ public class EnchantmentManager {
         if (!data.hasEnchantment(type) && data.getAllEnchantments().size() >= config.maxEnchantmentsPerItem) {
             return EnchantmentApplicationResult.failure("Maximum number of enchantments reached for this item.");
         }
-        
+
         // Check for conflicts
         for (EnchantmentType existing : data.getAllEnchantments().keySet()) {
             // Allow overwriting/upgrading the same enchantment
@@ -246,38 +255,43 @@ public class EnchantmentManager {
                 return EnchantmentApplicationResult.failure("Enchantment conflicts with " + existing.getDisplayName());
             }
         }
-        
+
         // Apply the enchantment
         data.addEnchantment(type, appliedLevel);
-        
+
         // Store back to item metadata
         ItemStack enchantedItem = item.withMetadata(EnchantmentData.METADATA_KEY, data.toBson());
-        
 
-        
         LOGGER.atInfo().log("Applied " + type.getFormattedName(appliedLevel) + " to " + item.getItemId());
-        
+
         // Dispatch the API event
-        org.herolias.plugin.api.event.ItemEnchantedEvent event = new org.herolias.plugin.api.event.ItemEnchantedEvent(playerRef, enchantedItem, type, appliedLevel);
-        com.hypixel.hytale.server.core.HytaleServer.get().getEventBus().dispatchFor(org.herolias.plugin.api.event.ItemEnchantedEvent.class).dispatch(event);
-        
-        return EnchantmentApplicationResult.success(enchantedItem, "Successfully applied " + type.getFormattedName(appliedLevel) + ".");
+        org.herolias.plugin.api.event.ItemEnchantedEvent event = new org.herolias.plugin.api.event.ItemEnchantedEvent(
+                playerRef, enchantedItem, type, appliedLevel);
+        com.hypixel.hytale.server.core.HytaleServer.get().getEventBus()
+                .dispatchFor(org.herolias.plugin.api.event.ItemEnchantedEvent.class).dispatch(event);
+
+        return EnchantmentApplicationResult.success(enchantedItem,
+                "Successfully applied " + type.getFormattedName(appliedLevel) + ".");
     }
 
     /**
      * Applies an enchantment to an item with strict max level checks (Safe mode).
+     * 
      * @param playerRef The player applying the enchantment (nullable)
      */
     @Nonnull
-    public EnchantmentApplicationResult applyEnchantmentToItem(@Nullable com.hypixel.hytale.server.core.universe.PlayerRef playerRef, @Nonnull ItemStack item, @Nonnull EnchantmentType type, int level) {
+    public EnchantmentApplicationResult applyEnchantmentToItem(
+            @Nullable com.hypixel.hytale.server.core.universe.PlayerRef playerRef, @Nonnull ItemStack item,
+            @Nonnull EnchantmentType type, int level) {
         return applyEnchantmentToItem(playerRef, item, type, level, false);
     }
-    
+
     /**
      * Legacy method without PlayerRef.
      */
     @Nonnull
-    public EnchantmentApplicationResult applyEnchantmentToItem(@Nonnull ItemStack item, @Nonnull EnchantmentType type, int level, boolean unsafe) {
+    public EnchantmentApplicationResult applyEnchantmentToItem(@Nonnull ItemStack item, @Nonnull EnchantmentType type,
+            int level, boolean unsafe) {
         return applyEnchantmentToItem(null, item, type, level, unsafe);
     }
 
@@ -285,17 +299,20 @@ public class EnchantmentManager {
      * Legacy method without PlayerRef.
      */
     @Nonnull
-    public EnchantmentApplicationResult applyEnchantmentToItem(@Nonnull ItemStack item, @Nonnull EnchantmentType type, int level) {
+    public EnchantmentApplicationResult applyEnchantmentToItem(@Nonnull ItemStack item, @Nonnull EnchantmentType type,
+            int level) {
         return applyEnchantmentToItem(null, item, type, level, false);
     }
 
     /**
-     * Checks if an item defines the basic requirements to accept a specific enchantment.
+     * Checks if an item defines the basic requirements to accept a specific
+     * enchantment.
      * Checks: Category, Config status, Durability requirements.
      * Does NOT check: Existing enchantments (conflicts/max count).
      */
     public boolean canAcceptEnchantment(@Nonnull ItemStack item, @Nonnull EnchantmentType type) {
-        if (item == null || item.isEmpty()) return false;
+        if (item == null || item.isEmpty())
+            return false;
 
         // Check config
         org.herolias.plugin.config.EnchantingConfig config = getConfig();
@@ -304,24 +321,29 @@ public class EnchantmentManager {
         if (error != null) {
             return false;
         }
-        
+
         // Check for conflicts
         EnchantmentData data = getEnchantmentsFromItem(item);
         for (EnchantmentType existing : data.getAllEnchantments().keySet()) {
-            if (existing == type) continue;
-            if (type.conflictsWith(existing)) return false;
+            if (existing == type)
+                continue;
+            if (type.conflictsWith(existing))
+                return false;
         }
 
         return true;
     }
 
     /**
-     * Checks common applicability rules (Config, Category, Durability, Special cases).
+     * Checks common applicability rules (Config, Category, Durability, Special
+     * cases).
+     * 
      * @return null if applicable, error message otherwise.
      */
-    private String checkCommonApplicability(ItemStack item, EnchantmentType type, org.herolias.plugin.config.EnchantingConfig config) {
+    private String checkCommonApplicability(ItemStack item, EnchantmentType type,
+            org.herolias.plugin.config.EnchantingConfig config) {
         if (config.disabledEnchantments.getOrDefault(type.getId(), false)) {
-             return "This enchantment is disabled in the server configuration.";
+            return "This enchantment is disabled in the server configuration.";
         }
 
         // Custom Scroll accepts all enchantment categories
@@ -331,34 +353,36 @@ public class EnchantmentManager {
 
         // Special check for Thrift
         if (type == EnchantmentType.THRIFT) {
-             if (!isManaConsuming(item)) return "This enchantment requires a mana-consuming item.";
-             return null;
+            if (!isManaConsuming(item))
+                return "This enchantment requires a mana-consuming item.";
+            return null;
         }
 
         ItemCategory category = categorizeItem(item);
         if (!type.canApplyTo(category)) {
             return "Cannot apply " + type.getDisplayName() + " to this item type.";
         }
-        
+
         if (type.requiresDurability()) {
-             Number maxDur = item.getItem().getMaxDurability();
-             Integer maxStack = item.getItem().getMaxStack();
-             if (maxDur == null || maxDur.doubleValue() <= 0) {
-                 // Check if any state variant has durability (e.g. filled Watering Can)
-                 if (!hasStateVariantWithDurability(item.getItem())) {
-                     return "This enchantment requires an item with durability.";
-                 }
-             }
-             if (maxStack != null && maxStack > 1) {
-                 return "Cannot apply durability enchantments to stackable items.";
-             }
+            Number maxDur = item.getItem().getMaxDurability();
+            Integer maxStack = item.getItem().getMaxStack();
+            if (maxDur == null || maxDur.doubleValue() <= 0) {
+                // Check if any state variant has durability (e.g. filled Watering Can)
+                if (!hasStateVariantWithDurability(item.getItem())) {
+                    return "This enchantment requires an item with durability.";
+                }
+            }
+            if (maxStack != null && maxStack > 1) {
+                return "Cannot apply durability enchantments to stackable items.";
+            }
         }
         return null;
     }
 
     /**
      * Checks if any state variant of an item has durability.
-     * For example, an empty Watering Can has no durability, but its filled state does.
+     * For example, an empty Watering Can has no durability, but its filled state
+     * does.
      *
      * @param item The item to check
      * @return true if any state variant has positive maxDurability
@@ -366,12 +390,16 @@ public class EnchantmentManager {
     private boolean hasStateVariantWithDurability(@Nonnull Item item) {
         try {
             // Iterate all known state variants via blockToState reverse map
-            // getStateForItem() uses blockToState, but we need to check stateToBlock (forward map)
+            // getStateForItem() uses blockToState, but we need to check stateToBlock
+            // (forward map)
             // Use getItemForState() with known state names — but we don't know them.
             // Instead, iterate the asset map for items that are variants of this item.
-            // We cast to AssetMap to access the underlying map, as the interface might be generic
-            for (Item candidate : com.hypixel.hytale.server.core.asset.type.item.config.Item.getAssetMap().getAssetMap().values()) {
-                if (candidate == item) continue;
+            // We cast to AssetMap to access the underlying map, as the interface might be
+            // generic
+            for (Item candidate : com.hypixel.hytale.server.core.asset.type.item.config.Item.getAssetMap().getAssetMap()
+                    .values()) {
+                if (candidate == item)
+                    continue;
                 // Check if this item has a state that maps to the candidate
                 String stateName = item.getStateForItem(candidate.getId());
                 if (stateName != null) {
@@ -392,10 +420,12 @@ public class EnchantmentManager {
      * Used for determining eligibility for Thrift enchantment.
      */
     public boolean isManaConsuming(@Nonnull ItemStack item) {
-        if (item == null || item.isEmpty()) return false;
-        
+        if (item == null || item.isEmpty())
+            return false;
+
         String itemId = item.getItemId();
-        if (itemId == null) return false;
+        if (itemId == null)
+            return false;
 
         return manaConsumingCache.computeIfAbsent(itemId, id -> {
             // 0. Check Category (Config/Mapping override)
@@ -410,7 +440,7 @@ public class EnchantmentManager {
 
             // 2. Deep inspection of Interactions (Primary/Secondary)
             int manaStatId = DefaultEntityStatTypes.getMana();
-            
+
             // Check main interactions
             for (String rootInteractionName : item.getItem().getInteractions().values()) {
                 if (checkRootInteraction(rootInteractionName, manaStatId)) {
@@ -418,7 +448,8 @@ public class EnchantmentManager {
                 }
             }
 
-            // Check Interaction Variables (Overridden/Inline interactions often contain the costs)
+            // Check Interaction Variables (Overridden/Inline interactions often contain the
+            // costs)
             if (item.getItem().getInteractionVars() != null) {
                 for (String rootInteractionName : item.getItem().getInteractionVars().values()) {
                     if (checkRootInteraction(rootInteractionName, manaStatId)) {
@@ -426,18 +457,20 @@ public class EnchantmentManager {
                     }
                 }
             }
-            
+
             return false;
         });
     }
 
     private boolean checkRootInteraction(String rootInteractionName, int manaStatId) {
         RootInteraction root = RootInteraction.getRootInteractionOrUnknown(rootInteractionName);
-        if (root == null || root.getInteractionIds() == null) return false;
+        if (root == null || root.getInteractionIds() == null)
+            return false;
 
         for (String interactionId : root.getInteractionIds()) {
             Interaction interaction = Interaction.getAssetMap().getAsset(interactionId);
-            if (interaction == null) continue;
+            if (interaction == null)
+                continue;
 
             if (isManaConsumingInteraction(interaction, manaStatId)) {
                 return true;
@@ -451,17 +484,18 @@ public class EnchantmentManager {
             if (interaction instanceof ChangeStatBaseInteraction) {
                 // Check entityStatAssets (String map)
                 if (CHANGE_STAT_ENTITY_STAT_ASSETS != null) {
-                    Object2FloatMap<String> assets = (Object2FloatMap<String>) CHANGE_STAT_ENTITY_STAT_ASSETS.get(interaction);
+                    Object2FloatMap<String> assets = (Object2FloatMap<String>) CHANGE_STAT_ENTITY_STAT_ASSETS
+                            .get(interaction);
                     if (assets != null) {
                         for (Object2FloatMap.Entry<String> entry : assets.object2FloatEntrySet()) {
-                             String key = entry.getKey();
-                             if (key != null && key.equalsIgnoreCase("Mana") && entry.getFloatValue() < 0) {
-                                 return true;
-                             }
+                            String key = entry.getKey();
+                            if (key != null && key.equalsIgnoreCase("Mana") && entry.getFloatValue() < 0) {
+                                return true;
+                            }
                         }
                     }
                 }
-                
+
                 // Check entityStats (ID map)
                 if (CHANGE_STAT_ENTITY_STATS != null) {
                     Int2FloatMap changes = (Int2FloatMap) CHANGE_STAT_ENTITY_STATS.get(interaction);
@@ -474,11 +508,12 @@ public class EnchantmentManager {
                     }
                 }
             }
-            
+
             if (interaction instanceof StatsConditionBaseInteraction) {
                 // Check rawCosts (String map)
                 if (STATS_CONDITION_RAW_COSTS != null) {
-                    Object2FloatMap<String> rawCosts = (Object2FloatMap<String>) STATS_CONDITION_RAW_COSTS.get(interaction);
+                    Object2FloatMap<String> rawCosts = (Object2FloatMap<String>) STATS_CONDITION_RAW_COSTS
+                            .get(interaction);
                     if (rawCosts != null) {
                         for (Object2FloatMap.Entry<String> entry : rawCosts.object2FloatEntrySet()) {
                             String key = entry.getKey();
@@ -488,27 +523,25 @@ public class EnchantmentManager {
                         }
                     }
                 }
-                
+
                 // Check costs (ID map)
                 if (STATS_CONDITION_COSTS != null) {
-                     Int2FloatMap costs = (Int2FloatMap) STATS_CONDITION_COSTS.get(interaction);
-                     if (costs != null) {
-                         for (Int2FloatMap.Entry entry : costs.int2FloatEntrySet()) {
-                             if (entry.getIntKey() == manaStatId) {
-                                 return true;
-                             }
-                         }
-                     }
+                    Int2FloatMap costs = (Int2FloatMap) STATS_CONDITION_COSTS.get(interaction);
+                    if (costs != null) {
+                        for (Int2FloatMap.Entry entry : costs.int2FloatEntrySet()) {
+                            if (entry.getIntKey() == manaStatId) {
+                                return true;
+                            }
+                        }
+                    }
                 }
             }
         } catch (IllegalAccessException e) {
             LOGGER.atWarning().log("Failed to access interaction fields: " + e.getMessage());
         }
-        
+
         return false;
     }
-
-
 
     /**
      * Gets the enchantment data from an ItemStack's metadata.
@@ -521,16 +554,16 @@ public class EnchantmentManager {
         if (item == null || item.isEmpty()) {
             return EnchantmentData.EMPTY;
         }
-        
+
         BsonDocument enchantmentsBson = item.getFromMetadataOrNull(
-            EnchantmentData.METADATA_KEY,
-            Codec.BSON_DOCUMENT
-        );
+                EnchantmentData.METADATA_KEY,
+                Codec.BSON_DOCUMENT);
         if (enchantmentsBson != null && !enchantmentsBson.isEmpty()) {
             return EnchantmentData.fromBson(enchantmentsBson);
         }
 
-        // Legacy fallback: metadata stored as a string (e.g., "sharpness:2,durability:1")
+        // Legacy fallback: metadata stored as a string (e.g.,
+        // "sharpness:2,durability:1")
         String legacyData = item.getFromMetadataOrNull(EnchantmentData.METADATA_KEY, Codec.STRING);
         if (legacyData != null && !legacyData.isBlank()) {
             return EnchantmentData.deserialize(legacyData);
@@ -544,7 +577,8 @@ public class EnchantmentManager {
      * Uses a cached set of disabled IDs for O(1) lookups.
      */
     public boolean isEnchantmentEnabled(EnchantmentType type) {
-        if (type == null) return false;
+        if (type == null)
+            return false;
         Set<String> disabled = disabledEnchantmentIds;
         if (disabled == null) {
             disabled = rebuildDisabledSet();
@@ -562,8 +596,9 @@ public class EnchantmentManager {
                 disabled.add(entry.getKey());
             }
         }
-        
-        // Robustness: Automatically disable dependent enchantments if the dependency is missing
+
+        // Robustness: Automatically disable dependent enchantments if the dependency is
+        // missing
         if (!SimpleEnchanting.getInstance().isPerfectParriesModPresent()) {
             disabled.add(EnchantmentType.RIPOSTE.getId());
             disabled.add(EnchantmentType.COUP_DE_GRACE.getId());
@@ -583,21 +618,24 @@ public class EnchantmentManager {
     /**
      * Fast check for whether an item has <em>any</em> enabled enchantment.
      * Only reads the BSON document keys — does <b>not</b> deserialize the full
-     * {@link EnchantmentData}.  Used by the visuals system where we only need
+     * {@link EnchantmentData}. Used by the visuals system where we only need
      * a boolean answer, not levels.
      *
      * @return {@code true} if at least one enabled enchantment is present
      */
     public boolean hasAnyEnabledEnchantment(@Nullable ItemStack item) {
-        if (item == null || item.isEmpty()) return false;
+        if (item == null || item.isEmpty())
+            return false;
 
         BsonDocument bson = item.getFromMetadataOrNull(
                 EnchantmentData.METADATA_KEY, Codec.BSON_DOCUMENT);
-        if (bson == null || bson.isEmpty()) return false;
+        if (bson == null || bson.isEmpty())
+            return false;
 
         for (String key : bson.keySet()) {
             EnchantmentType type = EnchantmentType.findByDisplayName(key);
-            if (type == null) type = EnchantmentType.fromId(key);
+            if (type == null)
+                type = EnchantmentType.fromId(key);
             if (type != null && isEnchantmentEnabled(type)) {
                 return true;
             }
@@ -614,17 +652,17 @@ public class EnchantmentManager {
         if (item == null || item.isEmpty()) {
             return false;
         }
-        
-        // Logical check: if it's disabled globally, acts as if it doesn't exist on the item
+
+        // Logical check: if it's disabled globally, acts as if it doesn't exist on the
+        // item
         if (!isEnchantmentEnabled(type)) {
             return false;
         }
 
         BsonDocument enchantmentsBson = item.getFromMetadataOrNull(
-            EnchantmentData.METADATA_KEY,
-            Codec.BSON_DOCUMENT
-        );
-        
+                EnchantmentData.METADATA_KEY,
+                Codec.BSON_DOCUMENT);
+
         if (enchantmentsBson != null && !enchantmentsBson.isEmpty()) {
             // Check direct display name key
             if (enchantmentsBson.containsKey(type.getDisplayName())) {
@@ -653,16 +691,15 @@ public class EnchantmentManager {
         if (item == null || item.isEmpty()) {
             return 0;
         }
-        
+
         // Logical check: if it's disabled globally, returns level 0 (no effect)
         if (!isEnchantmentEnabled(type)) {
             return 0;
         }
 
         BsonDocument enchantmentsBson = item.getFromMetadataOrNull(
-            EnchantmentData.METADATA_KEY,
-            Codec.BSON_DOCUMENT
-        );
+                EnchantmentData.METADATA_KEY,
+                Codec.BSON_DOCUMENT);
 
         if (enchantmentsBson != null && !enchantmentsBson.isEmpty()) {
             // Try display name first
@@ -682,10 +719,14 @@ public class EnchantmentManager {
     }
 
     private int parseBsonLevel(org.bson.BsonValue value) {
-        if (value == null) return 0;
-        if (value.isInt32()) return value.asInt32().getValue();
-        if (value.isInt64()) return (int) value.asInt64().getValue();
-        if (value.isDouble()) return (int) Math.round(value.asDouble().getValue());
+        if (value == null)
+            return 0;
+        if (value.isInt32())
+            return value.asInt32().getValue();
+        if (value.isInt64())
+            return (int) value.asInt64().getValue();
+        if (value.isDouble())
+            return (int) Math.round(value.asDouble().getValue());
         return 0;
     }
 
@@ -697,7 +738,8 @@ public class EnchantmentManager {
      * @return The total damage multiplier (1.0 = no change, 1.1 = +10%, etc.)
      */
     public double calculateDamageMultiplier(@Nullable ItemStack item) {
-        // Direct BSON read — avoids deserializing all enchantments just to check Sharpness
+        // Direct BSON read — avoids deserializing all enchantments just to check
+        // Sharpness
         int sharpnessLevel = getEnchantmentLevel(item, EnchantmentType.SHARPNESS);
         if (sharpnessLevel > 0) {
             return 1.0 + sharpnessLevel * EnchantmentType.SHARPNESS.getEffectMultiplier();
@@ -728,15 +770,14 @@ public class EnchantmentManager {
      * @return The mining speed multiplier (1.0 = normal, 1.2 = +20%, etc.)
      */
     public double calculateMiningSpeedMultiplier(@Nullable ItemStack item) {
-        // Direct BSON read — avoids deserializing all enchantments just to check Efficiency
+        // Direct BSON read — avoids deserializing all enchantments just to check
+        // Efficiency
         int efficiencyLevel = getEnchantmentLevel(item, EnchantmentType.EFFICIENCY);
         if (efficiencyLevel > 0) {
             return 1.0 + (efficiencyLevel * EnchantmentType.EFFICIENCY.getEffectMultiplier());
         }
         return 1.0;
     }
-
-
 
     /**
      * Calculates the ability charge speed multiplier from Frenzy enchantment.
@@ -745,15 +786,15 @@ public class EnchantmentManager {
      * @return The charge speed multiplier (0.1 = +10%, etc.)
      */
     public double calculateFrenzySpeedMultiplier(int level) {
-        if (level <= 0) return 0.0;
+        if (level <= 0)
+            return 0.0;
         return level * EnchantmentType.FRENZY.getEffectMultiplier();
     }
-
 
     /**
      * Calculates the projectile damage multiplier from ranged enchantments.
      *
-     * @param weapon The ranged weapon used to fire the projectile
+     * @param weapon   The ranged weapon used to fire the projectile
      * @param distance The distance between shooter and target
      * @return The projectile damage multiplier (1.0 = no change)
      */
@@ -771,10 +812,12 @@ public class EnchantmentManager {
         }
 
         int strengthLevel = data.getLevel(EnchantmentType.STRENGTH);
-        if (!isEnchantmentEnabled(EnchantmentType.STRENGTH)) strengthLevel = 0;
+        if (!isEnchantmentEnabled(EnchantmentType.STRENGTH))
+            strengthLevel = 0;
 
         int eaglesEyeLevel = data.getLevel(EnchantmentType.EAGLES_EYE);
-        if (!isEnchantmentEnabled(EnchantmentType.EAGLES_EYE)) eaglesEyeLevel = 0;
+        if (!isEnchantmentEnabled(EnchantmentType.EAGLES_EYE))
+            eaglesEyeLevel = 0;
 
         return calculateProjectileDamageMultiplier(strengthLevel, eaglesEyeLevel, distance);
     }
@@ -800,17 +843,17 @@ public class EnchantmentManager {
         return multiplier;
     }
 
-
-
     /**
      * Calculates an armor protection multiplier for the given enchantment type.
-     * Works for both PROTECTION (melee/general) and RANGED_PROTECTION (projectile/magic).
+     * Works for both PROTECTION (melee/general) and RANGED_PROTECTION
+     * (projectile/magic).
      *
      * @param armorContainer The armor inventory container
      * @param type           The protection enchantment type to check
      * @return The damage multiplier (1.0 = normal, 0.9 = 10% reduction, etc.)
      */
-    public double calculateArmorProtectionMultiplier(@Nullable ItemContainer armorContainer, @Nonnull EnchantmentType type) {
+    public double calculateArmorProtectionMultiplier(@Nullable ItemContainer armorContainer,
+            @Nonnull EnchantmentType type) {
         if (armorContainer == null) {
             return 1.0;
         }
@@ -828,7 +871,8 @@ public class EnchantmentManager {
 
             BsonDocument enchBson = armorPiece.getFromMetadataOrNull(
                     EnchantmentData.METADATA_KEY, Codec.BSON_DOCUMENT);
-            if (enchBson == null || enchBson.isEmpty()) continue;
+            if (enchBson == null || enchBson.isEmpty())
+                continue;
 
             int level = 0;
             if (enchBson.containsKey(type.getDisplayName())) {
@@ -845,8 +889,6 @@ public class EnchantmentManager {
 
         return multiplier;
     }
-
-
 
     /**
      * Rolls for extra Fortune drops.
@@ -870,17 +912,18 @@ public class EnchantmentManager {
         return extraRolls;
     }
 
-
-
     /**
      * Stores projectile enchantment levels for later calculations.
      */
-    public void storeProjectileEnchantments(@Nonnull UUID projectileUuid, int strengthLevel, int eaglesEyeLevel, int lootingLevel, int freezeLevel, int burnLevel, int eternalShotLevel) {
-        if (strengthLevel <= 0 && eaglesEyeLevel <= 0 && lootingLevel <= 0 && freezeLevel <= 0 && burnLevel <= 0 && eternalShotLevel <= 0) {
+    public void storeProjectileEnchantments(@Nonnull UUID projectileUuid, int strengthLevel, int eaglesEyeLevel,
+            int lootingLevel, int freezeLevel, int burnLevel, int eternalShotLevel) {
+        if (strengthLevel <= 0 && eaglesEyeLevel <= 0 && lootingLevel <= 0 && freezeLevel <= 0 && burnLevel <= 0
+                && eternalShotLevel <= 0) {
             projectileEnchantmentsByUuid.remove(projectileUuid);
             return;
         }
-        projectileEnchantmentsByUuid.put(projectileUuid, new ProjectileEnchantmentData(strengthLevel, eaglesEyeLevel, lootingLevel, freezeLevel, burnLevel, eternalShotLevel));
+        projectileEnchantmentsByUuid.put(projectileUuid, new ProjectileEnchantmentData(strengthLevel, eaglesEyeLevel,
+                lootingLevel, freezeLevel, burnLevel, eternalShotLevel));
     }
 
     /**
@@ -901,12 +944,15 @@ public class EnchantmentManager {
     /**
      * Stores projectile enchantments by network id (used by new projectile system).
      */
-    public void storeProjectileEnchantments(int networkId, int strengthLevel, int eaglesEyeLevel, int lootingLevel, int freezeLevel, int burnLevel, int eternalShotLevel) {
-        if (strengthLevel <= 0 && eaglesEyeLevel <= 0 && lootingLevel <= 0 && freezeLevel <= 0 && burnLevel <= 0 && eternalShotLevel <= 0) {
+    public void storeProjectileEnchantments(int networkId, int strengthLevel, int eaglesEyeLevel, int lootingLevel,
+            int freezeLevel, int burnLevel, int eternalShotLevel) {
+        if (strengthLevel <= 0 && eaglesEyeLevel <= 0 && lootingLevel <= 0 && freezeLevel <= 0 && burnLevel <= 0
+                && eternalShotLevel <= 0) {
             projectileEnchantmentsByNetworkId.remove(networkId);
             return;
         }
-        projectileEnchantmentsByNetworkId.put(networkId, new ProjectileEnchantmentData(strengthLevel, eaglesEyeLevel, lootingLevel, freezeLevel, burnLevel, eternalShotLevel));
+        projectileEnchantmentsByNetworkId.put(networkId, new ProjectileEnchantmentData(strengthLevel, eaglesEyeLevel,
+                lootingLevel, freezeLevel, burnLevel, eternalShotLevel));
     }
 
     /**
@@ -990,10 +1036,10 @@ public class EnchantmentManager {
         return oreOrCrystalCache.computeIfAbsent(itemId, id -> {
             String lowerItemId = id.toLowerCase();
             return lowerItemId.startsWith("ore_")
-                || lowerItemId.startsWith("ingredient_crystal")
-                || lowerItemId.startsWith("rock_crystal_")
-                || lowerItemId.contains("crystal_shard")
-                || lowerItemId.contains("crystalshard");
+                    || lowerItemId.startsWith("ingredient_crystal")
+                    || lowerItemId.startsWith("rock_crystal_")
+                    || lowerItemId.contains("crystal_shard")
+                    || lowerItemId.contains("crystalshard");
         });
     }
 
@@ -1029,8 +1075,6 @@ public class EnchantmentManager {
         return ItemCategoryManager.getInstance().categorizeItem(item);
     }
 
-
-
     /**
      * Generates tooltip lines for an enchanted item.
      */
@@ -1039,27 +1083,26 @@ public class EnchantmentManager {
         if (data.isEmpty()) {
             return new String[0];
         }
-        
+
         var enchantments = data.getAllEnchantments();
         java.util.List<String> lines = new java.util.ArrayList<>();
-        
+
         for (var entry : enchantments.entrySet()) {
             if (isEnchantmentEnabled(entry.getKey())) {
                 lines.add(entry.getKey().getFormattedName(entry.getValue()));
             }
         }
-        
+
         return lines.toArray(new String[0]);
     }
-
-
 
     /**
      * Generates a display message for the item's enchantments.
      * Used for visual notifications (Title/Action Bar).
      */
     @javax.annotation.Nullable
-    public com.hypixel.hytale.server.core.Message getEnchantmentDisplayMessage(@javax.annotation.Nonnull ItemStack item, @javax.annotation.Nonnull com.hypixel.hytale.server.core.universe.PlayerRef playerRef) {
+    public com.hypixel.hytale.server.core.Message getEnchantmentDisplayMessage(@javax.annotation.Nonnull ItemStack item,
+            @javax.annotation.Nonnull com.hypixel.hytale.server.core.universe.PlayerRef playerRef) {
         EnchantmentData data = getEnchantmentsFromItem(item);
         if (data.isEmpty()) {
             return null;
@@ -1071,45 +1114,53 @@ public class EnchantmentManager {
                 enabledEnchants.add(entry);
             }
         }
-        
+
         if (enabledEnchants.isEmpty()) {
             return null;
         }
-        
+
         // Build a flat string for the banner
-        // Composite messages with children often fail to render in Hytale's EventTitle/Action Bar 
+        // Composite messages with children often fail to render in Hytale's
+        // EventTitle/Action Bar
         // if the root text is empty. A flat string is the most robust approach.
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < enabledEnchants.size(); i++) {
             java.util.Map.Entry<EnchantmentType, Integer> entry = enabledEnchants.get(i);
-            
+
             String lang = getPlugin().getUserSettingsManager().getLanguage(playerRef.getUuid());
-            String name = getPlugin().getLanguageManager().getRawMessage(entry.getKey().getNameKey(), lang, playerRef.getLanguage());
-            
+            String name = getPlugin().getLanguageManager().getRawMessage(entry.getKey().getNameKey(), lang,
+                    playerRef.getLanguage());
+
             if (i > 0) {
                 sb.append(" | ");
             }
             sb.append(name).append(" ").append(EnchantmentType.toRoman(entry.getValue()));
         }
-        
+
         return com.hypixel.hytale.server.core.Message.raw(sb.toString());
     }
 
     // --- Centralized Helper Methods for Systems ---
 
     /**
-     * Record holding attacker and projectile references extracted from damage source.
+     * Record holding attacker and projectile references extracted from damage
+     * source.
      */
     public record DamageContext(@Nullable Ref<EntityStore> attackerRef, @Nullable Ref<EntityStore> projectileRef) {
-        public boolean hasAttacker() { return attackerRef != null && attackerRef.isValid(); }
-        public boolean hasProjectile() { return projectileRef != null && projectileRef.isValid(); }
+        public boolean hasAttacker() {
+            return attackerRef != null && attackerRef.isValid();
+        }
+
+        public boolean hasProjectile() {
+            return projectileRef != null && projectileRef.isValid();
+        }
     }
 
     /**
      * Extracts attacker and projectile references from a Damage source.
      * Centralizes the common pattern of checking EntitySource vs ProjectileSource.
      * 
-     * @param damage The damage event
+     * @param damage        The damage event
      * @param commandBuffer The command buffer for entity lookups
      * @return DamageContext with attacker and optional projectile refs
      */
@@ -1142,33 +1193,38 @@ public class EnchantmentManager {
      */
     @Nullable
     public ItemStack getActiveBlocker(@Nullable LivingEntity entity) {
-        if (entity == null) return null;
-        
+        if (entity == null)
+            return null;
+
         // 1. Precise check using InteractionManager (Server-side ECS)
         // This detects exactly which item is driving the interaction state.
         if (entity instanceof com.hypixel.hytale.server.core.entity.Entity) {
-            com.hypixel.hytale.component.Ref<com.hypixel.hytale.server.core.universe.world.storage.EntityStore> ref = 
-                ((com.hypixel.hytale.server.core.entity.Entity) entity).getReference();
-                
+            com.hypixel.hytale.component.Ref<com.hypixel.hytale.server.core.universe.world.storage.EntityStore> ref = ((com.hypixel.hytale.server.core.entity.Entity) entity)
+                    .getReference();
+
             if (ref != null && ref.isValid()) {
                 try {
-                    com.hypixel.hytale.component.Store<com.hypixel.hytale.server.core.universe.world.storage.EntityStore> store = ref.getStore();
-                    com.hypixel.hytale.server.core.entity.InteractionManager im = 
-                        store.getComponent(ref, com.hypixel.hytale.server.core.modules.interaction.InteractionModule.get().getInteractionManagerComponent());
-                    
+                    com.hypixel.hytale.component.Store<com.hypixel.hytale.server.core.universe.world.storage.EntityStore> store = ref
+                            .getStore();
+                    com.hypixel.hytale.server.core.entity.InteractionManager im = store.getComponent(ref,
+                            com.hypixel.hytale.server.core.modules.interaction.InteractionModule.get()
+                                    .getInteractionManagerComponent());
+
                     if (im != null) {
                         for (com.hypixel.hytale.server.core.entity.InteractionChain chain : im.getChains().values()) {
-                            // The blocking action often runs as a "Secondary" interaction (Right Click), 
+                            // The blocking action often runs as a "Secondary" interaction (Right Click),
                             // not explicitly "Wielding" in the chain type itself.
-                            if (chain.getType() == InteractionType.Wielding || chain.getType() == InteractionType.Secondary) {
+                            if (chain.getType() == InteractionType.Wielding
+                                    || chain.getType() == InteractionType.Secondary) {
                                 ItemStack held = chain.getContext().getHeldItem();
                                 if (held != null && !held.isEmpty()) {
                                     // Verify if this item is actually capable of blocking/wielding
                                     Item item = held.getItem();
                                     if (item != null) {
                                         // Check if it's a shield OR has Wielding interaction (like parrying weapon)
-                                        if (categorizeItem(held) == ItemCategory.SHIELD || 
-                                            (item.getInteractions() != null && item.getInteractions().containsKey(InteractionType.Wielding))) {
+                                        if (categorizeItem(held) == ItemCategory.SHIELD ||
+                                                (item.getInteractions() != null && item.getInteractions()
+                                                        .containsKey(InteractionType.Wielding))) {
                                             return held;
                                         }
                                     }
@@ -1182,32 +1238,38 @@ public class EnchantmentManager {
             }
         }
 
-        // 2. Legacy Fallback (Inventory scanning) - Only if InteractionManager check yielded nothing (e.g. client/prediction mismatch or error)
+        // 2. Legacy Fallback (Inventory scanning) - Only if InteractionManager check
+        // yielded nothing (e.g. client/prediction mismatch or error)
         Inventory inventory = entity.getInventory();
-        if (inventory == null) return null;
+        if (inventory == null)
+            return null;
 
         ItemStack mainHand = inventory.getItemInHand();
         if (mainHand != null && !mainHand.isEmpty()) {
             ItemCategory cat = categorizeItem(mainHand);
-            if (cat == ItemCategory.SHIELD) return mainHand;
-            
+            if (cat == ItemCategory.SHIELD)
+                return mainHand;
+
             Item item = mainHand.getItem();
-            if (item != null && item.getInteractions() != null && 
-                item.getInteractions().containsKey(InteractionType.Wielding)) {
+            if (item != null && item.getInteractions() != null &&
+                    item.getInteractions().containsKey(InteractionType.Wielding)) {
                 return mainHand;
             }
         }
 
         ItemStack offHand = inventory.getUtilityItem();
         if (offHand != null && !offHand.isEmpty()) {
-            if (categorizeItem(offHand) == ItemCategory.SHIELD) return offHand;
+            if (categorizeItem(offHand) == ItemCategory.SHIELD)
+                return offHand;
         }
         return null;
     }
 
     public boolean isCrossbow(@Nullable ItemStack item) {
-        if (item == null || item.isEmpty()) return false;
-        // Basic check based on item ID naming convention as we don't have a specific category for Crossbows vs Bows yet
+        if (item == null || item.isEmpty())
+            return false;
+        // Basic check based on item ID naming convention as we don't have a specific
+        // category for Crossbows vs Bows yet
         // and they both fall under RANGED_WEAPON.
         String lowerId = item.getItemId().toLowerCase();
         return lowerId.contains("crossbow");
@@ -1216,20 +1278,23 @@ public class EnchantmentManager {
     /**
      * Applies a status effect to an entity.
      * 
-     * @param targetRef The entity to apply the effect to
-     * @param effectId The effect ID (e.g., "Burn", "Freeze_I")
-     * @param store The entity store
+     * @param targetRef     The entity to apply the effect to
+     * @param effectId      The effect ID (e.g., "Burn", "Freeze_I")
+     * @param store         The entity store
      * @param commandBuffer The command buffer
      * @return true if the effect was applied successfully
      */
-    public boolean applyStatusEffect(@Nonnull Ref<EntityStore> targetRef, 
-                                     @Nonnull String effectId,
-                                     @Nonnull Store<EntityStore> store,
-                                     @Nonnull CommandBuffer<EntityStore> commandBuffer) {
-        if (targetRef == null || !targetRef.isValid()) return false;
+    public boolean applyStatusEffect(@Nonnull Ref<EntityStore> targetRef,
+            @Nonnull String effectId,
+            @Nonnull Store<EntityStore> store,
+            @Nonnull CommandBuffer<EntityStore> commandBuffer) {
+        if (targetRef == null || !targetRef.isValid())
+            return false;
 
-        EffectControllerComponent effectController = store.getComponent(targetRef, EffectControllerComponent.getComponentType());
-        if (effectController == null) return false;
+        EffectControllerComponent effectController = store.getComponent(targetRef,
+                EffectControllerComponent.getComponentType());
+        if (effectController == null)
+            return false;
 
         EntityEffect effect = EntityEffect.getAssetMap().getAsset(effectId);
         if (effect == null) {
@@ -1246,17 +1311,20 @@ public class EnchantmentManager {
      * Use this overload when only a Store is available (no CommandBuffer).
      * 
      * @param targetRef The entity to apply the effect to
-     * @param effectId The effect ID (e.g., "Night_Vision")
-     * @param store The entity store (also serves as ComponentAccessor)
+     * @param effectId  The effect ID (e.g., "Night_Vision")
+     * @param store     The entity store (also serves as ComponentAccessor)
      * @return true if the effect was applied successfully
      */
-    public boolean applyStatusEffect(@Nonnull Ref<EntityStore> targetRef, 
-                                     @Nonnull String effectId,
-                                     @Nonnull Store<EntityStore> store) {
-        if (targetRef == null || !targetRef.isValid()) return false;
+    public boolean applyStatusEffect(@Nonnull Ref<EntityStore> targetRef,
+            @Nonnull String effectId,
+            @Nonnull Store<EntityStore> store) {
+        if (targetRef == null || !targetRef.isValid())
+            return false;
 
-        EffectControllerComponent effectController = store.getComponent(targetRef, EffectControllerComponent.getComponentType());
-        if (effectController == null) return false;
+        EffectControllerComponent effectController = store.getComponent(targetRef,
+                EffectControllerComponent.getComponentType());
+        if (effectController == null)
+            return false;
 
         EntityEffect effect = EntityEffect.getAssetMap().getAsset(effectId);
         if (effect == null) {
@@ -1272,23 +1340,28 @@ public class EnchantmentManager {
      * Removes a status effect from an entity.
      * 
      * @param targetRef The entity to remove the effect from
-     * @param effectId The effect ID (e.g., "Night_Vision")
-     * @param store The entity store
+     * @param effectId  The effect ID (e.g., "Night_Vision")
+     * @param store     The entity store
      * @return true if the effect was removed successfully
      */
-    public boolean removeStatusEffect(@Nonnull Ref<EntityStore> targetRef, 
-                                      @Nonnull String effectId,
-                                      @Nonnull Store<EntityStore> store) {
-        if (targetRef == null || !targetRef.isValid()) return false;
+    public boolean removeStatusEffect(@Nonnull Ref<EntityStore> targetRef,
+            @Nonnull String effectId,
+            @Nonnull Store<EntityStore> store) {
+        if (targetRef == null || !targetRef.isValid())
+            return false;
 
-        EffectControllerComponent effectController = store.getComponent(targetRef, EffectControllerComponent.getComponentType());
-        if (effectController == null) return false;
+        EffectControllerComponent effectController = store.getComponent(targetRef,
+                EffectControllerComponent.getComponentType());
+        if (effectController == null)
+            return false;
 
         int effectIndex = EntityEffect.getAssetMap().getIndex(effectId);
-        if (effectIndex == Integer.MIN_VALUE) return false;
+        if (effectIndex == Integer.MIN_VALUE)
+            return false;
 
         // Only remove if currently active
-        if (!effectController.getActiveEffects().containsKey(effectIndex)) return false;
+        if (!effectController.getActiveEffects().containsKey(effectIndex))
+            return false;
 
         effectController.removeEffect(targetRef, effectIndex, store);
         return true;
@@ -1298,28 +1371,33 @@ public class EnchantmentManager {
      * Checks whether an entity currently has a specific status effect active.
      * 
      * @param targetRef The entity to check
-     * @param effectId The effect ID (e.g., "Night_Vision")
-     * @param store The entity store
+     * @param effectId  The effect ID (e.g., "Night_Vision")
+     * @param store     The entity store
      * @return true if the effect is currently active on the entity
      */
-    public boolean hasActiveEffect(@Nonnull Ref<EntityStore> targetRef, 
-                                   @Nonnull String effectId,
-                                   @Nonnull Store<EntityStore> store) {
-        if (targetRef == null || !targetRef.isValid()) return false;
+    public boolean hasActiveEffect(@Nonnull Ref<EntityStore> targetRef,
+            @Nonnull String effectId,
+            @Nonnull Store<EntityStore> store) {
+        if (targetRef == null || !targetRef.isValid())
+            return false;
 
-        EffectControllerComponent effectController = store.getComponent(targetRef, EffectControllerComponent.getComponentType());
-        if (effectController == null) return false;
+        EffectControllerComponent effectController = store.getComponent(targetRef,
+                EffectControllerComponent.getComponentType());
+        if (effectController == null)
+            return false;
 
         int effectIndex = EntityEffect.getAssetMap().getIndex(effectId);
-        if (effectIndex == Integer.MIN_VALUE) return false;
+        if (effectIndex == Integer.MIN_VALUE)
+            return false;
 
         return effectController.getActiveEffects().containsKey(effectIndex);
     }
-    
+
     // --- Existing Helper Methods for Systems ---
 
     /**
      * Safely retrieves the weapon currently held by an entity.
+     * 
      * @return The held item stack, or null if empty/none.
      */
     @Nullable
@@ -1341,16 +1419,20 @@ public class EnchantmentManager {
      */
     @Nullable
     public ProjectileEnchantmentData getProjectileEnchantmentData(@Nonnull Ref<EntityStore> projectileRef,
-                                                                   @Nonnull CommandBuffer<EntityStore> commandBuffer) {
-        if (projectileRef == null || !projectileRef.isValid()) return null;
+            @Nonnull CommandBuffer<EntityStore> commandBuffer) {
+        if (projectileRef == null || !projectileRef.isValid())
+            return null;
 
-        com.hypixel.hytale.server.core.modules.entity.tracker.NetworkId networkId = commandBuffer.getComponent(projectileRef, com.hypixel.hytale.server.core.modules.entity.tracker.NetworkId.getComponentType());
+        com.hypixel.hytale.server.core.modules.entity.tracker.NetworkId networkId = commandBuffer.getComponent(
+                projectileRef, com.hypixel.hytale.server.core.modules.entity.tracker.NetworkId.getComponentType());
         if (networkId != null) {
             ProjectileEnchantmentData data = getProjectileEnchantments(networkId.getId());
-            if (data != null) return data;
+            if (data != null)
+                return data;
         }
 
-        com.hypixel.hytale.server.core.entity.UUIDComponent uuidComponent = commandBuffer.getComponent(projectileRef, com.hypixel.hytale.server.core.entity.UUIDComponent.getComponentType());
+        com.hypixel.hytale.server.core.entity.UUIDComponent uuidComponent = commandBuffer.getComponent(projectileRef,
+                com.hypixel.hytale.server.core.entity.UUIDComponent.getComponentType());
         if (uuidComponent != null) {
             return getProjectileEnchantments(uuidComponent.getUuid());
         }
@@ -1358,17 +1440,23 @@ public class EnchantmentManager {
     }
 
     /**
-     * Helper to get shooter from a projectile using standard components and reflection fallback.
+     * Helper to get shooter from a projectile using standard components and
+     * reflection fallback.
      */
     @Nullable
     public Ref<EntityStore> getProjectileShooter(@Nonnull Ref<EntityStore> projectileRef,
-                                                  @Nonnull CommandBuffer<EntityStore> commandBuffer) {
-        com.hypixel.hytale.server.core.modules.projectile.config.StandardPhysicsProvider standardPhysics = commandBuffer.getComponent(projectileRef, com.hypixel.hytale.server.core.modules.projectile.config.StandardPhysicsProvider.getComponentType());
+            @Nonnull CommandBuffer<EntityStore> commandBuffer) {
+        com.hypixel.hytale.server.core.modules.projectile.config.StandardPhysicsProvider standardPhysics = commandBuffer
+                .getComponent(projectileRef,
+                        com.hypixel.hytale.server.core.modules.projectile.config.StandardPhysicsProvider
+                                .getComponentType());
         if (standardPhysics != null && standardPhysics.getCreatorUuid() != null) {
             return commandBuffer.getExternalData().getRefFromUUID(standardPhysics.getCreatorUuid());
         }
 
-        com.hypixel.hytale.server.core.entity.entities.ProjectileComponent projectileComponent = commandBuffer.getComponent(projectileRef, com.hypixel.hytale.server.core.entity.entities.ProjectileComponent.getComponentType());
+        com.hypixel.hytale.server.core.entity.entities.ProjectileComponent projectileComponent = commandBuffer
+                .getComponent(projectileRef,
+                        com.hypixel.hytale.server.core.entity.entities.ProjectileComponent.getComponentType());
         if (projectileComponent != null && PROJECTILE_CREATOR_FIELD != null) {
             try {
                 Object value = PROJECTILE_CREATOR_FIELD.get(projectileComponent);
@@ -1386,13 +1474,15 @@ public class EnchantmentManager {
         return checkDamageCause(cause, "Physical");
     }
 
-    public boolean isEnvironmentalDamage(@Nullable com.hypixel.hytale.server.core.modules.entity.damage.DamageCause cause) {
+    public boolean isEnvironmentalDamage(
+            @Nullable com.hypixel.hytale.server.core.modules.entity.damage.DamageCause cause) {
         return checkDamageCause(cause, "Elemental") ||
-               checkDamageCause(cause, "Environmental");
+                checkDamageCause(cause, "Environmental");
     }
 
     /**
-     * Checks if a damage cause is ranged (projectile or magic) — excludes melee physical damage.
+     * Checks if a damage cause is ranged (projectile or magic) — excludes melee
+     * physical damage.
      * Used by Ranged Protection enchantment.
      */
     public boolean isRangedDamage(@Nullable com.hypixel.hytale.server.core.modules.entity.damage.DamageCause cause) {
@@ -1400,45 +1490,55 @@ public class EnchantmentManager {
     }
 
     public boolean isProjectileEntity(@Nonnull Ref<EntityStore> sourceRef,
-                                      @Nonnull CommandBuffer<EntityStore> commandBuffer) {
-        if (commandBuffer.getComponent(sourceRef, com.hypixel.hytale.server.core.modules.projectile.config.StandardPhysicsProvider.getComponentType()) != null) {
+            @Nonnull CommandBuffer<EntityStore> commandBuffer) {
+        if (commandBuffer.getComponent(sourceRef,
+                com.hypixel.hytale.server.core.modules.projectile.config.StandardPhysicsProvider
+                        .getComponentType()) != null) {
             return true;
         }
-        return commandBuffer.getComponent(sourceRef, com.hypixel.hytale.server.core.entity.entities.ProjectileComponent.getComponentType()) != null;
+        return commandBuffer.getComponent(sourceRef,
+                com.hypixel.hytale.server.core.entity.entities.ProjectileComponent.getComponentType()) != null;
     }
 
-    public boolean isProjectileDamage(@Nullable com.hypixel.hytale.server.core.modules.entity.damage.DamageCause cause) {
+    public boolean isProjectileDamage(
+            @Nullable com.hypixel.hytale.server.core.modules.entity.damage.DamageCause cause) {
         return checkDamageCause(cause, "Projectile") || checkDamageCause(cause, "Physical");
     }
 
     public boolean isFallDamage(@Nullable com.hypixel.hytale.server.core.modules.entity.damage.DamageCause cause) {
         return checkDamageCause(cause, "Fall");
     }
-    
-    private boolean checkDamageCause(@Nullable com.hypixel.hytale.server.core.modules.entity.damage.DamageCause cause, String targetId) {
+
+    private boolean checkDamageCause(@Nullable com.hypixel.hytale.server.core.modules.entity.damage.DamageCause cause,
+            String targetId) {
         com.hypixel.hytale.server.core.modules.entity.damage.DamageCause current = cause;
         while (current != null) {
-            if (targetId.equalsIgnoreCase(current.getId())) return true;
+            if (targetId.equalsIgnoreCase(current.getId()))
+                return true;
             String parentId = current.getInherits();
-            if (parentId == null) return false;
+            if (parentId == null)
+                return false;
             current = com.hypixel.hytale.server.core.modules.entity.damage.DamageCause.getAssetMap().getAsset(parentId);
         }
         return false;
     }
-    
+
     /**
      * Calculates the extra drops from Fortune enchantment.
-     * @param blockType The block being broken
-     * @param breaking The breaking config of the block
+     * 
+     * @param blockType    The block being broken
+     * @param breaking     The breaking config of the block
      * @param fortuneLevel The level of Fortune enchantment
      * @return List of extra items dropped, or empty list if none.
      */
-    public java.util.List<ItemStack> getFortuneDrops(@Nonnull com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType blockType,
-                                                     @Nonnull com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockBreakingDropType breaking,
-                                                     int fortuneLevel) {
+    public java.util.List<ItemStack> getFortuneDrops(
+            @Nonnull com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType blockType,
+            @Nonnull com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockBreakingDropType breaking,
+            int fortuneLevel) {
         java.util.List<ItemStack> extraDrops = new java.util.ArrayList<>();
-        if (fortuneLevel <= 0) return extraDrops;
-        
+        if (fortuneLevel <= 0)
+            return extraDrops;
+
         if (!isFortuneTarget(blockType, breaking)) {
             return extraDrops;
         }
@@ -1449,8 +1549,9 @@ public class EnchantmentManager {
         }
 
         if (extraRolls > 0) {
-            java.util.List<ItemStack> baseDrops = com.hypixel.hytale.server.core.modules.interaction.BlockHarvestUtils.getDrops(blockType, 1, breaking.getItemId(), breaking.getDropListId());
-            
+            java.util.List<ItemStack> baseDrops = com.hypixel.hytale.server.core.modules.interaction.BlockHarvestUtils
+                    .getDrops(blockType, 1, breaking.getItemId(), breaking.getDropListId());
+
             for (ItemStack drop : baseDrops) {
                 if (drop != null && !drop.isEmpty() && isOreOrCrystalItem(drop.getItemId())) {
                     ItemStack extraStack = drop.withQuantity(drop.getQuantity() * extraRolls);
@@ -1462,23 +1563,26 @@ public class EnchantmentManager {
         }
         return extraDrops;
     }
-    
-    // Static field for projectile creator logic moved to top
-    public record DamageEnchantments(int lootingLevel, int burnLevel) {}
 
-    public DamageEnchantments resolveDamageEnchantments(@Nonnull com.hypixel.hytale.server.core.modules.entity.damage.Damage deathInfo,
-                                                        @Nonnull com.hypixel.hytale.component.CommandBuffer<com.hypixel.hytale.server.core.universe.world.storage.EntityStore> commandBuffer,
-                                                        @Nonnull com.hypixel.hytale.component.Ref<com.hypixel.hytale.server.core.universe.world.storage.EntityStore> targetRef) {
+    // Static field for projectile creator logic moved to top
+    public record DamageEnchantments(int lootingLevel, int burnLevel) {
+    }
+
+    public DamageEnchantments resolveDamageEnchantments(
+            @Nonnull com.hypixel.hytale.server.core.modules.entity.damage.Damage deathInfo,
+            @Nonnull com.hypixel.hytale.component.CommandBuffer<com.hypixel.hytale.server.core.universe.world.storage.EntityStore> commandBuffer,
+            @Nonnull com.hypixel.hytale.component.Ref<com.hypixel.hytale.server.core.universe.world.storage.EntityStore> targetRef) {
         com.hypixel.hytale.server.core.modules.entity.damage.Damage.Source source = deathInfo.getSource();
-        
+
         // 1. Check standard source (Direct hit or Projectile)
         if (source instanceof com.hypixel.hytale.server.core.modules.entity.damage.Damage.EntitySource) {
             int lootingLevel = 0;
             int burnLevel = 0;
-            
+
             // Check projectile enchantment data first (for ranged weapons)
             if (source instanceof com.hypixel.hytale.server.core.modules.entity.damage.Damage.ProjectileSource projectileSource) {
-                com.hypixel.hytale.component.Ref<com.hypixel.hytale.server.core.universe.world.storage.EntityStore> projectileRef = projectileSource.getProjectile();
+                com.hypixel.hytale.component.Ref<com.hypixel.hytale.server.core.universe.world.storage.EntityStore> projectileRef = projectileSource
+                        .getProjectile();
                 ProjectileEnchantmentData data = getProjectileEnchantmentData(projectileRef, commandBuffer);
                 if (data != null) {
                     lootingLevel = data.getLootingLevel();
@@ -1491,28 +1595,30 @@ public class EnchantmentManager {
             }
 
             // Check attacker's weapon for Burn/Looting enchantment (melee)
-            com.hypixel.hytale.component.Ref<com.hypixel.hytale.server.core.universe.world.storage.EntityStore> attackerRef = ((com.hypixel.hytale.server.core.modules.entity.damage.Damage.EntitySource) source).getRef();
+            com.hypixel.hytale.component.Ref<com.hypixel.hytale.server.core.universe.world.storage.EntityStore> attackerRef = ((com.hypixel.hytale.server.core.modules.entity.damage.Damage.EntitySource) source)
+                    .getRef();
             if (attackerRef != null && attackerRef.isValid()) {
-                com.hypixel.hytale.server.core.entity.Entity attackerEntity = com.hypixel.hytale.server.core.entity.EntityUtils.getEntity(attackerRef, commandBuffer);
+                com.hypixel.hytale.server.core.entity.Entity attackerEntity = com.hypixel.hytale.server.core.entity.EntityUtils
+                        .getEntity(attackerRef, commandBuffer);
                 ItemStack weapon = getWeaponFromEntity(attackerEntity);
                 if (weapon != null) {
                     return new DamageEnchantments(
-                        getEnchantmentLevel(weapon, EnchantmentType.LOOTING),
-                        getEnchantmentLevel(weapon, EnchantmentType.BURN)
-                    );
+                            getEnchantmentLevel(weapon, EnchantmentType.LOOTING),
+                            getEnchantmentLevel(weapon, EnchantmentType.BURN));
                 }
             }
         }
-        
+
         // 2. Fallback: Check stored burn data (Indirect/DoT death)
-        com.hypixel.hytale.server.core.entity.UUIDComponent uuidComp = commandBuffer.getComponent(targetRef, com.hypixel.hytale.server.core.entity.UUIDComponent.getComponentType());
+        com.hypixel.hytale.server.core.entity.UUIDComponent uuidComp = commandBuffer.getComponent(targetRef,
+                com.hypixel.hytale.server.core.entity.UUIDComponent.getComponentType());
         if (uuidComp != null) {
             ProjectileEnchantmentData data = getBurnEnchantments(uuidComp.getUuid());
             if (data != null) {
                 return new DamageEnchantments(data.getLootingLevel(), data.getBurnLevel());
             }
         }
-        
+
         return new DamageEnchantments(0, 0);
     }
 
@@ -1528,36 +1634,40 @@ public class EnchantmentManager {
      * Spawns item drops at the specified position.
      * 
      * @param commandBuffer The command buffer to use for spawning.
-     * @param drops The list of items to drop.
-     * @param position The position to spawn the drops at.
+     * @param drops         The list of items to drop.
+     * @param position      The position to spawn the drops at.
      */
-    public void spawnDrops(@Nonnull com.hypixel.hytale.component.CommandBuffer<com.hypixel.hytale.server.core.universe.world.storage.EntityStore> commandBuffer,
-                           @Nonnull java.util.List<ItemStack> drops,
-                           @Nonnull com.hypixel.hytale.math.vector.Vector3d position) {
+    public void spawnDrops(
+            @Nonnull com.hypixel.hytale.component.CommandBuffer<com.hypixel.hytale.server.core.universe.world.storage.EntityStore> commandBuffer,
+            @Nonnull java.util.List<ItemStack> drops,
+            @Nonnull com.hypixel.hytale.math.vector.Vector3d position) {
         spawnDrops(commandBuffer, drops, position, com.hypixel.hytale.math.vector.Vector3f.ZERO);
     }
 
     /**
-     * Spawns item drops at the specified position with an initial rotation/velocity variance.
+     * Spawns item drops at the specified position with an initial rotation/velocity
+     * variance.
      * 
      * @param commandBuffer The command buffer to use for spawning.
-     * @param drops The list of items to drop.
-     * @param position The position to spawn the drops at.
-     * @param rotation The rotation to apply to the drops (affects initial velocity).
+     * @param drops         The list of items to drop.
+     * @param position      The position to spawn the drops at.
+     * @param rotation      The rotation to apply to the drops (affects initial
+     *                      velocity).
      */
-    public void spawnDrops(@Nonnull com.hypixel.hytale.component.CommandBuffer<com.hypixel.hytale.server.core.universe.world.storage.EntityStore> commandBuffer,
-                           @Nonnull java.util.List<ItemStack> drops,
-                           @Nonnull com.hypixel.hytale.math.vector.Vector3d position,
-                           @Nonnull com.hypixel.hytale.math.vector.Vector3f rotation) {
-        if (drops == null || drops.isEmpty()) return;
+    public void spawnDrops(
+            @Nonnull com.hypixel.hytale.component.CommandBuffer<com.hypixel.hytale.server.core.universe.world.storage.EntityStore> commandBuffer,
+            @Nonnull java.util.List<ItemStack> drops,
+            @Nonnull com.hypixel.hytale.math.vector.Vector3d position,
+            @Nonnull com.hypixel.hytale.math.vector.Vector3f rotation) {
+        if (drops == null || drops.isEmpty())
+            return;
 
-        com.hypixel.hytale.component.Holder<com.hypixel.hytale.server.core.universe.world.storage.EntityStore>[] itemEntities =
-            com.hypixel.hytale.server.core.modules.entity.item.ItemComponent.generateItemDrops(
-                commandBuffer,
-                drops,
-                position,
-                rotation
-            );
+        com.hypixel.hytale.component.Holder<com.hypixel.hytale.server.core.universe.world.storage.EntityStore>[] itemEntities = com.hypixel.hytale.server.core.modules.entity.item.ItemComponent
+                .generateItemDrops(
+                        commandBuffer,
+                        drops,
+                        position,
+                        rotation);
 
         if (itemEntities.length > 0) {
             commandBuffer.addEntities(itemEntities, com.hypixel.hytale.component.AddReason.SPAWN);

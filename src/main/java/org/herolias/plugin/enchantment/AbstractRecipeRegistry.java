@@ -15,7 +15,8 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Base class for recipe registries that process single-input-single-output recipes
+ * Base class for recipe registries that process single-input-single-output
+ * recipes
  * (like Smelting or Campfire Cooking) from Hytale assets.
  */
 public abstract class AbstractRecipeRegistry<T extends AbstractRecipeRegistry.Recipe> {
@@ -98,7 +99,8 @@ public abstract class AbstractRecipeRegistry<T extends AbstractRecipeRegistry.Re
                         continue;
                     }
 
-                    T registryRecipe = createRecipe(output, input.getQuantity(), input.getItemId(), input.getResourceTypeId());
+                    T registryRecipe = createRecipe(output, input.getQuantity(), input.getItemId(),
+                            input.getResourceTypeId());
                     if (input.getItemId() != null) {
                         byItemId.putIfAbsent(input.getItemId(), registryRecipe);
                     }
@@ -113,14 +115,16 @@ public abstract class AbstractRecipeRegistry<T extends AbstractRecipeRegistry.Re
     }
 
     /**
-     * Checks if the crafting recipe belongs to this registry (e.g., checks bench type).
+     * Checks if the crafting recipe belongs to this registry (e.g., checks bench
+     * type).
      */
     protected abstract boolean isValidRecipe(@Nonnull CraftingRecipe recipe);
 
     /**
      * Creates an instance of the specific Recipe type.
      */
-    protected abstract T createRecipe(@Nonnull MaterialQuantity output, int inputQuantity, @Nullable String inputItemId, @Nullable String inputResourceTypeId);
+    protected abstract T createRecipe(@Nonnull MaterialQuantity output, int inputQuantity, @Nullable String inputItemId,
+            @Nullable String inputResourceTypeId);
 
     protected boolean checkBenchRequirement(@Nonnull CraftingRecipe recipe, @Nonnull String requiredBenchId) {
         BenchRequirement[] requirements = recipe.getBenchRequirement();
@@ -131,7 +135,8 @@ public abstract class AbstractRecipeRegistry<T extends AbstractRecipeRegistry.Re
             if (requirement == null || requirement.id == null) {
                 continue;
             }
-            if (requirement.type == com.hypixel.hytale.protocol.BenchType.Processing && requiredBenchId.equalsIgnoreCase(requirement.id)) {
+            if (requirement.type == com.hypixel.hytale.protocol.BenchType.Processing
+                    && requiredBenchId.equalsIgnoreCase(requirement.id)) {
                 return true;
             }
         }
@@ -147,7 +152,8 @@ public abstract class AbstractRecipeRegistry<T extends AbstractRecipeRegistry.Re
         private final String inputItemId;
         private final String inputResourceTypeId;
 
-        public Recipe(@Nonnull MaterialQuantity output, int inputQuantity, @Nullable String inputItemId, @Nullable String inputResourceTypeId) {
+        public Recipe(@Nonnull MaterialQuantity output, int inputQuantity, @Nullable String inputItemId,
+                @Nullable String inputResourceTypeId) {
             this.output = output;
             this.inputQuantity = inputQuantity;
             this.inputItemId = inputItemId;
@@ -176,7 +182,7 @@ public abstract class AbstractRecipeRegistry<T extends AbstractRecipeRegistry.Re
         public String getInputResourceTypeId() {
             return inputResourceTypeId;
         }
-        
+
         @Nonnull
         public String getOutputItemId() {
             return output.getItemId();

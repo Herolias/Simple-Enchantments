@@ -14,7 +14,8 @@ import org.herolias.plugin.enchantment.EnchantmentData;
 import java.util.Map;
 
 /**
- * Choice element for a single target item in the Custom Scroll item selection page.
+ * Choice element for a single target item in the Custom Scroll item selection
+ * page.
  * Displays item icon, name, current enchantments, and upgrade/apply info.
  */
 public class CustomScrollItemElement extends ChoiceElement {
@@ -25,28 +26,26 @@ public class CustomScrollItemElement extends ChoiceElement {
     private final EnchantmentManager enchantmentManager;
 
     public CustomScrollItemElement(
-        ItemStack itemStack,
-        EnchantmentType enchantmentType,
-        int targetLevel,
-        int currentLevel,
-        CustomScrollApplyInteraction interaction,
-        EnchantmentManager enchantmentManager
-    ) {
+            ItemStack itemStack,
+            EnchantmentType enchantmentType,
+            int targetLevel,
+            int currentLevel,
+            CustomScrollApplyInteraction interaction,
+            EnchantmentManager enchantmentManager) {
         this.itemStack = itemStack;
         this.enchantmentType = enchantmentType;
         this.targetLevel = targetLevel;
         this.currentLevel = currentLevel;
-        this.interactions = new ChoiceInteraction[]{interaction};
+        this.interactions = new ChoiceInteraction[] { interaction };
         this.enchantmentManager = enchantmentManager;
     }
 
     @Override
     public void addButton(
-        @Nonnull UICommandBuilder commandBuilder,
-        UIEventBuilder eventBuilder,
-        String selector,
-        PlayerRef playerRef
-    ) {
+            @Nonnull UICommandBuilder commandBuilder,
+            UIEventBuilder eventBuilder,
+            String selector,
+            PlayerRef playerRef) {
         // Reuse the same element UI as regular enchant scroll
         commandBuilder.append("#ElementList", "Pages/EnchantScrollElement.ui");
         commandBuilder.set(selector + " #Icon.ItemId", this.itemStack.getItemId().toString());
@@ -54,14 +53,16 @@ public class CustomScrollItemElement extends ChoiceElement {
         String clientLang = playerRef.getLanguage();
         org.herolias.plugin.lang.LanguageManager languageManager = enchantmentManager.getPlugin().getLanguageManager();
 
-        commandBuilder.set(selector + " #Name.TextSpans", languageManager.getMessage(this.itemStack.getItem().getTranslationKey(), lang, clientLang));
+        commandBuilder.set(selector + " #Name.TextSpans",
+                languageManager.getMessage(this.itemStack.getItem().getTranslationKey(), lang, clientLang));
 
         StringBuilder detailBuilder = new StringBuilder();
 
         // Display existing enchantments
         EnchantmentData data = enchantmentManager.getEnchantmentsFromItem(itemStack);
         if (data != null && !data.getAllEnchantments().isEmpty()) {
-            detailBuilder.append(languageManager.getRawMessage("customUI.enchantScrollPage.current", lang, clientLang)).append(" ");
+            detailBuilder.append(languageManager.getRawMessage("customUI.enchantScrollPage.current", lang, clientLang))
+                    .append(" ");
             boolean first = true;
             for (Map.Entry<EnchantmentType, Integer> entry : data.getAllEnchantments().entrySet()) {
                 if (!first) {
@@ -74,13 +75,17 @@ public class CustomScrollItemElement extends ChoiceElement {
             detailBuilder.append("\n");
         }
 
-        String targetName = languageManager.getRawMessage(enchantmentType.getNameKey(), lang, clientLang) + " " + EnchantmentType.toRoman(targetLevel);
+        String targetName = languageManager.getRawMessage(enchantmentType.getNameKey(), lang, clientLang) + " "
+                + EnchantmentType.toRoman(targetLevel);
         if (currentLevel > 0) {
-            String currentName = languageManager.getRawMessage(enchantmentType.getNameKey(), lang, clientLang) + " " + EnchantmentType.toRoman(currentLevel);
-            detailBuilder.append(languageManager.getRawMessage("customUI.enchantScrollPage.upgrade", lang, clientLang)).append(" ").append(currentName)
-                .append(" -> ").append(targetName);
+            String currentName = languageManager.getRawMessage(enchantmentType.getNameKey(), lang, clientLang) + " "
+                    + EnchantmentType.toRoman(currentLevel);
+            detailBuilder.append(languageManager.getRawMessage("customUI.enchantScrollPage.upgrade", lang, clientLang))
+                    .append(" ").append(currentName)
+                    .append(" -> ").append(targetName);
         } else {
-            detailBuilder.append(languageManager.getRawMessage("customUI.enchantScrollPage.apply", lang, clientLang)).append(" ").append(targetName);
+            detailBuilder.append(languageManager.getRawMessage("customUI.enchantScrollPage.apply", lang, clientLang))
+                    .append(" ").append(targetName);
         }
 
         commandBuilder.set(selector + " #Detail.Text", detailBuilder.toString());
