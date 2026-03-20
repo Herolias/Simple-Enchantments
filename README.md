@@ -4,7 +4,7 @@ A comprehensive enchanting system for **Hytale** — craft scrolls, enchant your
 
 Simple Enchantments adds an **Enchanting Table**, **31 built-in enchantments**, an **enchantment scroll system**, **usefull commands**, in-game **configuration UI**, **localisation** for 11 languages, and a **public API** that lets other mods register their own enchantments, categories, and scrolls at runtime.
 
-> **Version:** 0.9.1 · **Java:** 25 · **License:** _see below_ · **Wiki/Documentation:** _coming soon_
+> **Version:** 0.9.1 · **Java:** 25 · **License:** _see [LICENSE.md](LICENSE.md)_ · **Wiki/Documentation:** _coming soon_
 
 #### If you are looking for a Hytale Server, consider using my code and link at BisectHosting. That way you get 25% off and we get a commission which helps with further development:
 [![https://www.bisecthosting.com/Herolias](https://www.bisecthosting.com/partners/custom-banners/87d24680-40cb-471d-b1a9-bc3c9eb9ce68.webp)](https://www.bisecthosting.com/Herolias?r=GitHub)
