@@ -2,7 +2,7 @@ $C = "../Common.ui";
 
 // Item search sidebar - appears next to the main config window
 Group {
-  Background: (TexturePath: "../Common/Enchantment UI/Settings_Page.png", Border: 100);
+  Background: (TexturePath: "../Common/ContainerFullPatch.png", Border: 23);
   
   Group {
     LayoutMode: Top;

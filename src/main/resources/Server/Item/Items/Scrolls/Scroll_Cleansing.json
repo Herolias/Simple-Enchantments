@@ -64,13 +64,13 @@
     "IconProperties": {
         "Scale": 0.84,
         "Translation": [
-            5,
-            15
+            -35,
+            -18
         ],
         "Rotation": [
+            180,
             90,
-            45,
-            0
+            -5
         ]
     },
     "MaxStack": 10,

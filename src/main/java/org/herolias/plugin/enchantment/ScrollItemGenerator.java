@@ -33,16 +33,10 @@ import java.util.*;
  * Generates scroll {@link Item}, {@link CraftingRecipe}, {@link Interaction},
  * and {@link RootInteraction} assets at runtime for all registered
  * enchantments.
- * and {@link RootInteraction} assets at runtime for all registered
- * enchantments.
  * <p>
  * Uses a two-phase approach because mod assets load BEFORE engine
  * {@code /Server}
- * Uses a two-phase approach because mod assets load BEFORE engine
- * {@code /Server}
  * assets. Phase 1 registers items with safe defaults. Phase 2 calls
- * {@code processConfig()} after engine assets (ItemQuality,
- * UnarmedInteractions)
  * {@code processConfig()} after engine assets (ItemQuality,
  * UnarmedInteractions)
  * are available.
@@ -70,10 +64,6 @@ public class ScrollItemGenerator {
      * Re-entrance guard: true while we are inside
      * generateAndRegisterItems/processRegisteredItems
      */
-    /**
-     * Re-entrance guard: true while we are inside
-     * generateAndRegisterItems/processRegisteredItems
-     */
     private static boolean generating = false;
     /** Items we generated, kept for Phase 2 processConfig */
     private static final List<Item> generatedItems = new ArrayList<>();
@@ -88,9 +78,6 @@ public class ScrollItemGenerator {
                 LoadedAssetsEvent.class,
                 Item.class,
                 ScrollItemGenerator::onItemsLoaded);
-                LoadedAssetsEvent.class,
-                Item.class,
-                ScrollItemGenerator::onItemsLoaded);
 
         LOGGER.atInfo().log("ScrollItemGenerator: Event listener registered");
     }
@@ -100,16 +87,8 @@ public class ScrollItemGenerator {
      * Phase 1 (first call): Generate and register items with safe defaults.
      * Phase 2 (subsequent call): Call processConfig() now that engine assets are
      * loaded.
-     * Phase 2 (subsequent call): Call processConfig() now that engine assets are
-     * loaded.
      */
     private static void onItemsLoaded(LoadedAssetsEvent<String, Item, DefaultAssetMap<String, Item>> event) {
-        // Guard: AssetStore.loadAssets() fires nested LoadedAssetsEvent<Item>
-        // synchronously.
-        // Without this guard, Phase 1's loadAssets triggers Phase 2 prematurely (or
-        // infinite recursion).
-        if (generating)
-            return;
         // Guard: AssetStore.loadAssets() fires nested LoadedAssetsEvent<Item>
         // synchronously.
         // Without this guard, Phase 1's loadAssets triggers Phase 2 prematurely (or
@@ -132,8 +111,6 @@ public class ScrollItemGenerator {
             itemsProcessed = true;
             generating = true;
             try {
-                LOGGER.atInfo()
-                        .log("ScrollItemGenerator: Phase 2 — Running processConfig (engine assets now available)...");
                 LOGGER.atInfo()
                         .log("ScrollItemGenerator: Phase 2 — Running processConfig (engine assets now available)...");
                 processRegisteredItems();
@@ -161,8 +138,6 @@ public class ScrollItemGenerator {
         for (EnchantmentType type : EnchantmentType.values()) {
             if ("cleansing".equals(type.getId()))
                 continue;
-            if ("cleansing".equals(type.getId()))
-                continue;
 
             String scrollBaseName = type.getScrollBaseName();
 
@@ -188,8 +163,6 @@ public class ScrollItemGenerator {
                     if (def == null) {
                         LOGGER.atWarning().log("ScrollItemGenerator: No ScrollDefinition for " + scrollItemId
                                 + " (level " + level + ")");
-                        LOGGER.atWarning().log("ScrollItemGenerator: No ScrollDefinition for " + scrollItemId
-                                + " (level " + level + ")");
                         continue;
                     }
 
@@ -199,14 +172,7 @@ public class ScrollItemGenerator {
 
                     // Resolve crafting categories: use the definition's category, fall back to the
                     // type's category
-                    // Resolve crafting categories: use the definition's category, fall back to the
-                    // type's category
                     String cat = def.getCraftingCategory();
-                    if (cat == null)
-                        cat = type.getCraftingCategory();
-                    if (cat == null)
-                        cat = guessCraftingCategory(type);
-                    craftingCategories = new String[] { cat };
                     if (cat == null)
                         cat = type.getCraftingCategory();
                     if (cat == null)
@@ -248,8 +214,6 @@ public class ScrollItemGenerator {
                 OpenCustomUIInteraction interaction = createScrollInteraction(interactionId, type.getId(), level);
                 if (interaction != null)
                     interactionsToRegister.add(interaction);
-                if (interaction != null)
-                    interactionsToRegister.add(interaction);
 
                 // 2. RootInteractions
                 String rootPrimaryId = "SE_Root_Primary_" + scrollItemId;
@@ -269,16 +233,15 @@ public class ScrollItemGenerator {
                 }
                 if (iconProps == null) {
                     // Default fallback properties for built-in or if addon def is missing
-                    iconProps = new org.herolias.plugin.api.ScrollDefinition.IconProperties(0.84f, 31f, 18f, 0f, 90f,
+                    iconProps = new org.herolias.plugin.api.ScrollDefinition.IconProperties(0.84f, -35f, -18f, 180f,
+                            90f,
                             -5f);
                 }
 
+                String texture = getTextureForEnchantment(type.getId());
+                String icon = getIconForEnchantment(type.getId());
                 Item item = createScrollItem(scrollItemId, itemLevel, quality, rootPrimaryId, rootSecondaryId,
-                        iconProps);
-                if (item != null)
-                    generatedItems.add(item);
-                Item item = createScrollItem(scrollItemId, itemLevel, quality, rootPrimaryId, rootSecondaryId,
-                        iconProps);
+                        iconProps, texture, icon);
                 if (item != null)
                     generatedItems.add(item);
 
@@ -294,15 +257,11 @@ public class ScrollItemGenerator {
                     } catch (Exception e) {
                         LOGGER.atWarning()
                                 .log("ScrollItemGenerator: Failed to register translations for " + scrollItemId);
-                        LOGGER.atWarning()
-                                .log("ScrollItemGenerator: Failed to register translations for " + scrollItemId);
                     }
                 }
 
                 // 4. Recipe
                 CraftingRecipe recipe = createScrollRecipe(scrollItemId, ingredients, craftingTier, craftingCategories);
-                if (recipe != null)
-                    recipesToRegister.add(recipe);
                 if (recipe != null)
                     recipesToRegister.add(recipe);
             }
@@ -314,13 +273,9 @@ public class ScrollItemGenerator {
                 Interaction.getAssetStore().loadAssets(SOURCE_ID, interactionsToRegister);
                 LOGGER.atInfo()
                         .log("ScrollItemGenerator: Registered " + interactionsToRegister.size() + " interactions");
-                LOGGER.atInfo()
-                        .log("ScrollItemGenerator: Registered " + interactionsToRegister.size() + " interactions");
             }
             if (!rootInteractionsToRegister.isEmpty()) {
                 RootInteraction.getAssetStore().loadAssets(SOURCE_ID, rootInteractionsToRegister);
-                LOGGER.atInfo().log(
-                        "ScrollItemGenerator: Registered " + rootInteractionsToRegister.size() + " root interactions");
                 LOGGER.atInfo().log(
                         "ScrollItemGenerator: Registered " + rootInteractionsToRegister.size() + " root interactions");
             }
@@ -377,8 +332,6 @@ public class ScrollItemGenerator {
                     }
                 } catch (Exception ignore) {
                 }
-                } catch (Exception ignore) {
-                }
 
                 // Clear cached packet so toPacket() regenerates with new values
                 Field cachedPacketField = Item.class.getDeclaredField("cachedPacket");
@@ -394,8 +347,8 @@ public class ScrollItemGenerator {
             }
         }
 
-    LOGGER.atInfo().log("ScrollItemGenerator: Phase 2 complete. processConfig: "+success+" ok, "+failed+" failed.");
-
+        LOGGER.atInfo().log("ScrollItemGenerator: Phase 2 complete. processConfig: "
+                + success + " ok, " + failed + " failed.");
     }
 
     // ───────────────────── Item & Asset Creation ─────────────────────
@@ -430,8 +383,6 @@ public class ScrollItemGenerator {
         } catch (Exception e) {
             LOGGER.atSevere()
                     .log("ScrollItemGenerator: Failed to create interaction " + interactionId + ": " + e.getMessage());
-            LOGGER.atSevere()
-                    .log("ScrollItemGenerator: Failed to create interaction " + interactionId + ": " + e.getMessage());
             e.printStackTrace();
             return null;
         }
@@ -442,24 +393,17 @@ public class ScrollItemGenerator {
      * itemEntityConfig.
      * processConfig() will be called later in Phase 2 to resolve quality,
      * interaction
-     * Creates a scroll Item with safe defaults for interactionConfig and
-     * itemEntityConfig.
-     * processConfig() will be called later in Phase 2 to resolve quality,
-     * interaction
      * fallbacks, etc.
      */
     private static Item createScrollItem(String itemId, int level, String quality,
             String rootPrimaryId, String rootSecondaryId,
-            org.herolias.plugin.api.ScrollDefinition.IconProperties iconProps) {
-            String rootPrimaryId, String rootSecondaryId,
-            org.herolias.plugin.api.ScrollDefinition.IconProperties iconProps) {
+            org.herolias.plugin.api.ScrollDefinition.IconProperties iconProps,
+            String texture, String icon) {
         try {
             Item item = new Item(itemId);
 
-            setField(Item.class, item, "icon", DEFAULT_ICON);
+            setField(Item.class, item, "icon", icon != null ? icon : DEFAULT_ICON);
 
-            // Create Hytale's internal AssetIconProperties object using the provided
-            // iconProps
             // Create Hytale's internal AssetIconProperties object using the provided
             // iconProps
             if (iconProps != null) {
@@ -467,12 +411,11 @@ public class ScrollItemGenerator {
                         iconProps.getScale(),
                         new Vector2f(iconProps.getTranslationX(), iconProps.getTranslationY()),
                         new Vector3f(iconProps.getRotationX(), iconProps.getRotationY(), iconProps.getRotationZ()));
-                        new Vector3f(iconProps.getRotationX(), iconProps.getRotationY(), iconProps.getRotationZ()));
                 setField(Item.class, item, "iconProperties", aip);
             }
 
             setField(Item.class, item, "model", DEFAULT_MODEL);
-            setField(Item.class, item, "texture", DEFAULT_TEXTURE);
+            setField(Item.class, item, "texture", texture != null ? texture : DEFAULT_TEXTURE);
             setField(Item.class, item, "playerAnimationsId", DEFAULT_PLAYER_ANIMATIONS_ID);
             setField(Item.class, item, "maxStack", DEFAULT_MAX_STACK);
             setField(Item.class, item, "itemLevel", level);
@@ -486,7 +429,6 @@ public class ScrollItemGenerator {
             setField(Item.class, item, "translationProperties",
                     new ItemTranslationProperties(nameKey, descKey));
 
-            setField(Item.class, item, "categories", new String[] { "Items.Magic" });
             setField(Item.class, item, "categories", new String[] { "Items.Magic" });
 
             // Safe defaults — processConfig() will override in Phase 2
@@ -510,9 +452,6 @@ public class ScrollItemGenerator {
             List<ConfigIngredient> ingredients,
             int craftingTier,
             String[] craftingCategories) {
-            List<ConfigIngredient> ingredients,
-            int craftingTier,
-            String[] craftingCategories) {
         try {
             MaterialQuantity[] input = new MaterialQuantity[ingredients.size()];
             for (int i = 0; i < ingredients.size(); i++) {
@@ -533,17 +472,12 @@ public class ScrollItemGenerator {
                     new MaterialQuantity[] { primaryOutput }, 1,
                     new BenchRequirement[] { benchReq },
                     2.0f, false, 1);
-                    new MaterialQuantity[] { primaryOutput }, 1,
-                    new BenchRequirement[] { benchReq },
-                    2.0f, false, 1);
 
             String recipeId = scrollItemId + "_Recipe_Generated_0";
             setField(CraftingRecipe.class, recipe, "id", recipeId);
 
             return recipe;
         } catch (Exception e) {
-            LOGGER.atSevere()
-                    .log("ScrollItemGenerator: Failed to create recipe for " + scrollItemId + ": " + e.getMessage());
             LOGGER.atSevere()
                     .log("ScrollItemGenerator: Failed to create recipe for " + scrollItemId + ": " + e.getMessage());
             e.printStackTrace();
@@ -557,15 +491,9 @@ public class ScrollItemGenerator {
             return "Enchanting_Melee";
         if (cats.contains(ItemCategory.RANGED_WEAPON))
             return "Enchanting_Ranged";
-        if (cats.contains(ItemCategory.MELEE_WEAPON))
-            return "Enchanting_Melee";
-        if (cats.contains(ItemCategory.RANGED_WEAPON))
-            return "Enchanting_Ranged";
         if (cats.contains(ItemCategory.ARMOR) || cats.contains(ItemCategory.HELMET)
                 || cats.contains(ItemCategory.BOOTS) || cats.contains(ItemCategory.GLOVES))
             return "Enchanting_Armor";
-        if (cats.contains(ItemCategory.SHIELD))
-            return "Enchanting_Shield";
         if (cats.contains(ItemCategory.SHIELD))
             return "Enchanting_Shield";
         if (cats.contains(ItemCategory.STAFF) || cats.contains(ItemCategory.STAFF_MANA)
@@ -575,6 +503,114 @@ public class ScrollItemGenerator {
                 || cats.contains(ItemCategory.SHOVEL) || cats.contains(ItemCategory.TOOL))
             return "Enchanting_Tools";
         return "Enchanting_Melee";
+    }
+
+    private static String getTextureForEnchantment(String enchantmentId) {
+        String base = "Items/Scrolls/";
+        switch (enchantmentId) {
+            case "sharpness":
+                return base + "EnchScrollSharp.png";
+            case "life_leech":
+                return base + "EnchScrollLifeLe.png";
+            case "durability":
+                return base + "EnchScrollDurabi.png";
+            case "sturdy":
+                return base + "EnchScrollSturd.png";
+            case "dexterity":
+                return base + "EnchScrollDextiri.png";
+            case "protection":
+                return base + "EnchScrollProtec.png";
+            case "efficiency":
+                return base + "EnchScrollEffin.png";
+            case "fortune":
+                return base + "EnchScrollLoot.png";
+            case "smelting":
+                return base + "EnchScrollSmelt.png";
+            case "strength":
+                return base + "EnchScrollPow.png";
+            case "eagles_eye":
+                return base + "EnchScrollEagle.png";
+            case "looting":
+                return base + "EnchScrollLooting.png";
+            case "feather_falling":
+                return base + "EnchScrollFeatherFall.png";
+            case "waterbreathing":
+                return base + "EnchScrollWaterBreath.png";
+            case "burn":
+                return base + "EnchScrollBur.png";
+            case "freeze":
+                return base + "EnchScrollFree.png";
+            case "eternal_shot":
+                return base + "EnchScrollEternalSh.png";
+            case "pick_perfect":
+                return base + "EnchScrollPickPer.png";
+            case "thrift":
+                return base + "EnchScrollThri.png";
+            case "elemental_heart":
+                return base + "EnchScrollElementalH.png";
+            case "knockback":
+                return base + "EnchScrollKnock.png";
+            case "reflection":
+                return base + "EnchScrollReflect.png";
+            case "absorption":
+                return base + "EnchScrollAbsorb.png";
+            case "fast_swim":
+                return base + "EnchScrollSwiftSwi.png";
+            case "night_vision":
+                return base + "EnchScrollNightVis.png";
+            case "ranged_protection":
+                return base + "EnchScrollRangedProtec.png";
+            case "frenzy":
+                return base + "EnchScrollFren.png";
+            case "riposte":
+                return base + "EnchScrollRipo.png";
+            case "coup_de_grace":
+                return base + "EnchScrollCoupDeGr.png";
+            case "poison":
+                return base + "EnchScrollPoi.png";
+            case "environmental_protection":
+                return base + "EnchScrollEnviromentProtec.png";
+            default:
+                return DEFAULT_TEXTURE;
+        }
+    }
+
+    private static String getIconForEnchantment(String enchantmentId) {
+        String base = "Icons/ItemsGenerated/";
+        switch (enchantmentId) {
+            case "sharpness": return base + "Sharpness.png";
+            case "life_leech": return base + "LifeLeach.png";
+            case "durability": return base + "Durability.png";
+            case "sturdy": return base + "Sturdy.png";
+            case "dexterity": return base + "Dexterity.png";
+            case "protection": return base + "Protection.png";
+            case "efficiency": return base + "Efficiency.png";
+            case "fortune": return base + "Fortune.png";
+            case "smelting": return base + "Smelting.png";
+            case "strength": return base + "Strength.png";
+            case "eagles_eye": return base + "EaglesEye.png";
+            case "looting": return base + "Looting.png";
+            case "feather_falling": return base + "FeatherFalling.png";
+            case "waterbreathing": return base + "Waterbreathing.png";
+            case "burn": return base + "Burn.png";
+            case "freeze": return base + "Freeze.png";
+            case "eternal_shot": return base + "EternalShot.png";
+            case "pick_perfect": return base + "PickPerfect.png";
+            case "thrift": return base + "Thrift.png";
+            case "elemental_heart": return base + "ElementalHeart.png";
+            case "knockback": return base + "Knockback.png";
+            case "reflection": return base + "Reflection.png";
+            case "absorption": return base + "Absorption.png";
+            case "fast_swim": return base + "SwiftSwim.png";
+            case "night_vision": return base + "NightVision.png";
+            case "ranged_protection": return base + "RangedProtection.png";
+            case "frenzy": return base + "Frenzy.png";
+            case "riposte": return base + "Riposte.png";
+            case "coup_de_grace": return base + "CoupDeGrace.png";
+            case "poison": return base + "Poison.png";
+            case "environmental_protection": return base + "Environment Protection.png";
+            default: return DEFAULT_ICON;
+        }
     }
 
     private static void setField(Class<?> clazz, Object obj, String fieldName, Object value) throws Exception {

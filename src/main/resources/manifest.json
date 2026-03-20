@@ -1,7 +1,7 @@
 {
     "Group": "org.herolias",
     "Name": "SimpleEnchantments",
-    "Version": "0.9.1",
+    "Version": "0.9.1-graphics-preview",
     "Description": "Adds an Enchanting Table and a variety of enchantments to the game!",
     "Authors": [
         {
