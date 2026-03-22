@@ -58,7 +58,7 @@ public class EnchantmentManager {
     private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
     private static final double EAGLES_EYE_MAX_DISTANCE = 50.0;
     private final ConcurrentHashMap<UUID, ProjectileEnchantmentData> projectileEnchantmentsByUuid = new ConcurrentHashMap<>();
-    private final ConcurrentHashMap<UUID, ProjectileEnchantmentData> burnEnchantmentsByEntityUuid = new ConcurrentHashMap<>();
+    private final ConcurrentHashMap<UUID, ProjectileEnchantmentData> dotEnchantmentsByEntityUuid = new ConcurrentHashMap<>();
     private final SimpleEnchanting plugin;
 
     // Reflection Cache
@@ -162,28 +162,32 @@ public class EnchantmentManager {
     }
 
     /**
-     * Stores enchantment data for an entity that is burning.
+     * Stores enchantment data for an entity suffering from Damage over Time (Burn/Poison).
      * This allows us to attribute the kill to the original attacker/weapon even if
-     * they die from the DoT.
+     * they die from the DoT. Merges existing data safely.
      */
-    public void storeBurnEnchantments(@Nonnull UUID entityUuid, int burnLevel, int lootingLevel) {
+    public void updateDoTEnchantments(@Nonnull UUID entityUuid, int burnLevel, int lootingLevel) {
         if (burnLevel <= 0 && lootingLevel <= 0) {
-            burnEnchantmentsByEntityUuid.remove(entityUuid);
-            return;
+            return; // Don't remove here to respect potential active independent DoTs. 
         }
+        
+        ProjectileEnchantmentData existing = dotEnchantmentsByEntityUuid.get(entityUuid);
+        int newBurn = burnLevel > 0 ? burnLevel : (existing != null ? existing.getBurnLevel() : 0);
+        int newLooting = lootingLevel > 0 ? lootingLevel : (existing != null ? existing.getLootingLevel() : 0);
+        
         // distinct from projectile data, but reusing the class since it holds the same
         // fields we need
-        burnEnchantmentsByEntityUuid.put(entityUuid,
-                new ProjectileEnchantmentData(0, 0, lootingLevel, 0, burnLevel, 0));
+        dotEnchantmentsByEntityUuid.put(entityUuid,
+                new ProjectileEnchantmentData(0, 0, newLooting, 0, newBurn, 0));
     }
 
     @Nullable
-    public ProjectileEnchantmentData getBurnEnchantments(@Nonnull UUID entityUuid) {
-        return burnEnchantmentsByEntityUuid.get(entityUuid);
+    public ProjectileEnchantmentData getDoTEnchantments(@Nonnull UUID entityUuid) {
+        return dotEnchantmentsByEntityUuid.get(entityUuid);
     }
 
-    public void removeBurnEnchantments(@Nonnull UUID entityUuid) {
-        burnEnchantmentsByEntityUuid.remove(entityUuid);
+    public void removeDoTEnchantments(@Nonnull UUID entityUuid) {
+        dotEnchantmentsByEntityUuid.remove(entityUuid);
     }
 
     /**
@@ -1613,7 +1617,7 @@ public class EnchantmentManager {
         com.hypixel.hytale.server.core.entity.UUIDComponent uuidComp = commandBuffer.getComponent(targetRef,
                 com.hypixel.hytale.server.core.entity.UUIDComponent.getComponentType());
         if (uuidComp != null) {
-            ProjectileEnchantmentData data = getBurnEnchantments(uuidComp.getUuid());
+            ProjectileEnchantmentData data = getDoTEnchantments(uuidComp.getUuid());
             if (data != null) {
                 return new DamageEnchantments(data.getLootingLevel(), data.getBurnLevel());
             }
