@@ -1,4 +1,4 @@
-benchCategories.enchantingArmor = Rüstung
+﻿benchCategories.enchantingArmor = Rüstung
 
 
 
@@ -1082,7 +1082,6 @@ config.button.reset = Zurücksetzen
 config.button.change = Ändern
 
 config.general.max_enchantments = Max. Verzauberungen pro Gegenstand
-config.general.show_banner = Verzauberungsbanner anzeigen
 config.general.enable_glow = Verzauberungsleuchten aktivieren
 config.general.table_tier = Verzauberungstisch Crafting Rang
 config.general.disable_crafting = Verzauberungshandwerk deaktivieren

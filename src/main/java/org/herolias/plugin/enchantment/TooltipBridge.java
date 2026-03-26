@@ -10,13 +10,9 @@ import javax.annotation.Nonnull;
  * Bridge class that isolates <b>all</b> compile-time references to
  * DynamicTooltipsLib into a single place.
  * <p>
- * <b>This class must never be loaded unless DynamicTooltipsLib is confirmed
- * present on the classpath.</b> Callers must guard every reference with a
- * {@code Class.forName} check or an {@code isTooltipsEnabled()} flag.
- * <p>
- * This pattern ensures that the rest of Simple-Enchantments loads and runs
- * normally even when DynamicTooltipsLib is not installed — tooltips are a
- * purely visual, optional feature.
+ * DynamicTooltipsLib is a <b>hard dependency</b> of Simple-Enchantments,
+ * so this class is always safe to load. It provides a clean separation
+ * of tooltip registration and refresh logic.
  */
 public final class TooltipBridge {
 

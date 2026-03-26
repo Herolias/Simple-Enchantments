@@ -84,32 +84,11 @@ public class UserSettingsManager {
     }
 
     /**
-     * Determines whether the enchantment banner should be shown for a given player.
-     * Falls back to server config if player has not specified a preference.
-     */
-    public boolean getShowEnchantmentBanner(UUID playerUuid) {
-        UserSettings settings = getSettings(playerUuid);
-        if (settings.showEnchantmentBanner != null) {
-            return settings.showEnchantmentBanner;
-        }
-        return configManager.getConfig().showEnchantmentBanner;
-    }
-
-    /**
      * Updates and saves the glow preference for a player.
      */
     public void setEnableEnchantmentGlow(UUID playerUuid, Boolean enabled) {
         UserSettings settings = getSettings(playerUuid);
         settings.enableEnchantmentGlow = enabled;
-        saveSettings();
-    }
-
-    /**
-     * Updates and saves the banner preference for a player.
-     */
-    public void setShowEnchantmentBanner(UUID playerUuid, Boolean show) {
-        UserSettings settings = getSettings(playerUuid);
-        settings.showEnchantmentBanner = show;
         saveSettings();
     }
 

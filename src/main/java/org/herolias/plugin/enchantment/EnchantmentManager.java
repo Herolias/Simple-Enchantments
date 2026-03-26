@@ -1100,49 +1100,6 @@ public class EnchantmentManager {
         return lines.toArray(new String[0]);
     }
 
-    /**
-     * Generates a display message for the item's enchantments.
-     * Used for visual notifications (Title/Action Bar).
-     */
-    @javax.annotation.Nullable
-    public com.hypixel.hytale.server.core.Message getEnchantmentDisplayMessage(@javax.annotation.Nonnull ItemStack item,
-            @javax.annotation.Nonnull com.hypixel.hytale.server.core.universe.PlayerRef playerRef) {
-        EnchantmentData data = getEnchantmentsFromItem(item);
-        if (data.isEmpty()) {
-            return null;
-        }
-
-        java.util.List<java.util.Map.Entry<EnchantmentType, Integer>> enabledEnchants = new java.util.ArrayList<>();
-        for (java.util.Map.Entry<EnchantmentType, Integer> entry : data.getAllEnchantments().entrySet()) {
-            if (isEnchantmentEnabled(entry.getKey())) {
-                enabledEnchants.add(entry);
-            }
-        }
-
-        if (enabledEnchants.isEmpty()) {
-            return null;
-        }
-
-        // Build a flat string for the banner
-        // Composite messages with children often fail to render in Hytale's
-        // EventTitle/Action Bar
-        // if the root text is empty. A flat string is the most robust approach.
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < enabledEnchants.size(); i++) {
-            java.util.Map.Entry<EnchantmentType, Integer> entry = enabledEnchants.get(i);
-
-            String lang = getPlugin().getUserSettingsManager().getLanguage(playerRef.getUuid());
-            String name = getPlugin().getLanguageManager().getRawMessage(entry.getKey().getNameKey(), lang,
-                    playerRef.getLanguage());
-
-            if (i > 0) {
-                sb.append(" | ");
-            }
-            sb.append(name).append(" ").append(EnchantmentType.toRoman(entry.getValue()));
-        }
-
-        return com.hypixel.hytale.server.core.Message.raw(sb.toString());
-    }
 
     // --- Centralized Helper Methods for Systems ---
 

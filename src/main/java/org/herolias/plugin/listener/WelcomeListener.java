@@ -3,14 +3,12 @@ package org.herolias.plugin.listener;
 import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hypixel.hytale.server.core.event.events.player.PlayerReadyEvent;
-import com.hypixel.hytale.server.core.util.EventTitleUtil;
 import org.herolias.plugin.SimpleEnchanting;
 import org.herolias.plugin.config.EnchantingConfig;
 import org.herolias.plugin.config.UserSettingsManager;
 
 /**
- * Shows a one-time welcome message to players when they join,
- * informing them about the new tooltip system and general mod usage.
+ * Shows a one-time welcome message to players when they join.
  */
 public class WelcomeListener {
 
@@ -31,7 +29,6 @@ public class WelcomeListener {
                             com.hypixel.hytale.server.core.universe.PlayerRef.getComponentType());
             if (playerRef == null)
                 return;
-            String uuid = playerRef.getUuid().toString();
 
             UserSettingsManager userSettingsManager = plugin.getUserSettingsManager();
             EnchantingConfig config = plugin.getConfigManager().getConfig();
@@ -43,56 +40,11 @@ public class WelcomeListener {
                     String langCode = userSettingsManager.getLanguage(playerRef.getUuid());
 
                     Message greeting = plugin.getLanguageManager().getMessage("chat.greeting", langCode, clientLangCode)
-                            .color("#AA00AA").bold(true); // Changed to purple hex
+                            .color("#AA00AA").bold(true);
                     player.sendMessage(greeting);
                 }
                 userSettingsManager.setHasSeenGreeting(playerRef.getUuid(), true);
             }
-
-            // Only show if tooltips are enabled (meaning the lib is present)
-            if (!plugin.isTooltipsEnabled()) {
-                return;
-            }
-
-            // Check if player has already been notified, or if it was globally skipped for
-            // fresh installs
-            if (config.hasSkippedTooltipAnnouncement
-                    || (config.notifiedPlayers != null && config.notifiedPlayers.contains(uuid))) {
-                return;
-            }
-
-            // Mark player as notified and save
-            if (config.notifiedPlayers == null) {
-                config.notifiedPlayers = new java.util.ArrayList<>();
-            }
-            config.notifiedPlayers.add(uuid);
-            plugin.getConfigManager().saveConfig();
-
-            // Check if welcome message is disabled
-            if (!config.showWelcomeMessage) {
-                return;
-            }
-
-            // Show Title
-            EventTitleUtil.showEventTitleToPlayer(
-                    playerRef,
-                    Message.raw(""), // Title
-                    Message.raw("Enchantment Tooltips are here!").color("#FFAA00"), // Subtitle (Gold)
-                    false,
-                    null,
-                    1.5f,
-                    0.1f,
-                    2.0f);
-
-            // Send Chat Message
-            String border = "--------------------------------------------------";
-            player.sendMessage(Message.raw(border).color("#FFAA00").bold(true));
-            player.sendMessage(Message.raw("            Enchantment Tooltips are here! ").color("#FFAA00").bold(true)); // Centered
-                                                                                                                        // Gold
-                                                                                                                        // Bold
-            player.sendMessage(Message.raw(" They replace the banner by default, but you can ").color("YELLOW"));
-            player.sendMessage(Message.raw("                turn it back on in the config.").color("YELLOW"));
-            player.sendMessage(Message.raw(border).color("#FFAA00").bold(true));
         });
     }
 }

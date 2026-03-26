@@ -113,8 +113,6 @@ public class EnchantConfigPage extends InteractiveCustomUIPage<EnchantConfigPage
         EnchantingConfig copy = new EnchantingConfig();
         copy.configVersion = original.configVersion;
         copy.maxEnchantmentsPerItem = original.maxEnchantmentsPerItem;
-        copy.showEnchantmentBanner = original.showEnchantmentBanner;
-        copy.hasAutoDisabledBanner = original.hasAutoDisabledBanner;
         copy.enableEnchantmentGlow = original.enableEnchantmentGlow;
         copy.allowSameScrollUpgrades = original.allowSameScrollUpgrades;
 
@@ -485,17 +483,6 @@ public class EnchantConfigPage extends InteractiveCustomUIPage<EnchantConfigPage
                 false);
         index++;
 
-        // Show Enchantment Banner
-        commandBuilder.append("#ContentArea", "Pages/EnchantConfigToggle.ui");
-        commandBuilder.set("#ContentArea[" + index + "] #SettingName.TextSpans",
-                languageManager.getMessage("config.general.show_banner", lang, this.playerRef.getLanguage()));
-        commandBuilder.set("#ContentArea[" + index + "] #ToggleButton.TextSpans",
-                languageManager.getMessage(
-                        workingConfig.showEnchantmentBanner ? "config.common.enabled" : "config.common.disabled", lang,
-                        this.playerRef.getLanguage()));
-        eventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#ContentArea[" + index + "] #ToggleButton",
-                EventData.of("SettingValue", "showEnchantmentBanner:" + !workingConfig.showEnchantmentBanner));
-        index++;
 
         // Enable Enchantment Glow
         commandBuilder.append("#ContentArea", "Pages/EnchantConfigToggle.ui");
@@ -1431,7 +1418,7 @@ public class EnchantConfigPage extends InteractiveCustomUIPage<EnchantConfigPage
                 switch (key) {
                     case "maxEnchantmentsPerItem" ->
                         workingConfig.maxEnchantmentsPerItem = Math.max(1, Integer.parseInt(value));
-                    case "showEnchantmentBanner" -> workingConfig.showEnchantmentBanner = Boolean.parseBoolean(value);
+
                     case "enableEnchantmentGlow" -> workingConfig.enableEnchantmentGlow = Boolean.parseBoolean(value);
                     case "allowSameScrollUpgrades" ->
                         workingConfig.allowSameScrollUpgrades = Boolean.parseBoolean(value);
@@ -1552,8 +1539,6 @@ public class EnchantConfigPage extends InteractiveCustomUIPage<EnchantConfigPage
         // Copy working config to actual config
         EnchantingConfig actualConfig = configManager.getConfig();
         actualConfig.maxEnchantmentsPerItem = workingConfig.maxEnchantmentsPerItem;
-        actualConfig.showEnchantmentBanner = workingConfig.showEnchantmentBanner;
-        actualConfig.hasAutoDisabledBanner = workingConfig.hasAutoDisabledBanner;
         actualConfig.enableEnchantmentGlow = workingConfig.enableEnchantmentGlow;
         actualConfig.allowSameScrollUpgrades = workingConfig.allowSameScrollUpgrades;
         actualConfig.enchantingTableCraftingTier = workingConfig.enchantingTableCraftingTier;
@@ -1590,15 +1575,7 @@ public class EnchantConfigPage extends InteractiveCustomUIPage<EnchantConfigPage
         org.herolias.plugin.SimpleEnchanting.getInstance().getEnchantmentManager().invalidateEnabledCache();
 
         // Force-refresh all players' tooltips so changes are visible immediately.
-        // TooltipBridge isolates all DynamicTooltipsLib references; only call it
-        // when we know the lib was loaded successfully.
-        if (org.herolias.plugin.SimpleEnchanting.getInstance().isTooltipsEnabled()) {
-            try {
-                org.herolias.plugin.enchantment.TooltipBridge.refreshAllPlayers();
-            } catch (NoClassDefFoundError e) {
-                // Safety net — should never happen if isTooltipsEnabled() is true
-            }
-        }
+        org.herolias.plugin.enchantment.TooltipBridge.refreshAllPlayers();
 
         // Broadcast global scroll translation updates (for Crafting UI etc)
         org.herolias.plugin.enchantment.ScrollDescriptionManager.broadcastUpdatePacket();
@@ -1628,15 +1605,6 @@ public class EnchantConfigPage extends InteractiveCustomUIPage<EnchantConfigPage
         EnchantingConfig defaults = EnchantingConfig.createDefault();
 
         workingConfig.maxEnchantmentsPerItem = defaults.maxEnchantmentsPerItem;
-
-        // Smart default for banner: verify if tooltips are enabled
-        if (SimpleEnchanting.getInstance().isTooltipsEnabled()) {
-            workingConfig.showEnchantmentBanner = false;
-            workingConfig.hasAutoDisabledBanner = true;
-        } else {
-            workingConfig.showEnchantmentBanner = defaults.showEnchantmentBanner;
-            workingConfig.hasAutoDisabledBanner = false;
-        }
 
         workingConfig.enableEnchantmentGlow = defaults.enableEnchantmentGlow;
         workingConfig.enchantingTableCraftingTier = defaults.enchantingTableCraftingTier;

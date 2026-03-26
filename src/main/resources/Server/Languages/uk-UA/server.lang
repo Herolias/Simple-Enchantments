@@ -576,7 +576,6 @@ config.button.reset = Скинути
 config.button.change = Змінити
 
 config.general.max_enchantments = Макс. Чар На Предмет
-config.general.show_banner = Показати Банер Чар
 config.general.enable_glow = Увімкнути Світіння
 config.general.table_tier = Рівень Крафту Столу Чар
 config.general.disable_crafting = Вимкнути Крафт Чар

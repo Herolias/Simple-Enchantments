@@ -1,4 +1,4 @@
-benchCategories.enchantingArmor = Rustning
+﻿benchCategories.enchantingArmor = Rustning
 
 benchCategories.enchantingTools = Verktyg
 
@@ -576,7 +576,6 @@ config.button.reset = Återställ
 config.button.change = Ändra
 
 config.general.max_enchantments = Max Förtrollningar Per Föremål
-config.general.show_banner = Visa Förtrollningsbanner
 config.general.enable_glow = Aktivera Förtrollningsglöd
 config.general.table_tier = Förtrollningsbords Hantverksnivå
 config.general.disable_crafting = Inaktivera Förtrollningshantverk

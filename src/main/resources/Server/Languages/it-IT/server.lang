@@ -568,7 +568,6 @@ config.button.add_ingredient = Aggiungi Ingrediente
 config.button.reset_recipe = Reimposta Ricetta
 
 config.general.max_enchantments = Max Incantesimi Per Oggetto
-config.general.show_banner = Mostra Banner Incantesimi
 config.general.enable_glow = Abilita Bagliore Incantesimi
 config.general.table_tier = Livello Creazione Tavolo Incantesimi
 config.general.disable_crafting = Disabilita Creazione Incantesimi

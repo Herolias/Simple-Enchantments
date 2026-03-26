@@ -83,7 +83,7 @@ public class SimpleEnchanting extends JavaPlugin {
     private EnchantmentAbilityStaminaSystem enchantmentAbilityStaminaSystem;
     private EnchantmentProjectileSpeedSystem enchantmentProjectileSpeedSystem;
     private EnchantmentEternalShotSystem eternalShotSystem;
-    private boolean tooltipsEnabled;
+
     private org.herolias.plugin.config.ConfigManager configManager;
     private org.herolias.plugin.config.UserSettingsManager userSettingsManager;
     private org.herolias.plugin.lang.LanguageManager languageManager;
@@ -401,31 +401,8 @@ public class SimpleEnchanting extends JavaPlugin {
         });
         LOGGER.atInfo().log("Registered ScrollDescriptionManager listener");
 
-        // ── Tooltip System (via DynamicTooltipsLib, optional) ──
-        // All lib references are isolated in TooltipBridge so that
-        // Simple-Enchantments loads and runs normally without the lib.
-        try {
-            Class.forName("org.herolias.tooltips.api.DynamicTooltipsApiProvider");
-            // TooltipBridge is only loaded here — after we've confirmed the lib exists.
-            // It contains all compile-time references to DynamicTooltipsLib classes.
-            this.tooltipsEnabled = TooltipBridge.register(enchantmentManager);
-        } catch (ClassNotFoundException | NoClassDefFoundError e) {
-            LOGGER.atWarning().log("DynamicTooltipsLib not found — enchantment tooltips will not display. "
-                    + "Install DynamicTooltipsLib for rich enchantment tooltips.");
-        }
-
-        // Auto-disable enchantment banner if tooltips are present and we haven't done
-        // it yet
-        if (tooltipsEnabled) {
-            EnchantingConfig config = configManager.getConfig();
-            if (!config.hasAutoDisabledBanner) {
-                config.showEnchantmentBanner = false;
-                config.hasAutoDisabledBanner = true;
-                configManager.saveConfig();
-                LOGGER.atInfo()
-                        .log("Automatically disabled Enchantment Banner because DynamicTooltipsLib is installed.");
-            }
-        }
+        // ── Tooltip System (via DynamicTooltipsLib, required) ──
+        TooltipBridge.register(enchantmentManager);
 
         // Register Event Logger Listener (Debug)
         org.herolias.plugin.listener.EventLoggerListener debugListener = new org.herolias.plugin.listener.EventLoggerListener();
@@ -461,8 +438,7 @@ public class SimpleEnchanting extends JavaPlugin {
 
     @Override
     protected void start() {
-        // Register the slot tracker (handles glow updates + enchantment banner on slot
-        // change)
+        // Register the slot tracker (handles glow updates on slot change)
         try {
             EnchantmentSlotTracker slotTracker = new EnchantmentSlotTracker(enchantmentManager, eternalShotSystem);
             com.hypixel.hytale.server.core.HytaleServer.SCHEDULED_EXECUTOR.scheduleAtFixedRate(
@@ -474,10 +450,6 @@ public class SimpleEnchanting extends JavaPlugin {
         } catch (Exception e) {
             LOGGER.atSevere().log("Failed to register Slot Tracker: " + e.getMessage());
             e.printStackTrace();
-        }
-
-        if (tooltipsEnabled) {
-            LOGGER.atInfo().log("Enchantment tooltips active via DynamicTooltipsLib");
         }
     }
 
@@ -507,12 +479,7 @@ public class SimpleEnchanting extends JavaPlugin {
         return enchantmentDamageSystem;
     }
 
-    /**
-     * Returns whether enchantment tooltips are active (DynamicTooltipsLib present).
-     */
-    public boolean isTooltipsEnabled() {
-        return tooltipsEnabled;
-    }
+
 
     /**
      * Checks if the Perfect Parries mod is present.
