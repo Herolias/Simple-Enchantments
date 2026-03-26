@@ -72,7 +72,7 @@ public abstract class AbstractRecipeRegistry<T extends AbstractRecipeRegistry.Re
                 return;
             }
 
-            for (Item item : Item.getAssetMap().getAssetMap().values()) {
+            for (Item item : List.copyOf(Item.getAssetMap().getAssetMap().values())) {
                 if (item == null) {
                     continue;
                 }

@@ -15,9 +15,7 @@
     ],
     "Website": "https://discord.gg/7XQAnUfQfM",
     "ServerVersion": "2026.03.20-db226053c",
-    "Dependencies": {
-        
-    },
+    "Dependencies": {},
     "OptionalDependencies": {
         "org.herolias:DynamicTooltipsLib": "*"
     },
