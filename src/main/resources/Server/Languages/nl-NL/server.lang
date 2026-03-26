@@ -1,4 +1,4 @@
-benchCategories.enchantingArmor = Harnas
+﻿benchCategories.enchantingArmor = Harnas
 
 benchCategories.enchantingTools = Gereedschap
 
@@ -576,7 +576,6 @@ config.button.reset = Resetten
 config.button.change = Wijzigen
 
 config.general.max_enchantments = Max. Betoveringen Per Item
-config.general.show_banner = Toon Betoveringsbanner
 config.general.enable_glow = Activeer Betoveringsgloed
 config.general.table_tier = Betoveringstafel Ambachtsniveau
 config.general.disable_crafting = Schakel Betoveringsambacht Uit

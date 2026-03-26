@@ -15,6 +15,7 @@ import com.hypixel.hytale.server.core.asset.type.blocksound.config.BlockSoundSet
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType;
 import com.hypixel.hytale.server.core.asset.type.item.config.Item;
 import com.hypixel.hytale.server.core.entity.LivingEntity;
+import com.hypixel.hytale.server.core.entity.ItemUtils;
 import com.hypixel.hytale.server.core.event.events.ecs.DamageBlockEvent;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
 import com.hypixel.hytale.server.core.modules.blockhealth.BlockHealthChunk;
@@ -188,7 +189,7 @@ public class EnchantmentSilktouchSystem extends EntityEventSystem<EntityStore, D
                     .getEntity(breakerRef, store);
             if (rawEntity instanceof LivingEntity entity) {
                 byte activeHotbarSlot = entity.getInventory().getActiveHotbarSlot();
-                if (activeHotbarSlot != -1 && entity.canDecreaseItemStackDurability(breakerRef, store)
+                if (activeHotbarSlot != -1 && ItemUtils.canDecreaseItemStackDurability(breakerRef, store)
                         && !tool.isUnbreakable()) {
                     double durabilityLoss = tool.getItem().getDurabilityLossOnHit();
 

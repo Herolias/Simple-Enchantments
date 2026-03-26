@@ -1,4 +1,4 @@
-benchCategories.enchantingArmor = Baju Zirah
+﻿benchCategories.enchantingArmor = Baju Zirah
 
 benchCategories.enchantingTools = Alat
 
@@ -576,7 +576,6 @@ config.button.reset = Atur Ulang
 config.button.change = Ubah
 
 config.general.max_enchantments = Maks Sihir Per Item
-config.general.show_banner = Tampilkan Spanduk Sihir
 config.general.enable_glow = Aktifkan Cahaya Sihir
 config.general.table_tier = Tingkat Kerajinan Meja Sihir
 config.general.disable_crafting = Nonaktifkan Kerajinan Sihir

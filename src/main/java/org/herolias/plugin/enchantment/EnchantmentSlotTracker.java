@@ -1,15 +1,15 @@
 package org.herolias.plugin.enchantment;
 
-import com.hypixel.hytale.server.core.Message;
+
 import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hypixel.hytale.server.core.inventory.Inventory;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.Universe;
 import com.hypixel.hytale.server.core.universe.world.World;
-import com.hypixel.hytale.server.core.util.EventTitleUtil;
+
 import com.hypixel.hytale.logger.HytaleLogger;
-import org.herolias.plugin.SimpleEnchanting;
+
 
 import java.util.HashSet;
 import java.util.Map;
@@ -137,7 +137,7 @@ public class EnchantmentSlotTracker implements Runnable {
             // 1. Update Glow (Held item changed)
             EnchantmentVisualsHelper.updateGlowStats(ref, store, player, enchantmentManager);
 
-            // 2. Show Title (only if slot actually changed, not just offhand)
+            // 2. Check if slot actually changed (not just offhand)
             // Mask out the offhand bit to check slot index
             byte lastSlotIndex = lastState != null ? (byte) (lastState & 0x7F) : -1;
             if (currentSlot != lastSlotIndex) {
@@ -146,33 +146,8 @@ public class EnchantmentSlotTracker implements Runnable {
                     ItemStack previousItem = inventory.getHotbar().getItemStack(lastSlotIndex);
                     eternalShotSystem.onSlotChanged(player, previousItem);
                 }
-                showEnchantmentTitle(playerRef, player, currentSlot);
                 // DynamicTooltipsLib handles tooltip updates via packet interception
             }
-        }
-    }
-
-    private void showEnchantmentTitle(PlayerRef playerRef, Player player, byte slot) {
-        if (!SimpleEnchanting.getInstance().getUserSettingsManager().getShowEnchantmentBanner(playerRef.getUuid())) {
-            return;
-        }
-
-        ItemStack item = player.getInventory().getHotbar().getItemStack(slot);
-        Message displayMessage = enchantmentManager.getEnchantmentDisplayMessage(item, playerRef);
-
-        if (displayMessage != null) {
-            EventTitleUtil.hideEventTitleFromPlayer(playerRef, 0.0f);
-            EventTitleUtil.showEventTitleToPlayer(
-                    playerRef,
-                    Message.raw(""),
-                    displayMessage.color("GOLD"),
-                    false,
-                    null,
-                    1.5f,
-                    0.1f,
-                    0.2f);
-        } else {
-            EventTitleUtil.hideEventTitleFromPlayer(playerRef, 0.1f);
         }
     }
 

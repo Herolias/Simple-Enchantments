@@ -24,7 +24,7 @@ import java.util.Map;
 
 /**
  * Interactive UI page corresponding to the /enchanting command.
- * Provides a Walkthrough and User Settings (Glow, Banner toggles).
+ * Provides a Walkthrough and User Settings (Glow toggle, Language selection).
  */
 public class EnchantingPage extends InteractiveCustomUIPage<EnchantingPageEventData> {
     private static final Value<String> BUTTON_STYLE = Value.ref("Pages/BasicTextButton.ui", "LabelStyle");
@@ -136,15 +136,10 @@ public class EnchantingPage extends InteractiveCustomUIPage<EnchantingPageEventD
                 org.herolias.plugin.enchantment.ScrollDescriptionManager.sendUpdatePacket(this.playerRef);
 
                 // Also refresh dynamic tooltips in inventory
-                if (plugin.isTooltipsEnabled()) {
-                    org.herolias.plugin.enchantment.TooltipBridge.refreshPlayer(this.playerRef.getUuid());
-                }
+                org.herolias.plugin.enchantment.TooltipBridge.refreshPlayer(this.playerRef.getUuid());
             } else if ("glow".equals(data.toggleSetting)) {
                 boolean current = userSettingsManager.getEnableEnchantmentGlow(this.playerRef.getUuid());
                 userSettingsManager.setEnableEnchantmentGlow(this.playerRef.getUuid(), !current);
-            } else if ("banner".equals(data.toggleSetting)) {
-                boolean current = userSettingsManager.getShowEnchantmentBanner(this.playerRef.getUuid());
-                userSettingsManager.setShowEnchantmentBanner(this.playerRef.getUuid(), !current);
             }
 
             buildTabContent(commandBuilder, eventBuilder, true);
@@ -385,7 +380,6 @@ public class EnchantingPage extends InteractiveCustomUIPage<EnchantingPageEventD
     private void buildSettingsTab(@Nonnull UICommandBuilder commandBuilder, @Nonnull UIEventBuilder eventBuilder) {
         String lang = userSettingsManager.getLanguage(this.playerRef.getUuid());
         boolean glowEnabled = userSettingsManager.getEnableEnchantmentGlow(this.playerRef.getUuid());
-        boolean bannerEnabled = userSettingsManager.getShowEnchantmentBanner(this.playerRef.getUuid());
 
         int index = 0;
 
@@ -428,17 +422,6 @@ public class EnchantingPage extends InteractiveCustomUIPage<EnchantingPageEventD
                         this.playerRef.getLanguage()));
         eventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#ContentArea[" + index + "] #ToggleButton",
                 EventData.of("ToggleSetting", "glow"));
-        index++;
-
-        // Setup Banner Toggle
-        commandBuilder.append("#ContentArea", "Pages/EnchantingSettings.ui");
-        commandBuilder.set("#ContentArea[" + index + "] #SettingName.TextSpans",
-                languageManager.getMessage("config.general.show_banner", lang, this.playerRef.getLanguage()));
-        commandBuilder.set("#ContentArea[" + index + "] #ToggleButton.TextSpans",
-                languageManager.getMessage(bannerEnabled ? "config.common.enabled" : "config.common.disabled", lang,
-                        this.playerRef.getLanguage()));
-        eventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#ContentArea[" + index + "] #ToggleButton",
-                EventData.of("ToggleSetting", "banner"));
         index++;
 
         // Add Admin Config Note

@@ -1,6 +1,13 @@
 package org.herolias.plugin.enchantment;
 
-import com.hypixel.hytale.server.core.event.events.entity.LivingEntityInventoryChangeEvent;
+import com.hypixel.hytale.server.core.inventory.InventoryChangeEvent;
+import com.hypixel.hytale.component.system.EntityEventSystem;
+import com.hypixel.hytale.component.ArchetypeChunk;
+import com.hypixel.hytale.component.CommandBuffer;
+import com.hypixel.hytale.component.query.Query;
+import com.hypixel.hytale.component.Archetype;
+import com.hypixel.hytale.server.core.entity.EntityUtils;
+import javax.annotation.Nonnull;
 import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hypixel.hytale.server.core.entity.LivingEntity;
 import com.hypixel.hytale.component.Ref;
@@ -15,24 +22,32 @@ import org.herolias.plugin.SimpleEnchanting;
  * Event-driven listener for updating enchantment visuals (Glow).
  * Replaces the heavy polling mechanism for inventory content changes.
  */
-public class EnchantmentVisualsListener {
+public class EnchantmentVisualsListener extends EntityEventSystem<EntityStore, InventoryChangeEvent> {
 
     private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
     private final EnchantmentManager enchantmentManager;
 
     public EnchantmentVisualsListener(EnchantmentManager enchantmentManager) {
+        super(InventoryChangeEvent.class);
         this.enchantmentManager = enchantmentManager;
     }
 
-    public void onInventoryChange(LivingEntityInventoryChangeEvent event) {
+    @Override
+    @Nonnull
+    public Query<EntityStore> getQuery() {
+        return Archetype.empty();
+    }
+
+    @Override
+    public void handle(int index, @Nonnull ArchetypeChunk<EntityStore> archetypeChunk, @Nonnull Store<EntityStore> store, @Nonnull CommandBuffer<EntityStore> commandBuffer, @Nonnull InventoryChangeEvent event) {
         try {
-            LivingEntity entity = event.getEntity();
+            LivingEntity entity = (LivingEntity) EntityUtils.getEntity(index, archetypeChunk);
             if (!(entity instanceof Player player)) {
                 return;
             }
 
             if (player.getWorld() != null && !player.getWorld().isInThread()) {
-                player.getWorld().execute(() -> onInventoryChange(event));
+                player.getWorld().execute(() -> handle(index, archetypeChunk, store, commandBuffer, event));
                 return;
             }
 
@@ -41,11 +56,9 @@ public class EnchantmentVisualsListener {
                 return;
             }
 
-            // Get the ECS store from the world
             if (player.getWorld() == null) {
                 return;
             }
-            Store<EntityStore> store = player.getWorld().getEntityStore().getStore();
 
             if (store != null) {
                 // Update glow stats when inventory content changes

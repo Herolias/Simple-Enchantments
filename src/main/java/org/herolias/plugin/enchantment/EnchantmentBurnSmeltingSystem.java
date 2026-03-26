@@ -216,7 +216,7 @@ public class EnchantmentBurnSmeltingSystem extends DeathSystems.OnDeathSystem {
         com.hypixel.hytale.server.core.entity.UUIDComponent uuidComp = commandBuffer.getComponent(ref,
                 com.hypixel.hytale.server.core.entity.UUIDComponent.getComponentType());
         if (uuidComp != null) {
-            enchantmentManager.removeBurnEnchantments(uuidComp.getUuid());
+            enchantmentManager.removeDoTEnchantments(uuidComp.getUuid());
         }
     }
 

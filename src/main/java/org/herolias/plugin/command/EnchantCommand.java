@@ -135,8 +135,6 @@ public class EnchantCommand extends CommandBase {
 
                     // Update inventory
                     hotbar.setItemStackForSlot((short) inventory.getActiveHotbarSlot(), result.item());
-                    inventory.markChanged();
-                    player.sendInventory();
 
                     // Success message
                     EnchantmentData newEnchants = enchantmentManager.getEnchantmentsFromItem(result.item());

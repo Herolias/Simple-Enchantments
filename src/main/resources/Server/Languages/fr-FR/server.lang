@@ -1,4 +1,4 @@
-benchCategories.enchantingArmor = Armure
+﻿benchCategories.enchantingArmor = Armure
 
 benchCategories.enchantingTools = Outils
 
@@ -575,7 +575,6 @@ config.button.reset = Réinitialiser
 config.button.change = Changer
 
 config.general.max_enchantments = Max Enchantements Par Objet
-config.general.show_banner = Afficher Bannière d'Enchantement
 config.general.enable_glow = Activer Lueur d'Enchantement
 config.general.table_tier = Niveau de Craft Table d'Enchantement
 config.general.disable_crafting = Désactiver Craft d'Enchantement

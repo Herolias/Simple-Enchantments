@@ -1,4 +1,4 @@
-benchCategories.enchantingArmor = Броня
+﻿benchCategories.enchantingArmor = Броня
 
 benchCategories.enchantingTools = Инструменты
 
@@ -576,7 +576,6 @@ config.button.reset = Сбросить
 config.button.change = Изменить
 
 config.general.max_enchantments = Макс. Зачарований На Предмет
-config.general.show_banner = Показать Баннер Зачарований
 config.general.enable_glow = Включить Свечение
 config.general.table_tier = Уровень Крафта Стола Зачарований
 config.general.disable_crafting = Отключить Крафт Зачарований

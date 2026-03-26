@@ -4,7 +4,12 @@ import com.hypixel.hytale.codec.Codec;
 import com.hypixel.hytale.logger.HytaleLogger;
 import com.hypixel.hytale.server.core.entity.LivingEntity;
 import com.hypixel.hytale.server.core.entity.entities.Player;
-import com.hypixel.hytale.server.core.event.events.entity.LivingEntityInventoryChangeEvent;
+import com.hypixel.hytale.component.ArchetypeChunk;
+import com.hypixel.hytale.component.CommandBuffer;
+import com.hypixel.hytale.component.Store;
+import com.hypixel.hytale.server.core.inventory.InventoryChangeEvent;
+import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
+import com.hypixel.hytale.server.core.entity.EntityUtils;
 import com.hypixel.hytale.server.core.inventory.Inventory;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
 import com.hypixel.hytale.server.core.inventory.container.ItemContainer;
@@ -153,13 +158,14 @@ public class EnchantmentEternalShotSystem extends AbstractRefundSystem {
         LOGGER.atInfo().log("EnchantmentEternalShotSystem initialized");
     }
 
-    public void onInventoryChange(@Nonnull LivingEntityInventoryChangeEvent event) {
-        LivingEntity entity = event.getEntity();
+    @Override
+    public void handle(int index, @Nonnull ArchetypeChunk<EntityStore> archetypeChunk, @Nonnull Store<EntityStore> store, @Nonnull CommandBuffer<EntityStore> commandBuffer, @Nonnull InventoryChangeEvent event) {
+        LivingEntity entity = (LivingEntity) EntityUtils.getEntity(index, archetypeChunk);
         if (!(entity instanceof Player player))
             return;
 
         if (player.getWorld() != null && !player.getWorld().isInThread()) {
-            player.getWorld().execute(() -> onInventoryChange(event));
+            player.getWorld().execute(() -> handle(index, archetypeChunk, store, commandBuffer, event));
             return;
         }
 

@@ -47,7 +47,7 @@ import org.herolias.plugin.enchantment.ScrollItemGenerator;
 import com.al3x.HStats;
 
 import org.herolias.plugin.ui.EnchantScrollPageSupplier;
-import com.hypixel.hytale.server.core.event.events.entity.LivingEntityInventoryChangeEvent;
+
 import com.hypixel.hytale.server.core.event.events.ecs.SwitchActiveSlotEvent;
 import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hypixel.hytale.server.core.event.events.player.PlayerReadyEvent;
@@ -83,7 +83,7 @@ public class SimpleEnchanting extends JavaPlugin {
     private EnchantmentAbilityStaminaSystem enchantmentAbilityStaminaSystem;
     private EnchantmentProjectileSpeedSystem enchantmentProjectileSpeedSystem;
     private EnchantmentEternalShotSystem eternalShotSystem;
-    private boolean tooltipsEnabled;
+
     private org.herolias.plugin.config.ConfigManager configManager;
     private org.herolias.plugin.config.UserSettingsManager userSettingsManager;
     private org.herolias.plugin.lang.LanguageManager languageManager;
@@ -329,22 +329,19 @@ public class SimpleEnchanting extends JavaPlugin {
         // Initialize and register the state transfer system (preserves enchantments on
         // item state changes)
         EnchantmentStateTransferSystem stateTransferSystem = new EnchantmentStateTransferSystem(enchantmentManager);
-        this.getEventRegistry().registerGlobal(LivingEntityInventoryChangeEvent.class,
-                stateTransferSystem::onInventoryChange);
+        this.getEntityStoreRegistry().registerSystem(stateTransferSystem);
         LOGGER.atInfo().log("Registered EnchantmentStateTransferSystem listener");
 
         // Initialize and register the durability system (Event Listener)
         EnchantmentDurabilitySystem durabilitySystem = new EnchantmentDurabilitySystem(enchantmentManager);
-        this.getEventRegistry().registerGlobal(LivingEntityInventoryChangeEvent.class,
-                durabilitySystem::onInventoryChange);
+        this.getEntityStoreRegistry().registerSystem(durabilitySystem);
         LOGGER.atInfo().log("Registered EnchantmentDurabilitySystem listener");
 
         // Initialize and register the Eternal Shot system (Event Listener)
         // This intercepts arrow consumption and restores arrows when weapon has Eternal
         // Shot enchantment
         eternalShotSystem = new EnchantmentEternalShotSystem(enchantmentManager);
-        this.getEventRegistry().registerGlobal(LivingEntityInventoryChangeEvent.class,
-                eternalShotSystem::onInventoryChange);
+        this.getEntityStoreRegistry().registerSystem(eternalShotSystem);
 
         // Register SwitchActiveSlot handler to clear stale records when switching from
         // unloaded crossbows
@@ -355,8 +352,7 @@ public class SimpleEnchanting extends JavaPlugin {
 
         // Initialize and register Elemental Heart System (Essence Saver)
         EnchantmentElementalHeartSystem elementalHeartSystem = new EnchantmentElementalHeartSystem(enchantmentManager);
-        this.getEventRegistry().registerGlobal(LivingEntityInventoryChangeEvent.class,
-                elementalHeartSystem::onInventoryChange);
+        this.getEntityStoreRegistry().registerSystem(elementalHeartSystem);
         LOGGER.atInfo().log("Registered EnchantmentElementalHeartSystem listener");
 
         // Register DropItemEventSystem to track manual drops for Eternal Shot fix
@@ -375,15 +371,13 @@ public class SimpleEnchanting extends JavaPlugin {
         // Register interaction system with ECS
         this.getEntityStoreRegistry().registerSystem(new SalvagerInteractionSystem(salvageSystem));
         // Register inventory change listener globally
-        this.getEventRegistry().registerGlobal(LivingEntityInventoryChangeEvent.class,
-                salvageSystem::onEntityInventoryChange);
+        this.getEntityStoreRegistry().registerSystem(salvageSystem);
         LOGGER.atInfo().log("Registered EnchantmentSalvageSystem listener");
 
         // Register EnchantmentVisualsListener (Event driven visual updates)
         // Optimized to replace heavy per-tick polling
         EnchantmentVisualsListener visualsListener = new EnchantmentVisualsListener(enchantmentManager);
-        this.getEventRegistry().registerGlobal(LivingEntityInventoryChangeEvent.class,
-                visualsListener::onInventoryChange);
+        this.getEntityStoreRegistry().registerSystem(visualsListener);
         LOGGER.atInfo().log("Registered EnchantmentVisualsListener");
 
         // Register ScrollDescriptionManager to send global translation updates on join
@@ -407,31 +401,8 @@ public class SimpleEnchanting extends JavaPlugin {
         });
         LOGGER.atInfo().log("Registered ScrollDescriptionManager listener");
 
-        // ── Tooltip System (via DynamicTooltipsLib, optional) ──
-        // All lib references are isolated in TooltipBridge so that
-        // Simple-Enchantments loads and runs normally without the lib.
-        try {
-            Class.forName("org.herolias.tooltips.api.DynamicTooltipsApiProvider");
-            // TooltipBridge is only loaded here — after we've confirmed the lib exists.
-            // It contains all compile-time references to DynamicTooltipsLib classes.
-            this.tooltipsEnabled = TooltipBridge.register(enchantmentManager);
-        } catch (ClassNotFoundException | NoClassDefFoundError e) {
-            LOGGER.atWarning().log("DynamicTooltipsLib not found — enchantment tooltips will not display. "
-                    + "Install DynamicTooltipsLib for rich enchantment tooltips.");
-        }
-
-        // Auto-disable enchantment banner if tooltips are present and we haven't done
-        // it yet
-        if (tooltipsEnabled) {
-            EnchantingConfig config = configManager.getConfig();
-            if (!config.hasAutoDisabledBanner) {
-                config.showEnchantmentBanner = false;
-                config.hasAutoDisabledBanner = true;
-                configManager.saveConfig();
-                LOGGER.atInfo()
-                        .log("Automatically disabled Enchantment Banner because DynamicTooltipsLib is installed.");
-            }
-        }
+        // ── Tooltip System (via DynamicTooltipsLib, required) ──
+        TooltipBridge.register(enchantmentManager);
 
         // Register Event Logger Listener (Debug)
         org.herolias.plugin.listener.EventLoggerListener debugListener = new org.herolias.plugin.listener.EventLoggerListener();
@@ -467,8 +438,7 @@ public class SimpleEnchanting extends JavaPlugin {
 
     @Override
     protected void start() {
-        // Register the slot tracker (handles glow updates + enchantment banner on slot
-        // change)
+        // Register the slot tracker (handles glow updates on slot change)
         try {
             EnchantmentSlotTracker slotTracker = new EnchantmentSlotTracker(enchantmentManager, eternalShotSystem);
             com.hypixel.hytale.server.core.HytaleServer.SCHEDULED_EXECUTOR.scheduleAtFixedRate(
@@ -480,10 +450,6 @@ public class SimpleEnchanting extends JavaPlugin {
         } catch (Exception e) {
             LOGGER.atSevere().log("Failed to register Slot Tracker: " + e.getMessage());
             e.printStackTrace();
-        }
-
-        if (tooltipsEnabled) {
-            LOGGER.atInfo().log("Enchantment tooltips active via DynamicTooltipsLib");
         }
     }
 
@@ -513,12 +479,7 @@ public class SimpleEnchanting extends JavaPlugin {
         return enchantmentDamageSystem;
     }
 
-    /**
-     * Returns whether enchantment tooltips are active (DynamicTooltipsLib present).
-     */
-    public boolean isTooltipsEnabled() {
-        return tooltipsEnabled;
-    }
+
 
     /**
      * Checks if the Perfect Parries mod is present.

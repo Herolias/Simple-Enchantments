@@ -73,12 +73,14 @@ public class EnchantmentPoisonSystem extends DamageEventSystem {
         EnchantmentManager.DamageContext ctx = enchantmentManager.getDamageContext(damage, commandBuffer);
 
         int poisonLevel = 0;
+        int lootingLevel = 0;
 
         // 1. Check projectile data first (Ranged)
         if (ctx.hasProjectile()) {
             ProjectileEnchantmentData data = enchantmentManager.getProjectileEnchantmentData(ctx.projectileRef(),
                     commandBuffer);
             if (data != null) {
+                lootingLevel = data.getLootingLevel();
                 // HACK: As we didn't add poison explicitly to ProjectileEnchantmentData, we
                 // just read from the shooter's weapon directly
             }
@@ -91,6 +93,7 @@ public class EnchantmentPoisonSystem extends DamageEventSystem {
 
             if (weapon != null) {
                 poisonLevel = enchantmentManager.getEnchantmentLevel(weapon, EnchantmentType.POISON);
+                lootingLevel = Math.max(lootingLevel, enchantmentManager.getEnchantmentLevel(weapon, EnchantmentType.LOOTING));
             }
         }
 
@@ -114,6 +117,14 @@ public class EnchantmentPoisonSystem extends DamageEventSystem {
                         com.hypixel.hytale.server.core.universe.PlayerRef.getComponentType());
                 EnchantmentEventHelper.fireActivated(playerRef, weapon, EnchantmentType.POISON, poisonLevel);
             }
+        }
+
+        // Store enchantment data on the victim so we can attribute drops if they die
+        // from poison
+        com.hypixel.hytale.server.core.entity.UUIDComponent targetUuid = commandBuffer.getComponent(targetRef,
+                com.hypixel.hytale.server.core.entity.UUIDComponent.getComponentType());
+        if (targetUuid != null) {
+            enchantmentManager.updateDoTEnchantments(targetUuid.getUuid(), 0, lootingLevel);
         }
     }
 }

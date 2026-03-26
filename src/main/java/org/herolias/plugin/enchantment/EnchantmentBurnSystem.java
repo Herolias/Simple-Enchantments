@@ -128,7 +128,7 @@ public class EnchantmentBurnSystem extends DamageEventSystem {
         com.hypixel.hytale.server.core.entity.UUIDComponent targetUuid = commandBuffer.getComponent(targetRef,
                 com.hypixel.hytale.server.core.entity.UUIDComponent.getComponentType());
         if (targetUuid != null) {
-            enchantmentManager.storeBurnEnchantments(targetUuid.getUuid(), burnLevel, lootingLevel);
+            enchantmentManager.updateDoTEnchantments(targetUuid.getUuid(), burnLevel, lootingLevel);
         }
     }
 }

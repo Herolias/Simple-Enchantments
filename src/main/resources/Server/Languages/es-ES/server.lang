@@ -418,7 +418,6 @@ config.button.add_ingredient = Agregar Ingrediente
 config.button.reset_recipe = Restablecer Receta
 
 config.general.max_enchantments = Encantamientos máximos por objeto
-config.general.show_banner = Mostrar banner de encantamiento
 config.general.enable_glow = Activar brillo de encantamiento
 config.general.table_tier = Nivel de crafteo de la mesa
 config.general.disable_crafting = Desactivar crafteo de encantamientos

@@ -1,11 +1,20 @@
 package org.herolias.plugin.enchantment;
 
-import com.hypixel.hytale.builtin.crafting.state.ProcessingBenchState;
+import com.hypixel.hytale.builtin.crafting.component.ProcessingBenchBlock;
 import com.hypixel.hytale.event.EventPriority;
 import com.hypixel.hytale.logger.HytaleLogger;
 import com.hypixel.hytale.math.vector.Vector3i;
 import com.hypixel.hytale.server.core.entity.entities.Player;
-import com.hypixel.hytale.server.core.event.events.entity.LivingEntityInventoryChangeEvent;
+import com.hypixel.hytale.server.core.inventory.InventoryChangeEvent;
+import com.hypixel.hytale.component.system.EntityEventSystem;
+import com.hypixel.hytale.component.ArchetypeChunk;
+import com.hypixel.hytale.component.CommandBuffer;
+import com.hypixel.hytale.component.Store;
+import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
+import com.hypixel.hytale.component.query.Query;
+import com.hypixel.hytale.component.Archetype;
+import com.hypixel.hytale.server.core.entity.EntityUtils;
+import com.hypixel.hytale.server.core.entity.LivingEntity;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
 import com.hypixel.hytale.server.core.inventory.container.ItemContainer;
 import com.hypixel.hytale.server.core.inventory.transaction.ListTransaction;
@@ -33,7 +42,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * If the item is removed by the player before processing, the metadata is
  * restored.
  */
-public class EnchantmentSalvageSystem {
+public class EnchantmentSalvageSystem extends EntityEventSystem<EntityStore, InventoryChangeEvent> {
 
     private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
     private static final String BENCH_ID = "Salvagebench";
@@ -48,14 +57,21 @@ public class EnchantmentSalvageSystem {
     private static final long SESSION_TIMEOUT_MS = 30_000;
 
     public EnchantmentSalvageSystem(EnchantmentManager enchantmentManager) {
+        super(InventoryChangeEvent.class);
         this.enchantmentManager = enchantmentManager;
+    }
+
+    @Override
+    @Nonnull
+    public Query<EntityStore> getQuery() {
+        return Archetype.empty();
     }
 
     /**
      * Starts a salvage session for the player and bench.
      * Hooks into the bench's container to monitor item changes.
      */
-    public void startSession(Player player, ProcessingBenchState bench) {
+    public void startSession(Player player, ProcessingBenchBlock bench, Vector3i blockPos) {
         if (player.getWorld() == null || player.getReference() == null)
             return;
         com.hypixel.hytale.server.core.entity.UUIDComponent uComp = player.getWorld().getEntityStore().getStore()
@@ -69,13 +85,14 @@ public class EnchantmentSalvageSystem {
             return;
         }
 
-        SalvageSession session = new SalvageSession(playerId, bench.getBlockPosition());
+        SalvageSession session = new SalvageSession(playerId, blockPos);
         sessions.put(playerId, session);
 
         if (!trackedContainers.containsKey(bench.getItemContainer())) {
             LOGGER.atInfo().log("Registering change listener for bench container.");
+            com.hypixel.hytale.server.core.universe.world.World world = player.getWorld();
             bench.getItemContainer().registerChangeEvent(EventPriority.NORMAL, (event) -> {
-                this.onBenchItemChange(bench, event);
+                this.onBenchItemChange(bench, world, blockPos, event);
             });
             trackedContainers.put(bench.getItemContainer(), true);
         }
@@ -88,22 +105,22 @@ public class EnchantmentSalvageSystem {
     /**
      * Handles item changes in the Salvager Bench.
      */
-    private void onBenchItemChange(ProcessingBenchState bench, ItemContainer.ItemContainerChangeEvent event) {
-        processBenchTransaction(bench, event.container(), event.transaction());
+    private void onBenchItemChange(ProcessingBenchBlock bench, com.hypixel.hytale.server.core.universe.world.World world, Vector3i blockPos, ItemContainer.ItemContainerChangeEvent event) {
+        processBenchTransaction(bench, world, blockPos, event.container(), event.transaction());
     }
 
-    private void processBenchTransaction(ProcessingBenchState bench, ItemContainer container, Transaction transaction) {
+    private void processBenchTransaction(ProcessingBenchBlock bench, com.hypixel.hytale.server.core.universe.world.World world, Vector3i blockPos, ItemContainer container, Transaction transaction) {
         if (!transaction.succeeded()) {
             return;
         }
 
         if (transaction instanceof SlotTransaction) {
-            handleBenchSlotChange(bench, container, (SlotTransaction) transaction);
+            handleBenchSlotChange(bench, world, blockPos, container, (SlotTransaction) transaction);
         } else if (transaction instanceof ListTransaction) {
             ListTransaction<?> listTransaction = (ListTransaction<?>) transaction;
             for (Object child : listTransaction.getList()) {
                 if (child instanceof Transaction) {
-                    processBenchTransaction(bench, container, (Transaction) child);
+                    processBenchTransaction(bench, world, blockPos, container, (Transaction) child);
                 }
             }
         } else if (transaction instanceof MoveTransaction) {
@@ -113,23 +130,23 @@ public class EnchantmentSalvageSystem {
             if (moveTx.getMoveType() == MoveType.MOVE_TO_SELF) {
                 // Item matched TO this container (Add)
                 if (moveTx.getAddTransaction() != null) {
-                    processBenchTransaction(bench, container, moveTx.getAddTransaction());
+                    processBenchTransaction(bench, world, blockPos, container, moveTx.getAddTransaction());
                 }
             } else if (moveTx.getMoveType() == MoveType.MOVE_FROM_SELF) {
                 // Item matched FROM this container (Remove)
                 if (moveTx.getRemoveTransaction() != null) {
-                    processBenchTransaction(bench, container, moveTx.getRemoveTransaction());
+                    processBenchTransaction(bench, world, blockPos, container, moveTx.getRemoveTransaction());
                 }
             }
         } else if (transaction instanceof ItemStackTransaction) {
             ItemStackTransaction stackTx = (ItemStackTransaction) transaction;
             for (Transaction child : stackTx.getSlotTransactions()) {
-                processBenchTransaction(bench, container, child);
+                processBenchTransaction(bench, world, blockPos, container, child);
             }
         }
     }
 
-    private void handleBenchSlotChange(ProcessingBenchState bench, ItemContainer container,
+    private void handleBenchSlotChange(ProcessingBenchBlock bench, com.hypixel.hytale.server.core.universe.world.World world, Vector3i blockPos, ItemContainer container,
             SlotTransaction transaction) {
         ItemStack newItem = transaction.getSlotAfter();
         ItemStack oldItem = transaction.getSlotBefore();
@@ -139,7 +156,7 @@ public class EnchantmentSalvageSystem {
         if (newItem != null && !newItem.isEmpty()) {
             if (hasEnchantments(newItem)) {
                 // Save the data
-                saveEnchantmentData(bench, slot, newItem);
+                saveEnchantmentData(blockPos, slot, newItem);
 
                 // Strip the item - removal of ALL metadata (preserves durability)
                 ItemStack stripped = newItem.withMetadata((BsonDocument) null);
@@ -155,19 +172,19 @@ public class EnchantmentSalvageSystem {
             boolean quantityReduced = !removed && newItem.getQuantity() < oldItem.getQuantity();
 
             if (removed || quantityReduced) {
-                BsonDocument savedMeta = getSavedEnchantmentData(bench, slot);
+                BsonDocument savedMeta = getSavedEnchantmentData(blockPos, slot);
                 if (savedMeta != null) {
                     if (isProcessedByBench()) {
                         if (removed && org.herolias.plugin.SimpleEnchanting.getInstance().getConfigManager()
                                 .getConfig().salvagerYieldsScroll) {
-                            yieldScroll(bench, savedMeta);
+                            yieldScroll(bench, world, blockPos, savedMeta);
                         }
                     } else {
                         queueGlobalRestore(oldItem.getItemId(), savedMeta);
                     }
 
                     if (removed) {
-                        clearSavedEnchantmentData(bench, slot);
+                        clearSavedEnchantmentData(blockPos, slot);
                     }
                 }
             }
@@ -194,27 +211,26 @@ public class EnchantmentSalvageSystem {
     /** Timeout for stale bench slot entries (60 seconds). */
     private static final long BENCH_SLOT_TIMEOUT_MS = 60_000;
 
-    private String getSlotKey(ProcessingBenchState bench, short slot) {
-        Vector3i pos = bench.getBlockPosition();
-        return pos.x + "," + pos.y + "," + pos.z + ":" + slot;
+    private String getSlotKey(Vector3i blockPos, short slot) {
+        return blockPos.x + "," + blockPos.y + "," + blockPos.z + ":" + slot;
     }
 
-    private void saveEnchantmentData(ProcessingBenchState bench, short slot, ItemStack item) {
+    private void saveEnchantmentData(Vector3i blockPos, short slot, ItemStack item) {
         // Save ALL metadata to preserve names, etc. and to be sure we strip everything
         // that blocks the recipe
         BsonDocument data = item.getMetadata();
         if (data != null) {
-            benchSlotStorage.put(getSlotKey(bench, slot), new TimestampedMeta(data));
+            benchSlotStorage.put(getSlotKey(blockPos, slot), new TimestampedMeta(data));
         }
     }
 
-    private BsonDocument getSavedEnchantmentData(ProcessingBenchState bench, short slot) {
-        TimestampedMeta entry = benchSlotStorage.get(getSlotKey(bench, slot));
+    private BsonDocument getSavedEnchantmentData(Vector3i blockPos, short slot) {
+        TimestampedMeta entry = benchSlotStorage.get(getSlotKey(blockPos, slot));
         return entry != null ? entry.metadata : null;
     }
 
-    private void clearSavedEnchantmentData(ProcessingBenchState bench, short slot) {
-        benchSlotStorage.remove(getSlotKey(bench, slot));
+    private void clearSavedEnchantmentData(Vector3i blockPos, short slot) {
+        benchSlotStorage.remove(getSlotKey(blockPos, slot));
     }
 
     /**
@@ -251,8 +267,10 @@ public class EnchantmentSalvageSystem {
      * Listens for player inventory changes to catch when they retrieve a stripped
      * item.
      */
-    public void onEntityInventoryChange(LivingEntityInventoryChangeEvent event) {
-        if (!(event.getEntity() instanceof Player)) {
+    @Override
+    public void handle(int index, @Nonnull ArchetypeChunk<EntityStore> archetypeChunk, @Nonnull Store<EntityStore> store, @Nonnull CommandBuffer<EntityStore> commandBuffer, @Nonnull InventoryChangeEvent event) {
+        LivingEntity entity = (LivingEntity) EntityUtils.getEntity(index, archetypeChunk);
+        if (!(entity instanceof Player)) {
             return;
         }
 
@@ -332,15 +350,15 @@ public class EnchantmentSalvageSystem {
 
     /**
      * Determines whether the current item change originates from bench processing
-     * by checking the call stack for ProcessingBenchState.tick().
+     * by checking the call stack for ProcessingBenchBlock.tick().
      *
      * This only fires on bench item changes (not per-tick), so the performance
      * impact is acceptable. Alternative approaches (ThreadLocal, state heuristic)
-     * proved unreliable because we cannot instrument ProcessingBenchState directly.
+     * proved unreliable because we cannot instrument ProcessingBenchBlock directly.
      */
     private boolean isProcessedByBench() {
         for (StackTraceElement element : Thread.currentThread().getStackTrace()) {
-            if (element.getClassName().equals("com.hypixel.hytale.builtin.crafting.state.ProcessingBenchState") &&
+            if (element.getClassName().equals("com.hypixel.hytale.builtin.crafting.state.ProcessingBenchBlock") &&
                     element.getMethodName().equals("tick")) {
                 return true;
             }
@@ -348,7 +366,7 @@ public class EnchantmentSalvageSystem {
         return false;
     }
 
-    private void yieldScroll(ProcessingBenchState bench, BsonDocument savedMeta) {
+    private void yieldScroll(ProcessingBenchBlock bench, com.hypixel.hytale.server.core.universe.world.World world, Vector3i blockPos, BsonDocument savedMeta) {
         // Create a dummy item to deserialize the enchantment data from saved metadata
         ItemStack temp = new ItemStack("dummy", 1).withMetadata(savedMeta);
         EnchantmentData data = enchantmentManager.getEnchantmentsFromItem(temp);
@@ -420,10 +438,9 @@ public class EnchantmentSalvageSystem {
 
                 if (!tx.succeeded() || tx.getList().stream()
                         .anyMatch(t -> t.getRemainder() != null && !t.getRemainder().isEmpty())) {
-                    com.hypixel.hytale.server.core.universe.world.World world = bench.getChunk().getWorld();
                     com.hypixel.hytale.component.Store<com.hypixel.hytale.server.core.universe.world.storage.EntityStore> entityStore = world
                             .getEntityStore().getStore();
-                    com.hypixel.hytale.math.vector.Vector3d dropPosition = bench.getBlockPosition().toVector3d()
+                    com.hypixel.hytale.math.vector.Vector3d dropPosition = blockPos.toVector3d()
                             .add(0.5, 1.0, 0.5);
                     com.hypixel.hytale.component.Holder<com.hypixel.hytale.server.core.universe.world.storage.EntityStore>[] itemEntityHolders = com.hypixel.hytale.server.core.modules.entity.item.ItemComponent
                             .generateItemDrops(

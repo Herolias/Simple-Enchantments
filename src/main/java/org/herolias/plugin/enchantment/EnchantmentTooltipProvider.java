@@ -26,7 +26,7 @@ public class EnchantmentTooltipProvider implements TooltipProvider {
     private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
 
     private static final String PROVIDER_ID = "simple-enchantments:enchantments";
-    private static final int PRIORITY = 100; // Default priority — other mods can go above or below
+    private static final int PRIORITY = 110; // A bit less than default (100), so it shows below most other mods
 
     // ── Formatting constants (matches original VirtualItemRegistry style) ──
     private static final String HEADER_COLOR = "#C8A2FF";
