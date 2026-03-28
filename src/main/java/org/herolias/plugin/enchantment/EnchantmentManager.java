@@ -1,6 +1,7 @@
 package org.herolias.plugin.enchantment;
 
 import com.hypixel.hytale.codec.Codec;
+import com.hypixel.hytale.common.util.StringUtil;
 import com.hypixel.hytale.logger.HytaleLogger;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockBreakingDropType;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType;
@@ -15,14 +16,9 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ThreadLocalRandom;
 import org.herolias.plugin.SimpleEnchanting;
 
-import javax.annotation.Nonnull;
-import com.hypixel.hytale.server.core.asset.type.item.config.ItemWeapon;
-import com.hypixel.hytale.server.core.modules.entitystats.asset.EntityStatType;
 import com.hypixel.hytale.server.core.modules.entitystats.asset.DefaultEntityStatTypes;
 import com.hypixel.hytale.server.core.modules.interaction.interaction.config.RootInteraction;
 import com.hypixel.hytale.server.core.modules.interaction.interaction.config.Interaction;
-import com.hypixel.hytale.server.core.modules.interaction.interaction.config.server.ChangeStatInteraction;
-import com.hypixel.hytale.server.core.modules.interaction.interaction.config.none.StatsConditionInteraction;
 import com.hypixel.hytale.server.core.modules.interaction.interaction.config.server.ChangeStatBaseInteraction;
 import com.hypixel.hytale.server.core.modules.interaction.interaction.config.none.StatsConditionBaseInteraction;
 import com.hypixel.hytale.protocol.InteractionType;
@@ -35,9 +31,11 @@ import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.core.modules.entity.damage.Damage;
+
 import java.lang.reflect.Field;
 import it.unimi.dsi.fastutil.ints.Int2FloatMap;
 import it.unimi.dsi.fastutil.objects.Object2FloatMap;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -93,6 +91,7 @@ public class EnchantmentManager {
     // Cache for expensive string checks
     private final ConcurrentHashMap<String, Boolean> oreOrCrystalCache = new ConcurrentHashMap<>();
     private final ConcurrentHashMap<String, Boolean> manaConsumingCache = new ConcurrentHashMap<>();
+    private final ConcurrentHashMap<String, Boolean> pickPerfectBlacklistCache = new ConcurrentHashMap<>();
     // shieldCache removed - delegated to ItemCategoryManager
 
     /**
@@ -1044,6 +1043,16 @@ public class EnchantmentManager {
                     || lowerItemId.startsWith("rock_crystal_")
                     || lowerItemId.contains("crystal_shard")
                     || lowerItemId.contains("crystalshard");
+        });
+    }
+
+    public boolean isPickPerfectBlacklistedItem(@Nonnull String itemId) {
+        org.herolias.plugin.config.EnchantingConfig config = getConfig();
+        Set<String> pickPerfectBlacklist = config.pickPerfectBlacklist;
+        return pickPerfectBlacklistCache.computeIfAbsent(itemId, id -> {
+            String lowerItemId = id.toLowerCase();
+            return pickPerfectBlacklist.stream()
+              .anyMatch(it -> StringUtil.isGlobMatching(it, lowerItemId));
         });
     }
 
