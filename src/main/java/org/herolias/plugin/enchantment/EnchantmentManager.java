@@ -1049,6 +1049,12 @@ public class EnchantmentManager {
     public boolean isPickPerfectBlacklistedItem(@Nonnull String itemId) {
         org.herolias.plugin.config.EnchantingConfig config = getConfig();
         Set<String> pickPerfectBlacklist = config.pickPerfectBlacklist;
+
+        if (pickPerfectBlacklist.isEmpty()) {
+            // Early exit without caching on empty blacklist
+            return false;
+        }
+
         return pickPerfectBlacklistCache.computeIfAbsent(itemId, id -> {
             String lowerItemId = id.toLowerCase();
             return pickPerfectBlacklist.stream()
