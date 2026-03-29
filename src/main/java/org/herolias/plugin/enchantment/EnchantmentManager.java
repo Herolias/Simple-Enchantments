@@ -368,15 +368,17 @@ public class EnchantmentManager {
 
         if (type.requiresDurability()) {
             Number maxDur = item.getItem().getMaxDurability();
-            Integer maxStack = item.getItem().getMaxStack();
-            if (maxDur == null || maxDur.doubleValue() <= 0) {
-                // Check if any state variant has durability (e.g. filled Watering Can)
+            boolean hasDurability = maxDur != null && maxDur.doubleValue() > 0;
+            if (!hasDurability) {
                 if (!hasStateVariantWithDurability(item.getItem())) {
                     return "This enchantment requires an item with durability.";
                 }
             }
-            if (maxStack != null && maxStack > 1) {
-                return "Cannot apply durability enchantments to stackable items.";
+            if (!hasDurability) {
+                Integer maxStack = item.getItem().getMaxStack();
+                if (maxStack != null && maxStack > 1) {
+                    return "Cannot apply durability enchantments to stackable items.";
+                }
             }
         }
         return null;

@@ -63,6 +63,10 @@ public class EnchantmentReflectionSystem extends DamageEventSystem {
         if (damage.isCancelled())
             return;
 
+        Boolean isReflection = damage.getIfPresentMetaObject(IS_REFLECTION);
+        if (isReflection != null && isReflection)
+            return;
+
         // Check if the damage was blocked
         Boolean blocked = damage.getIfPresentMetaObject(Damage.BLOCKED);
         if (blocked == null || !blocked)

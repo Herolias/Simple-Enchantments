@@ -17,6 +17,7 @@ import com.hypixel.hytale.server.core.asset.type.item.config.Item;
 import com.hypixel.hytale.server.core.entity.LivingEntity;
 import com.hypixel.hytale.server.core.entity.ItemUtils;
 import com.hypixel.hytale.server.core.event.events.ecs.DamageBlockEvent;
+import com.hypixel.hytale.server.core.modules.interaction.BlockHarvestUtils;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
 import com.hypixel.hytale.server.core.modules.blockhealth.BlockHealthChunk;
 import com.hypixel.hytale.server.core.modules.blockhealth.BlockHealthModule;
@@ -188,8 +189,10 @@ public class EnchantmentSilktouchSystem extends EntityEventSystem<EntityStore, D
         EnchantmentEventHelper.fireActivated(playerRef, tool, EnchantmentType.PICK_PERFECT,
                 enchantmentManager.getEnchantmentLevel(tool, EnchantmentType.PICK_PERFECT));
 
-        // Apply Durability manually, since we cancelled DamageBlockEvent and bypassed
-        // BlockHarvestUtils calculation
+        // Apply durability manually, since we cancelled DamageBlockEvent and bypassed
+        // the vanilla BlockHarvestUtils.performBlockDamage durability path.
+        // Delegate to BlockHarvestUtils.calculateDurabilityUse to match vanilla exactly
+        // (soft block check, block set matching, etc.).
         if (breakerRef != null && breakerRef.isValid()) {
             com.hypixel.hytale.server.core.entity.Entity rawEntity = com.hypixel.hytale.server.core.entity.EntityUtils
                     .getEntity(breakerRef, store);
@@ -197,30 +200,11 @@ public class EnchantmentSilktouchSystem extends EntityEventSystem<EntityStore, D
                 byte activeHotbarSlot = entity.getInventory().getActiveHotbarSlot();
                 if (activeHotbarSlot != -1 && ItemUtils.canDecreaseItemStackDurability(breakerRef, store)
                         && !tool.isUnbreakable()) {
-                    double durabilityLoss = tool.getItem().getDurabilityLossOnHit();
-
-                    com.hypixel.hytale.server.core.asset.type.item.config.ItemTool itemTool = tool.getItem().getTool();
-                    if (itemTool != null) {
-                        com.hypixel.hytale.server.core.asset.type.item.config.ItemTool.DurabilityLossBlockTypes[] customLoss = itemTool
-                                .getDurabilityLossBlockTypes();
-                        if (customLoss != null) {
-                            int targetIndex = BlockType.getAssetMap().getIndex(blockType.getId());
-                            for (com.hypixel.hytale.server.core.asset.type.item.config.ItemTool.DurabilityLossBlockTypes cl : customLoss) {
-                                int[] types = cl.getBlockTypeIndexes();
-                                if (types != null) {
-                                    for (int id : types) {
-                                        if (id == targetIndex) {
-                                            durabilityLoss = cl.getDurabilityLossOnHit();
-                                            break;
-                                        }
-                                    }
-                                }
-                            }
-                        }
+                    double durabilityLoss = BlockHarvestUtils.calculateDurabilityUse(tool.getItem(), blockType);
+                    if (durabilityLoss > 0) {
+                        entity.updateItemStackDurability(breakerRef, tool, entity.getInventory().getHotbar(),
+                                activeHotbarSlot, -durabilityLoss, store);
                     }
-
-                    entity.updateItemStackDurability(breakerRef, tool, entity.getInventory().getHotbar(),
-                            activeHotbarSlot, -durabilityLoss, store);
                 }
             }
         }
