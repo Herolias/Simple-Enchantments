@@ -86,6 +86,23 @@ public class EnchantmentSilktouchSystem extends EntityEventSystem<EntityStore, D
             return;
         }
 
+        BlockType blockType = event.getBlockType();
+        if (blockType == null) {
+            return;
+        }
+
+        // Get the item representation of the block
+        Item blockItem = blockType.getItem();
+        if (blockItem == null) {
+            return;
+        }
+
+        // Check if the item representation of the block is blacklisted
+        String blockItemId = blockItem.getId();
+        if (enchantmentManager.isPickPerfectBlacklistedItem(blockItemId)) {
+            return;
+        }
+
         // Only trigger Silk Touch if the block is going to break on this hit
         Vector3i targetBlock = event.getTargetBlock();
         World world = store.getExternalData().getWorld();
@@ -115,19 +132,8 @@ public class EnchantmentSilktouchSystem extends EntityEventSystem<EntityStore, D
             return;
         }
 
-        BlockType blockType = event.getBlockType();
-        if (blockType == null) {
-            return;
-        }
-
-        // Get the item representation of the block
-        Item blockItem = blockType.getItem();
-        if (blockItem == null) {
-            return;
-        }
-
         // Create the drop: 1 unit of the block itself
-        ItemStack silkTouchDrop = new ItemStack(blockItem.getId(), 1);
+        ItemStack silkTouchDrop = new ItemStack(blockItemId, 1);
 
         Ref<EntityStore> breakerRef = archetypeChunk.getReferenceTo(index);
 
