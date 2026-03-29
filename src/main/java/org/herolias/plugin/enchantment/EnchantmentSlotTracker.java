@@ -66,7 +66,16 @@ public class EnchantmentSlotTracker implements Runnable {
                 try {
                     world.execute(() -> {
                         for (PlayerRef playerRef : world.getPlayerRefs()) {
-                            checkPlayerSlot(playerRef);
+                            try {
+                                checkPlayerSlot(playerRef);
+                            } catch (NullPointerException e) {
+                                // Player entity was removed from this world's store between the
+                                // isValid() check and the getComponent() call (e.g. transferred
+                                // to a dungeon instance). Clean up stale tracking data silently.
+                                if (playerRef != null) {
+                                    lastSlotMap.remove(playerRef.getUuid());
+                                }
+                            }
                         }
                     });
                 } catch (Exception e) {

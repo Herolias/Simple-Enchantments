@@ -12,6 +12,8 @@ import com.hypixel.hytale.math.util.ChunkUtil;
 import com.hypixel.hytale.math.vector.Vector3d;
 import com.hypixel.hytale.math.vector.Vector3i;
 import com.hypixel.hytale.server.core.asset.type.blocksound.config.BlockSoundSet;
+import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockBreakingDropType;
+import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockGathering;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType;
 import com.hypixel.hytale.server.core.asset.type.item.config.Item;
 import com.hypixel.hytale.server.core.entity.LivingEntity;
@@ -133,8 +135,30 @@ public class EnchantmentSilktouchSystem extends EntityEventSystem<EntityStore, D
             return;
         }
 
-        // Create the drop: 1 unit of the block itself
-        ItemStack silkTouchDrop = new ItemStack(blockItemId, 1);
+        // Resolve drops using the block's gathering data for correct quantities.
+        // When a drop list exists AND all its resolved items match the block's own item,
+        // use the resolved drops (handles combined half slabs dropping 2 instead of 1).
+        // Otherwise fall back to 1x block item (silk touch: always drop the block itself).
+        List<ItemStack> silkTouchDrops;
+        BlockGathering gathering = blockType.getGathering();
+        BlockBreakingDropType breaking = gathering != null ? gathering.getBreaking() : null;
+
+        if (breaking != null && breaking.getDropListId() != null) {
+            List<ItemStack> resolvedDrops = BlockHarvestUtils.getDrops(blockType, breaking.getQuantity(),
+                    null, breaking.getDropListId());
+            boolean allMatchBlockItem = !resolvedDrops.isEmpty();
+            for (ItemStack drop : resolvedDrops) {
+                if (drop.getItem() == null || !blockItemId.equals(drop.getItem().getId())) {
+                    allMatchBlockItem = false;
+                    break;
+                }
+            }
+            silkTouchDrops = allMatchBlockItem
+                    ? resolvedDrops
+                    : Collections.singletonList(new ItemStack(blockItemId, 1));
+        } else {
+            silkTouchDrops = Collections.singletonList(new ItemStack(blockItemId, 1));
+        }
 
         Ref<EntityStore> breakerRef = archetypeChunk.getReferenceTo(index);
 
@@ -181,10 +205,9 @@ public class EnchantmentSilktouchSystem extends EntityEventSystem<EntityStore, D
             }
         }
 
-        // Spawn the Silk Touch drop
+        // Spawn the Silk Touch drops
         Vector3d dropPosition = new Vector3d(targetBlock.getX() + 0.5, targetBlock.getY(), targetBlock.getZ() + 0.5);
-        List<ItemStack> drops = Collections.singletonList(silkTouchDrop);
-        enchantmentManager.spawnDrops(commandBuffer, drops, dropPosition);
+        enchantmentManager.spawnDrops(commandBuffer, silkTouchDrops, dropPosition);
 
         EnchantmentEventHelper.fireActivated(playerRef, tool, EnchantmentType.PICK_PERFECT,
                 enchantmentManager.getEnchantmentLevel(tool, EnchantmentType.PICK_PERFECT));
