@@ -243,6 +243,11 @@ public class SimpleEnchanting extends JavaPlugin {
         this.enchantmentAbilityStaminaSystem = new EnchantmentAbilityStaminaSystem(enchantmentManager);
         this.enchantmentProjectileSpeedSystem = new EnchantmentProjectileSpeedSystem(enchantmentManager);
 
+        // Initialize the Eternal Shot system early so it can be wired into the
+        // projectile speed system (the two collaborate: tracking + refund on spawn)
+        eternalShotSystem = new EnchantmentEternalShotSystem(enchantmentManager);
+        enchantmentProjectileSpeedSystem.setEternalShotSystem(eternalShotSystem);
+
         // Register 'eternal_shot_active' stat for JSON conditions
         // This allows us to conditionalize interactions based on whether the player has
         // Eternal Shot active
@@ -337,17 +342,13 @@ public class SimpleEnchanting extends JavaPlugin {
         this.getEntityStoreRegistry().registerSystem(durabilitySystem);
         LOGGER.atInfo().log("Registered EnchantmentDurabilitySystem listener");
 
-        // Initialize and register the Eternal Shot system (Event Listener)
-        // This intercepts arrow consumption and restores arrows when weapon has Eternal
-        // Shot enchantment
-        eternalShotSystem = new EnchantmentEternalShotSystem(enchantmentManager);
+        // Register the Eternal Shot tracking system (InventoryChangeEvent listener)
+        // Works with EnchantmentProjectileSpeedSystem: tracks consumed ammo, refunds on
+        // projectile spawn
         this.getEntityStoreRegistry().registerSystem(eternalShotSystem);
 
-        // Register SwitchActiveSlot handler to clear stale records when switching from
-        // unloaded crossbows
-        // We use a dedicated System to ensure we get the EntityStore context
         this.getEntityStoreRegistry()
-                .registerSystem(new org.herolias.plugin.enchantment.SwitchActiveSlotSystem(eternalShotSystem));
+                .registerSystem(new org.herolias.plugin.enchantment.SwitchActiveSlotSystem());
         LOGGER.atInfo().log("Registered SwitchActiveSlotSystem");
 
         // Initialize and register Elemental Heart System (Essence Saver)
@@ -440,7 +441,7 @@ public class SimpleEnchanting extends JavaPlugin {
     protected void start() {
         // Register the slot tracker (handles glow updates on slot change)
         try {
-            EnchantmentSlotTracker slotTracker = new EnchantmentSlotTracker(enchantmentManager, eternalShotSystem);
+            EnchantmentSlotTracker slotTracker = new EnchantmentSlotTracker(enchantmentManager);
             com.hypixel.hytale.server.core.HytaleServer.SCHEDULED_EXECUTOR.scheduleAtFixedRate(
                     slotTracker,
                     0,

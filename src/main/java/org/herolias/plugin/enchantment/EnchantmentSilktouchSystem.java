@@ -12,11 +12,14 @@ import com.hypixel.hytale.math.util.ChunkUtil;
 import com.hypixel.hytale.math.vector.Vector3d;
 import com.hypixel.hytale.math.vector.Vector3i;
 import com.hypixel.hytale.server.core.asset.type.blocksound.config.BlockSoundSet;
+import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockBreakingDropType;
+import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockGathering;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType;
 import com.hypixel.hytale.server.core.asset.type.item.config.Item;
 import com.hypixel.hytale.server.core.entity.LivingEntity;
 import com.hypixel.hytale.server.core.entity.ItemUtils;
 import com.hypixel.hytale.server.core.event.events.ecs.DamageBlockEvent;
+import com.hypixel.hytale.server.core.modules.interaction.BlockHarvestUtils;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
 import com.hypixel.hytale.server.core.modules.blockhealth.BlockHealthChunk;
 import com.hypixel.hytale.server.core.modules.blockhealth.BlockHealthModule;
@@ -86,6 +89,23 @@ public class EnchantmentSilktouchSystem extends EntityEventSystem<EntityStore, D
             return;
         }
 
+        BlockType blockType = event.getBlockType();
+        if (blockType == null) {
+            return;
+        }
+
+        // Get the item representation of the block
+        Item blockItem = blockType.getItem();
+        if (blockItem == null) {
+            return;
+        }
+
+        // Check if the item representation of the block is blacklisted
+        String blockItemId = blockItem.getId();
+        if (enchantmentManager.isPickPerfectBlacklistedItem(blockItemId)) {
+            return;
+        }
+
         // Only trigger Silk Touch if the block is going to break on this hit
         Vector3i targetBlock = event.getTargetBlock();
         World world = store.getExternalData().getWorld();
@@ -115,19 +135,30 @@ public class EnchantmentSilktouchSystem extends EntityEventSystem<EntityStore, D
             return;
         }
 
-        BlockType blockType = event.getBlockType();
-        if (blockType == null) {
-            return;
-        }
+        // Resolve drops using the block's gathering data for correct quantities.
+        // When a drop list exists AND all its resolved items match the block's own item,
+        // use the resolved drops (handles combined half slabs dropping 2 instead of 1).
+        // Otherwise fall back to 1x block item (silk touch: always drop the block itself).
+        List<ItemStack> silkTouchDrops;
+        BlockGathering gathering = blockType.getGathering();
+        BlockBreakingDropType breaking = gathering != null ? gathering.getBreaking() : null;
 
-        // Get the item representation of the block
-        Item blockItem = blockType.getItem();
-        if (blockItem == null) {
-            return;
+        if (breaking != null && breaking.getDropListId() != null) {
+            List<ItemStack> resolvedDrops = BlockHarvestUtils.getDrops(blockType, breaking.getQuantity(),
+                    null, breaking.getDropListId());
+            boolean allMatchBlockItem = !resolvedDrops.isEmpty();
+            for (ItemStack drop : resolvedDrops) {
+                if (drop.getItem() == null || !blockItemId.equals(drop.getItem().getId())) {
+                    allMatchBlockItem = false;
+                    break;
+                }
+            }
+            silkTouchDrops = allMatchBlockItem
+                    ? resolvedDrops
+                    : Collections.singletonList(new ItemStack(blockItemId, 1));
+        } else {
+            silkTouchDrops = Collections.singletonList(new ItemStack(blockItemId, 1));
         }
-
-        // Create the drop: 1 unit of the block itself
-        ItemStack silkTouchDrop = new ItemStack(blockItem.getId(), 1);
 
         Ref<EntityStore> breakerRef = archetypeChunk.getReferenceTo(index);
 
@@ -174,16 +205,17 @@ public class EnchantmentSilktouchSystem extends EntityEventSystem<EntityStore, D
             }
         }
 
-        // Spawn the Silk Touch drop
+        // Spawn the Silk Touch drops
         Vector3d dropPosition = new Vector3d(targetBlock.getX() + 0.5, targetBlock.getY(), targetBlock.getZ() + 0.5);
-        List<ItemStack> drops = Collections.singletonList(silkTouchDrop);
-        enchantmentManager.spawnDrops(commandBuffer, drops, dropPosition);
+        enchantmentManager.spawnDrops(commandBuffer, silkTouchDrops, dropPosition);
 
         EnchantmentEventHelper.fireActivated(playerRef, tool, EnchantmentType.PICK_PERFECT,
                 enchantmentManager.getEnchantmentLevel(tool, EnchantmentType.PICK_PERFECT));
 
-        // Apply Durability manually, since we cancelled DamageBlockEvent and bypassed
-        // BlockHarvestUtils calculation
+        // Apply durability manually, since we cancelled DamageBlockEvent and bypassed
+        // the vanilla BlockHarvestUtils.performBlockDamage durability path.
+        // Delegate to BlockHarvestUtils.calculateDurabilityUse to match vanilla exactly
+        // (soft block check, block set matching, etc.).
         if (breakerRef != null && breakerRef.isValid()) {
             com.hypixel.hytale.server.core.entity.Entity rawEntity = com.hypixel.hytale.server.core.entity.EntityUtils
                     .getEntity(breakerRef, store);
@@ -191,30 +223,11 @@ public class EnchantmentSilktouchSystem extends EntityEventSystem<EntityStore, D
                 byte activeHotbarSlot = entity.getInventory().getActiveHotbarSlot();
                 if (activeHotbarSlot != -1 && ItemUtils.canDecreaseItemStackDurability(breakerRef, store)
                         && !tool.isUnbreakable()) {
-                    double durabilityLoss = tool.getItem().getDurabilityLossOnHit();
-
-                    com.hypixel.hytale.server.core.asset.type.item.config.ItemTool itemTool = tool.getItem().getTool();
-                    if (itemTool != null) {
-                        com.hypixel.hytale.server.core.asset.type.item.config.ItemTool.DurabilityLossBlockTypes[] customLoss = itemTool
-                                .getDurabilityLossBlockTypes();
-                        if (customLoss != null) {
-                            int targetIndex = BlockType.getAssetMap().getIndex(blockType.getId());
-                            for (com.hypixel.hytale.server.core.asset.type.item.config.ItemTool.DurabilityLossBlockTypes cl : customLoss) {
-                                int[] types = cl.getBlockTypeIndexes();
-                                if (types != null) {
-                                    for (int id : types) {
-                                        if (id == targetIndex) {
-                                            durabilityLoss = cl.getDurabilityLossOnHit();
-                                            break;
-                                        }
-                                    }
-                                }
-                            }
-                        }
+                    double durabilityLoss = BlockHarvestUtils.calculateDurabilityUse(tool.getItem(), blockType);
+                    if (durabilityLoss > 0) {
+                        entity.updateItemStackDurability(breakerRef, tool, entity.getInventory().getHotbar(),
+                                activeHotbarSlot, -durabilityLoss, store);
                     }
-
-                    entity.updateItemStackDurability(breakerRef, tool, entity.getInventory().getHotbar(),
-                            activeHotbarSlot, -durabilityLoss, store);
                 }
             }
         }

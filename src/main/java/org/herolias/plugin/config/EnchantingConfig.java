@@ -1,9 +1,11 @@
 package org.herolias.plugin.config;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Data class for the plugin configuration.
@@ -60,6 +62,9 @@ public class EnchantingConfig {
     public double freezeDuration = 5.0; // In seconds
     public double poisonDuration = 4.0; // In seconds
 
+    // ===== Pick Perfect Settings =====
+    public Set<String> pickPerfectBlacklist = new HashSet<>(); // Item ID-s, allowing wildcards
+
     // ===== Other settings =====
     public boolean disableEnchantmentCrafting = false;
     public boolean returnEnchantmentOnCleanse = false;
@@ -76,6 +81,16 @@ public class EnchantingConfig {
 
     public EnchantingConfig() {
         // Default constructor for GSON
+    }
+
+    public void init() {
+        // Migrate every blacklist pattern to lowercase for case-insensitive testing
+        pickPerfectBlacklist = pickPerfectBlacklist.stream()
+            .map(String::toLowerCase)
+            .collect(HashSet::new, HashSet::add, HashSet::addAll);
+
+        // Migrate legacy per-field multipliers to unified map (v1.x -> v2.0)
+        migrateFromLegacy();
     }
 
     /**

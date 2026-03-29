@@ -21,9 +21,8 @@ import javax.annotation.Nonnull;
  */
 public class SwitchActiveSlotSystem extends EntityEventSystem<EntityStore, SwitchActiveSlotEvent> {
 
-    public SwitchActiveSlotSystem(EnchantmentEternalShotSystem eternalShotSystem) {
+    public SwitchActiveSlotSystem() {
         super(SwitchActiveSlotEvent.class);
-        // eternalShotSystem parameter kept for constructor compatibility
     }
 
     @Override
