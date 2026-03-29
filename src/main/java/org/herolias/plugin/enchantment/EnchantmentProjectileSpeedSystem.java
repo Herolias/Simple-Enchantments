@@ -9,15 +9,21 @@ import com.hypixel.hytale.logger.HytaleLogger;
 import com.hypixel.hytale.server.core.entity.Entity;
 import com.hypixel.hytale.server.core.entity.EntityUtils;
 import com.hypixel.hytale.server.core.entity.UUIDComponent;
+import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hypixel.hytale.server.core.entity.entities.ProjectileComponent;
+import com.hypixel.hytale.server.core.inventory.Inventory;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
+import com.hypixel.hytale.server.core.inventory.container.SimpleItemContainer;
 import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
 import com.hypixel.hytale.server.core.modules.entity.tracker.NetworkId;
 import com.hypixel.hytale.server.core.modules.projectile.config.StandardPhysicsProvider;
+import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.component.system.RefSystem;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.UUID;
 
 /**
  * Captures enchantment levels from ranged weapons when a projectile is spawned.
@@ -35,10 +41,15 @@ public class EnchantmentProjectileSpeedSystem extends RefSystem<EntityStore> {
             Query.or(ProjectileComponent.getComponentType(), StandardPhysicsProvider.getComponentType()));
 
     private final EnchantmentManager enchantmentManager;
+    private @Nullable EnchantmentEternalShotSystem eternalShotSystem;
 
     public EnchantmentProjectileSpeedSystem(EnchantmentManager enchantmentManager) {
         this.enchantmentManager = enchantmentManager;
         LOGGER.atInfo().log("EnchantmentProjectileSpeedSystem initialized");
+    }
+
+    public void setEternalShotSystem(@Nonnull EnchantmentEternalShotSystem system) {
+        this.eternalShotSystem = system;
     }
 
     @Override
@@ -89,6 +100,47 @@ public class EnchantmentProjectileSpeedSystem extends RefSystem<EntityStore> {
             enchantmentManager.storeProjectileEnchantments(networkId.getId(), strengthLevel, eaglesEyeLevel,
                     lootingLevel, freezeLevel, burnLevel, eternalShotLevel);
         }
+
+        if (eternalShotLevel > 0) {
+            refundEternalShotAmmo(shooterRef, shooterEntity, weapon, eternalShotLevel, commandBuffer);
+        }
+    }
+
+    /**
+     * Refunds 1 ammo to the shooter's inventory when an Eternal Shot projectile
+     * is spawned. Uses the tracked consumed ammo from {@link EnchantmentEternalShotSystem},
+     * falling back to searching the inventory for any ammo item.
+     */
+    private void refundEternalShotAmmo(@Nonnull Ref<EntityStore> shooterRef, @Nonnull Entity shooterEntity,
+            @Nonnull ItemStack weapon, int level, @Nonnull CommandBuffer<EntityStore> commandBuffer) {
+        if (eternalShotSystem == null)
+            return;
+
+        if (!(shooterEntity instanceof Player player))
+            return;
+
+        UUIDComponent uuidComp = commandBuffer.getComponent(shooterRef, UUIDComponent.getComponentType());
+        if (uuidComp == null)
+            return;
+        UUID playerUuid = uuidComp.getUuid();
+
+        ItemStack ammo = eternalShotSystem.getAndClearConsumedAmmo(playerUuid);
+        if (ammo == null) {
+            ammo = eternalShotSystem.findAmmoInInventory(player);
+        }
+
+        if (ammo == null)
+            return;
+
+        Inventory inventory = player.getInventory();
+        if (inventory == null)
+            return;
+
+        SimpleItemContainer.addOrDropItemStack(commandBuffer, shooterRef,
+                inventory.getCombinedHotbarFirst(), ammo);
+
+        PlayerRef playerRef = commandBuffer.getComponent(shooterRef, PlayerRef.getComponentType());
+        EnchantmentEventHelper.fireActivated(playerRef, weapon, EnchantmentType.ETERNAL_SHOT, level);
     }
 
     @Override

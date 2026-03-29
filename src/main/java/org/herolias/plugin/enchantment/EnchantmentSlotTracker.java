@@ -8,6 +8,7 @@ import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.Universe;
 import com.hypixel.hytale.server.core.universe.world.World;
 
+
 import com.hypixel.hytale.logger.HytaleLogger;
 
 
@@ -34,15 +35,12 @@ import java.util.concurrent.ConcurrentHashMap;
 public class EnchantmentSlotTracker implements Runnable {
 
     private final EnchantmentManager enchantmentManager;
-    private final EnchantmentEternalShotSystem eternalShotSystem;
     private final Map<UUID, Byte> lastSlotMap = new ConcurrentHashMap<>();
     /** Set of player UUIDs we have already processed for initial tooltip setup. */
     private final Set<UUID> knownPlayers = ConcurrentHashMap.newKeySet();
 
-    public EnchantmentSlotTracker(EnchantmentManager enchantmentManager,
-            EnchantmentEternalShotSystem eternalShotSystem) {
+    public EnchantmentSlotTracker(EnchantmentManager enchantmentManager) {
         this.enchantmentManager = enchantmentManager;
-        this.eternalShotSystem = eternalShotSystem;
     }
 
     @Override
@@ -125,8 +123,17 @@ public class EnchantmentSlotTracker implements Runnable {
         // Also track off-hand state (simple empty check is sufficient for glow logic)
         ItemStack offHandItem = inventory.getUtilityItem();
         boolean hasOffHand = offHandItem != null && !offHandItem.isEmpty();
-        // Use bit 7 (128) to store offhand presence combined with slot index (0-8).
-        byte combinedState = (byte) (currentSlot | (hasOffHand ? 0x80 : 0x00));
+
+        // Build combined state: slot index in bits 0-6, offhand flag in bit 7.
+        // getActiveHotbarSlot() can return -1 (INACTIVE_SLOT_INDEX) when no slot is
+        // active. We use Byte.MIN_VALUE as a sentinel for inactive slot to avoid
+        // corrupting -1 through bit masking (the old approach turned -1 into 127).
+        byte combinedState;
+        if (currentSlot < 0) {
+            combinedState = Byte.MIN_VALUE; // sentinel: no active slot
+        } else {
+            combinedState = (byte) (currentSlot | (hasOffHand ? 0x80 : 0x00));
+        }
 
         Byte lastState = lastSlotMap.get(uuid);
 
@@ -138,14 +145,15 @@ public class EnchantmentSlotTracker implements Runnable {
             EnchantmentVisualsHelper.updateGlowStats(ref, store, player, enchantmentManager);
 
             // 2. Check if slot actually changed (not just offhand)
-            // Mask out the offhand bit to check slot index
-            byte lastSlotIndex = lastState != null ? (byte) (lastState & 0x7F) : -1;
+            // Extract previous slot index from lastState, handling the sentinel.
+            byte lastSlotIndex;
+            if (lastState == null || lastState == Byte.MIN_VALUE) {
+                lastSlotIndex = -1; // no previous active slot
+            } else {
+                lastSlotIndex = (byte) (lastState & 0x7F);
+            }
+
             if (currentSlot != lastSlotIndex) {
-                // Notify Eternal Shot system about slot change with the PREVIOUS item
-                if (lastSlotIndex >= 0) {
-                    ItemStack previousItem = inventory.getHotbar().getItemStack(lastSlotIndex);
-                    eternalShotSystem.onSlotChanged(player, previousItem);
-                }
                 // DynamicTooltipsLib handles tooltip updates via packet interception
             }
         }
