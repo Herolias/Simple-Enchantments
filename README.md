@@ -453,9 +453,15 @@ Please do not add new features or enchantments without discussing it with the te
 But we are absolutely open to smaller contributions like bug fixes, performance improvements, and translations.
 Please open a pull request for that or write me up on [Discord](https://discord.com/users/herolias).
 
+### Before making a PR:
+- Check the dev branch: All development and testing happen here. All Pull Requests must be targeted to the dev branch.
+- Make sure your code compiles and also do in-game testing
+
 ### Contributors
 Huge thanks to Thanoz, Samu3k, and Ensō for helping improving the translations!
 
+Dimotai for fixing multiple bugs related to the Asset Map loading and the Effect System.
+Phyrian for implementing a block blacklist for the Pick Perfect Enchantment.
 
 ---
 
