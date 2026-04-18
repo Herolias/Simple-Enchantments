@@ -817,3 +817,5 @@ itemCategory.STAFF_MANA = Mana Staffs
 itemCategory.STAFF_ESSENCE = Essence Staffs
 
 itemCategory.UNKNOWN = Unknown
+items.Enchanting_Anvil.name = Enchanting Anvil
+items.Enchanting_Anvil.description = A rune anvil used to rename items and recolor enchantment glows.

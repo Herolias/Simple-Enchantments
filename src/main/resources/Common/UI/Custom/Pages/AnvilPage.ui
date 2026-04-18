@@ -1,0 +1,564 @@
+$C = "../Common.ui";
+
+@LightColorButtonLabelStyle = LabelStyle(
+  ...$C.@SmallButtonLabelStyle,
+  TextColor: #ffffff
+);
+
+@DarkColorButtonLabelStyle = LabelStyle(
+  ...$C.@SmallButtonLabelStyle,
+  TextColor: #141414
+);
+
+@RedColorButtonStyle = TextButtonStyle(
+  Default: (Background: (Color: #c94b4b), LabelStyle: @LightColorButtonLabelStyle),
+  Hovered: (Background: (Color: #db6262), LabelStyle: @LightColorButtonLabelStyle),
+  Pressed: (Background: (Color: #a73c3c), LabelStyle: @LightColorButtonLabelStyle),
+  Disabled: (Background: (Color: #57595c), LabelStyle: $C.@SmallButtonDisabledLabelStyle)
+);
+
+@BlueColorButtonStyle = TextButtonStyle(
+  Default: (Background: (Color: #4f73c7), LabelStyle: @LightColorButtonLabelStyle),
+  Hovered: (Background: (Color: #6386d6), LabelStyle: @LightColorButtonLabelStyle),
+  Pressed: (Background: (Color: #3e5ea9), LabelStyle: @LightColorButtonLabelStyle),
+  Disabled: (Background: (Color: #57595c), LabelStyle: $C.@SmallButtonDisabledLabelStyle)
+);
+
+@GreenColorButtonStyle = TextButtonStyle(
+  Default: (Background: (Color: #62b078), LabelStyle: @DarkColorButtonLabelStyle),
+  Hovered: (Background: (Color: #74c48a), LabelStyle: @DarkColorButtonLabelStyle),
+  Pressed: (Background: (Color: #4d905f), LabelStyle: @DarkColorButtonLabelStyle),
+  Disabled: (Background: (Color: #57595c), LabelStyle: $C.@SmallButtonDisabledLabelStyle)
+);
+
+@YellowColorButtonStyle = TextButtonStyle(
+  Default: (Background: (Color: #d9c25a), LabelStyle: @DarkColorButtonLabelStyle),
+  Hovered: (Background: (Color: #e6cf6a), LabelStyle: @DarkColorButtonLabelStyle),
+  Pressed: (Background: (Color: #b8a24a), LabelStyle: @DarkColorButtonLabelStyle),
+  Disabled: (Background: (Color: #57595c), LabelStyle: $C.@SmallButtonDisabledLabelStyle)
+);
+
+@PurpleColorButtonStyle = TextButtonStyle(
+  Default: (Background: (Color: #8f6fc7), LabelStyle: @LightColorButtonLabelStyle),
+  Hovered: (Background: (Color: #a17ed9), LabelStyle: @LightColorButtonLabelStyle),
+  Pressed: (Background: (Color: #7559a8), LabelStyle: @LightColorButtonLabelStyle),
+  Disabled: (Background: (Color: #57595c), LabelStyle: $C.@SmallButtonDisabledLabelStyle)
+);
+
+@PinkColorButtonStyle = TextButtonStyle(
+  Default: (Background: (Color: #d98cbb), LabelStyle: @DarkColorButtonLabelStyle),
+  Hovered: (Background: (Color: #e7a0ca), LabelStyle: @DarkColorButtonLabelStyle),
+  Pressed: (Background: (Color: #b3719d), LabelStyle: @DarkColorButtonLabelStyle),
+  Disabled: (Background: (Color: #57595c), LabelStyle: $C.@SmallButtonDisabledLabelStyle)
+);
+
+@CyanColorButtonStyle = TextButtonStyle(
+  Default: (Background: (Color: #78d6de), LabelStyle: @DarkColorButtonLabelStyle),
+  Hovered: (Background: (Color: #8ce3ea), LabelStyle: @DarkColorButtonLabelStyle),
+  Pressed: (Background: (Color: #5fb3ba), LabelStyle: @DarkColorButtonLabelStyle),
+  Disabled: (Background: (Color: #57595c), LabelStyle: $C.@SmallButtonDisabledLabelStyle)
+);
+
+@WhiteColorButtonStyle = TextButtonStyle(
+  Default: (Background: (Color: #e7e7e7), LabelStyle: @DarkColorButtonLabelStyle),
+  Hovered: (Background: (Color: #f4f4f4), LabelStyle: @DarkColorButtonLabelStyle),
+  Pressed: (Background: (Color: #cfcfcf), LabelStyle: @DarkColorButtonLabelStyle),
+  Disabled: (Background: (Color: #57595c), LabelStyle: $C.@SmallButtonDisabledLabelStyle)
+);
+
+@SectionTitleStyle = LabelStyle(
+  FontSize: 14,
+  RenderBold: true,
+  TextColor: #e6d8aa
+);
+
+@CaptionStyle = LabelStyle(
+  FontSize: 12,
+  TextColor: #9aa7b2,
+  Wrap: true
+);
+
+$C.@PageOverlay {}
+
+Group {
+  Anchor: (Width: 1700, Height: 760);
+
+  $C.@DecoratedContainer {
+    Anchor: (Width: 1240, Height: 760, Left: 230);
+
+    #Title {
+      Group {
+        $C.@Title #PageTitle {
+        }
+      }
+    }
+
+    #Content {
+      LayoutMode: Top;
+
+      Label #WindowHint {
+        Anchor: (Height: 0);
+        Style: (
+          FontSize: 13,
+          TextColor: #d7cfbe,
+          Wrap: true
+        );
+        Visible: false;
+      }
+
+      Group #TopRow {
+        LayoutMode: Left;
+        Anchor: (Height: 180, Bottom: 8);
+
+        Group #ForgePanel {
+          FlexWeight: 1;
+          LayoutMode: Top;
+          Padding: (Horizontal: 14, Vertical: 8);
+          Background: (TexturePath: "../Common/ContainerPanelPatch.png", Border: 4);
+
+          Label {
+            Anchor: (Height: 20, Bottom: 4);
+            Style: @SectionTitleStyle;
+            Text: "Forge";
+          }
+
+          Group #ForgeSlots {
+            LayoutMode: Left;
+            Anchor: (Height: 104);
+
+            Group #PrimarySlotCard {
+              Anchor: (Width: 112, Height: 104, Right: 10);
+              LayoutMode: Top;
+
+              Label {
+                Anchor: (Height: 15, Bottom: 3);
+                Style: (
+                  FontSize: 12,
+                  TextColor: #c9d4de,
+                  HorizontalAlignment: Center,
+                  RenderBold: true
+                );
+                Text: "Item/Scroll";
+              }
+
+              Group {
+                Anchor: (Height: 58, Bottom: 5);
+                LayoutMode: Center;
+
+                Group {
+                  Anchor: (Width: 58, Height: 58);
+
+                  ItemGrid #PrimaryDropGrid {
+                    Anchor: (Width: 58, Height: 58, Horizontal: 0, Vertical: 0);
+                    SlotsPerRow: 1;
+                    HitTestVisible: false;
+                    Style: (
+                      SlotSize: 58,
+                      SlotIconSize: 52,
+                      SlotSpacing: 0,
+                      SlotBackground: "../Common/BlockSelectorSlotBackground.png"
+                    );
+                  }
+
+                  Label #InputPlaceholder {
+                    Anchor: (Full: 0);
+                    Style: (
+                      FontSize: 11,
+                      HorizontalAlignment: Center,
+                      VerticalAlignment: Center,
+                      TextColor: #687787,
+                      Wrap: true
+                    );
+                    Text: "Item/Scroll";
+                    HitTestVisible: false;
+                  }
+                }
+              }
+
+              TextButton #ClearPrimaryButton {
+                Style: $C.@SmallTertiaryTextButtonStyle;
+                Anchor: (Width: 82, Height: 22, Horizontal: 0);
+                Text: "Clear";
+                Visible: false;
+              }
+            }
+
+            Label #MergePlus {
+              Anchor: (Width: 22, Height: 78, Right: 10, Top: 14);
+              Style: (
+                FontSize: 24,
+                HorizontalAlignment: Center,
+                VerticalAlignment: Center,
+                TextColor: #d7cfbe
+              );
+              Text: "+";
+            }
+
+            Group #SecondSlotRow {
+              Anchor: (Width: 112, Height: 104, Right: 10);
+              LayoutMode: Top;
+
+              Label {
+                Anchor: (Height: 15, Bottom: 3);
+                Style: (
+                  FontSize: 12,
+                  TextColor: #c9d4de,
+                  HorizontalAlignment: Center,
+                  RenderBold: true
+                );
+                Text: "Scroll";
+              }
+
+              Group {
+                Anchor: (Height: 58, Bottom: 5);
+                LayoutMode: Center;
+
+                Group {
+                  Anchor: (Width: 58, Height: 58);
+
+                  ItemGrid #SecondaryDropGrid {
+                    Anchor: (Width: 58, Height: 58, Horizontal: 0, Vertical: 0);
+                    SlotsPerRow: 1;
+                    HitTestVisible: false;
+                    Style: (
+                      SlotSize: 58,
+                      SlotIconSize: 52,
+                      SlotSpacing: 0,
+                      SlotBackground: "../Common/BlockSelectorSlotBackground.png"
+                    );
+                  }
+
+                  Label #SecondInputPlaceholder {
+                    Anchor: (Full: 0);
+                    Style: (
+                      FontSize: 11,
+                      HorizontalAlignment: Center,
+                      VerticalAlignment: Center,
+                      TextColor: #687787,
+                      Wrap: true
+                    );
+                    Text: "Scroll";
+                    HitTestVisible: false;
+                  }
+                }
+              }
+
+              TextButton #ClearSecondaryButton {
+                Style: $C.@SmallTertiaryTextButtonStyle;
+                Anchor: (Width: 82, Height: 22, Horizontal: 0);
+                Text: "Clear";
+                Visible: false;
+              }
+            }
+
+            Label {
+              Anchor: (Width: 34, Height: 78, Right: 10, Top: 14);
+              Style: (
+                FontSize: 24,
+                HorizontalAlignment: Center,
+                VerticalAlignment: Center,
+                TextColor: #d7cfbe
+              );
+              Text: ">";
+            }
+
+            Group #ResultSlotCard {
+              Anchor: (Width: 112, Height: 104);
+              LayoutMode: Top;
+
+              Label {
+                Anchor: (Height: 15, Bottom: 3);
+                Style: (
+                  FontSize: 12,
+                  TextColor: #c9d4de,
+                  HorizontalAlignment: Center,
+                  RenderBold: true
+                );
+                Text: "Result";
+              }
+
+              Group {
+                Anchor: (Height: 58, Bottom: 5);
+                LayoutMode: Center;
+
+                Group {
+                  Anchor: (Width: 58, Height: 58);
+
+                  ItemGrid #PreviewGrid {
+                    Anchor: (Width: 58, Height: 58, Horizontal: 0, Vertical: 0);
+                    SlotsPerRow: 1;
+                    HitTestVisible: false;
+                    Style: (
+                      SlotSize: 58,
+                      SlotIconSize: 52,
+                      SlotSpacing: 0,
+                      SlotBackground: "../Common/BlockSelectorSlotBackground.png"
+                    );
+                  }
+
+                  Label #PreviewPlaceholder {
+                    Anchor: (Full: 0);
+                    Style: (
+                      FontSize: 11,
+                      HorizontalAlignment: Center,
+                      VerticalAlignment: Center,
+                      TextColor: #687787,
+                      Wrap: true
+                    );
+                    Text: "Result";
+                    HitTestVisible: false;
+                  }
+                }
+              }
+            }
+          }
+
+          Group #ForgeFooter {
+            LayoutMode: Left;
+            Anchor: (Height: 32);
+
+            Group #StatusTextGroup {
+              FlexWeight: 1;
+              LayoutMode: Top;
+
+              Label #CostValue {
+                Anchor: (Height: 16, Bottom: 2);
+                Style: (
+                  FontSize: 12,
+                  TextColor: #d7cfbe,
+                  Wrap: true
+                );
+                Text: "Cost";
+              }
+
+              Label #StatusValue {
+                Anchor: (Height: 18);
+                Style: (
+                  FontSize: 12,
+                  TextColor: #d7cfbe,
+                  Wrap: true
+                );
+                Text: "Status";
+              }
+            }
+
+            TextButton #PreviewTakeButton {
+              Style: $C.@DefaultTextButtonStyle;
+              Anchor: (Width: 150, Height: 32, Right: 10);
+              Text: "Take";
+            }
+
+            TextButton #CloseButton {
+              Style: $C.@SecondaryTextButtonStyle;
+              Anchor: (Width: 120, Height: 32);
+              Text: "Close";
+            }
+          }
+        }
+      }
+
+      Group #DetailsRow {
+        LayoutMode: Left;
+        Anchor: (Height: 146, Bottom: 8);
+
+        Group #NameSection {
+          FlexWeight: 1;
+          LayoutMode: Top;
+          Padding: (Horizontal: 14, Vertical: 8);
+          Background: (TexturePath: "../Common/ContainerPanelPatch.png", Border: 4);
+
+          Group {
+            LayoutMode: Left;
+            Anchor: (Height: 20, Bottom: 4);
+
+            Label {
+              Anchor: (Width: 120, Height: 20);
+              Style: @SectionTitleStyle;
+              Text: "Name";
+            }
+
+            Label #NamePreviewValue {
+              FlexWeight: 1;
+              Style: (
+                FontSize: 13,
+                TextColor: #ffffff,
+                HorizontalAlignment: End,
+                VerticalAlignment: Center,
+                Wrap: true
+              );
+              Text: "Preview";
+            }
+          }
+
+          $C.@TextField #NameInput {
+            Anchor: (Height: 30, Bottom: 6);
+            PlaceholderText: "Item name";
+          }
+
+          Label #NameHint {
+            Anchor: (Height: 14, Bottom: 5);
+            Style: @CaptionStyle;
+            Text: "Name color cost";
+          }
+
+          Group {
+            LayoutMode: Top;
+            Anchor: (Height: 24);
+
+            Group {
+              LayoutMode: Left;
+              Anchor: (Height: 24);
+
+              TextButton #NameColorRed { Style: @RedColorButtonStyle; Anchor: (Width: 70, Height: 24, Right: 6); Text: "Red"; }
+              TextButton #NameColorBlue { Style: @BlueColorButtonStyle; Anchor: (Width: 70, Height: 24, Right: 6); Text: "Blue"; }
+              TextButton #NameColorGreen { Style: @GreenColorButtonStyle; Anchor: (Width: 70, Height: 24, Right: 6); Text: "Green"; }
+              TextButton #NameColorYellow { Style: @YellowColorButtonStyle; Anchor: (Width: 70, Height: 24, Right: 6); Text: "Yellow"; }
+              TextButton #NameColorPurple { Style: @PurpleColorButtonStyle; Anchor: (Width: 70, Height: 24, Right: 6); Text: "Purple"; }
+              TextButton #NameColorPink { Style: @PinkColorButtonStyle; Anchor: (Width: 70, Height: 24, Right: 6); Text: "Pink"; }
+              TextButton #NameColorCyan { Style: @CyanColorButtonStyle; Anchor: (Width: 70, Height: 24, Right: 6); Text: "Cyan"; }
+              TextButton #NameColorWhite { Style: @WhiteColorButtonStyle; Anchor: (Width: 70, Height: 24); Text: "White"; }
+            }
+          }
+        }
+
+        Group #GlowSection {
+          Anchor: (Width: 390, Height: 146, Left: 12);
+          LayoutMode: Top;
+          Padding: (Horizontal: 14, Vertical: 8);
+          Background: (TexturePath: "../Common/ContainerPanelPatch.png", Border: 4);
+
+          Group {
+            LayoutMode: Left;
+            Anchor: (Height: 20, Bottom: 4);
+
+            Label {
+              Anchor: (Width: 170, Height: 20);
+              Style: @SectionTitleStyle;
+              Text: "Enchantment Glow";
+            }
+
+            Label #GlowPreviewValue {
+              FlexWeight: 1;
+              Style: (
+                FontSize: 13,
+                TextColor: #ffffff,
+                HorizontalAlignment: End,
+                VerticalAlignment: Center,
+                Wrap: true
+              );
+              Text: "Glow";
+            }
+          }
+
+          Label #GlowHint {
+            Anchor: (Height: 24, Bottom: 6);
+            Style: @CaptionStyle;
+            Text: "Glow color cost";
+          }
+
+          Group {
+            LayoutMode: Top;
+            Anchor: (Height: 54);
+
+            Group {
+              LayoutMode: Left;
+              Anchor: (Height: 24, Bottom: 6);
+
+              TextButton #GlowColorRed { Style: @RedColorButtonStyle; Anchor: (Width: 86, Height: 24, Right: 6); Text: "Red"; }
+              TextButton #GlowColorBlue { Style: @BlueColorButtonStyle; Anchor: (Width: 86, Height: 24, Right: 6); Text: "Blue"; }
+              TextButton #GlowColorGreen { Style: @GreenColorButtonStyle; Anchor: (Width: 86, Height: 24, Right: 6); Text: "Green"; }
+              TextButton #GlowColorYellow { Style: @YellowColorButtonStyle; Anchor: (Width: 86, Height: 24); Text: "Yellow"; }
+            }
+
+            Group {
+              LayoutMode: Left;
+              Anchor: (Height: 24);
+
+              TextButton #GlowColorPurple { Style: @PurpleColorButtonStyle; Anchor: (Width: 86, Height: 24, Right: 6); Text: "Purple"; }
+              TextButton #GlowColorPink { Style: @PinkColorButtonStyle; Anchor: (Width: 86, Height: 24, Right: 6); Text: "Pink"; }
+              TextButton #GlowColorCyan { Style: @CyanColorButtonStyle; Anchor: (Width: 86, Height: 24, Right: 6); Text: "Cyan"; }
+              TextButton #GlowColorWhite { Style: @WhiteColorButtonStyle; Anchor: (Width: 86, Height: 24); Text: "White"; }
+            }
+          }
+        }
+      }
+
+      Group #InventoryPanel {
+        LayoutMode: Top;
+        FlexWeight: 1;
+        Padding: (Horizontal: 14, Vertical: 12);
+        Background: (TexturePath: "../Common/ContainerPanelPatch.png", Border: 4);
+
+        Label {
+          Anchor: (Height: 22, Bottom: 8);
+          Style: @SectionTitleStyle;
+          Text: "Inventory";
+        }
+
+        Group #InventoryScroll {
+          LayoutMode: Top;
+          FlexWeight: 1;
+
+          Group #HotbarSection {
+            LayoutMode: Top;
+            Anchor: (Height: 76, Bottom: 4);
+
+            Label #HotbarTitle {
+              Anchor: (Height: 16, Bottom: 4);
+              Style: @CaptionStyle;
+              Text: "Hotbar";
+            }
+
+            Group #HotbarSlots {
+              LayoutMode: Top;
+              Anchor: (Height: 56);
+            }
+          }
+
+          Group #StorageSection {
+            LayoutMode: Top;
+            Anchor: (Height: 130, Bottom: 4);
+
+            Label #StorageTitle {
+              Anchor: (Height: 16, Bottom: 4);
+              Style: @CaptionStyle;
+              Text: "Storage";
+            }
+
+            Group #StorageSlots {
+              LayoutMode: Top;
+              Anchor: (Height: 110);
+            }
+          }
+
+          Group #BackpackSection {
+            LayoutMode: Top;
+            Anchor: (Height: 130, Bottom: 4);
+
+            Label #BackpackTitle {
+              Anchor: (Height: 16, Bottom: 4);
+              Style: @CaptionStyle;
+              Text: "Backpack";
+            }
+
+            Group #BackpackSlots {
+              LayoutMode: Top;
+              Anchor: (Height: 110);
+            }
+          }
+        }
+
+        Label #InventoryEmptyLabel {
+          Anchor: (Height: 24);
+          Style: (
+            FontSize: 12,
+            TextColor: #687787,
+            HorizontalAlignment: Center
+          );
+          Text: "Inventory empty";
+          Visible: false;
+        }
+      }
+    }
+  }
+}

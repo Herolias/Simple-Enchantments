@@ -802,3 +802,5 @@ config.multiplier.elemental_heart = Peluang Penghematan Esensi per Level
 config.multiplier.poison = Kerusakan per Detik
 config.multiplier.poison:duration = Durasi (Detik)
 config.multiplier.environmental_protection = Pengurangan per Level
+items.Enchanting_Anvil.name = Enchanting Anvil
+items.Enchanting_Anvil.description = A rune anvil used to rename items and recolor enchantment glows.

@@ -4,6 +4,7 @@ import com.hypixel.hytale.logger.HytaleLogger;
 import com.hypixel.hytale.server.core.modules.interaction.interaction.config.server.OpenCustomUIInteraction;
 import com.hypixel.hytale.server.core.plugin.JavaPlugin;
 import com.hypixel.hytale.server.core.plugin.JavaPluginInit;
+import org.herolias.plugin.anvil.AnvilInteractionSystem;
 import org.herolias.plugin.command.EnchantCommand;
 import org.herolias.plugin.config.EnchantingConfig;
 import org.herolias.plugin.enchantment.EnchantmentDamageSystem;
@@ -374,6 +375,9 @@ public class SimpleEnchanting extends JavaPlugin {
         // Register inventory change listener globally
         this.getEntityStoreRegistry().registerSystem(salvageSystem);
         LOGGER.atInfo().log("Registered EnchantmentSalvageSystem listener");
+
+        this.getEntityStoreRegistry().registerSystem(new AnvilInteractionSystem(this, enchantmentManager));
+        LOGGER.atInfo().log("Registered AnvilInteractionSystem");
 
         // Register EnchantmentVisualsListener (Event driven visual updates)
         // Optimized to replace heavy per-tick polling

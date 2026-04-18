@@ -802,3 +802,5 @@ config.multiplier.elemental_heart = Besparingskans per Niveau
 config.multiplier.poison = Schade per Seconde
 config.multiplier.poison:duration = Duur (Seconden)
 config.multiplier.environmental_protection = Reductie per Niveau
+items.Enchanting_Anvil.name = Enchanting Anvil
+items.Enchanting_Anvil.description = A rune anvil used to rename items and recolor enchantment glows.

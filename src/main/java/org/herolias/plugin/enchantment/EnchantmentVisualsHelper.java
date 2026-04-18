@@ -11,6 +11,8 @@ import com.hypixel.hytale.server.core.asset.type.entityeffect.config.EntityEffec
 import com.hypixel.hytale.server.core.entity.effect.EffectControllerComponent;
 import com.hypixel.hytale.server.core.asset.type.item.config.Item;
 import org.herolias.plugin.SimpleEnchanting;
+import org.herolias.plugin.anvil.AnvilCustomizationData;
+import org.herolias.plugin.anvil.AnvilColorOption;
 
 public class EnchantmentVisualsHelper {
 
@@ -21,7 +23,6 @@ public class EnchantmentVisualsHelper {
     private static final String STAT_GLOW_CHEST = "EnchantmentGlow_Chest";
     private static final String STAT_GLOW_HANDS = "EnchantmentGlow_Hands";
     private static final String STAT_GLOW_LEGS = "EnchantmentGlow_Legs";
-    private static final float GLOW_ON = 1.0f;
     private static final float GLOW_OFF = 0.0f;
 
     public static void updateGlowStats(
@@ -50,12 +51,12 @@ public class EnchantmentVisualsHelper {
             }
 
             if (!isGlowEnabled) {
-                setGlowStat(statMap, STAT_GLOW_PRIMARY, false);
-                setGlowStat(statMap, STAT_GLOW_SHIELD, false);
-                setGlowStat(statMap, STAT_GLOW_HEAD, false);
-                setGlowStat(statMap, STAT_GLOW_CHEST, false);
-                setGlowStat(statMap, STAT_GLOW_HANDS, false);
-                setGlowStat(statMap, STAT_GLOW_LEGS, false);
+                setGlowStat(statMap, STAT_GLOW_PRIMARY, GLOW_OFF);
+                setGlowStat(statMap, STAT_GLOW_SHIELD, GLOW_OFF);
+                setGlowStat(statMap, STAT_GLOW_HEAD, GLOW_OFF);
+                setGlowStat(statMap, STAT_GLOW_CHEST, GLOW_OFF);
+                setGlowStat(statMap, STAT_GLOW_HANDS, GLOW_OFF);
+                setGlowStat(statMap, STAT_GLOW_LEGS, GLOW_OFF);
                 return;
             }
 
@@ -65,12 +66,12 @@ public class EnchantmentVisualsHelper {
             boolean hasOffHand = !ItemStack.isEmpty(offHandItem);
 
             // 1. Calculate Shield Glow (Checks both offhand and mainhand for shield)
-            boolean shouldGlowShield = false;
+            float shieldGlowValue = GLOW_OFF;
 
             // Check Offhand for Shield
             if (hasOffHand && enchantmentManager.hasAnyEnabledEnchantment(offHandItem)
                     && enchantmentManager.isShield(offHandItem)) {
-                shouldGlowShield = true;
+                shieldGlowValue = getGlowStatValue(offHandItem, false);
             }
 
             // Check Mainhand for Shield (in case they hold shield in main hand)
@@ -80,31 +81,25 @@ public class EnchantmentVisualsHelper {
             boolean heldIsShield = enchantmentManager.isShield(heldItem);
 
             if (heldEnchanted && heldIsShield) {
-                shouldGlowShield = true;
+                shieldGlowValue = getGlowStatValue(heldItem, false);
             }
 
-            setGlowStat(statMap, STAT_GLOW_SHIELD, shouldGlowShield);
+            setGlowStat(statMap, STAT_GLOW_SHIELD, shieldGlowValue);
 
             // 2. Calculate Primary Glow (Weapons/Tools)
             // Only applies if the held item is enchanted AND NOT a shield (since shields
             // use STAT_GLOW_SHIELD)
             if (heldEnchanted && !heldIsShield) {
-                if (hasOffHand) {
-                    // Value 1.0f = Standard Glow
-                    statMap.setStatValue(EntityStatType.getAssetMap().getIndex(STAT_GLOW_PRIMARY), 1.0f);
-                } else {
-                    // Value 2.0f = Single Glow
-                    statMap.setStatValue(EntityStatType.getAssetMap().getIndex(STAT_GLOW_PRIMARY), 2.0f);
-                }
+                setGlowStat(statMap, STAT_GLOW_PRIMARY, getGlowStatValue(heldItem, !hasOffHand));
             } else {
-                setGlowStat(statMap, STAT_GLOW_PRIMARY, false);
+                setGlowStat(statMap, STAT_GLOW_PRIMARY, GLOW_OFF);
             }
             // GLOW LOGIC END
 
             // 3. Update Eternal Shot Stat — reuses cached heldItem
             boolean hasEternalShot = !ItemStack.isEmpty(heldItem)
                     && enchantmentManager.hasEnchantment(heldItem, EnchantmentType.ETERNAL_SHOT);
-            setGlowStat(statMap, "eternal_shot_active", hasEternalShot);
+            setGlowStat(statMap, "eternal_shot_active", hasEternalShot ? 1.0f : GLOW_OFF);
 
             // Update armor glow for each slot
             updateArmorGlow(statMap, inventory, enchantmentManager);
@@ -130,12 +125,17 @@ public class EnchantmentVisualsHelper {
         return utilityItem == null ? ItemStack.EMPTY : utilityItem;
     }
 
-    private static void setGlowStat(EntityStatMap statMap, String statId, boolean enabled) {
+    private static void setGlowStat(EntityStatMap statMap, String statId, float value) {
         int index = EntityStatType.getAssetMap().getIndex(statId);
         if (index == Integer.MIN_VALUE) {
             return;
         }
-        statMap.setStatValue(index, enabled ? GLOW_ON : GLOW_OFF);
+        statMap.setStatValue(index, value);
+    }
+
+    private static float getGlowStatValue(ItemStack itemStack, boolean singleGlow) {
+        AnvilColorOption glowColor = AnvilCustomizationData.fromItemStack(itemStack).getGlowColorOrDefault();
+        return glowColor.getGlowStatValue(singleGlow);
     }
 
     private static void updateArmorGlow(EntityStatMap statMap, Inventory inventory, EnchantmentManager manager) {
@@ -156,7 +156,7 @@ public class EnchantmentVisualsHelper {
                 case Legs -> STAT_GLOW_LEGS;
             };
 
-            setGlowStat(statMap, statId, isEnchanted);
+            setGlowStat(statMap, statId, isEnchanted ? getGlowStatValue(armorItem, false) : GLOW_OFF);
         }
     }
 

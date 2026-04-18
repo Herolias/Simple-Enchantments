@@ -3,6 +3,8 @@ package org.herolias.plugin.enchantment;
 import com.hypixel.hytale.logger.HytaleLogger;
 import org.bson.BsonDocument;
 import org.bson.BsonValue;
+import org.herolias.plugin.anvil.AnvilCustomizationData;
+import org.herolias.tooltips.api.ItemVisualOverrides;
 import org.herolias.tooltips.api.TooltipData;
 import org.herolias.tooltips.api.TooltipProvider;
 
@@ -65,27 +67,51 @@ public class EnchantmentTooltipProvider implements TooltipProvider {
         if (metadata == null || metadata.isEmpty())
             return null;
 
-        // Quick string-contains check to avoid JSON parsing for items without
-        // enchantments
-        if (!metadata.contains("\"" + EnchantmentData.METADATA_KEY + "\""))
+        // Quick string-contains check to avoid BSON parsing for untouched items.
+        if (!metadata.contains("\"" + EnchantmentData.METADATA_KEY + "\"")
+                && !metadata.contains("\"" + AnvilCustomizationData.METADATA_KEY + "\"")) {
             return null;
+        }
 
-        EnchantmentData data = parseEnchantments(metadata);
-        if (data == null || data.isEmpty())
+        BsonDocument document;
+        try {
+            document = BsonDocument.parse(metadata);
+        } catch (Exception ignored) {
             return null;
+        }
 
-        // Use the stable hash from EnchantmentData for virtual ID generation
-        String stableHash = data.computeStableHash();
+        EnchantmentData enchantmentData = parseEnchantments(document);
+        AnvilCustomizationData customization = AnvilCustomizationData.fromMetadataDocument(document);
+        if ((enchantmentData == null || enchantmentData.isEmpty()) && customization.isEmpty()) {
+            return null;
+        }
 
         // Build additive lines in the player's locale.
         // The locale comes from processSection → compose → getTooltipData.
         String effectiveLocale = (locale != null && !locale.isEmpty()) ? locale : "en-US";
-        TooltipData.Builder builder = TooltipData.builder()
-                .hashInput(stableHash);
+        StringBuilder hashBuilder = new StringBuilder();
+        if (enchantmentData != null && !enchantmentData.isEmpty()) {
+            hashBuilder.append(enchantmentData.computeStableHash());
+        }
+        customization.appendHashInput(hashBuilder);
 
-        List<String> lines = buildEnchantmentLines(data, effectiveLocale);
-        for (String line : lines) {
-            builder.addLine(line);
+        TooltipData.Builder builder = TooltipData.builder()
+                .hashInput(hashBuilder.length() == 0 ? "simple-enchantments:anvil" : hashBuilder.toString());
+
+        if (customization.getCustomName() != null) {
+            builder.nameOverride(customization.getCustomName());
+        }
+        if (customization.getNameColor() != null) {
+            builder.visualOverrides(ItemVisualOverrides.builder()
+                    .nameColor(customization.getNameColor().getHexColor())
+                    .build());
+        }
+
+        if (enchantmentData != null && !enchantmentData.isEmpty()) {
+            List<String> lines = buildEnchantmentLines(enchantmentData, effectiveLocale);
+            for (String line : lines) {
+                builder.addLine(line);
+            }
         }
 
         return builder.build();
@@ -175,10 +201,9 @@ public class EnchantmentTooltipProvider implements TooltipProvider {
      * {@code InventoryPacketAdapter.parseEnchantmentsFromPacket}.
      */
     @Nullable
-    private static EnchantmentData parseEnchantments(@Nonnull String metadataJson) {
+    private static EnchantmentData parseEnchantments(@Nonnull BsonDocument metadataDocument) {
         try {
-            BsonDocument doc = BsonDocument.parse(metadataJson);
-            BsonValue enchBson = doc.get(EnchantmentData.METADATA_KEY);
+            BsonValue enchBson = metadataDocument.get(EnchantmentData.METADATA_KEY);
             if (enchBson == null || !enchBson.isDocument())
                 return null;
 

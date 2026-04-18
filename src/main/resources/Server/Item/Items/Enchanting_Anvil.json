@@ -1,0 +1,85 @@
+{
+    "TranslationProperties": {
+        "Name": "server.items.Enchanting_Anvil.name",
+        "Description": "server.items.Enchanting_Anvil.description"
+    },
+    "Icon": "Icons/ItemsGenerated/Enchanting_Anvil.png",
+    "Categories": [
+        "Furniture.Benches"
+    ],
+    "BlockType": {
+        "Material": "Solid",
+        "DrawType": "Model",
+        "Opacity": "Transparent",
+        "CustomModel": "Blocks/Benches/Anvil.blockymodel",
+        "CustomModelTexture": [
+            {
+                "Texture": "Blocks/Benches/Anvil_Texture.png",
+                "Weight": 1
+            }
+        ],
+        "HitboxType": "Bench_Alchemy",
+        "VariantRotation": "NESW",
+        "Bench": {
+            "Type": "Crafting",
+            "Categories": [
+                {
+                    "Id": "All",
+                    "Icon": "Icons/CraftingCategories/Campfire.png",
+                    "Name": "server.benchCategories.all"
+                }
+            ],
+            "LocalOpenSoundEventId": "SFX_Bench_Placeholder",
+            "LocalCloseSoundEventId": "SFX_Bench_Placeholder",
+            "CompletedSoundEventId": "SFX_Bench_Placeholder",
+            "Id": "EnchantingAnvilBench"
+        },
+        "BlockEntity": {
+            "Components": {
+                "BenchBlock": {}
+            }
+        },
+        "State": {
+            "Definitions": {
+                "CraftCompleted": {}
+            }
+        },
+        "Gathering": {
+            "Breaking": {
+                "GatherType": "Benches"
+            }
+        },
+        "BlockParticleSetId": "Stone",
+        "ParticleColor": "#b088ff",
+        "Support": {
+            "Down": [
+                {
+                    "FaceType": "Full"
+                }
+            ]
+        },
+        "BlockSoundSetId": "Stone"
+    },
+    "PlayerAnimationsId": "Block",
+    "IconProperties": {
+        "Scale": 0.46,
+        "Translation": [
+            11.4,
+            -18.2
+        ],
+        "Rotation": [
+            20.0,
+            45.0,
+            18.0
+        ]
+    },
+    "Tags": {
+        "Type": [
+            "Bench",
+            "Anvil"
+        ]
+    },
+    "MaxStack": 1,
+    "ItemLevel": 11,
+    "ItemSoundSetId": "ISS_Blocks_Wood"
+}

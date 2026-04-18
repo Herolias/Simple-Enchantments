@@ -8,6 +8,7 @@ import com.hypixel.hytale.protocol.ValueType;
 import com.hypixel.hytale.server.core.asset.type.item.config.Item;
 import com.hypixel.hytale.server.core.asset.type.item.config.ItemAppearanceCondition;
 import org.herolias.plugin.SimpleEnchanting;
+import org.herolias.plugin.anvil.AnvilColorOption;
 
 import javax.annotation.Nonnull;
 import java.lang.reflect.Field;
@@ -31,7 +32,6 @@ public class EnchantmentGlowInjector {
 
     // Stat keys that the condition is mapped to (must match EntityStatType assets)
     private static final String STAT_GLOW_PRIMARY = "EnchantmentGlow_Primary";
-    private static final String STAT_GLOW_PRIMARY_SINGLE = "EnchantmentGlow_Primary_Single";
     private static final String STAT_GLOW_HEAD = "EnchantmentGlow_Head";
     private static final String STAT_GLOW_CHEST = "EnchantmentGlow_Chest";
     private static final String STAT_GLOW_HANDS = "EnchantmentGlow_Hands";
@@ -104,25 +104,22 @@ public class EnchantmentGlowInjector {
                 if (category == ItemCategory.UNKNOWN)
                     continue;
 
-                // Determine appropriate VFX (normal or small)
-                String vfxId = getGlowVfxFor(item, itemId);
+                boolean smallGlow = usesSmallGlow(item, itemId);
 
                 // Check what type of item this is and inject appropriate glow conditions
                 if (category.isShield()) {
-                    injectGlowCondition(item, STAT_GLOW_SHIELD, MODEL_VFX_ID_SMALL, 1.0f);
+                    injectAllGlowConditions(item, STAT_GLOW_SHIELD, true, false);
                 } else if (category.isWeapon()) {
-                    injectGlowCondition(item, STAT_GLOW_PRIMARY, vfxId, 1.0f);
-                    injectGlowCondition(item, STAT_GLOW_PRIMARY, "Enchantment_Glow_Single", 2.0f);
+                    injectAllGlowConditions(item, STAT_GLOW_PRIMARY, smallGlow, true);
                     weaponCount++;
                 } else if (category.isTool()) {
-                    injectGlowCondition(item, STAT_GLOW_PRIMARY, vfxId, 1.0f);
-                    injectGlowCondition(item, STAT_GLOW_PRIMARY, "Enchantment_Glow_Single", 2.0f);
+                    injectAllGlowConditions(item, STAT_GLOW_PRIMARY, smallGlow, true);
                     toolCount++;
                 } else if (category.isArmor()) {
                     // Armor uses slot-specific glow stats
                     String statKey = getArmorGlowStat(itemId);
                     if (statKey != null) {
-                        injectGlowCondition(item, statKey, vfxId, 1.0f);
+                        injectAllGlowConditions(item, statKey, smallGlow, false);
                         armorCount++;
                     }
                 }
@@ -140,7 +137,7 @@ public class EnchantmentGlowInjector {
     /**
      * Determines which glow VFX to use based on item type/category.
      */
-    private static String getGlowVfxFor(Item item, String itemId) {
+    private static boolean usesSmallGlow(Item item, String itemId) {
         String idLower = itemId.toLowerCase();
 
         // Check Categories first
@@ -149,7 +146,7 @@ public class EnchantmentGlowInjector {
                 String catLower = category.toLowerCase();
                 for (String keyword : SMALL_WEAPON_KEYWORDS) {
                     if (catLower.contains(keyword)) {
-                        return MODEL_VFX_ID_SMALL;
+                        return true;
                     }
                 }
             }
@@ -158,11 +155,11 @@ public class EnchantmentGlowInjector {
         // Fallback checks on ID
         for (String keyword : SMALL_WEAPON_KEYWORDS) {
             if (idLower.contains(keyword)) {
-                return MODEL_VFX_ID_SMALL;
+                return true;
             }
         }
 
-        return MODEL_VFX_ID;
+        return false;
     }
 
     private static String getArmorGlowStat(String itemId) {
@@ -178,6 +175,27 @@ public class EnchantmentGlowInjector {
         }
         // Default to primary for unrecognized armor
         return STAT_GLOW_PRIMARY;
+    }
+
+    private static void injectAllGlowConditions(
+            @Nonnull Item item,
+            @Nonnull String statKey,
+            boolean smallGlow,
+            boolean includeSingleGlow) throws IllegalAccessException {
+        for (AnvilColorOption colorOption : AnvilColorOption.values()) {
+            injectGlowCondition(
+                    item,
+                    statKey,
+                    colorOption.getGlowVfxId(smallGlow, false),
+                    colorOption.getGlowStatValue(false));
+            if (includeSingleGlow) {
+                injectGlowCondition(
+                        item,
+                        statKey,
+                        colorOption.getGlowVfxId(smallGlow, true),
+                        colorOption.getGlowStatValue(true));
+            }
+        }
     }
 
     private static void injectGlowCondition(Item item, String statKey, String vfxId, float targetValue)
