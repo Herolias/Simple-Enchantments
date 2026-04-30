@@ -6,8 +6,9 @@ import com.hypixel.hytale.codec.builder.BuilderCodec;
 import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.math.vector.Transform;
-import com.hypixel.hytale.math.vector.Vector3d;
-import com.hypixel.hytale.math.vector.Vector3f;
+import com.hypixel.hytale.math.vector.Rotation3f;
+import com.hypixel.hytale.math.vector.Vector3dUtil;
+import org.joml.Vector3d;
 import com.hypixel.hytale.protocol.Direction;
 import com.hypixel.hytale.protocol.Interaction;
 import com.hypixel.hytale.protocol.InteractionSyncData;
@@ -101,8 +102,8 @@ public class LaunchDynamicProjectileInteraction
                 && clientState.attackerRot != null;
         if (hasClientState) {
             position = PositionUtil.toVector3d(clientState.attackerPos);
-            Vector3f lookVec = PositionUtil.toRotation(clientState.attackerRot);
-            direction = new Vector3d(lookVec.getYaw(), lookVec.getPitch());
+            Rotation3f lookVec = PositionUtil.toRotation(clientState.attackerRot);
+            direction = Vector3dUtil.setYawPitch(lookVec.yaw(), lookVec.pitch(), new Vector3d());
             generatedUUID = clientState.generatedUUID;
         } else {
             Transform lookVec = TargetUtil.getLook(ref, commandBuffer);

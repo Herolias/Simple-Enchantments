@@ -11,6 +11,7 @@ import com.hypixel.hytale.server.core.asset.AssetModule;
 import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hypixel.hytale.server.core.entity.entities.player.pages.InteractiveCustomUIPage;
 import com.hypixel.hytale.server.core.inventory.Inventory;
+import com.hypixel.hytale.server.core.inventory.InventoryComponent;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
 import com.hypixel.hytale.server.core.inventory.container.ItemContainer;
 import com.hypixel.hytale.server.core.inventory.container.SimpleItemContainer;
@@ -344,11 +345,11 @@ public class AnvilPage extends InteractiveCustomUIPage<AnvilPageEventData> {
 
         Inventory inventory = player.getInventory();
         boolean hasHotbar = this.appendInventorySection(commandBuilder, inventory.getHotbar(),
-                "#HotbarSection", "#HotbarSlots", "Hotbar", Inventory.HOTBAR_SECTION_ID);
+                "#HotbarSection", "#HotbarSlots", "Hotbar", InventoryComponent.HOTBAR_SECTION_ID);
         boolean hasStorage = this.appendInventorySection(commandBuilder, inventory.getStorage(),
-                "#StorageSection", "#StorageSlots", "Storage", Inventory.STORAGE_SECTION_ID);
+                "#StorageSection", "#StorageSlots", "Storage", InventoryComponent.STORAGE_SECTION_ID);
         boolean hasBackpack = this.appendInventorySection(commandBuilder, inventory.getBackpack(),
-                "#BackpackSection", "#BackpackSlots", "Backpack", Inventory.BACKPACK_SECTION_ID);
+                "#BackpackSection", "#BackpackSlots", "Backpack", InventoryComponent.BACKPACK_SECTION_ID);
 
         commandBuilder.set("#InventoryEmptyLabel.Visible", !(hasHotbar || hasStorage || hasBackpack));
     }
@@ -365,7 +366,7 @@ public class AnvilPage extends InteractiveCustomUIPage<AnvilPageEventData> {
             return false;
         }
 
-        int slotsPerRow = sectionId == Inventory.HOTBAR_SECTION_ID
+        int slotsPerRow = sectionId == InventoryComponent.HOTBAR_SECTION_ID
                 ? HOTBAR_SLOTS_PER_ROW
                 : INVENTORY_SLOTS_PER_ROW;
         boolean hasAnyItem = false;
@@ -432,11 +433,11 @@ public class AnvilPage extends InteractiveCustomUIPage<AnvilPageEventData> {
     private void bindInventorySlotEvents(@Nonnull UIEventBuilder eventBuilder, @Nonnull Player player) {
         Inventory inventory = player.getInventory();
         this.bindInventorySectionEvents(eventBuilder, inventory.getHotbar(), "#HotbarSlots", "Hotbar",
-                Inventory.HOTBAR_SECTION_ID);
+                InventoryComponent.HOTBAR_SECTION_ID);
         this.bindInventorySectionEvents(eventBuilder, inventory.getStorage(), "#StorageSlots", "Storage",
-                Inventory.STORAGE_SECTION_ID);
+                InventoryComponent.STORAGE_SECTION_ID);
         this.bindInventorySectionEvents(eventBuilder, inventory.getBackpack(), "#BackpackSlots", "Backpack",
-                Inventory.BACKPACK_SECTION_ID);
+                InventoryComponent.BACKPACK_SECTION_ID);
     }
 
     private void bindInventorySectionEvents(
@@ -448,7 +449,7 @@ public class AnvilPage extends InteractiveCustomUIPage<AnvilPageEventData> {
         if (container == null) {
             return;
         }
-        int slotsPerRow = sectionId == Inventory.HOTBAR_SECTION_ID
+        int slotsPerRow = sectionId == InventoryComponent.HOTBAR_SECTION_ID
                 ? HOTBAR_SLOTS_PER_ROW
                 : INVENTORY_SLOTS_PER_ROW;
         for (short slot = 0; slot < container.getCapacity(); slot++) {
@@ -1190,9 +1191,9 @@ public class AnvilPage extends InteractiveCustomUIPage<AnvilPageEventData> {
     private List<InventorySource> getInventorySources(@Nonnull Player player) {
         List<InventorySource> sources = new ArrayList<>();
         Inventory inventory = player.getInventory();
-        this.appendInventorySources(sources, inventory.getHotbar(), "Hotbar", Inventory.HOTBAR_SECTION_ID);
-        this.appendInventorySources(sources, inventory.getStorage(), "Storage", Inventory.STORAGE_SECTION_ID);
-        this.appendInventorySources(sources, inventory.getBackpack(), "Backpack", Inventory.BACKPACK_SECTION_ID);
+        this.appendInventorySources(sources, inventory.getHotbar(), "Hotbar", InventoryComponent.HOTBAR_SECTION_ID);
+        this.appendInventorySources(sources, inventory.getStorage(), "Storage", InventoryComponent.STORAGE_SECTION_ID);
+        this.appendInventorySources(sources, inventory.getBackpack(), "Backpack", InventoryComponent.BACKPACK_SECTION_ID);
         return sources;
     }
 

@@ -11,9 +11,10 @@ import com.hypixel.hytale.component.query.Query;
 import com.hypixel.hytale.component.system.EntityEventSystem;
 import com.hypixel.hytale.logger.HytaleLogger;
 import com.hypixel.hytale.math.util.ChunkUtil;
-import com.hypixel.hytale.math.vector.Vector3d;
-import com.hypixel.hytale.math.vector.Vector3f;
-import com.hypixel.hytale.math.vector.Vector3i;
+import com.hypixel.hytale.math.vector.Rotation3f;
+import com.hypixel.hytale.math.vector.Rotation3fc;
+import org.joml.Vector3d;
+import org.joml.Vector3i;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockBreakingDropType;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockGathering;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType;
@@ -143,7 +144,7 @@ public class EnchantmentSmeltingSystem extends EntityEventSystem<EntityStore, Br
         World world = store.getExternalData().getWorld();
         Store<ChunkStore> chunkStore = world.getChunkStore().getStore();
         Ref<ChunkStore> chunkRef = chunkStore.getExternalData().getChunkReference(
-                ChunkUtil.indexChunkFromBlock(targetBlock.getX(), targetBlock.getZ()));
+                ChunkUtil.indexChunkFromBlock(targetBlock.x(), targetBlock.z()));
         if (chunkRef == null || !chunkRef.isValid()) {
             return;
         }
@@ -153,8 +154,8 @@ public class EnchantmentSmeltingSystem extends EntityEventSystem<EntityStore, Br
             return;
         }
 
-        BlockSection blockSection = blockChunk.getSectionAtBlockY(targetBlock.getY());
-        int filler = blockSection.getFiller(targetBlock.getX(), targetBlock.getY(), targetBlock.getZ());
+        BlockSection blockSection = blockChunk.getSectionAtBlockY(targetBlock.y());
+        int filler = blockSection.getFiller(targetBlock.x(), targetBlock.y(), targetBlock.z());
 
         Ref<EntityStore> breakerRef = archetypeChunk.getReferenceTo(index);
         boolean naturalAction = breakerRef != null && breakerRef.isValid()
@@ -171,9 +172,9 @@ public class EnchantmentSmeltingSystem extends EntityEventSystem<EntityStore, Br
         BlockHarvestUtils.naturallyRemoveBlock(targetBlock, blockType, filler, 0, null, null, setBlockSettings,
                 chunkRef, store, chunkStore);
 
-        Vector3d dropPosition = new Vector3d(targetBlock.getX() + 0.5, targetBlock.getY(), targetBlock.getZ() + 0.5);
+        Vector3d dropPosition = new Vector3d(targetBlock.x() + 0.5, targetBlock.y(), targetBlock.z() + 0.5);
         Holder<EntityStore>[] itemEntities = ItemComponent.generateItemDrops(commandBuffer, smeltedDrops, dropPosition,
-                Vector3f.ZERO);
+                Rotation3f.ZERO);
         if (itemEntities.length > 0) {
             commandBuffer.addEntities(itemEntities, AddReason.SPAWN);
         }

@@ -146,7 +146,7 @@ public class EnchantCommand extends CommandBase {
                     }
 
                     sender.sendMessage(Message.raw("Enchanted! [" + enchantList + "]"));
-                    LOGGER.atInfo().log(sender.getDisplayName() + " enchanted " + item.getItemId() + " with "
+                    LOGGER.atInfo().log(sender.getUsername() + " enchanted " + item.getItemId() + " with "
                             + finalEnchantmentType.getFormattedName(finalLevel));
                 } catch (Exception e) {
                     LOGGER.atWarning().log("Failed to apply enchantment: " + e.getMessage());

@@ -7,22 +7,22 @@ import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.component.query.Query;
 import com.hypixel.hytale.component.system.EntityEventSystem;
-import com.hypixel.hytale.server.core.event.events.ecs.SwitchActiveSlotEvent;
+import com.hypixel.hytale.server.core.event.events.ecs.InventoryActiveSlotRequestEvent;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 
 import javax.annotation.Nonnull;
 
 /**
- * System to handle SwitchActiveSlotEvent.
+ * System to handle InventoryActiveSlotRequestEvent.
  * Previously used for Eternal Shot slot-switch detection, but the ECS event
  * dispatch never fires reliably. Slot switch detection is now handled by
  * the per-tick EnchantmentSlotTracker instead.
  * This class is kept registered as a no-op for safety.
  */
-public class SwitchActiveSlotSystem extends EntityEventSystem<EntityStore, SwitchActiveSlotEvent> {
+public class SwitchActiveSlotSystem extends EntityEventSystem<EntityStore, InventoryActiveSlotRequestEvent> {
 
     public SwitchActiveSlotSystem() {
-        super(SwitchActiveSlotEvent.class);
+        super(InventoryActiveSlotRequestEvent.class);
     }
 
     @Override
@@ -36,7 +36,7 @@ public class SwitchActiveSlotSystem extends EntityEventSystem<EntityStore, Switc
             @Nonnull ArchetypeChunk<EntityStore> archetypeChunk,
             @Nonnull Store<EntityStore> store,
             @Nonnull CommandBuffer<EntityStore> commandBuffer,
-            @Nonnull SwitchActiveSlotEvent event) {
+            @Nonnull InventoryActiveSlotRequestEvent event) {
         // No-op: Slot switch detection is handled by EnchantmentSlotTracker
     }
 }

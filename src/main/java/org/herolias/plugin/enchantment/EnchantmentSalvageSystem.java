@@ -3,9 +3,9 @@ package org.herolias.plugin.enchantment;
 import com.hypixel.hytale.builtin.crafting.component.ProcessingBenchBlock;
 import com.hypixel.hytale.event.EventPriority;
 import com.hypixel.hytale.logger.HytaleLogger;
-import com.hypixel.hytale.math.vector.Vector3i;
+import org.joml.Vector3i;
 import com.hypixel.hytale.server.core.entity.entities.Player;
-import com.hypixel.hytale.server.core.inventory.InventoryChangeEvent;
+import com.hypixel.hytale.server.core.event.events.ecs.InventoryChangeEvent;
 import com.hypixel.hytale.component.system.EntityEventSystem;
 import com.hypixel.hytale.component.ArchetypeChunk;
 import com.hypixel.hytale.component.CommandBuffer;
@@ -440,12 +440,12 @@ public class EnchantmentSalvageSystem extends EntityEventSystem<EntityStore, Inv
                         .anyMatch(t -> t.getRemainder() != null && !t.getRemainder().isEmpty())) {
                     com.hypixel.hytale.component.Store<com.hypixel.hytale.server.core.universe.world.storage.EntityStore> entityStore = world
                             .getEntityStore().getStore();
-                    com.hypixel.hytale.math.vector.Vector3d dropPosition = blockPos.toVector3d()
+                    org.joml.Vector3d dropPosition = com.hypixel.hytale.math.vector.Vector3iUtil.toVector3d(blockPos)
                             .add(0.5, 1.0, 0.5);
                     com.hypixel.hytale.component.Holder<com.hypixel.hytale.server.core.universe.world.storage.EntityStore>[] itemEntityHolders = com.hypixel.hytale.server.core.modules.entity.item.ItemComponent
                             .generateItemDrops(
                                     entityStore, java.util.Collections.singletonList(scrollStack), dropPosition,
-                                    com.hypixel.hytale.math.vector.Vector3f.ZERO);
+                                    com.hypixel.hytale.math.vector.Rotation3f.ZERO);
                     if (itemEntityHolders.length > 0) {
                         if (world.isAlive()) {
                             try {
