@@ -1,4 +1,4 @@
-package org.herolias.plugin.anvil;
+package org.herolias.plugin.engravingtable;
 
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
@@ -24,8 +24,11 @@ import com.hypixel.hytale.server.core.ui.builder.UIEventBuilder;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import org.herolias.plugin.SimpleEnchanting;
+import org.herolias.plugin.enchantment.EnchantmentData;
 import org.herolias.plugin.enchantment.EnchantmentManager;
 import org.herolias.plugin.enchantment.TooltipBridge;
+import org.bson.BsonDocument;
+import org.bson.BsonValue;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -42,11 +45,10 @@ import java.util.Map;
 import java.util.StringJoiner;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class AnvilPage extends InteractiveCustomUIPage<AnvilPageEventData> {
-    private static final String PAGE_PATH = "Pages/AnvilPage.ui";
-    private static final String INVENTORY_ENTRY_PATH = "Pages/AnvilInventoryEntry.ui";
-    private static final String INVENTORY_ROW_UI =
-            "Group { LayoutMode: LeftCenterWrap; Anchor: (Height: 54, Bottom: 2); }";
+public class EngravingTablePage extends InteractiveCustomUIPage<EngravingTablePageEventData> {
+    private static final String PAGE_PATH = "Pages/EngravingTablePage.ui";
+    private static final String INVENTORY_ENTRY_PATH = "Pages/EngravingTableInventoryEntry.ui";
+    private static final String INVENTORY_ROW_UI = "Group { LayoutMode: LeftCenterWrap; Anchor: (Height: 54, Bottom: 2); }";
     private static final long DUPLICATE_SELECTION_WINDOW_NANOS = 100_000_000L;
     private static final int HOTBAR_SLOTS_PER_ROW = 9;
     private static final int INVENTORY_SLOTS_PER_ROW = 18;
@@ -63,16 +65,16 @@ public class AnvilPage extends InteractiveCustomUIPage<AnvilPageEventData> {
     private String selectedPrimaryKey;
     private String selectedSecondaryKey;
     private String editableName = "";
-    private AnvilColorOption selectedNameColor = AnvilColorOption.DEFAULT_NAME_COLOR;
-    private AnvilColorOption selectedGlowColor = AnvilColorOption.DEFAULT_GLOW_COLOR;
+    private EngravingTableColorOption selectedNameColor = EngravingTableColorOption.DEFAULT_NAME_COLOR;
+    private EngravingTableColorOption selectedGlowColor = EngravingTableColorOption.DEFAULT_GLOW_COLOR;
     private String lastInventorySelectionKey;
     private long lastInventorySelectionNanos;
 
-    public AnvilPage(
+    public EngravingTablePage(
             @Nonnull PlayerRef playerRef,
             @Nonnull SimpleEnchanting plugin,
             @Nonnull EnchantmentManager enchantmentManager) {
-        super(playerRef, CustomPageLifetime.CanDismiss, AnvilPageEventData.CODEC);
+        super(playerRef, CustomPageLifetime.CanDismiss, EngravingTablePageEventData.CODEC);
         this.plugin = plugin;
         this.enchantmentManager = enchantmentManager;
     }
@@ -93,7 +95,7 @@ public class AnvilPage extends InteractiveCustomUIPage<AnvilPageEventData> {
     public void handleDataEvent(
             @Nonnull Ref<EntityStore> ref,
             @Nonnull Store<EntityStore> store,
-            @Nonnull AnvilPageEventData data) {
+            @Nonnull EngravingTablePageEventData data) {
         if (data.close != null) {
             this.closePage(ref, store);
             return;
@@ -120,12 +122,14 @@ public class AnvilPage extends InteractiveCustomUIPage<AnvilPageEventData> {
             return;
         }
         if (data.nameColor != null) {
-            this.selectedNameColor = AnvilColorOption.fromIdOrDefault(data.nameColor, AnvilColorOption.DEFAULT_NAME_COLOR);
+            this.selectedNameColor = EngravingTableColorOption.fromIdOrDefault(data.nameColor,
+                    EngravingTableColorOption.DEFAULT_NAME_COLOR);
             this.sendDynamicUpdate();
             return;
         }
         if (data.glowColor != null) {
-            this.selectedGlowColor = AnvilColorOption.fromIdOrDefault(data.glowColor, AnvilColorOption.DEFAULT_GLOW_COLOR);
+            this.selectedGlowColor = EngravingTableColorOption.fromIdOrDefault(data.glowColor,
+                    EngravingTableColorOption.DEFAULT_GLOW_COLOR);
             this.sendDynamicUpdate();
             return;
         }
@@ -156,12 +160,12 @@ public class AnvilPage extends InteractiveCustomUIPage<AnvilPageEventData> {
         ItemStack primary = this.getPrimaryInput();
         if (ItemStack.isEmpty(primary)) {
             this.editableName = "";
-            this.selectedNameColor = AnvilColorOption.DEFAULT_NAME_COLOR;
-            this.selectedGlowColor = AnvilColorOption.DEFAULT_GLOW_COLOR;
+            this.selectedNameColor = EngravingTableColorOption.DEFAULT_NAME_COLOR;
+            this.selectedGlowColor = EngravingTableColorOption.DEFAULT_GLOW_COLOR;
             return;
         }
 
-        AnvilCustomizationData customization = AnvilCustomizationData.fromItemStack(primary);
+        EngravingTableCustomizationData customization = EngravingTableCustomizationData.fromItemStack(primary);
         this.editableName = this.resolveCurrentDisplayName(primary, customization);
         this.selectedNameColor = customization.getNameColorOrDefault();
         this.selectedGlowColor = customization.getGlowColorOrDefault();
@@ -184,7 +188,7 @@ public class AnvilPage extends InteractiveCustomUIPage<AnvilPageEventData> {
         boolean showGlow = showCustomization && this.canEditGlow(primary);
         boolean canTake = this.canTakePreview();
 
-        commandBuilder.set("#PageTitle.TextSpans", Message.raw("Enchanting Anvil"));
+        commandBuilder.set("#PageTitle.TextSpans", Message.raw("Engraving Table"));
         commandBuilder.set("#WindowHint.Visible", false);
 
         this.setGridSlot(commandBuilder, "#PrimaryDropGrid", "#InputPlaceholder", primary, "Item/Scroll");
@@ -257,7 +261,7 @@ public class AnvilPage extends InteractiveCustomUIPage<AnvilPageEventData> {
                     EventData.of("NameInput", "").append("@NameInput", "#NameInput.Value"),
                     false);
 
-            for (AnvilColorOption colorOption : AnvilColorOption.values()) {
+            for (EngravingTableColorOption colorOption : EngravingTableColorOption.values()) {
                 eventBuilder.addEventBinding(CustomUIEventBindingType.Activating,
                         "#NameColor" + colorOption.getAssetSuffix(),
                         EventData.of("NameColor", colorOption.getId()));
@@ -265,7 +269,7 @@ public class AnvilPage extends InteractiveCustomUIPage<AnvilPageEventData> {
         }
 
         if (showGlow) {
-            for (AnvilColorOption colorOption : AnvilColorOption.values()) {
+            for (EngravingTableColorOption colorOption : EngravingTableColorOption.values()) {
                 eventBuilder.addEventBinding(CustomUIEventBindingType.Activating,
                         "#GlowColor" + colorOption.getAssetSuffix(),
                         EventData.of("GlowColor", colorOption.getId()));
@@ -285,8 +289,8 @@ public class AnvilPage extends InteractiveCustomUIPage<AnvilPageEventData> {
     }
 
     private void updateColorButtons(@Nonnull UICommandBuilder commandBuilder, boolean nameButtons) {
-        AnvilColorOption selected = nameButtons ? this.selectedNameColor : this.selectedGlowColor;
-        for (AnvilColorOption colorOption : AnvilColorOption.values()) {
+        EngravingTableColorOption selected = nameButtons ? this.selectedNameColor : this.selectedGlowColor;
+        for (EngravingTableColorOption colorOption : EngravingTableColorOption.values()) {
             String selector = (nameButtons ? "#NameColor" : "#GlowColor") + colorOption.getAssetSuffix();
             String label = colorOption == selected
                     ? "[" + colorOption.getDisplayName() + "]"
@@ -314,17 +318,53 @@ public class AnvilPage extends InteractiveCustomUIPage<AnvilPageEventData> {
             return new ItemGridSlot();
         }
         ItemStack displayStack = itemStack.getQuantity() > 1 ? itemStack.withQuantity(1) : itemStack;
-        return new ItemGridSlot(displayStack != null ? displayStack : itemStack);
+        if (displayStack == null) {
+            displayStack = itemStack;
+        }
+        if (!this.hasDynamicCustomUiTooltipData(displayStack)) {
+            displayStack = displayStack.withMetadata((BsonDocument) null);
+        }
+        return new ItemGridSlot(displayStack);
     }
 
-    @Nonnull
-    private ItemGridSlot createInventoryGridSlot(@Nullable ItemStack itemStack) {
-        if (ItemStack.isEmpty(itemStack)) {
-            return new ItemGridSlot();
+    private boolean hasDynamicCustomUiTooltipData(@Nonnull ItemStack itemStack) {
+        BsonDocument metadata = itemStack.getMetadata();
+        if (metadata == null || metadata.isEmpty()) {
+            return false;
         }
+        return TooltipBridge.hasDynamicTooltip(itemStack.getItemId(), metadata.toJson(), this.getTooltipLanguage())
+                || this.hasSimpleEnchantingTooltipData(metadata);
+    }
 
-        ItemStack displayStack = itemStack.getQuantity() > 1 ? itemStack.withQuantity(1) : itemStack;
-        return new ItemGridSlot(displayStack != null ? displayStack : itemStack);
+    private boolean hasSimpleEnchantingTooltipData(@Nonnull BsonDocument metadata) {
+        return this.hasEnchantmentTooltipData(metadata) || this.hasEngravingTooltipData(metadata);
+    }
+
+    @Nullable
+    private String getTooltipLanguage() {
+        String configuredLanguage = this.plugin.getUserSettingsManager().getLanguage(this.playerRef.getUuid());
+        if (configuredLanguage != null && !configuredLanguage.isBlank()
+                && !"default".equalsIgnoreCase(configuredLanguage)) {
+            return configuredLanguage;
+        }
+        return this.playerRef.getLanguage();
+    }
+
+    private boolean hasEnchantmentTooltipData(@Nonnull BsonDocument metadata) {
+        BsonValue enchantments = metadata.get(EnchantmentData.METADATA_KEY);
+        if (enchantments == null || !enchantments.isDocument()) {
+            return false;
+        }
+        try {
+            return !EnchantmentData.fromBson(enchantments.asDocument()).isEmpty();
+        } catch (Exception ignored) {
+            return false;
+        }
+    }
+
+    private boolean hasEngravingTooltipData(@Nonnull BsonDocument metadata) {
+        EngravingTableCustomizationData customization = EngravingTableCustomizationData.fromMetadataDocument(metadata);
+        return customization.getCustomName() != null || customization.getNameColor() != null;
     }
 
     private void updateInventoryGrid(@Nonnull UICommandBuilder commandBuilder) {
@@ -386,7 +426,6 @@ public class AnvilPage extends InteractiveCustomUIPage<AnvilPageEventData> {
 
             commandBuilder.set(selector + " #SlotButton.Disabled", !hasItem);
             commandBuilder.set(selector + " #Icon.Visible", hasItem);
-            commandBuilder.set(selector + " #Icon.Slots", new ItemGridSlot[] { this.createInventoryGridSlot(itemStack) });
             commandBuilder.set(selector + " #EmptySlot.Visible", !hasItem);
             commandBuilder.set(selector + " #SelectedOverlayPrimary.Visible", false);
             commandBuilder.set(selector + " #SelectedOverlaySecondary.Visible", false);
@@ -399,6 +438,7 @@ public class AnvilPage extends InteractiveCustomUIPage<AnvilPageEventData> {
                 continue;
             }
 
+            commandBuilder.set(selector + " #Icon.Slots", new ItemGridSlot[] { this.createGridSlot(itemStack) });
             InventorySource source = new InventorySource(
                     this.buildInventoryKey(sectionId, slot, itemStack),
                     container,
@@ -464,7 +504,7 @@ public class AnvilPage extends InteractiveCustomUIPage<AnvilPageEventData> {
             String overlaySelector = slotsSelector + "[" + rowIndex + "][" + slotInRow + "] #ClickOverlay";
             String iconSelector = slotsSelector + "[" + rowIndex + "][" + slotInRow + "] #Icon";
             String key = this.buildInventoryKey(sectionId, slot, itemStack);
-            
+
             EventData selectEvent = EventData.of("InventorySelect", key);
             eventBuilder.addEventBinding(CustomUIEventBindingType.Activating, selector,
                     selectEvent, false);
@@ -485,7 +525,7 @@ public class AnvilPage extends InteractiveCustomUIPage<AnvilPageEventData> {
             return Message.raw("No preview").color(COLOR_MUTED);
         }
 
-        AnvilCustomizationData customization = AnvilCustomizationData.fromItemStack(reference);
+        EngravingTableCustomizationData customization = EngravingTableCustomizationData.fromItemStack(reference);
         String name = this.resolveCurrentDisplayName(reference, customization);
         Message message = Message.raw(name);
         if (customization.getNameColor() != null) {
@@ -501,9 +541,9 @@ public class AnvilPage extends InteractiveCustomUIPage<AnvilPageEventData> {
             return Message.raw("No enchantment glow available").color(COLOR_MUTED);
         }
 
-        AnvilColorOption previewColor = this.hasPendingGlowChange(primary)
+        EngravingTableColorOption previewColor = this.hasPendingGlowChange(primary)
                 ? this.selectedGlowColor
-                : AnvilCustomizationData.fromItemStack(primary).getGlowColorOrDefault();
+                : EngravingTableCustomizationData.fromItemStack(primary).getGlowColorOrDefault();
         return Message.raw(previewColor.getDisplayName()).color(previewColor.getHexColor());
     }
 
@@ -568,7 +608,7 @@ public class AnvilPage extends InteractiveCustomUIPage<AnvilPageEventData> {
                 if (ScrollMergeHelper.isScroll(primary)) {
                     return new StatusInfo("Scroll ready for rename or merge.", COLOR_MUTED);
                 }
-                return new StatusInfo("No pending anvil changes.", COLOR_MUTED);
+                return new StatusInfo("No pending engravingTable changes.", COLOR_MUTED);
             }
 
             List<PendingCost> costs = this.buildRequiredCosts();
@@ -605,7 +645,7 @@ public class AnvilPage extends InteractiveCustomUIPage<AnvilPageEventData> {
         }
 
         FinalCustomization finalCustomization = this.buildFinalCustomization(primary);
-        ItemStack result = AnvilCustomizationData.applyToItem(
+        ItemStack result = EngravingTableCustomizationData.applyToItem(
                 primary,
                 finalCustomization.customName(),
                 finalCustomization.nameColor(),
@@ -625,16 +665,17 @@ public class AnvilPage extends InteractiveCustomUIPage<AnvilPageEventData> {
 
     @Nonnull
     private FinalCustomization buildFinalCustomization(@Nonnull ItemStack primary) {
-        AnvilCustomizationData existing = AnvilCustomizationData.fromItemStack(primary);
+        EngravingTableCustomizationData existing = EngravingTableCustomizationData.fromItemStack(primary);
         String defaultName = this.resolveBaseItemName(primary);
         String trimmedName = this.editableName.trim();
 
         String finalCustomName = trimmedName.equals(defaultName) ? null : trimmedName;
-        AnvilColorOption finalNameColor = this.selectedNameColor == AnvilColorOption.DEFAULT_NAME_COLOR
+        EngravingTableColorOption finalNameColor = this.selectedNameColor == EngravingTableColorOption.DEFAULT_NAME_COLOR
                 ? null
                 : this.selectedNameColor;
-        AnvilColorOption finalGlowColor = this.canEditGlow(primary)
-                ? (this.selectedGlowColor == AnvilColorOption.DEFAULT_GLOW_COLOR ? null : this.selectedGlowColor)
+        EngravingTableColorOption finalGlowColor = this.canEditGlow(primary)
+                ? (this.selectedGlowColor == EngravingTableColorOption.DEFAULT_GLOW_COLOR ? null
+                        : this.selectedGlowColor)
                 : existing.getGlowColor();
 
         return new FinalCustomization(finalCustomName, finalNameColor, finalGlowColor);
@@ -653,7 +694,7 @@ public class AnvilPage extends InteractiveCustomUIPage<AnvilPageEventData> {
             return false;
         }
 
-        AnvilCustomizationData customization = AnvilCustomizationData.fromItemStack(primary);
+        EngravingTableCustomizationData customization = EngravingTableCustomizationData.fromItemStack(primary);
         String currentDisplayName = this.resolveCurrentDisplayName(primary, customization);
         return !trimmedName.equals(currentDisplayName);
     }
@@ -662,7 +703,8 @@ public class AnvilPage extends InteractiveCustomUIPage<AnvilPageEventData> {
         if (!this.isCustomizationMode() || ItemStack.isEmpty(primary)) {
             return false;
         }
-        AnvilColorOption currentColor = AnvilCustomizationData.fromItemStack(primary).getNameColorOrDefault();
+        EngravingTableColorOption currentColor = EngravingTableCustomizationData.fromItemStack(primary)
+                .getNameColorOrDefault();
         return this.selectedNameColor != currentColor;
     }
 
@@ -670,7 +712,8 @@ public class AnvilPage extends InteractiveCustomUIPage<AnvilPageEventData> {
         if (!this.canEditGlow(primary)) {
             return false;
         }
-        AnvilColorOption currentGlowColor = AnvilCustomizationData.fromItemStack(primary).getGlowColorOrDefault();
+        EngravingTableColorOption currentGlowColor = EngravingTableCustomizationData.fromItemStack(primary)
+                .getGlowColorOrDefault();
         return this.selectedGlowColor != currentGlowColor;
     }
 
@@ -784,7 +827,7 @@ public class AnvilPage extends InteractiveCustomUIPage<AnvilPageEventData> {
         TooltipBridge.refreshPlayer(this.playerRef.getUuid());
         this.playerRef.sendMessage(Message.raw(mergeMode
                 ? "Merged the scrolls."
-                : "Applied the anvil changes."));
+                : "Applied the engravingTable changes."));
         player.getPageManager().setPage(ref, store, Page.None);
     }
 
@@ -893,7 +936,8 @@ public class AnvilPage extends InteractiveCustomUIPage<AnvilPageEventData> {
     }
 
     @Nullable
-    private String resolveI18nName(@Nonnull I18nModule i18nModule, @Nullable String language, @Nonnull String itemNameKey) {
+    private String resolveI18nName(@Nonnull I18nModule i18nModule, @Nullable String language,
+            @Nonnull String itemNameKey) {
         if (language == null || language.isBlank()) {
             return null;
         }
@@ -929,7 +973,8 @@ public class AnvilPage extends InteractiveCustomUIPage<AnvilPageEventData> {
         if (language == null || language.isBlank()) {
             return null;
         }
-        Map<String, String> messages = ASSET_LANGUAGE_CACHE.computeIfAbsent(language, AnvilPage::loadAssetLanguage);
+        Map<String, String> messages = ASSET_LANGUAGE_CACHE.computeIfAbsent(language,
+                EngravingTablePage::loadAssetLanguage);
         String resolved = messages.get(itemNameKey);
         if (resolved == null && itemNameKey.startsWith("server.")) {
             resolved = messages.get(itemNameKey.substring(7));
@@ -1012,7 +1057,8 @@ public class AnvilPage extends InteractiveCustomUIPage<AnvilPageEventData> {
     }
 
     @Nonnull
-    private String resolveCurrentDisplayName(@Nonnull ItemStack itemStack, @Nonnull AnvilCustomizationData customization) {
+    private String resolveCurrentDisplayName(@Nonnull ItemStack itemStack,
+            @Nonnull EngravingTableCustomizationData customization) {
         if (customization.getCustomName() != null && !customization.getCustomName().isBlank()) {
             String customName = customization.getCustomName();
             if (this.looksLikeTranslationKey(customName)) {
@@ -1104,7 +1150,7 @@ public class AnvilPage extends InteractiveCustomUIPage<AnvilPageEventData> {
     }
 
     @Nonnull
-    private String getButtonTextColor(@Nonnull AnvilColorOption colorOption) {
+    private String getButtonTextColor(@Nonnull EngravingTableColorOption colorOption) {
         return switch (colorOption) {
             case RED, BLUE, PURPLE -> "#ffffff";
             default -> "#1c1c1c";
@@ -1193,7 +1239,8 @@ public class AnvilPage extends InteractiveCustomUIPage<AnvilPageEventData> {
         Inventory inventory = player.getInventory();
         this.appendInventorySources(sources, inventory.getHotbar(), "Hotbar", InventoryComponent.HOTBAR_SECTION_ID);
         this.appendInventorySources(sources, inventory.getStorage(), "Storage", InventoryComponent.STORAGE_SECTION_ID);
-        this.appendInventorySources(sources, inventory.getBackpack(), "Backpack", InventoryComponent.BACKPACK_SECTION_ID);
+        this.appendInventorySources(sources, inventory.getBackpack(), "Backpack",
+                InventoryComponent.BACKPACK_SECTION_ID);
         return sources;
     }
 
@@ -1244,8 +1291,8 @@ public class AnvilPage extends InteractiveCustomUIPage<AnvilPageEventData> {
 
     private record FinalCustomization(
             @Nullable String customName,
-            @Nullable AnvilColorOption nameColor,
-            @Nullable AnvilColorOption glowColor) {
+            @Nullable EngravingTableColorOption nameColor,
+            @Nullable EngravingTableColorOption glowColor) {
     }
 
     private record PendingCost(@Nonnull ItemStack itemStack, @Nonnull String displayText) {

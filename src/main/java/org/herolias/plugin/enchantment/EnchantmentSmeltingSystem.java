@@ -12,7 +12,7 @@ import com.hypixel.hytale.component.system.EntityEventSystem;
 import com.hypixel.hytale.logger.HytaleLogger;
 import com.hypixel.hytale.math.util.ChunkUtil;
 import com.hypixel.hytale.math.vector.Rotation3f;
-import com.hypixel.hytale.math.vector.Rotation3fc;
+
 import org.joml.Vector3d;
 import org.joml.Vector3i;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockBreakingDropType;
@@ -174,7 +174,7 @@ public class EnchantmentSmeltingSystem extends EntityEventSystem<EntityStore, Br
 
         Vector3d dropPosition = new Vector3d(targetBlock.x() + 0.5, targetBlock.y(), targetBlock.z() + 0.5);
         Holder<EntityStore>[] itemEntities = ItemComponent.generateItemDrops(commandBuffer, smeltedDrops, dropPosition,
-                Rotation3f.ZERO);
+                new Rotation3f());
         if (itemEntities.length > 0) {
             commandBuffer.addEntities(itemEntities, AddReason.SPAWN);
         }

@@ -11,8 +11,8 @@ import com.hypixel.hytale.server.core.asset.type.entityeffect.config.EntityEffec
 import com.hypixel.hytale.server.core.entity.effect.EffectControllerComponent;
 import com.hypixel.hytale.server.core.asset.type.item.config.Item;
 import org.herolias.plugin.SimpleEnchanting;
-import org.herolias.plugin.anvil.AnvilCustomizationData;
-import org.herolias.plugin.anvil.AnvilColorOption;
+import org.herolias.plugin.engravingtable.EngravingTableCustomizationData;
+import org.herolias.plugin.engravingtable.EngravingTableColorOption;
 
 public class EnchantmentVisualsHelper {
 
@@ -134,7 +134,7 @@ public class EnchantmentVisualsHelper {
     }
 
     private static float getGlowStatValue(ItemStack itemStack, boolean singleGlow) {
-        AnvilColorOption glowColor = AnvilCustomizationData.fromItemStack(itemStack).getGlowColorOrDefault();
+        EngravingTableColorOption glowColor = EngravingTableCustomizationData.fromItemStack(itemStack).getGlowColorOrDefault();
         return glowColor.getGlowStatValue(singleGlow);
     }
 

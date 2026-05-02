@@ -1,9 +1,9 @@
 {
     "TranslationProperties": {
-        "Name": "server.items.Enchanting_Anvil.name",
-        "Description": "server.items.Enchanting_Anvil.description"
+        "Name": "server.items.EngravingTable.name",
+        "Description": "server.items.EngravingTable.description"
     },
-    "Icon": "Icons/ItemsGenerated/Enchanting_Anvil.png",
+    "Icon": "Icons/ItemsGenerated/Engraving_Table.png",
     "Categories": [
         "Furniture.Benches"
     ],
@@ -11,14 +11,14 @@
         "Material": "Solid",
         "DrawType": "Model",
         "Opacity": "Transparent",
-        "CustomModel": "Blocks/Benches/Anvil.blockymodel",
+        "CustomModel": "Blocks/Benches/Engraving_Table.blockymodel",
         "CustomModelTexture": [
             {
-                "Texture": "Blocks/Benches/Anvil_Texture.png",
+                "Texture": "Blocks/Benches/Engraving_Table_Texture.png",
                 "Weight": 1
             }
         ],
-        "HitboxType": "Bench_Alchemy",
+        "HitboxType": "Bench_Salvage",
         "VariantRotation": "NESW",
         "Bench": {
             "Type": "Crafting",
@@ -32,7 +32,7 @@
             "LocalOpenSoundEventId": "SFX_Bench_Placeholder",
             "LocalCloseSoundEventId": "SFX_Bench_Placeholder",
             "CompletedSoundEventId": "SFX_Bench_Placeholder",
-            "Id": "EnchantingAnvilBench"
+            "Id": "EngravingTableBench"
         },
         "BlockEntity": {
             "Components": {
@@ -76,7 +76,7 @@
     "Tags": {
         "Type": [
             "Bench",
-            "Anvil"
+            "EngravingTable"
         ]
     },
     "MaxStack": 1,

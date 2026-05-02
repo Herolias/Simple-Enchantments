@@ -3,7 +3,7 @@ package org.herolias.plugin.enchantment;
 import com.hypixel.hytale.logger.HytaleLogger;
 import org.bson.BsonDocument;
 import org.bson.BsonValue;
-import org.herolias.plugin.anvil.AnvilCustomizationData;
+import org.herolias.plugin.engravingtable.EngravingTableCustomizationData;
 import org.herolias.tooltips.api.ItemVisualOverrides;
 import org.herolias.tooltips.api.TooltipData;
 import org.herolias.tooltips.api.TooltipProvider;
@@ -69,7 +69,7 @@ public class EnchantmentTooltipProvider implements TooltipProvider {
 
         // Quick string-contains check to avoid BSON parsing for untouched items.
         if (!metadata.contains("\"" + EnchantmentData.METADATA_KEY + "\"")
-                && !metadata.contains("\"" + AnvilCustomizationData.METADATA_KEY + "\"")) {
+                && !metadata.contains("\"" + EngravingTableCustomizationData.METADATA_KEY + "\"")) {
             return null;
         }
 
@@ -81,7 +81,7 @@ public class EnchantmentTooltipProvider implements TooltipProvider {
         }
 
         EnchantmentData enchantmentData = parseEnchantments(document);
-        AnvilCustomizationData customization = AnvilCustomizationData.fromMetadataDocument(document);
+        EngravingTableCustomizationData customization = EngravingTableCustomizationData.fromMetadataDocument(document);
         if ((enchantmentData == null || enchantmentData.isEmpty()) && customization.isEmpty()) {
             return null;
         }
@@ -96,7 +96,7 @@ public class EnchantmentTooltipProvider implements TooltipProvider {
         customization.appendHashInput(hashBuilder);
 
         TooltipData.Builder builder = TooltipData.builder()
-                .hashInput(hashBuilder.length() == 0 ? "simple-enchantments:anvil" : hashBuilder.toString());
+                .hashInput(hashBuilder.length() == 0 ? "simple-enchantments:engraving_table" : hashBuilder.toString());
 
         if (customization.getCustomName() != null) {
             builder.nameOverride(customization.getCustomName());

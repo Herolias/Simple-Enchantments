@@ -1,4 +1,4 @@
-package org.herolias.plugin.anvil;
+package org.herolias.plugin.engravingtable;
 
 import com.hypixel.hytale.component.Archetype;
 import com.hypixel.hytale.component.ArchetypeChunk;
@@ -19,13 +19,14 @@ import org.herolias.plugin.enchantment.EnchantmentManager;
 
 import javax.annotation.Nonnull;
 
-public class AnvilInteractionSystem extends EntityEventSystem<EntityStore, UseBlockEvent.Pre> {
-    public static final String BLOCK_ID = "Enchanting_Anvil";
+public class EngravingTableInteractionSystem extends EntityEventSystem<EntityStore, UseBlockEvent.Pre> {
+    public static final String BLOCK_ID = "Engraving_Table";
 
     private final SimpleEnchanting plugin;
     private final EnchantmentManager enchantmentManager;
 
-    public AnvilInteractionSystem(@Nonnull SimpleEnchanting plugin, @Nonnull EnchantmentManager enchantmentManager) {
+    public EngravingTableInteractionSystem(@Nonnull SimpleEnchanting plugin,
+            @Nonnull EnchantmentManager enchantmentManager) {
         super(UseBlockEvent.Pre.class);
         this.plugin = plugin;
         this.enchantmentManager = enchantmentManager;
@@ -65,7 +66,7 @@ public class AnvilInteractionSystem extends EntityEventSystem<EntityStore, UseBl
         }
 
         event.setCancelled(true);
-        AnvilPage page = new AnvilPage(playerRef, this.plugin, this.enchantmentManager);
+        EngravingTablePage page = new EngravingTablePage(playerRef, this.plugin, this.enchantmentManager);
         player.getPageManager().openCustomPage(ref, store, page);
     }
 }

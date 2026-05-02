@@ -1,13 +1,13 @@
-package org.herolias.plugin.anvil;
+package org.herolias.plugin.engravingtable;
 
 import com.hypixel.hytale.codec.Codec;
 import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
 
-public class AnvilPageEventData {
-    public static final BuilderCodec<AnvilPageEventData> CODEC = BuilderCodec.builder(
-            AnvilPageEventData.class,
-            AnvilPageEventData::new)
+public class EngravingTablePageEventData {
+    public static final BuilderCodec<EngravingTablePageEventData> CODEC = BuilderCodec.builder(
+            EngravingTablePageEventData.class,
+            EngravingTablePageEventData::new)
             .addField(new KeyedCodec<>("Close", Codec.STRING),
                     (entry, s) -> entry.close = s, entry -> entry.close)
             .addField(new KeyedCodec<>("Take", Codec.STRING),
@@ -38,6 +38,6 @@ public class AnvilPageEventData {
     public String nameInputTrigger;
     public String nameInput;
 
-    public AnvilPageEventData() {
+    public EngravingTablePageEventData() {
     }
 }

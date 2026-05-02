@@ -1,9 +1,9 @@
-package org.herolias.plugin.anvil;
+package org.herolias.plugin.engravingtable;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public enum AnvilColorOption {
+public enum EngravingTableColorOption {
     RED(1, "red", "Red", "Red", "#ff5a5a", "Plant_Petals_Red", "Ingredient_Crystal_Red"),
     BLUE(2, "blue", "Blue", "Blue", "#5aa6ff", "Plant_Petals_Blue", "Ingredient_Crystal_Blue"),
     GREEN(3, "green", "Green", "Green", "#58d27d", "Plant_Petals_Green", "Ingredient_Crystal_Green"),
@@ -13,8 +13,8 @@ public enum AnvilColorOption {
     CYAN(7, "cyan", "Cyan", "Cyan", "#63ecff", "Plant_Petals_Cyan", "Ingredient_Crystal_Cyan"),
     WHITE(8, "white", "White", "White", "#ffffff", "Plant_Petals_White", "Ingredient_Crystal_White");
 
-    public static final AnvilColorOption DEFAULT_NAME_COLOR = WHITE;
-    public static final AnvilColorOption DEFAULT_GLOW_COLOR = PURPLE;
+    public static final EngravingTableColorOption DEFAULT_NAME_COLOR = WHITE;
+    public static final EngravingTableColorOption DEFAULT_GLOW_COLOR = PURPLE;
 
     private final int glowIndex;
     private final String id;
@@ -24,7 +24,7 @@ public enum AnvilColorOption {
     private final String petalItemId;
     private final String crystalItemId;
 
-    AnvilColorOption(
+    EngravingTableColorOption(
             int glowIndex,
             @Nonnull String id,
             @Nonnull String displayName,
@@ -88,11 +88,11 @@ public enum AnvilColorOption {
     }
 
     @Nullable
-    public static AnvilColorOption fromId(@Nullable String id) {
+    public static EngravingTableColorOption fromId(@Nullable String id) {
         if (id == null || id.isBlank()) {
             return null;
         }
-        for (AnvilColorOption option : values()) {
+        for (EngravingTableColorOption option : values()) {
             if (option.id.equalsIgnoreCase(id)) {
                 return option;
             }
@@ -101,8 +101,8 @@ public enum AnvilColorOption {
     }
 
     @Nonnull
-    public static AnvilColorOption fromIdOrDefault(@Nullable String id, @Nonnull AnvilColorOption fallback) {
-        AnvilColorOption option = fromId(id);
+    public static EngravingTableColorOption fromIdOrDefault(@Nullable String id, @Nonnull EngravingTableColorOption fallback) {
+        EngravingTableColorOption option = fromId(id);
         return option != null ? option : fallback;
     }
 }

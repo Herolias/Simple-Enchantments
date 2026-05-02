@@ -445,7 +445,7 @@ public class EnchantmentSalvageSystem extends EntityEventSystem<EntityStore, Inv
                     com.hypixel.hytale.component.Holder<com.hypixel.hytale.server.core.universe.world.storage.EntityStore>[] itemEntityHolders = com.hypixel.hytale.server.core.modules.entity.item.ItemComponent
                             .generateItemDrops(
                                     entityStore, java.util.Collections.singletonList(scrollStack), dropPosition,
-                                    com.hypixel.hytale.math.vector.Rotation3f.ZERO);
+                                    new com.hypixel.hytale.math.vector.Rotation3f());
                     if (itemEntityHolders.length > 0) {
                         if (world.isAlive()) {
                             try {

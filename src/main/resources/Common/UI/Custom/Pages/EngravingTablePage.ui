@@ -151,7 +151,7 @@ Group {
                   ItemGrid #PrimaryDropGrid {
                     Anchor: (Width: 58, Height: 58, Horizontal: 0, Vertical: 0);
                     SlotsPerRow: 1;
-                    HitTestVisible: false;
+                    HitTestVisible: true;
                     Style: (
                       SlotSize: 58,
                       SlotIconSize: 52,
@@ -219,7 +219,7 @@ Group {
                   ItemGrid #SecondaryDropGrid {
                     Anchor: (Width: 58, Height: 58, Horizontal: 0, Vertical: 0);
                     SlotsPerRow: 1;
-                    HitTestVisible: false;
+                    HitTestVisible: true;
                     Style: (
                       SlotSize: 58,
                       SlotIconSize: 52,
@@ -287,7 +287,7 @@ Group {
                   ItemGrid #PreviewGrid {
                     Anchor: (Width: 58, Height: 58, Horizontal: 0, Vertical: 0);
                     SlotsPerRow: 1;
-                    HitTestVisible: false;
+                    HitTestVisible: true;
                     Style: (
                       SlotSize: 58,
                       SlotIconSize: 52,

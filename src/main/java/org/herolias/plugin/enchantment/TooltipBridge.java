@@ -5,6 +5,9 @@ import org.herolias.tooltips.api.DynamicTooltipsApi;
 import org.herolias.tooltips.api.DynamicTooltipsApiProvider;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 
 /**
  * Bridge class that isolates <b>all</b> compile-time references to
@@ -17,6 +20,9 @@ import javax.annotation.Nonnull;
 public final class TooltipBridge {
 
     private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
+    private static volatile Field tooltipRegistryField;
+    private static volatile Method composeMethod;
+    private static volatile boolean warnedAboutCompositionLookup;
 
     private TooltipBridge() {
     }
@@ -73,6 +79,53 @@ public final class TooltipBridge {
         DynamicTooltipsApi api = DynamicTooltipsApiProvider.get();
         if (api != null) {
             api.refreshPlayer(playerUuid);
+        }
+    }
+
+    /**
+     * Checks whether DynamicTooltipsLib has any registered provider that would
+     * virtualize this exact item state in a CustomUI.
+     * <p>
+     * The public API does not currently expose composition lookup, so this uses a
+     * small reflective bridge to avoid hard-coding Simple Enchantments metadata as
+     * the only CustomUI-safe metadata. If DynamicTooltipsLib exposes this directly
+     * later, this is the only place that needs to change.
+     */
+    public static boolean hasDynamicTooltip(
+            @Nonnull String itemId,
+            @Nullable String metadata,
+            @Nullable String language) {
+        DynamicTooltipsApi api = DynamicTooltipsApiProvider.get();
+        if (api == null) {
+            return false;
+        }
+        try {
+            Field registryField = tooltipRegistryField;
+            if (registryField == null) {
+                registryField = api.getClass().getDeclaredField("registry");
+                registryField.setAccessible(true);
+                tooltipRegistryField = registryField;
+            }
+
+            Object registry = registryField.get(api);
+            if (registry == null) {
+                return false;
+            }
+
+            Method method = composeMethod;
+            if (method == null) {
+                method = registry.getClass().getMethod("compose", String.class, String.class, String.class);
+                composeMethod = method;
+            }
+
+            return method.invoke(registry, itemId, metadata, language) != null;
+        } catch (ReflectiveOperationException | RuntimeException e) {
+            if (!warnedAboutCompositionLookup) {
+                warnedAboutCompositionLookup = true;
+                LOGGER.atWarning().log("Could not inspect DynamicTooltipsLib providers for CustomUI metadata: "
+                        + e.getMessage());
+            }
+            return false;
         }
     }
 }

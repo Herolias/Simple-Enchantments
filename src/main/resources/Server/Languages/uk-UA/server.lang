@@ -804,5 +804,5 @@ config.multiplier.poison = Шкода за Секунду
 config.multiplier.poison:duration = Тривалість (Секунди)
 config.multiplier.environmental_protection = Зменшення за Рівень
 
-items.Enchanting_Anvil.name = Enchanting Anvil
-items.Enchanting_Anvil.description = A rune anvil used to rename items and recolor enchantment glows.
+items.EngravingTable.name = Engraving Table
+items.EngravingTable.description = A rune engraving table used to rename items and recolor enchantment glows.

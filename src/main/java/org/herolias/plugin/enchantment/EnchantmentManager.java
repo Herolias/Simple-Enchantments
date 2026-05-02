@@ -1619,7 +1619,7 @@ public class EnchantmentManager {
             @Nonnull com.hypixel.hytale.component.CommandBuffer<com.hypixel.hytale.server.core.universe.world.storage.EntityStore> commandBuffer,
             @Nonnull java.util.List<ItemStack> drops,
             @Nonnull org.joml.Vector3d position) {
-        spawnDrops(commandBuffer, drops, position, com.hypixel.hytale.math.vector.Rotation3f.ZERO);
+        spawnDrops(commandBuffer, drops, position, new com.hypixel.hytale.math.vector.Rotation3f());
     }
 
     /**
@@ -1636,7 +1636,7 @@ public class EnchantmentManager {
             @Nonnull com.hypixel.hytale.component.CommandBuffer<com.hypixel.hytale.server.core.universe.world.storage.EntityStore> commandBuffer,
             @Nonnull java.util.List<ItemStack> drops,
             @Nonnull org.joml.Vector3d position,
-            @Nonnull com.hypixel.hytale.math.vector.Rotation3fc rotation) {
+            @Nonnull com.hypixel.hytale.math.vector.Rotation3f rotation) {
         if (drops == null || drops.isEmpty())
             return;
 

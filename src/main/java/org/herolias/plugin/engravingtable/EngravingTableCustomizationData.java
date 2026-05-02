@@ -1,4 +1,4 @@
-package org.herolias.plugin.anvil;
+package org.herolias.plugin.engravingtable;
 
 import com.hypixel.hytale.server.core.inventory.ItemStack;
 import org.bson.BsonDocument;
@@ -8,25 +8,25 @@ import org.bson.BsonValue;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public final class AnvilCustomizationData {
-    public static final String METADATA_KEY = "SimpleEnchantingAnvil";
+public final class EngravingTableCustomizationData {
+    public static final String METADATA_KEY = "SimpleEnchantingEngravingTable";
     private static final String NAME_KEY = "Name";
     private static final String NAME_COLOR_KEY = "NameColor";
     private static final String GLOW_COLOR_KEY = "GlowColor";
 
-    public static final AnvilCustomizationData EMPTY = new AnvilCustomizationData(null, null, null);
+    public static final EngravingTableCustomizationData EMPTY = new EngravingTableCustomizationData(null, null, null);
 
     @Nullable
     private final String customName;
     @Nullable
-    private final AnvilColorOption nameColor;
+    private final EngravingTableColorOption nameColor;
     @Nullable
-    private final AnvilColorOption glowColor;
+    private final EngravingTableColorOption glowColor;
 
-    public AnvilCustomizationData(
+    public EngravingTableCustomizationData(
             @Nullable String customName,
-            @Nullable AnvilColorOption nameColor,
-            @Nullable AnvilColorOption glowColor) {
+            @Nullable EngravingTableColorOption nameColor,
+            @Nullable EngravingTableColorOption glowColor) {
         this.customName = normalizeName(customName);
         this.nameColor = nameColor;
         this.glowColor = glowColor;
@@ -38,12 +38,12 @@ public final class AnvilCustomizationData {
     }
 
     @Nullable
-    public AnvilColorOption getNameColor() {
+    public EngravingTableColorOption getNameColor() {
         return this.nameColor;
     }
 
     @Nullable
-    public AnvilColorOption getGlowColor() {
+    public EngravingTableColorOption getGlowColor() {
         return this.glowColor;
     }
 
@@ -52,29 +52,29 @@ public final class AnvilCustomizationData {
     }
 
     @Nonnull
-    public AnvilColorOption getNameColorOrDefault() {
-        return this.nameColor != null ? this.nameColor : AnvilColorOption.DEFAULT_NAME_COLOR;
+    public EngravingTableColorOption getNameColorOrDefault() {
+        return this.nameColor != null ? this.nameColor : EngravingTableColorOption.DEFAULT_NAME_COLOR;
     }
 
     @Nonnull
-    public AnvilColorOption getGlowColorOrDefault() {
-        return this.glowColor != null ? this.glowColor : AnvilColorOption.DEFAULT_GLOW_COLOR;
+    public EngravingTableColorOption getGlowColorOrDefault() {
+        return this.glowColor != null ? this.glowColor : EngravingTableColorOption.DEFAULT_GLOW_COLOR;
     }
 
     public void appendHashInput(@Nonnull StringBuilder hashBuilder) {
         if (this.customName != null) {
-            hashBuilder.append("|anvilName:").append(this.customName);
+            hashBuilder.append("|engravingTableName:").append(this.customName);
         }
         if (this.nameColor != null) {
-            hashBuilder.append("|anvilNameColor:").append(this.nameColor.getId());
+            hashBuilder.append("|engravingTableNameColor:").append(this.nameColor.getId());
         }
         if (this.glowColor != null) {
-            hashBuilder.append("|anvilGlowColor:").append(this.glowColor.getId());
+            hashBuilder.append("|engravingTableGlowColor:").append(this.glowColor.getId());
         }
     }
 
     @Nonnull
-    public static AnvilCustomizationData fromItemStack(@Nullable ItemStack itemStack) {
+    public static EngravingTableCustomizationData fromItemStack(@Nullable ItemStack itemStack) {
         if (ItemStack.isEmpty(itemStack)) {
             return EMPTY;
         }
@@ -83,7 +83,7 @@ public final class AnvilCustomizationData {
     }
 
     @Nonnull
-    public static AnvilCustomizationData fromMetadataDocument(@Nullable BsonDocument metadata) {
+    public static EngravingTableCustomizationData fromMetadataDocument(@Nullable BsonDocument metadata) {
         if (metadata == null || metadata.isEmpty()) {
             return EMPTY;
         }
@@ -94,21 +94,21 @@ public final class AnvilCustomizationData {
 
         BsonDocument customDocument = rawValue.asDocument();
         String customName = getString(customDocument, NAME_KEY);
-        AnvilColorOption nameColor = AnvilColorOption.fromId(getString(customDocument, NAME_COLOR_KEY));
-        AnvilColorOption glowColor = AnvilColorOption.fromId(getString(customDocument, GLOW_COLOR_KEY));
+        EngravingTableColorOption nameColor = EngravingTableColorOption.fromId(getString(customDocument, NAME_COLOR_KEY));
+        EngravingTableColorOption glowColor = EngravingTableColorOption.fromId(getString(customDocument, GLOW_COLOR_KEY));
 
         if (customName == null && nameColor == null && glowColor == null) {
             return EMPTY;
         }
-        return new AnvilCustomizationData(customName, nameColor, glowColor);
+        return new EngravingTableCustomizationData(customName, nameColor, glowColor);
     }
 
     @Nonnull
     public static ItemStack applyToItem(
             @Nonnull ItemStack itemStack,
             @Nullable String customName,
-            @Nullable AnvilColorOption nameColor,
-            @Nullable AnvilColorOption glowColor) {
+            @Nullable EngravingTableColorOption nameColor,
+            @Nullable EngravingTableColorOption glowColor) {
         BsonDocument customDocument = new BsonDocument();
         String normalizedName = normalizeName(customName);
         if (normalizedName != null) {

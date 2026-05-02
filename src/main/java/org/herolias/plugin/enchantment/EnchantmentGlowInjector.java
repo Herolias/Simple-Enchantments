@@ -8,7 +8,7 @@ import com.hypixel.hytale.protocol.ValueType;
 import com.hypixel.hytale.server.core.asset.type.item.config.Item;
 import com.hypixel.hytale.server.core.asset.type.item.config.ItemAppearanceCondition;
 import org.herolias.plugin.SimpleEnchanting;
-import org.herolias.plugin.anvil.AnvilColorOption;
+import org.herolias.plugin.engravingtable.EngravingTableColorOption;
 
 import javax.annotation.Nonnull;
 import java.lang.reflect.Field;
@@ -182,7 +182,7 @@ public class EnchantmentGlowInjector {
             @Nonnull String statKey,
             boolean smallGlow,
             boolean includeSingleGlow) throws IllegalAccessException {
-        for (AnvilColorOption colorOption : AnvilColorOption.values()) {
+        for (EngravingTableColorOption colorOption : EngravingTableColorOption.values()) {
             injectGlowCondition(
                     item,
                     statKey,

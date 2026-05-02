@@ -1,4 +1,4 @@
-package org.herolias.plugin.anvil;
+package org.herolias.plugin.engravingtable;
 
 import com.hypixel.hytale.server.core.inventory.ItemStack;
 import org.herolias.plugin.enchantment.EnchantmentData;
