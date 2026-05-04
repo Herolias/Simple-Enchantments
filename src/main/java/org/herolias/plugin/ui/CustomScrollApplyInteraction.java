@@ -57,6 +57,16 @@ public class CustomScrollApplyInteraction extends ChoiceInteraction {
         }
 
         PageManager pageManager = playerComponent.getPageManager();
+
+        // Re-validate the held scroll is still in the expected slot (prevents drop-while-open exploit)
+        ItemContainer scrollContainer = this.heldItemContext.getContainer();
+        ItemStack currentScrollItem = scrollContainer.getItemStack(this.heldItemContext.getSlot());
+        if (ItemStack.isEmpty(currentScrollItem)
+                || !currentScrollItem.isStackableWith(this.heldItemContext.getItemStack())) {
+            pageManager.setPage(ref, store, Page.None);
+            return;
+        }
+
         ItemStack targetItemStack = this.itemContext.getItemStack();
         if (ItemStack.isEmpty(targetItemStack)) {
             pageManager.setPage(ref, store, Page.None);
@@ -68,10 +78,41 @@ public class CustomScrollApplyInteraction extends ChoiceInteraction {
         String lang = enchantmentManager.getPlugin().getUserSettingsManager().getLanguage(playerRef.getUuid());
         String clientLang = playerRef.getLanguage();
 
-        // 1. Apply enchantment to target item
+        // 2. Update/remove the scroll FIRST, before applying the enchantment
+        ItemStack scrollItemStack = this.heldItemContext.getItemStack();
+        short scrollSlot = this.heldItemContext.getSlot();
+        EnchantmentData scrollData = enchantmentManager.getEnchantmentsFromItem(scrollItemStack);
+        EnchantmentData updatedData = scrollData.copy();
+        updatedData.removeEnchantment(enchantmentType);
+
+        // Store the original scroll state for rollback
+        ItemStackSlotTransaction scrollTransaction;
+        if (updatedData.isEmpty()) {
+            // No enchantments will remain — remove the scroll
+            scrollTransaction = scrollContainer.removeItemStackFromSlot(scrollSlot, scrollItemStack, 1);
+        } else {
+            // Update scroll metadata with remaining enchantments
+            ItemStack updatedScroll = scrollItemStack.withMetadata(EnchantmentData.METADATA_KEY,
+                    updatedData.toBson());
+            scrollTransaction = scrollContainer.replaceItemStackInSlot(scrollSlot, scrollItemStack, updatedScroll);
+        }
+        if (!scrollTransaction.succeeded()) {
+            pageManager.setPage(ref, store, Page.None);
+            return;
+        }
+
+        // 3. Apply enchantment to target item
         org.herolias.plugin.enchantment.EnchantmentApplicationResult result = enchantmentManager
                 .applyEnchantmentToItem(playerRef, targetItemStack, enchantmentType, targetLevel, true);
         if (!result.success()) {
+            // Rollback: restore the scroll
+            if (updatedData.isEmpty()) {
+                SimpleItemContainer.addOrDropItemStack(store, ref, scrollContainer, scrollSlot,
+                        scrollItemStack.withQuantity(1));
+            } else {
+                scrollContainer.replaceItemStackInSlot(scrollSlot,
+                        scrollContainer.getItemStack(scrollSlot), scrollItemStack);
+            }
             playerRef.sendMessage(Message.raw(result.message()));
             pageManager.setPage(ref, store, Page.None);
             return;
@@ -79,32 +120,20 @@ public class CustomScrollApplyInteraction extends ChoiceInteraction {
 
         ItemStack enchantedItem = result.item();
 
-        // 2. Replace the target item with the enchanted version
+        // 4. Replace the target item with the enchanted version
         ItemStackSlotTransaction replaceTransaction = this.itemContext.getContainer()
                 .replaceItemStackInSlot(this.itemContext.getSlot(), targetItemStack, enchantedItem);
         if (!replaceTransaction.succeeded()) {
+            // Rollback: restore the scroll
+            if (updatedData.isEmpty()) {
+                SimpleItemContainer.addOrDropItemStack(store, ref, scrollContainer, scrollSlot,
+                        scrollItemStack.withQuantity(1));
+            } else {
+                scrollContainer.replaceItemStackInSlot(scrollSlot,
+                        scrollContainer.getItemStack(scrollSlot), scrollItemStack);
+            }
             pageManager.setPage(ref, store, Page.None);
             return;
-        }
-
-        // 3. Remove the enchantment from the Custom Scroll
-        ItemStack scrollItemStack = this.heldItemContext.getItemStack();
-        if (!ItemStack.isEmpty(scrollItemStack)) {
-            EnchantmentData scrollData = enchantmentManager.getEnchantmentsFromItem(scrollItemStack);
-            EnchantmentData updatedData = scrollData.copy();
-            updatedData.removeEnchantment(enchantmentType);
-
-            if (updatedData.isEmpty()) {
-                // No enchantments left — remove the scroll
-                ItemContainer scrollContainer = this.heldItemContext.getContainer();
-                scrollContainer.removeItemStackFromSlot(this.heldItemContext.getSlot(), scrollItemStack, 1);
-            } else {
-                // Update scroll metadata with remaining enchantments
-                ItemStack updatedScroll = scrollItemStack.withMetadata(EnchantmentData.METADATA_KEY,
-                        updatedData.toBson());
-                ItemContainer scrollContainer = this.heldItemContext.getContainer();
-                scrollContainer.replaceItemStackInSlot(this.heldItemContext.getSlot(), scrollItemStack, updatedScroll);
-            }
         }
 
         // 4. Send success message and close UI

@@ -12,12 +12,10 @@ import com.hypixel.hytale.server.core.entity.EntityUtils;
 import com.hypixel.hytale.server.core.inventory.Inventory;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
 import com.hypixel.hytale.server.core.inventory.container.ItemContainer;
-import com.hypixel.hytale.server.core.inventory.container.CombinedItemContainer;
 import com.hypixel.hytale.server.core.inventory.transaction.Transaction;
 import com.hypixel.hytale.server.core.inventory.transaction.SlotTransaction;
 import com.hypixel.hytale.server.core.inventory.transaction.ItemStackTransaction;
 import com.hypixel.hytale.server.core.inventory.transaction.ItemStackSlotTransaction;
-import com.hypixel.hytale.server.core.asset.type.item.config.Item;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -53,15 +51,19 @@ public class EnchantmentEternalShotSystem extends AbstractRefundSystem {
 
     private static class ConsumedAmmoRecord {
         final ItemStack ammo;
-        final long timestamp;
+        int count;
+        long timestamp;
 
-        ConsumedAmmoRecord(ItemStack ammo, long timestamp) {
+        ConsumedAmmoRecord(ItemStack ammo, int count, long timestamp) {
             this.ammo = ammo;
+            this.count = count;
             this.timestamp = timestamp;
         }
     }
 
     private final Map<UUID, ConsumedAmmoRecord> consumedAmmo = new ConcurrentHashMap<>();
+    /** Tracks how many refund-additions to ignore per player (our own refunds, not vanilla cancel). */
+    private final Map<UUID, Integer> pendingRefundSkips = new ConcurrentHashMap<>();
 
     public EnchantmentEternalShotSystem(EnchantmentManager enchantmentManager) {
         this.enchantmentManager = enchantmentManager;
@@ -106,9 +108,9 @@ public class EnchantmentEternalShotSystem extends AbstractRefundSystem {
         int beforeQty = (before == null || before.isEmpty()) ? 0 : before.getQuantity();
         int afterQty = (after == null || after.isEmpty()) ? 0 : after.getQuantity();
 
-        if (beforeQty > afterQty && before != null && isAmmoItem(before)) {
+        if (beforeQty > afterQty && before != null) {
             handleAmmoRemoval(player, playerUuid, before, slotTx.getSlot());
-        } else if (afterQty > beforeQty && after != null && isAmmoItem(after)) {
+        } else if (afterQty > beforeQty && after != null) {
             handleAmmoAddition(playerUuid, after);
         }
     }
@@ -131,88 +133,95 @@ public class EnchantmentEternalShotSystem extends AbstractRefundSystem {
         if (enchantmentManager.getEnchantmentLevel(weapon, EnchantmentType.ETERNAL_SHOT) <= 0)
             return;
 
-        consumedAmmo.put(playerUuid, new ConsumedAmmoRecord(ammo.withQuantity(1), System.currentTimeMillis()));
+        // Accumulate count for batch reloads (e.g. crossbow loads 6 arrows)
+        ConsumedAmmoRecord existing = consumedAmmo.get(playerUuid);
+        if (existing != null && existing.ammo.getItemId().equals(ammo.getItemId())) {
+            existing.count++;
+            existing.timestamp = System.currentTimeMillis();
+        } else {
+            consumedAmmo.put(playerUuid, new ConsumedAmmoRecord(ammo.withQuantity(1), 1, System.currentTimeMillis()));
+        }
     }
 
     /**
-     * When ammo is added back (vanilla cancel refund), clear the tracking so
-     * the projectile spawn system won't also refund.
+     * When ammo is added back (vanilla cancel refund), decrement the tracking
+     * count so the projectile spawn system won't over-refund.
+     * Skips additions caused by our own refunds (marked via {@link #markPendingRefund}).
      */
     private void handleAmmoAddition(UUID playerUuid, ItemStack addedAmmo) {
+        // Check if this addition is from our own refund — skip it
+        Integer skips = pendingRefundSkips.get(playerUuid);
+        if (skips != null && skips > 0) {
+            int remaining = skips - 1;
+            if (remaining <= 0) {
+                pendingRefundSkips.remove(playerUuid);
+            } else {
+                pendingRefundSkips.put(playerUuid, remaining);
+            }
+            return;
+        }
+
         ConsumedAmmoRecord record = consumedAmmo.get(playerUuid);
         if (record != null && record.ammo.getItemId().equals(addedAmmo.getItemId())) {
-            consumedAmmo.remove(playerUuid);
+            record.count--;
+            if (record.count <= 0) {
+                consumedAmmo.remove(playerUuid);
+            }
         }
+    }
+
+    /**
+     * Called by {@link EnchantmentProjectileSpeedSystem} before refunding ammo
+     * to prevent the resulting inventory addition from being treated as a
+     * vanilla cancel refund.
+     */
+    public void markPendingRefund(@Nonnull UUID playerUuid) {
+        pendingRefundSkips.merge(playerUuid, 1, Integer::sum);
     }
 
     /**
      * Called by {@link EnchantmentProjectileSpeedSystem} when an Eternal Shot
-     * projectile is spawned. Returns and removes the tracked consumed ammo so
-     * it can be refunded to the player.
+     * projectile is spawned. Returns one unit of tracked consumed ammo.
+     * Decrements the count; only removes the record when fully consumed.
      */
     @Nullable
     public ItemStack getAndClearConsumedAmmo(@Nonnull UUID playerUuid) {
-        ConsumedAmmoRecord record = consumedAmmo.remove(playerUuid);
+        ConsumedAmmoRecord record = consumedAmmo.get(playerUuid);
         if (record == null)
             return null;
-        if (System.currentTimeMillis() - record.timestamp > TRACKING_EXPIRY_MS)
+        if (System.currentTimeMillis() - record.timestamp > TRACKING_EXPIRY_MS) {
+            consumedAmmo.remove(playerUuid);
             return null;
+        }
+        record.count--;
+        if (record.count <= 0) {
+            consumedAmmo.remove(playerUuid);
+        }
         return record.ammo;
     }
 
     /**
-     * Searches a player's combined inventory for any ammunition item.
+     * Reads the loaded ammo item ID from the weapon's metadata.
      * Used as a fallback when no tracked consumption record is available.
+     * Works for weapons that use {@link org.herolias.plugin.interaction.ConsumeAmmoInteraction}
+     * (e.g. crossbows), which stores the consumed ammo ID as "LoadedAmmoId" metadata.
      */
     @Nullable
-    public ItemStack findAmmoInInventory(@Nonnull LivingEntity entity) {
+    public ItemStack findAmmoFromWeapon(@Nonnull LivingEntity entity) {
         Inventory inventory = entity.getInventory();
         if (inventory == null)
             return null;
 
-        CombinedItemContainer combined = inventory.getCombinedHotbarFirst();
-        for (int i = 0; i < combined.getCapacity(); i++) {
-            ItemStack stack = combined.getItemStack((short) i);
-            if (stack != null && !stack.isEmpty() && isAmmoItem(stack)) {
-                return stack.withQuantity(1);
-            }
-        }
-        return null;
-    }
+        ItemStack weapon = inventory.getItemInHand();
+        if (weapon == null || weapon.isEmpty())
+            return null;
 
-    private boolean isAmmoItem(@Nonnull ItemStack itemStack) {
-        String itemId = itemStack.getItemId();
-        if (itemId == null)
-            return false;
+        String ammoId = weapon.getFromMetadataOrNull("LoadedAmmoId",
+                com.hypixel.hytale.codec.Codec.STRING);
+        if (ammoId == null)
+            return null;
 
-        String lower = itemId.toLowerCase();
-        if (lower.contains("arrow") || lower.contains("bolt") || lower.contains("ammo")
-                || lower.contains("ammunition")) {
-            return true;
-        }
-
-        try {
-            Item item = itemStack.getItem();
-            if (item != null && item.getData() != null) {
-                if (item.getData().getRawTags().containsKey("Category:Ammunition")) {
-                    return true;
-                }
-                String[] typeValues = item.getData().getRawTags().get("Type");
-                if (typeValues != null) {
-                    for (String tag : typeValues) {
-                        String tagLower = tag.toLowerCase();
-                        if (tagLower.contains("arrow") || tagLower.contains("bolt") || tagLower.contains("ammo")
-                                || tagLower.contains("ammunition") || tagLower.contains("projectile")) {
-                            return true;
-                        }
-                    }
-                }
-            }
-        } catch (Exception e) {
-            // Fall through
-        }
-
-        return false;
+        return new ItemStack(ammoId, 1);
     }
 
     @Nullable

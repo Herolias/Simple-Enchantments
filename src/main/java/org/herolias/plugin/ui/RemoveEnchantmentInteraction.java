@@ -50,6 +50,15 @@ public class RemoveEnchantmentInteraction extends ChoiceInteraction {
 
         PageManager pageManager = playerComponent.getPageManager();
 
+        // Re-validate the held scroll is still in the expected slot (prevents drop-while-open exploit)
+        ItemContainer heldContainer = this.heldItemContext.getContainer();
+        ItemStack currentHeldItem = heldContainer.getItemStack(this.heldItemContext.getSlot());
+        if (ItemStack.isEmpty(currentHeldItem)
+                || !currentHeldItem.isStackableWith(this.heldItemContext.getItemStack())) {
+            pageManager.setPage(ref, store, Page.None);
+            return;
+        }
+
         // Validate item still exists and has the enchantment
         ItemStack itemStack = this.itemContext.getItemStack();
         if (ItemStack.isEmpty(itemStack)) {

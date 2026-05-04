@@ -126,7 +126,7 @@ public class EnchantmentProjectileSpeedSystem extends RefSystem<EntityStore> {
 
         ItemStack ammo = eternalShotSystem.getAndClearConsumedAmmo(playerUuid);
         if (ammo == null) {
-            ammo = eternalShotSystem.findAmmoInInventory(player);
+            ammo = eternalShotSystem.findAmmoFromWeapon(player);
         }
 
         if (ammo == null)
@@ -136,6 +136,7 @@ public class EnchantmentProjectileSpeedSystem extends RefSystem<EntityStore> {
         if (inventory == null)
             return;
 
+        eternalShotSystem.markPendingRefund(playerUuid);
         SimpleItemContainer.addOrDropItemStack(commandBuffer, shooterRef,
                 inventory.getCombinedHotbarFirst(), ammo);
 
