@@ -1,14 +1,19 @@
 package org.herolias.plugin.command;
 
+import com.hypixel.hytale.component.Ref;
+import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.logger.HytaleLogger;
 import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.command.system.CommandContext;
 import com.hypixel.hytale.server.core.command.system.CommandSender;
-import com.hypixel.hytale.server.core.command.system.basecommands.CommandBase;
+import com.hypixel.hytale.server.core.command.system.basecommands.AbstractPlayerCommand;
 import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hypixel.hytale.server.core.inventory.Inventory;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
 import com.hypixel.hytale.server.core.inventory.container.ItemContainer;
+import com.hypixel.hytale.server.core.universe.PlayerRef;
+import com.hypixel.hytale.server.core.universe.world.World;
+import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import org.herolias.plugin.SimpleEnchanting;
 import org.herolias.plugin.enchantment.EnchantmentData;
 import org.herolias.plugin.enchantment.EnchantmentManager;
@@ -29,7 +34,7 @@ import javax.annotation.Nonnull;
  * /enchant sharpness 2 - Apply Sharpness 2
  * /enchant durability 3 - Apply Durability 3
  */
-public class EnchantCommand extends CommandBase {
+public class EnchantCommand extends AbstractPlayerCommand {
 
     private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
 
@@ -41,16 +46,20 @@ public class EnchantCommand extends CommandBase {
         this.plugin = plugin;
         this.enchantmentManager = plugin.getEnchantmentManager();
         this.setAllowsExtraArguments(true);
+        this.setPermissionGroups("hytale:WorldEditor"); // Ops only
     }
 
     @Override
-    protected void executeSync(@Nonnull CommandContext context) {
-        CommandSender sender = context.sender();
+    protected void execute(@Nonnull CommandContext context, @Nonnull Store<EntityStore> store,
+            @Nonnull Ref<EntityStore> ref, @Nonnull PlayerRef playerRef, @Nonnull World world) {
+        Player player = store.getComponent(ref, Player.getComponentType());
 
-        if (!(sender instanceof Player player)) {
-            sender.sendMessage(Message.raw("Only players can use this command."));
+        if (player == null) {
+            context.sendMessage(Message.raw("Only players can use this command."));
             return;
         }
+
+        CommandSender sender = context.sender();
 
         String rawInput = context.getInputString();
         String[] args = rawInput != null && !rawInput.isEmpty() ? rawInput.split("\\s+") : new String[0];
@@ -115,44 +124,30 @@ public class EnchantCommand extends CommandBase {
         }
 
         try {
-            final int finalLevel = level;
-            final EnchantmentType finalEnchantmentType = enchantmentType;
+            // Apply enchantment (Delegates checks to manager)
+            org.herolias.plugin.enchantment.EnchantmentApplicationResult result = enchantmentManager
+                    .applyEnchantmentToItem(playerRef, item, enchantmentType, level, true);
 
-            player.getWorld().execute(() -> {
-                try {
-                    com.hypixel.hytale.server.core.universe.PlayerRef playerRef = player.getWorld().getEntityStore()
-                            .getStore().getComponent(player.getReference(),
-                                    com.hypixel.hytale.server.core.universe.PlayerRef.getComponentType());
+            if (!result.success()) {
+                sender.sendMessage(Message.raw(result.message()));
+                return;
+            }
 
-                    // Apply enchantment (Delegates checks to manager)
-                    org.herolias.plugin.enchantment.EnchantmentApplicationResult result = enchantmentManager
-                            .applyEnchantmentToItem(playerRef, item, finalEnchantmentType, finalLevel, true);
+            // Update inventory
+            hotbar.setItemStackForSlot((short) inventory.getActiveHotbarSlot(), result.item());
 
-                    if (!result.success()) {
-                        sender.sendMessage(Message.raw(result.message()));
-                        return;
-                    }
+            // Success message
+            EnchantmentData newEnchants = enchantmentManager.getEnchantmentsFromItem(result.item());
+            StringBuilder enchantList = new StringBuilder();
+            for (var entry : newEnchants.getAllEnchantments().entrySet()) {
+                if (enchantList.length() > 0)
+                    enchantList.append(", ");
+                enchantList.append(entry.getKey().getFormattedName(entry.getValue()));
+            }
 
-                    // Update inventory
-                    hotbar.setItemStackForSlot((short) inventory.getActiveHotbarSlot(), result.item());
-
-                    // Success message
-                    EnchantmentData newEnchants = enchantmentManager.getEnchantmentsFromItem(result.item());
-                    StringBuilder enchantList = new StringBuilder();
-                    for (var entry : newEnchants.getAllEnchantments().entrySet()) {
-                        if (enchantList.length() > 0)
-                            enchantList.append(", ");
-                        enchantList.append(entry.getKey().getFormattedName(entry.getValue()));
-                    }
-
-                    sender.sendMessage(Message.raw("Enchanted! [" + enchantList + "]"));
-                    LOGGER.atInfo().log(sender.getUsername() + " enchanted " + item.getItemId() + " with "
-                            + finalEnchantmentType.getFormattedName(finalLevel));
-                } catch (Exception e) {
-                    LOGGER.atWarning().log("Failed to apply enchantment: " + e.getMessage());
-                    sender.sendMessage(Message.raw("Failed to apply enchantment: " + e.getMessage()));
-                }
-            });
+            sender.sendMessage(Message.raw("Enchanted! [" + enchantList + "]"));
+            LOGGER.atInfo().log(sender.getUsername() + " enchanted " + item.getItemId() + " with "
+                    + enchantmentType.getFormattedName(level));
 
         } catch (Exception e) {
             LOGGER.atWarning().log("Failed to apply enchantment: " + e.getMessage());

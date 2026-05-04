@@ -33,7 +33,7 @@ public class EnchantConfigCommand extends AbstractAsyncCommand {
     public EnchantConfigCommand(SimpleEnchanting plugin) {
         super("enchantconfig", "server.commands.enchantconfig.desc");
         this.plugin = plugin;
-        this.setPermissionGroup(GameMode.Creative); // Requires OP/Creative permissions
+        this.setPermissionGroups("hytale:WorldEditor"); // Ops only
     }
 
     @Override

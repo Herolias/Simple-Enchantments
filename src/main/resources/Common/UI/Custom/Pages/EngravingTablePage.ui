@@ -416,7 +416,7 @@ Group {
               TextButton #NameColorPurple { Style: @PurpleColorButtonStyle; Anchor: (Width: 70, Height: 24, Right: 6); Text: "Purple"; }
               TextButton #NameColorPink { Style: @PinkColorButtonStyle; Anchor: (Width: 70, Height: 24, Right: 6); Text: "Pink"; }
               TextButton #NameColorCyan { Style: @CyanColorButtonStyle; Anchor: (Width: 70, Height: 24, Right: 6); Text: "Cyan"; }
-              TextButton #NameColorWhite { Style: @WhiteColorButtonStyle; Anchor: (Width: 70, Height: 24); Text: "White"; }
+              TextButton #NameColorWhite { Style: @WhiteColorButtonStyle; Anchor: (Width: 70, Height: 24); Text: "Default"; }
             }
           }
         }

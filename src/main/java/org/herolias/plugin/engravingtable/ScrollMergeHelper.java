@@ -47,6 +47,10 @@ public final class ScrollMergeHelper {
         if (!isScroll(secondary)) {
             return new MergeResult(null, "Only scrolls can be placed in the extra slot.");
         }
+        
+        if (isCleansingScroll(primary) || isCleansingScroll(secondary)) {
+            return new MergeResult(null, "Cleansing scrolls cannot be merged.");
+        }
 
         EnchantmentData primaryData = extractScrollData(primary, enchantmentManager);
         EnchantmentData secondaryData = extractScrollData(secondary, enchantmentManager);
@@ -54,16 +58,56 @@ public final class ScrollMergeHelper {
             return new MergeResult(null, "Both scrolls need enchantment data.");
         }
 
-        EnchantmentData merged = trySingleEnchantUpgrade(primaryData, secondaryData);
-        if (merged == null) {
-            merged = primaryData.copy();
-            for (Map.Entry<EnchantmentType, Integer> entry : secondaryData.getAllEnchantments().entrySet()) {
-                int currentLevel = merged.getLevel(entry.getKey());
-                merged.addEnchantment(entry.getKey(), Math.max(currentLevel, entry.getValue()));
+        boolean allowSameScrollUpgrades = enchantmentManager.getPlugin().getConfigManager().getConfig().allowSameScrollUpgrades;
+
+        EnchantmentData merged = primaryData.copy();
+        boolean changed = false;
+
+        for (Map.Entry<EnchantmentType, Integer> entry : secondaryData.getAllEnchantments().entrySet()) {
+            EnchantmentType newType = entry.getKey();
+            int newLevel = entry.getValue();
+
+            int currentLevel = merged.getLevel(newType);
+
+            if (currentLevel == 0) {
+                boolean hasConflict = false;
+                for (EnchantmentType existing : merged.getAllEnchantments().keySet()) {
+                    if (newType.conflictsWith(existing)) {
+                        hasConflict = true;
+                        break;
+                    }
+                }
+                if (hasConflict) {
+                    return new MergeResult(null, "Scrolls have conflicting enchantments.");
+                }
+                merged.addEnchantment(newType, newLevel);
+                changed = true;
+            } else if (currentLevel == newLevel) {
+                if (allowSameScrollUpgrades && currentLevel < newType.getMaxLevel()) {
+                    merged.addEnchantment(newType, currentLevel + 1);
+                    changed = true;
+                } else {
+                    return new MergeResult(null, "Cannot upgrade this enchantment any further.");
+                }
+            } else {
+                if (newLevel > currentLevel) {
+                    merged.addEnchantment(newType, newLevel);
+                    changed = true;
+                }
             }
         }
 
+        if (!changed) {
+            return new MergeResult(null, "These scrolls cannot be merged to create anything new.");
+        }
+
         return new MergeResult(createResultScroll(merged), null);
+    }
+
+    private static boolean isCleansingScroll(ItemStack item) {
+        if (ItemStack.isEmpty(item)) return false;
+        ScrollIdHelper.ScrollEnchantment scrollEnch = ScrollIdHelper.getEnchantmentFromScrollId(item.getItemId());
+        return scrollEnch != null && "cleansing".equals(scrollEnch.type().getId());
     }
 
     @Nonnull
@@ -86,25 +130,6 @@ public final class ScrollMergeHelper {
         EnchantmentData data = new EnchantmentData();
         data.addEnchantment(regularScroll.type(), regularScroll.level());
         return data;
-    }
-
-    @Nullable
-    private static EnchantmentData trySingleEnchantUpgrade(
-            @Nonnull EnchantmentData primaryData,
-            @Nonnull EnchantmentData secondaryData) {
-        if (primaryData.getAllEnchantments().size() != 1 || secondaryData.getAllEnchantments().size() != 1) {
-            return null;
-        }
-
-        Map.Entry<EnchantmentType, Integer> primary = primaryData.getAllEnchantments().entrySet().iterator().next();
-        Map.Entry<EnchantmentType, Integer> secondary = secondaryData.getAllEnchantments().entrySet().iterator().next();
-        if (primary.getKey() != secondary.getKey() || !primary.getValue().equals(secondary.getValue())) {
-            return null;
-        }
-
-        EnchantmentData upgraded = new EnchantmentData();
-        upgraded.addEnchantment(primary.getKey(), primary.getValue() + 1);
-        return upgraded;
     }
 
     @Nonnull
