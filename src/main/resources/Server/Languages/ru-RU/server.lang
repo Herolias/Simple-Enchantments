@@ -697,6 +697,22 @@ items.Scroll_Environmental_Protection_III.name = Свиток Защиты от 
 
 items.Scroll_Environmental_Protection_III.description = Снижает урон от окружающей среды на 12% за элемент брони.
 
+items.Scroll_Regeneration_I.name = Свиток Регенерации
+
+items.Scroll_Regeneration_I.description = Пассивно восстанавливает {amount} HP в секунду. Только нагрудники.
+
+items.Scroll_Second_Stomach_I.name = Свиток Второго Желудка I
+
+items.Scroll_Second_Stomach_I.description = Увеличивает мгновенное исцеление на 15%.
+
+items.Scroll_Second_Stomach_II.name = Свиток Второго Желудка II
+
+items.Scroll_Second_Stomach_II.description = Увеличивает мгновенное исцеление на 30%.
+
+items.Scroll_Second_Stomach_III.name = Свиток Второго Желудка III
+
+items.Scroll_Second_Stomach_III.description = Увеличивает мгновенное исцеление на 45%.
+
 
 
 enchantment.poison.name = Яд
@@ -709,11 +725,23 @@ enchantment.environmental_protection.name = Защита от Окружающе
 
 enchantment.environmental_protection.description = Снижает урон от окружающей среды на 4% за элемент брони.
 
+enchantment.regeneration.name = Регенерация
+
+enchantment.regeneration.description = Пассивно восстанавливает {amount} HP в секунду. Только нагрудники.
+
+enchantment.second_stomach.name = Второй Желудок
+
+enchantment.second_stomach.description = Увеличивает мгновенное исцеление от еды и зелий на {amount}% за уровень. Только нагрудники.
+
 enchantment.poison.bonus = Отравляет цели ({amount} ур/с на {duration}с)
 enchantment.environmental_protection.bonus = Урон от окружающей среды снижен на {amount}%
+enchantment.regeneration.bonus = Восстанавливает {amount} HP в секунду
+enchantment.second_stomach.bonus = Мгновенное исцеление увеличено на {amount}%
 
 enchantment.poison.walkthrough = Отравляет цели при попадании, нанося {amount} урона в секунду в течение {duration} секунд. Применяется к оружию ближнего и дальнего боя. Не сочетается с Поджогом.
 enchantment.environmental_protection.walkthrough = Снижает получаемый стихийный урон и урон от окружающей среды (огонь, лёд, кактусы и другие опасности) на {amount}% за каждый элемент брони за уровень, а также пропорционально снижает интенсивность замедления от зачарования Заморозки. Применяется к броне.
+enchantment.regeneration.walkthrough = Пассивно восстанавливает {amount} HP в секунду при ношении зачарованного нагрудника. Только нагрудники.
+enchantment.second_stomach.walkthrough = Увеличивает эффективность мгновенного исцеления от еды и зелий на {amount}% за уровень. Только нагрудники.
 
 
 items.Scroll_Custom.name = Пользовательский Свиток
@@ -770,6 +798,8 @@ itemCategory.STAFF_MANA = Посохи Маны
 
 itemCategory.STAFF_ESSENCE = Посохи Эссенции
 
+itemCategory.CHESTPLATE = Нагрудники
+
 itemCategory.UNKNOWN = Неизвестно
 
 config.multiplier.sharpness = Урон за Уровень
@@ -802,5 +832,7 @@ config.multiplier.elemental_heart = Шанс Сохранения Эссенци
 config.multiplier.poison = Урон в Секунду
 config.multiplier.poison:duration = Длительность (Секунды)
 config.multiplier.environmental_protection = Снижение за Уровень
+config.multiplier.regeneration = HP В Секунду
+config.multiplier.second_stomach = Бонус За Уровень
 items.EngravingTable.name = Engraving Table
 items.EngravingTable.description = A rune engraving table used to rename items and recolor enchantment glows.

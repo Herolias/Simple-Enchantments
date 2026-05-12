@@ -456,7 +456,11 @@ public class ScrollItemGenerator {
             MaterialQuantity[] input = new MaterialQuantity[ingredients.size()];
             for (int i = 0; i < ingredients.size(); i++) {
                 ConfigIngredient ci = ingredients.get(i);
-                input[i] = new MaterialQuantity(ci.item, null, null, ci.amount, null);
+                if (ci.isResourceType()) {
+                    input[i] = new MaterialQuantity(null, ci.resourceType, null, ci.amount, null);
+                } else {
+                    input[i] = new MaterialQuantity(ci.item, null, null, ci.amount, null);
+                }
             }
 
             MaterialQuantity primaryOutput = new MaterialQuantity(scrollItemId, null, null, 1, null);

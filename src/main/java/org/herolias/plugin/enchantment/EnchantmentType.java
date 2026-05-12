@@ -152,7 +152,7 @@ public final class EnchantmentType {
     public static final EnchantmentType KNOCKBACK = builtin("knockback", "Knockback",
             "Knocks targets back", 3, false, false, 0.6,
             "Knocks targets back",
-            ItemCategory.MELEE_WEAPON);
+            ItemCategory.MELEE_WEAPON, ItemCategory.SHIELD);
 
     public static final EnchantmentType REFLECTION = builtin("reflection", "Reflection",
             "Reflects damage when blocking", 3, false, false, 0.10,
@@ -205,6 +205,16 @@ public final class EnchantmentType {
             "Reduces environmental damage and alters status effects", 3, false, false, 0.04,
             "Environmental damage reduced by {amount}%",
             ItemCategory.ARMOR);
+
+    public static final EnchantmentType REGENERATION = builtin("regeneration", "Regeneration",
+            "Passively regenerates health", 1, false, true, 0.5,
+            "Regenerates {amount} HP per second",
+            ItemCategory.CHESTPLATE);
+
+    public static final EnchantmentType SECOND_STOMACH = builtin("second_stomach", "Second Stomach",
+            "Increases instant healing from food and potions", 3, false, false, 0.15,
+            "Instant healing increased by {amount}%",
+            ItemCategory.CHESTPLATE);
 
     // ============================== Static Initialization
     // ==============================
@@ -276,6 +286,10 @@ public final class EnchantmentType {
         ENVIRONMENTAL_PROTECTION.setMultiplierDefinitions(java.util.List.of(
                 new MultiplierDefinition("environmental_protection", 0.04,
                         "config.multiplier.environmental_protection")));
+        REGENERATION.setMultiplierDefinitions(java.util.List.of(
+                new MultiplierDefinition("regeneration", 0.5, "config.multiplier.regeneration")));
+        SECOND_STOMACH.setMultiplierDefinitions(java.util.List.of(
+                new MultiplierDefinition("second_stomach", 0.15, "config.multiplier.second_stomach")));
     }
 
     // ============================== Constructors ==============================
@@ -597,8 +611,9 @@ public final class EnchantmentType {
         if (applicableCategories.contains(category)) {
             return true;
         }
-        // Allow HELMET, BOOTS, GLOVES to accept enchantments targeting ARMOR
-        if ((category == ItemCategory.HELMET || category == ItemCategory.BOOTS || category == ItemCategory.GLOVES)
+        // Allow HELMET, BOOTS, GLOVES, CHESTPLATE to accept enchantments targeting ARMOR
+        if ((category == ItemCategory.HELMET || category == ItemCategory.BOOTS
+                || category == ItemCategory.GLOVES || category == ItemCategory.CHESTPLATE)
                 && applicableCategories.contains(ItemCategory.ARMOR)) {
             return true;
         }
@@ -667,8 +682,8 @@ public final class EnchantmentType {
         if (this.equals(FREEZE)) {
             displayAmount = (float) ((1.0 - getEffectMultiplier()) * 100);
         }
-        // For burn and poison, show the raw DPS value, not percentage
-        if (this.equals(BURN) || this.equals(POISON)) {
+        // For burn, poison, and regeneration show the raw DPS/HPS value, not percentage
+        if (this.equals(BURN) || this.equals(POISON) || this.equals(REGENERATION)) {
             displayAmount = (float) getEffectMultiplier();
         }
 
@@ -753,10 +768,10 @@ public final class EnchantmentType {
             if (this.equals(FREEZE)) {
                 float slowPercent = (float) ((1.0 - getEffectMultiplier()) * 100);
                 template = template.replace("{amount}", String.valueOf(slowPercent));
-            } else if (this.equals(BURN) || this.equals(POISON)) {
-                // For burn and poison, show the raw DPS value, not percentage
-                float dps = (float) getEffectMultiplier();
-                template = template.replace("{amount}", String.valueOf(dps));
+            } else if (this.equals(BURN) || this.equals(POISON) || this.equals(REGENERATION)) {
+                // For burn, poison, and regeneration show the raw DPS/HPS value, not percentage
+                float rawValue = (float) getEffectMultiplier();
+                template = template.replace("{amount}", String.valueOf(rawValue));
             } else {
                 template = template.replace("{amount}", String.valueOf(percentage));
             }

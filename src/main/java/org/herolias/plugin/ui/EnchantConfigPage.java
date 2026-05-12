@@ -33,6 +33,7 @@ import java.util.Set;
 import java.util.Locale;
 
 import com.hypixel.hytale.server.core.asset.type.item.config.Item;
+import com.hypixel.hytale.server.core.asset.type.item.config.ResourceType;
 import com.hypixel.hytale.server.core.modules.i18n.I18nModule;
 
 /**
@@ -138,6 +139,14 @@ public class EnchantConfigPage extends InteractiveCustomUIPage<EnchantConfigPage
         } else {
             copy.enchantingTableRecipe = new java.util.ArrayList<>(defaults.enchantingTableRecipe);
         }
+
+        // Copy engraving table recipe (initialize from defaults if null)
+        if (original.engravingTableRecipe != null) {
+            copy.engravingTableRecipe = new java.util.ArrayList<>(original.engravingTableRecipe);
+        } else {
+            copy.engravingTableRecipe = new java.util.ArrayList<>(defaults.engravingTableRecipe);
+        }
+        copy.engravingTableCraftingTier = original.engravingTableCraftingTier;
 
         // Copy upgrades (initialize from defaults if null)
         copy.enchantingTableUpgrades = new LinkedHashMap<>();
@@ -508,13 +517,33 @@ public class EnchantConfigPage extends InteractiveCustomUIPage<EnchantConfigPage
                 EventData.of("SettingValue", "allowSameScrollUpgrades:" + !workingConfig.allowSameScrollUpgrades));
         index++;
 
-        // Enchanting Table Crafting Tier
-        int craftingTier = workingConfig.enchantingTableCraftingTier;
+        // Engraving Table Crafting Tier
+        int engravingCraftingTier = workingConfig.engravingTableCraftingTier;
         int craftingTierStep = 1; // Integer value, step by 1
         commandBuilder.append("#ContentArea", "Pages/EnchantConfigItem.ui");
         commandBuilder.set("#ContentArea[" + index + "] #SettingName.TextSpans",
+                languageManager.getMessage("config.general.engraving_table_tier", lang, this.playerRef.getLanguage()));
+        commandBuilder.set("#ContentArea[" + index + "] #SettingInput.Value", (double) engravingCraftingTier);
+        commandBuilder.set("#ContentArea[" + index + "] #ResetBtn.TextSpans",
+                languageManager.getMessage("config.button.reset", lang, this.playerRef.getLanguage()));
+        eventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#ContentArea[" + index + "] #ResetBtn",
+                EventData.of("ResetValue", "engravingTableCraftingTier"));
+        eventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#ContentArea[" + index + "] #DecreaseBtn",
+                EventData.of("SettingValue",
+                        "engravingTableCraftingTier:" + Math.max(1, engravingCraftingTier - craftingTierStep)));
+        eventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#ContentArea[" + index + "] #IncreaseBtn",
+                EventData.of("SettingValue", "engravingTableCraftingTier:" + (engravingCraftingTier + craftingTierStep)));
+        eventBuilder.addEventBinding(CustomUIEventBindingType.ValueChanged, "#ContentArea[" + index + "] #SettingInput",
+                EventData.of("SettingValue", "engravingTableCraftingTier").append("@InputValue",
+                        "#ContentArea[" + index + "] #SettingInput.Value"),
+                false);
+        index++;
+
+        // Enchanting Table Crafting Tier
+        int craftingTier = workingConfig.enchantingTableCraftingTier;
+        commandBuilder.append("#ContentArea", "Pages/EnchantConfigItem.ui");
+        commandBuilder.set("#ContentArea[" + index + "] #SettingName.TextSpans",
                 languageManager.getMessage("config.general.table_tier", lang, this.playerRef.getLanguage()));
-        commandBuilder.set("#ContentArea[" + index + "] #SettingInput.Value", (double) craftingTier);
         commandBuilder.set("#ContentArea[" + index + "] #SettingInput.Value", (double) craftingTier);
         commandBuilder.set("#ContentArea[" + index + "] #ResetBtn.TextSpans",
                 languageManager.getMessage("config.button.reset", lang, this.playerRef.getLanguage()));
@@ -567,6 +596,16 @@ public class EnchantConfigPage extends InteractiveCustomUIPage<EnchantConfigPage
                         this.playerRef.getLanguage()));
         eventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#ContentArea[" + index + "] #ToggleButton",
                 EventData.of("SettingValue", "salvagerYieldsScroll:" + !workingConfig.salvagerYieldsScroll));
+        index++;
+
+        // Edit Engraving Table Recipe button
+        commandBuilder.append("#ContentArea", "Pages/EnchantConfigRecipeButton.ui");
+        commandBuilder.set("#ContentArea[" + index + "] #RecipeButtonLabel.TextSpans",
+                languageManager.getMessage("config.general.engraving_table_recipe", lang, this.playerRef.getLanguage()));
+        commandBuilder.set("#ContentArea[" + index + "] #EditRecipeBtn.TextSpans",
+                languageManager.getMessage("config.button.edit", lang, this.playerRef.getLanguage()));
+        eventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#ContentArea[" + index + "] #EditRecipeBtn",
+                EventData.of("EditRecipeType", "engraving_table"));
         index++;
 
         // Edit Table Recipe button
@@ -647,14 +686,32 @@ public class EnchantConfigPage extends InteractiveCustomUIPage<EnchantConfigPage
         int ingredientDataIndex = 0;
 
         for (EnchantingConfig.ConfigIngredient ingredient : ingredients) {
-            if (ingredient.item != null) {
+            if (ingredient.item != null || ingredient.isResourceType()) {
                 int currentAmount = ingredient.amount != null ? ingredient.amount : 0;
                 final int dataIdx = ingredientDataIndex;
 
+                // Determine display name and icon based on ingredient type
+                String displayName;
+                String iconItemId;
+
+                if (ingredient.isResourceType()) {
+                    ResourceType rt = ResourceType.getAssetMap().getAssetMap().get(ingredient.resourceType);
+                    displayName = rt != null ? "[Any] " + getResourceTypeDisplayName(rt)
+                            : "[Any] " + formatItemName(ingredient.resourceType);
+                    iconItemId = ""; // ResourceType icon is a texture path, not a valid ItemId
+                } else {
+                    displayName = formatItemName(ingredient.item);
+                    Item item = Item.getAssetMap().getAssetMap().get(ingredient.item);
+                    if (item != null) {
+                        displayName = getItemDisplayName(item);
+                    }
+                    iconItemId = ingredient.item;
+                }
+
                 commandBuilder.append("#ContentArea", "Pages/EnchantConfigIngredient.ui");
-                commandBuilder.set("#ContentArea[" + index + "] #IngredientIcon.ItemId", ingredient.item);
+                commandBuilder.set("#ContentArea[" + index + "] #IngredientIcon.ItemId", iconItemId);
                 commandBuilder.set("#ContentArea[" + index + "] #IngredientName.TextSpans", languageManager
-                        .getMessage(formatItemName(ingredient.item), lang, this.playerRef.getLanguage()));
+                        .getMessage(displayName, lang, this.playerRef.getLanguage()));
                 commandBuilder.set("#ContentArea[" + index + "] #AmountInput.Value", (double) currentAmount);
                 commandBuilder.set("#ContentArea[" + index + "] #ChangeBtn.TextSpans",
                         languageManager.getMessage("config.button.change", lang, this.playerRef.getLanguage()));
@@ -722,6 +779,8 @@ public class EnchantConfigPage extends InteractiveCustomUIPage<EnchantConfigPage
             return null;
         if (editingRecipeType.equals("table")) {
             return workingConfig.enchantingTableRecipe;
+        } else if (editingRecipeType.equals("engraving_table")) {
+            return workingConfig.engravingTableRecipe;
         } else if (editingRecipeType.startsWith("Upgrade_")) {
             return workingConfig.enchantingTableUpgrades.get(editingRecipeType);
         }
@@ -735,6 +794,8 @@ public class EnchantConfigPage extends InteractiveCustomUIPage<EnchantConfigPage
         // Handle generic keys
         if (editingRecipeType.equals("table"))
             return "config.general.table_recipe";
+        if (editingRecipeType.equals("engraving_table"))
+            return "config.general.engraving_table_recipe";
         if (editingRecipeType.equals("Upgrade_1"))
             return "config.general.upgrade_1";
         if (editingRecipeType.equals("Upgrade_2"))
@@ -1010,20 +1071,32 @@ public class EnchantConfigPage extends InteractiveCustomUIPage<EnchantConfigPage
                 continue;
             }
 
-            if (ingredient.item != null) {
+            if (ingredient.item != null || ingredient.isResourceType()) {
                 int currentAmount = ingredient.amount != null ? ingredient.amount : 0;
                 final int dataIdx = ingredientDataIndex;
 
-                // Ingredient row with editable controls
-                String displayName = formatItemName(ingredient.item);
-                // Try to resolve item to get translated name
-                Item item = Item.getAssetMap().getAssetMap().get(ingredient.item);
-                if (item != null) {
-                    displayName = getItemDisplayName(item);
+                // Determine display name and icon based on ingredient type
+                String displayName;
+                String iconItemId;
+
+                if (ingredient.isResourceType()) {
+                    // Wildcard ResourceType ingredient
+                    ResourceType rt = ResourceType.getAssetMap().getAssetMap().get(ingredient.resourceType);
+                    displayName = rt != null ? "[Any] " + getResourceTypeDisplayName(rt)
+                            : "[Any] " + formatItemName(ingredient.resourceType);
+                    iconItemId = ""; // ResourceType icon is a texture path, not a valid ItemId
+                } else {
+                    // Specific item ingredient
+                    displayName = formatItemName(ingredient.item);
+                    Item item = Item.getAssetMap().getAssetMap().get(ingredient.item);
+                    if (item != null) {
+                        displayName = getItemDisplayName(item);
+                    }
+                    iconItemId = ingredient.item;
                 }
 
                 commandBuilder.append("#ContentArea", "Pages/EnchantConfigIngredient.ui");
-                commandBuilder.set("#ContentArea[" + index + "] #IngredientIcon.ItemId", ingredient.item);
+                commandBuilder.set("#ContentArea[" + index + "] #IngredientIcon.ItemId", iconItemId);
                 commandBuilder.set("#ContentArea[" + index + "] #IngredientName.TextSpans",
                         languageManager.getMessage(displayName, lang, this.playerRef.getLanguage()));
                 commandBuilder.set("#ContentArea[" + index + "] #AmountInput.Value", (double) currentAmount);
@@ -1118,10 +1191,35 @@ public class EnchantConfigPage extends InteractiveCustomUIPage<EnchantConfigPage
                 false);
 
         // Get filtered items and display them
-        List<Item> filteredItems = getFilteredItems(currentSearchQuery);
-
         int itemIndex = 0;
         int maxResults = 50; // Limit results to avoid performance issues
+
+        // Show ResourceType wildcard entries first (they are fewer and more relevant)
+        List<ResourceType> filteredResourceTypes = getFilteredResourceTypes(currentSearchQuery);
+
+        for (ResourceType rt : filteredResourceTypes) {
+            if (itemIndex >= maxResults)
+                break;
+
+            String rtId = rt.getId();
+            String displayName = "[Any] " + getResourceTypeDisplayName(rt);
+
+            commandBuilder.append("#ItemSearchSidebarContainer #ItemSearchResults", "Pages/EnchantConfigSearchItem.ui");
+            // ResourceType icon is a texture path, not an ItemId — don't set ItemIcon.ItemId
+            commandBuilder.set(
+                    "#ItemSearchSidebarContainer #ItemSearchResults[" + itemIndex + "] #ItemDisplayName.TextSpans",
+                    languageManager.getMessage(displayName, lang, this.playerRef.getLanguage()));
+
+            // Prefix with RT: so the handler knows this is a ResourceType
+            eventBuilder.addEventBinding(CustomUIEventBindingType.Activating,
+                    "#ItemSearchSidebarContainer #ItemSearchResults[" + itemIndex + "] #ItemSelectBtn",
+                    EventData.of("SelectItem", "RT:" + rtId));
+
+            itemIndex++;
+        }
+
+        // Then show filtered regular items
+        List<Item> filteredItems = getFilteredItems(currentSearchQuery);
 
         for (Item item : filteredItems) {
             if (itemIndex >= maxResults)
@@ -1154,11 +1252,35 @@ public class EnchantConfigPage extends InteractiveCustomUIPage<EnchantConfigPage
         // Clear only the search results, not the entire overlay
         commandBuilder.clear("#ItemSearchSidebarContainer #ItemSearchResults");
 
-        // Get filtered items and display them
-        List<Item> filteredItems = getFilteredItems(currentSearchQuery);
-
         int itemIndex = 0;
         int maxResults = 50;
+
+        // Show ResourceType wildcard entries first (they are fewer and more relevant)
+        List<ResourceType> filteredResourceTypes = getFilteredResourceTypes(currentSearchQuery);
+
+        for (ResourceType rt : filteredResourceTypes) {
+            if (itemIndex >= maxResults)
+                break;
+
+            String rtId = rt.getId();
+            String displayName = "[Any] " + getResourceTypeDisplayName(rt);
+
+            commandBuilder.append("#ItemSearchSidebarContainer #ItemSearchResults", "Pages/EnchantConfigSearchItem.ui");
+            // ResourceType icon is a texture path, not an ItemId — don't set ItemIcon.ItemId
+            commandBuilder.set(
+                    "#ItemSearchSidebarContainer #ItemSearchResults[" + itemIndex + "] #ItemDisplayName.TextSpans",
+                    languageManager.getMessage(displayName, lang, this.playerRef.getLanguage()));
+
+            // Prefix with RT: so the handler knows this is a ResourceType
+            eventBuilder.addEventBinding(CustomUIEventBindingType.Activating,
+                    "#ItemSearchSidebarContainer #ItemSearchResults[" + itemIndex + "] #ItemSelectBtn",
+                    EventData.of("SelectItem", "RT:" + rtId));
+
+            itemIndex++;
+        }
+
+        // Then show filtered regular items
+        List<Item> filteredItems = getFilteredItems(currentSearchQuery);
 
         for (Item item : filteredItems) {
             if (itemIndex >= maxResults)
@@ -1198,29 +1320,88 @@ public class EnchantConfigPage extends InteractiveCustomUIPage<EnchantConfigPage
     }
 
     /**
-     * Filters all game items by the search query (matches ID or display name).
+     * Checks if all query words appear in the given searchable text.
+     */
+    private boolean matchesAllWords(String[] queryWords, String searchable) {
+        for (String word : queryWords) {
+            if (!searchable.contains(word)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Filters all game items by the search query.
+     * Splits query into words and requires ALL words to match somewhere
+     * in the item ID, translation key, or resolved display name.
      */
     private List<Item> getFilteredItems(String query) {
         List<Item> result = new ArrayList<>();
-        String lowerQuery = query.toLowerCase(Locale.ROOT);
+        String lowerQuery = query.toLowerCase(Locale.ROOT).trim();
+        if (lowerQuery.isEmpty()) {
+            for (Item item : Item.getAssetMap().getAssetMap().values()) {
+                if (item != null && item.getId() != null) {
+                    result.add(item);
+                }
+            }
+            return result;
+        }
+
+        String[] queryWords = lowerQuery.split("\\s+");
 
         for (Item item : Item.getAssetMap().getAssetMap().values()) {
-            if (item == null)
+            if (item == null || item.getId() == null)
                 continue;
 
-            String itemId = item.getId();
-            if (itemId == null)
-                continue;
+            // Build combined searchable text: ID + translation key + resolved name
+            String itemId = item.getId().toLowerCase(Locale.ROOT);
+            String translationKey = getItemDisplayName(item).toLowerCase(Locale.ROOT);
+            String resolvedName = resolveTranslation(getItemDisplayName(item)).toLowerCase(Locale.ROOT);
+            String searchable = itemId + " " + translationKey + " " + resolvedName;
 
-            // Match by ID or display name
-            String displayName = getItemDisplayName(item);
-            if (itemId.toLowerCase(Locale.ROOT).contains(lowerQuery) ||
-                    displayName.toLowerCase(Locale.ROOT).contains(lowerQuery)) {
+            if (matchesAllWords(queryWords, searchable)) {
                 result.add(item);
             }
         }
 
         return result;
+    }
+
+    /**
+     * Filters all resource types (wildcards like "Any Wood") by the search query.
+     */
+    private List<ResourceType> getFilteredResourceTypes(String query) {
+        List<ResourceType> result = new ArrayList<>();
+        String lowerQuery = query.toLowerCase(Locale.ROOT).trim();
+
+        for (ResourceType rt : ResourceType.getAssetMap().getAssetMap().values()) {
+            if (rt == null || rt.getId() == null)
+                continue;
+
+            String rtId = rt.getId().toLowerCase(Locale.ROOT);
+            String translationKey = "resourceType." + rt.getId() + ".name";
+            String resolvedName = resolveTranslation(translationKey).toLowerCase(Locale.ROOT);
+            String searchable = rtId + " " + translationKey + " " + resolvedName;
+
+            if (lowerQuery.isEmpty() || matchesAllWords(lowerQuery.split("\\s+"), searchable)) {
+                result.add(rt);
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     * Resolves a translation key to its display text using I18nModule.
+     */
+    private String resolveTranslation(String translationKey) {
+        try {
+            String resolved = I18nModule.get().getMessage("en-US", translationKey);
+            return resolved != null ? resolved : translationKey;
+        } catch (Exception e) {
+            return translationKey;
+        }
     }
 
     /**
@@ -1234,6 +1415,19 @@ public class EnchantConfigPage extends InteractiveCustomUIPage<EnchantConfigPage
         }
         // Fall back to formatted ID
         return formatItemName(item.getId());
+    }
+
+    /**
+     * Gets a display name for a ResourceType (wildcard ingredient).
+     */
+    private String getResourceTypeDisplayName(ResourceType rt) {
+        String translationKey = "resourceType." + rt.getId() + ".name";
+        String resolved = resolveTranslation(translationKey);
+        // If translation wasn't found, format the ID
+        if (resolved.equals(translationKey)) {
+            return formatItemName(rt.getId());
+        }
+        return resolved;
     }
 
     /**
@@ -1301,7 +1495,14 @@ public class EnchantConfigPage extends InteractiveCustomUIPage<EnchantConfigPage
                 continue;
 
             if (dataIndex == ingredientIndex) {
-                ingredient.item = newItemId;
+                // Check if this is a ResourceType wildcard selection (prefixed with RT:)
+                if (newItemId.startsWith("RT:")) {
+                    ingredient.resourceType = newItemId.substring(3);
+                    ingredient.item = null;
+                } else {
+                    ingredient.item = newItemId;
+                    ingredient.resourceType = null;
+                }
                 markUnsavedChange();
                 return;
             }
@@ -1339,6 +1540,8 @@ public class EnchantConfigPage extends InteractiveCustomUIPage<EnchantConfigPage
 
         if (recipeType.equals("table")) {
             workingConfig.enchantingTableRecipe = new ArrayList<>(defaultConfig.enchantingTableRecipe);
+        } else if (recipeType.equals("engraving_table")) {
+            workingConfig.engravingTableRecipe = new ArrayList<>(defaultConfig.engravingTableRecipe);
         } else if (recipeType.startsWith("Upgrade_")) {
             List<EnchantingConfig.ConfigIngredient> defaultUpgrade = defaultConfig.enchantingTableUpgrades
                     .get(recipeType);
@@ -1428,6 +1631,8 @@ public class EnchantConfigPage extends InteractiveCustomUIPage<EnchantConfigPage
                         workingConfig.returnEnchantmentOnCleanse = Boolean.parseBoolean(value);
                     case "enchantingTableCraftingTier" ->
                         workingConfig.enchantingTableCraftingTier = Math.max(1, Integer.parseInt(value));
+                    case "engravingTableCraftingTier" ->
+                        workingConfig.engravingTableCraftingTier = Math.max(1, Integer.parseInt(value));
                     case "salvagerYieldsScroll" -> workingConfig.salvagerYieldsScroll = Boolean.parseBoolean(value);
                     case "showWelcomeMessage" -> workingConfig.showWelcomeMessage = Boolean.parseBoolean(value);
                 }
@@ -1527,6 +1732,7 @@ public class EnchantConfigPage extends InteractiveCustomUIPage<EnchantConfigPage
             case "maxEnchantmentsPerItem" -> String.valueOf(DEFAULT_CONFIG.maxEnchantmentsPerItem);
             case "allowSameScrollUpgrades" -> String.valueOf(DEFAULT_CONFIG.allowSameScrollUpgrades);
             case "enchantingTableCraftingTier" -> String.valueOf(DEFAULT_CONFIG.enchantingTableCraftingTier);
+            case "engravingTableCraftingTier" -> String.valueOf(DEFAULT_CONFIG.engravingTableCraftingTier);
             case "returnEnchantmentOnCleanse" -> String.valueOf(DEFAULT_CONFIG.returnEnchantmentOnCleanse);
             case "disableEnchantmentCrafting" -> String.valueOf(DEFAULT_CONFIG.disableEnchantmentCrafting);
             case "salvagerYieldsScroll" -> String.valueOf(DEFAULT_CONFIG.salvagerYieldsScroll);
@@ -1542,6 +1748,7 @@ public class EnchantConfigPage extends InteractiveCustomUIPage<EnchantConfigPage
         actualConfig.enableEnchantmentGlow = workingConfig.enableEnchantmentGlow;
         actualConfig.allowSameScrollUpgrades = workingConfig.allowSameScrollUpgrades;
         actualConfig.enchantingTableCraftingTier = workingConfig.enchantingTableCraftingTier;
+        actualConfig.engravingTableCraftingTier = workingConfig.engravingTableCraftingTier;
 
         // Copy enchantment multipliers map
         actualConfig.enchantmentMultipliers = new LinkedHashMap<>(workingConfig.enchantmentMultipliers);
@@ -1559,6 +1766,9 @@ public class EnchantConfigPage extends InteractiveCustomUIPage<EnchantConfigPage
         // Save enchanting table recipe and upgrades
         if (workingConfig.enchantingTableRecipe != null) {
             actualConfig.enchantingTableRecipe = new java.util.ArrayList<>(workingConfig.enchantingTableRecipe);
+        }
+        if (workingConfig.engravingTableRecipe != null) {
+            actualConfig.engravingTableRecipe = new java.util.ArrayList<>(workingConfig.engravingTableRecipe);
         }
         if (workingConfig.enchantingTableUpgrades != null) {
             actualConfig.enchantingTableUpgrades = new LinkedHashMap<>();

@@ -71,6 +71,12 @@ public class ItemCategory {
     public static final ItemCategory HELMET = new ItemCategory("HELMET", false, true, false);
 
     /**
+     * Chestplates (chest armor).
+     * Applicable enchantments: Regeneration, Second Stomach, etc.
+     */
+    public static final ItemCategory CHESTPLATE = new ItemCategory("CHESTPLATE", false, true, false);
+
+    /**
      * Armor pieces: helmets, chestplates, leggings, boots
      * Applicable enchantments: Protection, Fire Protection, etc.
      */

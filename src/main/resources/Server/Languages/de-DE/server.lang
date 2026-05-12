@@ -1199,6 +1199,22 @@ items.Scroll_Environmental_Protection_III.name = Schriftrolle des Umweltschutzes
 
 items.Scroll_Environmental_Protection_III.description = Verringert Umweltschaden um 12% pro Rüstungsteil.
 
+items.Scroll_Regeneration_I.name = Schriftrolle der Regeneration
+
+items.Scroll_Regeneration_I.description = Regeneriert passiv {amount} HP pro Sekunde. Nur für Brustplatten.
+
+items.Scroll_Second_Stomach_I.name = Schriftrolle des Zweiten Magens I
+
+items.Scroll_Second_Stomach_I.description = Erhöht Sofortheitung um 15%.
+
+items.Scroll_Second_Stomach_II.name = Schriftrolle des Zweiten Magens II
+
+items.Scroll_Second_Stomach_II.description = Erhöht Sofortheitung um 30%.
+
+items.Scroll_Second_Stomach_III.name = Schriftrolle des Zweiten Magens III
+
+items.Scroll_Second_Stomach_III.description = Erhöht Sofortheitung um 45%.
+
 
 
 enchantment.poison.name = Gift
@@ -1211,11 +1227,23 @@ enchantment.environmental_protection.name = Umweltschutz
 
 enchantment.environmental_protection.description = Verringert Umweltschaden um 4% pro Rüstungsteil.
 
+enchantment.regeneration.name = Regeneration
+
+enchantment.regeneration.description = Regeneriert passiv {amount} HP pro Sekunde. Nur für Brustplatten.
+
+enchantment.second_stomach.name = Zweiter Magen
+
+enchantment.second_stomach.description = Erhöht Sofortheitung durch Nahrung und Tränke um {amount}% pro Stufe. Nur für Brustplatten.
+
 enchantment.poison.bonus = Vergiftet Ziele bei Treffer ({amount} Schaden/s für {duration}s)
 enchantment.environmental_protection.bonus = Umweltschaden um {amount}% reduziert
+enchantment.regeneration.bonus = Regeneriert {amount} HP pro Sekunde
+enchantment.second_stomach.bonus = Sofortheitung erhöht um {amount}%
 
 enchantment.poison.walkthrough = Vergiftet Ziele bei Treffern und verursacht {amount} Schaden pro Sekunde für {duration} Sekunden. Gilt für Nahkampf- und Fernkampfwaffen. Nicht kombinierbar mit Verbrennen.
 enchantment.environmental_protection.walkthrough = Verringert eingehenden elementaren und Umweltschaden (Feuer, Eis, Kakteen und andere Gefahren) um {amount}% pro Rüstungsteil pro Stufe und mildert proportional die Verlangsamungsintensität der Frost-Verzauberung. Gilt für Rüstungen.
+enchantment.regeneration.walkthrough = Regeneriert passiv {amount} HP pro Sekunde, solange eine verzauberte Brustplatte getragen wird. Gilt nur für Brustplatten.
+enchantment.second_stomach.walkthrough = Erhöht die Effektivität von Sofortheitung durch Nahrung und Tränke um {amount}% pro Stufe. Aktiviert sich nur, wenn der Gesundheitsgewinn den natürlichen Regenerationsschwellenwert übersteigt. Gilt nur für Brustplatten.
 
 
 items.Scroll_Custom.name = Benutzerdefinierte Schriftrolle
@@ -1272,6 +1300,8 @@ itemCategory.STAFF_MANA = Manastäbe
 
 itemCategory.STAFF_ESSENCE = Essenzstäbe
 
+itemCategory.CHESTPLATE = Brustplatten
+
 itemCategory.UNKNOWN = Unbekannt
 
 config.multiplier.sharpness = Schaden pro Stufe
@@ -1304,5 +1334,7 @@ config.multiplier.elemental_heart = Sparchance pro Stufe
 config.multiplier.poison = Schaden pro Sekunde
 config.multiplier.poison:duration = Dauer (Sekunden)
 config.multiplier.environmental_protection = Reduktion pro Stufe
+config.multiplier.regeneration = HP Pro Sekunde
+config.multiplier.second_stomach = Bonus Pro Stufe
 items.EngravingTable.name = Engraving Table
 items.EngravingTable.description = A rune engraving table used to rename items and recolor enchantment glows.

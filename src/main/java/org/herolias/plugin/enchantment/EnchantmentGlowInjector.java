@@ -40,7 +40,7 @@ public class EnchantmentGlowInjector {
 
     // The VFX to apply when condition is met
     private static final String MODEL_VFX_ID = "Enchantment_Glow";
-    private static final String MODEL_VFX_ID_SMALL = "Enchantment_Glow_small";
+    private static final String MODEL_VFX_ID_SMALL = "Enchantment_Glow_Small";
 
     // Keywords for identifying items that should use the small glow effect
     private static final java.util.Set<String> SMALL_WEAPON_KEYWORDS = java.util.Set.of(

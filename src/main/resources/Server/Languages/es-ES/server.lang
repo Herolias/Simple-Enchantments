@@ -537,6 +537,22 @@ items.Scroll_Environmental_Protection_III.name = Pergamino de Protección Ambien
 
 items.Scroll_Environmental_Protection_III.description = Reduce el daño ambiental en un 12% por pieza de armadura.
 
+items.Scroll_Regeneration_I.name = Pergamino de Regeneración
+
+items.Scroll_Regeneration_I.description = Regenera pasivamente {amount} HP por segundo. Solo pecheras.
+
+items.Scroll_Second_Stomach_I.name = Pergamino de Segundo Estómago I
+
+items.Scroll_Second_Stomach_I.description = Aumenta la curación instantánea en un 15%.
+
+items.Scroll_Second_Stomach_II.name = Pergamino de Segundo Estómago II
+
+items.Scroll_Second_Stomach_II.description = Aumenta la curación instantánea en un 30%.
+
+items.Scroll_Second_Stomach_III.name = Pergamino de Segundo Estómago III
+
+items.Scroll_Second_Stomach_III.description = Aumenta la curación instantánea en un 45%.
+
 
 
 enchantment.poison.name = Veneno
@@ -549,11 +565,23 @@ enchantment.environmental_protection.name = Protección Ambiental
 
 enchantment.environmental_protection.description = Reduce el daño ambiental en un 4% por pieza de armadura.
 
+enchantment.regeneration.name = Regeneración
+
+enchantment.regeneration.description = Regenera pasivamente {amount} HP por segundo. Solo pecheras.
+
+enchantment.second_stomach.name = Segundo Estómago
+
+enchantment.second_stomach.description = Aumenta la curación instantánea de comida y pociones en un {amount}% por nivel. Solo pecheras.
+
 enchantment.poison.bonus = Envenena al objetivo al golpear ({amount} daño/s durante {duration}s)
 enchantment.environmental_protection.bonus = Daño ambiental -{amount}%
+enchantment.regeneration.bonus = Regenera {amount} HP por segundo
+enchantment.second_stomach.bonus = Curación instantánea aumentada en {amount}%
 
 enchantment.poison.walkthrough = Envenena a los objetivos al golpear, causando {amount} daño por segundo durante {duration} segundos. Se aplica a armas cuerpo a cuerpo y a distancia. No combinable con Combustión.
 enchantment.environmental_protection.walkthrough = Reduce el daño elemental y ambiental entrante (fuego, hielo, cactus y otros peligros) en {amount}% por pieza de armadura por nivel, y mitiga proporcionalmente la intensidad de ralentización del encantamiento de Congelación. Se aplica a armaduras.
+enchantment.regeneration.walkthrough = Regenera pasivamente {amount} HP por segundo mientras se usa un peto encantado. Solo pecheras.
+enchantment.second_stomach.walkthrough = Aumenta la efectividad de la curación instantánea de comida y pociones en un {amount}% por nivel. Solo pecheras.
 
 
 items.Scroll_Custom.name = Pergamino Personalizado
@@ -610,6 +638,8 @@ itemCategory.STAFF_MANA = Bastones de Maná
 
 itemCategory.STAFF_ESSENCE = Bastones de Esencia
 
+itemCategory.CHESTPLATE = Pecheras
+
 itemCategory.UNKNOWN = Desconocido
 
 config.multiplier.sharpness = Daño por Nivel
@@ -642,5 +672,7 @@ config.multiplier.elemental_heart = Probabilidad de Ahorro por Nivel
 config.multiplier.poison = Daño por Segundo
 config.multiplier.poison:duration = Duración (Segundos)
 config.multiplier.environmental_protection = Reducción por Nivel
+config.multiplier.regeneration = HP Por Segundo
+config.multiplier.second_stomach = Bonus Por Nivel
 items.EngravingTable.name = Engraving Table
 items.EngravingTable.description = A rune engraving table used to rename items and recolor enchantment glows.

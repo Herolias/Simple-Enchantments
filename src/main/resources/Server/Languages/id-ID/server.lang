@@ -697,6 +697,22 @@ items.Scroll_Environmental_Protection_III.name = Gulungan Perlindungan Lingkunga
 
 items.Scroll_Environmental_Protection_III.description = Mengurangi kerusakan lingkungan sebesar 12% per bagian baju zirah.
 
+items.Scroll_Regeneration_I.name = Gulungan Regenerasi
+
+items.Scroll_Regeneration_I.description = Secara pasif meregenerasi {amount} HP per detik. Hanya pelindung dada.
+
+items.Scroll_Second_Stomach_I.name = Gulungan Perut Kedua I
+
+items.Scroll_Second_Stomach_I.description = Meningkatkan penyembuhan instan sebesar 15%.
+
+items.Scroll_Second_Stomach_II.name = Gulungan Perut Kedua II
+
+items.Scroll_Second_Stomach_II.description = Meningkatkan penyembuhan instan sebesar 30%.
+
+items.Scroll_Second_Stomach_III.name = Gulungan Perut Kedua III
+
+items.Scroll_Second_Stomach_III.description = Meningkatkan penyembuhan instan sebesar 45%.
+
 
 
 enchantment.poison.name = Racun
@@ -709,11 +725,23 @@ enchantment.environmental_protection.name = Perlindungan Lingkungan
 
 enchantment.environmental_protection.description = Mengurangi kerusakan lingkungan sebesar 4% per bagian baju zirah.
 
+enchantment.regeneration.name = Regenerasi
+
+enchantment.regeneration.description = Secara pasif meregenerasi {amount} HP per detik. Hanya pelindung dada.
+
+enchantment.second_stomach.name = Perut Kedua
+
+enchantment.second_stomach.description = Meningkatkan penyembuhan instan dari makanan dan ramuan sebesar {amount}% per level. Hanya pelindung dada.
+
 enchantment.poison.bonus = Meracuni target ({amount} damage/detik selama {duration} detik)
 enchantment.environmental_protection.bonus = Kerusakan lingkungan berkurang sebesar {amount}%
+enchantment.regeneration.bonus = Meregenerasi {amount} HP per detik
+enchantment.second_stomach.bonus = Penyembuhan instan meningkat sebesar {amount}%
 
 enchantment.poison.walkthrough = Meracuni target saat terkena, memberikan {amount} kerusakan per detik selama {duration} detik. Berlaku untuk senjata jarak dekat dan jarak jauh. Tidak dapat dikombinasikan dengan Bakar.
 enchantment.environmental_protection.walkthrough = Mengurangi kerusakan elemen dan lingkungan masuk (api, es, kaktus, dan bahaya lainnya) sebesar {amount}% per bagian baju zirah per level, dan secara proporsional mengurangi intensitas efek perlambatan dari pesona Beku. Berlaku untuk baju zirah.
+enchantment.regeneration.walkthrough = Secara pasif meregenerasi {amount} HP per detik saat mengenakan pelindung dada yang disihir. Hanya pelindung dada.
+enchantment.second_stomach.walkthrough = Meningkatkan efektivitas penyembuhan instan dari makanan dan ramuan sebesar {amount}% per level. Hanya pelindung dada.
 
 
 items.Scroll_Custom.name = Gulungan Kustom
@@ -770,6 +798,8 @@ itemCategory.STAFF_MANA = Tongkat Mana
 
 itemCategory.STAFF_ESSENCE = Tongkat Esensi
 
+itemCategory.CHESTPLATE = Pelindung Dada
+
 itemCategory.UNKNOWN = Tidak Diketahui
 
 config.multiplier.sharpness = Kerusakan per Level
@@ -802,5 +832,7 @@ config.multiplier.elemental_heart = Peluang Penghematan Esensi per Level
 config.multiplier.poison = Kerusakan per Detik
 config.multiplier.poison:duration = Durasi (Detik)
 config.multiplier.environmental_protection = Pengurangan per Level
+config.multiplier.regeneration = HP Per Detik
+config.multiplier.second_stomach = Bonus Per Level
 items.EngravingTable.name = Engraving Table
 items.EngravingTable.description = A rune engraving table used to rename items and recolor enchantment glows.

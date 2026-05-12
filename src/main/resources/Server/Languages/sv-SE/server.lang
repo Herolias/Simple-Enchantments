@@ -698,6 +698,22 @@ items.Scroll_Environmental_Protection_III.name = Miljöskyddsrulle III
 
 items.Scroll_Environmental_Protection_III.description = Minskar miljöskada med 12% per rustningsdel.
 
+items.Scroll_Regeneration_I.name = Skriftrulle av Regenerering
+
+items.Scroll_Regeneration_I.description = Regenererar passivt {amount} HP per sekund. Endast bröstplåtar.
+
+items.Scroll_Second_Stomach_I.name = Skriftrulle av Andra Magen I
+
+items.Scroll_Second_Stomach_I.description = Ökar omedelbar läkning med 15%.
+
+items.Scroll_Second_Stomach_II.name = Skriftrulle av Andra Magen II
+
+items.Scroll_Second_Stomach_II.description = Ökar omedelbar läkning med 30%.
+
+items.Scroll_Second_Stomach_III.name = Skriftrulle av Andra Magen III
+
+items.Scroll_Second_Stomach_III.description = Ökar omedelbar läkning med 45%.
+
 
 
 enchantment.poison.name = Gift
@@ -710,11 +726,23 @@ enchantment.environmental_protection.name = Miljöskydd
 
 enchantment.environmental_protection.description = Minskar miljöskada med 4% per rustningsdel.
 
+enchantment.regeneration.name = Regenerering
+
+enchantment.regeneration.description = Regenererar passivt {amount} HP per sekund. Endast bröstplåtar.
+
+enchantment.second_stomach.name = Andra Magen
+
+enchantment.second_stomach.description = Ökar omedelbar läkning från mat och drycker med {amount}% per nivå. Endast bröstplåtar.
+
 enchantment.poison.bonus = Förgiftar mål ({amount} skada/s under {duration}s)
 enchantment.environmental_protection.bonus = Miljöskada minskad med {amount}%
+enchantment.regeneration.bonus = Regenererar {amount} HP per sekund
+enchantment.second_stomach.bonus = Omedelbar läkning ökad med {amount}%
 
 enchantment.poison.walkthrough = Förgiftar mål vid träff, gör {amount} skada per sekund i {duration} sekunder. Gäller för närstrids- och avståndsvapen. Ej kompatibel med Bränning.
 enchantment.environmental_protection.walkthrough = Minskar inkommande elementär och miljöskada (eld, is, kaktusar och andra faror) med {amount}% per rustningsdel per nivå, och motverkar proportionellt avmattningen av frysning. Gäller för rustningar.
+enchantment.regeneration.walkthrough = Regenererar passivt {amount} HP per sekund medan en förtrollad bröstplåt bärs. Endast bröstplåtar.
+enchantment.second_stomach.walkthrough = Ökar effektiviteten av omedelbar läkning från mat och drycker med {amount}% per nivå. Endast bröstplåtar.
 
 
 items.Scroll_Custom.name = Anpassad Rulle
@@ -771,6 +799,8 @@ itemCategory.STAFF_MANA = Manastavar
 
 itemCategory.STAFF_ESSENCE = Essensstavar
 
+itemCategory.CHESTPLATE = Bröstplåtar
+
 itemCategory.UNKNOWN = Okänd
 
 config.multiplier.sharpness = Skada per Nivå
@@ -803,6 +833,8 @@ config.multiplier.elemental_heart = Essenssparande Chans per Nivå
 config.multiplier.poison = Skada per Sekund
 config.multiplier.poison:duration = Längd (Sekunder)
 config.multiplier.environmental_protection = Minskning per Nivå
+config.multiplier.regeneration = HP Per Sekund
+config.multiplier.second_stomach = Bonus Per Nivå
 
 items.EngravingTable.name = Engraving Table
 items.EngravingTable.description = A rune engraving table used to rename items and recolor enchantment glows.

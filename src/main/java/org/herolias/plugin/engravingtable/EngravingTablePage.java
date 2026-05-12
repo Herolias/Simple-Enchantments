@@ -292,9 +292,15 @@ public class EngravingTablePage extends InteractiveCustomUIPage<EngravingTablePa
         EngravingTableColorOption selected = nameButtons ? this.selectedNameColor : this.selectedGlowColor;
         for (EngravingTableColorOption colorOption : EngravingTableColorOption.values()) {
             String selector = (nameButtons ? "#NameColor" : "#GlowColor") + colorOption.getAssetSuffix();
+            
+            String displayName = colorOption.getDisplayName();
+            if (nameButtons && colorOption == EngravingTableColorOption.DEFAULT_NAME_COLOR) {
+                displayName = "Default";
+            }
+            
             String label = colorOption == selected
-                    ? "[" + colorOption.getDisplayName() + "]"
-                    : colorOption.getDisplayName();
+                    ? "[" + displayName + "]"
+                    : displayName;
             commandBuilder.set(selector + ".TextSpans",
                     Message.raw(label).color(this.getButtonTextColor(colorOption)));
         }

@@ -697,6 +697,22 @@ items.Scroll_Environmental_Protection_III.name = Rol van Milieubescherming III
 
 items.Scroll_Environmental_Protection_III.description = Vermindert omgevingsschade met 12% per pantseronderdeel.
 
+items.Scroll_Regeneration_I.name = Boekrol van Regeneratie
+
+items.Scroll_Regeneration_I.description = Regenereert passief {amount} HP per seconde. Alleen borstplaten.
+
+items.Scroll_Second_Stomach_I.name = Boekrol van Tweede Maag I
+
+items.Scroll_Second_Stomach_I.description = Verhoogt directe genezing met 15%.
+
+items.Scroll_Second_Stomach_II.name = Boekrol van Tweede Maag II
+
+items.Scroll_Second_Stomach_II.description = Verhoogt directe genezing met 30%.
+
+items.Scroll_Second_Stomach_III.name = Boekrol van Tweede Maag III
+
+items.Scroll_Second_Stomach_III.description = Verhoogt directe genezing met 45%.
+
 
 
 enchantment.poison.name = Vergif
@@ -709,11 +725,23 @@ enchantment.environmental_protection.name = Milieubescherming
 
 enchantment.environmental_protection.description = Vermindert omgevingsschade met 4% per pantseronderdeel.
 
+enchantment.regeneration.name = Regeneratie
+
+enchantment.regeneration.description = Regenereert passief {amount} HP per seconde. Alleen borstplaten.
+
+enchantment.second_stomach.name = Tweede Maag
+
+enchantment.second_stomach.description = Verhoogt directe genezing van voedsel en drankjes met {amount}% per niveau. Alleen borstplaten.
+
 enchantment.poison.bonus = Vergiftigt doelen ({amount} schade/s gedurende {duration}s)
 enchantment.environmental_protection.bonus = Omgevingsschade verminderd met {amount}%
+enchantment.regeneration.bonus = Regenereert {amount} HP per seconde
+enchantment.second_stomach.bonus = Directe genezing verhoogd met {amount}%
 
 enchantment.poison.walkthrough = Vergiftigt doelen bij het raken, veroorzaakt {amount} schade per seconde gedurende {duration} seconden. Van toepassing op melee- en afstandswapens. Niet compatibel met Verbranding.
 enchantment.environmental_protection.walkthrough = Vermindert inkomende elementaire en omgevingsschade (vuur, ijs, cactussen en andere gevaren) met {amount}% per pantseronderdeel per niveau, en vermindert proportioneel de vertragingsintensiteit van de Bevriezing-betovering. Van toepassing op pantsers.
+enchantment.regeneration.walkthrough = Regenereert passief {amount} HP per seconde bij het dragen van een betoverd borstplaat. Alleen borstplaten.
+enchantment.second_stomach.walkthrough = Verhoogt de effectiviteit van directe genezing van voedsel en drankjes met {amount}% per niveau. Alleen borstplaten.
 
 
 items.Scroll_Custom.name = Aangepaste Rol
@@ -770,6 +798,8 @@ itemCategory.STAFF_MANA = Manastaven
 
 itemCategory.STAFF_ESSENCE = Essentiestaven
 
+itemCategory.CHESTPLATE = Borstplaten
+
 itemCategory.UNKNOWN = Onbekend
 
 config.multiplier.sharpness = Schade per Niveau
@@ -802,5 +832,7 @@ config.multiplier.elemental_heart = Besparingskans per Niveau
 config.multiplier.poison = Schade per Seconde
 config.multiplier.poison:duration = Duur (Seconden)
 config.multiplier.environmental_protection = Reductie per Niveau
+config.multiplier.regeneration = HP Per Seconde
+config.multiplier.second_stomach = Bonus Per Niveau
 items.EngravingTable.name = Engraving Table
 items.EngravingTable.description = A rune engraving table used to rename items and recolor enchantment glows.

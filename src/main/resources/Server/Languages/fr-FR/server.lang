@@ -696,6 +696,22 @@ items.Scroll_Environmental_Protection_III.name = Parchemin de Protection Environ
 
 items.Scroll_Environmental_Protection_III.description = Réduit les dégâts environnementaux de 12% par pièce d'armure.
 
+items.Scroll_Regeneration_I.name = Parchemin de Régénération
+
+items.Scroll_Regeneration_I.description = Régénère passivement {amount} HP par seconde. Plastrons uniquement.
+
+items.Scroll_Second_Stomach_I.name = Parchemin de Second Estomac I
+
+items.Scroll_Second_Stomach_I.description = Augmente les soins instantanés de 15%.
+
+items.Scroll_Second_Stomach_II.name = Parchemin de Second Estomac II
+
+items.Scroll_Second_Stomach_II.description = Augmente les soins instantanés de 30%.
+
+items.Scroll_Second_Stomach_III.name = Parchemin de Second Estomac III
+
+items.Scroll_Second_Stomach_III.description = Augmente les soins instantanés de 45%.
+
 
 
 enchantment.poison.name = Poison
@@ -708,11 +724,23 @@ enchantment.environmental_protection.name = Protection Environnementale
 
 enchantment.environmental_protection.description = Réduit les dégâts environnementaux de 4% par pièce d'armure.
 
+enchantment.regeneration.name = Régénération
+
+enchantment.regeneration.description = Régénère passivement {amount} HP par seconde. Plastrons uniquement.
+
+enchantment.second_stomach.name = Second Estomac
+
+enchantment.second_stomach.description = Augmente les soins instantanés de nourriture et potions de {amount}% par niveau. Plastrons uniquement.
+
 enchantment.poison.bonus = Empoisonne les cibles ({amount} dégâts/s pendant {duration}s)
 enchantment.environmental_protection.bonus = Dégâts environnementaux réduits de {amount}%
+enchantment.regeneration.bonus = Régénère {amount} HP par seconde
+enchantment.second_stomach.bonus = Soins instantanés augmentés de {amount}%
 
 enchantment.poison.walkthrough = Empoisonne les cibles touchées, infligeant {amount} dégâts par seconde pendant {duration} secondes. S'applique aux armes de mêlée et à distance. Incompatible avec Brûlure.
 enchantment.environmental_protection.walkthrough = Réduit les dégâts élémentaires et environnementaux (feu, glace, cactus et autres dangers) de {amount}% par pièce d'armure par niveau, et atténue proportionnellement l'intensité du ralentissement de l'enchantement Gel. S'applique aux armures.
+enchantment.regeneration.walkthrough = Régénère passivement {amount} HP par seconde en portant un plastron enchanté. Plastrons uniquement.
+enchantment.second_stomach.walkthrough = Augmente l'efficacité des soins instantanés de nourriture et potions de {amount}% par niveau. Plastrons uniquement.
 
 
 items.Scroll_Custom.name = Parchemin Personnalisé
@@ -769,6 +797,8 @@ itemCategory.STAFF_MANA = Bâtons de Mana
 
 itemCategory.STAFF_ESSENCE = Bâtons d'Essence
 
+itemCategory.CHESTPLATE = Plastrons
+
 itemCategory.UNKNOWN = Inconnu
 
 config.multiplier.sharpness = Dégâts par Niveau
@@ -801,5 +831,7 @@ config.multiplier.elemental_heart = Chance d'Économie par Niveau
 config.multiplier.poison = Dégâts par Seconde
 config.multiplier.poison:duration = Durée (Secondes)
 config.multiplier.environmental_protection = Réduction par Niveau
+config.multiplier.regeneration = HP Par Seconde
+config.multiplier.second_stomach = Bonus Par Niveau
 items.EngravingTable.name = Engraving Table
 items.EngravingTable.description = A rune engraving table used to rename items and recolor enchantment glows.

@@ -697,6 +697,22 @@ items.Scroll_Environmental_Protection_III.name = Pergaminho de Proteção Ambien
 
 items.Scroll_Environmental_Protection_III.description = Reduz o dano ambiental em 12% por peça de armadura.
 
+items.Scroll_Regeneration_I.name = Pergaminho de Regeneração
+
+items.Scroll_Regeneration_I.description = Regenera passivamente {amount} HP por segundo. Apenas peitorais.
+
+items.Scroll_Second_Stomach_I.name = Pergaminho de Segundo Estômago I
+
+items.Scroll_Second_Stomach_I.description = Aumenta a cura instantânea em 15%.
+
+items.Scroll_Second_Stomach_II.name = Pergaminho de Segundo Estômago II
+
+items.Scroll_Second_Stomach_II.description = Aumenta a cura instantânea em 30%.
+
+items.Scroll_Second_Stomach_III.name = Pergaminho de Segundo Estômago III
+
+items.Scroll_Second_Stomach_III.description = Aumenta a cura instantânea em 45%.
+
 
 
 enchantment.poison.name = Veneno
@@ -709,11 +725,23 @@ enchantment.environmental_protection.name = Proteção Ambiental
 
 enchantment.environmental_protection.description = Reduz o dano ambiental em 4% por peça de armadura.
 
+enchantment.regeneration.name = Regeneração
+
+enchantment.regeneration.description = Regenera passivamente {amount} HP por segundo. Apenas peitorais.
+
+enchantment.second_stomach.name = Segundo Estômago
+
+enchantment.second_stomach.description = Aumenta a cura instantânea de comida e poções em {amount}% por nível. Apenas peitorais.
+
 enchantment.poison.bonus = Envenena alvos ({amount} dano/s por {duration}s)
 enchantment.environmental_protection.bonus = Dano ambiental reduzido em {amount}%
+enchantment.regeneration.bonus = Regenera {amount} HP por segundo
+enchantment.second_stomach.bonus = Cura instantânea aumentada em {amount}%
 
 enchantment.poison.walkthrough = Envenena alvos ao acertar, causando {amount} dano por segundo durante {duration} segundos. Aplica-se a armas corpo a corpo e de longo alcance. Não combinável com Queimar.
 enchantment.environmental_protection.walkthrough = Reduz o dano elemental e ambiental recebido (fogo, gelo, cactos e outros perigos) em {amount}% por peça de armadura por nível, e mitiga proporcionalmente a intensidade de lentidão do encantamento de Congelamento. Aplica-se a armaduras.
+enchantment.regeneration.walkthrough = Regenera passivamente {amount} HP por segundo enquanto usa um peitoral encantado. Apenas peitorais.
+enchantment.second_stomach.walkthrough = Aumenta a eficácia da cura instantânea de comida e poções em {amount}% por nível. Apenas peitorais.
 
 
 items.Scroll_Custom.name = Pergaminho Personalizado
@@ -770,6 +798,8 @@ itemCategory.STAFF_MANA = Cajados de Mana
 
 itemCategory.STAFF_ESSENCE = Cajados de Essência
 
+itemCategory.CHESTPLATE = Peitorais
+
 itemCategory.UNKNOWN = Desconhecido
 
 config.multiplier.sharpness = Dano por Nível
@@ -802,5 +832,7 @@ config.multiplier.elemental_heart = Chance de Economia por Nível
 config.multiplier.poison = Dano por Segundo
 config.multiplier.poison:duration = Duração (Segundos)
 config.multiplier.environmental_protection = Redução por Nível
+config.multiplier.regeneration = HP Por Segundo
+config.multiplier.second_stomach = Bônus Por Nível
 items.EngravingTable.name = Engraving Table
 items.EngravingTable.description = A rune engraving table used to rename items and recolor enchantment glows.

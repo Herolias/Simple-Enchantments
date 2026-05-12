@@ -84,7 +84,7 @@ public enum EngravingTableColorOption {
         if (singleGlow) {
             return "Enchantment_Glow_Single_" + this.assetSuffix;
         }
-        return (smallGlow ? "Enchantment_Glow_small_" : "Enchantment_Glow_") + this.assetSuffix;
+        return (smallGlow ? "Enchantment_Glow_Small_" : "Enchantment_Glow_") + this.assetSuffix;
     }
 
     @Nullable

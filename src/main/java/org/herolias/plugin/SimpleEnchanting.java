@@ -43,6 +43,8 @@ import org.herolias.plugin.crafting.WorkbenchRefreshSystem;
 import org.herolias.plugin.enchantment.EnchantmentReflectionSystem;
 import org.herolias.plugin.enchantment.EnchantmentAbsorptionSystem;
 import org.herolias.plugin.enchantment.EnchantmentFastSwimSystem;
+import org.herolias.plugin.enchantment.EnchantmentRegenerationSystem;
+import org.herolias.plugin.enchantment.EnchantmentSecondStomachSystem;
 import org.herolias.plugin.enchantment.ScrollItemGenerator;
 
 import com.al3x.HStats;
@@ -322,6 +324,14 @@ public class SimpleEnchanting extends JavaPlugin {
             LOGGER.atInfo().log("Registered EnchantmentFastSwimSystem with ECS");
             this.getEntityStoreRegistry().registerSystem(new EnchantmentNightVisionSystem(enchantmentManager));
             LOGGER.atInfo().log("Registered EnchantmentNightVisionSystem with ECS");
+
+            // Create Second Stomach system first so Regeneration can report to it
+            EnchantmentSecondStomachSystem secondStomachSystem = new EnchantmentSecondStomachSystem(enchantmentManager);
+
+            this.getEntityStoreRegistry().registerSystem(new EnchantmentRegenerationSystem(enchantmentManager, secondStomachSystem));
+            LOGGER.atInfo().log("Registered EnchantmentRegenerationSystem with ECS");
+            this.getEntityStoreRegistry().registerSystem(secondStomachSystem);
+            LOGGER.atInfo().log("Registered EnchantmentSecondStomachSystem with ECS");
 
             // Workbench Refresh System (Bug fix for ExtraResources not rescanning on
             // upgrade)

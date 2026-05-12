@@ -342,7 +342,7 @@ public class ItemCategoryManager {
             if (s.contains("head"))
                 return ItemCategory.HELMET;
             if (s.contains("chest"))
-                return ItemCategory.ARMOR;
+                return ItemCategory.CHESTPLATE;
             if (s.contains("hands"))
                 return ItemCategory.GLOVES;
             if (s.contains("legs"))

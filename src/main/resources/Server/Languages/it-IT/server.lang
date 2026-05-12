@@ -688,6 +688,22 @@ items.Scroll_Environmental_Protection_III.name = Pergamena di Protezione Ambient
 
 items.Scroll_Environmental_Protection_III.description = Riduce i danni ambientali del 12% per pezzo di armatura.
 
+items.Scroll_Regeneration_I.name = Pergamena di Rigenerazione
+
+items.Scroll_Regeneration_I.description = Rigenera passivamente {amount} HP al secondo. Solo corazze.
+
+items.Scroll_Second_Stomach_I.name = Pergamena del Secondo Stomaco I
+
+items.Scroll_Second_Stomach_I.description = Aumenta la cura istantanea del 15%.
+
+items.Scroll_Second_Stomach_II.name = Pergamena del Secondo Stomaco II
+
+items.Scroll_Second_Stomach_II.description = Aumenta la cura istantanea del 30%.
+
+items.Scroll_Second_Stomach_III.name = Pergamena del Secondo Stomaco III
+
+items.Scroll_Second_Stomach_III.description = Aumenta la cura istantanea del 45%.
+
 
 
 enchantment.poison.name = Veleno
@@ -700,11 +716,23 @@ enchantment.environmental_protection.name = Protezione Ambientale
 
 enchantment.environmental_protection.description = Riduce i danni ambientali del 4% per pezzo di armatura.
 
+enchantment.regeneration.name = Rigenerazione
+
+enchantment.regeneration.description = Rigenera passivamente {amount} HP al secondo. Solo corazze.
+
+enchantment.second_stomach.name = Secondo Stomaco
+
+enchantment.second_stomach.description = Aumenta la cura istantanea da cibo e pozioni del {amount}% per livello. Solo corazze.
+
 enchantment.poison.bonus = Avvelena i bersagli ({amount} danni/s per {duration}s)
 enchantment.environmental_protection.bonus = Danni ambientali ridotti del {amount}%
+enchantment.regeneration.bonus = Rigenera {amount} HP al secondo
+enchantment.second_stomach.bonus = Cura istantanea aumentata del {amount}%
 
 enchantment.poison.walkthrough = Avvelena i bersagli al colpo, infliggendo {amount} danni al secondo per {duration} secondi. Si applica ad armi corpo a corpo e a distanza. Non combinabile con Combustione.
 enchantment.environmental_protection.walkthrough = Riduce i danni elementali e ambientali in arrivo (fuoco, ghiaccio, cactus e altri pericoli) del {amount}% per pezzo di armatura per livello, e mitiga proporzionalmente l'intensità del rallentamento dell'incantesimo Gelo. Si applica all'armatura.
+enchantment.regeneration.walkthrough = Rigenera passivamente {amount} HP al secondo indossando una corazza incantata. Solo corazze.
+enchantment.second_stomach.walkthrough = Aumenta l'efficacia della cura istantanea da cibo e pozioni del {amount}% per livello. Solo corazze.
 
 
 items.Scroll_Custom.name = Pergamena Personalizzata
@@ -761,6 +789,8 @@ itemCategory.STAFF_MANA = Bastoni di Mana
 
 itemCategory.STAFF_ESSENCE = Bastoni di Essenza
 
+itemCategory.CHESTPLATE = Corazze
+
 itemCategory.UNKNOWN = Sconosciuto
 
 config.multiplier.sharpness = Danni per Livello
@@ -793,5 +823,7 @@ config.multiplier.elemental_heart = Probabilità Risparmio per Livello
 config.multiplier.poison = Danni al Secondo
 config.multiplier.poison:duration = Durata (Secondi)
 config.multiplier.environmental_protection = Riduzione per Livello
+config.multiplier.regeneration = HP Al Secondo
+config.multiplier.second_stomach = Bonus Per Livello
 items.EngravingTable.name = Engraving Table
 items.EngravingTable.description = A rune engraving table used to rename items and recolor enchantment glows.
