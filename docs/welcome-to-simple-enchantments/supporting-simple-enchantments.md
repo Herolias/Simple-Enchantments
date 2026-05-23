@@ -9,7 +9,7 @@ If you would like to support the development of Simple Enchantments, there are m
 
 If you plan on hosting a Hytale Server, consider using Bisect Hosting with our code. It gives you a discount and us a commmission. We genuinely think that Bisect is a really good Hosting Provider, and they have an integrated mod manager to easily download and update Hytale Mods.
 
-[![https://www.bisecthosting.com/Herolias](../media/images/87d24680-40cb-471d-b1a9-bc3c9eb9ce68-28138a0805.webp)](https://www.bisecthosting.com/Herolias?r=Wiki)
+[![https://www.bisecthosting.com/Herolias](https://raw.githubusercontent.com/Herolias/Simple-Enchantments/main/docs/media/images/87d24680-40cb-471d-b1a9-bc3c9eb9ce68-28138a0805.webp)](https://www.bisecthosting.com/Herolias?r=Wiki)
 
 If you wish to support us financially, you can do so via Ko-fi:
 https://ko-fi.com/herolias

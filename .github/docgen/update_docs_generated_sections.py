@@ -31,7 +31,8 @@ ENCHANTMENT_PAGE_DIR = DOCS_DIR / "welcome-to-simple-enchantments" / "enchantmen
 ENCHANTMENT_ICON_DIR = DOCS_DIR / "media" / "enchantment-icons"
 RECIPE_ICON_DIR = DOCS_DIR / "media" / "recipe-icons"
 DOCSTAT_PATTERN = re.compile(r"<!--\s*DOCSTAT:([^>]+?)\s*-->.*?<!--\s*/DOCSTAT\s*-->", re.DOTALL)
-RAW_GITHUB_BRANCH = os.environ.get("DOCS_MEDIA_BRANCH") or os.environ.get("GITHUB_REF_NAME") or "main"
+# Keep raw media URLs stable across branch-specific GitHub Actions runs.
+RAW_GITHUB_BRANCH = os.environ.get("DOCS_MEDIA_BRANCH") or "main"
 RAW_GITHUB_BASE_URL = f"https://raw.githubusercontent.com/Herolias/Simple-Enchantments/{RAW_GITHUB_BRANCH}"
 
 
@@ -1169,6 +1170,52 @@ def render_recipe_table(
     return "\n".join(lines)
 
 
+def render_stats_table(stats_rows: list[tuple[str, str]]) -> str:
+    lines = [
+        (
+            '<div class="se-stats-card" style="border: 1px solid rgba(148, 163, 184, 0.22); '
+            'border-radius: 8px; padding: 10px 12px; '
+            'background: rgba(148, 163, 184, 0.04);">'
+        ),
+        (
+            '<div class="se-stats-grid" style="display: grid; '
+            'grid-template-columns: minmax(130px, 0.42fr) minmax(0, 1fr); '
+            'column-gap: 18px; align-items: center;">'
+        ),
+        (
+            '<div class="se-stats-heading" style="font-weight: 600; opacity: 0.75; padding: 0 0 8px;">'
+            "Field</div>"
+        ),
+        (
+            '<div class="se-stats-heading" style="font-weight: 600; opacity: 0.75; padding: 0 0 8px;">'
+            "Value</div>"
+        ),
+    ]
+
+    row_border = "border-top: 1px solid rgba(148, 163, 184, 0.18);"
+    for label, value in stats_rows:
+        lines.extend(
+            [
+                (
+                    f'<div class="se-stats-cell se-stats-label" '
+                    f'style="{row_border} display: flex; align-items: center; '
+                    'min-height: 38px; padding: 7px 0; font-weight: 600;">'
+                    f"{html.escape(label)}</div>"
+                ),
+                (
+                    f'<div class="se-stats-cell se-stats-value" '
+                    f'style="{row_border} display: flex; align-items: center; '
+                    'min-height: 38px; padding: 7px 0;">'
+                    f"{value}</div>"
+                ),
+            ]
+        )
+
+    lines.extend(["</div>", "</div>"])
+
+    return "\n".join(lines)
+
+
 def render_enchantment_page(
     enchantment: Enchantment,
     enchantment_by_id: dict[str, Enchantment],
@@ -1225,23 +1272,14 @@ def render_enchantment_page(
             "## Stats and Recipe",
             "",
             '<div class="se-stats-recipe" style="display: flex; gap: 24px; align-items: flex-start; flex-wrap: wrap;">',
-            '<div class="se-stats-panel" style="flex: 1 1 360px; min-width: 320px;">',
+            '<div class="se-stats-panel" style="flex: 1 1 420px; min-width: 320px;">',
             "<h3>Stats</h3>",
-            "<table>",
-            "<thead>",
-            "<tr><th>Field</th><th>Value</th></tr>",
-            "</thead>",
-            "<tbody>",
+            render_stats_table(stats_rows),
         ]
     )
 
-    for label, value in stats_rows:
-        lines.append(f"<tr><td>{html.escape(label)}</td><td>{value}</td></tr>")
-
     lines.extend(
         [
-            "</tbody>",
-            "</table>",
             "</div>",
             '<div class="se-recipe-panel" style="flex: 0 1 360px; min-width: 280px;">',
             "<h3>Recipe</h3>",
