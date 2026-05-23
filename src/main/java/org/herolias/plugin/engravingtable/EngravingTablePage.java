@@ -215,6 +215,10 @@ public class EngravingTablePage extends InteractiveCustomUIPage<EngravingTablePa
         commandBuilder.set("#NameInput.Value", this.editableName);
         commandBuilder.set("#NameHint.TextSpans",
                 Message.raw("Name color: 1 matching petal. Default is free."));
+        commandBuilder.set("#NamePreviewWarning.Visible",
+                showCustomization && !ItemStack.isEmpty(preview) && this.hasPendingNameColorChange(primary));
+        commandBuilder.set("#NamePreviewWarning.TextSpans",
+                Message.raw("Name color changes currently can't be previewed.").color(COLOR_ERROR));
         this.updateColorButtons(commandBuilder, true);
 
         commandBuilder.set("#GlowSection.Visible", showGlow);
@@ -333,7 +337,7 @@ public class EngravingTablePage extends InteractiveCustomUIPage<EngravingTablePa
         ItemGridSlot slot = new ItemGridSlot(this.createCustomUiVisualStack(displayStack));
 
         if (displayMetadata != null) {
-            String name = this.toCustomUiMarkup(displayMetadata.getName());
+            String name = this.toCustomUiPlainText(displayMetadata.getName());
             if (name != null && !name.isBlank()) {
                 slot.setName(name);
             }
@@ -348,9 +352,35 @@ public class EngravingTablePage extends InteractiveCustomUIPage<EngravingTablePa
     @Nonnull
     private ItemStack createCustomUiVisualStack(
             @Nonnull ItemStack itemStack) {
-        // CustomUI ItemGrid slots reject metadata-rich stacks in the Slots payload.
+        // CustomUI ItemGrid slots reject metadata in the Slots payload.
         // The grid's own tooltip fields carry the rendered text instead.
         return itemStack.withMetadata((BsonDocument) null);
+    }
+
+    @Nullable
+    private String toCustomUiPlainText(@Nullable Message message) {
+        if (message == null) {
+            return null;
+        }
+        StringBuilder builder = new StringBuilder();
+        this.appendCustomUiPlainText(builder, message.getFormattedMessage());
+        return builder.isEmpty() ? null : builder.toString();
+    }
+
+    private void appendCustomUiPlainText(@Nonnull StringBuilder builder, @Nullable FormattedMessage message) {
+        if (message == null) {
+            return;
+        }
+
+        String text = this.resolveFormattedText(message);
+        if (text != null) {
+            builder.append(text);
+        }
+        if (message.children != null) {
+            for (FormattedMessage child : message.children) {
+                this.appendCustomUiPlainText(builder, child);
+            }
+        }
     }
 
     @Nullable
@@ -581,11 +611,7 @@ public class EngravingTablePage extends InteractiveCustomUIPage<EngravingTablePa
             EngravingTableCustomizationData customization = EngravingTableCustomizationData.fromItemStack(primary);
             name = this.resolveCurrentDisplayName(primary, customization);
         }
-        Message message = Message.raw(name);
-        if (this.selectedNameColor != EngravingTableColorOption.DEFAULT_NAME_COLOR) {
-            message = message.color(this.selectedNameColor.getHexColor());
-        }
-        return message;
+        return Message.raw(name);
     }
 
     @Nonnull

@@ -402,9 +402,19 @@ Group {
           }
 
           Label #NameHint {
-            Anchor: (Height: 14, Bottom: 5);
+            Anchor: (Height: 14, Bottom: 1);
             Style: @CaptionStyle;
             Text: "Name color cost";
+          }
+
+          Label #NamePreviewWarning {
+            Anchor: (Height: 14, Bottom: 4);
+            Style: (
+              ...@CaptionStyle,
+              TextColor: #ff8a8a
+            );
+            Text: "Name color changes currently can't be previewed.";
+            Visible: false;
           }
 
           Group {

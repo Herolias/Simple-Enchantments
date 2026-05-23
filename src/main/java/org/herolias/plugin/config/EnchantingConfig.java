@@ -465,14 +465,14 @@ public class EnchantingConfig {
 
                 addScrollRecipe("Scroll_Environmental_Protection_I", 1, "Ingredient_Fabric_Scrap_Cindercloth", 5,
                                 "Ingredient_Crystal_Blue", 10, "Ingredient_Fire_Essence", 5,
-                                "Plant_Crop_Mushroom_Boomshroom_Small", 5);
+                                "Ingredient_Ice_Essence", 5);
                 addScrollRecipe("Scroll_Environmental_Protection_II", 2, "Ingredient_Fabric_Scrap_Cindercloth", 5,
                                 "Ingredient_Crystal_Blue", 15, "Ingredient_Fire_Essence", 10,
-                                "Plant_Crop_Mushroom_Boomshroom_Small",
+                                "Ingredient_Ice_Essence",
                                 10);
                 addScrollRecipe("Scroll_Environmental_Protection_III", 3, "Ingredient_Fabric_Scrap_Cindercloth", 5,
                                 "Ingredient_Crystal_Blue", 25, "Ingredient_Fire_Essence", 20,
-                                "Plant_Crop_Mushroom_Boomshroom_Small",
+                                "Ingredient_Ice_Essence",
                                 15);
 
                 addScrollRecipe("Scroll_Regeneration_I", 4, "Ingredient_Fabric_Scrap_Cindercloth", 5,
@@ -480,11 +480,11 @@ public class EnchantingConfig {
                                 "Ingredient_Life_Essence_Concentrated", 1);
 
                 addScrollRecipe("Scroll_Second_Stomach_I", 1, "Ingredient_Fabric_Scrap_Cindercloth", 5,
-                                "Plant_Crop_Health1", 5, "Ingredient_Life_Essence", 10, "Ingredient_Crystal_Green", 10);
+                                "Food_Popcorn", 1, "Ingredient_Life_Essence", 10, "Ingredient_Crystal_Green", 10);
                 addScrollRecipe("Scroll_Second_Stomach_II", 2, "Ingredient_Fabric_Scrap_Cindercloth", 5,
-                                "Plant_Crop_Health2", 5, "Ingredient_Life_Essence", 20, "Ingredient_Crystal_Green", 15);
+                                "Food_Popcorn", 3, "Ingredient_Life_Essence", 20, "Ingredient_Crystal_Green", 15);
                 addScrollRecipe("Scroll_Second_Stomach_III", 3, "Ingredient_Fabric_Scrap_Cindercloth", 5,
-                                "Plant_Crop_Health3", 5, "Ingredient_Life_Essence", 30, "Ingredient_Crystal_Green", 25);
+                                "Food_Popcorn", 5, "Ingredient_Life_Essence", 30, "Ingredient_Crystal_Green", 25);
 
                 if (enchantingTableRecipe == null) {
                         enchantingTableRecipe = new ArrayList<>();

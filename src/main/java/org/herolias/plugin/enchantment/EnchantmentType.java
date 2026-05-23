@@ -227,6 +227,7 @@ public final class EnchantmentType {
         registry.addConflict("pick_perfect", "fortune");
         registry.addConflict("pick_perfect", "smelting");
         registry.addConflict("reflection", "absorption");
+        registry.addConflict("regeneration", "second_stomach");
 
         // Register MultiplierDefinitions for all built-in enchantments
         SHARPNESS.setMultiplierDefinitions(java.util.List.of(
