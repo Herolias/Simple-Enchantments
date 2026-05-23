@@ -29,3 +29,13 @@ Generated: 2026-05-23 14:39:54 UTC.
   - [How Items store Enchantments](server-owner-guide/how-items-store-enchantments.md)
   - [Usefull resources](server-owner-guide/usefull-resources.md)
 - [API Documentation](api-documentation.md)
+
+<!-- AUTO-GENERATED:reference-navigation:start -->
+
+## Generated Reference
+
+- [Reference](reference)
+  - [Config Defaults](reference/config-defaults.md)
+  - [Enchantment Modifiers](reference/enchantment-modifiers.md)
+
+<!-- AUTO-GENERATED:reference-navigation:end -->

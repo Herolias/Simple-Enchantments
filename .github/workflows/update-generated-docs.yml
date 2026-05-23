@@ -1,0 +1,45 @@
+name: Update generated docs
+
+on:
+  push:
+    branches:
+      - main
+      - dev
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: generated-docs-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  update-generated-docs:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.13"
+
+      - name: Generate docs
+        run: python -B .github/docgen/update_docs_generated_sections.py
+
+      - name: Commit generated docs
+        run: |
+          if git diff --quiet -- docs; then
+            echo "Generated docs are already up to date."
+            exit 0
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs
+          git commit -m "Update generated docs"
+          git push origin "HEAD:${GITHUB_REF_NAME}"
