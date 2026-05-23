@@ -4,8 +4,8 @@ Simple Enchantments adds a complete enchanting system to the game. Currently, th
 
 This Documentation is split into 3 parts:
 * **This Guide:** For general gameplay and getting started.
-* **[Server Owner Guide](../server-owner-guide):** A breakdown of commands and config files.
-* **[Enchantment API Documentation](../api-documentation.md):** For developers looking to build on top of the mod.
+* **[Server Owner Guide](../02-server-owner-guide):** A breakdown of commands and config files.
+* **[Enchantment API Documentation](../03-api-documentation.md):** For developers looking to build on top of the mod.
 
 ## History 
 

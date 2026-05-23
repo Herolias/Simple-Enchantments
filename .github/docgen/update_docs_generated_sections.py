@@ -27,7 +27,7 @@ ASSET_COMMON_DIR = ASSETS_DIR / "Common"
 RECIPE_ITEM_NAME_CACHE = Path(".github/docgen/recipe_item_names.json")
 DOCS_DIR = Path("docs")
 REFERENCE_DIR = DOCS_DIR / "reference"
-ENCHANTMENT_PAGE_DIR = DOCS_DIR / "welcome-to-simple-enchantments" / "enchantments"
+ENCHANTMENT_PAGE_DIR = DOCS_DIR / "01-welcome-to-simple-enchantments" / "enchantments"
 ENCHANTMENT_ICON_DIR = DOCS_DIR / "media" / "enchantment-icons"
 RECIPE_ICON_DIR = DOCS_DIR / "media" / "recipe-icons"
 DOCSTAT_PATTERN = re.compile(r"<!--\s*DOCSTAT:([^>]+?)\s*-->.*?<!--\s*/DOCSTAT\s*-->", re.DOTALL)
@@ -1394,12 +1394,12 @@ def update_integrated_pages(
 
     block_updates = [
         (
-            DOCS_DIR / "welcome-to-simple-enchantments" / "enchantments" / "README.md",
+            DOCS_DIR / "01-welcome-to-simple-enchantments" / "enchantments" / "README.md",
             "enchantment-index",
             render_enchantment_index(enchantments, translations),
         ),
         (
-            DOCS_DIR / "welcome-to-simple-enchantments" / "enchantments" / "hiddendisabled-enchantments.md",
+            DOCS_DIR / "01-welcome-to-simple-enchantments" / "enchantments" / "hiddendisabled-enchantments.md",
             "disabled-enchantments",
             render_disabled_enchantments(enchantments),
         ),
