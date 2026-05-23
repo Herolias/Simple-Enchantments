@@ -1,11 +1,11 @@
 ---
-title: "Welcome to Simple Enchantments"
+title: "Getting Started"
 order: 1
 published: true
 draft: false
 ---
 
-## Welcome to Simple Enchantments 
+## Getting Started
 
 Simple Enchantments adds a complete enchanting system to the game. Currently, the mod includes an Enchantment Table, <!-- DOCSTAT:enchantments.count -->33<!-- /DOCSTAT --> unique Enchantments, a detailed config to customize almost every part of the mod, 3 commands, and an API for developers to create their own enchantments or register custom weapons.
 
