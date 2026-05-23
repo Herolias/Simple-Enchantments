@@ -28,7 +28,7 @@ Increases instant healing from food and potions by 15% per level. Chestplate onl
 <div class="se-stats-cell se-stats-label" style="border-top: 1px solid rgba(148, 163, 184, 0.18); display: flex; align-items: center; min-height: 38px; padding: 7px 0; font-weight: 600; white-space: nowrap;">Crafting Tier</div>
 <div class="se-stats-cell se-stats-value" style="border-top: 1px solid rgba(148, 163, 184, 0.18); display: flex; align-items: center; min-height: 38px; padding: 7px 0;"><span class="se-inline-code" style="display: inline-block; border-radius: 6px; padding: 2px 6px; line-height: 1.2; background: rgba(148, 163, 184, 0.22); font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace; font-size: 0.92em;">1/2/3</span></div>
 <div class="se-stats-cell se-stats-label" style="border-top: 1px solid rgba(148, 163, 184, 0.18); display: flex; align-items: center; min-height: 38px; padding: 7px 0; font-weight: 600; white-space: nowrap;">Conflicts With</div>
-<div class="se-stats-cell se-stats-value" style="border-top: 1px solid rgba(148, 163, 184, 0.18); display: flex; align-items: center; min-height: 38px; padding: 7px 0;"><a href="regeneration.md">Regeneration</a></div>
+<div class="se-stats-cell se-stats-value" style="border-top: 1px solid rgba(148, 163, 184, 0.18); display: flex; align-items: center; min-height: 38px; padding: 7px 0;"><a href="https://wiki.hytalemodding.dev/mod/simple-enchantments/regeneration">Regeneration</a></div>
 </div>
 </div>
 </div>

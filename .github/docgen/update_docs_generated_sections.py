@@ -34,6 +34,10 @@ DOCSTAT_PATTERN = re.compile(r"<!--\s*DOCSTAT:([^>]+?)\s*-->.*?<!--\s*/DOCSTAT\s
 # Keep raw media URLs stable across branch-specific GitHub Actions runs.
 RAW_GITHUB_BRANCH = os.environ.get("DOCS_MEDIA_BRANCH") or "main"
 RAW_GITHUB_BASE_URL = f"https://raw.githubusercontent.com/Herolias/Simple-Enchantments/{RAW_GITHUB_BRANCH}"
+WIKI_MOD_BASE_URL = os.environ.get(
+    "DOCS_WIKI_BASE_URL",
+    "https://wiki.hytalemodding.dev/mod/simple-enchantments",
+)
 INLINE_CODE_STYLE = (
     "display: inline-block; border-radius: 6px; padding: 2px 6px; line-height: 1.2; "
     "background: rgba(148, 163, 184, 0.22); "
@@ -504,6 +508,11 @@ def raw_github_url(path: Path) -> str:
     return f"{RAW_GITHUB_BASE_URL}/{quote(path.as_posix(), safe='/')}"
 
 
+def wiki_page_url(path: Path) -> str:
+    slug = path.parent.name if path.name == "README.md" else path.stem
+    return f"{WIKI_MOD_BASE_URL}/{quote(slug, safe='')}"
+
+
 def format_categories(categories: list[str], translations: dict[str, str]) -> str:
     fallback_labels = {
         "LEGS": "Leg Armor",
@@ -887,8 +896,8 @@ def render_reference_index() -> str:
             "",
             "Generated reference pages for values that are maintained in the mod source.",
             "",
-            "- [Config Defaults](config-defaults.md)",
-            "- [Enchantment Modifiers](enchantment-modifiers.md)",
+            f"- [Config Defaults]({wiki_page_url(DOCS_DIR / 'reference' / 'config-defaults.md')})",
+            f"- [Enchantment Modifiers]({wiki_page_url(DOCS_DIR / 'reference' / 'enchantment-modifiers.md')})",
             "",
         ]
     )
@@ -1022,7 +1031,7 @@ def render_disabled_enchantments(enchantments: list[Enchantment]) -> str:
         return "No built-in enchantments are disabled by default."
 
     return "\n".join(
-        f"* [{markdown_escape(enchantment.name)}]({page_for_enchantment(enchantment).name})"
+        f"* [{markdown_escape(enchantment.name)}]({wiki_page_url(page_for_enchantment(enchantment))})"
         for enchantment in disabled
     )
 
@@ -1090,7 +1099,7 @@ def render_enchantment_index(enchantments: list[Enchantment], translations: dict
             if multiplier
             else "None"
         )
-        page_name = html.escape(page_for_enchantment(enchantment).name, quote=True)
+        page_name = html.escape(wiki_page_url(page_for_enchantment(enchantment)), quote=True)
         lines.extend(
             [
                 "<tr>",
@@ -1137,7 +1146,7 @@ def render_enchantment_links(
     for enchantment_id in ids:
         target = enchantment_by_id.get(enchantment_id)
         if target:
-            links.append(f"[{markdown_escape(target.name)}]({page_for_enchantment(target).name})")
+            links.append(f"[{markdown_escape(target.name)}]({wiki_page_url(page_for_enchantment(target))})")
         else:
             links.append(f"`{enchantment_id}`")
     return ", ".join(links) if links else "None"
@@ -1152,7 +1161,7 @@ def render_enchantment_links_html(
         target = enchantment_by_id.get(enchantment_id)
         if target:
             links.append(
-                f'<a href="{html.escape(page_for_enchantment(target).name, quote=True)}">'
+                f'<a href="{html.escape(wiki_page_url(page_for_enchantment(target)), quote=True)}">'
                 f"{html.escape(target.name)}</a>"
             )
         else:
@@ -1399,7 +1408,7 @@ def update_integrated_pages(
             render_enchantment_index(enchantments, translations),
         ),
         (
-            DOCS_DIR / "welcome-to-simple-enchantments" / "enchantments" / "hiddendisabled-enchantments.md",
+            DOCS_DIR / "welcome-to-simple-enchantments" / "enchantments" / "README.md",
             "disabled-enchantments",
             render_disabled_enchantments(enchantments),
         ),
@@ -1421,9 +1430,9 @@ def ensure_root_reference_link(root_readme: Path) -> bool:
             "",
             "## Generated Reference",
             "",
-            "- [Reference](reference)",
-            "  - [Config Defaults](reference/config-defaults.md)",
-            "  - [Enchantment Modifiers](reference/enchantment-modifiers.md)",
+            f"- [Reference]({wiki_page_url(DOCS_DIR / 'reference' / 'README.md')})",
+            f"  - [Config Defaults]({wiki_page_url(DOCS_DIR / 'reference' / 'config-defaults.md')})",
+            f"  - [Enchantment Modifiers]({wiki_page_url(DOCS_DIR / 'reference' / 'enchantment-modifiers.md')})",
             "",
             marker_end,
             "",
