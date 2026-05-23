@@ -1344,8 +1344,12 @@ def render_enchantment_page(
             "",
             "## Stats and Recipe",
             "",
-            '<div class="se-stats-recipe" style="display: flex; gap: 24px; align-items: flex-start; flex-wrap: wrap;">',
-            '<div class="se-stats-panel" style="flex: 0 1 560px; min-width: 360px; max-width: 620px;">',
+            (
+                '<div class="se-stats-recipe" style="display: grid; '
+                'grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); '
+                'gap: 24px; align-items: flex-start;">'
+            ),
+            '<div class="se-stats-panel" style="min-width: 0;">',
             "<h3>Stats</h3>",
             render_stats_table(stats_rows),
         ]
@@ -1354,7 +1358,7 @@ def render_enchantment_page(
     lines.extend(
         [
             "</div>",
-            '<div class="se-recipe-panel" style="flex: 0 1 360px; min-width: 280px;">',
+            '<div class="se-recipe-panel" style="width: 100%; max-width: 380px; min-width: 0;">',
             "<h3>Recipe</h3>",
             render_recipe_table(
                 page_path,
