@@ -1,3 +1,10 @@
+---
+title: "The General Page"
+order: 1
+published: true
+draft: false
+---
+
 # The General Page
 
 On the **General Page**, you can edit core mod settings and behaviors. Here is a breakdown of all available configuration options:

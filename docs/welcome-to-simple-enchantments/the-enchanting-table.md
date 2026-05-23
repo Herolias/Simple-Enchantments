@@ -1,3 +1,10 @@
+---
+title: "The Enchanting Table"
+order: 1
+published: true
+draft: false
+---
+
 # The Enchanting Table
 
 ![](https://raw.githubusercontent.com/Herolias/Simple-Enchantments/main/docs/media/images/A5C9l1w-70df1f50b9.png)

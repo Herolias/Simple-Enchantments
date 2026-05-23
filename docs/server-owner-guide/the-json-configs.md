@@ -1,3 +1,10 @@
+---
+title: "The JSON Configs"
+order: 5
+published: true
+draft: false
+---
+
 # The json configs
 
 You find the config files of Simple Enchantments in YourServerDir/mods/Simple_Enchantments_Config.

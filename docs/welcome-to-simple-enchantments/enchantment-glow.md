@@ -1,3 +1,10 @@
+---
+title: "Enchantment Glow"
+order: 5
+published: true
+draft: false
+---
+
 # Enchantment Glow
 
 Enchanted Items get a Glow effect:

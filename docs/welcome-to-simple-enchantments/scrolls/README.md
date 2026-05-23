@@ -1,3 +1,10 @@
+---
+title: "Scrolls"
+order: 2
+published: true
+draft: false
+---
+
 # Scrolls
 
 ![](https://raw.githubusercontent.com/Herolias/Simple-Enchantments/main/docs/media/images/TzvR6D3-7feae16596.png)

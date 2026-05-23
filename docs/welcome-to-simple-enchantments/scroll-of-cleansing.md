@@ -1,3 +1,10 @@
+---
+title: "Scroll of Cleansing"
+order: 3
+published: true
+draft: false
+---
+
 # Scroll of Cleansing
 
 If you ever change your mind about an Enchantment on one of your Items, you can easily remove it via the Scroll of Cleansing. It unlocks at the <!-- DOCSTAT:recipe.Scroll_Cleansing.tier;ordinal -->2nd<!-- /DOCSTAT --> Tier of the Enchantment Table and is found in every Category.

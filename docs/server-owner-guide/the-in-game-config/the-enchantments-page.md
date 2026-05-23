@@ -1,3 +1,10 @@
+---
+title: "The Enchantments Page"
+order: 2
+published: true
+draft: false
+---
+
 # The Enchantments Page
 
 On the Enchantments Page, you can enable/disable individual enchantments as well as changing their modifier(s) if they have one.

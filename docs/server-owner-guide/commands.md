@@ -1,3 +1,10 @@
+---
+title: "Commands"
+order: 2
+published: true
+draft: false
+---
+
 # Commands
 
 Simple Enchantments has currently 3 Commands and an extension to the /give command. Here is a breakdown for each command:
