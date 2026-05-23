@@ -1,6 +1,6 @@
 # Frenzy
 
-![Frenzy scroll icon](https://raw.githubusercontent.com/Herolias/Simple-Enchantments/main/docs/media/enchantment-icons/frenzy.png)
+![Frenzy scroll icon](https://raw.githubusercontent.com/Herolias/Simple-Enchantments/dev/docs/media/enchantment-icons/frenzy.png)
 
 Increases signature charge rate by 15%.
 
@@ -31,10 +31,10 @@ Increases signature charge rate by 15%.
 <tr><th>Ingredient</th><th>Amount</th></tr>
 </thead>
 <tbody>
-<tr><td><img src="https://raw.githubusercontent.com/Herolias/Simple-Enchantments/main/docs/media/recipe-icons/Ingredient_Fabric_Scrap_Cindercloth.png" alt="Cindercloth Scraps" width="32"> Cindercloth Scraps</td><td><code>5/5/5</code></td></tr>
-<tr><td><img src="https://raw.githubusercontent.com/Herolias/Simple-Enchantments/main/docs/media/recipe-icons/Plant_Petals_Blood.png" alt="Blood Petals" width="32"> Blood Petals</td><td><code>15/20/25</code></td></tr>
-<tr><td><img src="https://raw.githubusercontent.com/Herolias/Simple-Enchantments/main/docs/media/recipe-icons/Ingredient_Crystal_Cyan.png" alt="Cyan Crystal Shards" width="32"> Cyan Crystal Shards</td><td><code>10/20/30</code></td></tr>
-<tr><td><img src="https://raw.githubusercontent.com/Herolias/Simple-Enchantments/main/docs/media/recipe-icons/Plant_Crop_Stamina1.png" alt="Storm Thistle" width="32"> Storm Thistle</td><td><code>5/7/10</code></td></tr>
+<tr><td><img src="https://raw.githubusercontent.com/Herolias/Simple-Enchantments/dev/docs/media/recipe-icons/Ingredient_Fabric_Scrap_Cindercloth.png" alt="Cindercloth Scraps" width="32"> Cindercloth Scraps</td><td><code>5/5/5</code></td></tr>
+<tr><td><img src="https://raw.githubusercontent.com/Herolias/Simple-Enchantments/dev/docs/media/recipe-icons/Plant_Petals_Blood.png" alt="Blood Petals" width="32"> Blood Petals</td><td><code>15/20/25</code></td></tr>
+<tr><td><img src="https://raw.githubusercontent.com/Herolias/Simple-Enchantments/dev/docs/media/recipe-icons/Ingredient_Crystal_Cyan.png" alt="Cyan Crystal Shards" width="32"> Cyan Crystal Shards</td><td><code>10/20/30</code></td></tr>
+<tr><td><img src="https://raw.githubusercontent.com/Herolias/Simple-Enchantments/dev/docs/media/recipe-icons/Plant_Crop_Stamina1.png" alt="Storm Thistle" width="32"> Storm Thistle</td><td><code>5/7/10</code></td></tr>
 </tbody>
 </table>
 </div>

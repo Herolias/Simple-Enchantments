@@ -1,6 +1,6 @@
 # Life Leech
 
-![Life Leech scroll icon](https://raw.githubusercontent.com/Herolias/Simple-Enchantments/main/docs/media/enchantment-icons/life-leech.png)
+![Life Leech scroll icon](https://raw.githubusercontent.com/Herolias/Simple-Enchantments/dev/docs/media/enchantment-icons/life-leech.png)
 
 Heals attacker for 10% of damage dealt.
 
@@ -31,10 +31,10 @@ Heals attacker for 10% of damage dealt.
 <tr><th>Ingredient</th><th>Amount</th></tr>
 </thead>
 <tbody>
-<tr><td><img src="https://raw.githubusercontent.com/Herolias/Simple-Enchantments/main/docs/media/recipe-icons/Ingredient_Fabric_Scrap_Cindercloth.png" alt="Cindercloth Scraps" width="32"> Cindercloth Scraps</td><td><code>5</code></td></tr>
-<tr><td><img src="https://raw.githubusercontent.com/Herolias/Simple-Enchantments/main/docs/media/recipe-icons/Plant_Crop_Health1.png" alt="Blood Rose" width="32"> Blood Rose</td><td><code>3</code></td></tr>
-<tr><td><img src="https://raw.githubusercontent.com/Herolias/Simple-Enchantments/main/docs/media/recipe-icons/Ingredient_Crystal_Red.png" alt="Red Crystal Shards" width="32"> Red Crystal Shards</td><td><code>20</code></td></tr>
-<tr><td><img src="https://raw.githubusercontent.com/Herolias/Simple-Enchantments/main/docs/media/recipe-icons/Ingredient_Life_Essence.png" alt="Essence of Life" width="32"> Essence of Life</td><td><code>25</code></td></tr>
+<tr><td><img src="https://raw.githubusercontent.com/Herolias/Simple-Enchantments/dev/docs/media/recipe-icons/Ingredient_Fabric_Scrap_Cindercloth.png" alt="Cindercloth Scraps" width="32"> Cindercloth Scraps</td><td><code>5</code></td></tr>
+<tr><td><img src="https://raw.githubusercontent.com/Herolias/Simple-Enchantments/dev/docs/media/recipe-icons/Plant_Crop_Health1.png" alt="Blood Rose" width="32"> Blood Rose</td><td><code>3</code></td></tr>
+<tr><td><img src="https://raw.githubusercontent.com/Herolias/Simple-Enchantments/dev/docs/media/recipe-icons/Ingredient_Crystal_Red.png" alt="Red Crystal Shards" width="32"> Red Crystal Shards</td><td><code>20</code></td></tr>
+<tr><td><img src="https://raw.githubusercontent.com/Herolias/Simple-Enchantments/dev/docs/media/recipe-icons/Ingredient_Life_Essence.png" alt="Essence of Life" width="32"> Essence of Life</td><td><code>25</code></td></tr>
 </tbody>
 </table>
 </div>

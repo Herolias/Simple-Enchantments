@@ -1,6 +1,6 @@
 # Sharpness
 
-![Sharpness scroll icon](https://raw.githubusercontent.com/Herolias/Simple-Enchantments/main/docs/media/enchantment-icons/sharpness.png)
+![Sharpness scroll icon](https://raw.githubusercontent.com/Herolias/Simple-Enchantments/dev/docs/media/enchantment-icons/sharpness.png)
 
 Increases melee damage by 10%.
 
@@ -31,10 +31,10 @@ Increases melee damage by 10%.
 <tr><th>Ingredient</th><th>Amount</th></tr>
 </thead>
 <tbody>
-<tr><td><img src="https://raw.githubusercontent.com/Herolias/Simple-Enchantments/main/docs/media/recipe-icons/Ingredient_Fabric_Scrap_Cindercloth.png" alt="Cindercloth Scraps" width="32"> Cindercloth Scraps</td><td><code>5/5/5</code></td></tr>
-<tr><td><img src="https://raw.githubusercontent.com/Herolias/Simple-Enchantments/main/docs/media/recipe-icons/Ingredient_Void_Essence.png" alt="Essence of the Void" width="32"> Essence of the Void</td><td><code>5/10/15</code></td></tr>
-<tr><td><img src="https://raw.githubusercontent.com/Herolias/Simple-Enchantments/main/docs/media/recipe-icons/Ingredient_Crystal_Blue.png" alt="Blue Crystal Shards" width="32"> Blue Crystal Shards</td><td><code>5/10/12</code></td></tr>
-<tr><td><img src="https://raw.githubusercontent.com/Herolias/Simple-Enchantments/main/docs/media/recipe-icons/Ingredient_Bar_Silver.png" alt="Silver Ingot" width="32"> Silver Ingot</td><td><code>5/10/20</code></td></tr>
+<tr><td><img src="https://raw.githubusercontent.com/Herolias/Simple-Enchantments/dev/docs/media/recipe-icons/Ingredient_Fabric_Scrap_Cindercloth.png" alt="Cindercloth Scraps" width="32"> Cindercloth Scraps</td><td><code>5/5/5</code></td></tr>
+<tr><td><img src="https://raw.githubusercontent.com/Herolias/Simple-Enchantments/dev/docs/media/recipe-icons/Ingredient_Void_Essence.png" alt="Essence of the Void" width="32"> Essence of the Void</td><td><code>5/10/15</code></td></tr>
+<tr><td><img src="https://raw.githubusercontent.com/Herolias/Simple-Enchantments/dev/docs/media/recipe-icons/Ingredient_Crystal_Blue.png" alt="Blue Crystal Shards" width="32"> Blue Crystal Shards</td><td><code>5/10/12</code></td></tr>
+<tr><td><img src="https://raw.githubusercontent.com/Herolias/Simple-Enchantments/dev/docs/media/recipe-icons/Ingredient_Bar_Silver.png" alt="Silver Ingot" width="32"> Silver Ingot</td><td><code>5/10/20</code></td></tr>
 </tbody>
 </table>
 </div>

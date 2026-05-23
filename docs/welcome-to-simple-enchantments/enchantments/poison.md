@@ -1,6 +1,6 @@
 # Poison
 
-![Poison scroll icon](https://raw.githubusercontent.com/Herolias/Simple-Enchantments/main/docs/media/enchantment-icons/poison.png)
+![Poison scroll icon](https://raw.githubusercontent.com/Herolias/Simple-Enchantments/dev/docs/media/enchantment-icons/poison.png)
 
 Poisons targets on hit (3 damage/s for 4s). Not combinable with Burn.
 
@@ -32,10 +32,10 @@ Poisons targets on hit (3 damage/s for 4s). Not combinable with Burn.
 <tr><th>Ingredient</th><th>Amount</th></tr>
 </thead>
 <tbody>
-<tr><td><img src="https://raw.githubusercontent.com/Herolias/Simple-Enchantments/main/docs/media/recipe-icons/Ingredient_Fabric_Scrap_Cindercloth.png" alt="Cindercloth Scraps" width="32"> Cindercloth Scraps</td><td><code>5</code></td></tr>
-<tr><td><img src="https://raw.githubusercontent.com/Herolias/Simple-Enchantments/main/docs/media/recipe-icons/Ingredient_Sac_Venom.png" alt="Venom Sac" width="32"> Venom Sac</td><td><code>25</code></td></tr>
-<tr><td><img src="https://raw.githubusercontent.com/Herolias/Simple-Enchantments/main/docs/media/recipe-icons/Ingredient_Crystal_Green.png" alt="Green Crystal Shards" width="32"> Green Crystal Shards</td><td><code>30</code></td></tr>
-<tr><td><img src="https://raw.githubusercontent.com/Herolias/Simple-Enchantments/main/docs/media/recipe-icons/Plant_Crop_Mushroom_Cap_Green.png" alt="Spotted Green Cap Mushroom" width="32"> Spotted Green Cap Mushroom</td><td><code>20</code></td></tr>
+<tr><td><img src="https://raw.githubusercontent.com/Herolias/Simple-Enchantments/dev/docs/media/recipe-icons/Ingredient_Fabric_Scrap_Cindercloth.png" alt="Cindercloth Scraps" width="32"> Cindercloth Scraps</td><td><code>5</code></td></tr>
+<tr><td><img src="https://raw.githubusercontent.com/Herolias/Simple-Enchantments/dev/docs/media/recipe-icons/Ingredient_Sac_Venom.png" alt="Venom Sac" width="32"> Venom Sac</td><td><code>25</code></td></tr>
+<tr><td><img src="https://raw.githubusercontent.com/Herolias/Simple-Enchantments/dev/docs/media/recipe-icons/Ingredient_Crystal_Green.png" alt="Green Crystal Shards" width="32"> Green Crystal Shards</td><td><code>30</code></td></tr>
+<tr><td><img src="https://raw.githubusercontent.com/Herolias/Simple-Enchantments/dev/docs/media/recipe-icons/Plant_Crop_Mushroom_Cap_Green.png" alt="Spotted Green Cap Mushroom" width="32"> Spotted Green Cap Mushroom</td><td><code>20</code></td></tr>
 </tbody>
 </table>
 </div>

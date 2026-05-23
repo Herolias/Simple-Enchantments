@@ -1,6 +1,6 @@
 # Freeze
 
-![Freeze scroll icon](https://raw.githubusercontent.com/Herolias/Simple-Enchantments/main/docs/media/enchantment-icons/freeze.png)
+![Freeze scroll icon](https://raw.githubusercontent.com/Herolias/Simple-Enchantments/dev/docs/media/enchantment-icons/freeze.png)
 
 Slows target by 50% for 5s on hit. Not combinable with Burn.
 
@@ -32,10 +32,10 @@ Slows target by 50% for 5s on hit. Not combinable with Burn.
 <tr><th>Ingredient</th><th>Amount</th></tr>
 </thead>
 <tbody>
-<tr><td><img src="https://raw.githubusercontent.com/Herolias/Simple-Enchantments/main/docs/media/recipe-icons/Ingredient_Fabric_Scrap_Cindercloth.png" alt="Cindercloth Scraps" width="32"> Cindercloth Scraps</td><td><code>5</code></td></tr>
-<tr><td><img src="https://raw.githubusercontent.com/Herolias/Simple-Enchantments/main/docs/media/recipe-icons/Ingredient_Ice_Essence.png" alt="Essence of Ice" width="32"> Essence of Ice</td><td><code>20</code></td></tr>
-<tr><td><img src="https://raw.githubusercontent.com/Herolias/Simple-Enchantments/main/docs/media/recipe-icons/Ingredient_Crystal_Cyan.png" alt="Cyan Crystal Shards" width="32"> Cyan Crystal Shards</td><td><code>20</code></td></tr>
-<tr><td><img src="https://raw.githubusercontent.com/Herolias/Simple-Enchantments/main/docs/media/recipe-icons/Plant_Flower_Bushy_White.png" alt="Frost Leaf" width="32"> Frost Leaf</td><td><code>3</code></td></tr>
+<tr><td><img src="https://raw.githubusercontent.com/Herolias/Simple-Enchantments/dev/docs/media/recipe-icons/Ingredient_Fabric_Scrap_Cindercloth.png" alt="Cindercloth Scraps" width="32"> Cindercloth Scraps</td><td><code>5</code></td></tr>
+<tr><td><img src="https://raw.githubusercontent.com/Herolias/Simple-Enchantments/dev/docs/media/recipe-icons/Ingredient_Ice_Essence.png" alt="Essence of Ice" width="32"> Essence of Ice</td><td><code>20</code></td></tr>
+<tr><td><img src="https://raw.githubusercontent.com/Herolias/Simple-Enchantments/dev/docs/media/recipe-icons/Ingredient_Crystal_Cyan.png" alt="Cyan Crystal Shards" width="32"> Cyan Crystal Shards</td><td><code>20</code></td></tr>
+<tr><td><img src="https://raw.githubusercontent.com/Herolias/Simple-Enchantments/dev/docs/media/recipe-icons/Plant_Flower_Bushy_White.png" alt="Frost Leaf" width="32"> Frost Leaf</td><td><code>3</code></td></tr>
 </tbody>
 </table>
 </div>

@@ -1,6 +1,6 @@
 # Pick Perfect
 
-![Pick Perfect scroll icon](https://raw.githubusercontent.com/Herolias/Simple-Enchantments/main/docs/media/enchantment-icons/pick-perfect.png)
+![Pick Perfect scroll icon](https://raw.githubusercontent.com/Herolias/Simple-Enchantments/dev/docs/media/enchantment-icons/pick-perfect.png)
 
 Mined blocks drop themselves instead of their usual drops. Not combinable with Fortune or Smelting.
 
@@ -32,10 +32,10 @@ Mined blocks drop themselves instead of their usual drops. Not combinable with F
 <tr><th>Ingredient</th><th>Amount</th></tr>
 </thead>
 <tbody>
-<tr><td><img src="https://raw.githubusercontent.com/Herolias/Simple-Enchantments/main/docs/media/recipe-icons/Ingredient_Fabric_Scrap_Cindercloth.png" alt="Cindercloth Scraps" width="32"> Cindercloth Scraps</td><td><code>5</code></td></tr>
-<tr><td><img src="https://raw.githubusercontent.com/Herolias/Simple-Enchantments/main/docs/media/recipe-icons/Plant_Petals_Azure.png" alt="Azure Petals" width="32"> Azure Petals</td><td><code>10</code></td></tr>
-<tr><td><img src="https://raw.githubusercontent.com/Herolias/Simple-Enchantments/main/docs/media/recipe-icons/Plant_Flower_Tall_Red.png" alt="Tall Red Rafflesia" width="32"> Tall Red Rafflesia</td><td><code>5</code></td></tr>
-<tr><td><img src="https://raw.githubusercontent.com/Herolias/Simple-Enchantments/main/docs/media/recipe-icons/Rock_Gem_Sapphire.png" alt="Sapphire" width="32"> Sapphire</td><td><code>1</code></td></tr>
+<tr><td><img src="https://raw.githubusercontent.com/Herolias/Simple-Enchantments/dev/docs/media/recipe-icons/Ingredient_Fabric_Scrap_Cindercloth.png" alt="Cindercloth Scraps" width="32"> Cindercloth Scraps</td><td><code>5</code></td></tr>
+<tr><td><img src="https://raw.githubusercontent.com/Herolias/Simple-Enchantments/dev/docs/media/recipe-icons/Plant_Petals_Azure.png" alt="Azure Petals" width="32"> Azure Petals</td><td><code>10</code></td></tr>
+<tr><td><img src="https://raw.githubusercontent.com/Herolias/Simple-Enchantments/dev/docs/media/recipe-icons/Plant_Flower_Tall_Red.png" alt="Tall Red Rafflesia" width="32"> Tall Red Rafflesia</td><td><code>5</code></td></tr>
+<tr><td><img src="https://raw.githubusercontent.com/Herolias/Simple-Enchantments/dev/docs/media/recipe-icons/Rock_Gem_Sapphire.png" alt="Sapphire" width="32"> Sapphire</td><td><code>1</code></td></tr>
 </tbody>
 </table>
 </div>

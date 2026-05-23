@@ -1,6 +1,6 @@
 # Looting
 
-![Looting scroll icon](https://raw.githubusercontent.com/Herolias/Simple-Enchantments/main/docs/media/enchantment-icons/looting.png)
+![Looting scroll icon](https://raw.githubusercontent.com/Herolias/Simple-Enchantments/dev/docs/media/enchantment-icons/looting.png)
 
 Increases mob max drop rates by 25% and boosts the chance of rare drops.
 
@@ -31,10 +31,10 @@ Increases mob max drop rates by 25% and boosts the chance of rare drops.
 <tr><th>Ingredient</th><th>Amount</th></tr>
 </thead>
 <tbody>
-<tr><td><img src="https://raw.githubusercontent.com/Herolias/Simple-Enchantments/main/docs/media/recipe-icons/Ingredient_Fabric_Scrap_Cindercloth.png" alt="Cindercloth Scraps" width="32"> Cindercloth Scraps</td><td><code>5/5/5</code></td></tr>
-<tr><td><img src="https://raw.githubusercontent.com/Herolias/Simple-Enchantments/main/docs/media/recipe-icons/Ingredient_Bar_Gold.png" alt="Gold Ingot" width="32"> Gold Ingot</td><td><code>5/10/20</code></td></tr>
-<tr><td><img src="https://raw.githubusercontent.com/Herolias/Simple-Enchantments/main/docs/media/recipe-icons/Ingredient_Crystal_Green.png" alt="Green Crystal Shards" width="32"> Green Crystal Shards</td><td><code>10/15/15</code></td></tr>
-<tr><td><img src="https://raw.githubusercontent.com/Herolias/Simple-Enchantments/main/docs/media/recipe-icons/Rock_Gem_Emerald.png" alt="Emerald" width="32"> Emerald</td><td><code>1/2/3</code></td></tr>
+<tr><td><img src="https://raw.githubusercontent.com/Herolias/Simple-Enchantments/dev/docs/media/recipe-icons/Ingredient_Fabric_Scrap_Cindercloth.png" alt="Cindercloth Scraps" width="32"> Cindercloth Scraps</td><td><code>5/5/5</code></td></tr>
+<tr><td><img src="https://raw.githubusercontent.com/Herolias/Simple-Enchantments/dev/docs/media/recipe-icons/Ingredient_Bar_Gold.png" alt="Gold Ingot" width="32"> Gold Ingot</td><td><code>5/10/20</code></td></tr>
+<tr><td><img src="https://raw.githubusercontent.com/Herolias/Simple-Enchantments/dev/docs/media/recipe-icons/Ingredient_Crystal_Green.png" alt="Green Crystal Shards" width="32"> Green Crystal Shards</td><td><code>10/15/15</code></td></tr>
+<tr><td><img src="https://raw.githubusercontent.com/Herolias/Simple-Enchantments/dev/docs/media/recipe-icons/Rock_Gem_Emerald.png" alt="Emerald" width="32"> Emerald</td><td><code>1/2/3</code></td></tr>
 </tbody>
 </table>
 </div>

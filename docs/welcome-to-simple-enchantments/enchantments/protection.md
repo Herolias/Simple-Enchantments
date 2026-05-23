@@ -1,6 +1,6 @@
 # Protection
 
-![Protection scroll icon](https://raw.githubusercontent.com/Herolias/Simple-Enchantments/main/docs/media/enchantment-icons/protection.png)
+![Protection scroll icon](https://raw.githubusercontent.com/Herolias/Simple-Enchantments/dev/docs/media/enchantment-icons/protection.png)
 
 Reduces incoming physical damage by 4% per armor piece.
 
@@ -31,10 +31,10 @@ Reduces incoming physical damage by 4% per armor piece.
 <tr><th>Ingredient</th><th>Amount</th></tr>
 </thead>
 <tbody>
-<tr><td><img src="https://raw.githubusercontent.com/Herolias/Simple-Enchantments/main/docs/media/recipe-icons/Ingredient_Fabric_Scrap_Cindercloth.png" alt="Cindercloth Scraps" width="32"> Cindercloth Scraps</td><td><code>5/5/5</code></td></tr>
-<tr><td><img src="https://raw.githubusercontent.com/Herolias/Simple-Enchantments/main/docs/media/recipe-icons/Ingredient_Life_Essence.png" alt="Essence of Life" width="32"> Essence of Life</td><td><code>15/30/40</code></td></tr>
-<tr><td><img src="https://raw.githubusercontent.com/Herolias/Simple-Enchantments/main/docs/media/recipe-icons/Ingredient_Crystal_Cyan.png" alt="Cyan Crystal Shards" width="32"> Cyan Crystal Shards</td><td><code>10/15/25</code></td></tr>
-<tr><td><img src="https://raw.githubusercontent.com/Herolias/Simple-Enchantments/main/docs/media/recipe-icons/Plant_Petals_Azure.png" alt="Azure Petals" width="32"> Azure Petals</td><td><code>10/10/10</code></td></tr>
+<tr><td><img src="https://raw.githubusercontent.com/Herolias/Simple-Enchantments/dev/docs/media/recipe-icons/Ingredient_Fabric_Scrap_Cindercloth.png" alt="Cindercloth Scraps" width="32"> Cindercloth Scraps</td><td><code>5/5/5</code></td></tr>
+<tr><td><img src="https://raw.githubusercontent.com/Herolias/Simple-Enchantments/dev/docs/media/recipe-icons/Ingredient_Life_Essence.png" alt="Essence of Life" width="32"> Essence of Life</td><td><code>15/30/40</code></td></tr>
+<tr><td><img src="https://raw.githubusercontent.com/Herolias/Simple-Enchantments/dev/docs/media/recipe-icons/Ingredient_Crystal_Cyan.png" alt="Cyan Crystal Shards" width="32"> Cyan Crystal Shards</td><td><code>10/15/25</code></td></tr>
+<tr><td><img src="https://raw.githubusercontent.com/Herolias/Simple-Enchantments/dev/docs/media/recipe-icons/Plant_Petals_Azure.png" alt="Azure Petals" width="32"> Azure Petals</td><td><code>10/10/10</code></td></tr>
 </tbody>
 </table>
 </div>

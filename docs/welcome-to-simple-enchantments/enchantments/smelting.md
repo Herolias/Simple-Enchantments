@@ -1,6 +1,6 @@
 # Smelting
 
-![Smelting scroll icon](https://raw.githubusercontent.com/Herolias/Simple-Enchantments/main/docs/media/enchantment-icons/smelting.png)
+![Smelting scroll icon](https://raw.githubusercontent.com/Herolias/Simple-Enchantments/dev/docs/media/enchantment-icons/smelting.png)
 
 Automatically smelts mined blocks.
 
@@ -32,9 +32,9 @@ Automatically smelts mined blocks.
 <tr><th>Ingredient</th><th>Amount</th></tr>
 </thead>
 <tbody>
-<tr><td><img src="https://raw.githubusercontent.com/Herolias/Simple-Enchantments/main/docs/media/recipe-icons/Ingredient_Fabric_Scrap_Cindercloth.png" alt="Cindercloth Scraps" width="32"> Cindercloth Scraps</td><td><code>5</code></td></tr>
-<tr><td><img src="https://raw.githubusercontent.com/Herolias/Simple-Enchantments/main/docs/media/recipe-icons/Ingredient_Fire_Essence.png" alt="Essence of Fire" width="32"> Essence of Fire</td><td><code>30</code></td></tr>
-<tr><td><img src="https://raw.githubusercontent.com/Herolias/Simple-Enchantments/main/docs/media/recipe-icons/Wood_Fire_Trunk.png" alt="Fire Log" width="32"> Fire Log</td><td><code>30</code></td></tr>
+<tr><td><img src="https://raw.githubusercontent.com/Herolias/Simple-Enchantments/dev/docs/media/recipe-icons/Ingredient_Fabric_Scrap_Cindercloth.png" alt="Cindercloth Scraps" width="32"> Cindercloth Scraps</td><td><code>5</code></td></tr>
+<tr><td><img src="https://raw.githubusercontent.com/Herolias/Simple-Enchantments/dev/docs/media/recipe-icons/Ingredient_Fire_Essence.png" alt="Essence of Fire" width="32"> Essence of Fire</td><td><code>30</code></td></tr>
+<tr><td><img src="https://raw.githubusercontent.com/Herolias/Simple-Enchantments/dev/docs/media/recipe-icons/Wood_Fire_Trunk.png" alt="Fire Log" width="32"> Fire Log</td><td><code>30</code></td></tr>
 </tbody>
 </table>
 </div>

@@ -1,6 +1,6 @@
 # Strength
 
-![Strength scroll icon](https://raw.githubusercontent.com/Herolias/Simple-Enchantments/main/docs/media/enchantment-icons/strength.png)
+![Strength scroll icon](https://raw.githubusercontent.com/Herolias/Simple-Enchantments/dev/docs/media/enchantment-icons/strength.png)
 
 Increases projectile damage by 10%.
 
@@ -31,10 +31,10 @@ Increases projectile damage by 10%.
 <tr><th>Ingredient</th><th>Amount</th></tr>
 </thead>
 <tbody>
-<tr><td><img src="https://raw.githubusercontent.com/Herolias/Simple-Enchantments/main/docs/media/recipe-icons/Ingredient_Fabric_Scrap_Cindercloth.png" alt="Cindercloth Scraps" width="32"> Cindercloth Scraps</td><td><code>5/5/5</code></td></tr>
-<tr><td><img src="https://raw.githubusercontent.com/Herolias/Simple-Enchantments/main/docs/media/recipe-icons/Ingredient_Void_Essence.png" alt="Essence of the Void" width="32"> Essence of the Void</td><td><code>10/20/25</code></td></tr>
-<tr><td><img src="https://raw.githubusercontent.com/Herolias/Simple-Enchantments/main/docs/media/recipe-icons/Plant_Crop_Stamina2.png" alt="Stormcap Mushroom" width="32"> Stormcap Mushroom</td><td><code>1/1/2</code></td></tr>
-<tr><td><img src="https://raw.githubusercontent.com/Herolias/Simple-Enchantments/main/docs/media/recipe-icons/Ingredient_Life_Essence.png" alt="Essence of Life" width="32"> Essence of Life</td><td><code>15/25/30</code></td></tr>
+<tr><td><img src="https://raw.githubusercontent.com/Herolias/Simple-Enchantments/dev/docs/media/recipe-icons/Ingredient_Fabric_Scrap_Cindercloth.png" alt="Cindercloth Scraps" width="32"> Cindercloth Scraps</td><td><code>5/5/5</code></td></tr>
+<tr><td><img src="https://raw.githubusercontent.com/Herolias/Simple-Enchantments/dev/docs/media/recipe-icons/Ingredient_Void_Essence.png" alt="Essence of the Void" width="32"> Essence of the Void</td><td><code>10/20/25</code></td></tr>
+<tr><td><img src="https://raw.githubusercontent.com/Herolias/Simple-Enchantments/dev/docs/media/recipe-icons/Plant_Crop_Stamina2.png" alt="Stormcap Mushroom" width="32"> Stormcap Mushroom</td><td><code>1/1/2</code></td></tr>
+<tr><td><img src="https://raw.githubusercontent.com/Herolias/Simple-Enchantments/dev/docs/media/recipe-icons/Ingredient_Life_Essence.png" alt="Essence of Life" width="32"> Essence of Life</td><td><code>15/25/30</code></td></tr>
 </tbody>
 </table>
 </div>

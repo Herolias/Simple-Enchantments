@@ -1,6 +1,6 @@
 # Waterbreathing
 
-![Waterbreathing scroll icon](https://raw.githubusercontent.com/Herolias/Simple-Enchantments/main/docs/media/enchantment-icons/waterbreathing.png)
+![Waterbreathing scroll icon](https://raw.githubusercontent.com/Herolias/Simple-Enchantments/dev/docs/media/enchantment-icons/waterbreathing.png)
 
 Reduces oxygen drain by 20%.
 
@@ -31,10 +31,10 @@ Reduces oxygen drain by 20%.
 <tr><th>Ingredient</th><th>Amount</th></tr>
 </thead>
 <tbody>
-<tr><td><img src="https://raw.githubusercontent.com/Herolias/Simple-Enchantments/main/docs/media/recipe-icons/Ingredient_Fabric_Scrap_Cindercloth.png" alt="Cindercloth Scraps" width="32"> Cindercloth Scraps</td><td><code>5/5/5</code></td></tr>
-<tr><td><img src="https://raw.githubusercontent.com/Herolias/Simple-Enchantments/main/docs/media/recipe-icons/Ingredient_Water_Essence.png" alt="Essence of Water" width="32"> Essence of Water</td><td><code>1/2/3</code></td></tr>
-<tr><td><img src="https://raw.githubusercontent.com/Herolias/Simple-Enchantments/main/docs/media/recipe-icons/Deco_Coral_Shell.png" alt="Coral Seashell" width="32"> Coral Seashell</td><td><code>5/7/10</code></td></tr>
-<tr><td><img src="https://raw.githubusercontent.com/Herolias/Simple-Enchantments/main/docs/media/recipe-icons/Ingredient_Crystal_Blue.png" alt="Blue Crystal Shards" width="32"> Blue Crystal Shards</td><td><code>15/20/30</code></td></tr>
+<tr><td><img src="https://raw.githubusercontent.com/Herolias/Simple-Enchantments/dev/docs/media/recipe-icons/Ingredient_Fabric_Scrap_Cindercloth.png" alt="Cindercloth Scraps" width="32"> Cindercloth Scraps</td><td><code>5/5/5</code></td></tr>
+<tr><td><img src="https://raw.githubusercontent.com/Herolias/Simple-Enchantments/dev/docs/media/recipe-icons/Ingredient_Water_Essence.png" alt="Essence of Water" width="32"> Essence of Water</td><td><code>1/2/3</code></td></tr>
+<tr><td><img src="https://raw.githubusercontent.com/Herolias/Simple-Enchantments/dev/docs/media/recipe-icons/Deco_Coral_Shell.png" alt="Coral Seashell" width="32"> Coral Seashell</td><td><code>5/7/10</code></td></tr>
+<tr><td><img src="https://raw.githubusercontent.com/Herolias/Simple-Enchantments/dev/docs/media/recipe-icons/Ingredient_Crystal_Blue.png" alt="Blue Crystal Shards" width="32"> Blue Crystal Shards</td><td><code>15/20/30</code></td></tr>
 </tbody>
 </table>
 </div>

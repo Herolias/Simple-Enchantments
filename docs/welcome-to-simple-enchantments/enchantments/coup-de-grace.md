@@ -1,6 +1,6 @@
 # Coup de Grâce
 
-![Coup de Grâce scroll icon](https://raw.githubusercontent.com/Herolias/Simple-Enchantments/main/docs/media/enchantment-icons/coup-de-grace.png)
+![Coup de Grâce scroll icon](https://raw.githubusercontent.com/Herolias/Simple-Enchantments/dev/docs/media/enchantment-icons/coup-de-grace.png)
 
 Increases damage to stunned enemies by 20%.
 
@@ -32,10 +32,10 @@ Increases damage to stunned enemies by 20%.
 <tr><th>Ingredient</th><th>Amount</th></tr>
 </thead>
 <tbody>
-<tr><td><img src="https://raw.githubusercontent.com/Herolias/Simple-Enchantments/main/docs/media/recipe-icons/Ingredient_Fabric_Scrap_Cindercloth.png" alt="Cindercloth Scraps" width="32"> Cindercloth Scraps</td><td><code>5/5/5</code></td></tr>
-<tr><td><img src="https://raw.githubusercontent.com/Herolias/Simple-Enchantments/main/docs/media/recipe-icons/Plant_Crop_Stamina2.png" alt="Stormcap Mushroom" width="32"> Stormcap Mushroom</td><td><code>3/5/7</code></td></tr>
-<tr><td><img src="https://raw.githubusercontent.com/Herolias/Simple-Enchantments/main/docs/media/recipe-icons/Ingredient_Crystal_Yellow.png" alt="Yellow Crystal Shards" width="32"> Yellow Crystal Shards</td><td><code>15/20/25</code></td></tr>
-<tr><td><img src="https://raw.githubusercontent.com/Herolias/Simple-Enchantments/main/docs/media/recipe-icons/Ingredient_Void_Essence.png" alt="Essence of the Void" width="32"> Essence of the Void</td><td><code>10/15/20</code></td></tr>
+<tr><td><img src="https://raw.githubusercontent.com/Herolias/Simple-Enchantments/dev/docs/media/recipe-icons/Ingredient_Fabric_Scrap_Cindercloth.png" alt="Cindercloth Scraps" width="32"> Cindercloth Scraps</td><td><code>5/5/5</code></td></tr>
+<tr><td><img src="https://raw.githubusercontent.com/Herolias/Simple-Enchantments/dev/docs/media/recipe-icons/Plant_Crop_Stamina2.png" alt="Stormcap Mushroom" width="32"> Stormcap Mushroom</td><td><code>3/5/7</code></td></tr>
+<tr><td><img src="https://raw.githubusercontent.com/Herolias/Simple-Enchantments/dev/docs/media/recipe-icons/Ingredient_Crystal_Yellow.png" alt="Yellow Crystal Shards" width="32"> Yellow Crystal Shards</td><td><code>15/20/25</code></td></tr>
+<tr><td><img src="https://raw.githubusercontent.com/Herolias/Simple-Enchantments/dev/docs/media/recipe-icons/Ingredient_Void_Essence.png" alt="Essence of the Void" width="32"> Essence of the Void</td><td><code>10/15/20</code></td></tr>
 </tbody>
 </table>
 </div>
