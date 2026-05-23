@@ -1120,7 +1120,7 @@ customUI.walkthrough.next = Nächste Seite
 customUI.walkthrough.prev = Vorherige Seite
 
 customUI.walkthrough.welcome.title = Willkommen bei Simple Enchantments!
-customUI.walkthrough.welcome.desc = Dieser Mod ermöglicht es dir, deine Ausrüstung und Waffen mit magischen Schriftrollen und Verzauberungen zu verbessern. Er ist hochgradig anpassbar, mit einem Admin-Konfigurationsmenü (/enchantconfig), das es ermöglicht, Einstellungen zu ändern oder bestimmte Verzauberungen zu aktivieren und zu deaktivieren. Er funktioniert am besten mit Vanilla-Gegenständen, bietet aber eine breite Kompatibilität mit anderen Mods. Wenn du auf ein Problem stößt oder einen Vorschlag hast, tritt unserem Discord-Server bei. Außerdem werden Verzauberungen im Tooltip des Gegenstands angezeigt, wenn Dynamic Tooltips Lib installiert ist.
+customUI.walkthrough.welcome.desc = Dieser Mod ermöglicht es dir, deine Ausrüstung und Waffen mit magischen Schriftrollen und Verzauberungen zu verbessern. Er ist hochgradig anpassbar, mit einem Admin-Konfigurationsmenü (/enchantconfig), das es ermöglicht, Einstellungen zu ändern oder bestimmte Verzauberungen zu aktivieren und zu deaktivieren. Er funktioniert am besten mit Vanilla-Gegenständen, bietet aber eine breite Kompatibilität mit anderen Mods. Wenn du auf ein Problem stößt oder einen Vorschlag hast, tritt unserem Discord-Server bei. Außerdem werden Verzauberungen direkt im Tooltip des Gegenstands angezeigt.
 
 customUI.walkthrough.table.title = 1. Der Verzauberungstisch
 customUI.walkthrough.table.desc = Stelle einen Verzauberungstisch an der Werkbank her. Platziere ihn und interagiere mit ihm, um alle verfügbaren Verzauberungsschriftrollen zu durchstöbern, die du herstellen kannst. Du kannst den Tisch auch aufwerten, um Zugang zu höherstufigen Verzauberungen zu erhalten.
@@ -1336,5 +1336,5 @@ config.multiplier.poison:duration = Dauer (Sekunden)
 config.multiplier.environmental_protection = Reduktion pro Stufe
 config.multiplier.regeneration = HP Pro Sekunde
 config.multiplier.second_stomach = Bonus Pro Stufe
-items.EngravingTable.name = Engraving Table
-items.EngravingTable.description = A rune engraving table used to rename items and recolor enchantment glows.
+items.EngravingTable.name = Gravurtisch
+items.EngravingTable.description = Ein Runen-Gravurtisch zum Umbenennen von Gegenständen und Umfärben von Verzauberungsglühen.

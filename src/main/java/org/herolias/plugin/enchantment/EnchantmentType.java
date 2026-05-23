@@ -112,7 +112,7 @@ public final class EnchantmentType {
     public static final EnchantmentType FEATHER_FALLING = builtin("feather_falling", "Feather Falling",
             "Reduces fall damage", 3, false, false, 0.20,
             "Fall damage reduced by {amount}%",
-            ItemCategory.BOOTS);
+            ItemCategory.LEGS);
 
     public static final EnchantmentType WATERBREATHING = builtin("waterbreathing", "Waterbreathing",
             "Breathe underwater longer", 3, false, false, 0.20,
@@ -611,8 +611,8 @@ public final class EnchantmentType {
         if (applicableCategories.contains(category)) {
             return true;
         }
-        // Allow HELMET, BOOTS, GLOVES, CHESTPLATE to accept enchantments targeting ARMOR
-        if ((category == ItemCategory.HELMET || category == ItemCategory.BOOTS
+        // Allow HELMET, LEGS, GLOVES, CHESTPLATE to accept enchantments targeting ARMOR
+        if ((category == ItemCategory.HELMET || category == ItemCategory.LEGS
                 || category == ItemCategory.GLOVES || category == ItemCategory.CHESTPLATE)
                 && applicableCategories.contains(ItemCategory.ARMOR)) {
             return true;
@@ -798,12 +798,16 @@ public final class EnchantmentType {
         if (scrollBaseName != null) {
             return scrollBaseName;
         }
-        // Standard behavior: Scroll_PascalCase
+        // Standard behavior: Scroll_PascalCase. Namespaced addon IDs keep their
+        // namespace in the asset ID to avoid collisions.
         String[] parts = id.split(":");
-        String rawId = parts.length > 1 ? parts[1] : parts[0]; // strip namespace for addons
-        String[] idParts = rawId.split("_");
+        String rawId = parts.length > 1 ? parts[0] + "_" + parts[1] : parts[0];
+        String[] idParts = rawId.replaceAll("[^A-Za-z0-9_]", "_").split("_");
         StringBuilder sb = new StringBuilder("Scroll");
         for (String part : idParts) {
+            if (part.isEmpty()) {
+                continue;
+            }
             sb.append("_");
             sb.append(Character.toUpperCase(part.charAt(0)));
             sb.append(part.substring(1));

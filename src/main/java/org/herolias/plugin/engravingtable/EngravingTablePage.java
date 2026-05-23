@@ -5,9 +5,11 @@ import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.protocol.packets.interface_.CustomPageLifetime;
 import com.hypixel.hytale.protocol.packets.interface_.CustomUIEventBindingType;
 import com.hypixel.hytale.protocol.packets.interface_.Page;
+import com.hypixel.hytale.protocol.FormattedMessage;
 import com.hypixel.hytale.assetstore.AssetPack;
 import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.asset.AssetModule;
+import com.hypixel.hytale.server.core.asset.type.item.config.metadata.ItemDisplayMetadata;
 import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hypixel.hytale.server.core.entity.entities.player.pages.InteractiveCustomUIPage;
 import com.hypixel.hytale.server.core.inventory.Inventory;
@@ -23,12 +25,11 @@ import com.hypixel.hytale.server.core.ui.builder.UICommandBuilder;
 import com.hypixel.hytale.server.core.ui.builder.UIEventBuilder;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
+import com.hypixel.hytale.server.core.util.MessageUtil;
 import org.herolias.plugin.SimpleEnchanting;
-import org.herolias.plugin.enchantment.EnchantmentData;
 import org.herolias.plugin.enchantment.EnchantmentManager;
-import org.herolias.plugin.enchantment.TooltipBridge;
+import org.herolias.plugin.enchantment.NativeTooltipManager;
 import org.bson.BsonDocument;
-import org.bson.BsonValue;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -327,50 +328,121 @@ public class EngravingTablePage extends InteractiveCustomUIPage<EngravingTablePa
         if (displayStack == null) {
             displayStack = itemStack;
         }
-        if (!this.hasDynamicCustomUiTooltipData(displayStack)) {
-            displayStack = displayStack.withMetadata((BsonDocument) null);
+        ItemStack tooltipStack = NativeTooltipManager.apply(displayStack, this.enchantmentManager);
+        ItemDisplayMetadata displayMetadata = tooltipStack.getFromMetadataOrNull(ItemDisplayMetadata.KEYED_CODEC);
+        ItemGridSlot slot = new ItemGridSlot(this.createCustomUiVisualStack(displayStack));
+
+        if (displayMetadata != null) {
+            String name = this.toCustomUiPlainText(displayMetadata.getName());
+            if (name != null && !name.isBlank()) {
+                slot.setName(name);
+            }
+            String description = this.toCustomUiMarkup(displayMetadata.getDescription());
+            if (description != null && !description.isBlank()) {
+                slot.setDescription(description);
+            }
         }
-        return new ItemGridSlot(displayStack);
+        return slot;
     }
 
-    private boolean hasDynamicCustomUiTooltipData(@Nonnull ItemStack itemStack) {
-        BsonDocument metadata = itemStack.getMetadata();
-        if (metadata == null || metadata.isEmpty()) {
-            return false;
-        }
-        return TooltipBridge.hasDynamicTooltip(itemStack.getItemId(), metadata.toJson(), this.getTooltipLanguage())
-                || this.hasSimpleEnchantingTooltipData(metadata);
-    }
-
-    private boolean hasSimpleEnchantingTooltipData(@Nonnull BsonDocument metadata) {
-        return this.hasEnchantmentTooltipData(metadata) || this.hasEngravingTooltipData(metadata);
+    @Nonnull
+    private ItemStack createCustomUiVisualStack(
+            @Nonnull ItemStack itemStack) {
+        // CustomUI ItemGrid slots reject metadata-rich stacks in the Slots payload.
+        // The grid's own tooltip fields carry the rendered text instead.
+        return itemStack.withMetadata((BsonDocument) null);
     }
 
     @Nullable
-    private String getTooltipLanguage() {
-        String configuredLanguage = this.plugin.getUserSettingsManager().getLanguage(this.playerRef.getUuid());
-        if (configuredLanguage != null && !configuredLanguage.isBlank()
-                && !"default".equalsIgnoreCase(configuredLanguage)) {
-            return configuredLanguage;
+    private String toCustomUiPlainText(@Nullable Message message) {
+        if (message == null) {
+            return null;
         }
-        return this.playerRef.getLanguage();
+        StringBuilder builder = new StringBuilder();
+        this.appendCustomUiPlainText(builder, message.getFormattedMessage());
+        return builder.isEmpty() ? null : builder.toString();
     }
 
-    private boolean hasEnchantmentTooltipData(@Nonnull BsonDocument metadata) {
-        BsonValue enchantments = metadata.get(EnchantmentData.METADATA_KEY);
-        if (enchantments == null || !enchantments.isDocument()) {
-            return false;
+    private void appendCustomUiPlainText(@Nonnull StringBuilder builder, @Nullable FormattedMessage message) {
+        if (message == null) {
+            return;
         }
-        try {
-            return !EnchantmentData.fromBson(enchantments.asDocument()).isEmpty();
-        } catch (Exception ignored) {
-            return false;
+
+        String text = this.resolveFormattedText(message);
+        if (text != null) {
+            builder.append(text);
+        }
+        if (message.children != null) {
+            for (FormattedMessage child : message.children) {
+                this.appendCustomUiPlainText(builder, child);
+            }
         }
     }
 
-    private boolean hasEngravingTooltipData(@Nonnull BsonDocument metadata) {
-        EngravingTableCustomizationData customization = EngravingTableCustomizationData.fromMetadataDocument(metadata);
-        return customization.getCustomName() != null || customization.getNameColor() != null;
+    @Nullable
+    private String toCustomUiMarkup(@Nullable Message message) {
+        if (message == null) {
+            return null;
+        }
+        StringBuilder builder = new StringBuilder();
+        this.appendCustomUiMarkup(builder, message.getFormattedMessage());
+        return builder.isEmpty() ? null : builder.toString();
+    }
+
+    private void appendCustomUiMarkup(@Nonnull StringBuilder builder, @Nullable FormattedMessage message) {
+        if (message == null) {
+            return;
+        }
+
+        boolean hasColor = message.color != null && !message.color.isBlank();
+        boolean bold = Boolean.TRUE.equals(message.bold);
+        boolean italic = Boolean.TRUE.equals(message.italic);
+
+        if (hasColor) {
+            builder.append("<color is=\"").append(message.color).append("\">");
+        }
+        if (bold) {
+            builder.append("<b>");
+        }
+        if (italic) {
+            builder.append("<i>");
+        }
+
+        String text = this.resolveFormattedText(message);
+        if (text != null) {
+            builder.append(text);
+        }
+        if (message.children != null) {
+            for (FormattedMessage child : message.children) {
+                this.appendCustomUiMarkup(builder, child);
+            }
+        }
+
+        if (italic) {
+            builder.append("</i>");
+        }
+        if (bold) {
+            builder.append("</b>");
+        }
+        if (hasColor) {
+            builder.append("</color>");
+        }
+    }
+
+    @Nullable
+    private String resolveFormattedText(@Nonnull FormattedMessage message) {
+        if (message.rawText != null) {
+            return message.rawText;
+        }
+        if (message.messageId == null || message.messageId.isBlank()) {
+            return null;
+        }
+
+        String resolved = this.resolveTranslationKey(message.messageId);
+        if (resolved == null || resolved.isBlank() || resolved.equals(message.messageId)) {
+            resolved = message.messageId;
+        }
+        return MessageUtil.formatText(resolved, message.params, message.messageParams);
     }
 
     private void updateInventoryGrid(@Nonnull UICommandBuilder commandBuilder) {
@@ -830,7 +902,6 @@ public class EngravingTablePage extends InteractiveCustomUIPage<EngravingTablePa
         }
 
         SimpleItemContainer.addOrDropItemStack(store, ref, playerInventory, previewResult);
-        TooltipBridge.refreshPlayer(this.playerRef.getUuid());
         this.playerRef.sendMessage(Message.raw(mergeMode
                 ? "Merged the scrolls."
                 : "Applied the engravingTable changes."));

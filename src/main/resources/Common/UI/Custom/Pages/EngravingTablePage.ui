@@ -81,20 +81,26 @@ $C = "../Common.ui";
 $C.@PageOverlay {}
 
 Group {
-  Anchor: (Width: 1700, Height: 760);
+  Anchor: (Width: 1240, Height: 760);
+  Background: "../Common/Enchantment UI/Engraving_Table_Page.png";
 
-  $C.@DecoratedContainer {
-    Anchor: (Width: 1240, Height: 760, Left: 230);
+  Group {
+    Anchor: (Full: 0);
 
-    #Title {
+    Group #Title {
+      Anchor: (Height: 38, Top: 0);
+      Padding: (Top: 7);
+
       Group {
         $C.@Title #PageTitle {
         }
       }
     }
 
-    #Content {
+    Group #Content {
       LayoutMode: Top;
+      Anchor: (Top: 38);
+      Padding: (Full: 17, Top: 8);
 
       Label #WindowHint {
         Anchor: (Height: 0);

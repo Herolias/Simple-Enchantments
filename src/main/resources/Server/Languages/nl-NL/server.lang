@@ -613,7 +613,7 @@ customUI.walkthrough.next = Volgende Pagina
 customUI.walkthrough.prev = Vorige Pagina
 
 customUI.walkthrough.welcome.title = Welkom bij Simple Enchantments!
-customUI.walkthrough.welcome.desc = Deze mod stelt je in staat om je uitrusting en wapens te verbeteren met magische rollen en betoveringen. Het is zeer aanpasbaar, met een admin-configuratiemenu (/enchantconfig) waarmee je instellingen kunt wijzigen of specifieke betoveringen kunt in- en uitschakelen. Het werkt het beste met vanilla items, maar biedt brede compatibiliteit met andere mods. Als je een probleem tegenkomt of een functieverzoek hebt, sluit je dan aan bij onze Discord-server. Daarnaast, als Dynamic Tooltips Lib is geïnstalleerd, worden betoveringen weergegeven in de tooltip van het item.
+customUI.walkthrough.welcome.desc = Deze mod stelt je in staat om je uitrusting en wapens te verbeteren met magische rollen en betoveringen. Het is zeer aanpasbaar, met een admin-configuratiemenu (/enchantconfig) waarmee je instellingen kunt wijzigen of specifieke betoveringen kunt in- en uitschakelen. Het werkt het beste met vanilla items, maar biedt brede compatibiliteit met andere mods. Als je een probleem tegenkomt of een functieverzoek hebt, sluit je dan aan bij onze Discord-server. Daarnaast worden betoveringen weergegeven in de tooltip van het item.
 
 customUI.walkthrough.table.title = 1. De Betoveringstafel
 customUI.walkthrough.table.desc = Maak een Betoveringstafel op de Werkbank. Plaats deze en interacteer ermee om alle beschikbare Betoveringsrollen te bekijken die je kunt maken. Je kunt de tafel ook upgraden om betoveringen van een hoger niveau te ontgrendelen.
@@ -834,5 +834,5 @@ config.multiplier.poison:duration = Duur (Seconden)
 config.multiplier.environmental_protection = Reductie per Niveau
 config.multiplier.regeneration = HP Per Seconde
 config.multiplier.second_stomach = Bonus Per Niveau
-items.EngravingTable.name = Engraving Table
-items.EngravingTable.description = A rune engraving table used to rename items and recolor enchantment glows.
+items.EngravingTable.name = Graveertafel
+items.EngravingTable.description = Een runengraveertafel om voorwerpen te hernoemen en de gloed van betoveringen opnieuw te kleuren.

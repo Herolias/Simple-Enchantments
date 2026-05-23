@@ -4,6 +4,7 @@ import com.hypixel.hytale.server.core.inventory.ItemStack;
 import org.herolias.plugin.enchantment.EnchantmentData;
 import org.herolias.plugin.enchantment.EnchantmentManager;
 import org.herolias.plugin.enchantment.EnchantmentType;
+import org.herolias.plugin.enchantment.NativeTooltipManager;
 import org.herolias.plugin.util.ScrollIdHelper;
 
 import javax.annotation.Nonnull;
@@ -144,7 +145,6 @@ public final class ScrollMergeHelper {
             }
         }
 
-        return new ItemStack("Scroll_Custom", 1)
-                .withMetadata(EnchantmentData.METADATA_KEY, mergedData.toBson());
+        return NativeTooltipManager.withEnchantments(new ItemStack("Scroll_Custom", 1), mergedData);
     }
 }

@@ -204,7 +204,11 @@ public abstract class AbstractRecipeRegistry<T extends AbstractRecipeRegistry.Re
             if (inputCount <= 0) {
                 return null;
             }
-            int totalOutput = Math.max(1, inputCount) * output.getQuantity();
+            int recipesCompleted = inputCount / Math.max(1, inputQuantity);
+            if (recipesCompleted <= 0) {
+                return null;
+            }
+            int totalOutput = recipesCompleted * output.getQuantity();
             return output.clone(totalOutput).toItemStack();
         }
 

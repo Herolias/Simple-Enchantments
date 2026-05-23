@@ -37,7 +37,6 @@ import org.herolias.plugin.enchantment.EnchantmentVisualsListener;
 import org.herolias.plugin.enchantment.EnchantmentKnockbackSystem;
 import org.herolias.plugin.enchantment.EnchantmentSlotTracker;
 import org.herolias.plugin.enchantment.EnchantmentThriftSystem;
-import org.herolias.plugin.enchantment.TooltipBridge;
 import org.herolias.plugin.enchantment.ItemCategoryManager;
 import org.herolias.plugin.crafting.WorkbenchRefreshSystem;
 import org.herolias.plugin.enchantment.EnchantmentReflectionSystem;
@@ -56,6 +55,8 @@ import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hypixel.hytale.server.core.event.events.player.PlayerReadyEvent;
 import com.hypixel.hytale.server.core.event.events.player.PlayerDisconnectEvent;
 import javax.annotation.Nonnull;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
 
 /**
  * SimpleEnchanting Plugin - Adds an enchanting system to Hytale
@@ -90,6 +91,8 @@ public class SimpleEnchanting extends JavaPlugin {
     private org.herolias.plugin.config.ConfigManager configManager;
     private org.herolias.plugin.config.UserSettingsManager userSettingsManager;
     private org.herolias.plugin.lang.LanguageManager languageManager;
+    private ScheduledFuture<?> slotTrackerFuture;
+    private HStats hStats;
 
     public SimpleEnchanting(@Nonnull JavaPluginInit init) {
         super(init);
@@ -101,7 +104,8 @@ public class SimpleEnchanting extends JavaPlugin {
     protected void setup() {
         LOGGER.atInfo().log("Setting up SimpleEnchanting...");
         super.setup();
-        new HStats("b04768bd-4189-4ecc-b29c-0f644d7c95cc", this.getManifest().getVersion().toString());
+        this.hStats = new HStats("b04768bd-4189-4ecc-b29c-0f644d7c95cc",
+                this.getManifest().getVersion().toString());
 
         // --- CONFIG MIGRATION ---
         java.io.File oldConfigDir = new java.io.File("config");
@@ -411,13 +415,13 @@ public class SimpleEnchanting extends JavaPlugin {
                     String langCode = userSettingsManager.getLanguage(playerRef.getUuid());
                     languageManager.sendUpdatePacket(playerRef, langCode);
                     org.herolias.plugin.enchantment.ScrollDescriptionManager.sendUpdatePacket(playerRef);
+                    org.herolias.plugin.enchantment.NativeTooltipManager.refreshPlayer(playerRef.getUuid());
                 }
             });
         });
-        LOGGER.atInfo().log("Registered ScrollDescriptionManager listener");
+        LOGGER.atInfo().log("Registered ScrollDescriptionManager and native tooltip migration listener");
 
-        // ── Tooltip System (via DynamicTooltipsLib, required) ──
-        TooltipBridge.register(enchantmentManager);
+        LOGGER.atInfo().log("Using native per-stack ItemDisplay metadata for enchantment tooltips");
 
         // Register Event Logger Listener (Debug)
         org.herolias.plugin.listener.EventLoggerListener debugListener = new org.herolias.plugin.listener.EventLoggerListener();
@@ -439,9 +443,9 @@ public class SimpleEnchanting extends JavaPlugin {
         this.getCommandRegistry().registerCommand(new org.herolias.plugin.command.EnchantingCommand(this));
         LOGGER.atInfo().log("Registered /enchanting command");
 
-        // Register custom /give command (overrides vanilla)
+        // Register custom give command without overriding vanilla /give
         this.getCommandRegistry().registerCommand(new org.herolias.plugin.command.GiveEnchantedCommand());
-        LOGGER.atInfo().log("Registered enhanced /give command");
+        LOGGER.atInfo().log("Registered /giveenchanted command");
 
         // Register config editor command
         this.getCommandRegistry().registerCommand(new org.herolias.plugin.command.EnchantConfigCommand(this));
@@ -456,12 +460,13 @@ public class SimpleEnchanting extends JavaPlugin {
         // Register the slot tracker (handles glow updates on slot change)
         try {
             EnchantmentSlotTracker slotTracker = new EnchantmentSlotTracker(enchantmentManager);
-            com.hypixel.hytale.server.core.HytaleServer.SCHEDULED_EXECUTOR.scheduleAtFixedRate(
+            this.slotTrackerFuture = com.hypixel.hytale.server.core.HytaleServer.SCHEDULED_EXECUTOR.scheduleAtFixedRate(
                     slotTracker,
                     0,
                     50, // 50ms = 1 tick
-                    java.util.concurrent.TimeUnit.MILLISECONDS);
+                    TimeUnit.MILLISECONDS);
             LOGGER.atInfo().log("Registered EnchantmentSlotTracker ticker in start()");
+            org.herolias.plugin.enchantment.NativeTooltipManager.refreshAllPlayers();
         } catch (Exception e) {
             LOGGER.atSevere().log("Failed to register Slot Tracker: " + e.getMessage());
             e.printStackTrace();
@@ -470,6 +475,13 @@ public class SimpleEnchanting extends JavaPlugin {
 
     @Override
     protected void shutdown() {
+        if (slotTrackerFuture != null) {
+            slotTrackerFuture.cancel(false);
+            slotTrackerFuture = null;
+        }
+        if (hStats != null) {
+            hStats = null;
+        }
         super.shutdown();
     }
 

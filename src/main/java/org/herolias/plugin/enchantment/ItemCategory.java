@@ -59,12 +59,6 @@ public class ItemCategory {
     public static final ItemCategory SHIELD = new ItemCategory("SHIELD", false, false, false); // Shield is special
 
     /**
-     * Boots (foot armor).
-     * Applicable enchantments: Feather Falling, etc.
-     */
-    public static final ItemCategory BOOTS = new ItemCategory("BOOTS", false, true, false);
-
-    /**
      * Helmets (head armor).
      * Applicable enchantments: Waterbreathing, etc.
      */
@@ -75,6 +69,18 @@ public class ItemCategory {
      * Applicable enchantments: Regeneration, Second Stomach, etc.
      */
     public static final ItemCategory CHESTPLATE = new ItemCategory("CHESTPLATE", false, true, false);
+
+    /**
+     * Leg armor. Hytale's armor slot enum calls this slot "Legs"; the old BOOTS
+     * constant is kept as a source-compatible alias.
+     */
+    public static final ItemCategory LEGS = new ItemCategory("LEGS", false, true, false);
+
+    /**
+     * @deprecated Hytale currently exposes this armor slot as {@link #LEGS}.
+     */
+    @Deprecated
+    public static final ItemCategory BOOTS = LEGS;
 
     /**
      * Armor pieces: helmets, chestplates, leggings, boots

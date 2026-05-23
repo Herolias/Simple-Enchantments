@@ -1784,8 +1784,9 @@ public class EnchantConfigPage extends InteractiveCustomUIPage<EnchantConfigPage
         // Invalidate enchantment cache FIRST so that refresh systems see the new state
         org.herolias.plugin.SimpleEnchanting.getInstance().getEnchantmentManager().invalidateEnabledCache();
 
-        // Force-refresh all players' tooltips so changes are visible immediately.
-        org.herolias.plugin.enchantment.TooltipBridge.refreshAllPlayers();
+        // Rebuild native ItemDisplay descriptions so enabled/disabled enchantments
+        // are reflected immediately on existing stacks.
+        org.herolias.plugin.enchantment.NativeTooltipManager.refreshAllPlayers();
 
         // Broadcast global scroll translation updates (for Crafting UI etc)
         org.herolias.plugin.enchantment.ScrollDescriptionManager.broadcastUpdatePacket();

@@ -100,6 +100,19 @@ public enum EngravingTableColorOption {
         return null;
     }
 
+    @Nullable
+    public static EngravingTableColorOption fromHexColor(@Nullable String hexColor) {
+        if (hexColor == null || hexColor.isBlank()) {
+            return null;
+        }
+        for (EngravingTableColorOption option : values()) {
+            if (option.hexColor.equalsIgnoreCase(hexColor)) {
+                return option;
+            }
+        }
+        return null;
+    }
+
     @Nonnull
     public static EngravingTableColorOption fromIdOrDefault(@Nullable String id, @Nonnull EngravingTableColorOption fallback) {
         EngravingTableColorOption option = fromId(id);

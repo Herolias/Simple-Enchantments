@@ -350,7 +350,7 @@ public class EnchantmentSalvageSystem extends EntityEventSystem<EntityStore, Inv
 
     /**
      * Determines whether the current item change originates from bench processing
-     * by checking the call stack for ProcessingBenchBlock.tick().
+     * by checking the call stack for the current ProcessingBenchBlock component.
      *
      * This only fires on bench item changes (not per-tick), so the performance
      * impact is acceptable. Alternative approaches (ThreadLocal, state heuristic)
@@ -358,8 +358,11 @@ public class EnchantmentSalvageSystem extends EntityEventSystem<EntityStore, Inv
      */
     private boolean isProcessedByBench() {
         for (StackTraceElement element : Thread.currentThread().getStackTrace()) {
-            if (element.getClassName().equals("com.hypixel.hytale.builtin.crafting.state.ProcessingBenchBlock") &&
-                    element.getMethodName().equals("tick")) {
+            if (element.getClassName().equals("com.hypixel.hytale.builtin.crafting.component.ProcessingBenchBlock")
+                    && (element.getMethodName().equals("advanceProcessing")
+                            || element.getMethodName().equals("completeRecipes")
+                            || element.getMethodName().equals("tryCompleteOneRecipe")
+                            || element.getMethodName().equals("tick"))) {
                 return true;
             }
         }
@@ -425,8 +428,8 @@ public class EnchantmentSalvageSystem extends EntityEventSystem<EntityStore, Inv
                 // Level exceeds max — create a Custom Scroll with the enchantment in metadata
                 EnchantmentData customScrollData = new EnchantmentData();
                 customScrollData.addEnchantment(chosenType, chosenLevel);
-                scrollStack = new ItemStack("Scroll_Custom", 1)
-                        .withMetadata(EnchantmentData.METADATA_KEY, customScrollData.toBson());
+                scrollStack = NativeTooltipManager.withEnchantments(new ItemStack("Scroll_Custom", 1),
+                        customScrollData, enchantmentManager);
             } else {
                 String scrollId = ScrollIdHelper.getScrollItemId(chosenType, chosenLevel);
                 scrollStack = new ItemStack(scrollId, 1);

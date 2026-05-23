@@ -4,7 +4,7 @@ A comprehensive enchanting system for **Hytale** — craft scrolls, enchant your
 
 Simple Enchantments adds an **Enchanting Table**, **31 built-in enchantments**, an **enchantment scroll system**, **usefull commands**, in-game **configuration UI**, **localisation** for 11 languages, and a **public API** that lets other mods register their own enchantments, categories, and scrolls at runtime.
 
-> **Version:** 0.9.1 · **Java:** 25 · **License:** _see [LICENSE.md](LICENSE.md)_ · **Wiki/Documentation:** _coming soon_
+> **Version:** 1.1.0 · **Java:** 25 · **License:** _see [LICENSE.md](LICENSE.md)_ · **Wiki/Documentation:** _coming soon_
 
 #### If you are looking for a Hytale Server, consider using my code and link at BisectHosting. That way you get 25% off and we get a commission which helps with further development:
 [![https://www.bisecthosting.com/Herolias](https://www.bisecthosting.com/partners/custom-banners/87d24680-40cb-471d-b1a9-bc3c9eb9ce68.webp)](https://www.bisecthosting.com/Herolias?r=GitHub)
@@ -27,7 +27,7 @@ Simple Enchantments adds an **Enchanting Table**, **31 built-in enchantments**, 
   - [Custom Interactions](#custom-interactions)
   - [Crafting & Recipes](#crafting--recipes)
   - [Asset Pack](#asset-pack)
-  - [Optional Integrations](#optional-integrations)
+  - [Dependencies & Integrations](#dependencies--integrations)
 
 ---
 
@@ -44,7 +44,7 @@ Simple Enchantments adds an **Enchanting Table**, **31 built-in enchantments**, 
 | **Configuration** | Full in-game config UI + JSON config with per-enchantment multipliers, recipes, and toggles |
 | **Localisation** | Translations for 11 languages (EN, DE, ES, FR, ID, IT, NL, PT-BR, RU, SV, UK) |
 | **API** | Public API for addon mods to register enchantments, categories, scrolls, and conflicts |
-| **Tooltips** | Optional tooltips via [DynamicTooltipsLib](https://github.com/Herolias/DynamicTooltipsLib) NOTE: Dynamic Tooltips Lib will become a mandatory dependency in version 1.0.0 |
+| **Tooltips** | Enchantment and engraving tooltip support through native per-stack item display metadata |
 | **Cross-Mod** | Integration with [Perfect Parries](https://www.curseforge.com/hytale/mods/perfect-parries) for Riposte & Coup de Grâce enchantments, [MMO Skill Tree](https://www.curseforge.com/hytale/mods/mmo-skill-tree) for custom Enchantment XP System |
 
 ---
@@ -88,10 +88,10 @@ Simple Enchantments adds an **Enchanting Table**, **31 built-in enchantments**, 
 
 | Property | Default | Description |
 |---|---|---|
-| `version` | `0.9.1` | Plugin version (semantic versioning) |
+| `version` | `1.1.0` | Plugin version (semantic versioning) |
 | `java_version` | `25` | Java toolchain version |
 | `includes_pack` | `true` | Load the bundled asset pack alongside the plugin |
-| `patchline` | `release` | Hytale release channel (`release` or `pre-release`) |
+| `patchline` | `pre-release` | Hytale release channel (`release` or `pre-release`) |
 | `load_user_mods` | `false` | Also load mods from the user's standard Mods folder during dev |
 
 ---
@@ -126,7 +126,7 @@ src/
     │       │   ├── EnchantCommand.java           # /enchant — apply enchantments
     │       │   ├── EnchantingCommand.java         # /enchanting — open enchanting UI
     │       │   ├── EnchantConfigCommand.java      # /enchantconfig — in-game config editor
-    │       │   └── GiveEnchantedCommand.java      # /give override — give pre-enchanted items
+    │       │   └── GiveEnchantedCommand.java      # /giveenchanted — give pre-enchanted items
     │       │
     │       ├── config/                          # ── Configuration ──
     │       │   ├── ConfigManager.java            # Load/save/migrate JSON config
@@ -156,7 +156,7 @@ src/
     │       │   ├── EnchantmentSlotTracker.java    # Per-tick slot tracking for glow + banner
     │       │   ├── EnchantmentDynamicEffects.java # Dynamic EntityEffect adjustments
     │       │   ├── EnchantmentStateTransferSystem.java # Preserves enchantments on item state changes
-    │       │   ├── TooltipBridge.java             # Isolated bridge to DynamicTooltipsLib
+    │       │   ├── NativeTooltipManager.java      # Native ItemDisplay metadata merge/tooltip support
     │       │   │
     │       │   ├── AbstractRecipeRegistry.java    # Base for smelting/cooking recipe caches
     │       │   ├── SmeltingRecipeRegistry.java    # Smelting recipe lookup (for Smelting enchant)
@@ -269,8 +269,8 @@ src/
 8. **Custom Interactions** — registers `ConsumeAmmo` and `LaunchDynamicProjectile` interaction types.
 9. **ECS Systems** — registers 20+ ECS systems with Hytale's `EntityStoreRegistry` for enchantment effects.
 10. **Event Listeners** — registers global listeners for inventory changes, player join, slot switching, etc.
-11. **Commands** — registers `/enchant`, `/enchanting`, `/enchantconfig`, and an enhanced `/give`.
-12. **Optional Tooltips** — conditionally registers `TooltipBridge` if DynamicTooltipsLib is present.
+11. **Commands** — registers `/enchant`, `/enchanting`, `/enchantconfig`, and `/giveenchanted`.
+12. **Tooltips** — writes enchantment and engraving descriptions through native per-stack `ItemDisplay` metadata.
 
 ---
 
@@ -398,7 +398,8 @@ Translation keys follow the pattern `enchantment.{id}.{name|description|bonus|wa
 | `/enchant <enchantment> [level]` | Apply an enchantment to the held item |
 | `/enchanting` | Open the enchanting settings/walkthrough UI |
 | `/enchantconfig` | Open the in-game configuration editor |
-| `/give <player> <item> [amount] [enchantments...]` | Enhanced give command that supports pre-enchanted items |
+| `/giveenchanted <item> [quantity] [durability] [metadata] [enchants]` | Give yourself a pre-enchanted item without replacing vanilla `/give` |
+| `/giveenchanted <player> <item> [quantity] [durability] [metadata] [enchants]` | Give another player a pre-enchanted item |
 
 ---
 
@@ -434,11 +435,10 @@ The mod bundles a complete asset pack containing:
 
 ---
 
-### Optional Integrations
+### Dependencies & Integrations
 
 | Mod | Integration |
 |---|---|
-| **[DynamicTooltipsLib](https://github.com/Herolias/DynamicTooltipsLib)** | Provides enchantment tooltips on item hover. Loaded via `TooltipBridge` (class isolated to prevent `NoClassDefFoundError`). When detected, the enchantment banner is auto-disabled. Note: This mod will become a full dependency in version 1.0.0. |
 | **Perfect Parries** | Enables the Riposte and Coup de Grâce enchantments (counter-attack and stun bonus damage). These enchantments are automatically disabled if the mod is not present. |
 | **MMO Skill Tree** | Adds Enchantment XP with unique rewards |
 | **[HStats](https://hstats.dev)** | Anonymous mod usage analytics. |

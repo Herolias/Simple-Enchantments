@@ -163,7 +163,7 @@ public class EnchantmentSlotTracker implements Runnable {
             }
 
             if (currentSlot != lastSlotIndex) {
-                // DynamicTooltipsLib handles tooltip updates via packet interception
+                // Native ItemDisplay metadata travels with the stack; no slot-specific tooltip refresh is required.
             }
         }
     }

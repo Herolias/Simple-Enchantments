@@ -18,6 +18,7 @@ import javax.annotation.Nonnull;
 import org.herolias.plugin.enchantment.EnchantmentData;
 import org.herolias.plugin.enchantment.EnchantmentManager;
 import org.herolias.plugin.enchantment.EnchantmentType;
+import org.herolias.plugin.enchantment.NativeTooltipManager;
 
 /**
  * Interaction that transfers an enchantment from the Custom Scroll to a target
@@ -92,8 +93,8 @@ public class CustomScrollApplyInteraction extends ChoiceInteraction {
             scrollTransaction = scrollContainer.removeItemStackFromSlot(scrollSlot, scrollItemStack, 1);
         } else {
             // Update scroll metadata with remaining enchantments
-            ItemStack updatedScroll = scrollItemStack.withMetadata(EnchantmentData.METADATA_KEY,
-                    updatedData.toBson());
+            ItemStack updatedScroll = NativeTooltipManager.withEnchantments(scrollItemStack,
+                    updatedData, enchantmentManager);
             scrollTransaction = scrollContainer.replaceItemStackInSlot(scrollSlot, scrollItemStack, updatedScroll);
         }
         if (!scrollTransaction.succeeded()) {

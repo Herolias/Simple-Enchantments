@@ -1,9 +1,12 @@
 package org.herolias.plugin.engravingtable;
 
 import com.hypixel.hytale.server.core.inventory.ItemStack;
+import com.hypixel.hytale.server.core.Message;
+import com.hypixel.hytale.server.core.asset.type.item.config.metadata.ItemDisplayMetadata;
 import org.bson.BsonDocument;
 import org.bson.BsonString;
 import org.bson.BsonValue;
+import org.herolias.plugin.enchantment.NativeTooltipManager;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -78,8 +81,22 @@ public final class EngravingTableCustomizationData {
         if (ItemStack.isEmpty(itemStack)) {
             return EMPTY;
         }
-        BsonDocument metadata = itemStack.getMetadata();
-        return fromMetadataDocument(metadata);
+        EngravingTableCustomizationData metadataData = fromMetadataDocument(itemStack.getMetadata());
+        ItemDisplayMetadata displayMetadata = itemStack.getFromMetadataOrNull(ItemDisplayMetadata.KEYED_CODEC);
+        if (displayMetadata == null || displayMetadata.getName() == null) {
+            return metadataData;
+        }
+
+        Message name = displayMetadata.getName();
+        String customName = normalizeName(name.getRawText());
+        EngravingTableColorOption nameColor = EngravingTableColorOption.fromHexColor(name.getColor());
+        if (customName == null && nameColor == null) {
+            return metadataData;
+        }
+        return new EngravingTableCustomizationData(
+                customName != null ? customName : metadataData.getCustomName(),
+                nameColor != null ? nameColor : metadataData.getNameColor(),
+                metadataData.getGlowColor());
     }
 
     @Nonnull
@@ -87,15 +104,34 @@ public final class EngravingTableCustomizationData {
         if (metadata == null || metadata.isEmpty()) {
             return EMPTY;
         }
+        String customName = null;
+        EngravingTableColorOption nameColor = null;
+        EngravingTableColorOption glowColor = null;
+
         BsonValue rawValue = metadata.get(METADATA_KEY);
-        if (rawValue == null || !rawValue.isDocument()) {
-            return EMPTY;
+        if (rawValue != null && rawValue.isDocument()) {
+            BsonDocument customDocument = rawValue.asDocument();
+            customName = getString(customDocument, NAME_KEY);
+            nameColor = EngravingTableColorOption.fromId(getString(customDocument, NAME_COLOR_KEY));
+            glowColor = EngravingTableColorOption.fromId(getString(customDocument, GLOW_COLOR_KEY));
         }
 
-        BsonDocument customDocument = rawValue.asDocument();
-        String customName = getString(customDocument, NAME_KEY);
-        EngravingTableColorOption nameColor = EngravingTableColorOption.fromId(getString(customDocument, NAME_COLOR_KEY));
-        EngravingTableColorOption glowColor = EngravingTableColorOption.fromId(getString(customDocument, GLOW_COLOR_KEY));
+        BsonValue displayValue = metadata.get(ItemDisplayMetadata.KEY);
+        if (displayValue != null && displayValue.isDocument()) {
+            BsonValue nameValue = displayValue.asDocument().get("Name");
+            if (nameValue != null && nameValue.isDocument()) {
+                BsonDocument nameDocument = nameValue.asDocument();
+                String nativeName = getString(nameDocument, "RawText");
+                EngravingTableColorOption nativeColor = EngravingTableColorOption.fromHexColor(
+                        getString(nameDocument, "Color"));
+                if (nativeName != null) {
+                    customName = nativeName;
+                }
+                if (nativeColor != null) {
+                    nameColor = nativeColor;
+                }
+            }
+        }
 
         if (customName == null && nameColor == null && glowColor == null) {
             return EMPTY;
@@ -109,11 +145,18 @@ public final class EngravingTableCustomizationData {
             @Nullable String customName,
             @Nullable EngravingTableColorOption nameColor,
             @Nullable EngravingTableColorOption glowColor) {
-        BsonDocument customDocument = new BsonDocument();
-        String normalizedName = normalizeName(customName);
-        if (normalizedName != null) {
-            customDocument.put(NAME_KEY, new BsonString(normalizedName));
+        ItemDisplayMetadata existingDisplay = itemStack.getFromMetadataOrNull(ItemDisplayMetadata.KEYED_CODEC);
+        Message description = existingDisplay != null ? existingDisplay.getDescription() : null;
+        Message nativeName = createNativeName(itemStack, customName, nameColor);
+        ItemStack updated = itemStack;
+        if (nativeName != null || description != null) {
+            updated = updated.withMetadata(ItemDisplayMetadata.KEYED_CODEC,
+                    new ItemDisplayMetadata(nativeName, description));
+        } else {
+            updated = updated.withMetadata(ItemDisplayMetadata.KEYED_CODEC, null);
         }
+
+        BsonDocument customDocument = new BsonDocument();
         if (nameColor != null) {
             customDocument.put(NAME_COLOR_KEY, new BsonString(nameColor.getId()));
         }
@@ -122,9 +165,23 @@ public final class EngravingTableCustomizationData {
         }
 
         if (customDocument.isEmpty()) {
-            return itemStack.withMetadata(METADATA_KEY, (BsonValue) null);
+            return NativeTooltipManager.apply(updated.withMetadata(METADATA_KEY, (BsonValue) null));
         }
-        return itemStack.withMetadata(METADATA_KEY, customDocument);
+        return NativeTooltipManager.apply(updated.withMetadata(METADATA_KEY, customDocument));
+    }
+
+    @Nullable
+    private static Message createNativeName(
+            @Nonnull ItemStack itemStack,
+            @Nullable String customName,
+            @Nullable EngravingTableColorOption nameColor) {
+        String normalizedName = normalizeName(customName);
+        Message message = normalizedName != null ? Message.raw(normalizedName)
+                : (nameColor != null ? itemStack.getItem().getTranslationMessage() : null);
+        if (message != null && nameColor != null) {
+            message = message.color(nameColor.getHexColor());
+        }
+        return message;
     }
 
     @Nullable

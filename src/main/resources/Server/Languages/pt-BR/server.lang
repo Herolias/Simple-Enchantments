@@ -613,7 +613,7 @@ customUI.walkthrough.next = Próxima Página
 customUI.walkthrough.prev = Página Anterior
 
 customUI.walkthrough.welcome.title = Bem-vindo ao Simple Enchantments!
-customUI.walkthrough.welcome.desc = Este mod permite que você aprimore seus equipamentos e armas usando pergaminhos mágicos e encantamentos. Ele é altamente personalizável, com um menu de configuração de administrador (/enchantconfig) que permite ajustar configurações ou ativar e desativar encantamentos específicos. Funciona melhor com itens vanilla, mas oferece ampla compatibilidade com outros mods. Se encontrar um problema ou tiver uma sugestão, junte-se ao nosso servidor Discord. Além disso, se o Dynamic Tooltips Lib estiver instalado, os encantamentos serão mostrados na dica do item.
+customUI.walkthrough.welcome.desc = Este mod permite que você aprimore seus equipamentos e armas usando pergaminhos mágicos e encantamentos. Ele é altamente personalizável, com um menu de configuração de administrador (/enchantconfig) que permite ajustar configurações ou ativar e desativar encantamentos específicos. Funciona melhor com itens vanilla, mas oferece ampla compatibilidade com outros mods. Se encontrar um problema ou tiver uma sugestão, junte-se ao nosso servidor Discord. Além disso, os encantamentos são mostrados na dica do item.
 
 customUI.walkthrough.table.title = 1. A Mesa de Encantamentos
 customUI.walkthrough.table.desc = Crie uma Mesa de Encantamentos na Bancada de Trabalho. Coloque-a e interaja com ela para ver todos os Pergaminhos de Encantamento disponíveis que você pode criar. Você também pode melhorar a mesa para acessar encantamentos de nível superior.
@@ -834,5 +834,5 @@ config.multiplier.poison:duration = Duração (Segundos)
 config.multiplier.environmental_protection = Redução por Nível
 config.multiplier.regeneration = HP Por Segundo
 config.multiplier.second_stomach = Bônus Por Nível
-items.EngravingTable.name = Engraving Table
-items.EngravingTable.description = A rune engraving table used to rename items and recolor enchantment glows.
+items.EngravingTable.name = Mesa de Gravura
+items.EngravingTable.description = Uma mesa de gravura rúnica para renomear itens e recolorir brilhos de encantamento.

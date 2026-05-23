@@ -177,7 +177,7 @@ public class EnchantmentManager {
         // distinct from projectile data, but reusing the class since it holds the same
         // fields we need
         dotEnchantmentsByEntityUuid.put(entityUuid,
-                new ProjectileEnchantmentData(0, 0, newLooting, 0, newBurn, 0));
+                new ProjectileEnchantmentData(0, 0, newLooting, 0, newBurn, 0, 0));
     }
 
     @Nullable
@@ -263,7 +263,7 @@ public class EnchantmentManager {
         data.addEnchantment(type, appliedLevel);
 
         // Store back to item metadata
-        ItemStack enchantedItem = item.withMetadata(EnchantmentData.METADATA_KEY, data.toBson());
+        ItemStack enchantedItem = NativeTooltipManager.withEnchantments(item, data, this);
 
         LOGGER.atInfo().log("Applied " + type.getFormattedName(appliedLevel) + " to " + item.getItemId());
 
@@ -637,11 +637,9 @@ public class EnchantmentManager {
         if (bson == null || bson.isEmpty())
             return false;
 
-        for (String key : bson.keySet()) {
-            EnchantmentType type = EnchantmentType.findByDisplayName(key);
-            if (type == null)
-                type = EnchantmentType.fromId(key);
-            if (type != null && isEnchantmentEnabled(type)) {
+        EnchantmentData data = EnchantmentData.fromBson(bson);
+        for (EnchantmentType type : data.getAllEnchantments().keySet()) {
+            if (isEnchantmentEnabled(type)) {
                 return true;
             }
         }
@@ -669,15 +667,7 @@ public class EnchantmentManager {
                 Codec.BSON_DOCUMENT);
 
         if (enchantmentsBson != null && !enchantmentsBson.isEmpty()) {
-            // Check direct display name key
-            if (enchantmentsBson.containsKey(type.getDisplayName())) {
-                return true;
-            }
-            // Check ID key (compatibility)
-            if (enchantmentsBson.containsKey(type.getId())) {
-                return true;
-            }
-            return false;
+            return EnchantmentData.fromBson(enchantmentsBson).hasEnchantment(type);
         }
 
         // Fallback to legacy check
@@ -707,15 +697,7 @@ public class EnchantmentManager {
                 Codec.BSON_DOCUMENT);
 
         if (enchantmentsBson != null && !enchantmentsBson.isEmpty()) {
-            // Try display name first
-            if (enchantmentsBson.containsKey(type.getDisplayName())) {
-                return parseBsonLevel(enchantmentsBson.get(type.getDisplayName()));
-            }
-            // Try ID second
-            if (enchantmentsBson.containsKey(type.getId())) {
-                return parseBsonLevel(enchantmentsBson.get(type.getId()));
-            }
-            return 0;
+            return EnchantmentData.fromBson(enchantmentsBson).getLevel(type);
         }
 
         // Fallback to legacy check
@@ -879,12 +861,7 @@ public class EnchantmentManager {
             if (enchBson == null || enchBson.isEmpty())
                 continue;
 
-            int level = 0;
-            if (enchBson.containsKey(type.getDisplayName())) {
-                level = parseBsonLevel(enchBson.get(type.getDisplayName()));
-            } else if (enchBson.containsKey(type.getId())) {
-                level = parseBsonLevel(enchBson.get(type.getId()));
-            }
+            int level = EnchantmentData.fromBson(enchBson).getLevel(type);
 
             if (level > 0) {
                 double pieceMultiplier = 1.0 - (level * type.getEffectMultiplier());
@@ -921,14 +898,15 @@ public class EnchantmentManager {
      * Stores projectile enchantment levels for later calculations.
      */
     public void storeProjectileEnchantments(@Nonnull UUID projectileUuid, int strengthLevel, int eaglesEyeLevel,
-            int lootingLevel, int freezeLevel, int burnLevel, int eternalShotLevel) {
+            int lootingLevel, int freezeLevel, int burnLevel, int poisonLevel, int eternalShotLevel) {
         if (strengthLevel <= 0 && eaglesEyeLevel <= 0 && lootingLevel <= 0 && freezeLevel <= 0 && burnLevel <= 0
+                && poisonLevel <= 0
                 && eternalShotLevel <= 0) {
             projectileEnchantmentsByUuid.remove(projectileUuid);
             return;
         }
         projectileEnchantmentsByUuid.put(projectileUuid, new ProjectileEnchantmentData(strengthLevel, eaglesEyeLevel,
-                lootingLevel, freezeLevel, burnLevel, eternalShotLevel));
+                lootingLevel, freezeLevel, burnLevel, poisonLevel, eternalShotLevel));
     }
 
     /**
@@ -950,14 +928,15 @@ public class EnchantmentManager {
      * Stores projectile enchantments by network id (used by new projectile system).
      */
     public void storeProjectileEnchantments(int networkId, int strengthLevel, int eaglesEyeLevel, int lootingLevel,
-            int freezeLevel, int burnLevel, int eternalShotLevel) {
+            int freezeLevel, int burnLevel, int poisonLevel, int eternalShotLevel) {
         if (strengthLevel <= 0 && eaglesEyeLevel <= 0 && lootingLevel <= 0 && freezeLevel <= 0 && burnLevel <= 0
+                && poisonLevel <= 0
                 && eternalShotLevel <= 0) {
             projectileEnchantmentsByNetworkId.remove(networkId);
             return;
         }
         projectileEnchantmentsByNetworkId.put(networkId, new ProjectileEnchantmentData(strengthLevel, eaglesEyeLevel,
-                lootingLevel, freezeLevel, burnLevel, eternalShotLevel));
+                lootingLevel, freezeLevel, burnLevel, poisonLevel, eternalShotLevel));
     }
 
     /**

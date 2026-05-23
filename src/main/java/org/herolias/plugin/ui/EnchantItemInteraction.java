@@ -19,6 +19,7 @@ import org.herolias.plugin.enchantment.EnchantmentData;
 import org.herolias.plugin.enchantment.EnchantmentManager;
 import org.herolias.plugin.enchantment.EnchantmentType;
 import org.herolias.plugin.enchantment.ItemCategory;
+import org.herolias.plugin.enchantment.NativeTooltipManager;
 
 public class EnchantItemInteraction extends ChoiceInteraction {
     private final ItemContext itemContext;
@@ -199,18 +200,18 @@ public class EnchantItemInteraction extends ChoiceInteraction {
                 resultStack = new ItemStack(scrollId, 1);
                 if (!resultStack.isValid() || resultStack.isEmpty()) {
                     // Fallback to Custom Scroll if the scroll item doesn't exist
-                    resultStack = new ItemStack("Scroll_Custom", 1)
-                            .withMetadata(EnchantmentData.METADATA_KEY, mergedData.toBson());
+                    resultStack = NativeTooltipManager.withEnchantments(new ItemStack("Scroll_Custom", 1),
+                            mergedData, enchantmentManager);
                 }
             } else {
                 // Level exceeds max — must be a Custom Scroll
-                resultStack = new ItemStack("Scroll_Custom", 1)
-                        .withMetadata(EnchantmentData.METADATA_KEY, mergedData.toBson());
+                resultStack = NativeTooltipManager.withEnchantments(new ItemStack("Scroll_Custom", 1),
+                        mergedData, enchantmentManager);
             }
         } else {
             // Multiple enchantments — always a Custom Scroll
-            resultStack = new ItemStack("Scroll_Custom", 1)
-                    .withMetadata(EnchantmentData.METADATA_KEY, mergedData.toBson());
+            resultStack = NativeTooltipManager.withEnchantments(new ItemStack("Scroll_Custom", 1),
+                    mergedData, enchantmentManager);
         }
 
         // Remove the held scroll (source)

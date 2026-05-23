@@ -19,7 +19,7 @@ public final class ScrollIdHelper {
     /**
      * Builds the scroll item ID for a given enchantment type and level.
      * Delegates to {@link EnchantmentType#getScrollBaseName()} to correctly
-     * resolve custom scroll names and namespace stripping for addons.
+     * resolve custom scroll names and namespaced addon IDs.
      *
      * @param type  the enchantment type
      * @param level the enchantment level (1-based)

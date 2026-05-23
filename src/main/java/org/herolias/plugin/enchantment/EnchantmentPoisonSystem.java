@@ -81,18 +81,24 @@ public class EnchantmentPoisonSystem extends DamageEventSystem {
                     commandBuffer);
             if (data != null) {
                 lootingLevel = data.getLootingLevel();
-                // HACK: As we didn't add poison explicitly to ProjectileEnchantmentData, we
-                // just read from the shooter's weapon directly
+                poisonLevel = data.getPoisonLevel();
             }
         }
 
         // 2. Check attacker's weapon
-        if (ctx.hasAttacker()) {
+        if (poisonLevel <= 0 && ctx.hasAttacker()) {
             Entity attackerEntity = EntityUtils.getEntity(ctx.attackerRef(), commandBuffer);
             ItemStack weapon = enchantmentManager.getWeaponFromEntity(attackerEntity);
 
             if (weapon != null) {
                 poisonLevel = enchantmentManager.getEnchantmentLevel(weapon, EnchantmentType.POISON);
+            }
+        }
+
+        if (ctx.hasAttacker()) {
+            Entity attackerEntity = EntityUtils.getEntity(ctx.attackerRef(), commandBuffer);
+            ItemStack weapon = enchantmentManager.getWeaponFromEntity(attackerEntity);
+            if (weapon != null) {
                 lootingLevel = Math.max(lootingLevel, enchantmentManager.getEnchantmentLevel(weapon, EnchantmentType.LOOTING));
             }
         }

@@ -105,23 +105,31 @@ public class EnchantmentGlowInjector {
                     continue;
 
                 boolean smallGlow = usesSmallGlow(item, itemId);
+                boolean mutated = false;
 
                 // Check what type of item this is and inject appropriate glow conditions
                 if (category.isShield()) {
                     injectAllGlowConditions(item, STAT_GLOW_SHIELD, true, false);
+                    mutated = true;
                 } else if (category.isWeapon()) {
                     injectAllGlowConditions(item, STAT_GLOW_PRIMARY, smallGlow, true);
                     weaponCount++;
+                    mutated = true;
                 } else if (category.isTool()) {
                     injectAllGlowConditions(item, STAT_GLOW_PRIMARY, smallGlow, true);
                     toolCount++;
+                    mutated = true;
                 } else if (category.isArmor()) {
                     // Armor uses slot-specific glow stats
                     String statKey = getArmorGlowStat(itemId);
                     if (statKey != null) {
                         injectAllGlowConditions(item, statKey, smallGlow, false);
                         armorCount++;
+                        mutated = true;
                     }
+                }
+                if (mutated) {
+                    item.invalidatePacketCache();
                 }
             } catch (Exception e) {
                 LOGGER.atWarning().log("Failed to inject glow for item " + itemId + ": " + e.getMessage());

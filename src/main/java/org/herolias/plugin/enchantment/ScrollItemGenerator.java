@@ -496,7 +496,7 @@ public class ScrollItemGenerator {
         if (cats.contains(ItemCategory.RANGED_WEAPON))
             return "Enchanting_Ranged";
         if (cats.contains(ItemCategory.ARMOR) || cats.contains(ItemCategory.HELMET)
-                || cats.contains(ItemCategory.BOOTS) || cats.contains(ItemCategory.GLOVES))
+                || cats.contains(ItemCategory.LEGS) || cats.contains(ItemCategory.GLOVES))
             return "Enchanting_Armor";
         if (cats.contains(ItemCategory.SHIELD))
             return "Enchanting_Shield";
@@ -574,6 +574,10 @@ public class ScrollItemGenerator {
                 return base + "EnchScrollPoi.png";
             case "environmental_protection":
                 return base + "EnchScrollEnviromentProtec.png";
+            case "regeneration":
+                return base + "EnchScrollHeal.png";
+            case "second_stomach":
+                return base + "EnchScrollSecondS.png";
             default:
                 return DEFAULT_TEXTURE;
         }
@@ -613,6 +617,8 @@ public class ScrollItemGenerator {
             case "coup_de_grace": return base + "CoupDeGrace.png";
             case "poison": return base + "Poison.png";
             case "environmental_protection": return base + "Environment Protection.png";
+            case "regeneration": return base + "Regeneration.png";
+            case "second_stomach": return base + "SecondStomach.png";
             default: return DEFAULT_ICON;
         }
     }

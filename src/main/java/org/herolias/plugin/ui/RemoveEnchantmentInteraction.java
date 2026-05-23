@@ -19,6 +19,7 @@ import org.herolias.plugin.SimpleEnchanting;
 import org.herolias.plugin.enchantment.EnchantmentData;
 import org.herolias.plugin.enchantment.EnchantmentManager;
 import org.herolias.plugin.enchantment.EnchantmentType;
+import org.herolias.plugin.enchantment.NativeTooltipManager;
 
 /**
  * Interaction that removes an enchantment from an item and consumes the Scroll
@@ -87,7 +88,7 @@ public class RemoveEnchantmentInteraction extends ChoiceInteraction {
 
         // Write back to item metadata
         org.bson.BsonDocument bson = data.isEmpty() ? null : data.toBson();
-        ItemStack cleanedItem = itemStack.withMetadata(EnchantmentData.METADATA_KEY, bson);
+        ItemStack cleanedItem = NativeTooltipManager.withEnchantments(itemStack, bson, enchantmentManager);
 
         // Consume the scroll
         ItemContainer heldItemContainer = this.heldItemContext.getContainer();
@@ -124,8 +125,8 @@ public class RemoveEnchantmentInteraction extends ChoiceInteraction {
                     // Level exceeds max — create a Custom Scroll with the enchantment in metadata
                     EnchantmentData customScrollData = new EnchantmentData();
                     customScrollData.addEnchantment(enchantmentType, removedLevel);
-                    scrollStack = new ItemStack("Scroll_Custom", 1)
-                            .withMetadata(EnchantmentData.METADATA_KEY, customScrollData.toBson());
+                    scrollStack = NativeTooltipManager.withEnchantments(new ItemStack("Scroll_Custom", 1),
+                            customScrollData, enchantmentManager);
                 } else {
                     String scrollId = getScrollItemId(enchantmentType, removedLevel);
                     scrollStack = new ItemStack(scrollId, 1);

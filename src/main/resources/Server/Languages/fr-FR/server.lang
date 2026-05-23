@@ -612,7 +612,7 @@ customUI.walkthrough.next = Page Suivante
 customUI.walkthrough.prev = Page Précédente
 
 customUI.walkthrough.welcome.title = Bienvenue dans Simple Enchantments !
-customUI.walkthrough.welcome.desc = Ce mod vous permet d'améliorer votre équipement et vos armes en utilisant des parchemins magiques et des enchantements. Il est hautement personnalisable, avec un menu de configuration administrateur (/enchantconfig) qui permet de modifier les paramètres ou d'activer/désactiver des enchantements spécifiques. Il fonctionne mieux avec les objets vanilla, mais offre une large compatibilité avec d'autres mods. Si vous rencontrez un problème ou avez une suggestion, rejoignez notre serveur Discord. De plus, si Dynamic Tooltips Lib est installé, les enchantements seront affichés dans l'infobulle de l'objet.
+customUI.walkthrough.welcome.desc = Ce mod vous permet d'améliorer votre équipement et vos armes en utilisant des parchemins magiques et des enchantements. Il est hautement personnalisable, avec un menu de configuration administrateur (/enchantconfig) qui permet de modifier les paramètres ou d'activer/désactiver des enchantements spécifiques. Il fonctionne mieux avec les objets vanilla, mais offre une large compatibilité avec d'autres mods. Si vous rencontrez un problème ou avez une suggestion, rejoignez notre serveur Discord. De plus, les enchantements sont affichés dans l'infobulle de l'objet.
 
 customUI.walkthrough.table.title = 1. La Table d'Enchantement
 customUI.walkthrough.table.desc = Fabriquez une Table d'Enchantement à l'Établi. Placez-la et interagissez avec pour parcourir tous les Parchemins d'Enchantement disponibles que vous pouvez fabriquer. Vous pouvez aussi améliorer la table pour accéder à des enchantements de niveau supérieur.
@@ -833,5 +833,5 @@ config.multiplier.poison:duration = Durée (Secondes)
 config.multiplier.environmental_protection = Réduction par Niveau
 config.multiplier.regeneration = HP Par Seconde
 config.multiplier.second_stomach = Bonus Par Niveau
-items.EngravingTable.name = Engraving Table
-items.EngravingTable.description = A rune engraving table used to rename items and recolor enchantment glows.
+items.EngravingTable.name = Table de gravure
+items.EngravingTable.description = Une table de gravure runique pour renommer les objets et recolorer les lueurs d'enchantement.

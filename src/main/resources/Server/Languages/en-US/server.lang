@@ -728,7 +728,7 @@ customUI.walkthrough.next = Next Page
 customUI.walkthrough.prev = Previous Page
 
 customUI.walkthrough.welcome.title = Welcome to Simple Enchantments!
-customUI.walkthrough.welcome.desc = This mod allows you to enhance your gear and weapons using magical scrolls and enchantments. It is highly customizable, featuring an admin configuration menu (/enchantconfig) that lets you tweak settings or toggle specific enchantments on and off. It works best with vanilla items, but it offers broad compatibility with other mods. If you encounter an issue or have a feature request, please join our Discord server. Additionally, if Dynamic Tooltips Lib is installed, enchantments will be shown in the item tooltip.
+customUI.walkthrough.welcome.desc = This mod allows you to enhance your gear and weapons using magical scrolls and enchantments. It is highly customizable, featuring an admin configuration menu (/enchantconfig) that lets you tweak settings or toggle specific enchantments on and off. It works best with vanilla items, but it offers broad compatibility with other mods. If you encounter an issue or have a feature request, please join our Discord server. Additionally, enchantments are shown in the item tooltip.
 
 customUI.walkthrough.table.title = 1. The Enchanting Table
 customUI.walkthrough.table.desc = Craft an Enchanting Table at the Workbench. Place it down and interact with it to browse all available Enchantment Scrolls that you can craft. You can also upgrade the table to access higher tier enchantments.

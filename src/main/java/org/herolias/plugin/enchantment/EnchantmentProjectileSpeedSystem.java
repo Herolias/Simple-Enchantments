@@ -83,9 +83,11 @@ public class EnchantmentProjectileSpeedSystem extends RefSystem<EntityStore> {
         int lootingLevel = enchantmentManager.getEnchantmentLevel(weapon, EnchantmentType.LOOTING);
         int freezeLevel = enchantmentManager.getEnchantmentLevel(weapon, EnchantmentType.FREEZE);
         int burnLevel = enchantmentManager.getEnchantmentLevel(weapon, EnchantmentType.BURN);
+        int poisonLevel = enchantmentManager.getEnchantmentLevel(weapon, EnchantmentType.POISON);
         int eternalShotLevel = enchantmentManager.getEnchantmentLevel(weapon, EnchantmentType.ETERNAL_SHOT);
 
         if (strengthLevel <= 0 && eaglesEyeLevel <= 0 && lootingLevel <= 0 && freezeLevel <= 0 && burnLevel <= 0
+                && poisonLevel <= 0
                 && eternalShotLevel <= 0) {
             return;
         }
@@ -93,12 +95,12 @@ public class EnchantmentProjectileSpeedSystem extends RefSystem<EntityStore> {
         UUIDComponent projectileUuidComponent = commandBuffer.getComponent(ref, UUIDComponent.getComponentType());
         if (projectileUuidComponent != null) {
             enchantmentManager.storeProjectileEnchantments(projectileUuidComponent.getUuid(), strengthLevel,
-                    eaglesEyeLevel, lootingLevel, freezeLevel, burnLevel, eternalShotLevel);
+                    eaglesEyeLevel, lootingLevel, freezeLevel, burnLevel, poisonLevel, eternalShotLevel);
         }
         NetworkId networkId = commandBuffer.getComponent(ref, NetworkId.getComponentType());
         if (networkId != null) {
             enchantmentManager.storeProjectileEnchantments(networkId.getId(), strengthLevel, eaglesEyeLevel,
-                    lootingLevel, freezeLevel, burnLevel, eternalShotLevel);
+                    lootingLevel, freezeLevel, burnLevel, poisonLevel, eternalShotLevel);
         }
 
         if (eternalShotLevel > 0) {

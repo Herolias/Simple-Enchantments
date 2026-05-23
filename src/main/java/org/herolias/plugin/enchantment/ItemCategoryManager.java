@@ -7,7 +7,6 @@ import org.herolias.plugin.SimpleEnchanting;
 
 import java.io.File;
 import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -34,9 +33,9 @@ public class ItemCategoryManager {
         registerCategory(ItemCategory.SHOVEL);
         registerCategory(ItemCategory.AXE);
         registerCategory(ItemCategory.SHIELD);
-        registerCategory(ItemCategory.BOOTS);
         registerCategory(ItemCategory.HELMET);
-        registerCategory(ItemCategory.ARMOR);
+        registerCategory(ItemCategory.CHESTPLATE);
+        registerCategory(ItemCategory.LEGS);
         registerCategory(ItemCategory.ARMOR);
         registerCategory(ItemCategory.GLOVES);
         registerCategory(ItemCategory.STAFF);
@@ -64,9 +63,16 @@ public class ItemCategoryManager {
 
         registerFamilyMapping("shield", ItemCategory.SHIELD);
         registerFamilyMapping("helmet", ItemCategory.HELMET);
-        registerFamilyMapping("chestplate", ItemCategory.ARMOR);
+        registerFamilyMapping("chestplate", ItemCategory.CHESTPLATE);
+        registerFamilyMapping("chest", ItemCategory.CHESTPLATE);
         registerFamilyMapping("gloves", ItemCategory.GLOVES);
-        registerFamilyMapping("boots", ItemCategory.BOOTS);
+        registerFamilyMapping("legs", ItemCategory.LEGS);
+        registerFamilyMapping("leggings", ItemCategory.LEGS);
+        registerFamilyMapping("greaves", ItemCategory.LEGS);
+        registerFamilyMapping("boots", ItemCategory.LEGS);
+
+        // Backward compatibility for existing configs/API calls that still say BOOTS.
+        categoriesById.put("BOOTS", ItemCategory.LEGS);
     }
 
     public static ItemCategoryManager getInstance() {
@@ -346,7 +352,7 @@ public class ItemCategoryManager {
             if (s.contains("hands"))
                 return ItemCategory.GLOVES;
             if (s.contains("legs"))
-                return ItemCategory.BOOTS;
+                return ItemCategory.LEGS;
         }
         return ItemCategory.ARMOR;
     }
