@@ -4,31 +4,42 @@
 
 Increases damage to stunned enemies by 20%.
 
-## Stats
+## Stats and Recipe
 
-| Field | Value |
-|---|---|
-| Added in Version | <!-- MANUAL:added-version:start --> <!-- MANUAL:added-version:end --> |
-| Default Modifier | Damage Per Level: `15%` |
-| Amount of Levels | 3 (I-III) |
-| ID | `coup_de_grace` |
-| Can Be Applied To | Melee Weapons |
-| Enabled By Default | Yes |
-| Recipe | Unlock tier `1/2/3`; ingredients are listed below. |
-| Requires | Perfect Parries |
-
-## Recipe
-
-Unlock tier: `1/2/3`.
-
-Amounts are listed as `I/II/III`.
-
-| Ingredient | Amount |
-|---|---:|
-| ![Cindercloth Scraps](../../media/recipe-icons/Ingredient_Fabric_Scrap_Cindercloth.png) Cindercloth Scraps | `5/5/5` |
-| ![Stormcap Mushroom](../../media/recipe-icons/Plant_Crop_Stamina2.png) Stormcap Mushroom | `3/5/7` |
-| ![Yellow Crystal Shards](../../media/recipe-icons/Ingredient_Crystal_Yellow.png) Yellow Crystal Shards | `15/20/25` |
-| ![Essence of the Void](../../media/recipe-icons/Ingredient_Void_Essence.png) Essence of the Void | `10/15/20` |
+<div style="display: flex; gap: 24px; align-items: flex-start; flex-wrap: wrap;">
+<div style="flex: 1 1 360px; min-width: 320px;">
+<h3>Stats</h3>
+<table>
+<thead>
+<tr><th>Field</th><th>Value</th></tr>
+</thead>
+<tbody>
+<tr><td>Added in Version</td><td><!-- MANUAL:added-version:start --> <!-- MANUAL:added-version:end --></td></tr>
+<tr><td>Default Modifier</td><td>Damage Per Level: <code>15%</code></td></tr>
+<tr><td>Amount of Levels</td><td>3 (I-III)</td></tr>
+<tr><td>ID</td><td><code>coup_de_grace</code></td></tr>
+<tr><td>Can Be Applied To</td><td>Melee Weapons</td></tr>
+<tr><td>Enabled By Default</td><td>Yes</td></tr>
+<tr><td>Crafting Tier</td><td><code>1/2/3</code></td></tr>
+<tr><td>Requires</td><td>Perfect Parries</td></tr>
+</tbody>
+</table>
+</div>
+<div style="flex: 0 1 320px; min-width: 260px;">
+<h3>Recipe</h3>
+<table>
+<thead>
+<tr><th>Ingredient</th><th>Amount</th></tr>
+</thead>
+<tbody>
+<tr><td><img src="../../media/recipe-icons/Ingredient_Fabric_Scrap_Cindercloth.png" alt="Cindercloth Scraps" width="32"> Cindercloth Scraps</td><td><code>5/5/5</code></td></tr>
+<tr><td><img src="../../media/recipe-icons/Plant_Crop_Stamina2.png" alt="Stormcap Mushroom" width="32"> Stormcap Mushroom</td><td><code>3/5/7</code></td></tr>
+<tr><td><img src="../../media/recipe-icons/Ingredient_Crystal_Yellow.png" alt="Yellow Crystal Shards" width="32"> Yellow Crystal Shards</td><td><code>15/20/25</code></td></tr>
+<tr><td><img src="../../media/recipe-icons/Ingredient_Void_Essence.png" alt="Essence of the Void" width="32"> Essence of the Void</td><td><code>10/15/20</code></td></tr>
+</tbody>
+</table>
+</div>
+</div>
 
 ## Showcase
 

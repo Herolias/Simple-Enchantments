@@ -4,31 +4,42 @@
 
 Heals blocker for 10% of blocked damage. Not combinable with Reflection.
 
-## Stats
+## Stats and Recipe
 
-| Field | Value |
-|---|---|
-| Added in Version | <!-- MANUAL:added-version:start --> <!-- MANUAL:added-version:end --> |
-| Default Modifier | Heal % Per Level: `10%` |
-| Amount of Levels | 3 (I-III) |
-| ID | `absorption` |
-| Can Be Applied To | Shields |
-| Enabled By Default | Yes |
-| Recipe | Unlock tier `1/2/3`; ingredients are listed below. |
-| Conflicts With | [Reflection](reflection.md) |
-
-## Recipe
-
-Unlock tier: `1/2/3`.
-
-Amounts are listed as `I/II/III`.
-
-| Ingredient | Amount |
-|---|---:|
-| ![Cindercloth Scraps](../../media/recipe-icons/Ingredient_Fabric_Scrap_Cindercloth.png) Cindercloth Scraps | `5/5/5` |
-| ![Essence of Life](../../media/recipe-icons/Ingredient_Life_Essence.png) Essence of Life | `10/20/30` |
-| ![Green Crystal Shards](../../media/recipe-icons/Ingredient_Crystal_Green.png) Green Crystal Shards | `15/20/25` |
-| ![Blood Leaf](../../media/recipe-icons/Plant_Crop_Health3.png) Blood Leaf | `3/5/7` |
+<div style="display: flex; gap: 24px; align-items: flex-start; flex-wrap: wrap;">
+<div style="flex: 1 1 360px; min-width: 320px;">
+<h3>Stats</h3>
+<table>
+<thead>
+<tr><th>Field</th><th>Value</th></tr>
+</thead>
+<tbody>
+<tr><td>Added in Version</td><td><!-- MANUAL:added-version:start --> <!-- MANUAL:added-version:end --></td></tr>
+<tr><td>Default Modifier</td><td>Heal % Per Level: <code>10%</code></td></tr>
+<tr><td>Amount of Levels</td><td>3 (I-III)</td></tr>
+<tr><td>ID</td><td><code>absorption</code></td></tr>
+<tr><td>Can Be Applied To</td><td>Shields</td></tr>
+<tr><td>Enabled By Default</td><td>Yes</td></tr>
+<tr><td>Crafting Tier</td><td><code>1/2/3</code></td></tr>
+<tr><td>Conflicts With</td><td><a href="reflection.md">Reflection</a></td></tr>
+</tbody>
+</table>
+</div>
+<div style="flex: 0 1 320px; min-width: 260px;">
+<h3>Recipe</h3>
+<table>
+<thead>
+<tr><th>Ingredient</th><th>Amount</th></tr>
+</thead>
+<tbody>
+<tr><td><img src="../../media/recipe-icons/Ingredient_Fabric_Scrap_Cindercloth.png" alt="Cindercloth Scraps" width="32"> Cindercloth Scraps</td><td><code>5/5/5</code></td></tr>
+<tr><td><img src="../../media/recipe-icons/Ingredient_Life_Essence.png" alt="Essence of Life" width="32"> Essence of Life</td><td><code>10/20/30</code></td></tr>
+<tr><td><img src="../../media/recipe-icons/Ingredient_Crystal_Green.png" alt="Green Crystal Shards" width="32"> Green Crystal Shards</td><td><code>15/20/25</code></td></tr>
+<tr><td><img src="../../media/recipe-icons/Plant_Crop_Health3.png" alt="Blood Leaf" width="32"> Blood Leaf</td><td><code>3/5/7</code></td></tr>
+</tbody>
+</table>
+</div>
+</div>
 
 ## Showcase
 

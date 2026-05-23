@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import argparse
+import html
 import json
 import os
 import re
@@ -590,6 +591,20 @@ def format_multiplier_details(enchantment: Enchantment, translations: dict[str, 
     return "; ".join(details)
 
 
+def format_multiplier_details_html(enchantment: Enchantment, translations: dict[str, str]) -> str:
+    if not enchantment.multipliers:
+        return "None"
+
+    details = []
+    for multiplier in enchantment.multipliers:
+        label = translations.get(multiplier.label_key, multiplier.key)
+        details.append(
+            f"{html.escape(label)}: <code>{html.escape(format_multiplier_for_summary(multiplier))}</code>"
+        )
+
+    return "; ".join(details)
+
+
 def format_description_placeholder(multiplier: Multiplier | None) -> str:
     if not multiplier:
         return ""
@@ -1047,6 +1062,23 @@ def render_enchantment_links(
     return ", ".join(links) if links else "None"
 
 
+def render_enchantment_links_html(
+    ids: list[str],
+    enchantment_by_id: dict[str, Enchantment],
+) -> str:
+    links: list[str] = []
+    for enchantment_id in ids:
+        target = enchantment_by_id.get(enchantment_id)
+        if target:
+            links.append(
+                f'<a href="{html.escape(page_for_enchantment(target).name, quote=True)}">'
+                f"{html.escape(target.name)}</a>"
+            )
+        else:
+            links.append(f"<code>{html.escape(enchantment_id)}</code>")
+    return ", ".join(links) if links else "None"
+
+
 def render_recipe_table(
     page_path: Path,
     recipes: list[ScrollRecipe],
@@ -1055,10 +1087,9 @@ def render_recipe_table(
     changed: list[Path],
 ) -> str:
     if not recipes:
-        return "No default scroll recipe is configured."
+        return "<p>No default scroll recipe is configured.</p>"
 
     recipes = sorted(recipes, key=lambda recipe: scroll_recipe_level(recipe.id))
-    level_labels = [roman(scroll_recipe_level(recipe.id)) for recipe in recipes]
     ingredient_ids: list[str] = []
     for recipe in recipes:
         for ingredient in recipe.ingredients:
@@ -1066,18 +1097,12 @@ def render_recipe_table(
                 ingredient_ids.append(ingredient.item_id)
 
     lines = [
-        f"Unlock tier: `{'/'.join(str(recipe.unlock_tier) for recipe in recipes)}`.",
-        "",
+        "<table>",
+        "<thead>",
+        "<tr><th>Ingredient</th><th>Amount</th></tr>",
+        "</thead>",
+        "<tbody>",
     ]
-    if len(recipes) > 1:
-        lines.extend([f"Amounts are listed as `{'/'.join(level_labels)}`.", ""])
-
-    lines.extend(
-        [
-            "| Ingredient | Amount |",
-            "|---|---:|",
-        ]
-    )
 
     for item_id in ingredient_ids:
         item_name = item_display_name(item_id, item_translations)
@@ -1085,7 +1110,10 @@ def render_recipe_table(
         icon = ""
         if icon_path:
             rel_icon_path = relative_markdown_path(page_path, icon_path)
-            icon = f"![{markdown_alt_escape(item_name)}]({rel_icon_path}) "
+            icon = (
+                f'<img src="{html.escape(rel_icon_path, quote=True)}" '
+                f'alt="{html.escape(item_name, quote=True)}" width="32"> '
+            )
 
         amounts = []
         for recipe in recipes:
@@ -1095,7 +1123,14 @@ def render_recipe_table(
             )
             amounts.append(str(amount) if amount is not None else "-")
 
-        lines.append(f"| {icon}{markdown_escape(item_name)} | `{'/'.join(amounts)}` |")
+        lines.append(
+            "<tr>"
+            f"<td>{icon}{html.escape(item_name)}</td>"
+            f"<td><code>{html.escape('/'.join(amounts))}</code></td>"
+            "</tr>"
+        )
+
+    lines.extend(["</tbody>", "</table>"])
 
     return "\n".join(lines)
 
@@ -1122,23 +1157,19 @@ def render_enchantment_page(
 
     stats_rows = [
         ("Added in Version", manual_block("added-version", added_version)),
-        ("Default Modifier", format_multiplier_details(enchantment, translations)),
+        ("Default Modifier", format_multiplier_details_html(enchantment, translations)),
         ("Amount of Levels", level_count(enchantment.max_level)),
-        ("ID", f"`{enchantment.id}`"),
-        ("Can Be Applied To", markdown_escape(format_categories(enchantment.categories, translations))),
+        ("ID", f"<code>{html.escape(enchantment.id)}</code>"),
+        ("Can Be Applied To", html.escape(format_categories(enchantment.categories, translations))),
         ("Enabled By Default", format_bool(not enchantment.disabled_by_default)),
-        (
-            "Recipe",
-            f"Unlock tier `{'/'.join(str(recipe.unlock_tier) for recipe in recipe_map.get(enchantment.id, []))}`; "
-            "ingredients are listed below."
-            if recipe_map.get(enchantment.id)
-            else "No default recipe.",
-        ),
     ]
+    if recipe_map.get(enchantment.id):
+        tiers = "/".join(str(recipe.unlock_tier) for recipe in recipe_map[enchantment.id])
+        stats_rows.append(("Crafting Tier", f"<code>{html.escape(tiers)}</code>"))
     if enchantment.owner_mod_name:
-        stats_rows.append(("Requires", markdown_escape(enchantment.owner_mod_name)))
+        stats_rows.append(("Requires", html.escape(enchantment.owner_mod_name)))
     if enchantment.conflicts:
-        stats_rows.append(("Conflicts With", render_enchantment_links(enchantment.conflicts, enchantment_by_id)))
+        stats_rows.append(("Conflicts With", render_enchantment_links_html(enchantment.conflicts, enchantment_by_id)))
 
     lines = [
         f"# {markdown_escape(enchantment.name)}",
@@ -1157,21 +1188,29 @@ def render_enchantment_page(
         [
             render_enchantment_description(enchantment, translations),
             "",
-            "## Stats",
+            "## Stats and Recipe",
             "",
-            "| Field | Value |",
-            "|---|---|",
+            '<div style="display: flex; gap: 24px; align-items: flex-start; flex-wrap: wrap;">',
+            '<div style="flex: 1 1 360px; min-width: 320px;">',
+            "<h3>Stats</h3>",
+            "<table>",
+            "<thead>",
+            "<tr><th>Field</th><th>Value</th></tr>",
+            "</thead>",
+            "<tbody>",
         ]
     )
 
     for label, value in stats_rows:
-        lines.append(f"| {label} | {value} |")
+        lines.append(f"<tr><td>{html.escape(label)}</td><td>{value}</td></tr>")
 
     lines.extend(
         [
-            "",
-            "## Recipe",
-            "",
+            "</tbody>",
+            "</table>",
+            "</div>",
+            '<div style="flex: 0 1 320px; min-width: 260px;">',
+            "<h3>Recipe</h3>",
             render_recipe_table(
                 page_path,
                 recipe_map.get(enchantment.id, []),
@@ -1179,6 +1218,8 @@ def render_enchantment_page(
                 item_icons,
                 changed,
             ),
+            "</div>",
+            "</div>",
             "",
             "## Showcase",
             "",

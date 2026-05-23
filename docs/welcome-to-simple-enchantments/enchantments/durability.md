@@ -4,30 +4,41 @@
 
 Reduces durability loss chance by 25%.
 
-## Stats
+## Stats and Recipe
 
-| Field | Value |
-|---|---|
-| Added in Version | <!-- MANUAL:added-version:start --> <!-- MANUAL:added-version:end --> |
-| Default Modifier | Reduction Per Level: `25%` |
-| Amount of Levels | 3 (I-III) |
-| ID | `durability` |
-| Can Be Applied To | Melee Weapons, Ranged Weapons, Tools, Pickaxes, Shovels, Axes, Armor, Staffs, Mana Staffs, Essence Staffs |
-| Enabled By Default | Yes |
-| Recipe | Unlock tier `1/2/3`; ingredients are listed below. |
-
-## Recipe
-
-Unlock tier: `1/2/3`.
-
-Amounts are listed as `I/II/III`.
-
-| Ingredient | Amount |
-|---|---:|
-| ![Cindercloth Scraps](../../media/recipe-icons/Ingredient_Fabric_Scrap_Cindercloth.png) Cindercloth Scraps | `5/5/5` |
-| ![Essence of Life](../../media/recipe-icons/Ingredient_Life_Essence.png) Essence of Life | `10/15/20` |
-| ![Cobalt Ingot](../../media/recipe-icons/Ingredient_Bar_Cobalt.png) Cobalt Ingot | `5/10/15` |
-| ![Thorium Ingot](../../media/recipe-icons/Ingredient_Bar_Thorium.png) Thorium Ingot | `5/10/15` |
+<div style="display: flex; gap: 24px; align-items: flex-start; flex-wrap: wrap;">
+<div style="flex: 1 1 360px; min-width: 320px;">
+<h3>Stats</h3>
+<table>
+<thead>
+<tr><th>Field</th><th>Value</th></tr>
+</thead>
+<tbody>
+<tr><td>Added in Version</td><td><!-- MANUAL:added-version:start --> <!-- MANUAL:added-version:end --></td></tr>
+<tr><td>Default Modifier</td><td>Reduction Per Level: <code>25%</code></td></tr>
+<tr><td>Amount of Levels</td><td>3 (I-III)</td></tr>
+<tr><td>ID</td><td><code>durability</code></td></tr>
+<tr><td>Can Be Applied To</td><td>Melee Weapons, Ranged Weapons, Tools, Pickaxes, Shovels, Axes, Armor, Staffs, Mana Staffs, Essence Staffs</td></tr>
+<tr><td>Enabled By Default</td><td>Yes</td></tr>
+<tr><td>Crafting Tier</td><td><code>1/2/3</code></td></tr>
+</tbody>
+</table>
+</div>
+<div style="flex: 0 1 320px; min-width: 260px;">
+<h3>Recipe</h3>
+<table>
+<thead>
+<tr><th>Ingredient</th><th>Amount</th></tr>
+</thead>
+<tbody>
+<tr><td><img src="../../media/recipe-icons/Ingredient_Fabric_Scrap_Cindercloth.png" alt="Cindercloth Scraps" width="32"> Cindercloth Scraps</td><td><code>5/5/5</code></td></tr>
+<tr><td><img src="../../media/recipe-icons/Ingredient_Life_Essence.png" alt="Essence of Life" width="32"> Essence of Life</td><td><code>10/15/20</code></td></tr>
+<tr><td><img src="../../media/recipe-icons/Ingredient_Bar_Cobalt.png" alt="Cobalt Ingot" width="32"> Cobalt Ingot</td><td><code>5/10/15</code></td></tr>
+<tr><td><img src="../../media/recipe-icons/Ingredient_Bar_Thorium.png" alt="Thorium Ingot" width="32"> Thorium Ingot</td><td><code>5/10/15</code></td></tr>
+</tbody>
+</table>
+</div>
+</div>
 
 ## Showcase
 

@@ -4,28 +4,41 @@
 
 Lets you shoot arrows without consuming them.
 
-## Stats
+## Stats and Recipe
 
-| Field | Value |
-|---|---|
-| Added in Version | <!-- MANUAL:added-version:start --> <!-- MANUAL:added-version:end --> |
-| Default Modifier | None |
-| Amount of Levels | 1 (I) |
-| ID | `eternal_shot` |
-| Can Be Applied To | Ranged Weapons |
-| Enabled By Default | Yes |
-| Recipe | Unlock tier `3`; ingredients are listed below. |
-
-## Recipe
-
-Unlock tier: `3`.
-
-| Ingredient | Amount |
-|---|---:|
-| ![Cindercloth Scraps](../../media/recipe-icons/Ingredient_Fabric_Scrap_Cindercloth.png) Cindercloth Scraps | `5` |
-| ![Essence of the Void](../../media/recipe-icons/Ingredient_Void_Essence.png) Essence of the Void | `30` |
-| ![Crude Arrow](../../media/recipe-icons/Weapon_Arrow_Crude.png) Crude Arrow | `100` |
-| ![Purple Crystal Shards](../../media/recipe-icons/Ingredient_Crystal_Purple.png) Purple Crystal Shards | `15` |
+<div style="display: flex; gap: 24px; align-items: flex-start; flex-wrap: wrap;">
+<div style="flex: 1 1 360px; min-width: 320px;">
+<h3>Stats</h3>
+<table>
+<thead>
+<tr><th>Field</th><th>Value</th></tr>
+</thead>
+<tbody>
+<tr><td>Added in Version</td><td><!-- MANUAL:added-version:start --> <!-- MANUAL:added-version:end --></td></tr>
+<tr><td>Default Modifier</td><td>None</td></tr>
+<tr><td>Amount of Levels</td><td>1 (I)</td></tr>
+<tr><td>ID</td><td><code>eternal_shot</code></td></tr>
+<tr><td>Can Be Applied To</td><td>Ranged Weapons</td></tr>
+<tr><td>Enabled By Default</td><td>Yes</td></tr>
+<tr><td>Crafting Tier</td><td><code>3</code></td></tr>
+</tbody>
+</table>
+</div>
+<div style="flex: 0 1 320px; min-width: 260px;">
+<h3>Recipe</h3>
+<table>
+<thead>
+<tr><th>Ingredient</th><th>Amount</th></tr>
+</thead>
+<tbody>
+<tr><td><img src="../../media/recipe-icons/Ingredient_Fabric_Scrap_Cindercloth.png" alt="Cindercloth Scraps" width="32"> Cindercloth Scraps</td><td><code>5</code></td></tr>
+<tr><td><img src="../../media/recipe-icons/Ingredient_Void_Essence.png" alt="Essence of the Void" width="32"> Essence of the Void</td><td><code>30</code></td></tr>
+<tr><td><img src="../../media/recipe-icons/Weapon_Arrow_Crude.png" alt="Crude Arrow" width="32"> Crude Arrow</td><td><code>100</code></td></tr>
+<tr><td><img src="../../media/recipe-icons/Ingredient_Crystal_Purple.png" alt="Purple Crystal Shards" width="32"> Purple Crystal Shards</td><td><code>15</code></td></tr>
+</tbody>
+</table>
+</div>
+</div>
 
 ## Showcase
 

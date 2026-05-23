@@ -4,31 +4,42 @@
 
 Increases counter attack damage by 20%.
 
-## Stats
+## Stats and Recipe
 
-| Field | Value |
-|---|---|
-| Added in Version | <!-- MANUAL:added-version:start --> <!-- MANUAL:added-version:end --> |
-| Default Modifier | Damage Per Level: `10%` |
-| Amount of Levels | 3 (I-III) |
-| ID | `riposte` |
-| Can Be Applied To | Melee Weapons |
-| Enabled By Default | Yes |
-| Recipe | Unlock tier `1/2/3`; ingredients are listed below. |
-| Requires | Perfect Parries |
-
-## Recipe
-
-Unlock tier: `1/2/3`.
-
-Amounts are listed as `I/II/III`.
-
-| Ingredient | Amount |
-|---|---:|
-| ![Cindercloth Scraps](../../media/recipe-icons/Ingredient_Fabric_Scrap_Cindercloth.png) Cindercloth Scraps | `5/5/5` |
-| ![Cactus Flower](../../media/recipe-icons/Plant_Cactus_Flower.png) Cactus Flower | `5/10/15` |
-| ![Yellow Crystal Shards](../../media/recipe-icons/Ingredient_Crystal_Yellow.png) Yellow Crystal Shards | `15/20/25` |
-| ![Iron Ingot](../../media/recipe-icons/Ingredient_Bar_Iron.png) Iron Ingot | `10/20/30` |
+<div style="display: flex; gap: 24px; align-items: flex-start; flex-wrap: wrap;">
+<div style="flex: 1 1 360px; min-width: 320px;">
+<h3>Stats</h3>
+<table>
+<thead>
+<tr><th>Field</th><th>Value</th></tr>
+</thead>
+<tbody>
+<tr><td>Added in Version</td><td><!-- MANUAL:added-version:start --> <!-- MANUAL:added-version:end --></td></tr>
+<tr><td>Default Modifier</td><td>Damage Per Level: <code>10%</code></td></tr>
+<tr><td>Amount of Levels</td><td>3 (I-III)</td></tr>
+<tr><td>ID</td><td><code>riposte</code></td></tr>
+<tr><td>Can Be Applied To</td><td>Melee Weapons</td></tr>
+<tr><td>Enabled By Default</td><td>Yes</td></tr>
+<tr><td>Crafting Tier</td><td><code>1/2/3</code></td></tr>
+<tr><td>Requires</td><td>Perfect Parries</td></tr>
+</tbody>
+</table>
+</div>
+<div style="flex: 0 1 320px; min-width: 260px;">
+<h3>Recipe</h3>
+<table>
+<thead>
+<tr><th>Ingredient</th><th>Amount</th></tr>
+</thead>
+<tbody>
+<tr><td><img src="../../media/recipe-icons/Ingredient_Fabric_Scrap_Cindercloth.png" alt="Cindercloth Scraps" width="32"> Cindercloth Scraps</td><td><code>5/5/5</code></td></tr>
+<tr><td><img src="../../media/recipe-icons/Plant_Cactus_Flower.png" alt="Cactus Flower" width="32"> Cactus Flower</td><td><code>5/10/15</code></td></tr>
+<tr><td><img src="../../media/recipe-icons/Ingredient_Crystal_Yellow.png" alt="Yellow Crystal Shards" width="32"> Yellow Crystal Shards</td><td><code>15/20/25</code></td></tr>
+<tr><td><img src="../../media/recipe-icons/Ingredient_Bar_Iron.png" alt="Iron Ingot" width="32"> Iron Ingot</td><td><code>10/20/30</code></td></tr>
+</tbody>
+</table>
+</div>
+</div>
 
 ## Showcase
 

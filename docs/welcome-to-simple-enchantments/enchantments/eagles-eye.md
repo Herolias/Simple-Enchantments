@@ -4,30 +4,41 @@
 
 Increases projectile damage by up to 25% based on distance.
 
-## Stats
+## Stats and Recipe
 
-| Field | Value |
-|---|---|
-| Added in Version | <!-- MANUAL:added-version:start --> <!-- MANUAL:added-version:end --> |
-| Default Modifier | Distance Bonus Per Level: `0.5%` |
-| Amount of Levels | 3 (I-III) |
-| ID | `eagles_eye` |
-| Can Be Applied To | Ranged Weapons |
-| Enabled By Default | Yes |
-| Recipe | Unlock tier `1/2/3`; ingredients are listed below. |
-
-## Recipe
-
-Unlock tier: `1/2/3`.
-
-Amounts are listed as `I/II/III`.
-
-| Ingredient | Amount |
-|---|---:|
-| ![Cindercloth Scraps](../../media/recipe-icons/Ingredient_Fabric_Scrap_Cindercloth.png) Cindercloth Scraps | `5/5/5` |
-| ![Essence of the Void](../../media/recipe-icons/Ingredient_Void_Essence.png) Essence of the Void | `10/10/15` |
-| ![White Feathers](../../media/recipe-icons/Ingredient_Feathers_Light.png) White Feathers | `5/7/12` |
-| ![Storm Petals](../../media/recipe-icons/Plant_Petals_Storm.png) Storm Petals | `3/5/7` |
+<div style="display: flex; gap: 24px; align-items: flex-start; flex-wrap: wrap;">
+<div style="flex: 1 1 360px; min-width: 320px;">
+<h3>Stats</h3>
+<table>
+<thead>
+<tr><th>Field</th><th>Value</th></tr>
+</thead>
+<tbody>
+<tr><td>Added in Version</td><td><!-- MANUAL:added-version:start --> <!-- MANUAL:added-version:end --></td></tr>
+<tr><td>Default Modifier</td><td>Distance Bonus Per Level: <code>0.5%</code></td></tr>
+<tr><td>Amount of Levels</td><td>3 (I-III)</td></tr>
+<tr><td>ID</td><td><code>eagles_eye</code></td></tr>
+<tr><td>Can Be Applied To</td><td>Ranged Weapons</td></tr>
+<tr><td>Enabled By Default</td><td>Yes</td></tr>
+<tr><td>Crafting Tier</td><td><code>1/2/3</code></td></tr>
+</tbody>
+</table>
+</div>
+<div style="flex: 0 1 320px; min-width: 260px;">
+<h3>Recipe</h3>
+<table>
+<thead>
+<tr><th>Ingredient</th><th>Amount</th></tr>
+</thead>
+<tbody>
+<tr><td><img src="../../media/recipe-icons/Ingredient_Fabric_Scrap_Cindercloth.png" alt="Cindercloth Scraps" width="32"> Cindercloth Scraps</td><td><code>5/5/5</code></td></tr>
+<tr><td><img src="../../media/recipe-icons/Ingredient_Void_Essence.png" alt="Essence of the Void" width="32"> Essence of the Void</td><td><code>10/10/15</code></td></tr>
+<tr><td><img src="../../media/recipe-icons/Ingredient_Feathers_Light.png" alt="White Feathers" width="32"> White Feathers</td><td><code>5/7/12</code></td></tr>
+<tr><td><img src="../../media/recipe-icons/Plant_Petals_Storm.png" alt="Storm Petals" width="32"> Storm Petals</td><td><code>3/5/7</code></td></tr>
+</tbody>
+</table>
+</div>
+</div>
 
 ## Showcase
 
