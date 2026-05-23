@@ -1104,11 +1104,25 @@ def render_recipe_table(
                 ingredient_ids.append(ingredient.item_id)
 
     lines = [
-        "<table>",
-        "<thead>",
-        "<tr><th>Ingredient</th><th>Amount</th></tr>",
-        "</thead>",
-        "<tbody>",
+        (
+            '<div class="se-recipe-card" style="border: 1px solid rgba(148, 163, 184, 0.22); '
+            'border-radius: 8px; padding: 10px 12px; '
+            'background: rgba(148, 163, 184, 0.04);">'
+        ),
+        (
+            '<div class="se-recipe-grid" style="display: grid; '
+            'grid-template-columns: minmax(0, 1fr) max-content; '
+            'column-gap: 16px; align-items: center;">'
+        ),
+        (
+            '<div class="se-recipe-heading" style="font-weight: 600; opacity: 0.75; padding: 0 0 8px;">'
+            "Ingredient</div>"
+        ),
+        (
+            '<div class="se-recipe-heading se-recipe-amount" '
+            'style="font-weight: 600; opacity: 0.75; padding: 0 0 8px; '
+            'text-align: right;">Amount</div>'
+        ),
     ]
 
     for item_id in ingredient_ids:
@@ -1118,7 +1132,10 @@ def render_recipe_table(
         if icon_path:
             icon = (
                 f'<img src="{html.escape(raw_github_url(icon_path), quote=True)}" '
-                f'alt="{html.escape(item_name, quote=True)}" width="32"> '
+                f'alt="{html.escape(item_name, quote=True)}" '
+                'class="se-recipe-icon" '
+                'style="width: 28px; height: 28px; object-fit: contain; '
+                'display: inline-block; flex: 0 0 28px; margin: 0;">'
             )
 
         amounts = []
@@ -1129,14 +1146,25 @@ def render_recipe_table(
             )
             amounts.append(str(amount) if amount is not None else "-")
 
-        lines.append(
-            "<tr>"
-            f"<td>{icon}{html.escape(item_name)}</td>"
-            f"<td><code>{html.escape('/'.join(amounts))}</code></td>"
-            "</tr>"
+        row_border = "border-top: 1px solid rgba(148, 163, 184, 0.18);"
+        lines.extend(
+            [
+                (
+                    f'<div class="se-recipe-cell se-recipe-ingredient" '
+                    f'style="{row_border} display: flex; align-items: center; '
+                    'gap: 10px; min-height: 40px; padding: 7px 0;">'
+                    f'{icon}<span class="se-recipe-name">{html.escape(item_name)}</span></div>'
+                ),
+                (
+                    f'<div class="se-recipe-cell se-recipe-amount" '
+                    f'style="{row_border} display: flex; align-items: center; '
+                    'justify-content: flex-end; min-height: 40px; padding: 7px 0;">'
+                    f"<code>{html.escape('/'.join(amounts))}</code></div>"
+                ),
+            ]
         )
 
-    lines.extend(["</tbody>", "</table>"])
+    lines.extend(["</div>", "</div>"])
 
     return "\n".join(lines)
 
@@ -1196,8 +1224,8 @@ def render_enchantment_page(
             "",
             "## Stats and Recipe",
             "",
-            '<div style="display: flex; gap: 24px; align-items: flex-start; flex-wrap: wrap;">',
-            '<div style="flex: 1 1 360px; min-width: 320px;">',
+            '<div class="se-stats-recipe" style="display: flex; gap: 24px; align-items: flex-start; flex-wrap: wrap;">',
+            '<div class="se-stats-panel" style="flex: 1 1 360px; min-width: 320px;">',
             "<h3>Stats</h3>",
             "<table>",
             "<thead>",
@@ -1215,7 +1243,7 @@ def render_enchantment_page(
             "</tbody>",
             "</table>",
             "</div>",
-            '<div style="flex: 0 1 320px; min-width: 260px;">',
+            '<div class="se-recipe-panel" style="flex: 0 1 360px; min-width: 280px;">',
             "<h3>Recipe</h3>",
             render_recipe_table(
                 page_path,

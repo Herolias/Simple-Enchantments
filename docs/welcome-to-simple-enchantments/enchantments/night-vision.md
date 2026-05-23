@@ -1,13 +1,13 @@
 # Night Vision
 
-![Night Vision scroll icon](https://raw.githubusercontent.com/Herolias/Simple-Enchantments/dev/docs/media/enchantment-icons/night-vision.png)
+![Night Vision scroll icon](https://raw.githubusercontent.com/Herolias/Simple-Enchantments/main/docs/media/enchantment-icons/night-vision.png)
 
 Enhances visibility in dark environments such as caves, nighttime, and underwater.
 
 ## Stats and Recipe
 
-<div style="display: flex; gap: 24px; align-items: flex-start; flex-wrap: wrap;">
-<div style="flex: 1 1 360px; min-width: 320px;">
+<div class="se-stats-recipe" style="display: flex; gap: 24px; align-items: flex-start; flex-wrap: wrap;">
+<div class="se-stats-panel" style="flex: 1 1 360px; min-width: 320px;">
 <h3>Stats</h3>
 <table>
 <thead>
@@ -24,19 +24,22 @@ Enhances visibility in dark environments such as caves, nighttime, and underwate
 </tbody>
 </table>
 </div>
-<div style="flex: 0 1 320px; min-width: 260px;">
+<div class="se-recipe-panel" style="flex: 0 1 360px; min-width: 280px;">
 <h3>Recipe</h3>
-<table>
-<thead>
-<tr><th>Ingredient</th><th>Amount</th></tr>
-</thead>
-<tbody>
-<tr><td><img src="https://raw.githubusercontent.com/Herolias/Simple-Enchantments/dev/docs/media/recipe-icons/Ingredient_Fabric_Scrap_Cindercloth.png" alt="Cindercloth Scraps" width="32"> Cindercloth Scraps</td><td><code>5</code></td></tr>
-<tr><td><img src="https://raw.githubusercontent.com/Herolias/Simple-Enchantments/dev/docs/media/recipe-icons/Ingredient_Fire_Essence.png" alt="Essence of Fire" width="32"> Essence of Fire</td><td><code>30</code></td></tr>
-<tr><td><img src="https://raw.githubusercontent.com/Herolias/Simple-Enchantments/dev/docs/media/recipe-icons/Ingredient_Crystal_Yellow.png" alt="Yellow Crystal Shards" width="32"> Yellow Crystal Shards</td><td><code>30</code></td></tr>
-<tr><td><img src="https://raw.githubusercontent.com/Herolias/Simple-Enchantments/dev/docs/media/recipe-icons/Plant_Crop_Mushroom_Glowing_Orange.png" alt="Orange Glowing Mushroom" width="32"> Orange Glowing Mushroom</td><td><code>20</code></td></tr>
-</tbody>
-</table>
+<div class="se-recipe-card" style="border: 1px solid rgba(148, 163, 184, 0.22); border-radius: 8px; padding: 10px 12px; background: rgba(148, 163, 184, 0.04);">
+<div class="se-recipe-grid" style="display: grid; grid-template-columns: minmax(0, 1fr) max-content; column-gap: 16px; align-items: center;">
+<div class="se-recipe-heading" style="font-weight: 600; opacity: 0.75; padding: 0 0 8px;">Ingredient</div>
+<div class="se-recipe-heading se-recipe-amount" style="font-weight: 600; opacity: 0.75; padding: 0 0 8px; text-align: right;">Amount</div>
+<div class="se-recipe-cell se-recipe-ingredient" style="border-top: 1px solid rgba(148, 163, 184, 0.18); display: flex; align-items: center; gap: 10px; min-height: 40px; padding: 7px 0;"><img src="https://raw.githubusercontent.com/Herolias/Simple-Enchantments/main/docs/media/recipe-icons/Ingredient_Fabric_Scrap_Cindercloth.png" alt="Cindercloth Scraps" class="se-recipe-icon" style="width: 28px; height: 28px; object-fit: contain; display: inline-block; flex: 0 0 28px; margin: 0;"><span class="se-recipe-name">Cindercloth Scraps</span></div>
+<div class="se-recipe-cell se-recipe-amount" style="border-top: 1px solid rgba(148, 163, 184, 0.18); display: flex; align-items: center; justify-content: flex-end; min-height: 40px; padding: 7px 0;"><code>5</code></div>
+<div class="se-recipe-cell se-recipe-ingredient" style="border-top: 1px solid rgba(148, 163, 184, 0.18); display: flex; align-items: center; gap: 10px; min-height: 40px; padding: 7px 0;"><img src="https://raw.githubusercontent.com/Herolias/Simple-Enchantments/main/docs/media/recipe-icons/Ingredient_Fire_Essence.png" alt="Essence of Fire" class="se-recipe-icon" style="width: 28px; height: 28px; object-fit: contain; display: inline-block; flex: 0 0 28px; margin: 0;"><span class="se-recipe-name">Essence of Fire</span></div>
+<div class="se-recipe-cell se-recipe-amount" style="border-top: 1px solid rgba(148, 163, 184, 0.18); display: flex; align-items: center; justify-content: flex-end; min-height: 40px; padding: 7px 0;"><code>30</code></div>
+<div class="se-recipe-cell se-recipe-ingredient" style="border-top: 1px solid rgba(148, 163, 184, 0.18); display: flex; align-items: center; gap: 10px; min-height: 40px; padding: 7px 0;"><img src="https://raw.githubusercontent.com/Herolias/Simple-Enchantments/main/docs/media/recipe-icons/Ingredient_Crystal_Yellow.png" alt="Yellow Crystal Shards" class="se-recipe-icon" style="width: 28px; height: 28px; object-fit: contain; display: inline-block; flex: 0 0 28px; margin: 0;"><span class="se-recipe-name">Yellow Crystal Shards</span></div>
+<div class="se-recipe-cell se-recipe-amount" style="border-top: 1px solid rgba(148, 163, 184, 0.18); display: flex; align-items: center; justify-content: flex-end; min-height: 40px; padding: 7px 0;"><code>30</code></div>
+<div class="se-recipe-cell se-recipe-ingredient" style="border-top: 1px solid rgba(148, 163, 184, 0.18); display: flex; align-items: center; gap: 10px; min-height: 40px; padding: 7px 0;"><img src="https://raw.githubusercontent.com/Herolias/Simple-Enchantments/main/docs/media/recipe-icons/Plant_Crop_Mushroom_Glowing_Orange.png" alt="Orange Glowing Mushroom" class="se-recipe-icon" style="width: 28px; height: 28px; object-fit: contain; display: inline-block; flex: 0 0 28px; margin: 0;"><span class="se-recipe-name">Orange Glowing Mushroom</span></div>
+<div class="se-recipe-cell se-recipe-amount" style="border-top: 1px solid rgba(148, 163, 184, 0.18); display: flex; align-items: center; justify-content: flex-end; min-height: 40px; padding: 7px 0;"><code>20</code></div>
+</div>
+</div>
 </div>
 </div>
 
