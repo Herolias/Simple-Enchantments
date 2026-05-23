@@ -1,4 +1,4 @@
-﻿benchCategories.enchantingArmor = Rüstung
+benchCategories.enchantingArmor = Rüstung
 
 
 
@@ -1087,6 +1087,8 @@ config.general.table_tier = Verzauberungstisch Crafting Rang
 config.general.disable_crafting = Verzauberungshandwerk deaktivieren
 config.general.return_cleanse = Verzauberung bei Reinigung zurückgeben
 config.general.table_recipe = Verzauberungstisch Rezept
+config.general.engraving_table_tier = Crafting-Rang des Gravurtischs
+config.general.engraving_table_recipe = Gravurtisch-Rezept
 config.general.upgrade_1 = Upgrade 1 Kosten (Rang 1 -> 2)
 config.general.upgrade_2 = Upgrade 2 Kosten (Rang 2 -> 3)
 config.general.upgrade_3 = Upgrade 3 Kosten (Rang 3 -> 4)
@@ -1098,9 +1100,6 @@ config.recipe.ingredients = Zutaten
 
 config.common.enabled = Aktiviert
 config.common.disabled = Deaktiviert
-
-config.secondary.range_speed_bonus = Reichweite/Tempo Bonus
-config.secondary.quantity_bonus = Mengenbonus
 
 config.recipe.active_title = {0} - Zutaten
 config.recipe.crafting_tier = Crafting Rang
@@ -1138,7 +1137,7 @@ customUI.enchantingPage.adminNote = Serverweite Einstellungen und Verzauberungsa
 
 
 customUI.walkthrough.enchantments.title = 5. Verzauberungen
-customUI.walkthrough.enchantments.desc = Eine vollständige Liste der Verzauberungen und ihrer Effekte. Klicke auf eine, um mehr zu erfahren. Auf diesem Server kann jeder Gegenstand bis zu {maxEnchantments} Verzauberungen haben.\n\nHinweis: Derzeit zeigt jede Verzauberungsseite nur die Tooltip-Beschreibung der Verzauberung und ob sie auf dem Server aktiviert ist. Ich plane, detaillierte Beschreibungen für jede einzelne zu schreiben, aber das braucht Zeit. Jedes zukünftige Update des Mods wird detaillierte Beschreibungen für einige von ihnen hinzufügen.
+customUI.walkthrough.enchantments.desc = Eine vollständige Liste der Verzauberungen und ihrer Effekte. Klicke auf einen Eintrag, um mehr zu erfahren. Auf diesem Server kann jeder Gegenstand bis zu {maxEnchantments} Verzauberungen haben.\n\nHinweis: Einige Verzauberungsseiten enthalten bereits ausführlichere Spielhinweise, während andere noch ihre Tooltip-Zusammenfassung verwenden. Zukünftige Updates werden weitere detaillierte Beschreibungen ergänzen.
 
 config.general.allow_same_scroll_upgrades = Gleiche Schriftrollen-Upgrades erlauben (I+I = II)
 
@@ -1242,8 +1241,8 @@ enchantment.second_stomach.bonus = Sofortheitung erhöht um {amount}%
 
 enchantment.poison.walkthrough = Vergiftet Ziele bei Treffern und verursacht {amount} Schaden pro Sekunde für {duration} Sekunden. Gilt für Nahkampf- und Fernkampfwaffen. Nicht kombinierbar mit Verbrennen.
 enchantment.environmental_protection.walkthrough = Verringert eingehenden elementaren und Umweltschaden (Feuer, Eis, Kakteen und andere Gefahren) um {amount}% pro Rüstungsteil pro Stufe und mildert proportional die Verlangsamungsintensität der Frost-Verzauberung. Gilt für Rüstungen.
-enchantment.regeneration.walkthrough = Regeneriert passiv {amount} HP pro Sekunde, solange eine verzauberte Brustplatte getragen wird. Gilt nur für Brustplatten.
-enchantment.second_stomach.walkthrough = Erhöht die Effektivität von Sofortheitung durch Nahrung und Tränke um {amount}% pro Stufe. Aktiviert sich nur, wenn der Gesundheitsgewinn den natürlichen Regenerationsschwellenwert übersteigt. Gilt nur für Brustplatten.
+enchantment.regeneration.walkthrough = Regeneration ist eine Brustplatten-Verzauberung, die beim Tragen {amount} HP pro Sekunde wiederherstellt. Sie ist dauerhaft aktiv, solange die verzauberte Brustplatte ausgerüstet ist, und hilft besonders in langen Kämpfen, beim Erkunden und beim Erholen zwischen Begegnungen.\n\nDiese Heilung zählt als passive Regeneration und wird von Sofortheilung getrennt behandelt, daher wird sie nicht durch Zweiter Magen verstärkt.
+enchantment.second_stomach.walkthrough = Zweiter Magen ist eine Brustplatten-Verzauberung, die Sofortheilung durch Nahrung und Tränke um {amount}% pro Stufe erhöht. Sie verstärkt nur echte Heilungsstöße, nicht passive Regeneration oder Heilung über Zeit, und ist daher besonders stark, wenn du im Kampf Notfallnahrung oder Tränke nutzt.\n\nDer Bonus basiert auf der Heilung, die du tatsächlich erhältst, und gilt nur, solange du die verzauberte Brustplatte trägst.
 
 
 items.Scroll_Custom.name = Benutzerdefinierte Schriftrolle

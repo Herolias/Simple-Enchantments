@@ -1,4 +1,4 @@
-﻿benchCategories.enchantingArmor = Armatura
+benchCategories.enchantingArmor = Armatura
 
 benchCategories.enchantingTools = Strumenti
 
@@ -573,6 +573,8 @@ config.general.table_tier = Livello Creazione Tavolo Incantesimi
 config.general.disable_crafting = Disabilita Creazione Incantesimi
 config.general.return_cleanse = Restituisci Incantesimo alla Pulizia
 config.general.table_recipe = Ricetta Tavolo Incantesimi
+config.general.engraving_table_tier = Livello Creazione Tavolo da Incisione
+config.general.engraving_table_recipe = Ricetta Tavolo da Incisione
 config.general.upgrade_1 = Costo Aggiornamento 1 (Livello 1 -> 2)
 config.general.upgrade_2 = Costo Aggiornamento 2 (Livello 2 -> 3)
 config.general.upgrade_3 = Costo Aggiornamento 3 (Livello 3 -> 4)
@@ -582,9 +584,6 @@ config.recipe.ingredients = Ingredienti
 
 config.common.enabled = Abilitato
 config.common.disabled = Disabilitato
-
-config.secondary.range_speed_bonus = Bonus Raggio/Velocità
-config.secondary.quantity_bonus = Bonus Quantità
 
 config.recipe.active_title = {0} - Ingredienti
 config.recipe.crafting_tier = Livello Creazione
@@ -626,7 +625,7 @@ customUI.walkthrough.salvaging.title = 4. Riciclaggio
 customUI.walkthrough.salvaging.desc = Se hai un pezzo di equipaggiamento incantato di cui non hai più bisogno, posizionalo nella Stazione di Riciclaggio per recuperare la pergamena d'incantesimo di livello più alto, se abilitato sul server.
 customUI.enchantingPage.adminNote = Le impostazioni globali del server e le personalizzazioni degli Incantesimi sono disponibili nella Configurazione Amministratore. Accedici tramite /enchantconfig
 customUI.walkthrough.enchantments.title = 5. Incantesimi
-customUI.walkthrough.enchantments.desc = Una lista completa degli incantesimi e dei loro effetti. Clicca su uno qualsiasi per saperne di più. Su questo server, ogni oggetto può avere fino a {maxEnchantments} incantesimi.\n\nNota: Per ora, ogni pagina di incantesimo mostra solo la descrizione del Tooltip dell'incantesimo e se è abilitato sul server. Ho intenzione di scrivere descrizioni dettagliate per ciascuno di essi, ma ci vuole tempo. Ogni futuro aggiornamento della mod aggiungerà una descrizione dettagliata per alcuni di essi.
+customUI.walkthrough.enchantments.desc = Una lista completa degli incantesimi e dei loro effetti. Clicca su una voce per saperne di più. Su questo server, ogni oggetto può avere fino a {maxEnchantments} incantesimi.\n\nNota: Alcune pagine degli incantesimi includono già note di gioco più dettagliate, mentre altre usano ancora il riassunto del tooltip. I futuri aggiornamenti continueranno ad aggiungere descrizioni dettagliate.
 
 config.general.allow_same_scroll_upgrades = Permetti Miglioramenti con Pergamene Uguali (I+I = II)
 
@@ -731,8 +730,8 @@ enchantment.second_stomach.bonus = Cura istantanea aumentata del {amount}%
 
 enchantment.poison.walkthrough = Avvelena i bersagli al colpo, infliggendo {amount} danni al secondo per {duration} secondi. Si applica ad armi corpo a corpo e a distanza. Non combinabile con Combustione.
 enchantment.environmental_protection.walkthrough = Riduce i danni elementali e ambientali in arrivo (fuoco, ghiaccio, cactus e altri pericoli) del {amount}% per pezzo di armatura per livello, e mitiga proporzionalmente l'intensità del rallentamento dell'incantesimo Gelo. Si applica all'armatura.
-enchantment.regeneration.walkthrough = Rigenera passivamente {amount} HP al secondo indossando una corazza incantata. Solo corazze.
-enchantment.second_stomach.walkthrough = Aumenta l'efficacia della cura istantanea da cibo e pozioni del {amount}% per livello. Solo corazze.
+enchantment.regeneration.walkthrough = Rigenerazione è un incantesimo per corazze che ripristina {amount} HP al secondo mentre la indossi. Resta sempre attivo finché la corazza incantata è equipaggiata, ed è utile nei combattimenti lunghi, durante l'esplorazione e per recuperare tra uno scontro e l'altro.\n\nQuesta cura è trattata come rigenerazione passiva e rimane separata dalle cure istantanee, quindi non viene potenziata da Secondo Stomaco.
+enchantment.second_stomach.walkthrough = Secondo Stomaco è un incantesimo per corazze che aumenta le cure istantanee da cibo e pozioni del {amount}% per livello. Potenzia solo vere cure immediate, non la rigenerazione passiva o le cure nel tempo, quindi brilla quando usi cibo o pozioni d'emergenza in combattimento.\n\nIl bonus si basa sulla cura che ricevi davvero e si applica solo mentre indossi la corazza incantata.
 
 
 items.Scroll_Custom.name = Pergamena Personalizzata

@@ -1,4 +1,4 @@
-﻿benchCategories.enchantingArmor = Harnas
+benchCategories.enchantingArmor = Harnas
 
 benchCategories.enchantingTools = Gereedschap
 
@@ -583,6 +583,8 @@ config.general.return_cleanse = Geef Betovering Terug Bij Reiniging
 config.general.salvager_yield = Recycler geeft Rol terug
 config.general.show_welcome = Welkomstberichten Tonen
 config.general.table_recipe = Betoveringstafel Recept
+config.general.engraving_table_tier = Craftniveau van de Graveertafel
+config.general.engraving_table_recipe = Recept voor de Graveertafel
 config.general.upgrade_1 = Upgrade 1 Kosten (Niveau 1 -> 2)
 config.general.upgrade_2 = Upgrade 2 Kosten (Niveau 2 -> 3)
 config.general.upgrade_3 = Upgrade 3 Kosten (Niveau 3 -> 4)
@@ -592,9 +594,6 @@ config.recipe.ingredients = Ingrediënten
 
 config.common.enabled = Ingeschakeld
 config.common.disabled = Uitgeschakeld
-
-config.secondary.range_speed_bonus = Bereik/Snelheid Bonus
-config.secondary.quantity_bonus = Aantal Bonus
 
 config.recipe.active_title = {0} - Ingrediënten
 config.recipe.crafting_tier = Ambachtsniveau
@@ -631,7 +630,7 @@ customUI.enchantingPage.adminNote = Serverbrede instellingen en betoveringsaanpa
 
 
 customUI.walkthrough.enchantments.title = 5. Betoveringen
-customUI.walkthrough.enchantments.desc = Een complete lijst van betoveringen en hun effecten. Klik op een betovering voor meer informatie. Op deze server kan elk item maximaal {maxEnchantments} betoveringen hebben.\n\nOpmerking: Momenteel toont elke betoveringspagina alleen de Tooltip-beschrijving van de betovering en of deze is ingeschakeld op de server. Ik ben van plan gedetailleerde beschrijvingen te schrijven voor elk ervan, maar dat kost tijd. Elke toekomstige update van de mod zal gedetailleerde beschrijvingen toevoegen voor sommige ervan.
+customUI.walkthrough.enchantments.desc = Een complete lijst van betoveringen en hun effecten. Klik op een item voor meer informatie. Op deze server kan elk item maximaal {maxEnchantments} betoveringen hebben.\n\nOpmerking: Sommige betoveringspagina's bevatten al uitgebreidere speeltips, terwijl andere nog hun tooltip-samenvatting gebruiken. Toekomstige updates blijven gedetailleerde beschrijvingen toevoegen.
 
 config.general.allow_same_scroll_upgrades = Dezelfde Rol Upgrades Toestaan (I+I = II)
 
@@ -740,8 +739,8 @@ enchantment.second_stomach.bonus = Directe genezing verhoogd met {amount}%
 
 enchantment.poison.walkthrough = Vergiftigt doelen bij het raken, veroorzaakt {amount} schade per seconde gedurende {duration} seconden. Van toepassing op melee- en afstandswapens. Niet compatibel met Verbranding.
 enchantment.environmental_protection.walkthrough = Vermindert inkomende elementaire en omgevingsschade (vuur, ijs, cactussen en andere gevaren) met {amount}% per pantseronderdeel per niveau, en vermindert proportioneel de vertragingsintensiteit van de Bevriezing-betovering. Van toepassing op pantsers.
-enchantment.regeneration.walkthrough = Regenereert passief {amount} HP per seconde bij het dragen van een betoverd borstplaat. Alleen borstplaten.
-enchantment.second_stomach.walkthrough = Verhoogt de effectiviteit van directe genezing van voedsel en drankjes met {amount}% per niveau. Alleen borstplaten.
+enchantment.regeneration.walkthrough = Regeneratie is een betovering voor borstplaten die {amount} HP per seconde herstelt zolang je hem draagt. Het effect blijft actief zolang de betoverde borstplaat is uitgerust, waardoor het handig is voor lange gevechten, verkennen en herstellen tussen ontmoetingen.\n\nDeze genezing telt als passieve regeneratie en wordt gescheiden gehouden van directe genezing, dus Tweede Maag versterkt deze niet.
+enchantment.second_stomach.walkthrough = Tweede Maag is een betovering voor borstplaten die directe genezing uit voedsel en drankjes met {amount}% per niveau verhoogt. Het versterkt alleen echte genezingspieken, niet passieve regeneratie of genezing over tijd, en is vooral sterk wanneer je in gevechten noodvoedsel of drankjes gebruikt.\n\nDe bonus is gebaseerd op de genezing die je daadwerkelijk ontvangt en geldt alleen terwijl je de betoverde borstplaat draagt.
 
 
 items.Scroll_Custom.name = Aangepaste Rol

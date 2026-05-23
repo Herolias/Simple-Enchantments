@@ -1,4 +1,4 @@
-﻿benchCategories.enchantingArmor = Armure
+benchCategories.enchantingArmor = Armure
 
 benchCategories.enchantingTools = Outils
 
@@ -582,6 +582,8 @@ config.general.return_cleanse = Rendre l'Enchantement au Désenchantement
 config.general.salvager_yield = Le Recycleur rend un Parchemin
 config.general.show_welcome = Afficher les Messages de Bienvenue
 config.general.table_recipe = Recette Table d'Enchantement
+config.general.engraving_table_tier = Niveau de craft de la table de gravure
+config.general.engraving_table_recipe = Recette de la table de gravure
 config.general.upgrade_1 = Coût Amélioration 1 (Niveau 1 -> 2)
 config.general.upgrade_2 = Coût Amélioration 2 (Niveau 2 -> 3)
 config.general.upgrade_3 = Coût Amélioration 3 (Niveau 3 -> 4)
@@ -591,9 +593,6 @@ config.recipe.ingredients = Ingrédients
 
 config.common.enabled = Activé
 config.common.disabled = Désactivé
-
-config.secondary.range_speed_bonus = Bonus Portée/Vitesse
-config.secondary.quantity_bonus = Bonus Quantité
 
 config.recipe.active_title = {0} - Ingrédients
 config.recipe.crafting_tier = Niveau de Craft
@@ -630,7 +629,7 @@ customUI.enchantingPage.adminNote = Les paramètres du serveur et les personnali
 
 
 customUI.walkthrough.enchantments.title = 5. Enchantements
-customUI.walkthrough.enchantments.desc = Une liste complète des enchantements et de leurs effets. Cliquez sur l'un d'entre eux pour en savoir plus. Sur ce serveur, chaque objet peut avoir jusqu'à {maxEnchantments} enchantements.\n\nNote : Pour l'instant, chaque page d'enchantement affiche uniquement la description de l'infobulle et si l'enchantement est activé sur le serveur. Je prévois d'écrire des descriptions détaillées pour chacun d'entre eux, mais cela prend du temps. Chaque future mise à jour du mod ajoutera une description détaillée pour certains d'entre eux.
+customUI.walkthrough.enchantments.desc = Une liste complète des enchantements et de leurs effets. Cliquez sur une entrée pour en savoir plus. Sur ce serveur, chaque objet peut avoir jusqu'à {maxEnchantments} enchantements.\n\nNote : Certaines pages d'enchantement contiennent déjà des notes de jeu plus détaillées, tandis que d'autres utilisent encore leur résumé d'infobulle. Les futures mises à jour continueront d'ajouter des descriptions détaillées.
 
 config.general.allow_same_scroll_upgrades = Autoriser les Améliorations de Parchemin Identique (I+I = II)
 
@@ -739,8 +738,8 @@ enchantment.second_stomach.bonus = Soins instantanés augmentés de {amount}%
 
 enchantment.poison.walkthrough = Empoisonne les cibles touchées, infligeant {amount} dégâts par seconde pendant {duration} secondes. S'applique aux armes de mêlée et à distance. Incompatible avec Brûlure.
 enchantment.environmental_protection.walkthrough = Réduit les dégâts élémentaires et environnementaux (feu, glace, cactus et autres dangers) de {amount}% par pièce d'armure par niveau, et atténue proportionnellement l'intensité du ralentissement de l'enchantement Gel. S'applique aux armures.
-enchantment.regeneration.walkthrough = Régénère passivement {amount} HP par seconde en portant un plastron enchanté. Plastrons uniquement.
-enchantment.second_stomach.walkthrough = Augmente l'efficacité des soins instantanés de nourriture et potions de {amount}% par niveau. Plastrons uniquement.
+enchantment.regeneration.walkthrough = Régénération est un enchantement de plastron qui restaure {amount} HP par seconde tant qu'il est porté. Il reste actif en permanence lorsque le plastron enchanté est équipé, ce qui le rend utile pour les longs combats, l'exploration et la récupération entre deux affrontements.\n\nCe soin est considéré comme une régénération passive et reste séparé des soins instantanés ; il n'est donc pas renforcé par Second Estomac.
+enchantment.second_stomach.walkthrough = Second Estomac est un enchantement de plastron qui augmente les soins instantanés de nourriture et de potions de {amount}% par niveau. Il améliore uniquement les vrais pics de soin, pas la régénération passive ni les soins sur la durée ; il est donc excellent lorsque vous utilisez de la nourriture ou des potions d'urgence en combat.\n\nLe bonus dépend des PV que vous récupérez réellement et ne s'applique que lorsque vous portez le plastron enchanté.
 
 
 items.Scroll_Custom.name = Parchemin Personnalisé

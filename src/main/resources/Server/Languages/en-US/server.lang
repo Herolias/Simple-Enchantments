@@ -746,7 +746,7 @@ customUI.enchantingPage.adminNote = Server-wide settings and Enchantment customi
 
 
 customUI.walkthrough.enchantments.title = 5. Enchantments
-customUI.walkthrough.enchantments.desc = A complete list of enchantments and their effects. Click on any to find out more. On this Server, each Item can have up to {maxEnchantments} Enchantments.\n\nNote: Right now each enchantment page only shows the Tooltip description of the enchantment and if it is enabled on the sever. I plan to write detailed descriptions for each of them, but that takes time. Each future update to the mod will add a detailed description and to some of them.
+customUI.walkthrough.enchantments.desc = A complete list of enchantments and their effects. Click any entry to learn more. On this server, each item can have up to {maxEnchantments} enchantments.\n\nNote: Some enchantment pages include expanded gameplay notes, while others still use their tooltip summary. Future updates will continue adding detailed descriptions.
 
 config.general.allow_same_scroll_upgrades = Allow Same Scroll Upgrades(I+I = II)
 
@@ -786,8 +786,8 @@ enchantment.riposte.walkthrough = This is a collab Enchantment with the Perfect 
 enchantment.coup_de_grace.walkthrough = This is a collab Enchantment with the Perfect Parries mod and will only work if both mods are installed.\n\nIncreases damage to stunned enemies by {amount}% per level. Applies to melee weapons.
 enchantment.poison.walkthrough = Poisons targets on hit, dealing {amount} damage per second for {duration} seconds. Applies to melee and ranged weapons. Not combinable with Burn.
 enchantment.environmental_protection.walkthrough = Reduces incoming elemental and environmental damage (fire, ice, cacti, and other hazards) by {amount}% per armor piece per level, and proportionally mitigates the slow intensity of the Freeze enchantment. Applies to armor.
-enchantment.regeneration.walkthrough = Passively regenerates {amount} HP per second while wearing an enchanted chestplate. Applies to chestplates only.
-enchantment.second_stomach.walkthrough = Increases the effectiveness of instant healing from food and potions by {amount}% per level. Only activates when the health gained exceeds the natural regeneration threshold. Applies to chestplates only.
+enchantment.regeneration.walkthrough = Regeneration is a chestplate enchantment that restores {amount} HP per second while worn. It is always active as long as the enchanted chestplate is equipped, making it useful for long fights, exploration, and recovering between encounters.\n\nIts healing is treated as passive regeneration and is kept separate from instant-heal effects, so it is not boosted by Second Stomach.
+enchantment.second_stomach.walkthrough = Second Stomach is a chestplate enchantment that increases instant healing from food and potions by {amount}% per level. It only boosts real healing bursts, not passive regeneration or healing-over-time effects, so it shines when you use emergency food or potions mid-fight.\n\nThe bonus is based on the healing you actually receive and applies only while wearing the enchanted chestplate.
 
 
 tooltip.enchantments = Enchantments:
