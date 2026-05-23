@@ -14,7 +14,7 @@ Automatically smelts mined blocks.
 <div class="se-stats-heading" style="font-weight: 600; opacity: 0.75; padding: 0 0 8px;">Field</div>
 <div class="se-stats-heading" style="font-weight: 600; opacity: 0.75; padding: 0 0 8px;">Value</div>
 <div class="se-stats-cell se-stats-label" style="border-top: 1px solid rgba(148, 163, 184, 0.18); display: flex; align-items: center; min-height: 38px; padding: 7px 0; font-weight: 600; white-space: nowrap;">Added in Version</div>
-<div class="se-stats-cell se-stats-value" style="border-top: 1px solid rgba(148, 163, 184, 0.18); display: flex; align-items: center; min-height: 38px; padding: 7px 0;"><!-- MANUAL:added-version:start --> <!-- MANUAL:added-version:end --></div>
+<div class="se-stats-cell se-stats-value" style="border-top: 1px solid rgba(148, 163, 184, 0.18); display: flex; align-items: center; min-height: 38px; padding: 7px 0;"><!-- MANUAL:added-version:start -->0.1.0<!-- MANUAL:added-version:end --></div>
 <div class="se-stats-cell se-stats-label" style="border-top: 1px solid rgba(148, 163, 184, 0.18); display: flex; align-items: center; min-height: 38px; padding: 7px 0; font-weight: 600; white-space: nowrap;">Default Modifier</div>
 <div class="se-stats-cell se-stats-value" style="border-top: 1px solid rgba(148, 163, 184, 0.18); display: flex; align-items: center; min-height: 38px; padding: 7px 0;">None</div>
 <div class="se-stats-cell se-stats-label" style="border-top: 1px solid rgba(148, 163, 184, 0.18); display: flex; align-items: center; min-height: 38px; padding: 7px 0; font-weight: 600; white-space: nowrap;">Amount of Levels</div>
