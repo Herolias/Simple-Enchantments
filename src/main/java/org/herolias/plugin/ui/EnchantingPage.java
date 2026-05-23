@@ -135,8 +135,6 @@ public class EnchantingPage extends InteractiveCustomUIPage<EnchantingPageEventD
                 // Also trigger scroll descriptions
                 org.herolias.plugin.enchantment.ScrollDescriptionManager.sendUpdatePacket(this.playerRef);
 
-                // Also refresh dynamic tooltips in inventory
-                org.herolias.plugin.enchantment.TooltipBridge.refreshPlayer(this.playerRef.getUuid());
             } else if ("glow".equals(data.toggleSetting)) {
                 boolean current = userSettingsManager.getEnableEnchantmentGlow(this.playerRef.getUuid());
                 userSettingsManager.setEnableEnchantmentGlow(this.playerRef.getUuid(), !current);

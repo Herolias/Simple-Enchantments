@@ -1,4 +1,4 @@
-﻿benchCategories.enchantingArmor = Armadura
+benchCategories.enchantingArmor = Armadura
 benchCategories.enchantingTools = Herramientas
 benchCategories.enchantingMelee = Cuerpo a cuerpo
 benchCategories.enchantingRanged = Largo Alcance
@@ -423,6 +423,8 @@ config.general.table_tier = Nivel de crafteo de la mesa
 config.general.disable_crafting = Desactivar crafteo de encantamientos
 config.general.return_cleanse = Devolver encantamiento al purificar
 config.general.table_recipe = Receta de la mesa de encantamiento
+config.general.engraving_table_tier = Nivel de crafteo de la mesa de grabado
+config.general.engraving_table_recipe = Receta de la mesa de grabado
 config.general.upgrade_1 = Costo de mejora 1 (Nivel 1 → 2)
 config.general.upgrade_2 = Costo de mejora 2 (Nivel 2 → 3)
 config.general.upgrade_3 = Costo de mejora 3 (Nivel 3 → 4)
@@ -432,9 +434,6 @@ config.recipe.ingredients = Ingredientes
 
 config.common.enabled = Activado
 config.common.disabled = Desactivado
-
-config.secondary.range_speed_bonus = Bonificación de alcance/velocidad
-config.secondary.quantity_bonus = Bonificación de cantidad
 
 config.recipe.active_title = {0} - Ingredientes
 config.recipe.crafting_tier = Dificultad de Crafteo
@@ -465,7 +464,7 @@ customUI.enchantingPage.lang.default = Predeterminado (Idioma del Juego)
 customUI.walkthrough.next = Página Siguiente
 customUI.walkthrough.prev = Página Anterior
 customUI.walkthrough.welcome.title = ¡Bienvenido a Simple Enchantments!
-customUI.walkthrough.welcome.desc = Este mod te permite mejorar tu equipo y armas usando pergaminos mágicos y encantamientos. Es altamente personalizable, con un menú de configuración para administradores (/enchantconfig) que te permite modificar ajustes o activar y desactivar encantamientos específicos. Funciona mejor con objetos vanilla, pero ofrece una amplia compatibilidad con otros mods. Si encuentras un problema o tienes una sugerencia, únete a nuestro servidor de Discord. Además, si Dynamic Tooltips Lib está instalado, los encantamientos se mostrarán en la descripción del objeto.
+customUI.walkthrough.welcome.desc = Este mod te permite mejorar tu equipo y armas usando pergaminos mágicos y encantamientos. Es altamente personalizable, con un menú de configuración para administradores (/enchantconfig) que te permite modificar ajustes o activar y desactivar encantamientos específicos. Funciona mejor con objetos vanilla, pero ofrece una amplia compatibilidad con otros mods. Si encuentras un problema o tienes una sugerencia, únete a nuestro servidor de Discord. Además, los encantamientos se muestran en la descripción del objeto.
 customUI.walkthrough.table.title = 1. Mesa de Encantamiento
 customUI.walkthrough.table.desc = Crea una Mesa de Encantamiento en el Banco de Trabajo. Colócala e interactúa con ella para ver todos los Pergaminos de Encantamiento disponibles que puedes crear. También puedes mejorar la mesa para acceder a encantamientos de mayor nivel.
 customUI.walkthrough.scrolls.title = 2. Pergaminos de Encantamiento
@@ -476,7 +475,7 @@ customUI.walkthrough.salvaging.title = 4. Reciclaje
 customUI.walkthrough.salvaging.desc = Si tienes una pieza de equipo encantado que ya no necesitas, colócala en la Estación de Reciclaje para recuperar el pergamino de encantamiento del nivel más alto, si está habilitado en el servidor.
 customUI.enchantingPage.adminNote = La configuración global del servidor y las personalizaciones de Encantamientos están disponibles en la Configuración de Administrador. Accede mediante /enchantconfig
 customUI.walkthrough.enchantments.title = 5. Encantamientos
-customUI.walkthrough.enchantments.desc = Una lista completa de los encantamientos y sus efectos. Haz clic en cualquiera para saber más. En este servidor, cada objeto puede tener hasta {maxEnchantments} encantamientos.\n\nNota: Por ahora, cada página de encantamiento solo muestra la descripción del Tooltip del encantamiento y si está habilitado en el servidor. Planeo escribir descripciones detalladas para cada uno de ellos, pero eso lleva tiempo. Cada futura actualización del mod añadirá una descripción detallada para algunos de ellos.
+customUI.walkthrough.enchantments.desc = Una lista completa de los encantamientos y sus efectos. Haz clic en cualquier entrada para saber más. En este servidor, cada objeto puede tener hasta {maxEnchantments} encantamientos.\n\nNota: Algunas páginas de encantamiento ya incluyen notas de juego más detalladas, mientras que otras todavía usan el resumen del tooltip. Las futuras actualizaciones seguirán añadiendo descripciones detalladas.
 
 config.general.allow_same_scroll_upgrades = Permitir Mejoras con Pergaminos Iguales (I+I = II)
 
@@ -537,6 +536,22 @@ items.Scroll_Environmental_Protection_III.name = Pergamino de Protección Ambien
 
 items.Scroll_Environmental_Protection_III.description = Reduce el daño ambiental en un 12% por pieza de armadura.
 
+items.Scroll_Regeneration_I.name = Pergamino de Regeneración
+
+items.Scroll_Regeneration_I.description = Regenera pasivamente {amount} HP por segundo. Solo pecheras.
+
+items.Scroll_Second_Stomach_I.name = Pergamino de Segundo Estómago I
+
+items.Scroll_Second_Stomach_I.description = Aumenta la curación instantánea en un 15%.
+
+items.Scroll_Second_Stomach_II.name = Pergamino de Segundo Estómago II
+
+items.Scroll_Second_Stomach_II.description = Aumenta la curación instantánea en un 30%.
+
+items.Scroll_Second_Stomach_III.name = Pergamino de Segundo Estómago III
+
+items.Scroll_Second_Stomach_III.description = Aumenta la curación instantánea en un 45%.
+
 
 
 enchantment.poison.name = Veneno
@@ -549,11 +564,23 @@ enchantment.environmental_protection.name = Protección Ambiental
 
 enchantment.environmental_protection.description = Reduce el daño ambiental en un 4% por pieza de armadura.
 
+enchantment.regeneration.name = Regeneración
+
+enchantment.regeneration.description = Regenera pasivamente {amount} HP por segundo. Solo pecheras.
+
+enchantment.second_stomach.name = Segundo Estómago
+
+enchantment.second_stomach.description = Aumenta la curación instantánea de comida y pociones en un {amount}% por nivel. Solo pecheras.
+
 enchantment.poison.bonus = Envenena al objetivo al golpear ({amount} daño/s durante {duration}s)
 enchantment.environmental_protection.bonus = Daño ambiental -{amount}%
+enchantment.regeneration.bonus = Regenera {amount} HP por segundo
+enchantment.second_stomach.bonus = Curación instantánea aumentada en {amount}%
 
 enchantment.poison.walkthrough = Envenena a los objetivos al golpear, causando {amount} daño por segundo durante {duration} segundos. Se aplica a armas cuerpo a cuerpo y a distancia. No combinable con Combustión.
 enchantment.environmental_protection.walkthrough = Reduce el daño elemental y ambiental entrante (fuego, hielo, cactus y otros peligros) en {amount}% por pieza de armadura por nivel, y mitiga proporcionalmente la intensidad de ralentización del encantamiento de Congelación. Se aplica a armaduras.
+enchantment.regeneration.walkthrough = Regeneración es un encantamiento de peto que restaura {amount} HP por segundo mientras lo llevas equipado. Permanece activo siempre que uses el peto encantado, por lo que resulta útil en combates largos, exploración y para recuperarte entre encuentros.\n\nEsta curación cuenta como regeneración pasiva y se mantiene separada de la curación instantánea, así que Segundo Estómago no la aumenta.
+enchantment.second_stomach.walkthrough = Segundo Estómago es un encantamiento de peto que aumenta la curación instantánea de comida y pociones en un {amount}% por nivel. Solo mejora ráfagas reales de curación, no la regeneración pasiva ni la curación con el tiempo, así que destaca cuando usas comida o pociones de emergencia en combate.\n\nLa bonificación se basa en la curación que realmente recibes y solo se aplica mientras llevas el peto encantado.
 
 
 items.Scroll_Custom.name = Pergamino Personalizado
@@ -610,6 +637,8 @@ itemCategory.STAFF_MANA = Bastones de Maná
 
 itemCategory.STAFF_ESSENCE = Bastones de Esencia
 
+itemCategory.CHESTPLATE = Pecheras
+
 itemCategory.UNKNOWN = Desconocido
 
 config.multiplier.sharpness = Daño por Nivel
@@ -642,3 +671,7 @@ config.multiplier.elemental_heart = Probabilidad de Ahorro por Nivel
 config.multiplier.poison = Daño por Segundo
 config.multiplier.poison:duration = Duración (Segundos)
 config.multiplier.environmental_protection = Reducción por Nivel
+config.multiplier.regeneration = HP Por Segundo
+config.multiplier.second_stomach = Bonus Por Nivel
+items.EngravingTable.name = Mesa de grabado
+items.EngravingTable.description = Una mesa de grabado rúnico para renombrar objetos y cambiar el color del brillo de los encantamientos.

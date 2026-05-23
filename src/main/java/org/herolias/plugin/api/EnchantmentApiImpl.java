@@ -11,6 +11,7 @@ import org.herolias.plugin.enchantment.EnchantmentManager;
 import org.herolias.plugin.enchantment.EnchantmentType;
 import org.herolias.plugin.enchantment.ItemCategory;
 import org.herolias.plugin.enchantment.ItemCategoryManager;
+import org.herolias.plugin.enchantment.NativeTooltipManager;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -73,7 +74,7 @@ public class EnchantmentApiImpl implements EnchantmentApi {
 
         // Write back to item metadata
         org.bson.BsonDocument bson = data.isEmpty() ? null : data.toBson();
-        ItemStack newItem = item.withMetadata(EnchantmentData.METADATA_KEY, bson);
+        ItemStack newItem = NativeTooltipManager.withEnchantments(item, bson, manager);
 
         // Update visuals
         return newItem;
@@ -205,7 +206,7 @@ public class EnchantmentApiImpl implements EnchantmentApi {
         // Utility / off-hand
         collectEnchantments(inventory.getUtilityItem(), result);
 
-        // Armor slots (helmet=0, chestplate=1, gloves=2, boots=3)
+        // Armor slots (helmet=0, chestplate=1, gloves=2, legs=3)
         ItemContainer armorContainer = inventory.getArmor();
         if (armorContainer != null) {
             for (short slot = 0; slot < armorContainer.getCapacity(); slot++) {

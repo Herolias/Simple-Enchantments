@@ -1,0 +1,108 @@
+{
+    "TranslationProperties": {
+        "Name": "server.items.EngravingTable.name",
+        "Description": "server.items.EngravingTable.description"
+    },
+    "Icon": "Icons/ItemsGenerated/Engraving_Table.png",
+    "Categories": [
+        "Furniture.Benches"
+    ],
+    "Recipe": {
+        "TimeSeconds": 5,
+        "Input": [
+            {
+                "ItemId": "Ingredient_Bar_Iron",
+                "Quantity": 10
+            },
+            {
+                "ItemId": "Rock_Marble",
+                "Quantity": 10
+            }
+        ],
+        "BenchRequirement": [
+            {
+                "Id": "Workbench",
+                "Type": "Crafting",
+                "Categories": [
+                    "Workbench_Crafting"
+                ],
+                "RequiredTierLevel": 2
+            }
+        ]
+    },
+    "BlockType": {
+        "Material": "Solid",
+        "DrawType": "Model",
+        "Opacity": "Transparent",
+        "CustomModel": "Blocks/Benches/Engraving_Table.blockymodel",
+        "CustomModelTexture": [
+            {
+                "Texture": "Blocks/Benches/Engraving_Table_Texture.png",
+                "Weight": 1
+            }
+        ],
+        "HitboxType": "Bench_Salvage",
+        "VariantRotation": "NESW",
+        "Bench": {
+            "Type": "Crafting",
+            "Categories": [
+                {
+                    "Id": "All",
+                    "Icon": "Icons/CraftingCategories/Campfire.png",
+                    "Name": "server.benchCategories.all"
+                }
+            ],
+            "LocalOpenSoundEventId": "SFX_Bench_Placeholder",
+            "LocalCloseSoundEventId": "SFX_Bench_Placeholder",
+            "CompletedSoundEventId": "SFX_Bench_Placeholder",
+            "Id": "EngravingTableBench"
+        },
+        "BlockEntity": {
+            "Components": {
+                "BenchBlock": {}
+            }
+        },
+        "State": {
+            "Definitions": {
+                "CraftCompleted": {}
+            }
+        },
+        "Gathering": {
+            "Breaking": {
+                "GatherType": "Benches"
+            }
+        },
+        "BlockParticleSetId": "Stone",
+        "ParticleColor": "#b088ff",
+        "Support": {
+            "Down": [
+                {
+                    "FaceType": "Full"
+                }
+            ]
+        },
+        "BlockSoundSetId": "Stone"
+    },
+    "PlayerAnimationsId": "Block",
+    "IconProperties": {
+        "Scale": 0.46,
+        "Translation": [
+            11.4,
+            -18.2
+        ],
+        "Rotation": [
+            20.0,
+            45.0,
+            18.0
+        ]
+    },
+    "Tags": {
+        "Type": [
+            "Bench",
+            "EngravingTable"
+        ]
+    },
+    "MaxStack": 1,
+    "ItemLevel": 11,
+    "ItemSoundSetId": "ISS_Blocks_Wood"
+}

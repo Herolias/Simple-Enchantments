@@ -19,6 +19,7 @@ import org.herolias.plugin.enchantment.EnchantmentData;
 import org.herolias.plugin.enchantment.EnchantmentManager;
 import org.herolias.plugin.enchantment.EnchantmentType;
 import org.herolias.plugin.enchantment.ItemCategory;
+import org.herolias.plugin.enchantment.NativeTooltipManager;
 
 public class EnchantItemInteraction extends ChoiceInteraction {
     private final ItemContext itemContext;
@@ -48,6 +49,16 @@ public class EnchantItemInteraction extends ChoiceInteraction {
         }
 
         PageManager pageManager = playerComponent.getPageManager();
+
+        // Re-validate the held scroll is still in the expected slot (prevents drop-while-open exploit)
+        ItemContainer heldContainer = this.heldItemContext.getContainer();
+        ItemStack currentHeldItem = heldContainer.getItemStack(this.heldItemContext.getSlot());
+        if (ItemStack.isEmpty(currentHeldItem)
+                || !currentHeldItem.isStackableWith(this.heldItemContext.getItemStack())) {
+            pageManager.setPage(ref, store, Page.None);
+            return;
+        }
+
         ItemStack itemStack = this.itemContext.getItemStack();
         if (ItemStack.isEmpty(itemStack)) {
             pageManager.setPage(ref, store, Page.None);
@@ -93,9 +104,23 @@ public class EnchantItemInteraction extends ChoiceInteraction {
             return;
         }
 
+        // Consume the scroll FIRST, before applying the enchantment
+        ItemStack heldItemStack = this.heldItemContext.getItemStack();
+        short heldItemSlot = this.heldItemContext.getSlot();
+
+        ItemStackSlotTransaction removeTransaction = heldContainer.removeItemStackFromSlot(heldItemSlot,
+                heldItemStack, 1);
+        if (!removeTransaction.succeeded()) {
+            pageManager.setPage(ref, store, Page.None);
+            return;
+        }
+
         org.herolias.plugin.enchantment.EnchantmentApplicationResult result = enchantmentManager
                 .applyEnchantmentToItem(playerRef, itemStack, enchantmentType, targetLevel);
         if (!result.success()) {
+            // Rollback: give back the scroll
+            SimpleItemContainer.addOrDropItemStack(store, ref, heldContainer, heldItemSlot,
+                    heldItemStack.withQuantity(1));
             playerRef.sendMessage(Message.raw(result.message()));
             pageManager.setPage(ref, store, Page.None);
             return;
@@ -103,21 +128,11 @@ public class EnchantItemInteraction extends ChoiceInteraction {
 
         ItemStack enchantedItem = result.item();
 
-        ItemContainer heldItemContainer = this.heldItemContext.getContainer();
-        ItemStack heldItemStack = this.heldItemContext.getItemStack();
-        short heldItemSlot = this.heldItemContext.getSlot();
-
-        ItemStackSlotTransaction removeTransaction = heldItemContainer.removeItemStackFromSlot(heldItemSlot,
-                heldItemStack, 1);
-        if (!removeTransaction.succeeded()) {
-            pageManager.setPage(ref, store, Page.None);
-            return;
-        }
-
         ItemStackSlotTransaction replaceTransaction = this.itemContext.getContainer()
                 .replaceItemStackInSlot(this.itemContext.getSlot(), itemStack, enchantedItem);
         if (!replaceTransaction.succeeded()) {
-            SimpleItemContainer.addOrDropItemStack(store, ref, heldItemContainer, heldItemSlot,
+            // Rollback: give back the scroll
+            SimpleItemContainer.addOrDropItemStack(store, ref, heldContainer, heldItemSlot,
                     heldItemStack.withQuantity(1));
             pageManager.setPage(ref, store, Page.None);
             return;
@@ -143,6 +158,15 @@ public class EnchantItemInteraction extends ChoiceInteraction {
             boolean isTargetCustomScroll,
             org.herolias.plugin.util.ScrollIdHelper.ScrollEnchantment targetScrollEnch,
             org.herolias.plugin.lang.LanguageManager languageManager, String lang, String clientLang) {
+        // Re-validate the held scroll is still present (drop-while-open check)
+        ItemContainer heldContainer = this.heldItemContext.getContainer();
+        ItemStack currentHeldItem = heldContainer.getItemStack(this.heldItemContext.getSlot());
+        if (ItemStack.isEmpty(currentHeldItem)
+                || !currentHeldItem.isStackableWith(this.heldItemContext.getItemStack())) {
+            pageManager.setPage(ref, store, Page.None);
+            return;
+        }
+
         // Build the merged enchantment data
         EnchantmentData mergedData = new EnchantmentData();
 
@@ -176,18 +200,18 @@ public class EnchantItemInteraction extends ChoiceInteraction {
                 resultStack = new ItemStack(scrollId, 1);
                 if (!resultStack.isValid() || resultStack.isEmpty()) {
                     // Fallback to Custom Scroll if the scroll item doesn't exist
-                    resultStack = new ItemStack("Scroll_Custom", 1)
-                            .withMetadata(EnchantmentData.METADATA_KEY, mergedData.toBson());
+                    resultStack = NativeTooltipManager.withEnchantments(new ItemStack("Scroll_Custom", 1),
+                            mergedData, enchantmentManager);
                 }
             } else {
                 // Level exceeds max — must be a Custom Scroll
-                resultStack = new ItemStack("Scroll_Custom", 1)
-                        .withMetadata(EnchantmentData.METADATA_KEY, mergedData.toBson());
+                resultStack = NativeTooltipManager.withEnchantments(new ItemStack("Scroll_Custom", 1),
+                        mergedData, enchantmentManager);
             }
         } else {
             // Multiple enchantments — always a Custom Scroll
-            resultStack = new ItemStack("Scroll_Custom", 1)
-                    .withMetadata(EnchantmentData.METADATA_KEY, mergedData.toBson());
+            resultStack = NativeTooltipManager.withEnchantments(new ItemStack("Scroll_Custom", 1),
+                    mergedData, enchantmentManager);
         }
 
         // Remove the held scroll (source)

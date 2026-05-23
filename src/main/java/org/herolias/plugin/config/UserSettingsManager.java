@@ -7,7 +7,6 @@ import com.hypixel.hytale.logger.HytaleLogger;
 
 import java.io.File;
 import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.Map;
@@ -55,8 +54,8 @@ public class UserSettingsManager {
     }
 
     public void saveSettings() {
-        try (FileWriter writer = new FileWriter(settingsFile)) {
-            gson.toJson(userSettingsMap, writer);
+        try {
+            AtomicJsonWriter.write(settingsFile, userSettingsMap, gson);
             logger.atInfo().log("User settings saved to " + settingsFile.getAbsolutePath());
         } catch (IOException e) {
             logger.atSevere().log("Failed to save user settings: " + e.getMessage());

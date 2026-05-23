@@ -22,15 +22,17 @@ public class ProjectileEnchantmentData {
     private final int lootingLevel;
     private final int freezeLevel;
     private final int burnLevel;
+    private final int poisonLevel;
     private final int eternalShotLevel;
 
     public ProjectileEnchantmentData(int strengthLevel, int eaglesEyeLevel, int lootingLevel, int freezeLevel,
-            int burnLevel, int eternalShotLevel) {
+            int burnLevel, int poisonLevel, int eternalShotLevel) {
         this.strengthLevel = strengthLevel;
         this.eaglesEyeLevel = eaglesEyeLevel;
         this.lootingLevel = lootingLevel;
         this.freezeLevel = freezeLevel;
         this.burnLevel = burnLevel;
+        this.poisonLevel = poisonLevel;
         this.eternalShotLevel = eternalShotLevel;
     }
 
@@ -45,6 +47,7 @@ public class ProjectileEnchantmentData {
         private int lootingLevel;
         private int freezeLevel;
         private int burnLevel;
+        private int poisonLevel;
         private int eternalShotLevel;
 
         public Builder strength(int level) {
@@ -72,6 +75,11 @@ public class ProjectileEnchantmentData {
             return this;
         }
 
+        public Builder poison(int level) {
+            this.poisonLevel = level;
+            return this;
+        }
+
         public Builder eternalShot(int level) {
             this.eternalShotLevel = level;
             return this;
@@ -79,7 +87,7 @@ public class ProjectileEnchantmentData {
 
         public ProjectileEnchantmentData build() {
             return new ProjectileEnchantmentData(strengthLevel, eaglesEyeLevel, lootingLevel, freezeLevel, burnLevel,
-                    eternalShotLevel);
+                    poisonLevel, eternalShotLevel);
         }
     }
 
@@ -101,6 +109,10 @@ public class ProjectileEnchantmentData {
 
     public int getBurnLevel() {
         return burnLevel;
+    }
+
+    public int getPoisonLevel() {
+        return poisonLevel;
     }
 
     public int getEternalShotLevel() {
@@ -125,6 +137,8 @@ public class ProjectileEnchantmentData {
             return freezeLevel;
         if (type == EnchantmentType.BURN)
             return burnLevel;
+        if (type == EnchantmentType.POISON)
+            return poisonLevel;
         if (type == EnchantmentType.ETERNAL_SHOT)
             return eternalShotLevel;
         return 0;
@@ -132,6 +146,6 @@ public class ProjectileEnchantmentData {
 
     public boolean hasAny() {
         return strengthLevel > 0 || eaglesEyeLevel > 0 || lootingLevel > 0 || freezeLevel > 0 || burnLevel > 0
-                || eternalShotLevel > 0;
+                || poisonLevel > 0 || eternalShotLevel > 0;
     }
 }

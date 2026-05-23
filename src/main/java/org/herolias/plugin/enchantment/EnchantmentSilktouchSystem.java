@@ -9,8 +9,8 @@ import com.hypixel.hytale.component.query.Query;
 import com.hypixel.hytale.component.system.EntityEventSystem;
 import com.hypixel.hytale.logger.HytaleLogger;
 import com.hypixel.hytale.math.util.ChunkUtil;
-import com.hypixel.hytale.math.vector.Vector3d;
-import com.hypixel.hytale.math.vector.Vector3i;
+import org.joml.Vector3d;
+import org.joml.Vector3i;
 import com.hypixel.hytale.server.core.asset.type.blocksound.config.BlockSoundSet;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockBreakingDropType;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockGathering;
@@ -111,7 +111,7 @@ public class EnchantmentSilktouchSystem extends EntityEventSystem<EntityStore, D
         World world = store.getExternalData().getWorld();
         Store<ChunkStore> chunkStore = world.getChunkStore().getStore();
 
-        long chunkIndex = ChunkUtil.indexChunkFromBlock(targetBlock.getX(), targetBlock.getZ());
+        long chunkIndex = ChunkUtil.indexChunkFromBlock(targetBlock.x(), targetBlock.z());
         WorldChunk chunk = world.getChunk(chunkIndex);
 
         if (chunk == null) {
@@ -181,7 +181,7 @@ public class EnchantmentSilktouchSystem extends EntityEventSystem<EntityStore, D
         }
 
         // Break the block manually
-        chunk.breakBlock(targetBlock.getX(), targetBlock.getY(), targetBlock.getZ(), setBlockSettings);
+        chunk.breakBlock(targetBlock.x(), targetBlock.y(), targetBlock.z(), setBlockSettings);
         healthChunk.removeBlock(world, targetBlock);
 
         com.hypixel.hytale.server.core.universe.PlayerRef playerRef = null;
@@ -194,19 +194,19 @@ public class EnchantmentSilktouchSystem extends EntityEventSystem<EntityStore, D
             if (soundSet != null) {
                 int soundEventIndex = soundSet.getSoundEventIndices().getOrDefault(BlockSoundEvent.Break, 0);
                 if (soundEventIndex != 0) {
-                    BlockSection section = blockChunk.getSectionAtBlockY(targetBlock.getY());
-                    int rotationIndex = section.getRotationIndex(targetBlock.getX(), targetBlock.getY(),
-                            targetBlock.getZ());
+                    BlockSection section = blockChunk.getSectionAtBlockY(targetBlock.y());
+                    int rotationIndex = section.getRotationIndex(targetBlock.x(), targetBlock.y(),
+                            targetBlock.z());
                     Vector3d centerPosition = new Vector3d();
                     blockType.getBlockCenter(rotationIndex, centerPosition);
-                    centerPosition.add(targetBlock);
+                    centerPosition.add(targetBlock.x(), targetBlock.y(), targetBlock.z());
                     SoundUtil.playSoundEvent3d(soundEventIndex, SoundCategory.SFX, centerPosition, store);
                 }
             }
         }
 
         // Spawn the Silk Touch drops
-        Vector3d dropPosition = new Vector3d(targetBlock.getX() + 0.5, targetBlock.getY(), targetBlock.getZ() + 0.5);
+        Vector3d dropPosition = new Vector3d(targetBlock.x() + 0.5, targetBlock.y(), targetBlock.z() + 0.5);
         enchantmentManager.spawnDrops(commandBuffer, silkTouchDrops, dropPosition);
 
         EnchantmentEventHelper.fireActivated(playerRef, tool, EnchantmentType.PICK_PERFECT,

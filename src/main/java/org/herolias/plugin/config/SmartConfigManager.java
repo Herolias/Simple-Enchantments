@@ -10,7 +10,6 @@ import com.hypixel.hytale.logger.HytaleLogger;
 
 import java.io.File;
 import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 
 /**
@@ -101,11 +100,7 @@ public class SmartConfigManager {
 
     private static <T> void saveConfig(File file, T configObject) {
         try {
-            if (file.getParentFile() != null)
-                file.getParentFile().mkdirs();
-            try (FileWriter writer = new FileWriter(file)) {
-                GSON.toJson(configObject, writer);
-            }
+            AtomicJsonWriter.write(file, configObject, GSON);
         } catch (IOException e) {
             LOGGER.atSevere().log("Failed to save config to " + file.getName(), e);
         }

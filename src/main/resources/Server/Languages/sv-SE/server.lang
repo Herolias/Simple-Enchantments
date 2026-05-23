@@ -1,4 +1,4 @@
-﻿benchCategories.enchantingArmor = Rustning
+benchCategories.enchantingArmor = Rustning
 
 benchCategories.enchantingTools = Verktyg
 
@@ -583,6 +583,8 @@ config.general.return_cleanse = Returnera Förtrollning Vid Rening
 config.general.salvager_yield = Återvinnare ger tillbaka Skriftrulle
 config.general.show_welcome = Visa Välkomstmeddelanden
 config.general.table_recipe = Förtrollningsbordsrecept
+config.general.engraving_table_tier = Hantverksnivå för Graveringsbordet
+config.general.engraving_table_recipe = Recept för Graveringsbordet
 config.general.upgrade_1 = Uppgraderingskostnad 1 (Nivå 1 -> 2)
 config.general.upgrade_2 = Uppgraderingskostnad 2 (Nivå 2 -> 3)
 config.general.upgrade_3 = Uppgraderingskostnad 3 (Nivå 3 -> 4)
@@ -592,9 +594,6 @@ config.recipe.ingredients = Ingredienser
 
 config.common.enabled = Aktiverad
 config.common.disabled = Inaktiverad
-
-config.secondary.range_speed_bonus = Räckvidd/Hastighetsbonus
-config.secondary.quantity_bonus = Mängdbonus
 
 config.recipe.active_title = {0} - Ingredienser
 config.recipe.crafting_tier = Hantverksnivå
@@ -613,7 +612,7 @@ customUI.walkthrough.next = Nästa Sida
 customUI.walkthrough.prev = Föregående Sida
 
 customUI.walkthrough.welcome.title = Välkommen till Simple Enchantments!
-customUI.walkthrough.welcome.desc = Denna mod låter dig förbättra din utrustning och vapen med magiska skriftrullar och förtrollningar. Den är mycket anpassningsbar, med en admin-konfigurationsmeny (/enchantconfig) som låter dig ändra inställningar eller aktivera och inaktivera specifika förtrollningar. Den fungerar bäst med vaniljföremål, men erbjuder bred kompatibilitet med andra mods. Om du stöter på ett problem eller har en funktionsförfrågan, gå med i vår Discord-server. Om Dynamic Tooltips Lib är installerat visas dessutom förtrollningar i föremålets inforuta.
+customUI.walkthrough.welcome.desc = Denna mod låter dig förbättra din utrustning och vapen med magiska skriftrullar och förtrollningar. Den är mycket anpassningsbar, med en admin-konfigurationsmeny (/enchantconfig) som låter dig ändra inställningar eller aktivera och inaktivera specifika förtrollningar. Den fungerar bäst med vaniljföremål, men erbjuder bred kompatibilitet med andra mods. Om du stöter på ett problem eller har en funktionsförfrågan, gå med i vår Discord-server. Dessutom visas förtrollningar i föremålets inforuta.
 
 customUI.walkthrough.table.title = 1. Förtrollningsbordet
 customUI.walkthrough.table.desc = Tillverka ett Förtrollningsbord vid Arbetsbänken. Placera det och interagera med det för att bläddra bland alla tillgängliga Förtrollningsrullar du kan tillverka. Du kan också uppgradera bordet för att komma åt förtrollningar på högre nivå.
@@ -631,7 +630,7 @@ customUI.enchantingPage.adminNote = Serveromfattande inställningar och anpassni
 
 
 customUI.walkthrough.enchantments.title = 5. Förtrollningar
-customUI.walkthrough.enchantments.desc = En komplett lista över förtrollningar och deras effekter. Klicka på någon för att lära dig mer. På denna server kan varje föremål ha upp till {maxEnchantments} förtrollningar.\n\nObs: Just nu visar varje förtrollningssida bara Tooltip-beskrivningen av förtrollningen och om den är aktiverad på servern. Jag planerar att skriva detaljerade beskrivningar för var och en av dem, men det tar tid. Varje framtida uppdatering av modden kommer att lägga till en detaljerad beskrivning för några av dem.
+customUI.walkthrough.enchantments.desc = En komplett lista över förtrollningar och deras effekter. Klicka på en post för att lära dig mer. På denna server kan varje föremål ha upp till {maxEnchantments} förtrollningar.\n\nObs: Vissa förtrollningssidor innehåller redan mer utförliga spelanteckningar, medan andra fortfarande använder sin tooltip-sammanfattning. Framtida uppdateringar kommer fortsätta lägga till detaljerade beskrivningar.
 
 config.general.allow_same_scroll_upgrades = Tillåt Uppgraderingar med Samma Rulle (I+I = II)
 
@@ -698,6 +697,22 @@ items.Scroll_Environmental_Protection_III.name = Miljöskyddsrulle III
 
 items.Scroll_Environmental_Protection_III.description = Minskar miljöskada med 12% per rustningsdel.
 
+items.Scroll_Regeneration_I.name = Skriftrulle av Regenerering
+
+items.Scroll_Regeneration_I.description = Regenererar passivt {amount} HP per sekund. Endast bröstplåtar.
+
+items.Scroll_Second_Stomach_I.name = Skriftrulle av Andra Magen I
+
+items.Scroll_Second_Stomach_I.description = Ökar omedelbar läkning med 15%.
+
+items.Scroll_Second_Stomach_II.name = Skriftrulle av Andra Magen II
+
+items.Scroll_Second_Stomach_II.description = Ökar omedelbar läkning med 30%.
+
+items.Scroll_Second_Stomach_III.name = Skriftrulle av Andra Magen III
+
+items.Scroll_Second_Stomach_III.description = Ökar omedelbar läkning med 45%.
+
 
 
 enchantment.poison.name = Gift
@@ -710,11 +725,23 @@ enchantment.environmental_protection.name = Miljöskydd
 
 enchantment.environmental_protection.description = Minskar miljöskada med 4% per rustningsdel.
 
+enchantment.regeneration.name = Regenerering
+
+enchantment.regeneration.description = Regenererar passivt {amount} HP per sekund. Endast bröstplåtar.
+
+enchantment.second_stomach.name = Andra Magen
+
+enchantment.second_stomach.description = Ökar omedelbar läkning från mat och drycker med {amount}% per nivå. Endast bröstplåtar.
+
 enchantment.poison.bonus = Förgiftar mål ({amount} skada/s under {duration}s)
 enchantment.environmental_protection.bonus = Miljöskada minskad med {amount}%
+enchantment.regeneration.bonus = Regenererar {amount} HP per sekund
+enchantment.second_stomach.bonus = Omedelbar läkning ökad med {amount}%
 
 enchantment.poison.walkthrough = Förgiftar mål vid träff, gör {amount} skada per sekund i {duration} sekunder. Gäller för närstrids- och avståndsvapen. Ej kompatibel med Bränning.
 enchantment.environmental_protection.walkthrough = Minskar inkommande elementär och miljöskada (eld, is, kaktusar och andra faror) med {amount}% per rustningsdel per nivå, och motverkar proportionellt avmattningen av frysning. Gäller för rustningar.
+enchantment.regeneration.walkthrough = Regeneration är en bröstplåtsförtrollning som återställer {amount} HP per sekund medan den bärs. Den är alltid aktiv så länge den förtrollade bröstplåten är utrustad, vilket gör den användbar i långa strider, under utforskning och för återhämtning mellan möten.\n\nLäkningen räknas som passiv regeneration och hålls åtskild från omedelbar läkning, så den förstärks inte av Andra Magen.
+enchantment.second_stomach.walkthrough = Andra Magen är en bröstplåtsförtrollning som ökar omedelbar läkning från mat och drycker med {amount}% per nivå. Den förstärker bara verkliga läkstötsar, inte passiv regeneration eller läkning över tid, så den passar bäst när du använder nödmat eller drycker mitt i striden.\n\nBonusen baseras på den läkning du faktiskt får och gäller bara medan du bär den förtrollade bröstplåten.
 
 
 items.Scroll_Custom.name = Anpassad Rulle
@@ -771,6 +798,8 @@ itemCategory.STAFF_MANA = Manastavar
 
 itemCategory.STAFF_ESSENCE = Essensstavar
 
+itemCategory.CHESTPLATE = Bröstplåtar
+
 itemCategory.UNKNOWN = Okänd
 
 config.multiplier.sharpness = Skada per Nivå
@@ -803,4 +832,8 @@ config.multiplier.elemental_heart = Essenssparande Chans per Nivå
 config.multiplier.poison = Skada per Sekund
 config.multiplier.poison:duration = Längd (Sekunder)
 config.multiplier.environmental_protection = Minskning per Nivå
+config.multiplier.regeneration = HP Per Sekund
+config.multiplier.second_stomach = Bonus Per Nivå
 
+items.EngravingTable.name = Graveringsbord
+items.EngravingTable.description = Ett rungraveringsbord för att byta namn på föremål och färga om förtrollningsglöd.

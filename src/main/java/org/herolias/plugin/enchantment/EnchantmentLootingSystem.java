@@ -11,8 +11,8 @@ import com.hypixel.hytale.component.dependency.SystemDependency;
 import com.hypixel.hytale.component.query.Query;
 import com.hypixel.hytale.logger.HytaleLogger;
 import com.hypixel.hytale.math.util.MathUtil;
-import com.hypixel.hytale.math.vector.Vector3d;
-import com.hypixel.hytale.math.vector.Vector3f;
+import com.hypixel.hytale.math.vector.Rotation3f;
+import org.joml.Vector3d;
 import com.hypixel.hytale.server.core.asset.type.gameplay.DeathConfig;
 import com.hypixel.hytale.server.core.asset.type.item.config.ItemDrop;
 import com.hypixel.hytale.server.core.asset.type.item.config.ItemDropList;
@@ -181,8 +181,8 @@ public class EnchantmentLootingSystem extends DeathSystems.OnDeathSystem {
             return;
         }
 
-        Vector3d dropPosition = transformComponent.getPosition().clone().add(0.0, 1.0, 0.0);
-        Vector3f headRotation = headRotationComponent.getRotation();
+        Vector3d dropPosition = new Vector3d(transformComponent.getPosition()).add(0.0, 1.0, 0.0);
+        Rotation3f headRotation = headRotationComponent.getRotation();
 
         Holder<EntityStore>[] drops = ItemComponent.generateItemDrops(commandBuffer, allDrops, dropPosition,
                 headRotation);

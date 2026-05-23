@@ -1,4 +1,4 @@
-﻿benchCategories.enchantingArmor = Harnas
+benchCategories.enchantingArmor = Harnas
 
 benchCategories.enchantingTools = Gereedschap
 
@@ -583,6 +583,8 @@ config.general.return_cleanse = Geef Betovering Terug Bij Reiniging
 config.general.salvager_yield = Recycler geeft Rol terug
 config.general.show_welcome = Welkomstberichten Tonen
 config.general.table_recipe = Betoveringstafel Recept
+config.general.engraving_table_tier = Craftniveau van de Graveertafel
+config.general.engraving_table_recipe = Recept voor de Graveertafel
 config.general.upgrade_1 = Upgrade 1 Kosten (Niveau 1 -> 2)
 config.general.upgrade_2 = Upgrade 2 Kosten (Niveau 2 -> 3)
 config.general.upgrade_3 = Upgrade 3 Kosten (Niveau 3 -> 4)
@@ -592,9 +594,6 @@ config.recipe.ingredients = Ingrediënten
 
 config.common.enabled = Ingeschakeld
 config.common.disabled = Uitgeschakeld
-
-config.secondary.range_speed_bonus = Bereik/Snelheid Bonus
-config.secondary.quantity_bonus = Aantal Bonus
 
 config.recipe.active_title = {0} - Ingrediënten
 config.recipe.crafting_tier = Ambachtsniveau
@@ -613,7 +612,7 @@ customUI.walkthrough.next = Volgende Pagina
 customUI.walkthrough.prev = Vorige Pagina
 
 customUI.walkthrough.welcome.title = Welkom bij Simple Enchantments!
-customUI.walkthrough.welcome.desc = Deze mod stelt je in staat om je uitrusting en wapens te verbeteren met magische rollen en betoveringen. Het is zeer aanpasbaar, met een admin-configuratiemenu (/enchantconfig) waarmee je instellingen kunt wijzigen of specifieke betoveringen kunt in- en uitschakelen. Het werkt het beste met vanilla items, maar biedt brede compatibiliteit met andere mods. Als je een probleem tegenkomt of een functieverzoek hebt, sluit je dan aan bij onze Discord-server. Daarnaast, als Dynamic Tooltips Lib is geïnstalleerd, worden betoveringen weergegeven in de tooltip van het item.
+customUI.walkthrough.welcome.desc = Deze mod stelt je in staat om je uitrusting en wapens te verbeteren met magische rollen en betoveringen. Het is zeer aanpasbaar, met een admin-configuratiemenu (/enchantconfig) waarmee je instellingen kunt wijzigen of specifieke betoveringen kunt in- en uitschakelen. Het werkt het beste met vanilla items, maar biedt brede compatibiliteit met andere mods. Als je een probleem tegenkomt of een functieverzoek hebt, sluit je dan aan bij onze Discord-server. Daarnaast worden betoveringen weergegeven in de tooltip van het item.
 
 customUI.walkthrough.table.title = 1. De Betoveringstafel
 customUI.walkthrough.table.desc = Maak een Betoveringstafel op de Werkbank. Plaats deze en interacteer ermee om alle beschikbare Betoveringsrollen te bekijken die je kunt maken. Je kunt de tafel ook upgraden om betoveringen van een hoger niveau te ontgrendelen.
@@ -631,7 +630,7 @@ customUI.enchantingPage.adminNote = Serverbrede instellingen en betoveringsaanpa
 
 
 customUI.walkthrough.enchantments.title = 5. Betoveringen
-customUI.walkthrough.enchantments.desc = Een complete lijst van betoveringen en hun effecten. Klik op een betovering voor meer informatie. Op deze server kan elk item maximaal {maxEnchantments} betoveringen hebben.\n\nOpmerking: Momenteel toont elke betoveringspagina alleen de Tooltip-beschrijving van de betovering en of deze is ingeschakeld op de server. Ik ben van plan gedetailleerde beschrijvingen te schrijven voor elk ervan, maar dat kost tijd. Elke toekomstige update van de mod zal gedetailleerde beschrijvingen toevoegen voor sommige ervan.
+customUI.walkthrough.enchantments.desc = Een complete lijst van betoveringen en hun effecten. Klik op een item voor meer informatie. Op deze server kan elk item maximaal {maxEnchantments} betoveringen hebben.\n\nOpmerking: Sommige betoveringspagina's bevatten al uitgebreidere speeltips, terwijl andere nog hun tooltip-samenvatting gebruiken. Toekomstige updates blijven gedetailleerde beschrijvingen toevoegen.
 
 config.general.allow_same_scroll_upgrades = Dezelfde Rol Upgrades Toestaan (I+I = II)
 
@@ -697,6 +696,22 @@ items.Scroll_Environmental_Protection_III.name = Rol van Milieubescherming III
 
 items.Scroll_Environmental_Protection_III.description = Vermindert omgevingsschade met 12% per pantseronderdeel.
 
+items.Scroll_Regeneration_I.name = Boekrol van Regeneratie
+
+items.Scroll_Regeneration_I.description = Regenereert passief {amount} HP per seconde. Alleen borstplaten.
+
+items.Scroll_Second_Stomach_I.name = Boekrol van Tweede Maag I
+
+items.Scroll_Second_Stomach_I.description = Verhoogt directe genezing met 15%.
+
+items.Scroll_Second_Stomach_II.name = Boekrol van Tweede Maag II
+
+items.Scroll_Second_Stomach_II.description = Verhoogt directe genezing met 30%.
+
+items.Scroll_Second_Stomach_III.name = Boekrol van Tweede Maag III
+
+items.Scroll_Second_Stomach_III.description = Verhoogt directe genezing met 45%.
+
 
 
 enchantment.poison.name = Vergif
@@ -709,11 +724,23 @@ enchantment.environmental_protection.name = Milieubescherming
 
 enchantment.environmental_protection.description = Vermindert omgevingsschade met 4% per pantseronderdeel.
 
+enchantment.regeneration.name = Regeneratie
+
+enchantment.regeneration.description = Regenereert passief {amount} HP per seconde. Alleen borstplaten.
+
+enchantment.second_stomach.name = Tweede Maag
+
+enchantment.second_stomach.description = Verhoogt directe genezing van voedsel en drankjes met {amount}% per niveau. Alleen borstplaten.
+
 enchantment.poison.bonus = Vergiftigt doelen ({amount} schade/s gedurende {duration}s)
 enchantment.environmental_protection.bonus = Omgevingsschade verminderd met {amount}%
+enchantment.regeneration.bonus = Regenereert {amount} HP per seconde
+enchantment.second_stomach.bonus = Directe genezing verhoogd met {amount}%
 
 enchantment.poison.walkthrough = Vergiftigt doelen bij het raken, veroorzaakt {amount} schade per seconde gedurende {duration} seconden. Van toepassing op melee- en afstandswapens. Niet compatibel met Verbranding.
 enchantment.environmental_protection.walkthrough = Vermindert inkomende elementaire en omgevingsschade (vuur, ijs, cactussen en andere gevaren) met {amount}% per pantseronderdeel per niveau, en vermindert proportioneel de vertragingsintensiteit van de Bevriezing-betovering. Van toepassing op pantsers.
+enchantment.regeneration.walkthrough = Regeneratie is een betovering voor borstplaten die {amount} HP per seconde herstelt zolang je hem draagt. Het effect blijft actief zolang de betoverde borstplaat is uitgerust, waardoor het handig is voor lange gevechten, verkennen en herstellen tussen ontmoetingen.\n\nDeze genezing telt als passieve regeneratie en wordt gescheiden gehouden van directe genezing, dus Tweede Maag versterkt deze niet.
+enchantment.second_stomach.walkthrough = Tweede Maag is een betovering voor borstplaten die directe genezing uit voedsel en drankjes met {amount}% per niveau verhoogt. Het versterkt alleen echte genezingspieken, niet passieve regeneratie of genezing over tijd, en is vooral sterk wanneer je in gevechten noodvoedsel of drankjes gebruikt.\n\nDe bonus is gebaseerd op de genezing die je daadwerkelijk ontvangt en geldt alleen terwijl je de betoverde borstplaat draagt.
 
 
 items.Scroll_Custom.name = Aangepaste Rol
@@ -770,6 +797,8 @@ itemCategory.STAFF_MANA = Manastaven
 
 itemCategory.STAFF_ESSENCE = Essentiestaven
 
+itemCategory.CHESTPLATE = Borstplaten
+
 itemCategory.UNKNOWN = Onbekend
 
 config.multiplier.sharpness = Schade per Niveau
@@ -802,3 +831,7 @@ config.multiplier.elemental_heart = Besparingskans per Niveau
 config.multiplier.poison = Schade per Seconde
 config.multiplier.poison:duration = Duur (Seconden)
 config.multiplier.environmental_protection = Reductie per Niveau
+config.multiplier.regeneration = HP Per Seconde
+config.multiplier.second_stomach = Bonus Per Niveau
+items.EngravingTable.name = Graveertafel
+items.EngravingTable.description = Een runengraveertafel om voorwerpen te hernoemen en de gloed van betoveringen opnieuw te kleuren.

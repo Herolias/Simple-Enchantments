@@ -114,7 +114,7 @@ public class EnchantmentRecipeManager {
 
             if (recipe.getPrimaryOutput() != null) {
                 String outId = recipe.getPrimaryOutput().getItemId();
-                if ("Enchanting_Table".equals(outId) || "Enchanting_Table_Item".equals(outId)) {
+                if ("Enchanting_Table".equals(outId) || "Enchanting_Table_Item".equals(outId) || "Engraving_Table".equals(outId) || "Engraving_Table_Item".equals(outId)) {
                     event.setCancelled(true);
                     return;
                 }
@@ -277,6 +277,8 @@ public class EnchantmentRecipeManager {
         }
     }
 
+    private static boolean isApplyingOverrides = false;
+
     /**
      * Event handler called when recipes are loaded.
      * Removes recipes for disabled enchantment scrolls.
@@ -284,6 +286,9 @@ public class EnchantmentRecipeManager {
     private static void onRecipeLoad(
             LoadedAssetsEvent<String, CraftingRecipe, DefaultAssetMap<String, CraftingRecipe>> event) {
         if (plugin == null) {
+            return;
+        }
+        if (isApplyingOverrides) {
             return;
         }
 
@@ -331,6 +336,40 @@ public class EnchantmentRecipeManager {
 
                 if (overrideIngredients != null || overrideTier != null) {
                     LOGGER.atInfo().log("Applying overrides for Enchanting Table (Asset ID: " + recipeId + ")");
+                    CraftingRecipe newRecipe = applyModifications(recipeId, recipe, overrideIngredients, overrideTier,
+                            "Workbench");
+                    newRecipes.put(recipeId, newRecipe);
+                    continue;
+                }
+            }
+
+            // Handle Engraving Table recipe
+            if (recipeId.startsWith("Engraving_Table")) {
+                // If all enchanting crafting is disabled, remove the engraving table recipe
+                if (config.disableEnchantmentCrafting) {
+                    recipeIdsToRemove.add(recipeId);
+                    LOGGER.atInfo().log("Marking for removal (all enchanting crafting disabled): " + recipeId);
+                    continue; // Skip further processing for this recipe
+                }
+
+                List<ConfigIngredient> overrideIngredients = null;
+                Integer overrideTier = null;
+
+                // Check ingredients
+                if (config.engravingTableRecipe != null && !config.engravingTableRecipe.isEmpty()) {
+                    if (!doesRecipeMatch(recipe, config.engravingTableRecipe)) {
+                        overrideIngredients = config.engravingTableRecipe;
+                    }
+                }
+
+                // Check tier
+                int currentTier = getBenchTier(recipe, "Workbench");
+                if (currentTier != -1 && currentTier != config.engravingTableCraftingTier) {
+                    overrideTier = config.engravingTableCraftingTier;
+                }
+
+                if (overrideIngredients != null || overrideTier != null) {
+                    LOGGER.atInfo().log("Applying overrides for Engraving Table (Asset ID: " + recipeId + ")");
                     CraftingRecipe newRecipe = applyModifications(recipeId, recipe, overrideIngredients, overrideTier,
                             "Workbench");
                     newRecipes.put(recipeId, newRecipe);
@@ -423,6 +462,7 @@ public class EnchantmentRecipeManager {
         // Apply overrides
         if (!newRecipes.isEmpty()) {
             try {
+                isApplyingOverrides = true;
                 // Use loadAssets to properly register/overwrite the recipes in the store
                 CraftingRecipe.getAssetStore().loadAssets("SimpleEnchanting:ConfigOverrides",
                         new ArrayList<>(newRecipes.values()));
@@ -430,6 +470,8 @@ public class EnchantmentRecipeManager {
             } catch (Exception e) {
                 LOGGER.atSevere().log("Failed to apply recipe overrides: " + e.toString());
                 e.printStackTrace();
+            } finally {
+                isApplyingOverrides = false;
             }
         }
 
@@ -463,10 +505,27 @@ public class EnchantmentRecipeManager {
 
         // Apply ingredient override if present
         if (ingredients != null) {
-            newInputs = new MaterialQuantity[ingredients.size()];
-            for (int i = 0; i < ingredients.size(); i++) {
-                ConfigIngredient ci = ingredients.get(i);
-                newInputs[i] = new MaterialQuantity(ci.item, null, null, ci.amount, null);
+            List<ConfigIngredient> actualIngredients = new ArrayList<>();
+            for (ConfigIngredient ci : ingredients) {
+                if (ci.UnlocksAtTier == null) {
+                    if (ci.item != null || ci.isResourceType()) {
+                        actualIngredients.add(ci);
+                    } else {
+                        LOGGER.atSevere().log("Invalid recipe ingredient found in config: both item and resourceType are null. Please check your config keys (e.g. use 'item' instead of 'itemId').");
+                    }
+                }
+            }
+            if (!actualIngredients.isEmpty() || ingredients.isEmpty()) {
+                newInputs = new MaterialQuantity[actualIngredients.size()];
+                for (int i = 0; i < actualIngredients.size(); i++) {
+                    ConfigIngredient ci = actualIngredients.get(i);
+                    int amt = ci.amount != null ? ci.amount : 1;
+                    if (ci.isResourceType()) {
+                        newInputs[i] = new MaterialQuantity(null, ci.resourceType, null, amt, null);
+                    } else {
+                        newInputs[i] = new MaterialQuantity(ci.item, null, null, amt, null);
+                    }
+                }
             }
         }
 
@@ -503,20 +562,43 @@ public class EnchantmentRecipeManager {
     /* Old applyRecipeOverride removed */
 
     private static boolean doesRecipeMatch(CraftingRecipe recipe, List<ConfigIngredient> configuredIngredients) {
+        List<ConfigIngredient> actualIngredients = new ArrayList<>();
+        for (ConfigIngredient ci : configuredIngredients) {
+            if (ci.UnlocksAtTier == null) {
+                actualIngredients.add(ci);
+            }
+        }
+
         MaterialQuantity[] currentInputs = recipe.getInput();
 
-        if (currentInputs.length != configuredIngredients.size()) {
+        if (currentInputs.length != actualIngredients.size()) {
             return false;
         }
 
+        // Build maps keyed by a composite key "item:<id>" or "rt:<id>" to handle both types
         Map<String, Integer> currentMap = new HashMap<>();
         for (MaterialQuantity mq : currentInputs) {
-            currentMap.merge(mq.getItemId(), mq.getQuantity(), Integer::sum);
+            String key;
+            if (mq.getResourceTypeId() != null) {
+                key = "rt:" + mq.getResourceTypeId();
+            } else {
+                key = "item:" + mq.getItemId();
+            }
+            currentMap.merge(key, mq.getQuantity(), Integer::sum);
         }
 
         Map<String, Integer> configMap = new HashMap<>();
-        for (ConfigIngredient ci : configuredIngredients) {
-            configMap.merge(ci.item, ci.amount, Integer::sum);
+        for (ConfigIngredient ci : actualIngredients) {
+            String key;
+            if (ci.isResourceType()) {
+                key = "rt:" + ci.resourceType;
+            } else if (ci.item != null) {
+                key = "item:" + ci.item;
+            } else {
+                continue;
+            }
+            int amt = ci.amount != null ? ci.amount : 1;
+            configMap.merge(key, amt, Integer::sum);
         }
 
         return currentMap.equals(configMap);
@@ -730,7 +812,11 @@ public class EnchantmentRecipeManager {
             MaterialQuantity[] materials = new MaterialQuantity[ingredients.size()];
             for (int i = 0; i < ingredients.size(); i++) {
                 ConfigIngredient ci = ingredients.get(i);
-                materials[i] = new MaterialQuantity(ci.item, null, null, ci.amount, null);
+                if (ci.isResourceType()) {
+                    materials[i] = new MaterialQuantity(null, ci.resourceType, null, ci.amount, null);
+                } else {
+                    materials[i] = new MaterialQuantity(ci.item, null, null, ci.amount, null);
+                }
             }
 
             BenchUpgradeRequirement newReq = new BenchUpgradeRequirement(materials, 5.0f);

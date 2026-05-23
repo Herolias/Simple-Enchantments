@@ -17,8 +17,8 @@ import com.hypixel.hytale.server.core.modules.interaction.interaction.config.Int
 import com.hypixel.hytale.server.core.modules.interaction.interaction.config.InteractionConfiguration;
 import com.hypixel.hytale.server.core.modules.interaction.interaction.config.RootInteraction;
 import com.hypixel.hytale.server.core.modules.interaction.interaction.config.server.OpenCustomUIInteraction;
-import com.hypixel.hytale.protocol.Vector2f;
-import com.hypixel.hytale.protocol.Vector3f;
+import org.joml.Vector2f;
+import org.joml.Vector3f;
 import org.herolias.plugin.SimpleEnchanting;
 import org.herolias.plugin.config.EnchantingConfig;
 import org.herolias.plugin.config.EnchantingConfig.ConfigIngredient;
@@ -456,7 +456,11 @@ public class ScrollItemGenerator {
             MaterialQuantity[] input = new MaterialQuantity[ingredients.size()];
             for (int i = 0; i < ingredients.size(); i++) {
                 ConfigIngredient ci = ingredients.get(i);
-                input[i] = new MaterialQuantity(ci.item, null, null, ci.amount, null);
+                if (ci.isResourceType()) {
+                    input[i] = new MaterialQuantity(null, ci.resourceType, null, ci.amount, null);
+                } else {
+                    input[i] = new MaterialQuantity(ci.item, null, null, ci.amount, null);
+                }
             }
 
             MaterialQuantity primaryOutput = new MaterialQuantity(scrollItemId, null, null, 1, null);
@@ -492,7 +496,7 @@ public class ScrollItemGenerator {
         if (cats.contains(ItemCategory.RANGED_WEAPON))
             return "Enchanting_Ranged";
         if (cats.contains(ItemCategory.ARMOR) || cats.contains(ItemCategory.HELMET)
-                || cats.contains(ItemCategory.BOOTS) || cats.contains(ItemCategory.GLOVES))
+                || cats.contains(ItemCategory.LEGS) || cats.contains(ItemCategory.GLOVES))
             return "Enchanting_Armor";
         if (cats.contains(ItemCategory.SHIELD))
             return "Enchanting_Shield";
@@ -570,6 +574,10 @@ public class ScrollItemGenerator {
                 return base + "EnchScrollPoi.png";
             case "environmental_protection":
                 return base + "EnchScrollEnviromentProtec.png";
+            case "regeneration":
+                return base + "EnchScrollHeal.png";
+            case "second_stomach":
+                return base + "EnchScrollSecondS.png";
             default:
                 return DEFAULT_TEXTURE;
         }
@@ -609,6 +617,8 @@ public class ScrollItemGenerator {
             case "coup_de_grace": return base + "CoupDeGrace.png";
             case "poison": return base + "Poison.png";
             case "environmental_protection": return base + "Environment Protection.png";
+            case "regeneration": return base + "Regeneration.png";
+            case "second_stomach": return base + "SecondStomach.png";
             default: return DEFAULT_ICON;
         }
     }

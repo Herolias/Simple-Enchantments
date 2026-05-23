@@ -3,9 +3,9 @@ package org.herolias.plugin.enchantment;
 import com.hypixel.hytale.builtin.crafting.component.ProcessingBenchBlock;
 import com.hypixel.hytale.event.EventPriority;
 import com.hypixel.hytale.logger.HytaleLogger;
-import com.hypixel.hytale.math.vector.Vector3i;
+import org.joml.Vector3i;
 import com.hypixel.hytale.server.core.entity.entities.Player;
-import com.hypixel.hytale.server.core.inventory.InventoryChangeEvent;
+import com.hypixel.hytale.server.core.event.events.ecs.InventoryChangeEvent;
 import com.hypixel.hytale.component.system.EntityEventSystem;
 import com.hypixel.hytale.component.ArchetypeChunk;
 import com.hypixel.hytale.component.CommandBuffer;
@@ -350,7 +350,7 @@ public class EnchantmentSalvageSystem extends EntityEventSystem<EntityStore, Inv
 
     /**
      * Determines whether the current item change originates from bench processing
-     * by checking the call stack for ProcessingBenchBlock.tick().
+     * by checking the call stack for the current ProcessingBenchBlock component.
      *
      * This only fires on bench item changes (not per-tick), so the performance
      * impact is acceptable. Alternative approaches (ThreadLocal, state heuristic)
@@ -358,8 +358,11 @@ public class EnchantmentSalvageSystem extends EntityEventSystem<EntityStore, Inv
      */
     private boolean isProcessedByBench() {
         for (StackTraceElement element : Thread.currentThread().getStackTrace()) {
-            if (element.getClassName().equals("com.hypixel.hytale.builtin.crafting.state.ProcessingBenchBlock") &&
-                    element.getMethodName().equals("tick")) {
+            if (element.getClassName().equals("com.hypixel.hytale.builtin.crafting.component.ProcessingBenchBlock")
+                    && (element.getMethodName().equals("advanceProcessing")
+                            || element.getMethodName().equals("completeRecipes")
+                            || element.getMethodName().equals("tryCompleteOneRecipe")
+                            || element.getMethodName().equals("tick"))) {
                 return true;
             }
         }
@@ -425,8 +428,8 @@ public class EnchantmentSalvageSystem extends EntityEventSystem<EntityStore, Inv
                 // Level exceeds max — create a Custom Scroll with the enchantment in metadata
                 EnchantmentData customScrollData = new EnchantmentData();
                 customScrollData.addEnchantment(chosenType, chosenLevel);
-                scrollStack = new ItemStack("Scroll_Custom", 1)
-                        .withMetadata(EnchantmentData.METADATA_KEY, customScrollData.toBson());
+                scrollStack = NativeTooltipManager.withEnchantments(new ItemStack("Scroll_Custom", 1),
+                        customScrollData, enchantmentManager);
             } else {
                 String scrollId = ScrollIdHelper.getScrollItemId(chosenType, chosenLevel);
                 scrollStack = new ItemStack(scrollId, 1);
@@ -440,12 +443,12 @@ public class EnchantmentSalvageSystem extends EntityEventSystem<EntityStore, Inv
                         .anyMatch(t -> t.getRemainder() != null && !t.getRemainder().isEmpty())) {
                     com.hypixel.hytale.component.Store<com.hypixel.hytale.server.core.universe.world.storage.EntityStore> entityStore = world
                             .getEntityStore().getStore();
-                    com.hypixel.hytale.math.vector.Vector3d dropPosition = blockPos.toVector3d()
+                    org.joml.Vector3d dropPosition = com.hypixel.hytale.math.vector.Vector3iUtil.toVector3d(blockPos)
                             .add(0.5, 1.0, 0.5);
                     com.hypixel.hytale.component.Holder<com.hypixel.hytale.server.core.universe.world.storage.EntityStore>[] itemEntityHolders = com.hypixel.hytale.server.core.modules.entity.item.ItemComponent
                             .generateItemDrops(
                                     entityStore, java.util.Collections.singletonList(scrollStack), dropPosition,
-                                    com.hypixel.hytale.math.vector.Vector3f.ZERO);
+                                    new com.hypixel.hytale.math.vector.Rotation3f());
                     if (itemEntityHolders.length > 0) {
                         if (world.isAlive()) {
                             try {

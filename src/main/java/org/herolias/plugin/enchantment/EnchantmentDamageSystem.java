@@ -283,7 +283,7 @@ public class EnchantmentDamageSystem extends DamageEventSystem {
         TransformComponent targetTransform = archetypeChunk.getComponent(index, TransformComponent.getComponentType());
         double distance = 0.0;
         if (shooterTransform != null && targetTransform != null) {
-            distance = shooterTransform.getPosition().distanceTo(targetTransform.getPosition());
+            distance = shooterTransform.getPosition().distance(targetTransform.getPosition());
         }
 
         ProjectileEnchantmentData projectileData = ctx.hasProjectile()

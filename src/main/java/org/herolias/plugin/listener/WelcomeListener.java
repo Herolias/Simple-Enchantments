@@ -41,7 +41,7 @@ public class WelcomeListener {
 
                     Message greeting = plugin.getLanguageManager().getMessage("chat.greeting", langCode, clientLangCode)
                             .color("#AA00AA").bold(true);
-                    player.sendMessage(greeting);
+                    playerRef.sendMessage(greeting);
                 }
                 userSettingsManager.setHasSeenGreeting(playerRef.getUuid(), true);
             }

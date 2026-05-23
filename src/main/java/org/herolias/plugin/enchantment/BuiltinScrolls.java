@@ -81,9 +81,9 @@ public final class BuiltinScrolls {
         reg("Scroll_Frenzy_III", "Epic", 3, "Enchanting_Melee", "Enchanting_Ranged");
 
         // ─── Knockback (Melee) ───
-        reg("Scroll_Knockback_I", "Uncommon", 1, "Enchanting_Melee");
-        reg("Scroll_Knockback_II", "Rare", 2, "Enchanting_Melee");
-        reg("Scroll_Knockback_III", "Epic", 3, "Enchanting_Melee");
+        reg("Scroll_Knockback_I", "Uncommon", 1, "Enchanting_Melee", "Enchanting_Shield");
+        reg("Scroll_Knockback_II", "Rare", 2, "Enchanting_Melee", "Enchanting_Shield");
+        reg("Scroll_Knockback_III", "Epic", 3, "Enchanting_Melee", "Enchanting_Shield");
 
         // ─── Life Leech (Melee, Legendary) ───
         reg("Scroll_Life_Leech_I", "Legendary", 4, "Enchanting_Melee");
@@ -153,6 +153,14 @@ public final class BuiltinScrolls {
         reg("Scroll_Environmental_Protection_I", "Uncommon", 1, "Enchanting_Armor");
         reg("Scroll_Environmental_Protection_II", "Rare", 2, "Enchanting_Armor");
         reg("Scroll_Environmental_Protection_III", "Epic", 3, "Enchanting_Armor");
+
+        // ─── Regeneration (Chestplate, Legendary) ───
+        reg("Scroll_Regeneration_I", "Legendary", 4, "Enchanting_Armor");
+
+        // ─── Second Stomach (Chestplate) ───
+        reg("Scroll_Second_Stomach_I", "Rare", 1, "Enchanting_Armor");
+        reg("Scroll_Second_Stomach_II", "Epic", 2, "Enchanting_Armor");
+        reg("Scroll_Second_Stomach_III", "Legendary", 3, "Enchanting_Armor");
     }
 
     private static void reg(String id, String quality, int itemLevel, String... categories) {

@@ -33,7 +33,10 @@ public abstract class AbstractRecipeRegistry<T extends AbstractRecipeRegistry.Re
         if (input == null || input.isEmpty()) {
             return null;
         }
-        ensureInitialized();
+        if (!ensureInitialized()) {
+            // Asset map not yet stable — skip this tick instead of crashing the entity.
+            return null;
+        }
 
         T recipe = byItemId.get(input.getItemId());
         if (recipe != null) {
@@ -63,54 +66,90 @@ public abstract class AbstractRecipeRegistry<T extends AbstractRecipeRegistry.Re
         return null;
     }
 
-    protected void ensureInitialized() {
+    protected boolean ensureInitialized() {
         if (initialized) {
-            return;
+            return true;
         }
         synchronized (this) {
             if (initialized) {
-                return;
+                return true;
             }
 
-            for (Item item : List.copyOf(Item.getAssetMap().getAssetMap().values())) {
-                if (item == null) {
-                    continue;
-                }
-
-                List<CraftingRecipe> recipes = new ArrayList<>();
-                item.collectRecipesToGenerate(recipes);
-                if (recipes.isEmpty()) {
-                    continue;
-                }
-
-                for (CraftingRecipe recipe : recipes) {
-                    if (!isValidRecipe(recipe)) {
-                        continue;
-                    }
-
-                    MaterialQuantity[] inputs = recipe.getInput();
-                    if (inputs == null || inputs.length != 1) {
-                        continue;
-                    }
-
-                    MaterialQuantity input = inputs[0];
-                    MaterialQuantity output = recipe.getPrimaryOutput();
-                    if (input == null || output == null || output.getItemId() == null) {
-                        continue;
-                    }
-
-                    T registryRecipe = createRecipe(output, input.getQuantity(), input.getItemId(),
-                            input.getResourceTypeId());
-                    if (input.getItemId() != null) {
-                        byItemId.putIfAbsent(input.getItemId(), registryRecipe);
-                    }
-                    if (input.getResourceTypeId() != null) {
-                        byResourceTypeId.putIfAbsent(input.getResourceTypeId(), registryRecipe);
+            // Snapshot the asset map defensively. The underlying fastutil map can be
+            // mutated by engine/plugin threads during startup, which corrupts
+            // iterators (NPE on Object2ObjectOpenCustomHashMap$MapIterator.wrapped).
+            // Retry a few times, then bail out and let the next caller try again.
+            List<Item> items = null;
+            for (int attempt = 0; attempt < 5; attempt++) {
+                try {
+                    items = new ArrayList<>(Item.getAssetMap().getAssetMap().values());
+                    break;
+                } catch (NullPointerException | java.util.ConcurrentModificationException e) {
+                    // Asset map is still being populated on another thread.
+                    try {
+                        Thread.sleep(20L);
+                    } catch (InterruptedException ie) {
+                        Thread.currentThread().interrupt();
+                        return false;
                     }
                 }
             }
+            if (items == null) {
+                // Still unstable — don't mark initialized; caller will retry later.
+                return false;
+            }
 
+            // Build into temporary maps so a mid-iteration failure leaves no partial state.
+            Map<String, T> tmpByItemId = new HashMap<>();
+            Map<String, T> tmpByResourceTypeId = new HashMap<>();
+
+            try {
+                for (Item item : items) {
+                    if (item == null) {
+                        continue;
+                    }
+
+                    List<CraftingRecipe> recipes = new ArrayList<>();
+                    item.collectRecipesToGenerate(recipes);
+                    if (recipes.isEmpty()) {
+                        continue;
+                    }
+
+                    for (CraftingRecipe recipe : recipes) {
+                        if (!isValidRecipe(recipe)) {
+                            continue;
+                        }
+
+                        MaterialQuantity[] inputs = recipe.getInput();
+                        if (inputs == null || inputs.length != 1) {
+                            continue;
+                        }
+
+                        MaterialQuantity input = inputs[0];
+                        MaterialQuantity output = recipe.getPrimaryOutput();
+                        if (input == null || output == null || output.getItemId() == null) {
+                            continue;
+                        }
+
+                        T registryRecipe = createRecipe(output, input.getQuantity(), input.getItemId(),
+                                input.getResourceTypeId());
+                        if (input.getItemId() != null) {
+                            tmpByItemId.putIfAbsent(input.getItemId(), registryRecipe);
+                        }
+                        if (input.getResourceTypeId() != null) {
+                            tmpByResourceTypeId.putIfAbsent(input.getResourceTypeId(), registryRecipe);
+                        }
+                    }
+                }
+            } catch (NullPointerException | java.util.ConcurrentModificationException e) {
+                // Something mutated underneath us mid-scan; don't commit, retry next call.
+                return false;
+            }
+
+            byItemId.putAll(tmpByItemId);
+            byResourceTypeId.putAll(tmpByResourceTypeId);
             initialized = true;
+            return true;
         }
     }
 
@@ -165,7 +204,11 @@ public abstract class AbstractRecipeRegistry<T extends AbstractRecipeRegistry.Re
             if (inputCount <= 0) {
                 return null;
             }
-            int totalOutput = Math.max(1, inputCount) * output.getQuantity();
+            int recipesCompleted = inputCount / Math.max(1, inputQuantity);
+            if (recipesCompleted <= 0) {
+                return null;
+            }
+            int totalOutput = recipesCompleted * output.getQuantity();
             return output.clone(totalOutput).toItemStack();
         }
 

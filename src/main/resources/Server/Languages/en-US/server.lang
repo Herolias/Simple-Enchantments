@@ -1,4 +1,4 @@
-﻿benchCategories.enchantingArmor = Armor
+benchCategories.enchantingArmor = Armor
 
 benchCategories.enchantingTools = Tools
 
@@ -276,6 +276,22 @@ items.Scroll_Environmental_Protection_III.name = Scroll of Environmental Protect
 
 items.Scroll_Environmental_Protection_III.description = Reduces environmental damage by 12% per armor piece.
 
+items.Scroll_Regeneration_I.name = Scroll of Regeneration
+
+items.Scroll_Regeneration_I.description = Passively regenerates {amount} HP per second. Chestplate only.
+
+items.Scroll_Second_Stomach_I.name = Scroll of Second Stomach I
+
+items.Scroll_Second_Stomach_I.description = Increases instant healing by 15%.
+
+items.Scroll_Second_Stomach_II.name = Scroll of Second Stomach II
+
+items.Scroll_Second_Stomach_II.description = Increases instant healing by 30%.
+
+items.Scroll_Second_Stomach_III.name = Scroll of Second Stomach III
+
+items.Scroll_Second_Stomach_III.description = Increases instant healing by 45%.
+
 
 
 benchCategories.enchantingStaff = Magic
@@ -496,6 +512,14 @@ enchantment.environmental_protection.name = Environmental Protection
 
 enchantment.environmental_protection.description = Reduces environmental damage by 4% per armor piece.
 
+enchantment.regeneration.name = Regeneration
+
+enchantment.regeneration.description = Passively regenerates {amount} HP per second. Chestplate only.
+
+enchantment.second_stomach.name = Second Stomach
+
+enchantment.second_stomach.description = Increases instant healing from food and potions by {amount}% per level. Chestplate only.
+
 
 
 items.Scroll_Night_Vision_I.name = Scroll of Night Vision
@@ -613,6 +637,8 @@ enchantment.riposte.bonus = Counter attack damage increased by {amount}%
 enchantment.coup_de_grace.bonus = Damage to stunned enemies increased by {amount}%
 enchantment.poison.bonus = Poisons targets on hit ({amount} damage/s for {duration}s)
 enchantment.environmental_protection.bonus = Environmental damage reduced by {amount}%
+enchantment.regeneration.bonus = Regenerates {amount} HP per second
+enchantment.second_stomach.bonus = Instant healing increased by {amount}%
 
 # Config UI
 config.title = Enchantment Configuration
@@ -637,6 +663,8 @@ config.general.table_tier = Enchanting Table Crafting Tier
 config.general.disable_crafting = Disable Enchantment Crafting
 config.general.return_cleanse = Return Enchantment On Cleanse
 config.general.table_recipe = Enchanting Table Recipe
+config.general.engraving_table_tier = Engraving Table Crafting Tier
+config.general.engraving_table_recipe = Engraving Table Recipe
 config.general.upgrade_1 = Upgrade 1 Cost (Tier 1 -> 2)
 config.general.upgrade_2 = Upgrade 2 Cost (Tier 2 -> 3)
 config.general.upgrade_3 = Upgrade 3 Cost (Tier 3 -> 4)
@@ -679,6 +707,8 @@ config.multiplier.elemental_heart = Save Chance Per Level
 config.multiplier.poison = Damage Per Second
 config.multiplier.poison:duration = Duration (Seconds)
 config.multiplier.environmental_protection = Reduction Per Level
+config.multiplier.regeneration = HP Per Second
+config.multiplier.second_stomach = Bonus Per Level
 
 
 config.recipe.active_title = {0} - Ingredients
@@ -698,7 +728,7 @@ customUI.walkthrough.next = Next Page
 customUI.walkthrough.prev = Previous Page
 
 customUI.walkthrough.welcome.title = Welcome to Simple Enchantments!
-customUI.walkthrough.welcome.desc = This mod allows you to enhance your gear and weapons using magical scrolls and enchantments. It is highly customizable, featuring an admin configuration menu (/enchantconfig) that lets you tweak settings or toggle specific enchantments on and off. It works best with vanilla items, but it offers broad compatibility with other mods. If you encounter an issue or have a feature request, please join our Discord server. Additionally, if Dynamic Tooltips Lib is installed, enchantments will be shown in the item tooltip.
+customUI.walkthrough.welcome.desc = This mod allows you to enhance your gear and weapons using magical scrolls and enchantments. It is highly customizable, featuring an admin configuration menu (/enchantconfig) that lets you tweak settings or toggle specific enchantments on and off. It works best with vanilla items, but it offers broad compatibility with other mods. If you encounter an issue or have a feature request, please join our Discord server. Additionally, enchantments are shown in the item tooltip.
 
 customUI.walkthrough.table.title = 1. The Enchanting Table
 customUI.walkthrough.table.desc = Craft an Enchanting Table at the Workbench. Place it down and interact with it to browse all available Enchantment Scrolls that you can craft. You can also upgrade the table to access higher tier enchantments.
@@ -716,7 +746,7 @@ customUI.enchantingPage.adminNote = Server-wide settings and Enchantment customi
 
 
 customUI.walkthrough.enchantments.title = 5. Enchantments
-customUI.walkthrough.enchantments.desc = A complete list of enchantments and their effects. Click on any to find out more. On this Server, each Item can have up to {maxEnchantments} Enchantments.\n\nNote: Right now each enchantment page only shows the Tooltip description of the enchantment and if it is enabled on the sever. I plan to write detailed descriptions for each of them, but that takes time. Each future update to the mod will add a detailed description and to some of them.
+customUI.walkthrough.enchantments.desc = A complete list of enchantments and their effects. Click any entry to learn more. On this server, each item can have up to {maxEnchantments} enchantments.\n\nNote: Some enchantment pages include expanded gameplay notes, while others still use their tooltip summary. Future updates will continue adding detailed descriptions.
 
 config.general.allow_same_scroll_upgrades = Allow Same Scroll Upgrades(I+I = II)
 
@@ -756,6 +786,8 @@ enchantment.riposte.walkthrough = This is a collab Enchantment with the Perfect 
 enchantment.coup_de_grace.walkthrough = This is a collab Enchantment with the Perfect Parries mod and will only work if both mods are installed.\n\nIncreases damage to stunned enemies by {amount}% per level. Applies to melee weapons.
 enchantment.poison.walkthrough = Poisons targets on hit, dealing {amount} damage per second for {duration} seconds. Applies to melee and ranged weapons. Not combinable with Burn.
 enchantment.environmental_protection.walkthrough = Reduces incoming elemental and environmental damage (fire, ice, cacti, and other hazards) by {amount}% per armor piece per level, and proportionally mitigates the slow intensity of the Freeze enchantment. Applies to armor.
+enchantment.regeneration.walkthrough = Regeneration is a chestplate enchantment that restores {amount} HP per second while worn. It is always active as long as the enchanted chestplate is equipped, making it useful for long fights, exploration, and recovering between encounters.\n\nIts healing is treated as passive regeneration and is kept separate from instant-heal effects, so it is not boosted by Second Stomach.
+enchantment.second_stomach.walkthrough = Second Stomach is a chestplate enchantment that increases instant healing from food and potions by {amount}% per level. It only boosts real healing bursts, not passive regeneration or healing-over-time effects, so it shines when you use emergency food or potions mid-fight.\n\nThe bonus is based on the healing you actually receive and applies only while wearing the enchanted chestplate.
 
 
 tooltip.enchantments = Enchantments:
@@ -816,4 +848,8 @@ itemCategory.STAFF_MANA = Mana Staffs
 
 itemCategory.STAFF_ESSENCE = Essence Staffs
 
+itemCategory.CHESTPLATE = Chestplates
+
 itemCategory.UNKNOWN = Unknown
+items.EngravingTable.name = Engraving Table
+items.EngravingTable.description = A rune engraving table used to rename items and recolor enchantment glows.

@@ -456,7 +456,7 @@ public class EnchantmentBuilder {
             return "Enchanting_Melee";
         if (categories.contains(ItemCategory.RANGED_WEAPON))
             return "Enchanting_Ranged";
-        if (categories.contains(ItemCategory.ARMOR) || categories.contains(ItemCategory.BOOTS))
+        if (categories.contains(ItemCategory.ARMOR) || categories.contains(ItemCategory.LEGS))
             return "Enchanting_Armor";
         if (categories.contains(ItemCategory.SHIELD))
             return "Enchanting_Shield";
