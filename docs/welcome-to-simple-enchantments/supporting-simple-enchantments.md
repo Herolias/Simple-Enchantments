@@ -1,3 +1,10 @@
+---
+title: "Supporting Simple Enchantments"
+order: 9
+published: true
+draft: false
+---
+
 # Supporting Simple Enchantments
 If you would like to support the development of Simple Enchantments, there are many ways to contribute:
 

@@ -1,3 +1,10 @@
+---
+title: "Get your own Custom Enchantment (Commission)"
+order: 10
+published: true
+draft: false
+---
+
 # Get your own custom Enchantment (Commission)
 
 The addition of the **Enchantments API** in Version 0.9.0 of Simple Enchantments makes it possible to add your own enchantments through separate Add-on plugins.

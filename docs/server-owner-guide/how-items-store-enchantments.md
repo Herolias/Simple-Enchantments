@@ -1,3 +1,10 @@
+---
+title: "How Items Store Enchantments"
+order: 4
+published: true
+draft: false
+---
+
 # How Items store Enchantments
 
 Enchantments are stored in the Item Extended Metadata. 

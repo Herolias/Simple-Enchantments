@@ -1,3 +1,10 @@
+---
+title: "Usefull Resources"
+order: 6
+published: true
+draft: false
+---
+
 # Usefull resources
 
 Here are other usefull pages that could help:

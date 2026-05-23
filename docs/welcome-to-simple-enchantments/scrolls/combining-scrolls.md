@@ -1,3 +1,10 @@
+---
+title: "Combining Scrolls"
+order: 1
+published: true
+draft: false
+---
+
 # Combining Scrolls
 
 You can combine multiple Scrolls (up to <!-- DOCSTAT:config.maxEnchantmentsPerItem -->5<!-- /DOCSTAT --> by default) into one Custom Scroll that holds all the Enchantments of the Scrolls you combined.

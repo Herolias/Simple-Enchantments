@@ -1,3 +1,10 @@
+---
+title: "Enchantments"
+order: 7
+published: true
+draft: false
+---
+
 # Enchantments
 
 There are currently <!-- DOCSTAT:enchantments.count -->33<!-- /DOCSTAT --> Enchantments in the mod. Each enchantment has its own page with stats, recipe details, and room for a showcase.

@@ -1,3 +1,10 @@
+---
+title: "The In Game Config"
+order: 1
+published: true
+draft: false
+---
+
 # The in-game Config
 
 Simple Enchantments has an in-game config editor for easier customization. In theory, you'd never have to touch the the json files in the mods folder. 

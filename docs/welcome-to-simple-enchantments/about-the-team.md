@@ -1,3 +1,10 @@
+---
+title: "About the Team"
+order: 8
+published: true
+draft: false
+---
+
 # About the Team
 We're Elias (Herolias/MineAndCraft) and Rita (Sorath), two CS students from Germany. We’ve both played Minecraft for years and have been hooked on Hytale since Day 1 of Early Access.
 

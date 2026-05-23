@@ -1,3 +1,10 @@
+---
+title: "Enchantment Tooltips"
+order: 6
+published: true
+draft: false
+---
+
 # Enchantment Tooltips
 
 Since Version 1.0.0 of Simple Enchantments, [DynamicTooltipsLib](https://www.curseforge.com/hytale/mods/dynamictooltipslib) is a required dependency. This library allows us to add per-item tooltips using "virtual IDs." If you're interested in the technical side, you can read more in the [GitHub Documentation](https://github.com/Herolias/DynamicTooltipsLib).
