@@ -214,7 +214,7 @@ public class EngravingTablePage extends InteractiveCustomUIPage<EngravingTablePa
         commandBuilder.set("#NamePreviewValue.TextSpans", this.buildNamePreviewMessage());
         commandBuilder.set("#NameInput.Value", this.editableName);
         commandBuilder.set("#NameHint.TextSpans",
-                Message.raw("Name color: 1 matching petal."));
+                Message.raw("Name color: 1 matching petal. Default is free."));
         this.updateColorButtons(commandBuilder, true);
 
         commandBuilder.set("#GlowSection.Visible", showGlow);
@@ -333,7 +333,7 @@ public class EngravingTablePage extends InteractiveCustomUIPage<EngravingTablePa
         ItemGridSlot slot = new ItemGridSlot(this.createCustomUiVisualStack(displayStack));
 
         if (displayMetadata != null) {
-            String name = this.toCustomUiPlainText(displayMetadata.getName());
+            String name = this.toCustomUiMarkup(displayMetadata.getName());
             if (name != null && !name.isBlank()) {
                 slot.setName(name);
             }
@@ -351,32 +351,6 @@ public class EngravingTablePage extends InteractiveCustomUIPage<EngravingTablePa
         // CustomUI ItemGrid slots reject metadata-rich stacks in the Slots payload.
         // The grid's own tooltip fields carry the rendered text instead.
         return itemStack.withMetadata((BsonDocument) null);
-    }
-
-    @Nullable
-    private String toCustomUiPlainText(@Nullable Message message) {
-        if (message == null) {
-            return null;
-        }
-        StringBuilder builder = new StringBuilder();
-        this.appendCustomUiPlainText(builder, message.getFormattedMessage());
-        return builder.isEmpty() ? null : builder.toString();
-    }
-
-    private void appendCustomUiPlainText(@Nonnull StringBuilder builder, @Nullable FormattedMessage message) {
-        if (message == null) {
-            return;
-        }
-
-        String text = this.resolveFormattedText(message);
-        if (text != null) {
-            builder.append(text);
-        }
-        if (message.children != null) {
-            for (FormattedMessage child : message.children) {
-                this.appendCustomUiPlainText(builder, child);
-            }
-        }
     }
 
     @Nullable
@@ -597,17 +571,19 @@ public class EngravingTablePage extends InteractiveCustomUIPage<EngravingTablePa
 
     @Nonnull
     private Message buildNamePreviewMessage() {
-        ItemStack preview = this.getPreviewResultItem();
-        ItemStack reference = !ItemStack.isEmpty(preview) ? preview : this.getPrimaryInput();
-        if (ItemStack.isEmpty(reference)) {
+        ItemStack primary = this.getPrimaryInput();
+        if (ItemStack.isEmpty(primary)) {
             return Message.raw("No preview").color(COLOR_MUTED);
         }
 
-        EngravingTableCustomizationData customization = EngravingTableCustomizationData.fromItemStack(reference);
-        String name = this.resolveCurrentDisplayName(reference, customization);
+        String name = this.editableName.trim();
+        if (name.isEmpty()) {
+            EngravingTableCustomizationData customization = EngravingTableCustomizationData.fromItemStack(primary);
+            name = this.resolveCurrentDisplayName(primary, customization);
+        }
         Message message = Message.raw(name);
-        if (customization.getNameColor() != null) {
-            message = message.color(customization.getNameColor().getHexColor());
+        if (this.selectedNameColor != EngravingTableColorOption.DEFAULT_NAME_COLOR) {
+            message = message.color(this.selectedNameColor.getHexColor());
         }
         return message;
     }
@@ -686,7 +662,7 @@ public class EngravingTablePage extends InteractiveCustomUIPage<EngravingTablePa
                 if (ScrollMergeHelper.isScroll(primary)) {
                     return new StatusInfo("Scroll ready for rename or merge.", COLOR_MUTED);
                 }
-                return new StatusInfo("No pending engravingTable changes.", COLOR_MUTED);
+                return new StatusInfo("No pending engraving table changes.", COLOR_MUTED);
             }
 
             List<PendingCost> costs = this.buildRequiredCosts();
@@ -808,7 +784,8 @@ public class EngravingTablePage extends InteractiveCustomUIPage<EngravingTablePa
             return costs;
         }
 
-        if (this.hasPendingNameColorChange(primary)) {
+        if (this.hasPendingNameColorChange(primary)
+                && this.selectedNameColor != EngravingTableColorOption.DEFAULT_NAME_COLOR) {
             costs.add(new PendingCost(
                     new ItemStack(this.selectedNameColor.getPetalItemId(), 1),
                     "1 " + this.selectedNameColor.getDisplayName() + " Petal"));
@@ -904,7 +881,7 @@ public class EngravingTablePage extends InteractiveCustomUIPage<EngravingTablePa
         SimpleItemContainer.addOrDropItemStack(store, ref, playerInventory, previewResult);
         this.playerRef.sendMessage(Message.raw(mergeMode
                 ? "Merged the scrolls."
-                : "Applied the engravingTable changes."));
+                : "Applied the engraving table changes."));
         player.getPageManager().setPage(ref, store, Page.None);
     }
 
