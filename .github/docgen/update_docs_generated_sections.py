@@ -1326,15 +1326,7 @@ def generate() -> list[Path]:
     context = build_docstat_context(enchantments, general_defaults, recipe_counts, scroll_recipe_tiers)
 
     changed: list[Path] = []
-    targets = {
-        REFERENCE_DIR / "README.md": render_reference_index(),
-        REFERENCE_DIR / "config-defaults.md": render_config_defaults(
-            enchantments,
-            list(general_defaults.items()),
-            recipe_counts,
-        ),
-        REFERENCE_DIR / "enchantment-modifiers.md": render_enchantment_modifiers(enchantments, translations),
-    }
+    targets: dict[Path, str] = {}
     if ASSET_LANG_SOURCE.exists():
         targets[RECIPE_ITEM_NAME_CACHE] = render_recipe_item_name_cache(scroll_recipe_item_ids, item_translations)
 
@@ -1353,9 +1345,6 @@ def generate() -> list[Path]:
     for path, content in targets.items():
         if write_if_changed(path, content):
             changed.append(path)
-
-    if ensure_root_reference_link(DOCS_DIR / "README.md"):
-        changed.append(DOCS_DIR / "README.md")
 
     changed.extend(update_integrated_pages(enchantments, translations, context))
 
