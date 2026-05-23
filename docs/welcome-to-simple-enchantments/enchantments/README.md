@@ -25,21 +25,21 @@ There are currently <!-- DOCSTAT:enchantments.count -->33<!-- /DOCSTAT --> Encha
 <tr>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><a href="sharpness.md">Sharpness</a></td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;">I-III</td>
-<td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><code>10%</code></td>
+<td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><span class="se-inline-code" style="display: inline-block; border-radius: 6px; padding: 2px 6px; line-height: 1.2; background: rgba(148, 163, 184, 0.22); font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace; font-size: 0.92em;">10%</span></td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top;">Melee Weapons</td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;">Yes</td>
 </tr>
 <tr>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><a href="life-leech.md">Life Leech</a></td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;">I</td>
-<td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><code>10%</code></td>
+<td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><span class="se-inline-code" style="display: inline-block; border-radius: 6px; padding: 2px 6px; line-height: 1.2; background: rgba(148, 163, 184, 0.22); font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace; font-size: 0.92em;">10%</span></td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top;">Melee Weapons</td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;">Yes</td>
 </tr>
 <tr>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><a href="durability.md">Durability</a></td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;">I-III</td>
-<td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><code>25%</code></td>
+<td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><span class="se-inline-code" style="display: inline-block; border-radius: 6px; padding: 2px 6px; line-height: 1.2; background: rgba(148, 163, 184, 0.22); font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace; font-size: 0.92em;">25%</span></td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top;">Melee Weapons, Ranged Weapons, Tools, Pickaxes, Shovels, Axes, Armor, Staffs, Mana Staffs, Essence Staffs</td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;">Yes</td>
 </tr>
@@ -53,28 +53,28 @@ There are currently <!-- DOCSTAT:enchantments.count -->33<!-- /DOCSTAT --> Encha
 <tr>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><a href="dexterity.md">Dexterity</a></td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;">I-III</td>
-<td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><code>20%</code></td>
+<td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><span class="se-inline-code" style="display: inline-block; border-radius: 6px; padding: 2px 6px; line-height: 1.2; background: rgba(148, 163, 184, 0.22); font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace; font-size: 0.92em;">20%</span></td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top;">Melee Weapons, Shields, Staffs, Mana Staffs, Essence Staffs</td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;">Yes</td>
 </tr>
 <tr>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><a href="protection.md">Protection</a></td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;">I-III</td>
-<td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><code>4%</code></td>
+<td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><span class="se-inline-code" style="display: inline-block; border-radius: 6px; padding: 2px 6px; line-height: 1.2; background: rgba(148, 163, 184, 0.22); font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace; font-size: 0.92em;">4%</span></td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top;">Armor</td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;">Yes</td>
 </tr>
 <tr>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><a href="efficiency.md">Efficiency</a></td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;">I-III</td>
-<td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><code>20%</code></td>
+<td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><span class="se-inline-code" style="display: inline-block; border-radius: 6px; padding: 2px 6px; line-height: 1.2; background: rgba(148, 163, 184, 0.22); font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace; font-size: 0.92em;">20%</span></td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top;">Pickaxes, Axes, Shovels</td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;">Yes</td>
 </tr>
 <tr>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><a href="fortune.md">Fortune</a></td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;">I-III</td>
-<td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><code>25%</code></td>
+<td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><span class="se-inline-code" style="display: inline-block; border-radius: 6px; padding: 2px 6px; line-height: 1.2; background: rgba(148, 163, 184, 0.22); font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace; font-size: 0.92em;">25%</span></td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top;">Pickaxes</td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;">Yes</td>
 </tr>
@@ -88,49 +88,49 @@ There are currently <!-- DOCSTAT:enchantments.count -->33<!-- /DOCSTAT --> Encha
 <tr>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><a href="strength.md">Strength</a></td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;">I-III</td>
-<td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><code>10%</code></td>
+<td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><span class="se-inline-code" style="display: inline-block; border-radius: 6px; padding: 2px 6px; line-height: 1.2; background: rgba(148, 163, 184, 0.22); font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace; font-size: 0.92em;">10%</span></td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top;">Ranged Weapons</td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;">Yes</td>
 </tr>
 <tr>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><a href="eagles-eye.md">Eagle&#x27;s Eye</a></td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;">I-III</td>
-<td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><code>0.5%</code></td>
+<td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><span class="se-inline-code" style="display: inline-block; border-radius: 6px; padding: 2px 6px; line-height: 1.2; background: rgba(148, 163, 184, 0.22); font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace; font-size: 0.92em;">0.5%</span></td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top;">Ranged Weapons</td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;">Yes</td>
 </tr>
 <tr>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><a href="looting.md">Looting</a></td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;">I-III</td>
-<td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><code>25%</code></td>
+<td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><span class="se-inline-code" style="display: inline-block; border-radius: 6px; padding: 2px 6px; line-height: 1.2; background: rgba(148, 163, 184, 0.22); font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace; font-size: 0.92em;">25%</span></td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top;">Melee Weapons, Ranged Weapons, Staffs, Mana Staffs, Essence Staffs</td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;">Yes</td>
 </tr>
 <tr>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><a href="feather-falling.md">Feather Falling</a></td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;">I-III</td>
-<td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><code>20%</code></td>
+<td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><span class="se-inline-code" style="display: inline-block; border-radius: 6px; padding: 2px 6px; line-height: 1.2; background: rgba(148, 163, 184, 0.22); font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace; font-size: 0.92em;">20%</span></td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top;">Leg Armor</td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;">Yes</td>
 </tr>
 <tr>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><a href="waterbreathing.md">Waterbreathing</a></td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;">I-III</td>
-<td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><code>20%</code></td>
+<td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><span class="se-inline-code" style="display: inline-block; border-radius: 6px; padding: 2px 6px; line-height: 1.2; background: rgba(148, 163, 184, 0.22); font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace; font-size: 0.92em;">20%</span></td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top;">Helmets</td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;">Yes</td>
 </tr>
 <tr>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><a href="burn.md">Burn</a></td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;">I</td>
-<td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><code>5 damage/s</code></td>
+<td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><span class="se-inline-code" style="display: inline-block; border-radius: 6px; padding: 2px 6px; line-height: 1.2; background: rgba(148, 163, 184, 0.22); font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace; font-size: 0.92em;">5 damage/s</span></td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top;">Melee Weapons, Ranged Weapons</td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;">Yes</td>
 </tr>
 <tr>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><a href="freeze.md">Freeze</a></td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;">I</td>
-<td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><code>50%</code></td>
+<td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><span class="se-inline-code" style="display: inline-block; border-radius: 6px; padding: 2px 6px; line-height: 1.2; background: rgba(148, 163, 184, 0.22); font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace; font-size: 0.92em;">50%</span></td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top;">Ranged Weapons, Melee Weapons</td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;">Yes</td>
 </tr>
@@ -151,42 +151,42 @@ There are currently <!-- DOCSTAT:enchantments.count -->33<!-- /DOCSTAT --> Encha
 <tr>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><a href="thrift.md">Thrift</a></td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;">I-III</td>
-<td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><code>20%</code></td>
+<td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><span class="se-inline-code" style="display: inline-block; border-radius: 6px; padding: 2px 6px; line-height: 1.2; background: rgba(148, 163, 184, 0.22); font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace; font-size: 0.92em;">20%</span></td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top;">Mana Staffs</td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;">No</td>
 </tr>
 <tr>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><a href="elemental-heart.md">Elemental Heart</a></td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;">I</td>
-<td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><code>100%</code></td>
+<td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><span class="se-inline-code" style="display: inline-block; border-radius: 6px; padding: 2px 6px; line-height: 1.2; background: rgba(148, 163, 184, 0.22); font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace; font-size: 0.92em;">100%</span></td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top;">Essence Staffs</td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;">Yes</td>
 </tr>
 <tr>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><a href="knockback.md">Knockback</a></td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;">I-III</td>
-<td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><code>60%</code></td>
+<td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><span class="se-inline-code" style="display: inline-block; border-radius: 6px; padding: 2px 6px; line-height: 1.2; background: rgba(148, 163, 184, 0.22); font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace; font-size: 0.92em;">60%</span></td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top;">Melee Weapons, Shields</td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;">Yes</td>
 </tr>
 <tr>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><a href="reflection.md">Reflection</a></td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;">I-III</td>
-<td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><code>10%</code></td>
+<td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><span class="se-inline-code" style="display: inline-block; border-radius: 6px; padding: 2px 6px; line-height: 1.2; background: rgba(148, 163, 184, 0.22); font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace; font-size: 0.92em;">10%</span></td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top;">Shields</td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;">Yes</td>
 </tr>
 <tr>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><a href="absorption.md">Absorption</a></td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;">I-III</td>
-<td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><code>10%</code></td>
+<td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><span class="se-inline-code" style="display: inline-block; border-radius: 6px; padding: 2px 6px; line-height: 1.2; background: rgba(148, 163, 184, 0.22); font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace; font-size: 0.92em;">10%</span></td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top;">Shields</td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;">Yes</td>
 </tr>
 <tr>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><a href="fast-swim.md">Swift Swim</a></td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;">I-III</td>
-<td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><code>25%</code></td>
+<td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><span class="se-inline-code" style="display: inline-block; border-radius: 6px; padding: 2px 6px; line-height: 1.2; background: rgba(148, 163, 184, 0.22); font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace; font-size: 0.92em;">25%</span></td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top;">Gloves</td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;">Yes</td>
 </tr>
@@ -200,56 +200,56 @@ There are currently <!-- DOCSTAT:enchantments.count -->33<!-- /DOCSTAT --> Encha
 <tr>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><a href="ranged-protection.md">Ranged Protection</a></td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;">I-III</td>
-<td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><code>4%</code></td>
+<td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><span class="se-inline-code" style="display: inline-block; border-radius: 6px; padding: 2px 6px; line-height: 1.2; background: rgba(148, 163, 184, 0.22); font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace; font-size: 0.92em;">4%</span></td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top;">Armor</td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;">Yes</td>
 </tr>
 <tr>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><a href="frenzy.md">Frenzy</a></td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;">I-III</td>
-<td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><code>15%</code></td>
+<td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><span class="se-inline-code" style="display: inline-block; border-radius: 6px; padding: 2px 6px; line-height: 1.2; background: rgba(148, 163, 184, 0.22); font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace; font-size: 0.92em;">15%</span></td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top;">Melee Weapons, Ranged Weapons, Staffs, Mana Staffs, Essence Staffs</td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;">Yes</td>
 </tr>
 <tr>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><a href="riposte.md">Riposte</a></td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;">I-III</td>
-<td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><code>10%</code></td>
+<td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><span class="se-inline-code" style="display: inline-block; border-radius: 6px; padding: 2px 6px; line-height: 1.2; background: rgba(148, 163, 184, 0.22); font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace; font-size: 0.92em;">10%</span></td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top;">Melee Weapons</td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;">Yes</td>
 </tr>
 <tr>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><a href="coup-de-grace.md">Coup de Grâce</a></td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;">I-III</td>
-<td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><code>15%</code></td>
+<td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><span class="se-inline-code" style="display: inline-block; border-radius: 6px; padding: 2px 6px; line-height: 1.2; background: rgba(148, 163, 184, 0.22); font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace; font-size: 0.92em;">15%</span></td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top;">Melee Weapons</td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;">Yes</td>
 </tr>
 <tr>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><a href="poison.md">Poison</a></td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;">I</td>
-<td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><code>3 damage/s</code></td>
+<td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><span class="se-inline-code" style="display: inline-block; border-radius: 6px; padding: 2px 6px; line-height: 1.2; background: rgba(148, 163, 184, 0.22); font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace; font-size: 0.92em;">3 damage/s</span></td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top;">Melee Weapons, Ranged Weapons</td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;">Yes</td>
 </tr>
 <tr>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><a href="environmental-protection.md">Env. Protection</a></td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;">I-III</td>
-<td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><code>4%</code></td>
+<td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><span class="se-inline-code" style="display: inline-block; border-radius: 6px; padding: 2px 6px; line-height: 1.2; background: rgba(148, 163, 184, 0.22); font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace; font-size: 0.92em;">4%</span></td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top;">Armor</td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;">Yes</td>
 </tr>
 <tr>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><a href="regeneration.md">Regeneration</a></td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;">I</td>
-<td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><code>0.5 HP/s</code></td>
+<td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><span class="se-inline-code" style="display: inline-block; border-radius: 6px; padding: 2px 6px; line-height: 1.2; background: rgba(148, 163, 184, 0.22); font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace; font-size: 0.92em;">0.5 HP/s</span></td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top;">Chestplates</td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;">Yes</td>
 </tr>
 <tr>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><a href="second-stomach.md">Second Stomach</a></td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;">I-III</td>
-<td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><code>15%</code></td>
+<td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><span class="se-inline-code" style="display: inline-block; border-radius: 6px; padding: 2px 6px; line-height: 1.2; background: rgba(148, 163, 184, 0.22); font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace; font-size: 0.92em;">15%</span></td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top;">Chestplates</td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;">Yes</td>
 </tr>

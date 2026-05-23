@@ -34,6 +34,12 @@ DOCSTAT_PATTERN = re.compile(r"<!--\s*DOCSTAT:([^>]+?)\s*-->.*?<!--\s*/DOCSTAT\s
 # Keep raw media URLs stable across branch-specific GitHub Actions runs.
 RAW_GITHUB_BRANCH = os.environ.get("DOCS_MEDIA_BRANCH") or "main"
 RAW_GITHUB_BASE_URL = f"https://raw.githubusercontent.com/Herolias/Simple-Enchantments/{RAW_GITHUB_BRANCH}"
+INLINE_CODE_STYLE = (
+    "display: inline-block; border-radius: 6px; padding: 2px 6px; line-height: 1.2; "
+    "background: rgba(148, 163, 184, 0.22); "
+    "font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "
+    "'Liberation Mono', 'Courier New', monospace; font-size: 0.92em;"
+)
 
 
 @dataclass
@@ -100,6 +106,10 @@ def copy_binary_if_changed(source: Path, target: Path) -> bool:
 
     shutil.copy2(source, target)
     return True
+
+
+def inline_code_html(value: str) -> str:
+    return f'<span class="se-inline-code" style="{INLINE_CODE_STYLE}">{html.escape(value)}</span>'
 
 
 def extract_parenthesized(text: str, open_paren_index: int) -> tuple[str, int]:
@@ -606,9 +616,7 @@ def format_multiplier_details_html(enchantment: Enchantment, translations: dict[
     details = []
     for multiplier in enchantment.multipliers:
         label = translations.get(multiplier.label_key, multiplier.key)
-        details.append(
-            f"{html.escape(label)}: <code>{html.escape(format_multiplier_for_summary(multiplier))}</code>"
-        )
+        details.append(f"{html.escape(label)}: {inline_code_html(format_multiplier_for_summary(multiplier))}")
 
     return "; ".join(details)
 
@@ -1078,7 +1086,7 @@ def render_enchantment_index(enchantments: list[Enchantment], translations: dict
     for enchantment in enchantments:
         multiplier = primary_multiplier(enchantment)
         default_modifier = (
-            f"<code>{html.escape(format_multiplier_for_summary(multiplier))}</code>"
+            inline_code_html(format_multiplier_for_summary(multiplier))
             if multiplier
             else "None"
         )
@@ -1148,7 +1156,7 @@ def render_enchantment_links_html(
                 f"{html.escape(target.name)}</a>"
             )
         else:
-            links.append(f"<code>{html.escape(enchantment_id)}</code>")
+            links.append(inline_code_html(enchantment_id))
     return ", ".join(links) if links else "None"
 
 
@@ -1225,7 +1233,7 @@ def render_recipe_table(
                     f'<div class="se-recipe-cell se-recipe-amount" '
                     f'style="{row_border} display: flex; align-items: center; '
                     'justify-content: flex-end; min-height: 40px; padding: 7px 0;">'
-                    f"<code>{html.escape('/'.join(amounts))}</code></div>"
+                    f"{inline_code_html('/'.join(amounts))}</div>"
                 ),
             ]
         )
@@ -1305,13 +1313,13 @@ def render_enchantment_page(
         ("Added in Version", manual_block("added-version", added_version)),
         ("Default Modifier", format_multiplier_details_html(enchantment, translations)),
         ("Amount of Levels", level_count(enchantment.max_level)),
-        ("ID", f"<code>{html.escape(enchantment.id)}</code>"),
+        ("ID", inline_code_html(enchantment.id)),
         ("Can Be Applied To", html.escape(format_categories(enchantment.categories, translations))),
         ("Enabled By Default", format_bool(not enchantment.disabled_by_default)),
     ]
     if recipe_map.get(enchantment.id):
         tiers = "/".join(str(recipe.unlock_tier) for recipe in recipe_map[enchantment.id])
-        stats_rows.append(("Crafting Tier", f"<code>{html.escape(tiers)}</code>"))
+        stats_rows.append(("Crafting Tier", inline_code_html(tiers)))
     if enchantment.owner_mod_name:
         stats_rows.append(("Requires", html.escape(enchantment.owner_mod_name)))
     if enchantment.conflicts:
@@ -1337,7 +1345,7 @@ def render_enchantment_page(
             "## Stats and Recipe",
             "",
             '<div class="se-stats-recipe" style="display: flex; gap: 24px; align-items: flex-start; flex-wrap: wrap;">',
-            '<div class="se-stats-panel" style="flex: 1 1 460px; min-width: 360px;">',
+            '<div class="se-stats-panel" style="flex: 0 1 560px; min-width: 360px; max-width: 620px;">',
             "<h3>Stats</h3>",
             render_stats_table(stats_rows),
         ]
