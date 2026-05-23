@@ -30,231 +30,231 @@ There are currently <!-- DOCSTAT:enchantments.count -->33<!-- /DOCSTAT --> Encha
 </thead>
 <tbody>
 <tr>
-<td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><a href="sharpness.md">Sharpness</a></td>
+<td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><a href="https://wiki.hytalemodding.dev/mod/simple-enchantments/sharpness">Sharpness</a></td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;">I-III</td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><span class="se-inline-code" style="display: inline-block; border-radius: 6px; padding: 2px 6px; line-height: 1.2; background: rgba(148, 163, 184, 0.22); font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace; font-size: 0.92em;">10%</span></td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top;">Melee Weapons</td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;">Yes</td>
 </tr>
 <tr>
-<td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><a href="life-leech.md">Life Leech</a></td>
+<td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><a href="https://wiki.hytalemodding.dev/mod/simple-enchantments/life-leech">Life Leech</a></td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;">I</td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><span class="se-inline-code" style="display: inline-block; border-radius: 6px; padding: 2px 6px; line-height: 1.2; background: rgba(148, 163, 184, 0.22); font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace; font-size: 0.92em;">10%</span></td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top;">Melee Weapons</td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;">Yes</td>
 </tr>
 <tr>
-<td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><a href="durability.md">Durability</a></td>
+<td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><a href="https://wiki.hytalemodding.dev/mod/simple-enchantments/durability">Durability</a></td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;">I-III</td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><span class="se-inline-code" style="display: inline-block; border-radius: 6px; padding: 2px 6px; line-height: 1.2; background: rgba(148, 163, 184, 0.22); font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace; font-size: 0.92em;">25%</span></td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top;">Melee Weapons, Ranged Weapons, Tools, Pickaxes, Shovels, Axes, Armor, Staffs, Mana Staffs, Essence Staffs</td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;">Yes</td>
 </tr>
 <tr>
-<td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><a href="sturdy.md">Sturdy</a></td>
+<td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><a href="https://wiki.hytalemodding.dev/mod/simple-enchantments/sturdy">Sturdy</a></td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;">I</td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;">None</td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top;">Melee Weapons, Ranged Weapons, Tools, Pickaxes, Shovels, Axes, Armor, Staffs, Mana Staffs, Essence Staffs</td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;">Yes</td>
 </tr>
 <tr>
-<td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><a href="dexterity.md">Dexterity</a></td>
+<td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><a href="https://wiki.hytalemodding.dev/mod/simple-enchantments/dexterity">Dexterity</a></td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;">I-III</td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><span class="se-inline-code" style="display: inline-block; border-radius: 6px; padding: 2px 6px; line-height: 1.2; background: rgba(148, 163, 184, 0.22); font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace; font-size: 0.92em;">20%</span></td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top;">Melee Weapons, Shields, Staffs, Mana Staffs, Essence Staffs</td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;">Yes</td>
 </tr>
 <tr>
-<td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><a href="protection.md">Protection</a></td>
+<td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><a href="https://wiki.hytalemodding.dev/mod/simple-enchantments/protection">Protection</a></td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;">I-III</td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><span class="se-inline-code" style="display: inline-block; border-radius: 6px; padding: 2px 6px; line-height: 1.2; background: rgba(148, 163, 184, 0.22); font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace; font-size: 0.92em;">4%</span></td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top;">Armor</td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;">Yes</td>
 </tr>
 <tr>
-<td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><a href="efficiency.md">Efficiency</a></td>
+<td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><a href="https://wiki.hytalemodding.dev/mod/simple-enchantments/efficiency">Efficiency</a></td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;">I-III</td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><span class="se-inline-code" style="display: inline-block; border-radius: 6px; padding: 2px 6px; line-height: 1.2; background: rgba(148, 163, 184, 0.22); font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace; font-size: 0.92em;">20%</span></td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top;">Pickaxes, Axes, Shovels</td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;">Yes</td>
 </tr>
 <tr>
-<td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><a href="fortune.md">Fortune</a></td>
+<td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><a href="https://wiki.hytalemodding.dev/mod/simple-enchantments/fortune">Fortune</a></td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;">I-III</td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><span class="se-inline-code" style="display: inline-block; border-radius: 6px; padding: 2px 6px; line-height: 1.2; background: rgba(148, 163, 184, 0.22); font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace; font-size: 0.92em;">25%</span></td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top;">Pickaxes</td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;">Yes</td>
 </tr>
 <tr>
-<td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><a href="smelting.md">Smelting</a></td>
+<td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><a href="https://wiki.hytalemodding.dev/mod/simple-enchantments/smelting">Smelting</a></td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;">I</td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;">None</td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top;">Pickaxes</td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;">Yes</td>
 </tr>
 <tr>
-<td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><a href="strength.md">Strength</a></td>
+<td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><a href="https://wiki.hytalemodding.dev/mod/simple-enchantments/strength">Strength</a></td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;">I-III</td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><span class="se-inline-code" style="display: inline-block; border-radius: 6px; padding: 2px 6px; line-height: 1.2; background: rgba(148, 163, 184, 0.22); font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace; font-size: 0.92em;">10%</span></td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top;">Ranged Weapons</td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;">Yes</td>
 </tr>
 <tr>
-<td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><a href="eagles-eye.md">Eagle&#x27;s Eye</a></td>
+<td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><a href="https://wiki.hytalemodding.dev/mod/simple-enchantments/eagles-eye">Eagle&#x27;s Eye</a></td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;">I-III</td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><span class="se-inline-code" style="display: inline-block; border-radius: 6px; padding: 2px 6px; line-height: 1.2; background: rgba(148, 163, 184, 0.22); font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace; font-size: 0.92em;">0.5%</span></td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top;">Ranged Weapons</td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;">Yes</td>
 </tr>
 <tr>
-<td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><a href="looting.md">Looting</a></td>
+<td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><a href="https://wiki.hytalemodding.dev/mod/simple-enchantments/looting">Looting</a></td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;">I-III</td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><span class="se-inline-code" style="display: inline-block; border-radius: 6px; padding: 2px 6px; line-height: 1.2; background: rgba(148, 163, 184, 0.22); font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace; font-size: 0.92em;">25%</span></td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top;">Melee Weapons, Ranged Weapons, Staffs, Mana Staffs, Essence Staffs</td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;">Yes</td>
 </tr>
 <tr>
-<td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><a href="feather-falling.md">Feather Falling</a></td>
+<td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><a href="https://wiki.hytalemodding.dev/mod/simple-enchantments/feather-falling">Feather Falling</a></td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;">I-III</td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><span class="se-inline-code" style="display: inline-block; border-radius: 6px; padding: 2px 6px; line-height: 1.2; background: rgba(148, 163, 184, 0.22); font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace; font-size: 0.92em;">20%</span></td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top;">Leg Armor</td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;">Yes</td>
 </tr>
 <tr>
-<td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><a href="waterbreathing.md">Waterbreathing</a></td>
+<td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><a href="https://wiki.hytalemodding.dev/mod/simple-enchantments/waterbreathing">Waterbreathing</a></td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;">I-III</td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><span class="se-inline-code" style="display: inline-block; border-radius: 6px; padding: 2px 6px; line-height: 1.2; background: rgba(148, 163, 184, 0.22); font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace; font-size: 0.92em;">20%</span></td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top;">Helmets</td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;">Yes</td>
 </tr>
 <tr>
-<td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><a href="burn.md">Burn</a></td>
+<td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><a href="https://wiki.hytalemodding.dev/mod/simple-enchantments/burn">Burn</a></td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;">I</td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><span class="se-inline-code" style="display: inline-block; border-radius: 6px; padding: 2px 6px; line-height: 1.2; background: rgba(148, 163, 184, 0.22); font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace; font-size: 0.92em;">5 damage/s</span></td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top;">Melee Weapons, Ranged Weapons</td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;">Yes</td>
 </tr>
 <tr>
-<td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><a href="freeze.md">Freeze</a></td>
+<td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><a href="https://wiki.hytalemodding.dev/mod/simple-enchantments/freeze">Freeze</a></td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;">I</td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><span class="se-inline-code" style="display: inline-block; border-radius: 6px; padding: 2px 6px; line-height: 1.2; background: rgba(148, 163, 184, 0.22); font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace; font-size: 0.92em;">50%</span></td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top;">Ranged Weapons, Melee Weapons</td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;">Yes</td>
 </tr>
 <tr>
-<td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><a href="eternal-shot.md">Eternal Shot</a></td>
+<td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><a href="https://wiki.hytalemodding.dev/mod/simple-enchantments/eternal-shot">Eternal Shot</a></td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;">I</td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;">None</td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top;">Ranged Weapons</td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;">Yes</td>
 </tr>
 <tr>
-<td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><a href="pick-perfect.md">Pick Perfect</a></td>
+<td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><a href="https://wiki.hytalemodding.dev/mod/simple-enchantments/pick-perfect">Pick Perfect</a></td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;">I</td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;">None</td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top;">Pickaxes, Axes, Shovels</td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;">Yes</td>
 </tr>
 <tr>
-<td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><a href="thrift.md">Thrift</a></td>
+<td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><a href="https://wiki.hytalemodding.dev/mod/simple-enchantments/thrift">Thrift</a></td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;">I-III</td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><span class="se-inline-code" style="display: inline-block; border-radius: 6px; padding: 2px 6px; line-height: 1.2; background: rgba(148, 163, 184, 0.22); font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace; font-size: 0.92em;">20%</span></td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top;">Mana Staffs</td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;">No</td>
 </tr>
 <tr>
-<td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><a href="elemental-heart.md">Elemental Heart</a></td>
+<td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><a href="https://wiki.hytalemodding.dev/mod/simple-enchantments/elemental-heart">Elemental Heart</a></td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;">I</td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><span class="se-inline-code" style="display: inline-block; border-radius: 6px; padding: 2px 6px; line-height: 1.2; background: rgba(148, 163, 184, 0.22); font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace; font-size: 0.92em;">100%</span></td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top;">Essence Staffs</td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;">Yes</td>
 </tr>
 <tr>
-<td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><a href="knockback.md">Knockback</a></td>
+<td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><a href="https://wiki.hytalemodding.dev/mod/simple-enchantments/knockback">Knockback</a></td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;">I-III</td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><span class="se-inline-code" style="display: inline-block; border-radius: 6px; padding: 2px 6px; line-height: 1.2; background: rgba(148, 163, 184, 0.22); font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace; font-size: 0.92em;">60%</span></td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top;">Melee Weapons, Shields</td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;">Yes</td>
 </tr>
 <tr>
-<td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><a href="reflection.md">Reflection</a></td>
+<td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><a href="https://wiki.hytalemodding.dev/mod/simple-enchantments/reflection">Reflection</a></td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;">I-III</td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><span class="se-inline-code" style="display: inline-block; border-radius: 6px; padding: 2px 6px; line-height: 1.2; background: rgba(148, 163, 184, 0.22); font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace; font-size: 0.92em;">10%</span></td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top;">Shields</td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;">Yes</td>
 </tr>
 <tr>
-<td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><a href="absorption.md">Absorption</a></td>
+<td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><a href="https://wiki.hytalemodding.dev/mod/simple-enchantments/absorption">Absorption</a></td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;">I-III</td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><span class="se-inline-code" style="display: inline-block; border-radius: 6px; padding: 2px 6px; line-height: 1.2; background: rgba(148, 163, 184, 0.22); font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace; font-size: 0.92em;">10%</span></td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top;">Shields</td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;">Yes</td>
 </tr>
 <tr>
-<td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><a href="fast-swim.md">Swift Swim</a></td>
+<td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><a href="https://wiki.hytalemodding.dev/mod/simple-enchantments/fast-swim">Swift Swim</a></td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;">I-III</td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><span class="se-inline-code" style="display: inline-block; border-radius: 6px; padding: 2px 6px; line-height: 1.2; background: rgba(148, 163, 184, 0.22); font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace; font-size: 0.92em;">25%</span></td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top;">Gloves</td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;">Yes</td>
 </tr>
 <tr>
-<td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><a href="night-vision.md">Night Vision</a></td>
+<td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><a href="https://wiki.hytalemodding.dev/mod/simple-enchantments/night-vision">Night Vision</a></td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;">I</td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;">None</td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top;">Helmets</td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;">No</td>
 </tr>
 <tr>
-<td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><a href="ranged-protection.md">Ranged Protection</a></td>
+<td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><a href="https://wiki.hytalemodding.dev/mod/simple-enchantments/ranged-protection">Ranged Protection</a></td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;">I-III</td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><span class="se-inline-code" style="display: inline-block; border-radius: 6px; padding: 2px 6px; line-height: 1.2; background: rgba(148, 163, 184, 0.22); font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace; font-size: 0.92em;">4%</span></td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top;">Armor</td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;">Yes</td>
 </tr>
 <tr>
-<td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><a href="frenzy.md">Frenzy</a></td>
+<td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><a href="https://wiki.hytalemodding.dev/mod/simple-enchantments/frenzy">Frenzy</a></td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;">I-III</td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><span class="se-inline-code" style="display: inline-block; border-radius: 6px; padding: 2px 6px; line-height: 1.2; background: rgba(148, 163, 184, 0.22); font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace; font-size: 0.92em;">15%</span></td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top;">Melee Weapons, Ranged Weapons, Staffs, Mana Staffs, Essence Staffs</td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;">Yes</td>
 </tr>
 <tr>
-<td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><a href="riposte.md">Riposte</a></td>
+<td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><a href="https://wiki.hytalemodding.dev/mod/simple-enchantments/riposte">Riposte</a></td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;">I-III</td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><span class="se-inline-code" style="display: inline-block; border-radius: 6px; padding: 2px 6px; line-height: 1.2; background: rgba(148, 163, 184, 0.22); font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace; font-size: 0.92em;">10%</span></td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top;">Melee Weapons</td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;">Yes</td>
 </tr>
 <tr>
-<td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><a href="coup-de-grace.md">Coup de Grâce</a></td>
+<td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><a href="https://wiki.hytalemodding.dev/mod/simple-enchantments/coup-de-grace">Coup de Grâce</a></td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;">I-III</td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><span class="se-inline-code" style="display: inline-block; border-radius: 6px; padding: 2px 6px; line-height: 1.2; background: rgba(148, 163, 184, 0.22); font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace; font-size: 0.92em;">15%</span></td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top;">Melee Weapons</td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;">Yes</td>
 </tr>
 <tr>
-<td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><a href="poison.md">Poison</a></td>
+<td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><a href="https://wiki.hytalemodding.dev/mod/simple-enchantments/poison">Poison</a></td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;">I</td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><span class="se-inline-code" style="display: inline-block; border-radius: 6px; padding: 2px 6px; line-height: 1.2; background: rgba(148, 163, 184, 0.22); font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace; font-size: 0.92em;">3 damage/s</span></td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top;">Melee Weapons, Ranged Weapons</td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;">Yes</td>
 </tr>
 <tr>
-<td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><a href="environmental-protection.md">Env. Protection</a></td>
+<td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><a href="https://wiki.hytalemodding.dev/mod/simple-enchantments/environmental-protection">Env. Protection</a></td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;">I-III</td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><span class="se-inline-code" style="display: inline-block; border-radius: 6px; padding: 2px 6px; line-height: 1.2; background: rgba(148, 163, 184, 0.22); font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace; font-size: 0.92em;">4%</span></td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top;">Armor</td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;">Yes</td>
 </tr>
 <tr>
-<td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><a href="regeneration.md">Regeneration</a></td>
+<td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><a href="https://wiki.hytalemodding.dev/mod/simple-enchantments/regeneration">Regeneration</a></td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;">I</td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><span class="se-inline-code" style="display: inline-block; border-radius: 6px; padding: 2px 6px; line-height: 1.2; background: rgba(148, 163, 184, 0.22); font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace; font-size: 0.92em;">0.5 HP/s</span></td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top;">Chestplates</td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;">Yes</td>
 </tr>
 <tr>
-<td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><a href="second-stomach.md">Second Stomach</a></td>
+<td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><a href="https://wiki.hytalemodding.dev/mod/simple-enchantments/second-stomach">Second Stomach</a></td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;">I-III</td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><span class="se-inline-code" style="display: inline-block; border-radius: 6px; padding: 2px 6px; line-height: 1.2; background: rgba(148, 163, 184, 0.22); font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace; font-size: 0.92em;">15%</span></td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top;">Chestplates</td>
@@ -271,6 +271,6 @@ Sometimes it is because the Enchantment is still a bit experimental, and sometim
 
 These Enchantments are currently disabled:
 <!-- AUTO-GENERATED:disabled-enchantments:start -->
-* [Thrift](thrift.md)
-* [Night Vision](night-vision.md)
+* [Thrift](https://wiki.hytalemodding.dev/mod/simple-enchantments/thrift)
+* [Night Vision](https://wiki.hytalemodding.dev/mod/simple-enchantments/night-vision)
 <!-- AUTO-GENERATED:disabled-enchantments:end -->

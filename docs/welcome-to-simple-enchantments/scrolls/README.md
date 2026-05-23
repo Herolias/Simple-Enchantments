@@ -12,4 +12,4 @@ Scrolls are used to apply Enchantments to your Items. They come in different rar
 ![](https://raw.githubusercontent.com/Herolias/Simple-Enchantments/main/docs/media/images/wSXnyED-88eb674872.png)
 After successfully applying an Enchantment from a Scroll to an Item, the Scroll gets destroyed.
 
-You can also [Combine](combining-scrolls.md) Scrolls for better Storage management.
+You can also [Combine](https://wiki.hytalemodding.dev/mod/simple-enchantments/combining-scrolls) Scrolls for better Storage management.

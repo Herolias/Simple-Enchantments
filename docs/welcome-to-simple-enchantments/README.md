@@ -11,8 +11,8 @@ Simple Enchantments adds a complete enchanting system to the game. Currently, th
 
 This Documentation is split into 3 parts:
 * **Getting Started:** For general gameplay and getting started.
-* **[Server Owner Guide](../server-owner-guide):** A breakdown of commands and config files.
-* **[Enchantment API Documentation](../api-documentation.md):** For developers looking to build on top of the mod.
+* **[Server Owner Guide](https://wiki.hytalemodding.dev/mod/simple-enchantments/server-owner-guide):** A breakdown of commands and config files.
+* **[Enchantment API Documentation](https://wiki.hytalemodding.dev/mod/simple-enchantments/api-documentation):** For developers looking to build on top of the mod.
 
 ## History 
 
