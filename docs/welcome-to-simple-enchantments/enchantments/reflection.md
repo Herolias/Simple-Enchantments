@@ -1,6 +1,6 @@
 # Reflection
 
-![Reflection scroll icon](../../media/enchantment-icons/reflection.png)
+![Reflection scroll icon](https://raw.githubusercontent.com/Herolias/Simple-Enchantments/main/docs/media/enchantment-icons/reflection.png)
 
 Reflects 10% of blocked damage back to the attacker. Not combinable with Absorption.
 
@@ -32,10 +32,10 @@ Reflects 10% of blocked damage back to the attacker. Not combinable with Absorpt
 <tr><th>Ingredient</th><th>Amount</th></tr>
 </thead>
 <tbody>
-<tr><td><img src="../../media/recipe-icons/Ingredient_Fabric_Scrap_Cindercloth.png" alt="Cindercloth Scraps" width="32"> Cindercloth Scraps</td><td><code>5/5/5</code></td></tr>
-<tr><td><img src="../../media/recipe-icons/Plant_Cactus_Flower.png" alt="Cactus Flower" width="32"> Cactus Flower</td><td><code>5/10/15</code></td></tr>
-<tr><td><img src="../../media/recipe-icons/Ingredient_Crystal_Red.png" alt="Red Crystal Shards" width="32"> Red Crystal Shards</td><td><code>10/15/20</code></td></tr>
-<tr><td><img src="../../media/recipe-icons/Plant_Petals_Storm.png" alt="Storm Petals" width="32"> Storm Petals</td><td><code>5/10/15</code></td></tr>
+<tr><td><img src="https://raw.githubusercontent.com/Herolias/Simple-Enchantments/main/docs/media/recipe-icons/Ingredient_Fabric_Scrap_Cindercloth.png" alt="Cindercloth Scraps" width="32"> Cindercloth Scraps</td><td><code>5/5/5</code></td></tr>
+<tr><td><img src="https://raw.githubusercontent.com/Herolias/Simple-Enchantments/main/docs/media/recipe-icons/Plant_Cactus_Flower.png" alt="Cactus Flower" width="32"> Cactus Flower</td><td><code>5/10/15</code></td></tr>
+<tr><td><img src="https://raw.githubusercontent.com/Herolias/Simple-Enchantments/main/docs/media/recipe-icons/Ingredient_Crystal_Red.png" alt="Red Crystal Shards" width="32"> Red Crystal Shards</td><td><code>10/15/20</code></td></tr>
+<tr><td><img src="https://raw.githubusercontent.com/Herolias/Simple-Enchantments/main/docs/media/recipe-icons/Plant_Petals_Storm.png" alt="Storm Petals" width="32"> Storm Petals</td><td><code>5/10/15</code></td></tr>
 </tbody>
 </table>
 </div>

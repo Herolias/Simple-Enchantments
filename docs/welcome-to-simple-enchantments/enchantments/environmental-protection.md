@@ -1,6 +1,6 @@
 # Env. Protection
 
-![Env. Protection scroll icon](../../media/enchantment-icons/environmental-protection.png)
+![Env. Protection scroll icon](https://raw.githubusercontent.com/Herolias/Simple-Enchantments/main/docs/media/enchantment-icons/environmental-protection.png)
 
 Reduces environmental damage by 4% per armor piece.
 
@@ -31,10 +31,10 @@ Reduces environmental damage by 4% per armor piece.
 <tr><th>Ingredient</th><th>Amount</th></tr>
 </thead>
 <tbody>
-<tr><td><img src="../../media/recipe-icons/Ingredient_Fabric_Scrap_Cindercloth.png" alt="Cindercloth Scraps" width="32"> Cindercloth Scraps</td><td><code>5/5/5</code></td></tr>
-<tr><td><img src="../../media/recipe-icons/Ingredient_Crystal_Blue.png" alt="Blue Crystal Shards" width="32"> Blue Crystal Shards</td><td><code>10/15/25</code></td></tr>
-<tr><td><img src="../../media/recipe-icons/Ingredient_Fire_Essence.png" alt="Essence of Fire" width="32"> Essence of Fire</td><td><code>5/10/20</code></td></tr>
-<tr><td><img src="../../media/recipe-icons/Ingredient_Ice_Essence.png" alt="Essence of Ice" width="32"> Essence of Ice</td><td><code>5/10/15</code></td></tr>
+<tr><td><img src="https://raw.githubusercontent.com/Herolias/Simple-Enchantments/main/docs/media/recipe-icons/Ingredient_Fabric_Scrap_Cindercloth.png" alt="Cindercloth Scraps" width="32"> Cindercloth Scraps</td><td><code>5/5/5</code></td></tr>
+<tr><td><img src="https://raw.githubusercontent.com/Herolias/Simple-Enchantments/main/docs/media/recipe-icons/Ingredient_Crystal_Blue.png" alt="Blue Crystal Shards" width="32"> Blue Crystal Shards</td><td><code>10/15/25</code></td></tr>
+<tr><td><img src="https://raw.githubusercontent.com/Herolias/Simple-Enchantments/main/docs/media/recipe-icons/Ingredient_Fire_Essence.png" alt="Essence of Fire" width="32"> Essence of Fire</td><td><code>5/10/20</code></td></tr>
+<tr><td><img src="https://raw.githubusercontent.com/Herolias/Simple-Enchantments/main/docs/media/recipe-icons/Ingredient_Ice_Essence.png" alt="Essence of Ice" width="32"> Essence of Ice</td><td><code>5/10/15</code></td></tr>
 </tbody>
 </table>
 </div>

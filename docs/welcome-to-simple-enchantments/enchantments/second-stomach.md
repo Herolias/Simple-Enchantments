@@ -1,6 +1,6 @@
 # Second Stomach
 
-![Second Stomach scroll icon](../../media/enchantment-icons/second-stomach.png)
+![Second Stomach scroll icon](https://raw.githubusercontent.com/Herolias/Simple-Enchantments/main/docs/media/enchantment-icons/second-stomach.png)
 
 Increases instant healing from food and potions by 15% per level. Chestplate only.
 
@@ -32,10 +32,10 @@ Increases instant healing from food and potions by 15% per level. Chestplate onl
 <tr><th>Ingredient</th><th>Amount</th></tr>
 </thead>
 <tbody>
-<tr><td><img src="../../media/recipe-icons/Ingredient_Fabric_Scrap_Cindercloth.png" alt="Cindercloth Scraps" width="32"> Cindercloth Scraps</td><td><code>5/5/5</code></td></tr>
-<tr><td><img src="../../media/recipe-icons/Food_Popcorn.png" alt="Popcorn" width="32"> Popcorn</td><td><code>1/3/5</code></td></tr>
-<tr><td><img src="../../media/recipe-icons/Ingredient_Life_Essence.png" alt="Essence of Life" width="32"> Essence of Life</td><td><code>10/20/30</code></td></tr>
-<tr><td><img src="../../media/recipe-icons/Ingredient_Crystal_Green.png" alt="Green Crystal Shards" width="32"> Green Crystal Shards</td><td><code>10/15/25</code></td></tr>
+<tr><td><img src="https://raw.githubusercontent.com/Herolias/Simple-Enchantments/main/docs/media/recipe-icons/Ingredient_Fabric_Scrap_Cindercloth.png" alt="Cindercloth Scraps" width="32"> Cindercloth Scraps</td><td><code>5/5/5</code></td></tr>
+<tr><td><img src="https://raw.githubusercontent.com/Herolias/Simple-Enchantments/main/docs/media/recipe-icons/Food_Popcorn.png" alt="Popcorn" width="32"> Popcorn</td><td><code>1/3/5</code></td></tr>
+<tr><td><img src="https://raw.githubusercontent.com/Herolias/Simple-Enchantments/main/docs/media/recipe-icons/Ingredient_Life_Essence.png" alt="Essence of Life" width="32"> Essence of Life</td><td><code>10/20/30</code></td></tr>
+<tr><td><img src="https://raw.githubusercontent.com/Herolias/Simple-Enchantments/main/docs/media/recipe-icons/Ingredient_Crystal_Green.png" alt="Green Crystal Shards" width="32"> Green Crystal Shards</td><td><code>10/15/25</code></td></tr>
 </tbody>
 </table>
 </div>

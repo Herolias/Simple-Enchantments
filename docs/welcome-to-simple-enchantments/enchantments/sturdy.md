@@ -1,6 +1,6 @@
 # Sturdy
 
-![Sturdy scroll icon](../../media/enchantment-icons/sturdy.png)
+![Sturdy scroll icon](https://raw.githubusercontent.com/Herolias/Simple-Enchantments/main/docs/media/enchantment-icons/sturdy.png)
 
 Prevents max durability loss when repairing.
 
@@ -31,9 +31,9 @@ Prevents max durability loss when repairing.
 <tr><th>Ingredient</th><th>Amount</th></tr>
 </thead>
 <tbody>
-<tr><td><img src="../../media/recipe-icons/Ingredient_Fabric_Scrap_Cindercloth.png" alt="Cindercloth Scraps" width="32"> Cindercloth Scraps</td><td><code>5</code></td></tr>
-<tr><td><img src="../../media/recipe-icons/Ingredient_Voidheart.png" alt="Voidheart" width="32"> Voidheart</td><td><code>1</code></td></tr>
-<tr><td><img src="../../media/recipe-icons/Ingredient_Life_Essence_Concentrated.png" alt="Greater Essence of Life" width="32"> Greater Essence of Life</td><td><code>1</code></td></tr>
+<tr><td><img src="https://raw.githubusercontent.com/Herolias/Simple-Enchantments/main/docs/media/recipe-icons/Ingredient_Fabric_Scrap_Cindercloth.png" alt="Cindercloth Scraps" width="32"> Cindercloth Scraps</td><td><code>5</code></td></tr>
+<tr><td><img src="https://raw.githubusercontent.com/Herolias/Simple-Enchantments/main/docs/media/recipe-icons/Ingredient_Voidheart.png" alt="Voidheart" width="32"> Voidheart</td><td><code>1</code></td></tr>
+<tr><td><img src="https://raw.githubusercontent.com/Herolias/Simple-Enchantments/main/docs/media/recipe-icons/Ingredient_Life_Essence_Concentrated.png" alt="Greater Essence of Life" width="32"> Greater Essence of Life</td><td><code>1</code></td></tr>
 </tbody>
 </table>
 </div>

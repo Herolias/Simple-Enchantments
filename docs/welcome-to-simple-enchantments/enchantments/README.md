@@ -39,3 +39,13 @@ There are currently <!-- DOCSTAT:enchantments.count -->33<!-- /DOCSTAT --> Encha
 | [Regeneration](regeneration.md) | I | `0.5 HP/s` | Chestplates | Yes |
 | [Second Stomach](second-stomach.md) | I-III | `15%` | Chestplates | Yes |
 <!-- AUTO-GENERATED:enchantment-index:end -->
+### Hidden/Disabled Enchantments
+
+Some Enchantments are disabled by default. This can have multiple reasons: 
+Sometimes it is because the Enchantment is still a bit experimental, and sometimes it is because they are for Items that are not yet fully implemented in vanilla. If you want to play with these Enchantments, you have to enable them in the config.
+
+These Enchantments are currently disabled:
+<!-- AUTO-GENERATED:disabled-enchantments:start -->
+* [Thrift](thrift.md)
+* [Night Vision](night-vision.md)
+<!-- AUTO-GENERATED:disabled-enchantments:end -->

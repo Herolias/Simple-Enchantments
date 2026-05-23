@@ -1,6 +1,6 @@
 # Thrift
 
-![Thrift scroll icon](../../media/enchantment-icons/thrift.png)
+![Thrift scroll icon](https://raw.githubusercontent.com/Herolias/Simple-Enchantments/main/docs/media/enchantment-icons/thrift.png)
 
 Restores 20% of mana spent on hit.
 
@@ -31,10 +31,10 @@ Restores 20% of mana spent on hit.
 <tr><th>Ingredient</th><th>Amount</th></tr>
 </thead>
 <tbody>
-<tr><td><img src="../../media/recipe-icons/Ingredient_Fabric_Scrap_Cindercloth.png" alt="Cindercloth Scraps" width="32"> Cindercloth Scraps</td><td><code>5/5/5</code></td></tr>
-<tr><td><img src="../../media/recipe-icons/Plant_Crop_Mana2.png" alt="Azurecap Mushroom" width="32"> Azurecap Mushroom</td><td><code>5/10/15</code></td></tr>
-<tr><td><img src="../../media/recipe-icons/Ingredient_Crystal_Blue.png" alt="Blue Crystal Shards" width="32"> Blue Crystal Shards</td><td><code>10/15/20</code></td></tr>
-<tr><td><img src="../../media/recipe-icons/Plant_Petals_Azure.png" alt="Azure Petals" width="32"> Azure Petals</td><td><code>10/15/20</code></td></tr>
+<tr><td><img src="https://raw.githubusercontent.com/Herolias/Simple-Enchantments/main/docs/media/recipe-icons/Ingredient_Fabric_Scrap_Cindercloth.png" alt="Cindercloth Scraps" width="32"> Cindercloth Scraps</td><td><code>5/5/5</code></td></tr>
+<tr><td><img src="https://raw.githubusercontent.com/Herolias/Simple-Enchantments/main/docs/media/recipe-icons/Plant_Crop_Mana2.png" alt="Azurecap Mushroom" width="32"> Azurecap Mushroom</td><td><code>5/10/15</code></td></tr>
+<tr><td><img src="https://raw.githubusercontent.com/Herolias/Simple-Enchantments/main/docs/media/recipe-icons/Ingredient_Crystal_Blue.png" alt="Blue Crystal Shards" width="32"> Blue Crystal Shards</td><td><code>10/15/20</code></td></tr>
+<tr><td><img src="https://raw.githubusercontent.com/Herolias/Simple-Enchantments/main/docs/media/recipe-icons/Plant_Petals_Azure.png" alt="Azure Petals" width="32"> Azure Petals</td><td><code>10/15/20</code></td></tr>
 </tbody>
 </table>
 </div>

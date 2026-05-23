@@ -1,6 +1,6 @@
 # Efficiency
 
-![Efficiency scroll icon](../../media/enchantment-icons/efficiency.png)
+![Efficiency scroll icon](https://raw.githubusercontent.com/Herolias/Simple-Enchantments/main/docs/media/enchantment-icons/efficiency.png)
 
 Increases mining speed by 20%.
 
@@ -31,10 +31,10 @@ Increases mining speed by 20%.
 <tr><th>Ingredient</th><th>Amount</th></tr>
 </thead>
 <tbody>
-<tr><td><img src="../../media/recipe-icons/Ingredient_Fabric_Scrap_Cindercloth.png" alt="Cindercloth Scraps" width="32"> Cindercloth Scraps</td><td><code>5/5/5</code></td></tr>
-<tr><td><img src="../../media/recipe-icons/Ingredient_Crystal_Red.png" alt="Red Crystal Shards" width="32"> Red Crystal Shards</td><td><code>10/15/20</code></td></tr>
-<tr><td><img src="../../media/recipe-icons/Ingredient_Bar_Gold.png" alt="Gold Ingot" width="32"> Gold Ingot</td><td><code>5/10/15</code></td></tr>
-<tr><td><img src="../../media/recipe-icons/Ingredient_Bar_Cobalt.png" alt="Cobalt Ingot" width="32"> Cobalt Ingot</td><td><code>5/10/15</code></td></tr>
+<tr><td><img src="https://raw.githubusercontent.com/Herolias/Simple-Enchantments/main/docs/media/recipe-icons/Ingredient_Fabric_Scrap_Cindercloth.png" alt="Cindercloth Scraps" width="32"> Cindercloth Scraps</td><td><code>5/5/5</code></td></tr>
+<tr><td><img src="https://raw.githubusercontent.com/Herolias/Simple-Enchantments/main/docs/media/recipe-icons/Ingredient_Crystal_Red.png" alt="Red Crystal Shards" width="32"> Red Crystal Shards</td><td><code>10/15/20</code></td></tr>
+<tr><td><img src="https://raw.githubusercontent.com/Herolias/Simple-Enchantments/main/docs/media/recipe-icons/Ingredient_Bar_Gold.png" alt="Gold Ingot" width="32"> Gold Ingot</td><td><code>5/10/15</code></td></tr>
+<tr><td><img src="https://raw.githubusercontent.com/Herolias/Simple-Enchantments/main/docs/media/recipe-icons/Ingredient_Bar_Cobalt.png" alt="Cobalt Ingot" width="32"> Cobalt Ingot</td><td><code>5/10/15</code></td></tr>
 </tbody>
 </table>
 </div>

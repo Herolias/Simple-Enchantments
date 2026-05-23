@@ -1,6 +1,6 @@
 # Eternal Shot
 
-![Eternal Shot scroll icon](../../media/enchantment-icons/eternal-shot.png)
+![Eternal Shot scroll icon](https://raw.githubusercontent.com/Herolias/Simple-Enchantments/main/docs/media/enchantment-icons/eternal-shot.png)
 
 Lets you shoot arrows without consuming them.
 
@@ -31,10 +31,10 @@ Lets you shoot arrows without consuming them.
 <tr><th>Ingredient</th><th>Amount</th></tr>
 </thead>
 <tbody>
-<tr><td><img src="../../media/recipe-icons/Ingredient_Fabric_Scrap_Cindercloth.png" alt="Cindercloth Scraps" width="32"> Cindercloth Scraps</td><td><code>5</code></td></tr>
-<tr><td><img src="../../media/recipe-icons/Ingredient_Void_Essence.png" alt="Essence of the Void" width="32"> Essence of the Void</td><td><code>30</code></td></tr>
-<tr><td><img src="../../media/recipe-icons/Weapon_Arrow_Crude.png" alt="Crude Arrow" width="32"> Crude Arrow</td><td><code>100</code></td></tr>
-<tr><td><img src="../../media/recipe-icons/Ingredient_Crystal_Purple.png" alt="Purple Crystal Shards" width="32"> Purple Crystal Shards</td><td><code>15</code></td></tr>
+<tr><td><img src="https://raw.githubusercontent.com/Herolias/Simple-Enchantments/main/docs/media/recipe-icons/Ingredient_Fabric_Scrap_Cindercloth.png" alt="Cindercloth Scraps" width="32"> Cindercloth Scraps</td><td><code>5</code></td></tr>
+<tr><td><img src="https://raw.githubusercontent.com/Herolias/Simple-Enchantments/main/docs/media/recipe-icons/Ingredient_Void_Essence.png" alt="Essence of the Void" width="32"> Essence of the Void</td><td><code>30</code></td></tr>
+<tr><td><img src="https://raw.githubusercontent.com/Herolias/Simple-Enchantments/main/docs/media/recipe-icons/Weapon_Arrow_Crude.png" alt="Crude Arrow" width="32"> Crude Arrow</td><td><code>100</code></td></tr>
+<tr><td><img src="https://raw.githubusercontent.com/Herolias/Simple-Enchantments/main/docs/media/recipe-icons/Ingredient_Crystal_Purple.png" alt="Purple Crystal Shards" width="32"> Purple Crystal Shards</td><td><code>15</code></td></tr>
 </tbody>
 </table>
 </div>

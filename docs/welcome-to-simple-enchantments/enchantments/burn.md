@@ -1,6 +1,6 @@
 # Burn
 
-![Burn scroll icon](../../media/enchantment-icons/burn.png)
+![Burn scroll icon](https://raw.githubusercontent.com/Herolias/Simple-Enchantments/main/docs/media/enchantment-icons/burn.png)
 
 Sets target on fire (5 damage/s for 3s) and lets it drop cooked variants of its drops. Not combinable with Freeze.
 
@@ -32,10 +32,10 @@ Sets target on fire (5 damage/s for 3s) and lets it drop cooked variants of its 
 <tr><th>Ingredient</th><th>Amount</th></tr>
 </thead>
 <tbody>
-<tr><td><img src="../../media/recipe-icons/Ingredient_Fabric_Scrap_Cindercloth.png" alt="Cindercloth Scraps" width="32"> Cindercloth Scraps</td><td><code>5</code></td></tr>
-<tr><td><img src="../../media/recipe-icons/Ingredient_Fire_Essence.png" alt="Essence of Fire" width="32"> Essence of Fire</td><td><code>20</code></td></tr>
-<tr><td><img src="../../media/recipe-icons/Ingredient_Crystal_Red.png" alt="Red Crystal Shards" width="32"> Red Crystal Shards</td><td><code>20</code></td></tr>
-<tr><td><img src="../../media/recipe-icons/Plant_Flower_Flax_Orange.png" alt="Fire Flower" width="32"> Fire Flower</td><td><code>3</code></td></tr>
+<tr><td><img src="https://raw.githubusercontent.com/Herolias/Simple-Enchantments/main/docs/media/recipe-icons/Ingredient_Fabric_Scrap_Cindercloth.png" alt="Cindercloth Scraps" width="32"> Cindercloth Scraps</td><td><code>5</code></td></tr>
+<tr><td><img src="https://raw.githubusercontent.com/Herolias/Simple-Enchantments/main/docs/media/recipe-icons/Ingredient_Fire_Essence.png" alt="Essence of Fire" width="32"> Essence of Fire</td><td><code>20</code></td></tr>
+<tr><td><img src="https://raw.githubusercontent.com/Herolias/Simple-Enchantments/main/docs/media/recipe-icons/Ingredient_Crystal_Red.png" alt="Red Crystal Shards" width="32"> Red Crystal Shards</td><td><code>20</code></td></tr>
+<tr><td><img src="https://raw.githubusercontent.com/Herolias/Simple-Enchantments/main/docs/media/recipe-icons/Plant_Flower_Flax_Orange.png" alt="Fire Flower" width="32"> Fire Flower</td><td><code>3</code></td></tr>
 </tbody>
 </table>
 </div>
