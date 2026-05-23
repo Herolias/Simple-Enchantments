@@ -1,6 +1,6 @@
 # Knockback
 
-![Knockback scroll icon](../../media/enchantment-icons/knockback.png)
+![Knockback scroll icon](https://raw.githubusercontent.com/Herolias/Simple-Enchantments/main/docs/media/enchantment-icons/knockback.png)
 
 Knocks targets back on hit.
 
@@ -31,10 +31,10 @@ Knocks targets back on hit.
 <tr><th>Ingredient</th><th>Amount</th></tr>
 </thead>
 <tbody>
-<tr><td><img src="../../media/recipe-icons/Ingredient_Fabric_Scrap_Cindercloth.png" alt="Cindercloth Scraps" width="32"> Cindercloth Scraps</td><td><code>5/5/5</code></td></tr>
-<tr><td><img src="../../media/recipe-icons/Plant_Crop_Stamina1.png" alt="Storm Thistle" width="32"> Storm Thistle</td><td><code>3/5/7</code></td></tr>
-<tr><td><img src="../../media/recipe-icons/Ingredient_Crystal_Yellow.png" alt="Yellow Crystal Shards" width="32"> Yellow Crystal Shards</td><td><code>5/10/15</code></td></tr>
-<tr><td><img src="../../media/recipe-icons/Ingredient_Bar_Adamantite.png" alt="Adamantite Ingot" width="32"> Adamantite Ingot</td><td><code>5/10/15</code></td></tr>
+<tr><td><img src="https://raw.githubusercontent.com/Herolias/Simple-Enchantments/main/docs/media/recipe-icons/Ingredient_Fabric_Scrap_Cindercloth.png" alt="Cindercloth Scraps" width="32"> Cindercloth Scraps</td><td><code>5/5/5</code></td></tr>
+<tr><td><img src="https://raw.githubusercontent.com/Herolias/Simple-Enchantments/main/docs/media/recipe-icons/Plant_Crop_Stamina1.png" alt="Storm Thistle" width="32"> Storm Thistle</td><td><code>3/5/7</code></td></tr>
+<tr><td><img src="https://raw.githubusercontent.com/Herolias/Simple-Enchantments/main/docs/media/recipe-icons/Ingredient_Crystal_Yellow.png" alt="Yellow Crystal Shards" width="32"> Yellow Crystal Shards</td><td><code>5/10/15</code></td></tr>
+<tr><td><img src="https://raw.githubusercontent.com/Herolias/Simple-Enchantments/main/docs/media/recipe-icons/Ingredient_Bar_Adamantite.png" alt="Adamantite Ingot" width="32"> Adamantite Ingot</td><td><code>5/10/15</code></td></tr>
 </tbody>
 </table>
 </div>

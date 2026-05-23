@@ -1,6 +1,6 @@
 # Riposte
 
-![Riposte scroll icon](../../media/enchantment-icons/riposte.png)
+![Riposte scroll icon](https://raw.githubusercontent.com/Herolias/Simple-Enchantments/main/docs/media/enchantment-icons/riposte.png)
 
 Increases counter attack damage by 20%.
 
@@ -32,10 +32,10 @@ Increases counter attack damage by 20%.
 <tr><th>Ingredient</th><th>Amount</th></tr>
 </thead>
 <tbody>
-<tr><td><img src="../../media/recipe-icons/Ingredient_Fabric_Scrap_Cindercloth.png" alt="Cindercloth Scraps" width="32"> Cindercloth Scraps</td><td><code>5/5/5</code></td></tr>
-<tr><td><img src="../../media/recipe-icons/Plant_Cactus_Flower.png" alt="Cactus Flower" width="32"> Cactus Flower</td><td><code>5/10/15</code></td></tr>
-<tr><td><img src="../../media/recipe-icons/Ingredient_Crystal_Yellow.png" alt="Yellow Crystal Shards" width="32"> Yellow Crystal Shards</td><td><code>15/20/25</code></td></tr>
-<tr><td><img src="../../media/recipe-icons/Ingredient_Bar_Iron.png" alt="Iron Ingot" width="32"> Iron Ingot</td><td><code>10/20/30</code></td></tr>
+<tr><td><img src="https://raw.githubusercontent.com/Herolias/Simple-Enchantments/main/docs/media/recipe-icons/Ingredient_Fabric_Scrap_Cindercloth.png" alt="Cindercloth Scraps" width="32"> Cindercloth Scraps</td><td><code>5/5/5</code></td></tr>
+<tr><td><img src="https://raw.githubusercontent.com/Herolias/Simple-Enchantments/main/docs/media/recipe-icons/Plant_Cactus_Flower.png" alt="Cactus Flower" width="32"> Cactus Flower</td><td><code>5/10/15</code></td></tr>
+<tr><td><img src="https://raw.githubusercontent.com/Herolias/Simple-Enchantments/main/docs/media/recipe-icons/Ingredient_Crystal_Yellow.png" alt="Yellow Crystal Shards" width="32"> Yellow Crystal Shards</td><td><code>15/20/25</code></td></tr>
+<tr><td><img src="https://raw.githubusercontent.com/Herolias/Simple-Enchantments/main/docs/media/recipe-icons/Ingredient_Bar_Iron.png" alt="Iron Ingot" width="32"> Iron Ingot</td><td><code>10/20/30</code></td></tr>
 </tbody>
 </table>
 </div>

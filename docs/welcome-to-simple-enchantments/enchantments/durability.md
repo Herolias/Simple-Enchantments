@@ -1,6 +1,6 @@
 # Durability
 
-![Durability scroll icon](../../media/enchantment-icons/durability.png)
+![Durability scroll icon](https://raw.githubusercontent.com/Herolias/Simple-Enchantments/main/docs/media/enchantment-icons/durability.png)
 
 Reduces durability loss chance by 25%.
 
@@ -31,10 +31,10 @@ Reduces durability loss chance by 25%.
 <tr><th>Ingredient</th><th>Amount</th></tr>
 </thead>
 <tbody>
-<tr><td><img src="../../media/recipe-icons/Ingredient_Fabric_Scrap_Cindercloth.png" alt="Cindercloth Scraps" width="32"> Cindercloth Scraps</td><td><code>5/5/5</code></td></tr>
-<tr><td><img src="../../media/recipe-icons/Ingredient_Life_Essence.png" alt="Essence of Life" width="32"> Essence of Life</td><td><code>10/15/20</code></td></tr>
-<tr><td><img src="../../media/recipe-icons/Ingredient_Bar_Cobalt.png" alt="Cobalt Ingot" width="32"> Cobalt Ingot</td><td><code>5/10/15</code></td></tr>
-<tr><td><img src="../../media/recipe-icons/Ingredient_Bar_Thorium.png" alt="Thorium Ingot" width="32"> Thorium Ingot</td><td><code>5/10/15</code></td></tr>
+<tr><td><img src="https://raw.githubusercontent.com/Herolias/Simple-Enchantments/main/docs/media/recipe-icons/Ingredient_Fabric_Scrap_Cindercloth.png" alt="Cindercloth Scraps" width="32"> Cindercloth Scraps</td><td><code>5/5/5</code></td></tr>
+<tr><td><img src="https://raw.githubusercontent.com/Herolias/Simple-Enchantments/main/docs/media/recipe-icons/Ingredient_Life_Essence.png" alt="Essence of Life" width="32"> Essence of Life</td><td><code>10/15/20</code></td></tr>
+<tr><td><img src="https://raw.githubusercontent.com/Herolias/Simple-Enchantments/main/docs/media/recipe-icons/Ingredient_Bar_Cobalt.png" alt="Cobalt Ingot" width="32"> Cobalt Ingot</td><td><code>5/10/15</code></td></tr>
+<tr><td><img src="https://raw.githubusercontent.com/Herolias/Simple-Enchantments/main/docs/media/recipe-icons/Ingredient_Bar_Thorium.png" alt="Thorium Ingot" width="32"> Thorium Ingot</td><td><code>5/10/15</code></td></tr>
 </tbody>
 </table>
 </div>

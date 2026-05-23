@@ -12,6 +12,7 @@ import shutil
 import sys
 from dataclasses import dataclass, field
 from pathlib import Path
+from urllib.parse import quote
 
 
 ENCHANTMENT_SOURCE = Path("src/main/java/org/herolias/plugin/enchantment/EnchantmentType.java")
@@ -30,6 +31,8 @@ ENCHANTMENT_PAGE_DIR = DOCS_DIR / "welcome-to-simple-enchantments" / "enchantmen
 ENCHANTMENT_ICON_DIR = DOCS_DIR / "media" / "enchantment-icons"
 RECIPE_ICON_DIR = DOCS_DIR / "media" / "recipe-icons"
 DOCSTAT_PATTERN = re.compile(r"<!--\s*DOCSTAT:([^>]+?)\s*-->.*?<!--\s*/DOCSTAT\s*-->", re.DOTALL)
+RAW_GITHUB_BRANCH = os.environ.get("DOCS_MEDIA_BRANCH") or os.environ.get("GITHUB_REF_NAME") or "main"
+RAW_GITHUB_BASE_URL = f"https://raw.githubusercontent.com/Herolias/Simple-Enchantments/{RAW_GITHUB_BRANCH}"
 
 
 @dataclass
@@ -484,6 +487,10 @@ def page_for_enchantment(enchantment: Enchantment) -> Path:
 
 def relative_markdown_path(from_file: Path, to_file: Path) -> str:
     return os.path.relpath(to_file, start=from_file.parent).replace(os.sep, "/")
+
+
+def raw_github_url(path: Path) -> str:
+    return f"{RAW_GITHUB_BASE_URL}/{quote(path.as_posix(), safe='/')}"
 
 
 def format_categories(categories: list[str], translations: dict[str, str]) -> str:
@@ -1109,9 +1116,8 @@ def render_recipe_table(
         icon_path = copy_recipe_icon(item_id, item_icons, changed)
         icon = ""
         if icon_path:
-            rel_icon_path = relative_markdown_path(page_path, icon_path)
             icon = (
-                f'<img src="{html.escape(rel_icon_path, quote=True)}" '
+                f'<img src="{html.escape(raw_github_url(icon_path), quote=True)}" '
                 f'alt="{html.escape(item_name, quote=True)}" width="32"> '
             )
 
@@ -1179,7 +1185,7 @@ def render_enchantment_page(
     if icon_path:
         lines.extend(
             [
-                f"![{markdown_alt_escape(enchantment.name)} scroll icon]({relative_markdown_path(page_path, icon_path)})",
+                f"![{markdown_alt_escape(enchantment.name)} scroll icon]({raw_github_url(icon_path)})",
                 "",
             ]
         )

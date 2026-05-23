@@ -1,6 +1,6 @@
 # Eagle's Eye
 
-![Eagle's Eye scroll icon](../../media/enchantment-icons/eagles-eye.png)
+![Eagle's Eye scroll icon](https://raw.githubusercontent.com/Herolias/Simple-Enchantments/main/docs/media/enchantment-icons/eagles-eye.png)
 
 Increases projectile damage by up to 25% based on distance.
 
@@ -31,10 +31,10 @@ Increases projectile damage by up to 25% based on distance.
 <tr><th>Ingredient</th><th>Amount</th></tr>
 </thead>
 <tbody>
-<tr><td><img src="../../media/recipe-icons/Ingredient_Fabric_Scrap_Cindercloth.png" alt="Cindercloth Scraps" width="32"> Cindercloth Scraps</td><td><code>5/5/5</code></td></tr>
-<tr><td><img src="../../media/recipe-icons/Ingredient_Void_Essence.png" alt="Essence of the Void" width="32"> Essence of the Void</td><td><code>10/10/15</code></td></tr>
-<tr><td><img src="../../media/recipe-icons/Ingredient_Feathers_Light.png" alt="White Feathers" width="32"> White Feathers</td><td><code>5/7/12</code></td></tr>
-<tr><td><img src="../../media/recipe-icons/Plant_Petals_Storm.png" alt="Storm Petals" width="32"> Storm Petals</td><td><code>3/5/7</code></td></tr>
+<tr><td><img src="https://raw.githubusercontent.com/Herolias/Simple-Enchantments/main/docs/media/recipe-icons/Ingredient_Fabric_Scrap_Cindercloth.png" alt="Cindercloth Scraps" width="32"> Cindercloth Scraps</td><td><code>5/5/5</code></td></tr>
+<tr><td><img src="https://raw.githubusercontent.com/Herolias/Simple-Enchantments/main/docs/media/recipe-icons/Ingredient_Void_Essence.png" alt="Essence of the Void" width="32"> Essence of the Void</td><td><code>10/10/15</code></td></tr>
+<tr><td><img src="https://raw.githubusercontent.com/Herolias/Simple-Enchantments/main/docs/media/recipe-icons/Ingredient_Feathers_Light.png" alt="White Feathers" width="32"> White Feathers</td><td><code>5/7/12</code></td></tr>
+<tr><td><img src="https://raw.githubusercontent.com/Herolias/Simple-Enchantments/main/docs/media/recipe-icons/Plant_Petals_Storm.png" alt="Storm Petals" width="32"> Storm Petals</td><td><code>3/5/7</code></td></tr>
 </tbody>
 </table>
 </div>

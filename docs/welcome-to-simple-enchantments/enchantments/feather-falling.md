@@ -1,6 +1,6 @@
 # Feather Falling
 
-![Feather Falling scroll icon](../../media/enchantment-icons/feather-falling.png)
+![Feather Falling scroll icon](https://raw.githubusercontent.com/Herolias/Simple-Enchantments/main/docs/media/enchantment-icons/feather-falling.png)
 
 Reduces fall damage by 20%.
 
@@ -31,10 +31,10 @@ Reduces fall damage by 20%.
 <tr><th>Ingredient</th><th>Amount</th></tr>
 </thead>
 <tbody>
-<tr><td><img src="../../media/recipe-icons/Ingredient_Fabric_Scrap_Cindercloth.png" alt="Cindercloth Scraps" width="32"> Cindercloth Scraps</td><td><code>5/5/5</code></td></tr>
-<tr><td><img src="../../media/recipe-icons/Ingredient_Life_Essence.png" alt="Essence of Life" width="32"> Essence of Life</td><td><code>10/15/20</code></td></tr>
-<tr><td><img src="../../media/recipe-icons/Ingredient_Feathers_Light.png" alt="White Feathers" width="32"> White Feathers</td><td><code>10/20/30</code></td></tr>
-<tr><td><img src="../../media/recipe-icons/Plant_Petals_Storm.png" alt="Storm Petals" width="32"> Storm Petals</td><td><code>5/5/5</code></td></tr>
+<tr><td><img src="https://raw.githubusercontent.com/Herolias/Simple-Enchantments/main/docs/media/recipe-icons/Ingredient_Fabric_Scrap_Cindercloth.png" alt="Cindercloth Scraps" width="32"> Cindercloth Scraps</td><td><code>5/5/5</code></td></tr>
+<tr><td><img src="https://raw.githubusercontent.com/Herolias/Simple-Enchantments/main/docs/media/recipe-icons/Ingredient_Life_Essence.png" alt="Essence of Life" width="32"> Essence of Life</td><td><code>10/15/20</code></td></tr>
+<tr><td><img src="https://raw.githubusercontent.com/Herolias/Simple-Enchantments/main/docs/media/recipe-icons/Ingredient_Feathers_Light.png" alt="White Feathers" width="32"> White Feathers</td><td><code>10/20/30</code></td></tr>
+<tr><td><img src="https://raw.githubusercontent.com/Herolias/Simple-Enchantments/main/docs/media/recipe-icons/Plant_Petals_Storm.png" alt="Storm Petals" width="32"> Storm Petals</td><td><code>5/5/5</code></td></tr>
 </tbody>
 </table>
 </div>
