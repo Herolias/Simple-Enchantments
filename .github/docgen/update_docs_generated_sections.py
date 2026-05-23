@@ -4,7 +4,10 @@
 from __future__ import annotations
 
 import argparse
+import json
+import os
 import re
+import shutil
 import sys
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -12,9 +15,19 @@ from pathlib import Path
 
 ENCHANTMENT_SOURCE = Path("src/main/java/org/herolias/plugin/enchantment/EnchantmentType.java")
 CONFIG_SOURCE = Path("src/main/java/org/herolias/plugin/config/EnchantingConfig.java")
+SCROLL_ITEM_GENERATOR_SOURCE = Path("src/main/java/org/herolias/plugin/enchantment/ScrollItemGenerator.java")
 LANG_SOURCE = Path("src/main/resources/Server/Languages/en-US/server.lang")
+COMMON_RESOURCES_DIR = Path("src/main/resources/Common")
+ASSETS_DIR = Path("Assets")
+ASSET_LANG_SOURCE = ASSETS_DIR / "Server/Languages/en-US/server.lang"
+ASSET_ITEM_DIR = ASSETS_DIR / "Server/Item/Items"
+ASSET_COMMON_DIR = ASSETS_DIR / "Common"
+RECIPE_ITEM_NAME_CACHE = Path(".github/docgen/recipe_item_names.json")
 DOCS_DIR = Path("docs")
 REFERENCE_DIR = DOCS_DIR / "reference"
+ENCHANTMENT_PAGE_DIR = DOCS_DIR / "welcome-to-simple-enchantments" / "enchantments"
+ENCHANTMENT_ICON_DIR = DOCS_DIR / "media" / "enchantment-icons"
+RECIPE_ICON_DIR = DOCS_DIR / "media" / "recipe-icons"
 DOCSTAT_PATTERN = re.compile(r"<!--\s*DOCSTAT:([^>]+?)\s*-->.*?<!--\s*/DOCSTAT\s*-->", re.DOTALL)
 
 
@@ -45,6 +58,19 @@ class Enchantment:
     disabled_by_default: bool = False
 
 
+@dataclass
+class RecipeIngredient:
+    item_id: str
+    amount: int
+
+
+@dataclass
+class ScrollRecipe:
+    id: str
+    unlock_tier: int
+    ingredients: list[RecipeIngredient]
+
+
 def read(path: Path) -> str:
     try:
         return path.read_text(encoding="utf-8")
@@ -58,6 +84,16 @@ def write_if_changed(path: Path, content: str) -> bool:
         return False
 
     path.write_text(content, encoding="utf-8")
+    return True
+
+
+def copy_binary_if_changed(source: Path, target: Path) -> bool:
+    target.parent.mkdir(parents=True, exist_ok=True)
+    source_bytes = source.read_bytes()
+    if target.exists() and target.read_bytes() == source_bytes:
+        return False
+
+    shutil.copy2(source, target)
     return True
 
 
@@ -310,6 +346,101 @@ def parse_scroll_recipe_tiers(config_text: str) -> dict[str, str]:
     return dict(re.findall(r'\baddScrollRecipe\("([^"]+)",\s*([0-9]+),', config_text))
 
 
+def parse_scroll_recipes(config_text: str) -> list[ScrollRecipe]:
+    recipes: list[ScrollRecipe] = []
+    pattern = re.compile(r"\baddScrollRecipe\s*\(")
+
+    for match in pattern.finditer(config_text):
+        args = split_java_args(extract_parenthesized(config_text, match.end() - 1)[0])
+        if not args or not args[0].strip().startswith('"'):
+            continue
+        if len(args) < 4 or len(args[2:]) % 2 != 0:
+            raise RuntimeError(f"Could not parse scroll recipe arguments: {args}")
+
+        ingredients: list[RecipeIngredient] = []
+        for index in range(2, len(args), 2):
+            ingredients.append(
+                RecipeIngredient(
+                    item_id=unquote_java_string(args[index]),
+                    amount=int(args[index + 1]),
+                )
+            )
+
+        recipes.append(
+            ScrollRecipe(
+                id=unquote_java_string(args[0]),
+                unlock_tier=int(args[1]),
+                ingredients=ingredients,
+            )
+        )
+
+    return recipes
+
+
+def parse_enchantment_icon_paths(scroll_generator_text: str) -> dict[str, str]:
+    method_match = re.search(
+        r"private\s+static\s+String\s+getIconForEnchantment\(String\s+enchantmentId\)\s*\{(.*?)\n\s*\}",
+        scroll_generator_text,
+        re.DOTALL,
+    )
+    if not method_match:
+        return {}
+
+    method_body = method_match.group(1)
+    base_match = re.search(r'String\s+base\s*=\s*"([^"]+)";', method_body)
+    base = base_match.group(1) if base_match else ""
+    return {
+        enchantment_id: base + icon_path
+        for enchantment_id, icon_path in re.findall(
+            r'case\s+"([^"]+)"\s*:\s*return\s+base\s*\+\s*"([^"]+)";',
+            method_body,
+        )
+    }
+
+
+def load_optional_language_file(path: Path) -> dict[str, str]:
+    if not path.exists():
+        return {}
+    return parse_language_file(path.read_text(encoding="utf-8"))
+
+
+def load_cached_item_translations() -> dict[str, str]:
+    if not RECIPE_ITEM_NAME_CACHE.exists():
+        return {}
+
+    try:
+        cache = json.loads(RECIPE_ITEM_NAME_CACHE.read_text(encoding="utf-8"))
+    except json.JSONDecodeError:
+        return {}
+
+    if not isinstance(cache, dict):
+        return {}
+
+    return {
+        f"items.{item_id}.name": name
+        for item_id, name in cache.items()
+        if isinstance(item_id, str) and isinstance(name, str)
+    }
+
+
+def load_asset_item_icons() -> dict[str, Path]:
+    if not ASSET_ITEM_DIR.exists():
+        return {}
+
+    item_icons: dict[str, Path] = {}
+    for path in ASSET_ITEM_DIR.rglob("*.json"):
+        try:
+            data = json.loads(path.read_text(encoding="utf-8"))
+        except (json.JSONDecodeError, UnicodeDecodeError):
+            continue
+
+        icon_path = data.get("Icon")
+        if isinstance(icon_path, str):
+            item_icons[path.stem] = ASSET_COMMON_DIR / icon_path
+
+    return item_icons
+
+
 def bool_from_java(value: str) -> bool:
     if value == "true":
         return True
@@ -333,6 +464,25 @@ def apply_source_data(
 def markdown_escape(value: str) -> str:
     value = value.replace("\n", " ")
     return value.replace("|", r"\|")
+
+
+def markdown_alt_escape(value: str) -> str:
+    return value.replace("[", "(").replace("]", ")")
+
+
+def slugify(value: str) -> str:
+    value = value.lower().replace("_", "-")
+    value = re.sub(r"[^a-z0-9-]+", "-", value)
+    value = re.sub(r"-+", "-", value).strip("-")
+    return value or "page"
+
+
+def page_for_enchantment(enchantment: Enchantment) -> Path:
+    return ENCHANTMENT_PAGE_DIR / f"{slugify(enchantment.id)}.md"
+
+
+def relative_markdown_path(from_file: Path, to_file: Path) -> str:
+    return os.path.relpath(to_file, start=from_file.parent).replace(os.sep, "/")
 
 
 def format_categories(categories: list[str], translations: dict[str, str]) -> str:
@@ -407,6 +557,10 @@ def level_range(max_level: int) -> str:
     return f"I-{roman(max_level)}"
 
 
+def level_count(max_level: int) -> str:
+    return f"{max_level} ({level_range(max_level)})"
+
+
 def primary_multiplier(enchantment: Enchantment) -> Multiplier | None:
     for multiplier in enchantment.multipliers:
         if multiplier.key == enchantment.id:
@@ -422,6 +576,156 @@ def format_multiplier_for_summary(multiplier: Multiplier) -> str:
     if multiplier.key == "regeneration":
         return f"{format_human_number(multiplier.default)} HP/s"
     return format_percent(multiplier.default)
+
+
+def format_multiplier_details(enchantment: Enchantment, translations: dict[str, str]) -> str:
+    if not enchantment.multipliers:
+        return "None"
+
+    details = []
+    for multiplier in enchantment.multipliers:
+        label = translations.get(multiplier.label_key, multiplier.key)
+        details.append(f"{markdown_escape(label)}: `{format_multiplier_for_summary(multiplier)}`")
+
+    return "; ".join(details)
+
+
+def format_description_placeholder(multiplier: Multiplier | None) -> str:
+    if not multiplier:
+        return ""
+    if multiplier.key.endswith(":duration"):
+        return format_human_number(multiplier.default)
+    if multiplier.key in {"burn", "poison", "regeneration"}:
+        return format_human_number(multiplier.default)
+    return format_human_number(str(float(multiplier.default) * 100))
+
+
+def render_enchantment_description(enchantment: Enchantment, translations: dict[str, str]) -> str:
+    description = translations.get(f"enchantment.{enchantment.id}.description", sentence(enchantment.description))
+    primary = primary_multiplier(enchantment)
+    duration = next((multiplier for multiplier in enchantment.multipliers if multiplier.key.endswith(":duration")), None)
+
+    if primary:
+        description = description.replace("{amount}", format_description_placeholder(primary))
+    if duration:
+        description = description.replace("{duration}", format_description_placeholder(duration))
+
+    return sentence(description)
+
+
+def scroll_recipe_level(recipe_id: str) -> int:
+    roman_values = {"I": 1, "II": 2, "III": 3, "IV": 4, "V": 5}
+    suffix = recipe_id.rsplit("_", 1)[-1]
+    return roman_values.get(suffix, 1)
+
+
+def normalize_scroll_recipe_base(recipe_id: str) -> str:
+    base = recipe_id.removeprefix("Scroll_")
+    if re.search(r"_(?:I|II|III|IV|V)$", base):
+        base = base.rsplit("_", 1)[0]
+
+    special_cases = {
+        "Silktouch": "pick_perfect",
+        "FastSwim": "fast_swim",
+        "ElementalHeart": "elemental_heart",
+    }
+    if base in special_cases:
+        return special_cases[base]
+
+    base = re.sub(r"([a-z0-9])([A-Z])", r"\1_\2", base)
+    return base.lower()
+
+
+def group_recipes_by_enchantment(
+    recipes: list[ScrollRecipe],
+    enchantments: list[Enchantment],
+) -> dict[str, list[ScrollRecipe]]:
+    enchantment_ids = {enchantment.id for enchantment in enchantments}
+    grouped: dict[str, list[ScrollRecipe]] = {}
+
+    for recipe in recipes:
+        enchantment_id = normalize_scroll_recipe_base(recipe.id)
+        if enchantment_id in enchantment_ids:
+            grouped.setdefault(enchantment_id, []).append(recipe)
+
+    for recipe_group in grouped.values():
+        recipe_group.sort(key=lambda recipe: scroll_recipe_level(recipe.id))
+
+    return grouped
+
+
+def item_display_name(item_id: str, translations: dict[str, str]) -> str:
+    return (
+        translations.get(f"items.{item_id}.name")
+        or translations.get(f"server.items.{item_id}.name")
+        or item_id.replace("_", " ")
+    )
+
+
+def recipe_item_ids(recipes: list[ScrollRecipe]) -> list[str]:
+    item_ids = {
+        ingredient.item_id
+        for recipe in recipes
+        for ingredient in recipe.ingredients
+        if recipe.id != "Scroll_Cleansing"
+    }
+    return sorted(item_ids)
+
+
+def render_recipe_item_name_cache(item_ids: list[str], translations: dict[str, str]) -> str:
+    cache = {
+        item_id: item_display_name(item_id, translations)
+        for item_id in item_ids
+    }
+    return json.dumps(cache, indent=2, ensure_ascii=True, sort_keys=True) + "\n"
+
+
+def existing_media_file(directory: Path, stem: str) -> Path | None:
+    for suffix in (".png", ".webp", ".jpg", ".jpeg"):
+        path = directory / f"{stem}{suffix}"
+        if path.exists():
+            return path
+    return None
+
+
+def copy_enchantment_icon(
+    enchantment: Enchantment,
+    icon_paths: dict[str, str],
+    changed: list[Path],
+) -> Path | None:
+    existing = existing_media_file(ENCHANTMENT_ICON_DIR, slugify(enchantment.id))
+    icon_path = icon_paths.get(enchantment.id)
+    if not icon_path:
+        return existing
+
+    source = COMMON_RESOURCES_DIR / icon_path
+    if not source.exists():
+        return existing
+
+    target = ENCHANTMENT_ICON_DIR / f"{slugify(enchantment.id)}{source.suffix}"
+    if copy_binary_if_changed(source, target):
+        changed.append(target)
+    return target
+
+
+def copy_recipe_icon(
+    item_id: str,
+    item_icons: dict[str, Path],
+    changed: list[Path],
+) -> Path | None:
+    existing = existing_media_file(RECIPE_ICON_DIR, item_id)
+    source = item_icons.get(item_id)
+    if not source or not source.exists():
+        fallback = ASSET_COMMON_DIR / "Icons" / "ItemsGenerated" / f"{item_id}.png"
+        source = fallback if fallback.exists() else None
+
+    if not source:
+        return existing
+
+    target = RECIPE_ICON_DIR / f"{item_id}{source.suffix}"
+    if copy_binary_if_changed(source, target):
+        changed.append(target)
+    return target
 
 
 def sentence(value: str) -> str:
@@ -464,8 +768,26 @@ def build_docstat_context(
     return context
 
 
+def parse_docstat_payload(payload: str) -> tuple[str, str]:
+    payload = payload.strip()
+    if "|" in payload:
+        key, _, format_name = payload.partition("|")
+    elif ";" in payload:
+        key, _, format_name = payload.partition(";")
+    else:
+        key, format_name = payload, "raw"
+
+    return key.strip(), (format_name.strip() or "raw")
+
+
+def format_docstat_payload(key: str, format_name: str) -> str:
+    if format_name == "raw":
+        return key
+    return f"{key};{format_name}"
+
+
 def resolve_docstat(payload: str, context: dict[str, str]) -> str:
-    key, _, format_name = payload.strip().partition("|")
+    key, format_name = parse_docstat_payload(payload)
     format_name = format_name or "raw"
 
     if key not in context:
@@ -503,7 +825,9 @@ def update_inline_docstats(path: Path, context: dict[str, str]) -> bool:
 
     def replace(match: re.Match[str]) -> str:
         payload = match.group(1)
-        return f"<!-- DOCSTAT:{payload} -->{resolve_docstat(payload, context)}<!-- /DOCSTAT -->"
+        key, format_name = parse_docstat_payload(payload)
+        canonical_payload = format_docstat_payload(key, format_name)
+        return f"<!-- DOCSTAT:{canonical_payload} -->{resolve_docstat(payload, context)}<!-- /DOCSTAT -->"
 
     updated = DOCSTAT_PATTERN.sub(replace, content)
     return write_if_changed(path, updated)
@@ -666,10 +990,211 @@ def render_disabled_enchantments(enchantments: list[Enchantment]) -> str:
     if not disabled:
         return "No built-in enchantments are disabled by default."
 
-    return "\n".join(f"* **{markdown_escape(enchantment.name)}**" for enchantment in disabled)
+    return "\n".join(
+        f"* [{markdown_escape(enchantment.name)}]({page_for_enchantment(enchantment).name})"
+        for enchantment in disabled
+    )
 
 
-def update_integrated_pages(enchantments: list[Enchantment], context: dict[str, str]) -> list[Path]:
+def render_enchantment_index(enchantments: list[Enchantment], translations: dict[str, str]) -> str:
+    lines = [
+        "| Enchantment | Levels | Default Modifier | Applies To | Enabled By Default |",
+        "|---|---:|---|---|---|",
+    ]
+
+    for enchantment in enchantments:
+        multiplier = primary_multiplier(enchantment)
+        default_modifier = f"`{format_multiplier_for_summary(multiplier)}`" if multiplier else "None"
+        lines.append(
+            "| "
+            f"[{markdown_escape(enchantment.name)}]({page_for_enchantment(enchantment).name}) | "
+            f"{level_range(enchantment.max_level)} | "
+            f"{default_modifier} | "
+            f"{markdown_escape(format_categories(enchantment.categories, translations))} | "
+            f"{format_bool(not enchantment.disabled_by_default)} |"
+        )
+
+    return "\n".join(lines)
+
+
+def extract_manual_block(existing_content: str | None, name: str, default: str = "") -> str:
+    if not existing_content:
+        return default
+
+    pattern = re.compile(
+        rf"<!--\s*MANUAL:{re.escape(name)}:start\s*-->(.*?)<!--\s*MANUAL:{re.escape(name)}:end\s*-->",
+        re.DOTALL,
+    )
+    match = pattern.search(existing_content)
+    return match.group(1) if match else default
+
+
+def manual_block(name: str, value: str = "") -> str:
+    return f"<!-- MANUAL:{name}:start -->{value}<!-- MANUAL:{name}:end -->"
+
+
+def render_enchantment_links(
+    ids: list[str],
+    enchantment_by_id: dict[str, Enchantment],
+) -> str:
+    links: list[str] = []
+    for enchantment_id in ids:
+        target = enchantment_by_id.get(enchantment_id)
+        if target:
+            links.append(f"[{markdown_escape(target.name)}]({page_for_enchantment(target).name})")
+        else:
+            links.append(f"`{enchantment_id}`")
+    return ", ".join(links) if links else "None"
+
+
+def render_recipe_table(
+    page_path: Path,
+    recipes: list[ScrollRecipe],
+    item_translations: dict[str, str],
+    item_icons: dict[str, Path],
+    changed: list[Path],
+) -> str:
+    if not recipes:
+        return "No default scroll recipe is configured."
+
+    recipes = sorted(recipes, key=lambda recipe: scroll_recipe_level(recipe.id))
+    level_labels = [roman(scroll_recipe_level(recipe.id)) for recipe in recipes]
+    ingredient_ids: list[str] = []
+    for recipe in recipes:
+        for ingredient in recipe.ingredients:
+            if ingredient.item_id not in ingredient_ids:
+                ingredient_ids.append(ingredient.item_id)
+
+    lines = [
+        f"Unlock tier: `{'/'.join(str(recipe.unlock_tier) for recipe in recipes)}`.",
+        "",
+    ]
+    if len(recipes) > 1:
+        lines.extend([f"Amounts are listed as `{'/'.join(level_labels)}`.", ""])
+
+    lines.extend(
+        [
+            "| Ingredient | Amount |",
+            "|---|---:|",
+        ]
+    )
+
+    for item_id in ingredient_ids:
+        item_name = item_display_name(item_id, item_translations)
+        icon_path = copy_recipe_icon(item_id, item_icons, changed)
+        icon = ""
+        if icon_path:
+            rel_icon_path = relative_markdown_path(page_path, icon_path)
+            icon = f"![{markdown_alt_escape(item_name)}]({rel_icon_path}) "
+
+        amounts = []
+        for recipe in recipes:
+            amount = next(
+                (ingredient.amount for ingredient in recipe.ingredients if ingredient.item_id == item_id),
+                None,
+            )
+            amounts.append(str(amount) if amount is not None else "-")
+
+        lines.append(f"| {icon}{markdown_escape(item_name)} | `{'/'.join(amounts)}` |")
+
+    return "\n".join(lines)
+
+
+def render_enchantment_page(
+    enchantment: Enchantment,
+    enchantment_by_id: dict[str, Enchantment],
+    translations: dict[str, str],
+    item_translations: dict[str, str],
+    recipe_map: dict[str, list[ScrollRecipe]],
+    item_icons: dict[str, Path],
+    icon_paths: dict[str, str],
+    changed: list[Path],
+) -> str:
+    page_path = page_for_enchantment(enchantment)
+    existing_content = page_path.read_text(encoding="utf-8") if page_path.exists() else None
+    added_version = extract_manual_block(existing_content, "added-version", " ")
+    showcase = extract_manual_block(
+        existing_content,
+        "showcase",
+        "\n<!-- Add a GIF or screenshot here. -->\n",
+    )
+    icon_path = copy_enchantment_icon(enchantment, icon_paths, changed)
+
+    stats_rows = [
+        ("Added in Version", manual_block("added-version", added_version)),
+        ("Default Modifier", format_multiplier_details(enchantment, translations)),
+        ("Amount of Levels", level_count(enchantment.max_level)),
+        ("ID", f"`{enchantment.id}`"),
+        ("Can Be Applied To", markdown_escape(format_categories(enchantment.categories, translations))),
+        ("Enabled By Default", format_bool(not enchantment.disabled_by_default)),
+        (
+            "Recipe",
+            f"Unlock tier `{'/'.join(str(recipe.unlock_tier) for recipe in recipe_map.get(enchantment.id, []))}`; "
+            "ingredients are listed below."
+            if recipe_map.get(enchantment.id)
+            else "No default recipe.",
+        ),
+    ]
+    if enchantment.owner_mod_name:
+        stats_rows.append(("Requires", markdown_escape(enchantment.owner_mod_name)))
+    if enchantment.conflicts:
+        stats_rows.append(("Conflicts With", render_enchantment_links(enchantment.conflicts, enchantment_by_id)))
+
+    lines = [
+        f"# {markdown_escape(enchantment.name)}",
+        "",
+    ]
+
+    if icon_path:
+        lines.extend(
+            [
+                f"![{markdown_alt_escape(enchantment.name)} scroll icon]({relative_markdown_path(page_path, icon_path)})",
+                "",
+            ]
+        )
+
+    lines.extend(
+        [
+            render_enchantment_description(enchantment, translations),
+            "",
+            "## Stats",
+            "",
+            "| Field | Value |",
+            "|---|---|",
+        ]
+    )
+
+    for label, value in stats_rows:
+        lines.append(f"| {label} | {value} |")
+
+    lines.extend(
+        [
+            "",
+            "## Recipe",
+            "",
+            render_recipe_table(
+                page_path,
+                recipe_map.get(enchantment.id, []),
+                item_translations,
+                item_icons,
+                changed,
+            ),
+            "",
+            "## Showcase",
+            "",
+            manual_block("showcase", showcase),
+            "",
+        ]
+    )
+
+    return "\n".join(lines)
+
+
+def update_integrated_pages(
+    enchantments: list[Enchantment],
+    translations: dict[str, str],
+    context: dict[str, str],
+) -> list[Path]:
     changed: list[Path] = []
     markdown_files = sorted(DOCS_DIR.rglob("*.md"))
 
@@ -680,8 +1205,8 @@ def update_integrated_pages(enchantments: list[Enchantment], context: dict[str, 
     block_updates = [
         (
             DOCS_DIR / "welcome-to-simple-enchantments" / "enchantments" / "README.md",
-            "enchantment-summary",
-            render_enchantment_summary(enchantments),
+            "enchantment-index",
+            render_enchantment_index(enchantments, translations),
         ),
         (
             DOCS_DIR / "welcome-to-simple-enchantments" / "enchantments" / "hiddendisabled-enchantments.md",
@@ -735,7 +1260,11 @@ def ensure_root_reference_link(root_readme: Path) -> bool:
 def generate() -> list[Path]:
     enchantment_text = read(ENCHANTMENT_SOURCE)
     config_text = read(CONFIG_SOURCE)
+    scroll_generator_text = read(SCROLL_ITEM_GENERATOR_SOURCE)
     translations = parse_language_file(read(LANG_SOURCE))
+    item_translations = load_cached_item_translations()
+    item_translations.update(load_optional_language_file(ASSET_LANG_SOURCE))
+    item_icons = load_asset_item_icons()
 
     enchantments = parse_enchantments(enchantment_text)
     apply_source_data(
@@ -744,10 +1273,15 @@ def generate() -> list[Path]:
         parse_conflicts(enchantment_text),
         parse_disabled_defaults(config_text),
     )
+    enchantment_by_id = {enchantment.id: enchantment for enchantment in enchantments}
 
     general_defaults = dict(parse_general_defaults(config_text))
     recipe_counts = parse_recipe_counts(config_text)
     scroll_recipe_tiers = parse_scroll_recipe_tiers(config_text)
+    scroll_recipes = parse_scroll_recipes(config_text)
+    scroll_recipe_item_ids = recipe_item_ids(scroll_recipes)
+    recipe_map = group_recipes_by_enchantment(scroll_recipes, enchantments)
+    icon_paths = parse_enchantment_icon_paths(scroll_generator_text)
     context = build_docstat_context(enchantments, general_defaults, recipe_counts, scroll_recipe_tiers)
 
     changed: list[Path] = []
@@ -760,6 +1294,20 @@ def generate() -> list[Path]:
         ),
         REFERENCE_DIR / "enchantment-modifiers.md": render_enchantment_modifiers(enchantments, translations),
     }
+    if ASSET_LANG_SOURCE.exists():
+        targets[RECIPE_ITEM_NAME_CACHE] = render_recipe_item_name_cache(scroll_recipe_item_ids, item_translations)
+
+    for enchantment in enchantments:
+        targets[page_for_enchantment(enchantment)] = render_enchantment_page(
+            enchantment,
+            enchantment_by_id,
+            translations,
+            item_translations,
+            recipe_map,
+            item_icons,
+            icon_paths,
+            changed,
+        )
 
     for path, content in targets.items():
         if write_if_changed(path, content):
@@ -768,7 +1316,7 @@ def generate() -> list[Path]:
     if ensure_root_reference_link(DOCS_DIR / "README.md"):
         changed.append(DOCS_DIR / "README.md")
 
-    changed.extend(update_integrated_pages(enchantments, context))
+    changed.extend(update_integrated_pages(enchantments, translations, context))
 
     return list(dict.fromkeys(changed))
 

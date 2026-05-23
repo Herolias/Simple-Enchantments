@@ -5,6 +5,6 @@ Sometimes it is because the Enchantment is still a bit experimental, and sometim
 
 These Enchantments are currently disabled:
 <!-- AUTO-GENERATED:disabled-enchantments:start -->
-* **Thrift**
-* **Night Vision**
+* [Thrift](thrift.md)
+* [Night Vision](night-vision.md)
 <!-- AUTO-GENERATED:disabled-enchantments:end -->

@@ -1,6 +1,6 @@
 ## Welcome to Simple Enchantments 
 
-Simple Enchantments adds a complete enchanting system to the game. Currently, the mod includes an Enchantment Table, 31 unique Enchantments, a detailed config to customize almost every part of the mod, 3 commands, and an API for developers to create their own enchantments or register custom weapons.
+Simple Enchantments adds a complete enchanting system to the game. Currently, the mod includes an Enchantment Table, <!-- DOCSTAT:enchantments.count -->33<!-- /DOCSTAT --> unique Enchantments, a detailed config to customize almost every part of the mod, 3 commands, and an API for developers to create their own enchantments or register custom weapons.
 
 This Documentation is split into 3 parts:
 * **This Guide:** For general gameplay and getting started.

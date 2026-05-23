@@ -1,39 +1,41 @@
 # Enchantments
 
-There are currently <!-- DOCSTAT:enchantments.count -->33<!-- /DOCSTAT --> Enchantments in the mod:
+There are currently <!-- DOCSTAT:enchantments.count -->33<!-- /DOCSTAT --> Enchantments in the mod. Each enchantment has its own page with stats, recipe details, and room for a showcase.
 
-<!-- AUTO-GENERATED:enchantment-summary:start -->
-* **Sharpness** (I-III): Increases melee damage. Default modifier: `10%`.
-* **Life Leech** (I): Heals for a portion of damage dealt. Default modifier: `10%`.
-* **Durability** (I-III): Reduces durability loss. Default modifier: `25%`.
-* **Sturdy** (I): Prevents repair durability penalty.
-* **Dexterity** (I-III): Reduces stamina costs. Default modifier: `20%`.
-* **Protection** (I-III): Increases physical damage resistance. Default modifier: `4%`.
-* **Efficiency** (I-III): Increases mining speed. Default modifier: `20%`.
-* **Fortune** (I-III): Chance for extra ore/crystal drops. Default modifier: `25%`. Conflicts with `pick_perfect`.
-* **Smelting** (I): Automatically smelts mined blocks. Conflicts with `pick_perfect`.
-* **Strength** (I-III): Increases projectile damage and range. Default modifier: `10%`.
-* **Eagle's Eye** (I-III): Increases damage with distance. Default modifier: `0.5%`.
-* **Looting** (I-III): Increases enemy drops and rare drop chance. Default modifier: `25%`.
-* **Feather Falling** (I-III): Reduces fall damage. Default modifier: `20%`.
-* **Waterbreathing** (I-III): Breathe underwater longer. Default modifier: `20%`.
-* **Burn** (I): Sets target on fire. Default modifier: `5 damage/s`. Conflicts with `freeze`, `poison`.
-* **Freeze** (I): Slows targets on hit. Default modifier: `50%`. Conflicts with `burn`.
-* **Eternal Shot** (I): Shoot without consuming arrows.
-* **Pick Perfect** (I): Drops the block itself when mined. Conflicts with `fortune`, `smelting`.
-* **Thrift** (I-III): Restores mana on hit. Default modifier: `20%`. Disabled by default.
-* **Elemental Heart** (I): Chance to save essence. Default modifier: `100%`.
-* **Knockback** (I-III): Knocks targets back. Default modifier: `60%`.
-* **Reflection** (I-III): Reflects damage when blocking. Default modifier: `10%`. Conflicts with `absorption`.
-* **Absorption** (I-III): Heals directly from blocked damage. Default modifier: `10%`. Conflicts with `reflection`.
-* **Swift Swim** (I-III): Increases swimming speed. Default modifier: `25%`.
-* **Night Vision** (I): Increases visibility in dark environments. Disabled by default.
-* **Ranged Protection** (I-III): Reduces projectile and magic damage. Default modifier: `4%`.
-* **Frenzy** (I-III): Increases ability charge rate. Default modifier: `15%`.
-* **Riposte** (I-III): Increases counter attack damage. Default modifier: `10%`. Requires `Perfect Parries`.
-* **Coup de Grâce** (I-III): Increases damage to stunned enemies. Default modifier: `15%`. Requires `Perfect Parries`.
-* **Poison** (I): Poisons targets on hit. Default modifier: `3 damage/s`. Conflicts with `burn`.
-* **Env. Protection** (I-III): Reduces environmental damage and alters status effects. Default modifier: `4%`.
-* **Regeneration** (I): Passively regenerates health. Default modifier: `0.5 HP/s`. Conflicts with `second_stomach`.
-* **Second Stomach** (I-III): Increases instant healing from food and potions. Default modifier: `15%`. Conflicts with `regeneration`.
-<!-- AUTO-GENERATED:enchantment-summary:end -->
+<!-- AUTO-GENERATED:enchantment-index:start -->
+| Enchantment | Levels | Default Modifier | Applies To | Enabled By Default |
+|---|---:|---|---|---|
+| [Sharpness](sharpness.md) | I-III | `10%` | Melee Weapons | Yes |
+| [Life Leech](life-leech.md) | I | `10%` | Melee Weapons | Yes |
+| [Durability](durability.md) | I-III | `25%` | Melee Weapons, Ranged Weapons, Tools, Pickaxes, Shovels, Axes, Armor, Staffs, Mana Staffs, Essence Staffs | Yes |
+| [Sturdy](sturdy.md) | I | None | Melee Weapons, Ranged Weapons, Tools, Pickaxes, Shovels, Axes, Armor, Staffs, Mana Staffs, Essence Staffs | Yes |
+| [Dexterity](dexterity.md) | I-III | `20%` | Melee Weapons, Shields, Staffs, Mana Staffs, Essence Staffs | Yes |
+| [Protection](protection.md) | I-III | `4%` | Armor | Yes |
+| [Efficiency](efficiency.md) | I-III | `20%` | Pickaxes, Axes, Shovels | Yes |
+| [Fortune](fortune.md) | I-III | `25%` | Pickaxes | Yes |
+| [Smelting](smelting.md) | I | None | Pickaxes | Yes |
+| [Strength](strength.md) | I-III | `10%` | Ranged Weapons | Yes |
+| [Eagle's Eye](eagles-eye.md) | I-III | `0.5%` | Ranged Weapons | Yes |
+| [Looting](looting.md) | I-III | `25%` | Melee Weapons, Ranged Weapons, Staffs, Mana Staffs, Essence Staffs | Yes |
+| [Feather Falling](feather-falling.md) | I-III | `20%` | Leg Armor | Yes |
+| [Waterbreathing](waterbreathing.md) | I-III | `20%` | Helmets | Yes |
+| [Burn](burn.md) | I | `5 damage/s` | Melee Weapons, Ranged Weapons | Yes |
+| [Freeze](freeze.md) | I | `50%` | Ranged Weapons, Melee Weapons | Yes |
+| [Eternal Shot](eternal-shot.md) | I | None | Ranged Weapons | Yes |
+| [Pick Perfect](pick-perfect.md) | I | None | Pickaxes, Axes, Shovels | Yes |
+| [Thrift](thrift.md) | I-III | `20%` | Mana Staffs | No |
+| [Elemental Heart](elemental-heart.md) | I | `100%` | Essence Staffs | Yes |
+| [Knockback](knockback.md) | I-III | `60%` | Melee Weapons, Shields | Yes |
+| [Reflection](reflection.md) | I-III | `10%` | Shields | Yes |
+| [Absorption](absorption.md) | I-III | `10%` | Shields | Yes |
+| [Swift Swim](fast-swim.md) | I-III | `25%` | Gloves | Yes |
+| [Night Vision](night-vision.md) | I | None | Helmets | No |
+| [Ranged Protection](ranged-protection.md) | I-III | `4%` | Armor | Yes |
+| [Frenzy](frenzy.md) | I-III | `15%` | Melee Weapons, Ranged Weapons, Staffs, Mana Staffs, Essence Staffs | Yes |
+| [Riposte](riposte.md) | I-III | `10%` | Melee Weapons | Yes |
+| [Coup de Grâce](coup-de-grace.md) | I-III | `15%` | Melee Weapons | Yes |
+| [Poison](poison.md) | I | `3 damage/s` | Melee Weapons, Ranged Weapons | Yes |
+| [Env. Protection](environmental-protection.md) | I-III | `4%` | Armor | Yes |
+| [Regeneration](regeneration.md) | I | `0.5 HP/s` | Chestplates | Yes |
+| [Second Stomach](second-stomach.md) | I-III | `15%` | Chestplates | Yes |
+<!-- AUTO-GENERATED:enchantment-index:end -->
