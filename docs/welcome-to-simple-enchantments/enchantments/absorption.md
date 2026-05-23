@@ -7,27 +7,27 @@ Heals blocker for 10% of blocked damage. Not combinable with Reflection.
 ## Stats and Recipe
 
 <div class="se-stats-recipe" style="display: flex; gap: 24px; align-items: flex-start; flex-wrap: wrap;">
-<div class="se-stats-panel" style="flex: 1 1 420px; min-width: 320px;">
+<div class="se-stats-panel" style="flex: 1 1 460px; min-width: 360px;">
 <h3>Stats</h3>
 <div class="se-stats-card" style="border: 1px solid rgba(148, 163, 184, 0.22); border-radius: 8px; padding: 10px 12px; background: rgba(148, 163, 184, 0.04);">
-<div class="se-stats-grid" style="display: grid; grid-template-columns: minmax(130px, 0.42fr) minmax(0, 1fr); column-gap: 18px; align-items: center;">
+<div class="se-stats-grid" style="display: grid; grid-template-columns: max-content minmax(0, 1fr); column-gap: 22px; align-items: center;">
 <div class="se-stats-heading" style="font-weight: 600; opacity: 0.75; padding: 0 0 8px;">Field</div>
 <div class="se-stats-heading" style="font-weight: 600; opacity: 0.75; padding: 0 0 8px;">Value</div>
-<div class="se-stats-cell se-stats-label" style="border-top: 1px solid rgba(148, 163, 184, 0.18); display: flex; align-items: center; min-height: 38px; padding: 7px 0; font-weight: 600;">Added in Version</div>
+<div class="se-stats-cell se-stats-label" style="border-top: 1px solid rgba(148, 163, 184, 0.18); display: flex; align-items: center; min-height: 38px; padding: 7px 0; font-weight: 600; white-space: nowrap;">Added in Version</div>
 <div class="se-stats-cell se-stats-value" style="border-top: 1px solid rgba(148, 163, 184, 0.18); display: flex; align-items: center; min-height: 38px; padding: 7px 0;"><!-- MANUAL:added-version:start --> <!-- MANUAL:added-version:end --></div>
-<div class="se-stats-cell se-stats-label" style="border-top: 1px solid rgba(148, 163, 184, 0.18); display: flex; align-items: center; min-height: 38px; padding: 7px 0; font-weight: 600;">Default Modifier</div>
+<div class="se-stats-cell se-stats-label" style="border-top: 1px solid rgba(148, 163, 184, 0.18); display: flex; align-items: center; min-height: 38px; padding: 7px 0; font-weight: 600; white-space: nowrap;">Default Modifier</div>
 <div class="se-stats-cell se-stats-value" style="border-top: 1px solid rgba(148, 163, 184, 0.18); display: flex; align-items: center; min-height: 38px; padding: 7px 0;">Heal % Per Level: <code>10%</code></div>
-<div class="se-stats-cell se-stats-label" style="border-top: 1px solid rgba(148, 163, 184, 0.18); display: flex; align-items: center; min-height: 38px; padding: 7px 0; font-weight: 600;">Amount of Levels</div>
+<div class="se-stats-cell se-stats-label" style="border-top: 1px solid rgba(148, 163, 184, 0.18); display: flex; align-items: center; min-height: 38px; padding: 7px 0; font-weight: 600; white-space: nowrap;">Amount of Levels</div>
 <div class="se-stats-cell se-stats-value" style="border-top: 1px solid rgba(148, 163, 184, 0.18); display: flex; align-items: center; min-height: 38px; padding: 7px 0;">3 (I-III)</div>
-<div class="se-stats-cell se-stats-label" style="border-top: 1px solid rgba(148, 163, 184, 0.18); display: flex; align-items: center; min-height: 38px; padding: 7px 0; font-weight: 600;">ID</div>
+<div class="se-stats-cell se-stats-label" style="border-top: 1px solid rgba(148, 163, 184, 0.18); display: flex; align-items: center; min-height: 38px; padding: 7px 0; font-weight: 600; white-space: nowrap;">ID</div>
 <div class="se-stats-cell se-stats-value" style="border-top: 1px solid rgba(148, 163, 184, 0.18); display: flex; align-items: center; min-height: 38px; padding: 7px 0;"><code>absorption</code></div>
-<div class="se-stats-cell se-stats-label" style="border-top: 1px solid rgba(148, 163, 184, 0.18); display: flex; align-items: center; min-height: 38px; padding: 7px 0; font-weight: 600;">Can Be Applied To</div>
+<div class="se-stats-cell se-stats-label" style="border-top: 1px solid rgba(148, 163, 184, 0.18); display: flex; align-items: center; min-height: 38px; padding: 7px 0; font-weight: 600; white-space: nowrap;">Can Be Applied To</div>
 <div class="se-stats-cell se-stats-value" style="border-top: 1px solid rgba(148, 163, 184, 0.18); display: flex; align-items: center; min-height: 38px; padding: 7px 0;">Shields</div>
-<div class="se-stats-cell se-stats-label" style="border-top: 1px solid rgba(148, 163, 184, 0.18); display: flex; align-items: center; min-height: 38px; padding: 7px 0; font-weight: 600;">Enabled By Default</div>
+<div class="se-stats-cell se-stats-label" style="border-top: 1px solid rgba(148, 163, 184, 0.18); display: flex; align-items: center; min-height: 38px; padding: 7px 0; font-weight: 600; white-space: nowrap;">Enabled By Default</div>
 <div class="se-stats-cell se-stats-value" style="border-top: 1px solid rgba(148, 163, 184, 0.18); display: flex; align-items: center; min-height: 38px; padding: 7px 0;">Yes</div>
-<div class="se-stats-cell se-stats-label" style="border-top: 1px solid rgba(148, 163, 184, 0.18); display: flex; align-items: center; min-height: 38px; padding: 7px 0; font-weight: 600;">Crafting Tier</div>
+<div class="se-stats-cell se-stats-label" style="border-top: 1px solid rgba(148, 163, 184, 0.18); display: flex; align-items: center; min-height: 38px; padding: 7px 0; font-weight: 600; white-space: nowrap;">Crafting Tier</div>
 <div class="se-stats-cell se-stats-value" style="border-top: 1px solid rgba(148, 163, 184, 0.18); display: flex; align-items: center; min-height: 38px; padding: 7px 0;"><code>1/2/3</code></div>
-<div class="se-stats-cell se-stats-label" style="border-top: 1px solid rgba(148, 163, 184, 0.18); display: flex; align-items: center; min-height: 38px; padding: 7px 0; font-weight: 600;">Conflicts With</div>
+<div class="se-stats-cell se-stats-label" style="border-top: 1px solid rgba(148, 163, 184, 0.18); display: flex; align-items: center; min-height: 38px; padding: 7px 0; font-weight: 600; white-space: nowrap;">Conflicts With</div>
 <div class="se-stats-cell se-stats-value" style="border-top: 1px solid rgba(148, 163, 184, 0.18); display: flex; align-items: center; min-height: 38px; padding: 7px 0;"><a href="reflection.md">Reflection</a></div>
 </div>
 </div>

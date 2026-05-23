@@ -1021,22 +1021,87 @@ def render_disabled_enchantments(enchantments: list[Enchantment]) -> str:
 
 def render_enchantment_index(enchantments: list[Enchantment], translations: dict[str, str]) -> str:
     lines = [
-        "| Enchantment | Levels | Default Modifier | Applies To | Enabled By Default |",
-        "|---|---:|---|---|---|",
+        (
+            '<div class="se-table-card se-enchantment-index-card" '
+            'style="border: 1px solid rgba(148, 163, 184, 0.22); border-radius: 8px; '
+            'background: rgba(148, 163, 184, 0.04); overflow: hidden;">'
+        ),
+        (
+            '<table class="se-doc-table se-enchantment-index-table" '
+            'style="width: 100%; border-collapse: collapse; table-layout: fixed;">'
+        ),
+        "<colgroup>",
+        '<col style="width: 16%;">',
+        '<col style="width: 8%;">',
+        '<col style="width: 13%;">',
+        "<col>",
+        '<col style="width: 13%;">',
+        "</colgroup>",
+        "<thead>",
+        "<tr>",
+        (
+            '<th style="padding: 10px 12px; text-align: left; font-weight: 600; '
+            'opacity: 0.75; border-bottom: 1px solid rgba(148, 163, 184, 0.18);">'
+            "Enchantment</th>"
+        ),
+        (
+            '<th style="padding: 10px 12px; text-align: left; font-weight: 600; '
+            'opacity: 0.75; border-bottom: 1px solid rgba(148, 163, 184, 0.18);">'
+            "Levels</th>"
+        ),
+        (
+            '<th style="padding: 10px 12px; text-align: left; font-weight: 600; '
+            'opacity: 0.75; border-bottom: 1px solid rgba(148, 163, 184, 0.18);">'
+            "Default Modifier</th>"
+        ),
+        (
+            '<th style="padding: 10px 12px; text-align: left; font-weight: 600; '
+            'opacity: 0.75; border-bottom: 1px solid rgba(148, 163, 184, 0.18);">'
+            "Applies To</th>"
+        ),
+        (
+            '<th style="padding: 10px 12px; text-align: left; font-weight: 600; '
+            'opacity: 0.75; border-bottom: 1px solid rgba(148, 163, 184, 0.18);">'
+            "Enabled By Default</th>"
+        ),
+        "</tr>",
+        "</thead>",
+        "<tbody>",
     ]
+
+    cell_style = (
+        "padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); "
+        "vertical-align: top;"
+    )
+    nowrap_cell_style = f"{cell_style} white-space: nowrap;"
 
     for enchantment in enchantments:
         multiplier = primary_multiplier(enchantment)
-        default_modifier = f"`{format_multiplier_for_summary(multiplier)}`" if multiplier else "None"
-        lines.append(
-            "| "
-            f"[{markdown_escape(enchantment.name)}]({page_for_enchantment(enchantment).name}) | "
-            f"{level_range(enchantment.max_level)} | "
-            f"{default_modifier} | "
-            f"{markdown_escape(format_categories(enchantment.categories, translations))} | "
-            f"{format_bool(not enchantment.disabled_by_default)} |"
+        default_modifier = (
+            f"<code>{html.escape(format_multiplier_for_summary(multiplier))}</code>"
+            if multiplier
+            else "None"
+        )
+        page_name = html.escape(page_for_enchantment(enchantment).name, quote=True)
+        lines.extend(
+            [
+                "<tr>",
+                (
+                    f'<td style="{nowrap_cell_style}"><a href="{page_name}">'
+                    f"{html.escape(enchantment.name)}</a></td>"
+                ),
+                f'<td style="{nowrap_cell_style}">{html.escape(level_range(enchantment.max_level))}</td>',
+                f'<td style="{nowrap_cell_style}">{default_modifier}</td>',
+                (
+                    f'<td style="{cell_style}">'
+                    f"{html.escape(format_categories(enchantment.categories, translations))}</td>"
+                ),
+                f'<td style="{nowrap_cell_style}">{format_bool(not enchantment.disabled_by_default)}</td>',
+                "</tr>",
+            ]
         )
 
+    lines.extend(["</tbody>", "</table>", "</div>"])
     return "\n".join(lines)
 
 
@@ -1179,8 +1244,8 @@ def render_stats_table(stats_rows: list[tuple[str, str]]) -> str:
         ),
         (
             '<div class="se-stats-grid" style="display: grid; '
-            'grid-template-columns: minmax(130px, 0.42fr) minmax(0, 1fr); '
-            'column-gap: 18px; align-items: center;">'
+            'grid-template-columns: max-content minmax(0, 1fr); '
+            'column-gap: 22px; align-items: center;">'
         ),
         (
             '<div class="se-stats-heading" style="font-weight: 600; opacity: 0.75; padding: 0 0 8px;">'
@@ -1199,7 +1264,7 @@ def render_stats_table(stats_rows: list[tuple[str, str]]) -> str:
                 (
                     f'<div class="se-stats-cell se-stats-label" '
                     f'style="{row_border} display: flex; align-items: center; '
-                    'min-height: 38px; padding: 7px 0; font-weight: 600;">'
+                    'min-height: 38px; padding: 7px 0; font-weight: 600; white-space: nowrap;">'
                     f"{html.escape(label)}</div>"
                 ),
                 (
@@ -1272,7 +1337,7 @@ def render_enchantment_page(
             "## Stats and Recipe",
             "",
             '<div class="se-stats-recipe" style="display: flex; gap: 24px; align-items: flex-start; flex-wrap: wrap;">',
-            '<div class="se-stats-panel" style="flex: 1 1 420px; min-width: 320px;">',
+            '<div class="se-stats-panel" style="flex: 1 1 460px; min-width: 360px;">',
             "<h3>Stats</h3>",
             render_stats_table(stats_rows),
         ]
