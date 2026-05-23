@@ -6,8 +6,8 @@ Knocks targets back on hit.
 
 ## Stats and Recipe
 
-<div class="se-stats-recipe" style="display: flex; gap: 24px; align-items: flex-start; flex-wrap: wrap;">
-<div class="se-stats-panel" style="flex: 0 1 560px; min-width: 360px; max-width: 620px;">
+<div class="se-stats-recipe" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 24px; align-items: flex-start;">
+<div class="se-stats-panel" style="min-width: 0;">
 <h3>Stats</h3>
 <div class="se-stats-card" style="border: 1px solid rgba(148, 163, 184, 0.22); border-radius: 8px; padding: 10px 12px; background: rgba(148, 163, 184, 0.04);">
 <div class="se-stats-grid" style="display: grid; grid-template-columns: max-content minmax(0, 1fr); column-gap: 22px; align-items: center;">
@@ -30,7 +30,7 @@ Knocks targets back on hit.
 </div>
 </div>
 </div>
-<div class="se-recipe-panel" style="flex: 0 1 360px; min-width: 280px;">
+<div class="se-recipe-panel" style="width: 100%; max-width: 380px; min-width: 0;">
 <h3>Recipe</h3>
 <div class="se-recipe-card" style="border: 1px solid rgba(148, 163, 184, 0.22); border-radius: 8px; padding: 10px 12px; background: rgba(148, 163, 184, 0.04);">
 <div class="se-recipe-grid" style="display: grid; grid-template-columns: minmax(0, 1fr) max-content; column-gap: 16px; align-items: center;">
