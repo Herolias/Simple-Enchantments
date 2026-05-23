@@ -8,8 +8,6 @@
 |---|---:|
 | `configVersion` | `2.0` |
 | `maxEnchantmentsPerItem` | `5` |
-| `showEnchantmentBanner` | `true` |
-| `hasAutoDisabledBanner` | `false` |
 | `enableEnchantmentGlow` | `true` |
 | `allowSameScrollUpgrades` | `true` |
 | `burnDuration` | `3.0` |

@@ -1,32 +1,39 @@
 # Enchantments
 
-There are currently 29 Enchantments in the mod:
-*   **Sharpness** (I-III): Increases melee damage by 10% per level.
-*   **Efficiency** (I-III): Increases mining speed by 20% per level.
-*   **Fortune** (I-III): Increases the chance of getting extra ores and crystals while mining.
-*   **Protection** (I-III): Reduces incoming physical damage by 4% per level per armor piece.
-*   **Feather Falling** (I-III): Reduces fall damage by 20% per level (Boots only).
-*   **Looting** (I-III): Increases drop rates and rare drop chances from mobs.
-*   **Life Leech** (I): Heals the attacker for 10% of damage dealt.
-*   **Smelting** (I): Automatically smelts mined ores into ingots.
-*   **Waterbreathing** (I-III): Reduces oxygen consumption underwater.
-*   **Strength** (I-III): Increases projectile damage and range for ranged weapons.
-*   **Eagle's Eye** (I-III): Boosts projectile damage based on distance to the target.
-*   **Dexterity** (I-III): Reduces stamina costs for blocking and abilities.
-*   **Durability** (I-III): Significant chance to ignore durability loss on use.
-*   **Sturdy** (I): Prevents the max durability penalty when repairing items with a repair kit.
-*   **Burn** (I): Sets targets on fire, dealing damage over time.
-*   **Freeze** (I): Slows down the target by 50% for a short time.
-*   **Eternal Shot** (I): Lets you shoot a Bow/Crossbow without consuming Arrows; you must have at least 1 Arrow in your Inventory.
-*   **Pick Perfect** (I): Mined blocks drop themselves instead of a broken-down version.
-*   **Elemental Heart** (I): Like Eternal Shot, but for Staves that consume Essences.
-*   **Thrift** (I-III): Disabled by default (as long as Mana Staves are not integrated into vanilla). Reduces Mana consumption by 20% per level.
-*   **Knockback** (I-III): Increases the Knockback of weapons.
-*   **Reflection** (I-III): Shield Enchantment. Reflects 10% (per level) of blocked damage back to the attacker.
-*   **Absorption** (I-III): Shield Enchantment. Heals you by 10% (per level) of damage blocked with the Shield. Not combinable with Reflection.
-*   **Swift Swim** (I-III): Gloves Enchantment. Makes you 25% faster in water per level 
-*   **Ranged Protection** (I-III): Reduces incoming projectile and magic damage by 4% per level per armor piece.
-*   **Frenzy** (I-III): Increases Signature Ability charge by ~15% per level.
-*   **Night Vision** (I):Disabled by default. Brightens up the environment.
-*   **Poison** (I): Deals poison damage over time.
-*   **Environmental Protection** (I-III): Reduces damage from Lava, fire, thorns, cacti and reduces slow of the freeze enchantment.
+There are currently <!-- DOCSTAT:enchantments.count -->33<!-- /DOCSTAT --> Enchantments in the mod:
+
+<!-- AUTO-GENERATED:enchantment-summary:start -->
+* **Sharpness** (I-III): Increases melee damage. Default modifier: `10%`.
+* **Life Leech** (I): Heals for a portion of damage dealt. Default modifier: `10%`.
+* **Durability** (I-III): Reduces durability loss. Default modifier: `25%`.
+* **Sturdy** (I): Prevents repair durability penalty.
+* **Dexterity** (I-III): Reduces stamina costs. Default modifier: `20%`.
+* **Protection** (I-III): Increases physical damage resistance. Default modifier: `4%`.
+* **Efficiency** (I-III): Increases mining speed. Default modifier: `20%`.
+* **Fortune** (I-III): Chance for extra ore/crystal drops. Default modifier: `25%`. Conflicts with `pick_perfect`.
+* **Smelting** (I): Automatically smelts mined blocks. Conflicts with `pick_perfect`.
+* **Strength** (I-III): Increases projectile damage and range. Default modifier: `10%`.
+* **Eagle's Eye** (I-III): Increases damage with distance. Default modifier: `0.5%`.
+* **Looting** (I-III): Increases enemy drops and rare drop chance. Default modifier: `25%`.
+* **Feather Falling** (I-III): Reduces fall damage. Default modifier: `20%`.
+* **Waterbreathing** (I-III): Breathe underwater longer. Default modifier: `20%`.
+* **Burn** (I): Sets target on fire. Default modifier: `5 damage/s`. Conflicts with `freeze`, `poison`.
+* **Freeze** (I): Slows targets on hit. Default modifier: `50%`. Conflicts with `burn`.
+* **Eternal Shot** (I): Shoot without consuming arrows.
+* **Pick Perfect** (I): Drops the block itself when mined. Conflicts with `fortune`, `smelting`.
+* **Thrift** (I-III): Restores mana on hit. Default modifier: `20%`. Disabled by default.
+* **Elemental Heart** (I): Chance to save essence. Default modifier: `100%`.
+* **Knockback** (I-III): Knocks targets back. Default modifier: `60%`.
+* **Reflection** (I-III): Reflects damage when blocking. Default modifier: `10%`. Conflicts with `absorption`.
+* **Absorption** (I-III): Heals directly from blocked damage. Default modifier: `10%`. Conflicts with `reflection`.
+* **Swift Swim** (I-III): Increases swimming speed. Default modifier: `25%`.
+* **Night Vision** (I): Increases visibility in dark environments. Disabled by default.
+* **Ranged Protection** (I-III): Reduces projectile and magic damage. Default modifier: `4%`.
+* **Frenzy** (I-III): Increases ability charge rate. Default modifier: `15%`.
+* **Riposte** (I-III): Increases counter attack damage. Default modifier: `10%`. Requires `Perfect Parries`.
+* **Coup de Grâce** (I-III): Increases damage to stunned enemies. Default modifier: `15%`. Requires `Perfect Parries`.
+* **Poison** (I): Poisons targets on hit. Default modifier: `3 damage/s`. Conflicts with `burn`.
+* **Env. Protection** (I-III): Reduces environmental damage and alters status effects. Default modifier: `4%`.
+* **Regeneration** (I): Passively regenerates health. Default modifier: `0.5 HP/s`. Conflicts with `second_stomach`.
+* **Second Stomach** (I-III): Increases instant healing from food and potions. Default modifier: `15%`. Conflicts with `regeneration`.
+<!-- AUTO-GENERATED:enchantment-summary:end -->
