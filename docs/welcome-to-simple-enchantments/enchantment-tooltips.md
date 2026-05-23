@@ -4,7 +4,7 @@ Since Version 1.0.0 of Simple Enchantments, [DynamicTooltipsLib](https://www.cur
 
 The enchantments you put on your items will now show up directly in the item tooltip:
 
-![](../media/images/LrTUPtP-b0d53da377.png)
+![](https://raw.githubusercontent.com/Herolias/Simple-Enchantments/main/docs/media/images/LrTUPtP-b0d53da377.png)
 
 ### Tooltip Colors
 Enchantment tooltips come in two distinct colors so you can easily tell them apart:
