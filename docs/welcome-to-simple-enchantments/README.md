@@ -5,7 +5,11 @@ published: true
 draft: false
 ---
 
-## Getting Started
+<div class="se-link-buttons" style="display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 16px;">
+<a href="https://github.com/Herolias/Simple-Enchantments" class="se-inline-code" style="display: inline-block; border: 1px solid rgba(148, 163, 184, 0.28); border-radius: 6px; padding: 3px 8px; line-height: 1.2; background: rgba(148, 163, 184, 0.14); font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace; font-size: 0.9em; text-decoration: none;">GitHub</a>
+<a href="https://www.curseforge.com/hytale/mods/simple-enchantments" class="se-inline-code" style="display: inline-block; border: 1px solid rgba(148, 163, 184, 0.28); border-radius: 6px; padding: 3px 8px; line-height: 1.2; background: rgba(148, 163, 184, 0.14); font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace; font-size: 0.9em; text-decoration: none;">CurseForge</a>
+<a href="https://discord.com/invite/7XQAnUfQfM" class="se-inline-code" style="display: inline-block; border: 1px solid rgba(148, 163, 184, 0.28); border-radius: 6px; padding: 3px 8px; line-height: 1.2; background: rgba(148, 163, 184, 0.14); font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace; font-size: 0.9em; text-decoration: none;">Discord</a>
+</div>
 
 Simple Enchantments adds a complete enchanting system to the game. Currently, the mod includes an Enchanting Table, an Engraving Table, <!-- DOCSTAT:enchantments.count -->33<!-- /DOCSTAT --> unique enchantments, a detailed config to customize almost every part of the mod, 3 commands, and an API for developers to create their own enchantments or register custom weapons.
 
