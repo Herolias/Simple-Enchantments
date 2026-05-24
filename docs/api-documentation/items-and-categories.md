@@ -1,68 +1,17 @@
 ---
-title: "Items and Categories"
-order: 2
+title: "Register Items to Categories"
+order: 3
 published: true
 draft: false
 ---
 
-Use the item APIs when you want to inspect enchanted items, modify an `ItemStack`, or make custom items eligible for existing and add-on enchantments.
+Use this page when you want Simple Enchantments to recognize custom items, or when your add-on needs a custom item category for a new enchantment.
 
-## Reading Enchantments
-
-```java
-EnchantmentApi api = EnchantmentApiProvider.get();
-if (api == null) {
-    return;
-}
-
-int sharpnessLevel = api.getEnchantmentLevel(heldItem, "sharpness");
-boolean hasFortune = api.hasEnchantment(heldItem, "fortune");
-Map<String, Integer> allEnchantments = api.getEnchantments(heldItem);
-```
-
-`getEnchantmentLevel()` returns `0` when the item is null, empty, unknown, or does not contain the enchantment. `hasEnchantment()` returns `false` for the same cases. `getEnchantments()` returns an empty map when the item has no enchantments.
-
-## Adding And Removing Enchantments
-
-`addEnchantment()` and `removeEnchantment()` return an `ItemStack`. Assign the returned item back to the slot you changed.
-
-```java
-ItemStack updated = api.addEnchantment(heldItem, "sharpness", 3);
-inventory.getHotbar().setItemStackForSlot((short) inventory.getActiveHotbarSlot(), updated);
-```
-
-`addEnchantment()` throws `IllegalArgumentException` when the enchantment ID is not registered. If the enchantment is known but cannot be applied because of normal Simple Enchantments rules, such as conflicts or max enchantment limits, the original item is returned.
-
-```java
-try {
-    ItemStack updated = api.addEnchantment(heldItem, "example:gold_digger", 1);
-    updateHeldItem(inventory, updated);
-} catch (IllegalArgumentException e) {
-    // Unknown enchantment ID.
-}
-```
-
-`removeEnchantment()` returns the original item when the item is empty, the enchantment ID is unknown, or the item does not have that enchantment.
-
-```java
-ItemStack cleaned = api.removeEnchantment(heldItem, "sharpness");
-updateHeldItem(inventory, cleaned);
-```
-
-## Equipped Enchantments
-
-`equippedItemEnchantments(player)` scans the player's main hand, utility/off-hand, and armor slots. If the same enchantment appears on multiple equipped items, the highest level wins.
-
-```java
-Map<String, Integer> equipped = api.equippedItemEnchantments(player);
-int protection = equipped.getOrDefault("protection", 0);
-```
-
-This is useful for passive effects that care about the player's full equipment set rather than one triggering item.
+Item categories decide which items an enchantment can be applied to. They are different from crafting categories: crafting categories are Enchanting Table tabs, covered on [Scrolls and Crafting](https://wiki.hytalemodding.dev/mod/simple-enchantments/api-documentation/scrolls-and-crafting).
 
 ## Built-In Item Categories
 
-Enchantments use item categories to decide what they can apply to.
+Use a built-in category whenever it expresses your item well.
 
 | Category | Typical use |
 |---|---|
@@ -83,22 +32,24 @@ Enchantments use item categories to decide what they can apply to.
 | `STAFF_ESSENCE` | Essence-consuming staffs. |
 | `UNKNOWN` | Non-enchantable or uncategorized items. |
 
-`BOOTS` still exists as a deprecated source-compatible alias for `LEGS`. New integrations should use `LEGS`.
+`ItemCategory.BOOTS` still exists as a deprecated source-compatible alias for `ItemCategory.LEGS`. New integrations should use `LEGS`.
 
-## Registering Existing Items
+## Register One Item To An Existing Category
 
-Use `registerItemToCategory()` when you know an item ID and want Simple Enchantments to treat it as an existing category.
+Use `registerItemToCategory(itemId, categoryId)` when you know an item ID and want it to behave like an existing category.
 
 ```java
 api.registerItemToCategory("My_Mod_Steel_Katana", "MELEE_WEAPON");
 api.registerItemToCategory("My_Mod_Tower_Shield", "SHIELD");
 ```
 
-The category ID must already exist. API item mappings have higher priority than JSON config mappings and automatic family detection.
+The category ID must already exist. This is the right API for optional integrations where your mod has its own items and simply wants them to accept Simple Enchantments.
 
-## Registering Custom Categories
+API item mappings override config mappings and automatic family detection.
 
-Use custom categories when your enchantment applies to a group that the built-in categories cannot express cleanly.
+## Register A Category By Item IDs
+
+Use `registerCategoryByItems(categoryId, itemIds...)` when your enchantment should apply to a specific list of items that does not fit a built-in category.
 
 ```java
 ItemCategory hoes = api.registerCategoryByItems(
@@ -110,7 +61,7 @@ ItemCategory hoes = api.registerCategoryByItems(
 );
 ```
 
-Then use the returned category in your enchantment builder:
+Then pass the returned category into your enchantment builder:
 
 ```java
 api.registerEnchantment("example:gold_digger", "Gold Digger")
@@ -120,15 +71,27 @@ api.registerEnchantment("example:gold_digger", "Gold Digger")
     .build();
 ```
 
-You can also map a Hytale item family to a category:
+If the category ID already exists, Simple Enchantments reuses it and adds the item mappings.
+
+## Register A Category By Family
+
+Use `registerCategoryByFamily(categoryId, family)` when all items in a Hytale item family should behave the same way.
 
 ```java
 ItemCategory katanas = api.registerCategoryByFamily("KATANAS", "katana");
+
+api.registerEnchantment("my_mod:parry", "Parry")
+    .description("Chance to deflect an incoming melee attack")
+    .maxLevel(3)
+    .appliesTo(ItemCategory.MELEE_WEAPON, katanas)
+    .build();
 ```
 
-Family mappings are useful when every item in a family should behave the same way. Explicit item mappings are better when only specific item IDs should be included.
+Family names are stored case-insensitively. Explicit item ID mappings are better when only some items in a family should be enchantable.
 
-## Looking Up Categories
+## Look Up A Category
+
+Use `getCategory(categoryId)` when you need to reuse a category that may have been registered elsewhere.
 
 ```java
 ItemCategory category = api.getCategory("MELEE_WEAPON");
@@ -139,27 +102,18 @@ if (category != null && category.isEnchantable()) {
 
 Useful helper methods on `ItemCategory` include `getId()`, `isWeapon()`, `isArmor()`, `isTool()`, `isShield()`, `isMelee()`, `isRanged()`, and `isEnchantable()`.
 
-## Minimal Command Pattern
+Custom categories created with the public API are enchantable, but their helper flags such as `isWeapon()` and `isArmor()` are `false` unless they are one of the built-in categories. Use `getId()` or direct equality with the returned category when you need custom-category checks.
 
-This is the core pattern for a command that enchants the item in the player's hand:
+## Setup Order
 
-```java
-private void addToHeldItem(Player player, String enchantmentId, int level) {
-    EnchantmentApi api = EnchantmentApiProvider.get();
-    if (api == null) {
-        return;
-    }
+Register item categories during your plugin `setup()` method, before registering enchantments that use them.
 
-    Inventory inventory = player.getInventory();
-    ItemStack heldItem = inventory.getItemInHand();
-    if (heldItem == null || heldItem.isEmpty()) {
-        return;
-    }
+For a full add-on, the usual order is:
 
-    ItemStack updated = api.addEnchantment(heldItem, enchantmentId, level);
-    int activeHotbarSlot = inventory.getActiveHotbarSlot();
-    if (activeHotbarSlot != -1) {
-        inventory.getHotbar().setItemStackForSlot((short) activeHotbarSlot, updated);
-    }
-}
-```
+1. Get `EnchantmentApi`.
+2. Register custom item categories.
+3. Register custom Enchanting Table tabs if needed.
+4. Register enchantments that use those categories.
+5. Register the systems or listeners that implement gameplay effects.
+
+For optional integrations that only map your items into existing categories, call `registerItemToCategory(...)` in a guarded integration method. See [Getting Started](https://wiki.hytalemodding.dev/mod/simple-enchantments/api-documentation/getting-started) for the optional dependency pattern.

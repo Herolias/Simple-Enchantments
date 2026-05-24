@@ -1,9 +1,11 @@
 ---
-title: "Registering Enchantments"
-order: 3
+title: "Enchantment Builder Reference"
+order: 5
 published: true
 draft: false
 ---
+
+Use this page when you need details for `EnchantmentBuilder`: IDs, descriptions, max levels, multipliers, scaling, applicability, conflicts, and builder validation. If you want the complete add-on flow first, start with [How to Build Your Own Enchantment](https://wiki.hytalemodding.dev/mod/simple-enchantments/api-documentation/how-to-build-your-own-enchantment).
 
 Custom enchantments are registered through `EnchantmentApi.registerEnchantment(id, displayName)`. The method returns an `EnchantmentBuilder`, and the enchantment becomes available when you call `.build()`.
 
@@ -31,7 +33,7 @@ EnchantmentType lightning = api.registerEnchantment("my_mod:lightning", "Lightni
     .build();
 ```
 
-After `.build()`, the enchantment is registered in Simple Enchantments, can be looked up through the API, appears in config metadata, and can receive scroll definitions if you added them.
+After `.build()`, the enchantment is registered in Simple Enchantments, can be looked up through the API, appears in config metadata, and includes any scroll definitions you chained before `.build()`.
 
 ## Builder Fields
 
@@ -71,6 +73,8 @@ double chance = type.getScaledMultiplier(2);
 ```
 
 For a linear multiplier of `0.15`, level 2 would normally become `0.30`. With `ScaleType.DIMINISHING`, level 2 becomes `sqrt(2) * 0.15`.
+
+The default linear scaling and the built-in `ScaleType`/power scaling helpers read the active config multiplier when `getScaledMultiplier(level)` is called. A fully custom `.scale(function)` returns whatever your function computes, so use it only when you intentionally want to own the whole formula.
 
 Available scale types:
 
@@ -133,7 +137,7 @@ api.addConflict("my_mod:lightning", "burn");
 api.addConflict("my_mod:ice_edge", "burn");
 ```
 
-The IDs must refer to registered enchantments. Add conflicts after both enchantments are registered.
+Conflicts are stored by ID and checked case-insensitively. Add conflicts after both enchantments are registered, and use `api.isEnchantmentRegistered(id)` during development if you want to catch typos early.
 
 ## Complete Registration Example
 

@@ -1,6 +1,6 @@
 ---
 title: "Events"
-order: 5
+order: 7
 published: true
 draft: false
 ---
@@ -14,7 +14,7 @@ Simple Enchantments exposes events for mods that want to observe enchanting acti
 | `ItemEnchantedEvent` | An item is successfully enchanted. | `getPlayerRef()`, `getItem()`, `getEnchantment()`, `getLevel()` |
 | `EnchantmentActivatedEvent` | An enchantment effect successfully activates. | `getPlayerRef()`, `getItem()`, `getEnchantment()`, `getLevel()` |
 
-`getPlayerRef()` can be `null`. For example, an item may be enchanted through a command or an activation may come from a non-player context.
+`getPlayerRef()` can be `null`. For example, an item may be enchanted through an API call without player context, or an activation may come from a non-player context.
 
 ## Listening To Events
 

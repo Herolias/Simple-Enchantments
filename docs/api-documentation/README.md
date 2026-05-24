@@ -5,7 +5,7 @@ published: true
 draft: false
 ---
 
-Simple Enchantments exposes a Java API for mods that want to read enchantments, edit enchanted items, register custom item categories, add new enchantments, create craftable scrolls, and react to enchantment events.
+Simple Enchantments exposes a Java API for mods that want to add enchantments, make custom items enchantable, create craftable scrolls, read or edit enchanted items, and react to enchantment events.
 
 The API is useful for two kinds of projects:
 
@@ -24,15 +24,21 @@ if (api == null) {
 }
 ```
 
-## Pages
+## What Do You Want To Do?
 
-* **[Getting Started](https://wiki.hytalemodding.dev/mod/simple-enchantments/api-documentation/getting-started):** Add the jar, choose a dependency style, and access the API safely.
-* **[Items and Categories](https://wiki.hytalemodding.dev/mod/simple-enchantments/api-documentation/items-and-categories):** Read, add, remove, and list enchantments on items, plus register custom item categories.
-* **[Registering Enchantments](https://wiki.hytalemodding.dev/mod/simple-enchantments/api-documentation/registering-enchantments):** Use the fluent builder to create enchantments with descriptions, scaling, config multipliers, conflicts, and applicability rules.
-* **[Scrolls and Crafting](https://wiki.hytalemodding.dev/mod/simple-enchantments/api-documentation/scrolls-and-crafting):** Define craftable scrolls, ingredients, crafting tiers, and Enchanting Table tabs.
-* **[Events](https://wiki.hytalemodding.dev/mod/simple-enchantments/api-documentation/events):** Listen for item enchantments and fire activation events from your own enchantment logic.
-* **[Full Example](https://wiki.hytalemodding.dev/mod/simple-enchantments/api-documentation/full-example):** A complete "Gold Digger" enchantment walkthrough based on the example add-on.
-* **[API Reference](https://wiki.hytalemodding.dev/mod/simple-enchantments/api-documentation/reference):** Method tables for the public API classes.
+| Goal | Open this page |
+|---|---|
+| Add Simple Enchantments to your build and manifest. | [Getting Started](https://wiki.hytalemodding.dev/mod/simple-enchantments/api-documentation/getting-started) |
+| Build a complete new enchantment with categories, scrolls, and effect logic. | [How to Build Your Own Enchantment](https://wiki.hytalemodding.dev/mod/simple-enchantments/api-documentation/how-to-build-your-own-enchantment) |
+| Make your own items work with existing enchantments. | [Register Items to Categories](https://wiki.hytalemodding.dev/mod/simple-enchantments/api-documentation/items-and-categories) |
+| Read, add, or remove enchantments on an `ItemStack`. | [Work With Enchanted Items](https://wiki.hytalemodding.dev/mod/simple-enchantments/api-documentation/working-with-enchanted-items) |
+| Configure builder fields such as max level, scaling, multipliers, and conflicts. | [Enchantment Builder Reference](https://wiki.hytalemodding.dev/mod/simple-enchantments/api-documentation/registering-enchantments) |
+| Add scroll recipes or Enchanting Table tabs. | [Scrolls and Crafting](https://wiki.hytalemodding.dev/mod/simple-enchantments/api-documentation/scrolls-and-crafting) |
+| Listen for enchantment activity or report your own activation. | [Events](https://wiki.hytalemodding.dev/mod/simple-enchantments/api-documentation/events) |
+| See a full add-on from setup through effect system. | [Full Example](https://wiki.hytalemodding.dev/mod/simple-enchantments/api-documentation/full-example) |
+| Check method signatures and return behavior. | [API Reference](https://wiki.hytalemodding.dev/mod/simple-enchantments/api-documentation/reference) |
+
+If you are writing an enchantment add-on, start with **Getting Started**, then follow **How to Build Your Own Enchantment**. If you are only integrating your existing items with Simple Enchantments, start with **Register Items to Categories**.
 
 ## Core Concepts
 
@@ -40,9 +46,9 @@ if (api == null) {
 |---|---|
 | `EnchantmentApi` | The main interface for reading, editing, and registering enchantments. |
 | `EnchantmentType` | The registered definition of one enchantment. It stores ID, name, max level, scaling, categories, scrolls, and config metadata. |
-| `ItemCategory` | A category such as `MELEE_WEAPON`, `SHOVEL`, or a custom category. Enchantments use categories to decide which items they can apply to. |
+| `ItemCategory` | An applicability group such as `MELEE_WEAPON`, `SHOVEL`, or a custom category. Enchantments use categories to decide which items they can apply to. |
 | `ScrollDefinition` | One craftable scroll level, including quality, required table tier, ingredients, and optional visual overrides. |
-| Crafting category | An Enchanting Table tab such as `Enchanting_Melee` or a custom tab registered by an add-on. |
+| Crafting category | An Enchanting Table tab such as `Enchanting_Melee` or a custom tab registered by an add-on. This decides where scroll recipes appear. |
 | Events | Hooks for when an item is enchanted or when an enchantment effect activates. |
 
 The API stores enchantments on `ItemStack` metadata and usually returns a new `ItemStack` when it changes an item. When you modify a held item, chest item, or custom inventory slot, assign the returned item back to the inventory/container.
