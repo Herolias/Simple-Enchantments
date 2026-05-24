@@ -1,5 +1,3 @@
-# Waterbreathing
-
 ![Waterbreathing scroll icon](https://raw.githubusercontent.com/Herolias/Simple-Enchantments/main/docs/media/enchantment-icons/waterbreathing.png)
 
 Reduces oxygen drain by 20%.

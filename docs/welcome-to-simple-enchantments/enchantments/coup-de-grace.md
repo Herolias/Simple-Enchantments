@@ -1,5 +1,3 @@
-# Coup de Grâce
-
 ![Coup de Grâce scroll icon](https://raw.githubusercontent.com/Herolias/Simple-Enchantments/main/docs/media/enchantment-icons/coup-de-grace.png)
 
 Increases damage to stunned enemies by 20%.

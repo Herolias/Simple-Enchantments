@@ -1,5 +1,3 @@
-# Night Vision
-
 ![Night Vision scroll icon](https://raw.githubusercontent.com/Herolias/Simple-Enchantments/main/docs/media/enchantment-icons/night-vision.png)
 
 Enhances visibility in dark environments such as caves, nighttime, and underwater.

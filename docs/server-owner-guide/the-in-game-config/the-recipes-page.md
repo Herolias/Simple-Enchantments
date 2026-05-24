@@ -5,8 +5,6 @@ published: true
 draft: false
 ---
 
-# The Recipes Page
-
 On this page, you can edit the crafting recipes for every enchantment scroll and choose which Enchanting Table tier unlocks each scroll. You can also edit the Enchanting Table recipe, the Engraving Table recipe, and Enchanting Table upgrade costs.
 
 Clicking Edit Recipe opens the recipe editor. There, you can view the default recipe, adjust ingredient quantities, change ingredient order, and add, remove, or replace ingredients. When you add or change an ingredient, a search bar appears on the right side so you can search for specific items.

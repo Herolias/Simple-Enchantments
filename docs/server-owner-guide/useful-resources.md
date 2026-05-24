@@ -5,8 +5,6 @@ published: true
 draft: false
 ---
 
-# Useful Resources
-
 Here are other useful pages that could help:
 
 * [Create your own enchantment](https://wiki.hytalemodding.dev/mod/simple-enchantments/api-documentation)

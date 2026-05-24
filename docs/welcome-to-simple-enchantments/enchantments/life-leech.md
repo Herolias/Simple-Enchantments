@@ -1,5 +1,3 @@
-# Life Leech
-
 ![Life Leech scroll icon](https://raw.githubusercontent.com/Herolias/Simple-Enchantments/main/docs/media/enchantment-icons/life-leech.png)
 
 Heals attacker for 10% of damage dealt.

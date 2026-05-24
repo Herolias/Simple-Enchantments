@@ -1,5 +1,3 @@
-# Thrift
-
 ![Thrift scroll icon](https://raw.githubusercontent.com/Herolias/Simple-Enchantments/main/docs/media/enchantment-icons/thrift.png)
 
 Restores 20% of mana spent on hit.

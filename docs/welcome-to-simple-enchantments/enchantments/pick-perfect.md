@@ -1,5 +1,3 @@
-# Pick Perfect
-
 ![Pick Perfect scroll icon](https://raw.githubusercontent.com/Herolias/Simple-Enchantments/main/docs/media/enchantment-icons/pick-perfect.png)
 
 Mined blocks drop themselves instead of their usual drops. Not combinable with Fortune or Smelting.

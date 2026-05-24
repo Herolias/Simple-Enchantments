@@ -1,5 +1,3 @@
-# Sharpness
-
 ![Sharpness scroll icon](https://raw.githubusercontent.com/Herolias/Simple-Enchantments/main/docs/media/enchantment-icons/sharpness.png)
 
 Increases melee damage by 10%.

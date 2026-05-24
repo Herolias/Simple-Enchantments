@@ -1,5 +1,3 @@
-# Second Stomach
-
 ![Second Stomach scroll icon](https://raw.githubusercontent.com/Herolias/Simple-Enchantments/main/docs/media/enchantment-icons/second-stomach.png)
 
 Increases instant healing from food and potions by 15% per level. Chestplate only.

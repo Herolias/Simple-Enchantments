@@ -1,5 +1,3 @@
-# Feather Falling
-
 ![Feather Falling scroll icon](https://raw.githubusercontent.com/Herolias/Simple-Enchantments/main/docs/media/enchantment-icons/feather-falling.png)
 
 Reduces fall damage by 20%.

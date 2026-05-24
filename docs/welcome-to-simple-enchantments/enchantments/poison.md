@@ -1,5 +1,3 @@
-# Poison
-
 ![Poison scroll icon](https://raw.githubusercontent.com/Herolias/Simple-Enchantments/main/docs/media/enchantment-icons/poison.png)
 
 Poisons targets on hit (3 damage/s for 4s). Not combinable with Burn.

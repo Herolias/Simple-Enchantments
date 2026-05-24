@@ -1,5 +1,3 @@
-# Regeneration
-
 ![Regeneration scroll icon](https://raw.githubusercontent.com/Herolias/Simple-Enchantments/main/docs/media/enchantment-icons/regeneration.png)
 
 Passively regenerates 0.5 HP per second. Chestplate only.

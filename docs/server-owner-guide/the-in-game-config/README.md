@@ -5,8 +5,6 @@ published: true
 draft: false
 ---
 
-# The In-Game Config
-
 Simple Enchantments has an in-game config editor for easier customization. In theory, you never have to touch the JSON files in the mods folder.
 You can access the config with the `/enchantconfig` command. This command requires OP permissions. It opens a menu with 3 tabs: General, Enchantments, and Recipes.
 ![](https://raw.githubusercontent.com/Herolias/Simple-Enchantments/main/docs/media/images/dQ8V5UI-3fa83fb98c.png)

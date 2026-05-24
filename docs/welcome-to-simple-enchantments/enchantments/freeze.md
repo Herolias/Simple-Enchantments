@@ -1,5 +1,3 @@
-# Freeze
-
 ![Freeze scroll icon](https://raw.githubusercontent.com/Herolias/Simple-Enchantments/main/docs/media/enchantment-icons/freeze.png)
 
 Slows target by 50% for 5s on hit. Not combinable with Burn.

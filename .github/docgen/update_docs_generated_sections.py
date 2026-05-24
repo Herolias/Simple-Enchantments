@@ -1277,6 +1277,16 @@ def render_single_recipe_table(
     )
 
 
+def render_compact_recipe_panel(recipe_content: str) -> str:
+    return "\n".join(
+        [
+            '<div class="se-recipe-panel" style="width: 100%; max-width: 380px; min-width: 0;">',
+            recipe_content,
+            "</div>",
+        ]
+    )
+
+
 def render_recipe_card(
     rows: list[tuple[str, str]],
     item_translations: dict[str, str],
@@ -1361,7 +1371,7 @@ def render_table_upgrade_recipes(
     for upgrade in upgrades:
         lines.extend(
             [
-                '<div class="se-recipe-panel" style="width: 100%; min-width: 0;">',
+                '<div class="se-recipe-panel" style="width: 100%; max-width: 380px; min-width: 0;">',
                 f"<h3>Upgrade to Tier {html.escape(roman(upgrade.target_tier))}</h3>",
                 render_single_recipe_table(upgrade.ingredients, item_translations, item_icons, changed),
                 "</div>",
@@ -1454,10 +1464,7 @@ def render_enchantment_page(
     if enchantment.conflicts:
         stats_rows.append(("Conflicts With", render_enchantment_links_html(enchantment.conflicts, enchantment_by_id)))
 
-    lines = [
-        f"# {markdown_escape(enchantment.name)}",
-        "",
-    ]
+    lines = []
 
     if icon_path:
         lines.extend(
@@ -1540,7 +1547,9 @@ def update_integrated_pages(
         (
             DOCS_DIR / "welcome-to-simple-enchantments" / "the-enchanting-table.md",
             "enchanting-table-recipe",
-            render_single_recipe_table(enchanting_table_recipe, item_translations, item_icons, changed),
+            render_compact_recipe_panel(
+                render_single_recipe_table(enchanting_table_recipe, item_translations, item_icons, changed)
+            ),
         ),
         (
             DOCS_DIR / "welcome-to-simple-enchantments" / "the-enchanting-table.md",
@@ -1550,7 +1559,9 @@ def update_integrated_pages(
         (
             DOCS_DIR / "welcome-to-simple-enchantments" / "engraving-table.md",
             "engraving-table-recipe",
-            render_single_recipe_table(engraving_table_recipe, item_translations, item_icons, changed),
+            render_compact_recipe_panel(
+                render_single_recipe_table(engraving_table_recipe, item_translations, item_icons, changed)
+            ),
         ),
     ]
 

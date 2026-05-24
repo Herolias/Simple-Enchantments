@@ -1,5 +1,3 @@
-# Burn
-
 ![Burn scroll icon](https://raw.githubusercontent.com/Herolias/Simple-Enchantments/main/docs/media/enchantment-icons/burn.png)
 
 Sets target on fire (5 damage/s for 3s) and lets it drop cooked variants of its drops. Not combinable with Freeze.

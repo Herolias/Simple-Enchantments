@@ -1,5 +1,3 @@
-# Env. Protection
-
 ![Env. Protection scroll icon](https://raw.githubusercontent.com/Herolias/Simple-Enchantments/main/docs/media/enchantment-icons/environmental-protection.png)
 
 Reduces environmental damage by 4% per armor piece.

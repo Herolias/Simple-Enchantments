@@ -1,5 +1,3 @@
-# Knockback
-
 ![Knockback scroll icon](https://raw.githubusercontent.com/Herolias/Simple-Enchantments/main/docs/media/enchantment-icons/knockback.png)
 
 Knocks targets back on hit.

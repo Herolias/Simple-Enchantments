@@ -1,5 +1,3 @@
-# Looting
-
 ![Looting scroll icon](https://raw.githubusercontent.com/Herolias/Simple-Enchantments/main/docs/media/enchantment-icons/looting.png)
 
 Increases mob max drop rates by 25% and boosts the chance of rare drops.

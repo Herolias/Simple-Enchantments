@@ -1,5 +1,3 @@
-# Swift Swim
-
 ![Swift Swim scroll icon](https://raw.githubusercontent.com/Herolias/Simple-Enchantments/main/docs/media/enchantment-icons/fast-swim.png)
 
 Increases swim speed by 25%.

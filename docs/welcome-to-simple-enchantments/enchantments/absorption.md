@@ -1,5 +1,3 @@
-# Absorption
-
 ![Absorption scroll icon](https://raw.githubusercontent.com/Herolias/Simple-Enchantments/main/docs/media/enchantment-icons/absorption.png)
 
 Heals blocker for 10% of blocked damage. Not combinable with Reflection.

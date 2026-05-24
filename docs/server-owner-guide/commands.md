@@ -5,8 +5,6 @@ published: true
 draft: false
 ---
 
-# Commands
-
 Simple Enchantments currently adds 3 commands and an extension to the `/give` command.
 
 * `/enchantconfig` - Opens the admin config UI. Requires OP permissions.

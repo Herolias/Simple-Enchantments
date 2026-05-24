@@ -1,5 +1,3 @@
-# Efficiency
-
 ![Efficiency scroll icon](https://raw.githubusercontent.com/Herolias/Simple-Enchantments/main/docs/media/enchantment-icons/efficiency.png)
 
 Increases mining speed by 20%.

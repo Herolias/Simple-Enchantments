@@ -1,5 +1,3 @@
-# Elemental Heart
-
 ![Elemental Heart scroll icon](https://raw.githubusercontent.com/Herolias/Simple-Enchantments/main/docs/media/enchantment-icons/elemental-heart.png)
 
 Elemental Staffs do not consume essence when casting.

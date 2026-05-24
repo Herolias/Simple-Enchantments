@@ -5,7 +5,6 @@ published: true
 draft: false
 ---
 
-# Supporting Simple Enchantments
 If you would like to support the development of Simple Enchantments, there are many ways to contribute:
 
 - Help improve the translations in your native language. You can make a [PR on GitHub](https://github.com/Herolias/Simple-Enchantments) or [DM me](https://discord.com/users/herolias) about it.
