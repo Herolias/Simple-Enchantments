@@ -1,5 +1,3 @@
-# Strength
-
 ![Strength scroll icon](https://raw.githubusercontent.com/Herolias/Simple-Enchantments/main/docs/media/enchantment-icons/strength.png)
 
 Increases projectile damage by 10%.

@@ -5,8 +5,6 @@ published: true
 draft: false
 ---
 
-# The JSON Configs
-
 You can find the Simple Enchantments config files in `YourServerDir/mods/Simple_Enchantments_Config`.
 There are 3 JSON files:
 

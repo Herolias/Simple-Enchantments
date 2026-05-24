@@ -1,5 +1,3 @@
-# Reflection
-
 ![Reflection scroll icon](https://raw.githubusercontent.com/Herolias/Simple-Enchantments/main/docs/media/enchantment-icons/reflection.png)
 
 Reflects 10% of blocked damage back to the attacker. Not combinable with Absorption.

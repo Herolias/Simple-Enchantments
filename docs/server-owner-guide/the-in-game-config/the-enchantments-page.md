@@ -5,8 +5,6 @@ published: true
 draft: false
 ---
 
-# The Enchantments Page
-
 On the Enchantments page, you can enable or disable individual enchantments and change their modifiers if they have any.
 Modifier values are percentages (`0.10` = 10%) and are applied per level. For enchantments that can be applied to multiple armor slots, such as Protection, the modifier is also applied per armor piece.
 

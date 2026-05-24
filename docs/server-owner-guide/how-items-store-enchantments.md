@@ -5,8 +5,6 @@ published: true
 draft: false
 ---
 
-# How Items Store Enchantments
-
 Enchantments are stored in item extended metadata.
 Here is an example of how that looks on an item in a player's inventory:
 

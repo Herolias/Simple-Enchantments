@@ -1,5 +1,3 @@
-# Dexterity
-
 ![Dexterity scroll icon](https://raw.githubusercontent.com/Herolias/Simple-Enchantments/main/docs/media/enchantment-icons/dexterity.png)
 
 Reduces stamina costs by 20%.

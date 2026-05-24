@@ -1,5 +1,3 @@
-# Ranged Protection
-
 ![Ranged Protection scroll icon](https://raw.githubusercontent.com/Herolias/Simple-Enchantments/main/docs/media/enchantment-icons/ranged-protection.png)
 
 Reduces incoming projectile and magic damage by 4% per armor piece.

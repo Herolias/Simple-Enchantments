@@ -1,5 +1,3 @@
-# Protection
-
 ![Protection scroll icon](https://raw.githubusercontent.com/Herolias/Simple-Enchantments/main/docs/media/enchantment-icons/protection.png)
 
 Reduces incoming physical damage by 4% per armor piece.

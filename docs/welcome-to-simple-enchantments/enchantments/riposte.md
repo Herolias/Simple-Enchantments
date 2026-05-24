@@ -1,5 +1,3 @@
-# Riposte
-
 ![Riposte scroll icon](https://raw.githubusercontent.com/Herolias/Simple-Enchantments/main/docs/media/enchantment-icons/riposte.png)
 
 Increases counter attack damage by 20%.

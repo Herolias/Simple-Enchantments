@@ -1,5 +1,3 @@
-# Frenzy
-
 ![Frenzy scroll icon](https://raw.githubusercontent.com/Herolias/Simple-Enchantments/main/docs/media/enchantment-icons/frenzy.png)
 
 Increases signature charge rate by 15%.

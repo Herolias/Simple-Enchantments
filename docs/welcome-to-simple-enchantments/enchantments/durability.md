@@ -1,5 +1,3 @@
-# Durability
-
 ![Durability scroll icon](https://raw.githubusercontent.com/Herolias/Simple-Enchantments/main/docs/media/enchantment-icons/durability.png)
 
 Reduces durability loss chance by 25%.

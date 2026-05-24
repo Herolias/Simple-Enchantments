@@ -1,5 +1,3 @@
-# Eagle's Eye
-
 ![Eagle's Eye scroll icon](https://raw.githubusercontent.com/Herolias/Simple-Enchantments/main/docs/media/enchantment-icons/eagles-eye.png)
 
 Increases projectile damage by up to 25% based on distance.

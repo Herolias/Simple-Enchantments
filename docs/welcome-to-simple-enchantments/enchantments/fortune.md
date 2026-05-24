@@ -1,5 +1,3 @@
-# Fortune
-
 ![Fortune scroll icon](https://raw.githubusercontent.com/Herolias/Simple-Enchantments/main/docs/media/enchantment-icons/fortune.png)
 
 Increases chance for extra ore/crystal drops by 25%.

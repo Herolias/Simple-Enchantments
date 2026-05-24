@@ -5,13 +5,9 @@ published: true
 draft: false
 ---
 
-# The Enchanting Table
-
-![](https://raw.githubusercontent.com/Herolias/Simple-Enchantments/main/docs/media/images/A5C9l1w-70df1f50b9.png)
-
 To get started with Simple Enchantments, craft an Enchanting Table at a Tier <!-- DOCSTAT:config.enchantingTableCraftingTier -->2<!-- /DOCSTAT --> Workbench.
 
-![](https://raw.githubusercontent.com/Herolias/Simple-Enchantments/main/docs/media/images/69v3FeX-961b221dc1.png)
+![](https://raw.githubusercontent.com/Herolias/Simple-Enchantments/refs/heads/dev/src/main/resources/Common/Icons/ItemsGenerated/Enchanting_Table.png)
 
 The Enchanting Table is used to craft [Scrolls](https://wiki.hytalemodding.dev/mod/simple-enchantments/scrolls), which are then used to apply enchantments to your items.
 The table has <!-- DOCSTAT:enchantingTable.tier.count -->4<!-- /DOCSTAT --> tiers. Each upgrade tier unlocks stronger enchantments, with Tier <!-- DOCSTAT:enchantingTable.tier.count -->4<!-- /DOCSTAT --> unlocking special legendary enchantments.
@@ -19,6 +15,7 @@ The table has <!-- DOCSTAT:enchantingTable.tier.count -->4<!-- /DOCSTAT --> tier
 ## Crafting Recipe
 
 <!-- AUTO-GENERATED:enchanting-table-recipe:start -->
+<div class="se-recipe-panel" style="width: 100%; max-width: 380px; min-width: 0;">
 <div class="se-recipe-card" style="border: 1px solid rgba(148, 163, 184, 0.22); border-radius: 8px; padding: 10px 12px; background: rgba(148, 163, 184, 0.04);">
 <div class="se-recipe-grid" style="display: grid; grid-template-columns: minmax(0, 1fr) max-content; column-gap: 16px; align-items: center;">
 <div class="se-recipe-heading" style="font-weight: 600; opacity: 0.75; padding: 0 0 8px;">Ingredient</div>
@@ -33,6 +30,7 @@ The table has <!-- DOCSTAT:enchantingTable.tier.count -->4<!-- /DOCSTAT --> tier
 <div class="se-recipe-cell se-recipe-amount" style="border-top: 1px solid rgba(148, 163, 184, 0.18); display: flex; align-items: center; justify-content: flex-end; min-height: 40px; padding: 7px 0;"><span class="se-inline-code" style="display: inline-block; border-radius: 6px; padding: 2px 6px; line-height: 1.2; background: rgba(148, 163, 184, 0.22); font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace; font-size: 0.92em;">10</span></div>
 </div>
 </div>
+</div>
 <!-- AUTO-GENERATED:enchanting-table-recipe:end -->
 
 ## Upgrade Costs
@@ -41,7 +39,7 @@ These are the default costs for upgrading the Enchanting Table from Tier 1 throu
 
 <!-- AUTO-GENERATED:enchanting-table-upgrades:start -->
 <div class="se-stats-recipe se-upgrade-recipes" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; align-items: flex-start;">
-<div class="se-recipe-panel" style="width: 100%; min-width: 0;">
+<div class="se-recipe-panel" style="width: 100%; max-width: 380px; min-width: 0;">
 <h3>Upgrade to Tier II</h3>
 <div class="se-recipe-card" style="border: 1px solid rgba(148, 163, 184, 0.22); border-radius: 8px; padding: 10px 12px; background: rgba(148, 163, 184, 0.04);">
 <div class="se-recipe-grid" style="display: grid; grid-template-columns: minmax(0, 1fr) max-content; column-gap: 16px; align-items: center;">
@@ -58,7 +56,7 @@ These are the default costs for upgrading the Enchanting Table from Tier 1 throu
 </div>
 </div>
 </div>
-<div class="se-recipe-panel" style="width: 100%; min-width: 0;">
+<div class="se-recipe-panel" style="width: 100%; max-width: 380px; min-width: 0;">
 <h3>Upgrade to Tier III</h3>
 <div class="se-recipe-card" style="border: 1px solid rgba(148, 163, 184, 0.22); border-radius: 8px; padding: 10px 12px; background: rgba(148, 163, 184, 0.04);">
 <div class="se-recipe-grid" style="display: grid; grid-template-columns: minmax(0, 1fr) max-content; column-gap: 16px; align-items: center;">
@@ -75,7 +73,7 @@ These are the default costs for upgrading the Enchanting Table from Tier 1 throu
 </div>
 </div>
 </div>
-<div class="se-recipe-panel" style="width: 100%; min-width: 0;">
+<div class="se-recipe-panel" style="width: 100%; max-width: 380px; min-width: 0;">
 <h3>Upgrade to Tier IV</h3>
 <div class="se-recipe-card" style="border: 1px solid rgba(148, 163, 184, 0.22); border-radius: 8px; padding: 10px 12px; background: rgba(148, 163, 184, 0.04);">
 <div class="se-recipe-grid" style="display: grid; grid-template-columns: minmax(0, 1fr) max-content; column-gap: 16px; align-items: center;">
@@ -94,3 +92,9 @@ These are the default costs for upgrading the Enchanting Table from Tier 1 throu
 </div>
 </div>
 <!-- AUTO-GENERATED:enchanting-table-upgrades:end -->
+
+## Images
+
+![](https://raw.githubusercontent.com/Herolias/Simple-Enchantments/main/docs/media/images/A5C9l1w-70df1f50b9.png)
+
+![](https://raw.githubusercontent.com/Herolias/Simple-Enchantments/main/docs/media/images/69v3FeX-961b221dc1.png)

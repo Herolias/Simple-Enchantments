@@ -1,5 +1,3 @@
-# Sturdy
-
 ![Sturdy scroll icon](https://raw.githubusercontent.com/Herolias/Simple-Enchantments/main/docs/media/enchantment-icons/sturdy.png)
 
 Prevents max durability loss when repairing.

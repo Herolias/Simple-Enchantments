@@ -1,5 +1,3 @@
-# Eternal Shot
-
 ![Eternal Shot scroll icon](https://raw.githubusercontent.com/Herolias/Simple-Enchantments/main/docs/media/enchantment-icons/eternal-shot.png)
 
 Lets you shoot arrows without consuming them.

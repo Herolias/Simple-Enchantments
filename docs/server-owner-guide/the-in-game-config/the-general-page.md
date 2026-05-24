@@ -5,8 +5,6 @@ published: true
 draft: false
 ---
 
-# The General Page
-
 On the **General Page**, you can edit core mod settings and behaviors. Here is a breakdown of all available configuration options:
 
 <div class="se-table-card se-config-table-card" style="border: 1px solid rgba(148, 163, 184, 0.22); border-radius: 8px; background: rgba(148, 163, 184, 0.04); overflow: hidden;">
