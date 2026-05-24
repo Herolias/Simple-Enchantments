@@ -497,7 +497,7 @@ public class EnchantingConfig {
                 if (engravingTableRecipe == null) {
                         engravingTableRecipe = new ArrayList<>();
                         addEngravingTableRecipe("Rock_Stone", 10);
-                        addEngravingTableRecipe("Ingredient_Bar_Iron", 5);
+                        addEngravingTableRecipe("Ingredient_Bar_Gold", 5);
                 }
 
                 if (enchantingTableUpgrades == null) {
