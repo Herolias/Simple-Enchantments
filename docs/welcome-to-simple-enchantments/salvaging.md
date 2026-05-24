@@ -1,10 +1,10 @@
 ---
 title: "Salvaging"
-order: 4
+order: 5
 published: true
 draft: false
 ---
 
 # Salvaging
 
-When putting an Enchanted Item in the Salvager Bench, you'll get the strongest Enchantment that was on the Item back (<!-- DOCSTAT:config.salvagerYieldsScroll;enabled_sentence -->enabled by default<!-- /DOCSTAT --> in the config). The Enchantment will be picked primarily by rarity, so a Legendary Enchantment will be picked over a lvl III Enchantment. If you had multiple Enchantments of the same rarity/level on your Item, one of them gets picked at random.
+When you put an enchanted item in the Salvager Bench, you get the strongest enchantment on that item back as a scroll (<!-- DOCSTAT:config.salvagerYieldsScroll;enabled_sentence -->enabled by default<!-- /DOCSTAT --> in the config). The enchantment is chosen primarily by rarity, so a legendary enchantment is picked over a level III enchantment. If the item has multiple enchantments with the same rarity or level, one of them is chosen at random.

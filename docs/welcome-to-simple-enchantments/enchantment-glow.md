@@ -1,14 +1,14 @@
 ---
 title: "Enchantment Glow"
-order: 5
+order: 6
 published: true
 draft: false
 ---
 
 # Enchantment Glow
 
-Enchanted Items get a Glow effect:
+Enchanted items get a glow effect:
 ![](https://raw.githubusercontent.com/Herolias/Simple-Enchantments/main/docs/media/images/GsMblfo-4cc6cb14fc.jpeg)
 This can be turned off in the user config.
 
-The Enchantment Glow will be customisable starting with the next update for Simple Enchantments! More info on that soon.
+The glow color can be changed at the [Engraving Table](https://wiki.hytalemodding.dev/mod/simple-enchantments/engraving-table).

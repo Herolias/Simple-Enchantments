@@ -2,7 +2,7 @@
 
 A comprehensive enchanting system for **Hytale** — craft scrolls, enchant your gear, and extend the system with your own mods.
 
-Simple Enchantments adds an **Enchanting Table**, **31 built-in enchantments**, an **enchantment scroll system**, **usefull commands**, in-game **configuration UI**, **localisation** for 11 languages, and a **public API** that lets other mods register their own enchantments, categories, and scrolls at runtime.
+Simple Enchantments adds an **Enchanting Table**, an **Engraving Table**, **33 built-in enchantments**, an **enchantment scroll system**, **useful commands**, in-game **configuration UI**, **localisation** for 11 languages, and a **public API** that lets other mods register their own enchantments, categories, and scrolls at runtime.
 
 > **Version:** 1.1.0 · **Java:** 25 · **License:** _see [LICENSE.md](LICENSE.md)_ · **Wiki/Documentation:** _see [Wiki](https://wiki.hytalemodding.dev/mod/simple-enchantments)_
 
@@ -35,7 +35,7 @@ Simple Enchantments adds an **Enchanting Table**, **31 built-in enchantments**, 
 
 | Category | Highlights |
 |---|---|
-| **Enchantments** | 31 built-in enchantments across melee, ranged, armor, shields, staves, and tools |
+| **Enchantments** | 33 built-in enchantments across melee, ranged, armor, shields, staves, and tools |
 | **Scrolls** | Craft enchantment scrolls at a tiered Enchanting Table |
 | **Metadata Storage** | Enchantments stored as BSON in item metadata — no extra JSON item files needed |
 | **Enchantment Glow** | Runtime-injected visual glow on enchanted items via `ItemAppearanceConditions` |

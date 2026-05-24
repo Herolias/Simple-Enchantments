@@ -86,6 +86,13 @@ class ScrollRecipe:
     ingredients: list[RecipeIngredient]
 
 
+@dataclass
+class TableUpgradeRecipe:
+    id: str
+    target_tier: int
+    ingredients: list[RecipeIngredient]
+
+
 def read(path: Path) -> str:
     try:
         return path.read_text(encoding="utf-8")
@@ -396,6 +403,57 @@ def parse_scroll_recipes(config_text: str) -> list[ScrollRecipe]:
     return recipes
 
 
+def parse_recipe_ingredient_calls(config_text: str, function_name: str) -> list[RecipeIngredient]:
+    ingredients: list[RecipeIngredient] = []
+    pattern = re.compile(rf"\b{re.escape(function_name)}\s*\(")
+
+    for match in pattern.finditer(config_text):
+        args = split_java_args(extract_parenthesized(config_text, match.end() - 1)[0])
+        if len(args) != 2 or not args[0].strip().startswith('"'):
+            continue
+
+        ingredients.append(
+            RecipeIngredient(
+                item_id=unquote_java_string(args[0]),
+                amount=int(args[1]),
+            )
+        )
+
+    return ingredients
+
+
+def parse_table_upgrade_recipes(config_text: str) -> list[TableUpgradeRecipe]:
+    upgrades: list[TableUpgradeRecipe] = []
+    pattern = re.compile(r"\baddTableUpgrade\s*\(")
+
+    for match in pattern.finditer(config_text):
+        args = split_java_args(extract_parenthesized(config_text, match.end() - 1)[0])
+        if len(args) < 3 or not args[0].strip().startswith('"') or len(args[1:]) % 2 != 0:
+            continue
+
+        ingredients: list[RecipeIngredient] = []
+        for index in range(1, len(args), 2):
+            ingredients.append(
+                RecipeIngredient(
+                    item_id=unquote_java_string(args[index]),
+                    amount=int(args[index + 1]),
+                )
+            )
+
+        upgrade_id = unquote_java_string(args[0])
+        upgrade_number_match = re.search(r"([0-9]+)$", upgrade_id)
+        target_tier = int(upgrade_number_match.group(1)) + 1 if upgrade_number_match else len(upgrades) + 2
+        upgrades.append(
+            TableUpgradeRecipe(
+                id=upgrade_id,
+                target_tier=target_tier,
+                ingredients=ingredients,
+            )
+        )
+
+    return upgrades
+
+
 def parse_enchantment_icon_paths(scroll_generator_text: str) -> dict[str, str]:
     method_match = re.search(
         r"private\s+static\s+String\s+getIconForEnchantment\(String\s+enchantmentId\)\s*\{(.*?)\n\s*\}",
@@ -702,13 +760,15 @@ def item_display_name(item_id: str, translations: dict[str, str]) -> str:
     )
 
 
-def recipe_item_ids(recipes: list[ScrollRecipe]) -> list[str]:
-    item_ids = {
-        ingredient.item_id
-        for recipe in recipes
-        for ingredient in recipe.ingredients
-        if recipe.id != "Scroll_Cleansing"
-    }
+def recipe_item_ids(*recipe_groups: list[RecipeIngredient] | list[ScrollRecipe] | list[TableUpgradeRecipe]) -> list[str]:
+    item_ids: set[str] = set()
+    for recipe_group in recipe_groups:
+        for entry in recipe_group:
+            if isinstance(entry, RecipeIngredient):
+                item_ids.add(entry.item_id)
+            else:
+                for ingredient in entry.ingredients:
+                    item_ids.add(ingredient.item_id)
     return sorted(item_ids)
 
 
@@ -1186,6 +1246,43 @@ def render_recipe_table(
             if ingredient.item_id not in ingredient_ids:
                 ingredient_ids.append(ingredient.item_id)
 
+    rows: list[tuple[str, str]] = []
+    for item_id in ingredient_ids:
+        amounts = []
+        for recipe in recipes:
+            amount = next(
+                (ingredient.amount for ingredient in recipe.ingredients if ingredient.item_id == item_id),
+                None,
+            )
+            amounts.append(str(amount) if amount is not None else "-")
+        rows.append((item_id, "/".join(amounts)))
+
+    return render_recipe_card(rows, item_translations, item_icons, changed)
+
+
+def render_single_recipe_table(
+    ingredients: list[RecipeIngredient],
+    item_translations: dict[str, str],
+    item_icons: dict[str, Path],
+    changed: list[Path],
+) -> str:
+    if not ingredients:
+        return "<p>No default recipe is configured.</p>"
+
+    return render_recipe_card(
+        [(ingredient.item_id, str(ingredient.amount)) for ingredient in ingredients],
+        item_translations,
+        item_icons,
+        changed,
+    )
+
+
+def render_recipe_card(
+    rows: list[tuple[str, str]],
+    item_translations: dict[str, str],
+    item_icons: dict[str, Path],
+    changed: list[Path],
+) -> str:
     lines = [
         (
             '<div class="se-recipe-card" style="border: 1px solid rgba(148, 163, 184, 0.22); '
@@ -1208,7 +1305,7 @@ def render_recipe_table(
         ),
     ]
 
-    for item_id in ingredient_ids:
+    for item_id, amount_text in rows:
         item_name = item_display_name(item_id, item_translations)
         icon_path = copy_recipe_icon(item_id, item_icons, changed)
         icon = ""
@@ -1220,14 +1317,6 @@ def render_recipe_table(
                 'style="width: 28px; height: 28px; object-fit: contain; '
                 'display: inline-block; flex: 0 0 28px; margin: 0;">'
             )
-
-        amounts = []
-        for recipe in recipes:
-            amount = next(
-                (ingredient.amount for ingredient in recipe.ingredients if ingredient.item_id == item_id),
-                None,
-            )
-            amounts.append(str(amount) if amount is not None else "-")
 
         row_border = "border-top: 1px solid rgba(148, 163, 184, 0.18);"
         lines.extend(
@@ -1242,13 +1331,44 @@ def render_recipe_table(
                     f'<div class="se-recipe-cell se-recipe-amount" '
                     f'style="{row_border} display: flex; align-items: center; '
                     'justify-content: flex-end; min-height: 40px; padding: 7px 0;">'
-                    f"{inline_code_html('/'.join(amounts))}</div>"
+                    f"{inline_code_html(amount_text)}</div>"
                 ),
             ]
         )
 
     lines.extend(["</div>", "</div>"])
 
+    return "\n".join(lines)
+
+
+def render_table_upgrade_recipes(
+    upgrades: list[TableUpgradeRecipe],
+    item_translations: dict[str, str],
+    item_icons: dict[str, Path],
+    changed: list[Path],
+) -> str:
+    if not upgrades:
+        return "<p>No default Enchanting Table upgrade recipes are configured.</p>"
+
+    lines = [
+        (
+            '<div class="se-stats-recipe se-upgrade-recipes" style="display: grid; '
+            'grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); '
+            'gap: 24px; align-items: flex-start;">'
+        )
+    ]
+
+    for upgrade in upgrades:
+        lines.extend(
+            [
+                '<div class="se-recipe-panel" style="width: 100%; min-width: 0;">',
+                f"<h3>Upgrade to Tier {html.escape(roman(upgrade.target_tier))}</h3>",
+                render_single_recipe_table(upgrade.ingredients, item_translations, item_icons, changed),
+                "</div>",
+            ]
+        )
+
+    lines.append("</div>")
     return "\n".join(lines)
 
 
@@ -1393,6 +1513,11 @@ def update_integrated_pages(
     enchantments: list[Enchantment],
     translations: dict[str, str],
     context: dict[str, str],
+    item_translations: dict[str, str],
+    item_icons: dict[str, Path],
+    enchanting_table_recipe: list[RecipeIngredient],
+    engraving_table_recipe: list[RecipeIngredient],
+    table_upgrades: list[TableUpgradeRecipe],
 ) -> list[Path]:
     changed: list[Path] = []
     markdown_files = sorted(DOCS_DIR.rglob("*.md"))
@@ -1411,6 +1536,21 @@ def update_integrated_pages(
             DOCS_DIR / "welcome-to-simple-enchantments" / "enchantments" / "README.md",
             "disabled-enchantments",
             render_disabled_enchantments(enchantments),
+        ),
+        (
+            DOCS_DIR / "welcome-to-simple-enchantments" / "the-enchanting-table.md",
+            "enchanting-table-recipe",
+            render_single_recipe_table(enchanting_table_recipe, item_translations, item_icons, changed),
+        ),
+        (
+            DOCS_DIR / "welcome-to-simple-enchantments" / "the-enchanting-table.md",
+            "enchanting-table-upgrades",
+            render_table_upgrade_recipes(table_upgrades, item_translations, item_icons, changed),
+        ),
+        (
+            DOCS_DIR / "welcome-to-simple-enchantments" / "engraving-table.md",
+            "engraving-table-recipe",
+            render_single_recipe_table(engraving_table_recipe, item_translations, item_icons, changed),
         ),
     ]
 
@@ -1478,7 +1618,15 @@ def generate() -> list[Path]:
     recipe_counts = parse_recipe_counts(config_text)
     scroll_recipe_tiers = parse_scroll_recipe_tiers(config_text)
     scroll_recipes = parse_scroll_recipes(config_text)
-    scroll_recipe_item_ids = recipe_item_ids(scroll_recipes)
+    enchanting_table_recipe = parse_recipe_ingredient_calls(config_text, "addTableRecipe")
+    engraving_table_recipe = parse_recipe_ingredient_calls(config_text, "addEngravingTableRecipe")
+    table_upgrades = parse_table_upgrade_recipes(config_text)
+    scroll_recipe_item_ids = recipe_item_ids(
+        scroll_recipes,
+        enchanting_table_recipe,
+        engraving_table_recipe,
+        table_upgrades,
+    )
     recipe_map = group_recipes_by_enchantment(scroll_recipes, enchantments)
     icon_paths = parse_enchantment_icon_paths(scroll_generator_text)
     context = build_docstat_context(enchantments, general_defaults, recipe_counts, scroll_recipe_tiers)
@@ -1504,7 +1652,18 @@ def generate() -> list[Path]:
         if write_if_changed(path, content):
             changed.append(path)
 
-    changed.extend(update_integrated_pages(enchantments, translations, context))
+    changed.extend(
+        update_integrated_pages(
+            enchantments,
+            translations,
+            context,
+            item_translations,
+            item_icons,
+            enchanting_table_recipe,
+            engraving_table_recipe,
+            table_upgrades,
+        )
+    )
 
     return list(dict.fromkeys(changed))
 

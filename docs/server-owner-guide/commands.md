@@ -7,14 +7,34 @@ draft: false
 
 # Commands
 
-Simple Enchantments has currently 3 Commands and an extension to the /give command. Here is a breakdown for each command:
+Simple Enchantments currently adds 3 commands and an extension to the `/give` command.
 
-/enchantconfig - The Admin config. Needs OP permissions to run the command.
-/enchanting - Mod Walktrough and user settings. Everyone can run the command by default.
-/enchant - Enchants the Item you are holding with a specific Enchantment (with level up to 100). Needs OP permissions to run the command.
-Usage: /enchant \<enchantment_id\> \<level\>
-Example: /enchant knockback 10
+* `/enchantconfig` - Opens the admin config UI. Requires OP permissions.
+* `/enchanting` - Opens the mod walkthrough and user settings. Everyone can run this by default.
+* `/enchant` - Enchants the item you are holding with a specific enchantment, up to level 100. Requires OP permissions.
 
-The mod also adds the -enchants argument to the /give command.
-Usage: /give \<item\> \<other args\> --enchant \<enchantment_id\>:\<lvl\>;\<other_enchant\>:\<lvl\>
-Example: /give Tool_Pickaxe_Adamantite --enchants efficiency:3;fortune:3;durability:3;smelting:1
+Usage:
+
+```text
+/enchant <enchantment_id> <level>
+```
+
+Example:
+
+```text
+/enchant knockback 10
+```
+
+The mod also adds the `--enchants` argument to the `/give` command.
+
+Usage:
+
+```text
+/give <item> <other args> --enchants <enchantment_id>:<level>;<other_enchantment>:<level>
+```
+
+Example:
+
+```text
+/give Tool_Pickaxe_Adamantite --enchants efficiency:3;fortune:3;durability:3;smelting:1
+```

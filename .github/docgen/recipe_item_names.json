@@ -3,6 +3,7 @@
   "Food_Popcorn": "Popcorn",
   "Ingredient_Bar_Adamantite": "Adamantite Ingot",
   "Ingredient_Bar_Cobalt": "Cobalt Ingot",
+  "Ingredient_Bar_Copper": "Copper Ingot",
   "Ingredient_Bar_Gold": "Gold Ingot",
   "Ingredient_Bar_Iron": "Iron Ingot",
   "Ingredient_Bar_Silver": "Silver Ingot",
@@ -14,6 +15,7 @@
   "Ingredient_Crystal_Red": "Red Crystal Shards",
   "Ingredient_Crystal_Yellow": "Yellow Crystal Shards",
   "Ingredient_Fabric_Scrap_Cindercloth": "Cindercloth Scraps",
+  "Ingredient_Fabric_Scrap_Linen": "Linen Scraps",
   "Ingredient_Feathers_Light": "White Feathers",
   "Ingredient_Fire_Essence": "Essence of Fire",
   "Ingredient_Ice_Essence": "Essence of Ice",
@@ -39,7 +41,10 @@
   "Plant_Petals_Blue": "Blue Petals",
   "Plant_Petals_Storm": "Storm Petals",
   "Rock_Gem_Emerald": "Emerald",
+  "Rock_Gem_Ruby": "Ruby",
   "Rock_Gem_Sapphire": "Sapphire",
+  "Rock_Stone": "Stone",
   "Weapon_Arrow_Crude": "Crude Arrow",
+  "Wood_Azure_Trunk": "Azure Log",
   "Wood_Fire_Trunk": "Fire Log"
 }
