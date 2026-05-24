@@ -1,6 +1,6 @@
 ---
 title: "Scrolls and Crafting"
-order: 4
+order: 6
 published: true
 draft: false
 ---
@@ -29,6 +29,8 @@ api.registerEnchantment("my_mod:lightning", "Lightning Strike")
 ```
 
 Scrolls are optional from the builder's point of view. If you do not add scroll definitions, the enchantment can still exist for commands or custom systems, but players will not get craftable scroll recipes from your add-on.
+
+If you set `maxLevel(3)` but only define scrolls for levels 1 and 2, only those levels get craftable scrolls. Add one `scroll(level)` definition for every level players should be able to craft.
 
 ## Built-In Crafting Categories
 
@@ -77,6 +79,8 @@ api.registerEnchantment("example:gold_digger", "Gold Digger")
 ```
 
 The icon path is relative to your mod assets. Pass `null` to use the default enchanting icon.
+
+Custom crafting category IDs must be unique. Registering the same crafting category twice throws `IllegalArgumentException`, so register each tab once during setup.
 
 ## Scroll Builder Options
 

@@ -129,6 +129,12 @@ For add-ons that define actual enchantment effects, the usual setup order is:
 4. Register enchantments and scroll definitions.
 5. Register ECS systems, commands, or event listeners that use those enchantments.
 
+Next pages:
+
+* Use [How to Build Your Own Enchantment](https://wiki.hytalemodding.dev/mod/simple-enchantments/api-documentation/how-to-build-your-own-enchantment) for the full add-on flow.
+* Use [Register Items to Categories](https://wiki.hytalemodding.dev/mod/simple-enchantments/api-documentation/items-and-categories) if you only want existing enchantments to work on your custom items.
+* Use [Work With Enchanted Items](https://wiki.hytalemodding.dev/mod/simple-enchantments/api-documentation/working-with-enchanted-items) if you want to read, add, or remove enchantments from code.
+
 ## Import Checklist
 
 Most add-ons need these imports:

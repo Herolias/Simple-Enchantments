@@ -380,7 +380,7 @@ public class EnchantmentBuilder {
         }
 
         // Resolve and store scale function
-        IntToDoubleFunction resolvedScale = resolveScaleFunction();
+        IntToDoubleFunction resolvedScale = resolveScaleFunction(type);
         if (resolvedScale != null) {
             type.setScaleFunction(resolvedScale);
         }
@@ -473,17 +473,23 @@ public class EnchantmentBuilder {
      * Resolves the scale function from deferred settings.
      * Returns null for linear (default) to avoid storing a no-op function.
      */
-    private IntToDoubleFunction resolveScaleFunction() {
+    private IntToDoubleFunction resolveScaleFunction(@Nonnull EnchantmentType type) {
         if (scaleFunction != null) {
             return scaleFunction;
         }
         if (deferredScaleType != null && deferredScaleType != ScaleType.LINEAR) {
-            return deferredScaleType.toFunction(multiplierPerLevel);
+            ScaleType scaleType = deferredScaleType;
+            return level -> switch (scaleType) {
+                case LINEAR -> level * type.getEffectMultiplier();
+                case QUADRATIC -> (long) level * level * type.getEffectMultiplier();
+                case DIMINISHING -> Math.sqrt(level) * type.getEffectMultiplier();
+                case EXPONENTIAL -> (Math.pow(2, level) - 1) * type.getEffectMultiplier();
+                case LOGARITHMIC -> Math.log(level + 1) * type.getEffectMultiplier();
+            };
         }
         if (!Double.isNaN(deferredScalePower) && deferredScalePower != 1.0) {
             double exponent = deferredScalePower;
-            double mult = multiplierPerLevel;
-            return level -> Math.pow(level, exponent) * mult;
+            return level -> Math.pow(level, exponent) * type.getEffectMultiplier();
         }
         return null; // linear default
     }

@@ -1,6 +1,6 @@
 ---
 title: "API Reference"
-order: 7
+order: 9
 published: true
 draft: false
 ---
@@ -33,7 +33,7 @@ This is a compact reference for the public API classes most add-ons use.
 | `getRegisteredEnchantment(String id)` | `@Nullable EnchantmentType` | Looks up a registered enchantment. |
 | `isEnchantmentRegistered(String id)` | `boolean` | Checks if an enchantment ID exists. |
 | `addConflict(String enchantmentId1, String enchantmentId2)` | `void` | Declares two enchantments mutually exclusive. |
-| `registerCraftingCategory(String categoryId, String displayName, @Nullable String iconPath)` | `void` | Adds an Enchanting Table tab. |
+| `registerCraftingCategory(String categoryId, String displayName, @Nullable String iconPath)` | `void` | Adds an Enchanting Table tab. Throws `IllegalArgumentException` if the crafting category ID is already registered. |
 
 ## EnchantmentBuilder
 
@@ -72,6 +72,22 @@ This is a compact reference for the public API classes most add-ons use.
 | `end()` | `EnchantmentBuilder` | Adds the scroll to the parent enchantment and returns to the enchantment builder. |
 | `build()` | `ScrollDefinition` | Builds a standalone scroll definition. |
 
+## ScrollDefinition
+
+| Method | Returns | Notes |
+|---|---|---|
+| `getLevel()` | `int` | Scroll level. |
+| `getQuality()` | `String` | Quality string such as `Uncommon` or `Rare`. |
+| `getCraftingTier()` | `int` | Required Enchanting Table tier. |
+| `getCraftingCategory()` | `@Nullable String` | Per-scroll crafting tab override. |
+| `getRecipe()` | `List<ScrollDefinition.Ingredient>` | Recipe ingredients. |
+| `getIcon()` | `@Nullable String` | Optional icon override. |
+| `getModel()` | `@Nullable String` | Optional model override. |
+| `getTexture()` | `@Nullable String` | Optional texture override. |
+| `getIconProperties()` | `IconProperties` | Icon transform values. |
+
+`ScrollDefinition.Ingredient` exposes `getItemId()` and `getQuantity()`. `ScrollDefinition.IconProperties` exposes scale, translation, and rotation getters.
+
 ## ScaleType
 
 | Value | Formula |
@@ -81,6 +97,24 @@ This is a compact reference for the public API classes most add-ons use.
 | `DIMINISHING` | `sqrt(level) * multiplier` |
 | `EXPONENTIAL` | `(2^level - 1) * multiplier` |
 | `LOGARITHMIC` | `ln(level + 1) * multiplier` |
+
+## CraftingCategoryDefinition
+
+Most add-ons use `api.registerCraftingCategory(...)` instead of this class directly.
+
+| Method | Returns | Notes |
+|---|---|---|
+| `CraftingCategoryDefinition.get(categoryId)` | `@Nullable CraftingCategoryDefinition` | Looks up a crafting tab definition. |
+| `CraftingCategoryDefinition.exists(categoryId)` | `boolean` | Checks whether a crafting tab ID is registered. |
+| `CraftingCategoryDefinition.values()` | `Collection<CraftingCategoryDefinition>` | Returns built-in and add-on crafting categories. |
+| `getCategoryId()` | `String` | Crafting tab ID. |
+| `getDisplayName()` | `String` | Display name registered for the tab. |
+| `getIconPath()` | `@Nullable String` | Icon path or null for the default icon. |
+| `isBuiltIn()` | `boolean` | Whether the category is one of Simple Enchantments' built-in tabs. |
+
+## MultiplierDefinition
+
+`MultiplierDefinition` is a Java record with `key()`, `defaultValue()`, and `labelKey()`. Add-ons usually create these through `multiplierPerLevel(...)` and `addMultiplier(...)` rather than constructing the record directly.
 
 ## ItemCategory
 
@@ -130,19 +164,24 @@ Common methods for add-ons:
 | `getDisplayName()` | `String` | Human-readable name. |
 | `getDescription()` | `String` | Description text. |
 | `getMaxLevel()` | `int` | Maximum supported level. |
+| `requiresDurability()` | `boolean` | Whether the enchantment requires durable items. |
 | `isLegendary()` | `boolean` | Whether the enchantment is legendary. |
+| `isBuiltIn()` | `boolean` | Whether the enchantment belongs to Simple Enchantments itself. |
 | `getApplicableCategories()` | `Set<ItemCategory>` | Categories the enchantment can apply to. |
-| `getOwnerModId()` | `String` | Namespace/owner mod ID. |
-| `getOwnerModName()` | `String` | Display name for the owner mod. |
+| `getOwnerModId()` | `@Nullable String` | Namespace/owner mod ID. Null for built-ins. |
+| `getOwnerModName()` | `@Nullable String` | Display name for the owner mod. |
 | `getDefaultMultiplierPerLevel()` | `double` | Default primary multiplier. |
 | `getScaledMultiplier(int level)` | `double` | Config-aware scaled multiplier for the given level. |
 | `getMultiplierValue(String key)` | `double` | Config-aware value for a primary or secondary multiplier. |
+| `getMultiplierDefinitions()` | `List<MultiplierDefinition>` | Primary and secondary config multiplier definitions. |
 | `getScrollDefinitions()` | `List<ScrollDefinition>` | Scrolls registered by the builder. |
-| `getCraftingCategory()` | `String` | Resolved crafting tab ID. |
+| `getCraftingCategory()` | `@Nullable String` | Resolved crafting tab ID. |
 | `conflictsWith(EnchantmentType other)` | `boolean` | Checks conflict rules. |
 | `canApplyTo(ItemCategory category)` | `boolean` | Checks item category applicability. |
 | `getFormattedName(int level)` | `String` | Name formatted with level. |
 | `getBonusDescription(int level)` | `String` | Bonus description with calculated amount. |
+
+Linear scaling, `ScaleType`, and power scaling read the active primary multiplier config. A custom `.scale(IntToDoubleFunction)` owns the whole returned value.
 
 ## Events
 

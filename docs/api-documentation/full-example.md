@@ -1,11 +1,13 @@
 ---
 title: "Full Example"
-order: 6
+order: 8
 published: true
 draft: false
 ---
 
 This page walks through a compact version of the example add-on. The enchantment is called `example:gold_digger`: when a player breaks a soil block with an enchanted shovel or hoe, there is a configurable chance to replace the normal drop with gold ore.
+
+For the shorter task checklist, start with [How to Build Your Own Enchantment](https://wiki.hytalemodding.dev/mod/simple-enchantments/api-documentation/how-to-build-your-own-enchantment). This page is the longer code-oriented walkthrough.
 
 The full example project lives at [Herolias/Enchantment-API-Example](https://github.com/Herolias/Enchantment-API-Example), but the snippets below are adjusted to the current Simple Enchantments API.
 

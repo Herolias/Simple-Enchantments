@@ -153,6 +153,9 @@ public class ScrollItemGenerator {
                 String quality;
                 int itemLevel;
                 String[] craftingCategories;
+                String iconOverride = null;
+                String modelOverride = null;
+                String textureOverride = null;
 
                 if (isAddon) {
                     // ─── Use ScrollDefinition from the builder API ───
@@ -179,7 +182,9 @@ public class ScrollItemGenerator {
                         cat = guessCraftingCategory(type);
                     craftingCategories = new String[] { cat };
 
-                    org.herolias.plugin.api.ScrollDefinition.IconProperties iconProps = def.getIconProperties();
+                    iconOverride = def.getIcon();
+                    modelOverride = def.getModel();
+                    textureOverride = def.getTexture();
 
                     for (org.herolias.plugin.api.ScrollDefinition.Ingredient ing : def.getRecipe()) {
                         ConfigIngredient ci = new ConfigIngredient();
@@ -238,10 +243,11 @@ public class ScrollItemGenerator {
                             -5f);
                 }
 
-                String texture = getTextureForEnchantment(type.getId());
-                String icon = getIconForEnchantment(type.getId());
+                String texture = textureOverride != null ? textureOverride : getTextureForEnchantment(type.getId());
+                String icon = iconOverride != null ? iconOverride : getIconForEnchantment(type.getId());
+                String model = modelOverride != null ? modelOverride : DEFAULT_MODEL;
                 Item item = createScrollItem(scrollItemId, itemLevel, quality, rootPrimaryId, rootSecondaryId,
-                        iconProps, texture, icon);
+                        iconProps, texture, icon, model);
                 if (item != null)
                     generatedItems.add(item);
 
@@ -398,7 +404,7 @@ public class ScrollItemGenerator {
     private static Item createScrollItem(String itemId, int level, String quality,
             String rootPrimaryId, String rootSecondaryId,
             org.herolias.plugin.api.ScrollDefinition.IconProperties iconProps,
-            String texture, String icon) {
+            String texture, String icon, String model) {
         try {
             Item item = new Item(itemId);
 
@@ -414,7 +420,7 @@ public class ScrollItemGenerator {
                 setField(Item.class, item, "iconProperties", aip);
             }
 
-            setField(Item.class, item, "model", DEFAULT_MODEL);
+            setField(Item.class, item, "model", model != null ? model : DEFAULT_MODEL);
             setField(Item.class, item, "texture", texture != null ? texture : DEFAULT_TEXTURE);
             setField(Item.class, item, "playerAnimationsId", DEFAULT_PLAYER_ANIMATIONS_ID);
             setField(Item.class, item, "maxStack", DEFAULT_MAX_STACK);
