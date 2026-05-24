@@ -131,9 +131,9 @@ For add-ons that define actual enchantment effects, the usual setup order is:
 
 Next pages:
 
-* Use [How to Build Your Own Enchantment](https://wiki.hytalemodding.dev/mod/simple-enchantments/api-documentation/how-to-build-your-own-enchantment) for the full add-on flow.
-* Use [Register Items to Categories](https://wiki.hytalemodding.dev/mod/simple-enchantments/api-documentation/items-and-categories) if you only want existing enchantments to work on your custom items.
-* Use [Work With Enchanted Items](https://wiki.hytalemodding.dev/mod/simple-enchantments/api-documentation/working-with-enchanted-items) if you want to read, add, or remove enchantments from code.
+* Use [How to Build Your Own Enchantment](https://wiki.hytalemodding.dev/mod/simple-enchantments/how-to-build-your-own-enchantment) for the full add-on flow.
+* Use [Register Items to Categories](https://wiki.hytalemodding.dev/mod/simple-enchantments/items-and-categories) if you only want existing enchantments to work on your custom items.
+* Use [Work With Enchanted Items](https://wiki.hytalemodding.dev/mod/simple-enchantments/working-with-enchanted-items) if you want to read, add, or remove enchantments from code.
 
 ## Import Checklist
 
