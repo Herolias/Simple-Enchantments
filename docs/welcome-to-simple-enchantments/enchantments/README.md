@@ -1,6 +1,6 @@
 ---
 title: "Enchantments"
-order: 7
+order: 8
 published: true
 draft: false
 ---
@@ -266,10 +266,9 @@ There are currently <!-- DOCSTAT:enchantments.count -->33<!-- /DOCSTAT --> Encha
 <!-- AUTO-GENERATED:enchantment-index:end -->
 ### Hidden/Disabled Enchantments
 
-Some Enchantments are disabled by default. This can have multiple reasons: 
-Sometimes it is because the Enchantment is still a bit experimental, and sometimes it is because they are for Items that are not yet fully implemented in vanilla. If you want to play with these Enchantments, you have to enable them in the config.
+Some enchantments are disabled by default for different reasons. Sometimes an enchantment is still experimental, and sometimes it is meant for items that are not fully implemented in vanilla yet. If you want to play with these enchantments, enable them in the config.
 
-These Enchantments are currently disabled:
+These enchantments are currently disabled:
 <!-- AUTO-GENERATED:disabled-enchantments:start -->
 * [Thrift](https://wiki.hytalemodding.dev/mod/simple-enchantments/thrift)
 * [Night Vision](https://wiki.hytalemodding.dev/mod/simple-enchantments/night-vision)

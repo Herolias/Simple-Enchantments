@@ -5,16 +5,17 @@ published: true
 draft: false
 ---
 
-# The json configs
+# The JSON Configs
 
-You find the config files of Simple Enchantments in YourServerDir/mods/Simple_Enchantments_Config.
-There are 3 json files:
-simple_enchantments_config.json - the general config, containing everything editable in the config editor
-simple_enchantments_user_config.json - The user config, containing user specific preferences like mod language or cosmetic changes, accessible in-game via /enchanting
-simple_enchantments_custom_items.json - Allows for setting Enchantment Categories for different Items or Item Families and Blacklisting Items from being enchantable. json-only for now, in-game editor maybe later-on. 
+You can find the Simple Enchantments config files in `YourServerDir/mods/Simple_Enchantments_Config`.
+There are 3 JSON files:
 
-I would recommend sticking to the in-game editor, as changing json files can easily render them invalid via a typo. If you decide to edit the json files anyways, I recommend using a json validator/editor. There are also snapshot files for each config file in the same folder. These are created and needed by the Mod to determine which values you changed, and which values we as the developers changed, to enable a smart updating system that keeps all your changes and only changes settings you did not touch when we decide to change default settings. Please do not edit the snapshot files, it will most likely cause all your changes to be overwritten by the system.  
+* `simple_enchantments_config.json` - The general config, containing everything editable in the config editor.
+* `simple_enchantments_user_config.json` - The user config, containing user-specific preferences like mod language and cosmetic changes. Players can edit these in-game with `/enchanting`.
+* `simple_enchantments_custom_items.json` - Lets you set enchantment categories for different items or item families and blacklist items from being enchantable. This is JSON-only for now; an in-game editor may come later.
 
-## Transfering Config Files to another Server 
+I recommend sticking to the in-game editor, because a typo can make a JSON file invalid. If you edit the JSON files manually anyway, use a JSON validator or editor. Each config file also has a snapshot file in the same folder. The mod uses these snapshots to tell which values you changed and which defaults changed between mod updates, letting the smart updater keep your edits while still applying new default settings you have not touched. Please do not edit the snapshot files; doing so will most likely cause your changes to be overwritten.
 
-If you want to transfer your config files, e.g. form a test server to your main server, you can do so by simply copying the Simple_Enchantments_Config folder and pasting/replacing it on your other server in the mods folder. Make sure the server is turned off while doing so.
+## Transferring Config Files to Another Server
+
+To move your config files from one server to another, copy the `Simple_Enchantments_Config` folder into the `mods` folder on the target server and replace the existing folder. Make sure the target server is turned off while you do this.

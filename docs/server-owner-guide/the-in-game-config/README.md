@@ -1,22 +1,21 @@
 ---
-title: "The In Game Config"
+title: "The In-Game Config"
 order: 1
 published: true
 draft: false
 ---
 
-# The in-game Config
+# The In-Game Config
 
-Simple Enchantments has an in-game config editor for easier customization. In theory, you'd never have to touch the the json files in the mods folder. 
-You can access the config via the /enchantconfig command. This command requires OP-Permissions. You are greeted with a menu with 3 Tabs: 
-General, Enchantments and Recipies
+Simple Enchantments has an in-game config editor for easier customization. In theory, you never have to touch the JSON files in the mods folder.
+You can access the config with the `/enchantconfig` command. This command requires OP permissions. It opens a menu with 3 tabs: General, Enchantments, and Recipes.
 ![](https://raw.githubusercontent.com/Herolias/Simple-Enchantments/main/docs/media/images/dQ8V5UI-3fa83fb98c.png)
-More on the 3 Tabs on the next Pages.
+More details about the 3 tabs are on the next pages.
 
-After making changes in the config editor, make sure to click on save, otherwhise your progress will be lost. There is also an Indicator for unsaved changes and a confirmation for when you successfully saved your changes. 
+After making changes in the config editor, make sure to click Save, otherwise your progress will be lost. There is also an indicator for unsaved changes and a confirmation when your changes are saved.
 ![](https://raw.githubusercontent.com/Herolias/Simple-Enchantments/main/docs/media/images/1c7lQI6-0a941fc038.png) ![](https://raw.githubusercontent.com/Herolias/Simple-Enchantments/main/docs/media/images/7OAbZlk-23fe219d16.png)
 
-Most changes require a Server-restart to become effective.
-If you want to revert changes, most options have a reset button next to them that resets it to its default value. If you want to start from scratch, there is also an reset all button. 
+Most changes require a server restart to take effect.
+If you want to revert changes, most options have a reset button next to them. If you want to start from scratch, there is also a Reset All button.
 
-All changes you make in the in-game config editor get saved to the simple-enchantments-config.json file (more on that later), so you can easily migrate your config from a test server to your main server.
+All changes you make in the in-game config editor are saved to `simple_enchantments_config.json`, so you can easily migrate your config from a test server to your main server.

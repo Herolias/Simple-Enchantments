@@ -5,12 +5,14 @@ published: true
 draft: false
 ---
 
-# How Items store Enchantments
+# How Items Store Enchantments
 
-Enchantments are stored in the Item Extended Metadata. 
-Here is an example of how that looks on an Item in the player Inventory:
-...
-"2": {
+Enchantments are stored in item extended metadata.
+Here is an example of how that looks on an item in a player's inventory:
+
+```json
+{
+  "2": {
     "Id": "Weapon_Shortbow_Adamantite",
     "Quantity": 1,
     "Durability": 180.0,
@@ -22,6 +24,8 @@ Here is an example of how that looks on an Item in the player Inventory:
       }
     },
     "OverrideDroppedItemAnimation": false
-  },
-...
-The Player has an Adamantite Bow with Durability III and Eagle's Eye III in his second hotbar slot. If you want to remove/add enchantments to that players Inventory manually, you can do so by adding removing enchantments to the json structure via their display names. Enchantment Metadata is persistent, meaning it stays on the Item even if the mod is removed. So all enchantments will stay on the Items even if Simple Enchantments is deactivated for maintanance.
+  }
+}
+```
+
+The player has an Adamantite Bow with Durability III and Eagle's Eye III in their second hotbar slot. If you want to add or remove enchantments manually, edit the `Enchantments` object by display name. Enchantment metadata is persistent, meaning it stays on the item even if the mod is removed. Existing enchantments will remain on items if Simple Enchantments is deactivated for maintenance.

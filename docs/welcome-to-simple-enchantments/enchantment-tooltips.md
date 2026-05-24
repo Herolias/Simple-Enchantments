@@ -1,13 +1,13 @@
 ---
 title: "Enchantment Tooltips"
-order: 6
+order: 7
 published: true
 draft: false
 ---
 
 # Enchantment Tooltips
 
-Since Version 1.0.0 of Simple Enchantments, [DynamicTooltipsLib](https://www.curseforge.com/hytale/mods/dynamictooltipslib) is a required dependency. This library allows us to add per-item tooltips using "virtual IDs." If you're interested in the technical side, you can read more in the [GitHub Documentation](https://github.com/Herolias/DynamicTooltipsLib).
+Since Version 1.0.0 of Simple Enchantments, [DynamicTooltipsLib](https://www.curseforge.com/hytale/mods/dynamictooltipslib) is a required dependency. This library lets us add per-item tooltips using "virtual IDs." If you're interested in the technical side, you can read more in the [GitHub documentation](https://github.com/Herolias/DynamicTooltipsLib).
 
 The enchantments you put on your items will now show up directly in the item tooltip:
 
@@ -15,8 +15,8 @@ The enchantments you put on your items will now show up directly in the item too
 
 ### Tooltip Colors
 Enchantment tooltips come in two distinct colors so you can easily tell them apart:
-* **Purple:** Regular Enchantments
-* **Gold:** Legendary Enchantments
+* **Purple:** Regular enchantments
+* **Gold:** Legendary enchantments
 
 ### A Note on Item IDs
-If you are playing in Creative Mode, you might notice a strange addition to the Item ID starting with `__dtt_`. Don't worry, this is just a **Virtual ID** used by the client to display the tooltip. It doesn't change the actual ID of the item or affect how the game handles it!
+If you are playing in Creative Mode, you might notice a strange addition to the item ID starting with `__dtt_`. This is a **virtual ID** used by the client to display the tooltip. It does not change the actual item ID or affect how the game handles the item.
