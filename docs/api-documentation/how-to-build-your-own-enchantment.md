@@ -22,7 +22,7 @@ If your mod is mainly an enchantment add-on, make Simple Enchantments a full dep
 }
 ```
 
-Then compile against the jar with `compileOnly`. See [Getting Started](https://wiki.hytalemodding.dev/mod/simple-enchantments/api-documentation/getting-started) for Gradle examples and optional integration patterns.
+Then compile against the jar with `compileOnly`. See [Getting Started](https://wiki.hytalemodding.dev/mod/simple-enchantments/getting-started) for Gradle examples and optional integration patterns.
 
 ## 2. Get The API In setup()
 
@@ -67,7 +67,7 @@ ItemCategory hoes = api.registerCategoryByItems(
 );
 ```
 
-Use [Register Items to Categories](https://wiki.hytalemodding.dev/mod/simple-enchantments/api-documentation/items-and-categories) when you want existing Simple Enchantments to work on your custom items, or when you need custom categories.
+Use [Register Items to Categories](https://wiki.hytalemodding.dev/mod/simple-enchantments/items-and-categories) when you want existing Simple Enchantments to work on your custom items, or when you need custom categories.
 
 ## 4. Register The Enchantment
 
@@ -88,7 +88,7 @@ EnchantmentType lightning = api.registerEnchantment("my_mod:lightning", "Lightni
 
 After `.build()`, the enchantment can be looked up by ID, appears in config metadata, and can be applied by commands or API calls. The ID must contain `:`; use your mod ID as the namespace.
 
-For every builder option, see [Enchantment Builder Reference](https://wiki.hytalemodding.dev/mod/simple-enchantments/api-documentation/registering-enchantments).
+For every builder option, see [Enchantment Builder Reference](https://wiki.hytalemodding.dev/mod/simple-enchantments/registering-enchantments).
 
 ## 5. Add Craftable Scrolls
 
@@ -118,7 +118,7 @@ api.registerEnchantment("my_mod:lightning", "Lightning Strike")
 
 Each `.scroll(level)` call defines one craftable scroll level. Call `.end()` to return to the enchantment builder before adding the next scroll or calling `.build()`.
 
-Use [Scrolls and Crafting](https://wiki.hytalemodding.dev/mod/simple-enchantments/api-documentation/scrolls-and-crafting) for recipe tiers, custom Enchanting Table tabs, and visual overrides.
+Use [Scrolls and Crafting](https://wiki.hytalemodding.dev/mod/simple-enchantments/scrolls-and-crafting) for recipe tiers, custom Enchanting Table tabs, and visual overrides.
 
 ## 6. Implement The Effect
 
@@ -153,7 +153,7 @@ if (ThreadLocalRandom.current().nextDouble() >= chance) {
 EnchantmentEventHelper.fireActivated(playerRef, weapon, type, level);
 ```
 
-See [Events](https://wiki.hytalemodding.dev/mod/simple-enchantments/api-documentation/events) for activation event details and [Full Example](https://wiki.hytalemodding.dev/mod/simple-enchantments/api-documentation/full-example) for a complete effect-system sketch.
+See [Events](https://wiki.hytalemodding.dev/mod/simple-enchantments/events) for activation event details and [Full Example](https://wiki.hytalemodding.dev/mod/simple-enchantments/full-example) for a complete effect-system sketch.
 
 ## 7. Test The Player Path
 

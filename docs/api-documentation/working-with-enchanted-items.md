@@ -90,5 +90,5 @@ This is useful for passive effects that care about the player's full equipment s
 |---|---|
 | Calling `addEnchantment()` but ignoring the returned item. | Assign the returned `ItemStack` back to the slot. |
 | Applying an unknown ID such as a typo. | Check `api.isEnchantmentRegistered(id)` or catch `IllegalArgumentException`. |
-| Expecting custom items to accept an enchantment automatically. | Register the item or its family on [Register Items to Categories](https://wiki.hytalemodding.dev/mod/simple-enchantments/api-documentation/items-and-categories). |
+| Expecting custom items to accept an enchantment automatically. | Register the item or its family on [Register Items to Categories](https://wiki.hytalemodding.dev/mod/simple-enchantments/items-and-categories). |
 | Reading equipped enchantments for a one-item trigger. | Use `getEnchantmentLevel(triggerItem, id)` when only the active item should matter. |

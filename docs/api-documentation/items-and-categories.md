@@ -7,7 +7,7 @@ draft: false
 
 Use this page when you want Simple Enchantments to recognize custom items, or when your add-on needs a custom item category for a new enchantment.
 
-Item categories decide which items an enchantment can be applied to. They are different from crafting categories: crafting categories are Enchanting Table tabs, covered on [Scrolls and Crafting](https://wiki.hytalemodding.dev/mod/simple-enchantments/api-documentation/scrolls-and-crafting).
+Item categories decide which items an enchantment can be applied to. They are different from crafting categories: crafting categories are Enchanting Table tabs, covered on [Scrolls and Crafting](https://wiki.hytalemodding.dev/mod/simple-enchantments/scrolls-and-crafting).
 
 ## Built-In Item Categories
 
@@ -116,4 +116,4 @@ For a full add-on, the usual order is:
 4. Register enchantments that use those categories.
 5. Register the systems or listeners that implement gameplay effects.
 
-For optional integrations that only map your items into existing categories, call `registerItemToCategory(...)` in a guarded integration method. See [Getting Started](https://wiki.hytalemodding.dev/mod/simple-enchantments/api-documentation/getting-started) for the optional dependency pattern.
+For optional integrations that only map your items into existing categories, call `registerItemToCategory(...)` in a guarded integration method. See [Getting Started](https://wiki.hytalemodding.dev/mod/simple-enchantments/getting-started) for the optional dependency pattern.

@@ -5,7 +5,7 @@ published: true
 draft: false
 ---
 
-Use this page when you need details for `EnchantmentBuilder`: IDs, descriptions, max levels, multipliers, scaling, applicability, conflicts, and builder validation. If you want the complete add-on flow first, start with [How to Build Your Own Enchantment](https://wiki.hytalemodding.dev/mod/simple-enchantments/api-documentation/how-to-build-your-own-enchantment).
+Use this page when you need details for `EnchantmentBuilder`: IDs, descriptions, max levels, multipliers, scaling, applicability, conflicts, and builder validation. If you want the complete add-on flow first, start with [How to Build Your Own Enchantment](https://wiki.hytalemodding.dev/mod/simple-enchantments/how-to-build-your-own-enchantment).
 
 Custom enchantments are registered through `EnchantmentApi.registerEnchantment(id, displayName)`. The method returns an `EnchantmentBuilder`, and the enchantment becomes available when you call `.build()`.
 

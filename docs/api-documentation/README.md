@@ -28,15 +28,15 @@ if (api == null) {
 
 | Goal | Open this page |
 |---|---|
-| Add Simple Enchantments to your build and manifest. | [Getting Started](https://wiki.hytalemodding.dev/mod/simple-enchantments/api-documentation/getting-started) |
-| Build a complete new enchantment with categories, scrolls, and effect logic. | [How to Build Your Own Enchantment](https://wiki.hytalemodding.dev/mod/simple-enchantments/api-documentation/how-to-build-your-own-enchantment) |
-| Make your own items work with existing enchantments. | [Register Items to Categories](https://wiki.hytalemodding.dev/mod/simple-enchantments/api-documentation/items-and-categories) |
-| Read, add, or remove enchantments on an `ItemStack`. | [Work With Enchanted Items](https://wiki.hytalemodding.dev/mod/simple-enchantments/api-documentation/working-with-enchanted-items) |
-| Configure builder fields such as max level, scaling, multipliers, and conflicts. | [Enchantment Builder Reference](https://wiki.hytalemodding.dev/mod/simple-enchantments/api-documentation/registering-enchantments) |
-| Add scroll recipes or Enchanting Table tabs. | [Scrolls and Crafting](https://wiki.hytalemodding.dev/mod/simple-enchantments/api-documentation/scrolls-and-crafting) |
-| Listen for enchantment activity or report your own activation. | [Events](https://wiki.hytalemodding.dev/mod/simple-enchantments/api-documentation/events) |
-| See a full add-on from setup through effect system. | [Full Example](https://wiki.hytalemodding.dev/mod/simple-enchantments/api-documentation/full-example) |
-| Check method signatures and return behavior. | [API Reference](https://wiki.hytalemodding.dev/mod/simple-enchantments/api-documentation/reference) |
+| Add Simple Enchantments to your build and manifest. | [Getting Started](https://wiki.hytalemodding.dev/mod/simple-enchantments/getting-started) |
+| Build a complete new enchantment with categories, scrolls, and effect logic. | [How to Build Your Own Enchantment](https://wiki.hytalemodding.dev/mod/simple-enchantments/how-to-build-your-own-enchantment) |
+| Make your own items work with existing enchantments. | [Register Items to Categories](https://wiki.hytalemodding.dev/mod/simple-enchantments/items-and-categories) |
+| Read, add, or remove enchantments on an `ItemStack`. | [Work With Enchanted Items](https://wiki.hytalemodding.dev/mod/simple-enchantments/working-with-enchanted-items) |
+| Configure builder fields such as max level, scaling, multipliers, and conflicts. | [Enchantment Builder Reference](https://wiki.hytalemodding.dev/mod/simple-enchantments/registering-enchantments) |
+| Add scroll recipes or Enchanting Table tabs. | [Scrolls and Crafting](https://wiki.hytalemodding.dev/mod/simple-enchantments/scrolls-and-crafting) |
+| Listen for enchantment activity or report your own activation. | [Events](https://wiki.hytalemodding.dev/mod/simple-enchantments/events) |
+| See a full add-on from setup through effect system. | [Full Example](https://wiki.hytalemodding.dev/mod/simple-enchantments/full-example) |
+| Check method signatures and return behavior. | [API Reference](https://wiki.hytalemodding.dev/mod/simple-enchantments/reference) |
 
 If you are writing an enchantment add-on, start with **Getting Started**, then follow **How to Build Your Own Enchantment**. If you are only integrating your existing items with Simple Enchantments, start with **Register Items to Categories**.
 
