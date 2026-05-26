@@ -5,7 +5,6 @@ import com.google.gson.GsonBuilder;
 import com.hypixel.hytale.logger.HytaleLogger;
 
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 
 /**
@@ -44,8 +43,8 @@ public class ConfigManager {
     }
 
     public void saveConfig() {
-        try (FileWriter writer = new FileWriter(configFile)) {
-            gson.toJson(config, writer);
+        try {
+            AtomicJsonWriter.write(configFile, config, gson);
             logger.atInfo().log("Configuration saved to " + configFile.getAbsolutePath());
         } catch (IOException e) {
             logger.atSevere().log("Failed to save configuration: " + e.getMessage());

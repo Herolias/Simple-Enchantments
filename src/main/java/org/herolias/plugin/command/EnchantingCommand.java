@@ -31,7 +31,7 @@ public class EnchantingCommand extends AbstractAsyncCommand {
     public EnchantingCommand(SimpleEnchanting plugin) {
         super("enchanting", "server.commands.enchanting.desc");
         this.plugin = plugin;
-        this.setPermissionGroup(GameMode.Adventure); // Lower permissions to allow everyone
+        this.setPermissionGroups("hytale:Adventurer"); // Lower permissions to allow everyone
     }
 
     @Override

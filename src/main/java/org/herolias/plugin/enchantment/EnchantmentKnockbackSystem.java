@@ -8,7 +8,7 @@ import com.hypixel.hytale.component.dependency.Order;
 import com.hypixel.hytale.component.dependency.SystemDependency;
 import com.hypixel.hytale.component.query.Query;
 import com.hypixel.hytale.logger.HytaleLogger;
-import com.hypixel.hytale.math.vector.Vector3d;
+import org.joml.Vector3d;
 import com.hypixel.hytale.protocol.ChangeVelocityType;
 import com.hypixel.hytale.server.core.entity.Entity;
 import com.hypixel.hytale.server.core.entity.EntityUtils;
@@ -63,8 +63,6 @@ public class EnchantmentKnockbackSystem extends DamageEventSystem {
             @Nonnull CommandBuffer<EntityStore> commandBuffer,
             @Nonnull Damage damage) {
 
-        if (damage.getAmount() <= 0)
-            return;
 
         // Use centralized damage context extraction
         EnchantmentManager.DamageContext ctx = enchantmentManager.getDamageContext(damage, commandBuffer);
@@ -76,12 +74,19 @@ public class EnchantmentKnockbackSystem extends DamageEventSystem {
             return;
 
         ItemStack weapon = enchantmentManager.getWeaponFromEntity(attackerEntity);
-        if (weapon == null)
-            return;
+        ItemStack shield = null;
+        if (attackerEntity instanceof com.hypixel.hytale.server.core.entity.LivingEntity living) {
+            shield = enchantmentManager.getActiveBlocker(living);
+        }
 
-        int knockbackLevel = enchantmentManager.getEnchantmentLevel(weapon, EnchantmentType.KNOCKBACK);
+        int weaponKb = weapon != null ? enchantmentManager.getEnchantmentLevel(weapon, EnchantmentType.KNOCKBACK) : 0;
+        int shieldKb = shield != null ? enchantmentManager.getEnchantmentLevel(shield, EnchantmentType.KNOCKBACK) : 0;
+
+        int knockbackLevel = Math.max(weaponKb, shieldKb);
         if (knockbackLevel <= 0)
             return;
+
+        ItemStack sourceItem = (shieldKb >= weaponKb && shield != null) ? shield : weapon;
 
         // Calculate horizontal direction
         TransformComponent attackerTransform = commandBuffer.getComponent(ctx.attackerRef(),
@@ -135,6 +140,6 @@ public class EnchantmentKnockbackSystem extends DamageEventSystem {
 
         com.hypixel.hytale.server.core.universe.PlayerRef playerRef = store.getComponent(ctx.attackerRef(),
                 com.hypixel.hytale.server.core.universe.PlayerRef.getComponentType());
-        EnchantmentEventHelper.fireActivated(playerRef, weapon, EnchantmentType.KNOCKBACK, knockbackLevel);
+        EnchantmentEventHelper.fireActivated(playerRef, sourceItem, EnchantmentType.KNOCKBACK, knockbackLevel);
     }
 }

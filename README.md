@@ -2,9 +2,9 @@
 
 A comprehensive enchanting system for **Hytale** — craft scrolls, enchant your gear, and extend the system with your own mods.
 
-Simple Enchantments adds an **Enchanting Table**, **31 built-in enchantments**, an **enchantment scroll system**, **usefull commands**, in-game **configuration UI**, **localisation** for 11 languages, and a **public API** that lets other mods register their own enchantments, categories, and scrolls at runtime.
+Simple Enchantments adds an **Enchanting Table**, an **Engraving Table**, **33 built-in enchantments**, an **enchantment scroll system**, **useful commands**, in-game **configuration UI**, **localisation** for 11 languages, and a **public API** that lets other mods register their own enchantments, categories, and scrolls at runtime.
 
-> **Version:** 0.9.1 · **Java:** 25 · **License:** _see [LICENSE.md](LICENSE.md)_ · **Wiki/Documentation:** _coming soon_
+> **Version:** 1.1.0 · **Java:** 25 · **License:** _see [LICENSE.md](LICENSE.md)_ · **Wiki/Documentation:** _see [Wiki](https://wiki.hytalemodding.dev/mod/simple-enchantments)_
 
 #### If you are looking for a Hytale Server, consider using my code and link at BisectHosting. That way you get 25% off and we get a commission which helps with further development:
 [![https://www.bisecthosting.com/Herolias](https://www.bisecthosting.com/partners/custom-banners/87d24680-40cb-471d-b1a9-bc3c9eb9ce68.webp)](https://www.bisecthosting.com/Herolias?r=GitHub)
@@ -14,7 +14,6 @@ Simple Enchantments adds an **Enchanting Table**, **31 built-in enchantments**, 
 
 - [Features](#features)
 - [Building from Source](#building-from-source)
-- [Folder Structure](#folder-structure)
 - [Technical Overview](#technical-overview)
   - [Core Plugin](#core-plugin)
   - [Enchantment Engine](#enchantment-engine)
@@ -27,7 +26,7 @@ Simple Enchantments adds an **Enchanting Table**, **31 built-in enchantments**, 
   - [Custom Interactions](#custom-interactions)
   - [Crafting & Recipes](#crafting--recipes)
   - [Asset Pack](#asset-pack)
-  - [Optional Integrations](#optional-integrations)
+  - [Dependencies & Integrations](#dependencies--integrations)
 
 ---
 
@@ -35,7 +34,7 @@ Simple Enchantments adds an **Enchanting Table**, **31 built-in enchantments**, 
 
 | Category | Highlights |
 |---|---|
-| **Enchantments** | 31 built-in enchantments across melee, ranged, armor, shields, staves, and tools |
+| **Enchantments** | 33 built-in enchantments across melee, ranged, armor, shields, staves, and tools |
 | **Scrolls** | Craft enchantment scrolls at a tiered Enchanting Table |
 | **Metadata Storage** | Enchantments stored as BSON in item metadata — no extra JSON item files needed |
 | **Enchantment Glow** | Runtime-injected visual glow on enchanted items via `ItemAppearanceConditions` |
@@ -44,7 +43,7 @@ Simple Enchantments adds an **Enchanting Table**, **31 built-in enchantments**, 
 | **Configuration** | Full in-game config UI + JSON config with per-enchantment multipliers, recipes, and toggles |
 | **Localisation** | Translations for 11 languages (EN, DE, ES, FR, ID, IT, NL, PT-BR, RU, SV, UK) |
 | **API** | Public API for addon mods to register enchantments, categories, scrolls, and conflicts |
-| **Tooltips** | Optional tooltips via [DynamicTooltipsLib](https://github.com/Herolias/DynamicTooltipsLib) NOTE: Dynamic Tooltips Lib will become a mandatory dependency in version 1.0.0 |
+| **Tooltips** | Enchantment and engraving tooltip support through native per-stack item display metadata |
 | **Cross-Mod** | Integration with [Perfect Parries](https://www.curseforge.com/hytale/mods/perfect-parries) for Riposte & Coup de Grâce enchantments, [MMO Skill Tree](https://www.curseforge.com/hytale/mods/mmo-skill-tree) for custom Enchantment XP System |
 
 ---
@@ -88,168 +87,14 @@ Simple Enchantments adds an **Enchanting Table**, **31 built-in enchantments**, 
 
 | Property | Default | Description |
 |---|---|---|
-| `version` | `0.9.1` | Plugin version (semantic versioning) |
+| `version` | `1.1.0` | Plugin version (semantic versioning) |
 | `java_version` | `25` | Java toolchain version |
 | `includes_pack` | `true` | Load the bundled asset pack alongside the plugin |
-| `patchline` | `release` | Hytale release channel (`release` or `pre-release`) |
+| `patchline` | `pre-release` | Hytale release channel (`release` or `pre-release`) |
 | `load_user_mods` | `false` | Also load mods from the user's standard Mods folder during dev |
 
 ---
 
-## Folder Structure
-
-```
-src/
-└── main/
-    ├── java/
-    │   ├── com/al3x/
-    │   │   └── HStats.java                    # Mod analytics (hstats.dev)
-    │   │
-    │   └── org/herolias/plugin/
-    │       ├── SimpleEnchanting.java           # Plugin entry point (setup, start, shutdown)
-    │       │
-    │       ├── api/                            # ── Public API ──
-    │       │   ├── EnchantmentApi.java          # API interface for third-party mods
-    │       │   ├── EnchantmentApiImpl.java       # API implementation
-    │       │   ├── EnchantmentApiProvider.java   # Service locator
-    │       │   ├── EnchantmentBuilder.java       # Fluent builder for registering enchantments
-    │       │   ├── ScrollBuilder.java            # Builder for scroll definitions
-    │       │   ├── ScrollDefinition.java         # Scroll data record
-    │       │   ├── CraftingCategoryDefinition.java # Enchanting Table tab registration
-    │       │   ├── MultiplierDefinition.java     # Config multiplier metadata
-    │       │   ├── ScaleType.java                # Scaling curve types (linear, diminishing, etc.)
-    │       │   └── event/                        # Custom API events
-    │       │       ├── EnchantmentActivatedEvent.java
-    │       │       └── ItemEnchantedEvent.java
-    │       │
-    │       ├── command/                         # ── Chat Commands ──
-    │       │   ├── EnchantCommand.java           # /enchant — apply enchantments
-    │       │   ├── EnchantingCommand.java         # /enchanting — open enchanting UI
-    │       │   ├── EnchantConfigCommand.java      # /enchantconfig — in-game config editor
-    │       │   └── GiveEnchantedCommand.java      # /give override — give pre-enchanted items
-    │       │
-    │       ├── config/                          # ── Configuration ──
-    │       │   ├── ConfigManager.java            # Load/save/migrate JSON config
-    │       │   ├── SmartConfigManager.java        # Smart config with snapshots
-    │       │   ├── EnchantingConfig.java          # Config data class (multipliers, recipes, toggles)
-    │       │   ├── UserSettings.java              # Per-player settings
-    │       │   └── UserSettingsManager.java       # Per-player settings persistence
-    │       │
-    │       ├── crafting/                         # ── Crafting ──
-    │       │   └── WorkbenchRefreshSystem.java    # Fix for workbench recipe refresh on upgrade
-    │       │
-    │       ├── enchantment/                     # ── Core Enchantment Engine ──
-    │       │   ├── EnchantmentType.java           # Enchantment definitions (30 built-in)
-    │       │   ├── EnchantmentRegistry.java       # Central registry (built-in + addon)
-    │       │   ├── EnchantmentManager.java        # Core logic (apply, read, calculate)
-    │       │   ├── EnchantmentData.java           # BSON serialisation for item metadata
-    │       │   ├── EnchantmentApplicationResult.java # Result type for apply operations
-    │       │   ├── ItemCategory.java              # Item categorisation (weapon, armor, tool…)
-    │       │   ├── ItemCategoryManager.java       # Runtime item → category mapping with config
-    │       │   ├── EnchantmentEventHelper.java    # Common event utilities
-    │       │   ├── EnchantmentRecipeManager.java  # Runtime recipe filtering (disabled scrolls)
-    │       │   ├── ScrollItemGenerator.java       # Runtime scroll item generation (~70 items)
-    │       │   ├── ScrollDescriptionManager.java  # Scroll description localisation packets
-    │       │   ├── BuiltinScrolls.java            # Built-in scroll definitions
-    │       │   ├── EnchantmentGlowInjector.java   # Runtime glow injection via ItemAppearance
-    │       │   ├── EnchantmentVisualsListener.java # Event-driven visual updates
-    │       │   ├── EnchantmentSlotTracker.java    # Per-tick slot tracking for glow + banner
-    │       │   ├── EnchantmentDynamicEffects.java # Dynamic EntityEffect adjustments
-    │       │   ├── EnchantmentStateTransferSystem.java # Preserves enchantments on item state changes
-    │       │   ├── TooltipBridge.java             # Isolated bridge to DynamicTooltipsLib
-    │       │   │
-    │       │   ├── AbstractRecipeRegistry.java    # Base for smelting/cooking recipe caches
-    │       │   ├── SmeltingRecipeRegistry.java    # Smelting recipe lookup (for Smelting enchant)
-    │       │   ├── CookingRecipeRegistry.java     # Cooking recipe lookup (for Burn Smelting)
-    │       │   ├── AbstractRefundSystem.java      # Base for refund/resource-saving systems
-    │       │   │
-    │       │   │  # ── ECS Systems (registered with Hytale's Entity Component System) ──
-    │       │   ├── EnchantmentDamageSystem.java        # Sharpness, Strength, Eagle's Eye
-    │       │   ├── EnchantmentBlockDamageSystem.java    # Efficiency (mining speed)
-    │       │   ├── EnchantmentDurabilitySystem.java     # Durability, Sturdy
-    │       │   ├── EnchantmentFortuneSystem.java        # Fortune (extra drops)
-    │       │   ├── EnchantmentSmeltingSystem.java       # Smelting (auto-smelt)
-    │       │   ├── EnchantmentBurnSmeltingSystem.java   # Auto-smelt drops from burn kills
-    │       │   ├── EnchantmentSilktouchSystem.java      # Pick Perfect (silk touch)
-    │       │   ├── EnchantmentLootingSystem.java        # Looting (bonus mob drops)
-    │       │   ├── EnchantmentStaminaSystem.java        # Dexterity (stamina reduction)
-    │       │   ├── EnchantmentAbilityStaminaSystem.java # Frenzy (ability charge rate)
-    │       │   ├── EnchantmentProjectileSpeedSystem.java # Strength (projectile speed)
-    │       │   ├── EnchantmentFeatherFallingSystem.java  # Feather Falling
-    │       │   ├── EnchantmentWaterbreathingSystem.java  # Waterbreathing
-    │       │   ├── EnchantmentNightVisionSystem.java     # Night Vision
-    │       │   ├── EnchantmentBurnSystem.java            # Burn (fire DoT)
-    │       │   ├── EnchantmentFreezeSystem.java          # Freeze (slow)
-    │       │   ├── EnchantmentPoisonSystem.java          # Poison (DoT)
-    │       │   ├── EnchantmentKnockbackSystem.java       # Knockback
-    │       │   ├── EnchantmentReflectionSystem.java      # Reflection (damage reflect)
-    │       │   ├── EnchantmentAbsorptionSystem.java      # Absorption (heal on block)
-    │       │   ├── EnchantmentFastSwimSystem.java        # Swift Swim
-    │       │   ├── EnchantmentThriftSystem.java          # Thrift (mana restore)
-    │       │   ├── EnchantmentElementalHeartSystem.java  # Elemental Heart (save essence)
-    │       │   ├── EnchantmentEternalShotSystem.java     # Eternal Shot (infinite arrows)
-    │       │   ├── EternalShotProjectileCleanupSystem.java # Cleanup for Eternal Shot
-    │       │   ├── SwitchActiveSlotSystem.java           # Slot switch handler
-    │       │   ├── EnchantmentSalvageSystem.java         # Salvager bench metadata strip
-    │       │   ├── SalvagerInteractionSystem.java        # Salvager interaction ECS
-    │       │   ├── DropItemEventSystem.java              # Manual drop tracking
-    │       │   └── ProjectileEnchantmentData.java        # Projectile enchantment cache
-    │       │
-    │       ├── interaction/                     # ── Custom Interactions ──
-    │       │   ├── ConsumeAmmoInteraction.java    # Custom ammo consumption
-    │       │   └── LaunchDynamicProjectileInteraction.java # Dynamic projectile launch
-    │       │
-    │       ├── lang/                            # ── Localisation ──
-    │       │   └── LanguageManager.java           # Multi-language string resolution
-    │       │
-    │       ├── listener/                        # ── Event Listeners ──
-    │       │   ├── EventLoggerListener.java       # Debug logging for enchantment events
-    │       │   └── WelcomeListener.java           # First-join tooltip notification
-    │       │
-    │       ├── ui/                              # ── UI Pages & Elements ──
-    │       │   ├── EnchantScrollPageSupplier.java        # Scroll application UI codec
-    │       │   ├── EnchantScrollPage.java                # Scroll UI page logic
-    │       │   ├── EnchantScrollElement.java             # Scroll UI element
-    │       │   ├── CleansingScrollPageSupplier.java      # Cleansing scroll UI codec
-    │       │   ├── CleansingScrollPage.java              # Cleansing UI page logic
-    │       │   ├── CleansingScrollElement.java           # Cleansing UI element
-    │       │   ├── CleansingEnchantmentPage.java         # Enchantment selection for cleansing
-    │       │   ├── CleansingEnchantmentElement.java      # Per-enchantment cleansing element
-    │       │   ├── CustomScrollPageSupplier.java         # Multi-enchant transfer UI codec
-    │       │   ├── CustomScrollEnchantmentPage.java      # Enchantment selection page
-    │       │   ├── CustomScrollEnchantmentElement.java   # Enchantment element
-    │       │   ├── CustomScrollItemPage.java             # Item selection page
-    │       │   ├── CustomScrollItemElement.java          # Item element
-    │       │   ├── CustomScrollApplyInteraction.java     # Apply interaction for transfers
-    │       │   ├── EnchantItemInteraction.java           # Main enchant interaction
-    │       │   ├── RemoveEnchantmentInteraction.java     # Remove enchantment interaction
-    │       │   ├── EnchantingPage.java                   # Settings/walkthrough page
-    │       │   ├── EnchantingPageEventData.java          # Settings page event data
-    │       │   ├── EnchantConfigPage.java                # Config editor page
-    │       │   └── EnchantConfigPageEventData.java       # Config page event data
-    │       │
-    │       └── util/                            # ── Utilities ──
-    │           ├── ProcessingGuard.java           # Reentrant event guard
-    │           └── ScrollIdHelper.java            # Scroll ID parsing utilities
-    │
-    └── resources/
-        ├── manifest.json                        # Plugin manifest (version, deps, main class)
-        │
-        ├── Common/                              # ── Shared Asset Pack ──
-        │   ├── Blocks/Benches/                   # Enchanting Table block model + animation
-        │   ├── Icons/                            # UI icons (crafting categories, items)
-        │   ├── Items/Scrolls/                    # Scroll item models + textures
-        │   └── UI/Custom/                        # Custom UI layouts, textures, and buttons
-        │
-        └── Server/                              # ── Server-Side Assets ──
-            ├── Entity/
-            │   ├── Effects/Status/               # Burn, Freeze, Poison entity effects
-            │   ├── ModelVFX/                      # Enchantment glow VFX definitions
-            │   └── Stats/                        # Glow stat definitions per armor slot
-            ├── Item/Items/                       # Enchanting Table + special scroll items
-            ├── Languages/                        # Translations (11 locales)
-            └── Particles/Enchantment/            # Enchantment particle effects
-```
 
 ---
 
@@ -269,8 +114,8 @@ src/
 8. **Custom Interactions** — registers `ConsumeAmmo` and `LaunchDynamicProjectile` interaction types.
 9. **ECS Systems** — registers 20+ ECS systems with Hytale's `EntityStoreRegistry` for enchantment effects.
 10. **Event Listeners** — registers global listeners for inventory changes, player join, slot switching, etc.
-11. **Commands** — registers `/enchant`, `/enchanting`, `/enchantconfig`, and an enhanced `/give`.
-12. **Optional Tooltips** — conditionally registers `TooltipBridge` if DynamicTooltipsLib is present.
+11. **Commands** — registers `/enchant`, `/enchanting`, `/enchantconfig`, and `/giveenchanted`.
+12. **Tooltips** — writes enchantment and engraving descriptions through native per-stack `ItemDisplay` metadata.
 
 ---
 
@@ -398,7 +243,8 @@ Translation keys follow the pattern `enchantment.{id}.{name|description|bonus|wa
 | `/enchant <enchantment> [level]` | Apply an enchantment to the held item |
 | `/enchanting` | Open the enchanting settings/walkthrough UI |
 | `/enchantconfig` | Open the in-game configuration editor |
-| `/give <player> <item> [amount] [enchantments...]` | Enhanced give command that supports pre-enchanted items |
+| `/giveenchanted <item> [quantity] [durability] [metadata] [enchants]` | Give yourself a pre-enchanted item without replacing vanilla `/give` |
+| `/giveenchanted <player> <item> [quantity] [durability] [metadata] [enchants]` | Give another player a pre-enchanted item |
 
 ---
 
@@ -434,11 +280,10 @@ The mod bundles a complete asset pack containing:
 
 ---
 
-### Optional Integrations
+### Dependencies & Integrations
 
 | Mod | Integration |
 |---|---|
-| **[DynamicTooltipsLib](https://github.com/Herolias/DynamicTooltipsLib)** | Provides enchantment tooltips on item hover. Loaded via `TooltipBridge` (class isolated to prevent `NoClassDefFoundError`). When detected, the enchantment banner is auto-disabled. Note: This mod will become a full dependency in version 1.0.0. |
 | **Perfect Parries** | Enables the Riposte and Coup de Grâce enchantments (counter-attack and stun bonus damage). These enchantments are automatically disabled if the mod is not present. |
 | **MMO Skill Tree** | Adds Enchantment XP with unique rewards |
 | **[HStats](https://hstats.dev)** | Anonymous mod usage analytics. |

@@ -2,7 +2,7 @@ package org.herolias.plugin.enchantment;
 
 import com.hypixel.hytale.server.core.asset.type.item.config.Item;
 import com.hypixel.hytale.server.core.entity.LivingEntity;
-import com.hypixel.hytale.server.core.inventory.InventoryChangeEvent;
+import com.hypixel.hytale.server.core.event.events.ecs.InventoryChangeEvent;
 import com.hypixel.hytale.component.system.EntityEventSystem;
 import com.hypixel.hytale.component.ArchetypeChunk;
 import com.hypixel.hytale.component.CommandBuffer;
@@ -116,6 +116,10 @@ public class EnchantmentStateTransferSystem extends EntityEventSystem<EntityStor
 
         String cacheKey = getCacheKey(container, slot);
 
+        if (hasItem(after)) {
+            migrateNativeTooltip(container, slot, after);
+        }
+
         // ── Phase 1: Cache enchantments from removed items ──
         if (hasItem(before) && !hasItem(after)) {
             BsonDocument enchBson = getEnchantmentBson(before);
@@ -149,7 +153,8 @@ public class EnchantmentStateTransferSystem extends EntityEventSystem<EntityStor
 
             // Re-apply enchantments
             guard.runGuarded(() -> {
-                ItemStack restoredItem = after.withMetadata(EnchantmentData.METADATA_KEY, cached.enchantmentBson);
+                ItemStack restoredItem = NativeTooltipManager.withEnchantments(after, cached.enchantmentBson,
+                        enchantmentManager);
                 container.replaceItemStackInSlot(slot, after, restoredItem);
             });
             return;
@@ -168,7 +173,8 @@ public class EnchantmentStateTransferSystem extends EntityEventSystem<EntityStor
                     && areStateVariants(before.getItemId(), after.getItemId())) {
 
                 guard.runGuarded(() -> {
-                    ItemStack restoredItem = after.withMetadata(EnchantmentData.METADATA_KEY, beforeBson);
+                    ItemStack restoredItem = NativeTooltipManager.withEnchantments(after, beforeBson,
+                            enchantmentManager);
                     container.replaceItemStackInSlot(slot, after, restoredItem);
                 });
             }
@@ -181,6 +187,33 @@ public class EnchantmentStateTransferSystem extends EntityEventSystem<EntityStor
 
     private static boolean hasItem(ItemStack item) {
         return item != null && !item.isEmpty();
+    }
+
+    private void migrateNativeTooltip(@Nonnull ItemContainer container, short slot, @Nonnull ItemStack item) {
+        if (!hasTooltipMetadata(item)) {
+            return;
+        }
+        guard.runGuarded(() -> {
+            ItemStack updated = NativeTooltipManager.apply(item, enchantmentManager);
+            if (!updated.isEquivalentType(item)) {
+                container.replaceItemStackInSlot(slot, item, updated);
+            }
+        });
+    }
+
+    private static boolean hasTooltipMetadata(@Nonnull ItemStack item) {
+        BsonDocument enchantmentBson = getEnchantmentBson(item);
+        if (enchantmentBson != null && !enchantmentBson.isEmpty()) {
+            return true;
+        }
+        try {
+            BsonDocument nativeState = item.getFromMetadataOrNull(
+                    NativeTooltipManager.METADATA_KEY,
+                    com.hypixel.hytale.codec.Codec.BSON_DOCUMENT);
+            return nativeState != null && !nativeState.isEmpty();
+        } catch (Exception ignored) {
+            return false;
+        }
     }
 
     /**

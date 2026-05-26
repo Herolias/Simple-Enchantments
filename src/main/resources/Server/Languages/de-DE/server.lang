@@ -1,4 +1,4 @@
-﻿benchCategories.enchantingArmor = Rüstung
+benchCategories.enchantingArmor = Rüstung
 
 
 
@@ -1087,6 +1087,8 @@ config.general.table_tier = Verzauberungstisch Crafting Rang
 config.general.disable_crafting = Verzauberungshandwerk deaktivieren
 config.general.return_cleanse = Verzauberung bei Reinigung zurückgeben
 config.general.table_recipe = Verzauberungstisch Rezept
+config.general.engraving_table_tier = Crafting-Rang des Gravurtischs
+config.general.engraving_table_recipe = Gravurtisch-Rezept
 config.general.upgrade_1 = Upgrade 1 Kosten (Rang 1 -> 2)
 config.general.upgrade_2 = Upgrade 2 Kosten (Rang 2 -> 3)
 config.general.upgrade_3 = Upgrade 3 Kosten (Rang 3 -> 4)
@@ -1098,9 +1100,6 @@ config.recipe.ingredients = Zutaten
 
 config.common.enabled = Aktiviert
 config.common.disabled = Deaktiviert
-
-config.secondary.range_speed_bonus = Reichweite/Tempo Bonus
-config.secondary.quantity_bonus = Mengenbonus
 
 config.recipe.active_title = {0} - Zutaten
 config.recipe.crafting_tier = Crafting Rang
@@ -1120,13 +1119,13 @@ customUI.walkthrough.next = Nächste Seite
 customUI.walkthrough.prev = Vorherige Seite
 
 customUI.walkthrough.welcome.title = Willkommen bei Simple Enchantments!
-customUI.walkthrough.welcome.desc = Dieser Mod ermöglicht es dir, deine Ausrüstung und Waffen mit magischen Schriftrollen und Verzauberungen zu verbessern. Er ist hochgradig anpassbar, mit einem Admin-Konfigurationsmenü (/enchantconfig), das es ermöglicht, Einstellungen zu ändern oder bestimmte Verzauberungen zu aktivieren und zu deaktivieren. Er funktioniert am besten mit Vanilla-Gegenständen, bietet aber eine breite Kompatibilität mit anderen Mods. Wenn du auf ein Problem stößt oder einen Vorschlag hast, tritt unserem Discord-Server bei. Außerdem werden Verzauberungen im Tooltip des Gegenstands angezeigt, wenn Dynamic Tooltips Lib installiert ist.
+customUI.walkthrough.welcome.desc = Dieser Mod ermöglicht es dir, deine Ausrüstung und Waffen mit magischen Schriftrollen und Verzauberungen zu verbessern. Er ist hochgradig anpassbar, mit einem Admin-Konfigurationsmenü (/enchantconfig), das es ermöglicht, Einstellungen zu ändern oder bestimmte Verzauberungen zu aktivieren und zu deaktivieren. Er funktioniert am besten mit Vanilla-Gegenständen, bietet aber eine breite Kompatibilität mit anderen Mods. Wenn du auf ein Problem stößt oder einen Vorschlag hast, tritt unserem Discord-Server bei. Außerdem werden Verzauberungen direkt im Tooltip des Gegenstands angezeigt.
 
 customUI.walkthrough.table.title = 1. Der Verzauberungstisch
 customUI.walkthrough.table.desc = Stelle einen Verzauberungstisch an der Werkbank her. Platziere ihn und interagiere mit ihm, um alle verfügbaren Verzauberungsschriftrollen zu durchstöbern, die du herstellen kannst. Du kannst den Tisch auch aufwerten, um Zugang zu höherstufigen Verzauberungen zu erhalten.
 
 customUI.walkthrough.scrolls.title = 2. Verzauberungsschriftrollen
-customUI.walkthrough.scrolls.desc = Stelle Schriftrollen direkt am Verzauberungstisch mit Essenzen, Edelsteinen, Barren und Pflanzen her. Einmal hergestellt, klicke mit der rechten Maustaste auf die Schriftrolle, während du sie hältst, um die Verzauberung auf eine Waffe, Rüstung oder ein Werkzeug in deinem Inventar anzuwenden. Schriftrollen haben verschiedene Seltenheiten, die zeigen, wie stark oder einzigartig die Verzauberung ist. Die meisten Verzauberungen haben 3 Stufen, aber es gibt Ausnahmen. Legendäre Verzauberungen sind besonders mächtig oder einzigartig. Du kannst Schriftrollen auch kombinieren oder aufwerten. Wähle einfach eine andere Schriftrolle anstelle eines Gegenstands beim Anwenden von Verzauberungen und die Schriftrollen werden kombiniert.
+customUI.walkthrough.scrolls.desc = Stelle Schriftrollen direkt am Verzauberungstisch mit Essenzen, Edelsteinen, Barren und Pflanzen her. Einmal hergestellt, klicke mit der rechten Maustaste auf die Schriftrolle, während du sie hältst, um die Verzauberung auf eine Waffe, Rüstung oder ein Werkzeug in deinem Inventar anzuwenden. Schriftrollen haben verschiedene Seltenheiten, die zeigen, wie stark oder einzigartig die Verzauberung ist. Die meisten Verzauberungen haben 3 Stufen, aber es gibt Ausnahmen. Legendäre Verzauberungen sind besonders mächtig oder einzigartig. Du kannst Schriftrollen auch am Gravurtisch kombinieren oder aufwerten.
 
 customUI.walkthrough.removing.title = 3. Verzauberungen entfernen
 customUI.walkthrough.removing.desc = Einen Fehler gemacht? Du kannst eine Reinigungsschriftrolle herstellen, um Verzauberungen von einem Gegenstand zu entfernen. Auf diesem Server wirst du die Schriftrolle {returnScroll} zurückerhalten.
@@ -1138,7 +1137,7 @@ customUI.enchantingPage.adminNote = Serverweite Einstellungen und Verzauberungsa
 
 
 customUI.walkthrough.enchantments.title = 5. Verzauberungen
-customUI.walkthrough.enchantments.desc = Eine vollständige Liste der Verzauberungen und ihrer Effekte. Klicke auf eine, um mehr zu erfahren. Auf diesem Server kann jeder Gegenstand bis zu {maxEnchantments} Verzauberungen haben.\n\nHinweis: Derzeit zeigt jede Verzauberungsseite nur die Tooltip-Beschreibung der Verzauberung und ob sie auf dem Server aktiviert ist. Ich plane, detaillierte Beschreibungen für jede einzelne zu schreiben, aber das braucht Zeit. Jedes zukünftige Update des Mods wird detaillierte Beschreibungen für einige von ihnen hinzufügen.
+customUI.walkthrough.enchantments.desc = Eine vollständige Liste der Verzauberungen und ihrer Effekte. Klicke auf einen Eintrag, um mehr zu erfahren. Auf diesem Server kann jeder Gegenstand bis zu {maxEnchantments} Verzauberungen haben.\n\nHinweis: Einige Verzauberungsseiten enthalten bereits ausführlichere Spielhinweise, während andere noch ihre Tooltip-Zusammenfassung verwenden. Zukünftige Updates werden weitere detaillierte Beschreibungen ergänzen.
 
 config.general.allow_same_scroll_upgrades = Gleiche Schriftrollen-Upgrades erlauben (I+I = II)
 
@@ -1199,6 +1198,22 @@ items.Scroll_Environmental_Protection_III.name = Schriftrolle des Umweltschutzes
 
 items.Scroll_Environmental_Protection_III.description = Verringert Umweltschaden um 12% pro Rüstungsteil.
 
+items.Scroll_Regeneration_I.name = Schriftrolle der Regeneration
+
+items.Scroll_Regeneration_I.description = Regeneriert passiv {amount} HP pro Sekunde. Nur für Brustplatten.
+
+items.Scroll_Second_Stomach_I.name = Schriftrolle des Zweiten Magens I
+
+items.Scroll_Second_Stomach_I.description = Erhöht Sofortheitung um 15%.
+
+items.Scroll_Second_Stomach_II.name = Schriftrolle des Zweiten Magens II
+
+items.Scroll_Second_Stomach_II.description = Erhöht Sofortheitung um 30%.
+
+items.Scroll_Second_Stomach_III.name = Schriftrolle des Zweiten Magens III
+
+items.Scroll_Second_Stomach_III.description = Erhöht Sofortheitung um 45%.
+
 
 
 enchantment.poison.name = Gift
@@ -1211,11 +1226,23 @@ enchantment.environmental_protection.name = Umweltschutz
 
 enchantment.environmental_protection.description = Verringert Umweltschaden um 4% pro Rüstungsteil.
 
+enchantment.regeneration.name = Regeneration
+
+enchantment.regeneration.description = Regeneriert passiv {amount} HP pro Sekunde. Nur für Brustplatten.
+
+enchantment.second_stomach.name = Zweiter Magen
+
+enchantment.second_stomach.description = Erhöht Sofortheitung durch Nahrung und Tränke um {amount}% pro Stufe. Nur für Brustplatten.
+
 enchantment.poison.bonus = Vergiftet Ziele bei Treffer ({amount} Schaden/s für {duration}s)
 enchantment.environmental_protection.bonus = Umweltschaden um {amount}% reduziert
+enchantment.regeneration.bonus = Regeneriert {amount} HP pro Sekunde
+enchantment.second_stomach.bonus = Sofortheitung erhöht um {amount}%
 
 enchantment.poison.walkthrough = Vergiftet Ziele bei Treffern und verursacht {amount} Schaden pro Sekunde für {duration} Sekunden. Gilt für Nahkampf- und Fernkampfwaffen. Nicht kombinierbar mit Verbrennen.
 enchantment.environmental_protection.walkthrough = Verringert eingehenden elementaren und Umweltschaden (Feuer, Eis, Kakteen und andere Gefahren) um {amount}% pro Rüstungsteil pro Stufe und mildert proportional die Verlangsamungsintensität der Frost-Verzauberung. Gilt für Rüstungen.
+enchantment.regeneration.walkthrough = Regeneration ist eine Brustplatten-Verzauberung, die beim Tragen {amount} HP pro Sekunde wiederherstellt. Sie ist dauerhaft aktiv, solange die verzauberte Brustplatte ausgerüstet ist, und hilft besonders in langen Kämpfen, beim Erkunden und beim Erholen zwischen Begegnungen.\n\nDiese Heilung zählt als passive Regeneration und wird von Sofortheilung getrennt behandelt, daher wird sie nicht durch Zweiter Magen verstärkt.
+enchantment.second_stomach.walkthrough = Zweiter Magen ist eine Brustplatten-Verzauberung, die Sofortheilung durch Nahrung und Tränke um {amount}% pro Stufe erhöht. Sie verstärkt nur echte Heilungsstöße, nicht passive Regeneration oder Heilung über Zeit, und ist daher besonders stark, wenn du im Kampf Notfallnahrung oder Tränke nutzt.\n\nDer Bonus basiert auf der Heilung, die du tatsächlich erhältst, und gilt nur, solange du die verzauberte Brustplatte trägst.
 
 
 items.Scroll_Custom.name = Benutzerdefinierte Schriftrolle
@@ -1272,6 +1299,8 @@ itemCategory.STAFF_MANA = Manastäbe
 
 itemCategory.STAFF_ESSENCE = Essenzstäbe
 
+itemCategory.CHESTPLATE = Brustplatten
+
 itemCategory.UNKNOWN = Unbekannt
 
 config.multiplier.sharpness = Schaden pro Stufe
@@ -1304,3 +1333,7 @@ config.multiplier.elemental_heart = Sparchance pro Stufe
 config.multiplier.poison = Schaden pro Sekunde
 config.multiplier.poison:duration = Dauer (Sekunden)
 config.multiplier.environmental_protection = Reduktion pro Stufe
+config.multiplier.regeneration = HP Pro Sekunde
+config.multiplier.second_stomach = Bonus Pro Stufe
+items.EngravingTable.name = Gravurtisch
+items.EngravingTable.description = Ein Runen-Gravurtisch zum Umbenennen von Gegenständen und Umfärben von Verzauberungsglühen.

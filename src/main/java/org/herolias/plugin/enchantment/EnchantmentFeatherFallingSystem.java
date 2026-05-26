@@ -26,17 +26,17 @@ import java.util.Set;
 
 /**
  * ECS system that reduces fall damage based on Feather Falling enchantment on
- * boots.
+ * leg armor.
  * 
  * Effect: Reduces fall damage by 20% per level (up to 60% at level 3)
- * Applicable to: Boots only
+ * Applicable to: leg armor
  */
 public class EnchantmentFeatherFallingSystem extends DamageEventSystem {
 
     private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
 
-    // Boots slot index in armor container (typically slot 3 for feet)
-    private static final short BOOTS_SLOT = 3;
+    // Hytale's armor slot index 3 is Legs.
+    private static final short LEGS_SLOT = 3;
 
     private final EnchantmentManager enchantmentManager;
 
@@ -94,14 +94,14 @@ public class EnchantmentFeatherFallingSystem extends DamageEventSystem {
                 return;
             }
 
-            // Get boots from armor slot
-            ItemStack boots = armorContainer.getItemStack(BOOTS_SLOT);
-            if (boots == null || boots.isEmpty()) {
+            // Get leg armor from armor slot
+            ItemStack legArmor = armorContainer.getItemStack(LEGS_SLOT);
+            if (legArmor == null || legArmor.isEmpty()) {
                 return;
             }
 
             // Check for Feather Falling enchantment
-            int featherFallingLevel = enchantmentManager.getEnchantmentLevel(boots, EnchantmentType.FEATHER_FALLING);
+            int featherFallingLevel = enchantmentManager.getEnchantmentLevel(legArmor, EnchantmentType.FEATHER_FALLING);
             if (featherFallingLevel <= 0) {
                 return;
             }
@@ -118,7 +118,7 @@ public class EnchantmentFeatherFallingSystem extends DamageEventSystem {
                 com.hypixel.hytale.server.core.universe.PlayerRef playerRef = store.getComponent(
                         targetEntity.getReference(),
                         com.hypixel.hytale.server.core.universe.PlayerRef.getComponentType());
-                EnchantmentEventHelper.fireActivated(playerRef, boots, EnchantmentType.FEATHER_FALLING,
+                EnchantmentEventHelper.fireActivated(playerRef, legArmor, EnchantmentType.FEATHER_FALLING,
                         featherFallingLevel);
             }
 

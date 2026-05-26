@@ -1,4 +1,4 @@
-﻿benchCategories.enchantingArmor = Baju Zirah
+benchCategories.enchantingArmor = Baju Zirah
 
 benchCategories.enchantingTools = Alat
 
@@ -583,6 +583,8 @@ config.general.return_cleanse = Kembalikan Sihir saat Pembersihan
 config.general.salvager_yield = Pendaur Ulang Mengembalikan Gulungan
 config.general.show_welcome = Tampilkan Pesan Selamat Datang
 config.general.table_recipe = Resep Meja Sihir
+config.general.engraving_table_tier = Tingkat Kerajinan Meja Pengukiran
+config.general.engraving_table_recipe = Resep Meja Pengukiran
 config.general.upgrade_1 = Biaya Peningkatan 1 (Tingkat 1 -> 2)
 config.general.upgrade_2 = Biaya Peningkatan 2 (Tingkat 2 -> 3)
 config.general.upgrade_3 = Biaya Peningkatan 3 (Tingkat 3 -> 4)
@@ -592,9 +594,6 @@ config.recipe.ingredients = Bahan
 
 config.common.enabled = Diaktifkan
 config.common.disabled = Dinonaktifkan
-
-config.secondary.range_speed_bonus = Bonus Jarak/Kecepatan
-config.secondary.quantity_bonus = Bonus Jumlah
 
 config.recipe.active_title = {0} - Bahan
 config.recipe.crafting_tier = Tingkat Kerajinan
@@ -613,13 +612,13 @@ customUI.walkthrough.next = Halaman Berikutnya
 customUI.walkthrough.prev = Halaman Sebelumnya
 
 customUI.walkthrough.welcome.title = Selamat Datang di Simple Enchantments!
-customUI.walkthrough.welcome.desc = Mod ini memungkinkan Anda meningkatkan perlengkapan dan senjata menggunakan gulungan sihir dan pesona. Mod ini sangat dapat disesuaikan, dengan menu konfigurasi admin (/enchantconfig) yang memungkinkan Anda mengubah pengaturan atau mengaktifkan dan menonaktifkan pesona tertentu. Mod ini paling cocok dengan item vanilla, tetapi menawarkan kompatibilitas luas dengan mod lain. Jika Anda menemukan masalah atau memiliki permintaan fitur, silakan bergabung dengan server Discord kami. Selain itu, jika Dynamic Tooltips Lib terinstal, pesona akan ditampilkan di tooltip item.
+customUI.walkthrough.welcome.desc = Mod ini memungkinkan Anda meningkatkan perlengkapan dan senjata menggunakan gulungan sihir dan pesona. Mod ini sangat dapat disesuaikan, dengan menu konfigurasi admin (/enchantconfig) yang memungkinkan Anda mengubah pengaturan atau mengaktifkan dan menonaktifkan pesona tertentu. Mod ini paling cocok dengan item vanilla, tetapi menawarkan kompatibilitas luas dengan mod lain. Jika Anda menemukan masalah atau memiliki permintaan fitur, silakan bergabung dengan server Discord kami. Selain itu, pesona ditampilkan di tooltip item.
 
 customUI.walkthrough.table.title = 1. Meja Sihir
 customUI.walkthrough.table.desc = Buat Meja Sihir di Meja Kerja. Letakkan dan berinteraksi dengannya untuk melihat semua Gulungan Sihir yang tersedia yang dapat Anda buat. Anda juga dapat meningkatkan meja untuk mengakses pesona tingkat lebih tinggi.
 
 customUI.walkthrough.scrolls.title = 2. Gulungan Sihir
-customUI.walkthrough.scrolls.desc = Buat gulungan langsung di Meja Sihir menggunakan esensi, permata, batangan dan tanaman. Setelah dibuat, klik kanan gulungan saat memegangnya untuk menerapkan pesona ke senjata, baju zirah, atau alat di inventaris Anda. Gulungan memiliki tingkat kelangkaan berbeda, menunjukkan seberapa kuat atau unik pesona tersebut. Sebagian besar pesona memiliki 3 Level, tetapi ada beberapa pengecualian. Pesona legendaris sangat kuat atau unik. Anda juga dapat menggabungkan atau meningkatkan gulungan. Cukup pilih gulungan lain alih-alih item saat menerapkan pesona dan gulungan akan digabungkan.
+customUI.walkthrough.scrolls.desc = Buat gulungan langsung di Meja Sihir menggunakan esensi, permata, batangan dan tanaman. Setelah dibuat, klik kanan gulungan saat memegangnya untuk menerapkan pesona ke senjata, baju zirah, atau alat di inventaris Anda. Gulungan memiliki tingkat kelangkaan berbeda, menunjukkan seberapa kuat atau unik pesona tersebut. Sebagian besar pesona memiliki 3 Level, tetapi ada beberapa pengecualian. Pesona legendaris sangat kuat atau unik. Anda juga dapat menggabungkan atau meningkatkan gulungan di Meja Pengukiran.
 
 customUI.walkthrough.removing.title = 3. Menghapus Pesona
 customUI.walkthrough.removing.desc = Membuat kesalahan? Anda dapat membuat Gulungan Pembersihan untuk menghapus pesona dari item. Di server ini, Anda {returnScroll} mendapatkan gulungan kembali.
@@ -631,7 +630,7 @@ customUI.enchantingPage.adminNote = Pengaturan di seluruh server dan penyesuaian
 
 
 customUI.walkthrough.enchantments.title = 5. Pesona
-customUI.walkthrough.enchantments.desc = Daftar lengkap pesona dan efeknya. Klik salah satu untuk mengetahui lebih lanjut. Di server ini, setiap Item dapat memiliki hingga {maxEnchantments} Pesona.\n\nCatatan: Saat ini setiap halaman pesona hanya menampilkan deskripsi Tooltip dari pesona dan apakah pesona tersebut diaktifkan di server. Saya berencana menulis deskripsi terperinci untuk masing-masing, tetapi itu membutuhkan waktu. Setiap pembaruan mod di masa depan akan menambahkan deskripsi terperinci untuk beberapa di antaranya.
+customUI.walkthrough.enchantments.desc = Daftar lengkap pesona dan efeknya. Klik salah satu entri untuk mengetahui lebih lanjut. Di server ini, setiap item dapat memiliki hingga {maxEnchantments} pesona.\n\nCatatan: Beberapa halaman pesona kini berisi catatan gameplay yang lebih lengkap, sementara yang lain masih memakai ringkasan tooltip. Pembaruan mendatang akan terus menambahkan deskripsi terperinci.
 
 config.general.allow_same_scroll_upgrades = Izinkan Peningkatan Gulungan yang Sama (I+I = II)
 
@@ -697,6 +696,22 @@ items.Scroll_Environmental_Protection_III.name = Gulungan Perlindungan Lingkunga
 
 items.Scroll_Environmental_Protection_III.description = Mengurangi kerusakan lingkungan sebesar 12% per bagian baju zirah.
 
+items.Scroll_Regeneration_I.name = Gulungan Regenerasi
+
+items.Scroll_Regeneration_I.description = Secara pasif meregenerasi {amount} HP per detik. Hanya pelindung dada.
+
+items.Scroll_Second_Stomach_I.name = Gulungan Perut Kedua I
+
+items.Scroll_Second_Stomach_I.description = Meningkatkan penyembuhan instan sebesar 15%.
+
+items.Scroll_Second_Stomach_II.name = Gulungan Perut Kedua II
+
+items.Scroll_Second_Stomach_II.description = Meningkatkan penyembuhan instan sebesar 30%.
+
+items.Scroll_Second_Stomach_III.name = Gulungan Perut Kedua III
+
+items.Scroll_Second_Stomach_III.description = Meningkatkan penyembuhan instan sebesar 45%.
+
 
 
 enchantment.poison.name = Racun
@@ -709,11 +724,23 @@ enchantment.environmental_protection.name = Perlindungan Lingkungan
 
 enchantment.environmental_protection.description = Mengurangi kerusakan lingkungan sebesar 4% per bagian baju zirah.
 
+enchantment.regeneration.name = Regenerasi
+
+enchantment.regeneration.description = Secara pasif meregenerasi {amount} HP per detik. Hanya pelindung dada.
+
+enchantment.second_stomach.name = Perut Kedua
+
+enchantment.second_stomach.description = Meningkatkan penyembuhan instan dari makanan dan ramuan sebesar {amount}% per level. Hanya pelindung dada.
+
 enchantment.poison.bonus = Meracuni target ({amount} damage/detik selama {duration} detik)
 enchantment.environmental_protection.bonus = Kerusakan lingkungan berkurang sebesar {amount}%
+enchantment.regeneration.bonus = Meregenerasi {amount} HP per detik
+enchantment.second_stomach.bonus = Penyembuhan instan meningkat sebesar {amount}%
 
 enchantment.poison.walkthrough = Meracuni target saat terkena, memberikan {amount} kerusakan per detik selama {duration} detik. Berlaku untuk senjata jarak dekat dan jarak jauh. Tidak dapat dikombinasikan dengan Bakar.
 enchantment.environmental_protection.walkthrough = Mengurangi kerusakan elemen dan lingkungan masuk (api, es, kaktus, dan bahaya lainnya) sebesar {amount}% per bagian baju zirah per level, dan secara proporsional mengurangi intensitas efek perlambatan dari pesona Beku. Berlaku untuk baju zirah.
+enchantment.regeneration.walkthrough = Regenerasi adalah pesona pelindung dada yang memulihkan {amount} HP per detik saat dipakai. Efeknya selalu aktif selama pelindung dada yang disihir terpasang, sehingga berguna untuk pertarungan panjang, eksplorasi, dan memulihkan diri di antara pertempuran.\n\nPenyembuhan ini dihitung sebagai regenerasi pasif dan dipisahkan dari penyembuhan instan, jadi tidak diperkuat oleh Perut Kedua.
+enchantment.second_stomach.walkthrough = Perut Kedua adalah pesona pelindung dada yang meningkatkan penyembuhan instan dari makanan dan ramuan sebesar {amount}% per tingkat. Pesona ini hanya memperkuat lonjakan penyembuhan langsung, bukan regenerasi pasif atau penyembuhan bertahap, sehingga sangat berguna saat memakai makanan atau ramuan darurat di tengah pertarungan.\n\nBonusnya berdasarkan penyembuhan yang benar-benar kamu terima dan hanya berlaku saat pelindung dada yang disihir dipakai.
 
 
 items.Scroll_Custom.name = Gulungan Kustom
@@ -770,6 +797,8 @@ itemCategory.STAFF_MANA = Tongkat Mana
 
 itemCategory.STAFF_ESSENCE = Tongkat Esensi
 
+itemCategory.CHESTPLATE = Pelindung Dada
+
 itemCategory.UNKNOWN = Tidak Diketahui
 
 config.multiplier.sharpness = Kerusakan per Level
@@ -802,3 +831,7 @@ config.multiplier.elemental_heart = Peluang Penghematan Esensi per Level
 config.multiplier.poison = Kerusakan per Detik
 config.multiplier.poison:duration = Durasi (Detik)
 config.multiplier.environmental_protection = Pengurangan per Level
+config.multiplier.regeneration = HP Per Detik
+config.multiplier.second_stomach = Bonus per Tingkat
+items.EngravingTable.name = Meja Pengukiran
+items.EngravingTable.description = Meja pengukiran rune untuk mengganti nama item dan mewarnai ulang cahaya enchantment.

@@ -25,6 +25,9 @@ public class EnchantmentData {
      * Usage: itemStack.withMetadata(METADATA_KEY, enchantmentData.toBson())
      */
     public static final String METADATA_KEY = "Enchantments";
+    private static final int CURRENT_BSON_VERSION = 2;
+    private static final String VERSION_KEY = "Version";
+    private static final String VALUES_KEY = "Values";
 
     /**
      * Shared immutable empty instance — avoids allocations for items without
@@ -169,13 +172,16 @@ public class EnchantmentData {
 
     /**
      * Serializes enchantment data to a BsonDocument for ItemStack metadata storage.
-     * Format: { "Sharpness": 2, "Durability": 1 }
+     * Format: { "Version": 2, "Values": { "sharpness": 2, "durability": 1 } }
      */
     public BsonDocument toBson() {
         BsonDocument doc = new BsonDocument();
+        BsonDocument values = new BsonDocument();
         enchantments.forEach((type, level) -> {
-            doc.put(type.getDisplayName(), new BsonInt32(level));
+            values.put(type.getId(), new BsonInt32(level));
         });
+        doc.put(VERSION_KEY, new BsonInt32(CURRENT_BSON_VERSION));
+        doc.put(VALUES_KEY, values);
         return doc;
     }
 
@@ -192,7 +198,14 @@ public class EnchantmentData {
             return result;
         }
 
-        for (Map.Entry<String, BsonValue> entry : bson.entrySet()) {
+        BsonDocument values = bson;
+        BsonValue version = bson.get(VERSION_KEY);
+        BsonValue nestedValues = bson.get(VALUES_KEY);
+        if (version != null && nestedValues != null && nestedValues.isDocument()) {
+            values = nestedValues.asDocument();
+        }
+
+        for (Map.Entry<String, BsonValue> entry : values.entrySet()) {
             String enchantName = entry.getKey();
             BsonValue value = entry.getValue();
 

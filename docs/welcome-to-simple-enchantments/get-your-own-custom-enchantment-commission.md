@@ -5,7 +5,7 @@ published: true
 draft: false
 ---
 
-The addition of the **Enchantments API** in Version 0.9.0 of Simple Enchantments makes it possible to add your own enchantments through separate add-on plugins.
+The addition of the [**Enchantments API**](https://wiki.hytalemodding.dev/mod/simple-enchantments/api-documentation) in Version 0.9.0 of Simple Enchantments makes it possible to add your own enchantments through separate add-on plugins.
 
 I definitely recommend giving it a shot yourself if you're up for it! It's a great way to learn, though you will need some Java knowledge to handle the logic behind how the enchantment actually works. However, if you aren't able to code it yourself or just want your "dream enchantment" ready to go, we also offer a **Commission Service**:
 

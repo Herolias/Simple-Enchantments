@@ -100,96 +100,8 @@ public class EnchantScrollPage extends ChoiceBasePage {
 
             String itemId = itemStack.getItemId();
 
-            // --- Scroll merge targets ---
-            boolean isScrollTarget = false;
-
-            // Check for Custom Scroll
-            if ("Scroll_Custom".equals(itemId)) {
-                isScrollTarget = true;
-                // Custom Scrolls are always valid merge targets
-                // (enchantment will be added to the scroll's metadata)
-                EnchantmentData targetData = enchantmentManager.getEnchantmentsFromItem(itemStack);
-                int currentLevel = targetData.getLevel(enchantmentType);
-                int interactionTargetLevel = scrollLevel;
-
-                // Check for conflicts
-                boolean hasConflict = false;
-                for (EnchantmentType existing : targetData.getAllEnchantments().keySet()) {
-                    if (existing == enchantmentType)
-                        continue;
-                    if (enchantmentType.conflictsWith(existing)) {
-                        hasConflict = true;
-                        break;
-                    }
-                }
-                if (hasConflict)
-                    continue;
-
-                if (currentLevel == scrollLevel) {
-                    if (allowSameScrollUpgrades && currentLevel < enchantmentType.getMaxLevel()) {
-                        interactionTargetLevel = currentLevel + 1;
-                    } else {
-                        continue;
-                    }
-                } else if (currentLevel > scrollLevel) {
-                    continue;
-                }
-
-                ItemContext itemContext = new ItemContext(itemContainer, slot, itemStack);
-                elements.add(new EnchantScrollElement(
-                        itemStack,
-                        enchantmentType,
-                        interactionTargetLevel,
-                        currentLevel,
-                        new EnchantItemInteraction(itemContext, heldItemContext, enchantmentType,
-                                interactionTargetLevel, enchantmentManager),
-                        enchantmentManager));
-                continue;
-            }
-
-            // Check for regular scroll (e.g. Scroll_Sharpness_II)
-            org.herolias.plugin.util.ScrollIdHelper.ScrollEnchantment scrollEnch = org.herolias.plugin.util.ScrollIdHelper
-                    .getEnchantmentFromScrollId(itemId);
-            if (scrollEnch != null) {
-                isScrollTarget = true;
-                // Skip cleansing scrolls
-                if ("cleansing".equals(scrollEnch.type().getId()))
-                    continue;
-
-                if (scrollEnch.type() == enchantmentType) {
-                    // Same enchantment: upgrade logic
-                    if (scrollEnch.level() == scrollLevel) {
-                        if (allowSameScrollUpgrades && scrollEnch.level() < enchantmentType.getMaxLevel()) {
-                            int upgradeLevel = scrollEnch.level() + 1;
-                            ItemContext itemContext = new ItemContext(itemContainer, slot, itemStack);
-                            elements.add(new EnchantScrollElement(
-                                    itemStack,
-                                    enchantmentType,
-                                    upgradeLevel,
-                                    scrollEnch.level(),
-                                    new EnchantItemInteraction(itemContext, heldItemContext, enchantmentType,
-                                            upgradeLevel, enchantmentManager),
-                                    enchantmentManager));
-                        }
-                        // else: same level, no upgrade allowed
-                    }
-                    // Different levels of same enchantment - skip (no meaningful merge)
-                } else {
-                    // Different enchantment: merge into Custom Scroll
-                    // Check for conflicts between the two enchantments
-                    if (enchantmentType.conflictsWith(scrollEnch.type()))
-                        continue;
-
-                    ItemContext itemContext = new ItemContext(itemContainer, slot, itemStack);
-                    elements.add(new EnchantScrollElement(
-                            itemStack,
-                            enchantmentType,
-                            scrollLevel,
-                            0,
-                            new EnchantItemInteraction(itemContext, heldItemContext, enchantmentType, scrollLevel,
-                                    enchantmentManager),
-                            enchantmentManager));
-                }
+            // Scrolls can no longer be enchanted via the menu; use Engraving Table instead.
+            if (itemId != null && itemId.startsWith("Scroll_")) {
                 continue;
             }
 
@@ -244,16 +156,6 @@ public class EnchantScrollPage extends ChoiceBasePage {
                             enchantmentManager),
                     enchantmentManager));
         }
-
-        elements.sort((a, b) -> {
-            boolean aIsScroll = ((EnchantScrollElement) a).getItemStack().getItemId().startsWith("Scroll_");
-            boolean bIsScroll = ((EnchantScrollElement) b).getItemStack().getItemId().startsWith("Scroll_");
-            if (aIsScroll && !bIsScroll)
-                return 1;
-            if (!aIsScroll && bIsScroll)
-                return -1;
-            return 0;
-        });
 
         return elements.toArray(ChoiceElement[]::new);
     }

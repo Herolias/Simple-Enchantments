@@ -1,4 +1,4 @@
-﻿benchCategories.enchantingArmor = Armatura
+benchCategories.enchantingArmor = Armatura
 
 benchCategories.enchantingTools = Strumenti
 
@@ -573,6 +573,8 @@ config.general.table_tier = Livello Creazione Tavolo Incantesimi
 config.general.disable_crafting = Disabilita Creazione Incantesimi
 config.general.return_cleanse = Restituisci Incantesimo alla Pulizia
 config.general.table_recipe = Ricetta Tavolo Incantesimi
+config.general.engraving_table_tier = Livello Creazione Tavolo da Incisione
+config.general.engraving_table_recipe = Ricetta Tavolo da Incisione
 config.general.upgrade_1 = Costo Aggiornamento 1 (Livello 1 -> 2)
 config.general.upgrade_2 = Costo Aggiornamento 2 (Livello 2 -> 3)
 config.general.upgrade_3 = Costo Aggiornamento 3 (Livello 3 -> 4)
@@ -582,9 +584,6 @@ config.recipe.ingredients = Ingredienti
 
 config.common.enabled = Abilitato
 config.common.disabled = Disabilitato
-
-config.secondary.range_speed_bonus = Bonus Raggio/Velocità
-config.secondary.quantity_bonus = Bonus Quantità
 
 config.recipe.active_title = {0} - Ingredienti
 config.recipe.crafting_tier = Livello Creazione
@@ -615,18 +614,18 @@ customUI.enchantingPage.lang.default = Predefinita (Lingua di Gioco)
 customUI.walkthrough.next = Pagina Successiva
 customUI.walkthrough.prev = Pagina Precedente
 customUI.walkthrough.welcome.title = Benvenuto in Simple Enchantments!
-customUI.walkthrough.welcome.desc = Questa mod ti permette di migliorare il tuo equipaggiamento e le tue armi usando pergamene magiche e incantesimi. È altamente personalizzabile, con un menù di configurazione per gli amministratori (/enchantconfig) che ti permette di modificare le impostazioni o attivare e disattivare incantesimi specifici. Funziona al meglio con gli oggetti vanilla, ma offre un'ampia compatibilità con altre mod. Se riscontri un problema o hai una richiesta, unisciti al nostro server Discord. Inoltre, se Dynamic Tooltips Lib è installato, gli incantesimi verranno mostrati nel tooltip dell'oggetto.
+customUI.walkthrough.welcome.desc = Questa mod ti permette di migliorare il tuo equipaggiamento e le tue armi usando pergamene magiche e incantesimi. È altamente personalizzabile, con un menù di configurazione per gli amministratori (/enchantconfig) che ti permette di modificare le impostazioni o attivare e disattivare incantesimi specifici. Funziona al meglio con gli oggetti vanilla, ma offre un'ampia compatibilità con altre mod. Se riscontri un problema o hai una richiesta, unisciti al nostro server Discord. Inoltre, gli incantesimi vengono mostrati nel tooltip dell'oggetto.
 customUI.walkthrough.table.title = 1. Tavolo degli Incantesimi
 customUI.walkthrough.table.desc = Crea un Tavolo degli Incantesimi al Banco di Lavoro. Posizionalo e interagisci per sfogliare tutte le Pergamene d'Incantesimo disponibili che puoi creare. Puoi anche migliorare il tavolo per accedere a incantesimi di livello superiore.
 customUI.walkthrough.scrolls.title = 2. Pergamene d'Incantesimo
-customUI.walkthrough.scrolls.desc = Crea pergamene direttamente al Tavolo degli Incantesimi usando essenze, gemme, lingotti e piante. Una volta creata, fai clic destro sulla pergamena mentre la tieni in mano per applicare l'incantesimo a un'arma, un'armatura o uno strumento nel tuo inventario. Le pergamene hanno diverse rarità, che indicano quanto sia potente o unico l'incantesimo. La maggior parte degli incantesimi ha 3 Livelli, ma ci sono alcune eccezioni. Gli incantesimi leggendari sono particolarmente potenti o unici. Puoi anche combinare o potenziare le pergamene. Seleziona semplicemente un'altra pergamena al posto di un oggetto quando applichi gli incantesimi e le pergamene verranno combinate.
+customUI.walkthrough.scrolls.desc = Crea pergamene direttamente al Tavolo degli Incantesimi usando essenze, gemme, lingotti e piante. Una volta creata, fai clic destro sulla pergamena mentre la tieni in mano per applicare l'incantesimo a un'arma, un'armatura o uno strumento nel tuo inventario. Le pergamene hanno diverse rarità, che indicano quanto sia potente o unico l'incantesimo. La maggior parte degli incantesimi ha 3 Livelli, ma ci sono alcune eccezioni. Gli incantesimi leggendari sono particolarmente potenti o unici. Puoi anche combinare o potenziare le pergamene al Tavolo da incisione.
 customUI.walkthrough.removing.title = 3. Rimuovere Incantesimi
 customUI.walkthrough.removing.desc = Hai commesso un errore? Puoi creare una Pergamena della Purificazione per rimuovere gli incantesimi da un oggetto. Su questo server, {returnScroll} riottenere la pergamena.
 customUI.walkthrough.salvaging.title = 4. Riciclaggio
 customUI.walkthrough.salvaging.desc = Se hai un pezzo di equipaggiamento incantato di cui non hai più bisogno, posizionalo nella Stazione di Riciclaggio per recuperare la pergamena d'incantesimo di livello più alto, se abilitato sul server.
 customUI.enchantingPage.adminNote = Le impostazioni globali del server e le personalizzazioni degli Incantesimi sono disponibili nella Configurazione Amministratore. Accedici tramite /enchantconfig
 customUI.walkthrough.enchantments.title = 5. Incantesimi
-customUI.walkthrough.enchantments.desc = Una lista completa degli incantesimi e dei loro effetti. Clicca su uno qualsiasi per saperne di più. Su questo server, ogni oggetto può avere fino a {maxEnchantments} incantesimi.\n\nNota: Per ora, ogni pagina di incantesimo mostra solo la descrizione del Tooltip dell'incantesimo e se è abilitato sul server. Ho intenzione di scrivere descrizioni dettagliate per ciascuno di essi, ma ci vuole tempo. Ogni futuro aggiornamento della mod aggiungerà una descrizione dettagliata per alcuni di essi.
+customUI.walkthrough.enchantments.desc = Una lista completa degli incantesimi e dei loro effetti. Clicca su una voce per saperne di più. Su questo server, ogni oggetto può avere fino a {maxEnchantments} incantesimi.\n\nNota: Alcune pagine degli incantesimi includono già note di gioco più dettagliate, mentre altre usano ancora il riassunto del tooltip. I futuri aggiornamenti continueranno ad aggiungere descrizioni dettagliate.
 
 config.general.allow_same_scroll_upgrades = Permetti Miglioramenti con Pergamene Uguali (I+I = II)
 
@@ -688,6 +687,22 @@ items.Scroll_Environmental_Protection_III.name = Pergamena di Protezione Ambient
 
 items.Scroll_Environmental_Protection_III.description = Riduce i danni ambientali del 12% per pezzo di armatura.
 
+items.Scroll_Regeneration_I.name = Pergamena di Rigenerazione
+
+items.Scroll_Regeneration_I.description = Rigenera passivamente {amount} HP al secondo. Solo corazze.
+
+items.Scroll_Second_Stomach_I.name = Pergamena del Secondo Stomaco I
+
+items.Scroll_Second_Stomach_I.description = Aumenta la cura istantanea del 15%.
+
+items.Scroll_Second_Stomach_II.name = Pergamena del Secondo Stomaco II
+
+items.Scroll_Second_Stomach_II.description = Aumenta la cura istantanea del 30%.
+
+items.Scroll_Second_Stomach_III.name = Pergamena del Secondo Stomaco III
+
+items.Scroll_Second_Stomach_III.description = Aumenta la cura istantanea del 45%.
+
 
 
 enchantment.poison.name = Veleno
@@ -700,11 +715,23 @@ enchantment.environmental_protection.name = Protezione Ambientale
 
 enchantment.environmental_protection.description = Riduce i danni ambientali del 4% per pezzo di armatura.
 
+enchantment.regeneration.name = Rigenerazione
+
+enchantment.regeneration.description = Rigenera passivamente {amount} HP al secondo. Solo corazze.
+
+enchantment.second_stomach.name = Secondo Stomaco
+
+enchantment.second_stomach.description = Aumenta la cura istantanea da cibo e pozioni del {amount}% per livello. Solo corazze.
+
 enchantment.poison.bonus = Avvelena i bersagli ({amount} danni/s per {duration}s)
 enchantment.environmental_protection.bonus = Danni ambientali ridotti del {amount}%
+enchantment.regeneration.bonus = Rigenera {amount} HP al secondo
+enchantment.second_stomach.bonus = Cura istantanea aumentata del {amount}%
 
 enchantment.poison.walkthrough = Avvelena i bersagli al colpo, infliggendo {amount} danni al secondo per {duration} secondi. Si applica ad armi corpo a corpo e a distanza. Non combinabile con Combustione.
 enchantment.environmental_protection.walkthrough = Riduce i danni elementali e ambientali in arrivo (fuoco, ghiaccio, cactus e altri pericoli) del {amount}% per pezzo di armatura per livello, e mitiga proporzionalmente l'intensità del rallentamento dell'incantesimo Gelo. Si applica all'armatura.
+enchantment.regeneration.walkthrough = Rigenerazione è un incantesimo per corazze che ripristina {amount} HP al secondo mentre la indossi. Resta sempre attivo finché la corazza incantata è equipaggiata, ed è utile nei combattimenti lunghi, durante l'esplorazione e per recuperare tra uno scontro e l'altro.\n\nQuesta cura è trattata come rigenerazione passiva e rimane separata dalle cure istantanee, quindi non viene potenziata da Secondo Stomaco.
+enchantment.second_stomach.walkthrough = Secondo Stomaco è un incantesimo per corazze che aumenta le cure istantanee da cibo e pozioni del {amount}% per livello. Potenzia solo vere cure immediate, non la rigenerazione passiva o le cure nel tempo, quindi brilla quando usi cibo o pozioni d'emergenza in combattimento.\n\nIl bonus si basa sulla cura che ricevi davvero e si applica solo mentre indossi la corazza incantata.
 
 
 items.Scroll_Custom.name = Pergamena Personalizzata
@@ -761,6 +788,8 @@ itemCategory.STAFF_MANA = Bastoni di Mana
 
 itemCategory.STAFF_ESSENCE = Bastoni di Essenza
 
+itemCategory.CHESTPLATE = Corazze
+
 itemCategory.UNKNOWN = Sconosciuto
 
 config.multiplier.sharpness = Danni per Livello
@@ -793,3 +822,7 @@ config.multiplier.elemental_heart = Probabilità Risparmio per Livello
 config.multiplier.poison = Danni al Secondo
 config.multiplier.poison:duration = Durata (Secondi)
 config.multiplier.environmental_protection = Riduzione per Livello
+config.multiplier.regeneration = HP Al Secondo
+config.multiplier.second_stomach = Bonus Per Livello
+items.EngravingTable.name = Tavolo da incisione
+items.EngravingTable.description = Un tavolo da incisione runica per rinominare gli oggetti e ricolorare i bagliori degli incantamenti.

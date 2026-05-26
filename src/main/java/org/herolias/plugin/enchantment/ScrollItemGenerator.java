@@ -17,8 +17,8 @@ import com.hypixel.hytale.server.core.modules.interaction.interaction.config.Int
 import com.hypixel.hytale.server.core.modules.interaction.interaction.config.InteractionConfiguration;
 import com.hypixel.hytale.server.core.modules.interaction.interaction.config.RootInteraction;
 import com.hypixel.hytale.server.core.modules.interaction.interaction.config.server.OpenCustomUIInteraction;
-import com.hypixel.hytale.protocol.Vector2f;
-import com.hypixel.hytale.protocol.Vector3f;
+import org.joml.Vector2f;
+import org.joml.Vector3f;
 import org.herolias.plugin.SimpleEnchanting;
 import org.herolias.plugin.config.EnchantingConfig;
 import org.herolias.plugin.config.EnchantingConfig.ConfigIngredient;
@@ -153,6 +153,9 @@ public class ScrollItemGenerator {
                 String quality;
                 int itemLevel;
                 String[] craftingCategories;
+                String iconOverride = null;
+                String modelOverride = null;
+                String textureOverride = null;
 
                 if (isAddon) {
                     // ─── Use ScrollDefinition from the builder API ───
@@ -179,7 +182,9 @@ public class ScrollItemGenerator {
                         cat = guessCraftingCategory(type);
                     craftingCategories = new String[] { cat };
 
-                    org.herolias.plugin.api.ScrollDefinition.IconProperties iconProps = def.getIconProperties();
+                    iconOverride = def.getIcon();
+                    modelOverride = def.getModel();
+                    textureOverride = def.getTexture();
 
                     for (org.herolias.plugin.api.ScrollDefinition.Ingredient ing : def.getRecipe()) {
                         ConfigIngredient ci = new ConfigIngredient();
@@ -238,10 +243,11 @@ public class ScrollItemGenerator {
                             -5f);
                 }
 
-                String texture = getTextureForEnchantment(type.getId());
-                String icon = getIconForEnchantment(type.getId());
+                String texture = textureOverride != null ? textureOverride : getTextureForEnchantment(type.getId());
+                String icon = iconOverride != null ? iconOverride : getIconForEnchantment(type.getId());
+                String model = modelOverride != null ? modelOverride : DEFAULT_MODEL;
                 Item item = createScrollItem(scrollItemId, itemLevel, quality, rootPrimaryId, rootSecondaryId,
-                        iconProps, texture, icon);
+                        iconProps, texture, icon, model);
                 if (item != null)
                     generatedItems.add(item);
 
@@ -398,7 +404,7 @@ public class ScrollItemGenerator {
     private static Item createScrollItem(String itemId, int level, String quality,
             String rootPrimaryId, String rootSecondaryId,
             org.herolias.plugin.api.ScrollDefinition.IconProperties iconProps,
-            String texture, String icon) {
+            String texture, String icon, String model) {
         try {
             Item item = new Item(itemId);
 
@@ -414,7 +420,7 @@ public class ScrollItemGenerator {
                 setField(Item.class, item, "iconProperties", aip);
             }
 
-            setField(Item.class, item, "model", DEFAULT_MODEL);
+            setField(Item.class, item, "model", model != null ? model : DEFAULT_MODEL);
             setField(Item.class, item, "texture", texture != null ? texture : DEFAULT_TEXTURE);
             setField(Item.class, item, "playerAnimationsId", DEFAULT_PLAYER_ANIMATIONS_ID);
             setField(Item.class, item, "maxStack", DEFAULT_MAX_STACK);
@@ -456,7 +462,11 @@ public class ScrollItemGenerator {
             MaterialQuantity[] input = new MaterialQuantity[ingredients.size()];
             for (int i = 0; i < ingredients.size(); i++) {
                 ConfigIngredient ci = ingredients.get(i);
-                input[i] = new MaterialQuantity(ci.item, null, null, ci.amount, null);
+                if (ci.isResourceType()) {
+                    input[i] = new MaterialQuantity(null, ci.resourceType, null, ci.amount, null);
+                } else {
+                    input[i] = new MaterialQuantity(ci.item, null, null, ci.amount, null);
+                }
             }
 
             MaterialQuantity primaryOutput = new MaterialQuantity(scrollItemId, null, null, 1, null);
@@ -492,7 +502,7 @@ public class ScrollItemGenerator {
         if (cats.contains(ItemCategory.RANGED_WEAPON))
             return "Enchanting_Ranged";
         if (cats.contains(ItemCategory.ARMOR) || cats.contains(ItemCategory.HELMET)
-                || cats.contains(ItemCategory.BOOTS) || cats.contains(ItemCategory.GLOVES))
+                || cats.contains(ItemCategory.LEGS) || cats.contains(ItemCategory.GLOVES))
             return "Enchanting_Armor";
         if (cats.contains(ItemCategory.SHIELD))
             return "Enchanting_Shield";
@@ -570,6 +580,10 @@ public class ScrollItemGenerator {
                 return base + "EnchScrollPoi.png";
             case "environmental_protection":
                 return base + "EnchScrollEnviromentProtec.png";
+            case "regeneration":
+                return base + "EnchScrollHeal.png";
+            case "second_stomach":
+                return base + "EnchScrollSecondS.png";
             default:
                 return DEFAULT_TEXTURE;
         }
@@ -609,6 +623,8 @@ public class ScrollItemGenerator {
             case "coup_de_grace": return base + "CoupDeGrace.png";
             case "poison": return base + "Poison.png";
             case "environmental_protection": return base + "Environment Protection.png";
+            case "regeneration": return base + "Regeneration.png";
+            case "second_stomach": return base + "SecondStomach.png";
             default: return DEFAULT_ICON;
         }
     }
