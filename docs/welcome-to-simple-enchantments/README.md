@@ -5,11 +5,11 @@ published: true
 draft: false
 ---
 
-<div class="se-link-buttons" style="display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 16px;">
-<a href="https://github.com/Herolias/Simple-Enchantments" class="se-inline-code" style="display: inline-block; border: 1px solid rgba(148, 163, 184, 0.28); border-radius: 6px; padding: 3px 8px; line-height: 1.2; background: rgba(148, 163, 184, 0.14); font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace; font-size: 0.9em; text-decoration: none;">GitHub</a>
-<a href="https://www.curseforge.com/hytale/mods/simple-enchantments" class="se-inline-code" style="display: inline-block; border: 1px solid rgba(148, 163, 184, 0.28); border-radius: 6px; padding: 3px 8px; line-height: 1.2; background: rgba(148, 163, 184, 0.14); font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace; font-size: 0.9em; text-decoration: none;">CurseForge</a>
-<a href="https://discord.com/invite/7XQAnUfQfM" class="se-inline-code" style="display: inline-block; border: 1px solid rgba(148, 163, 184, 0.28); border-radius: 6px; padding: 3px 8px; line-height: 1.2; background: rgba(148, 163, 184, 0.14); font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace; font-size: 0.9em; text-decoration: none;">Discord</a>
-</div>
+[![Discord](https://img.shields.io/badge/Discord-5865F2?style=for-the-badge&logo=discord&logoColor=white)](https://discord.com/invite/7XQAnUfQfM)
+[![CurseForge](https://img.shields.io/badge/CurseForge-F16436?style=for-the-badge&logo=curseforge&logoColor=white)](https://www.curseforge.com/hytale/mods/simple-enchantments)
+[![GitHub](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/Herolias/Simple-Enchantments)
+[![Creator Code: Herolias](https://img.shields.io/badge/Creator%20Code%3A%20Herolias-58B80F?style=for-the-badge)](https://store.hytale.com/)
+[![Bisect](https://img.shields.io/badge/Bisect-0078D7?style=for-the-badge)](https://www.bisecthosting.com/Herolias?r=Wiki)
 
 Simple Enchantments adds a complete enchanting system to the game. Currently, the mod includes an Enchanting Table, an Engraving Table, <!-- DOCSTAT:enchantments.count -->33<!-- /DOCSTAT --> unique enchantments, a detailed config to customize almost every part of the mod, 3 commands, and an API for developers to create their own enchantments or register custom weapons.
 

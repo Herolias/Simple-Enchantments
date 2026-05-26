@@ -44,7 +44,7 @@ Use a full dependency when your mod requires Simple Enchantments.
 {
   "Main": "com.example.plugin.MyEnchantmentAddon",
   "Dependencies": {
-    "org.herolias:SimpleEnchantments": "1.1.0"
+    "org.herolias:SimpleEnchantments": ">=1.0.0"
   }
 }
 ```
@@ -89,7 +89,7 @@ Use an optional dependency when your mod should still run without Simple Enchant
 {
   "Main": "com.example.plugin.MyStandaloneMod",
   "OptionalDependencies": {
-    "org.herolias:SimpleEnchantments": "1.1.0"
+    "org.herolias:SimpleEnchantments": ">=1.0.0"
   }
 }
 ```

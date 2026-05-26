@@ -14,7 +14,6 @@ Simple Enchantments adds an **Enchanting Table**, an **Engraving Table**, **33 b
 
 - [Features](#features)
 - [Building from Source](#building-from-source)
-- [Folder Structure](#folder-structure)
 - [Technical Overview](#technical-overview)
   - [Core Plugin](#core-plugin)
   - [Enchantment Engine](#enchantment-engine)
@@ -96,160 +95,6 @@ Simple Enchantments adds an **Enchanting Table**, an **Engraving Table**, **33 b
 
 ---
 
-## Folder Structure
-
-```
-src/
-└── main/
-    ├── java/
-    │   ├── com/al3x/
-    │   │   └── HStats.java                    # Mod analytics (hstats.dev)
-    │   │
-    │   └── org/herolias/plugin/
-    │       ├── SimpleEnchanting.java           # Plugin entry point (setup, start, shutdown)
-    │       │
-    │       ├── api/                            # ── Public API ──
-    │       │   ├── EnchantmentApi.java          # API interface for third-party mods
-    │       │   ├── EnchantmentApiImpl.java       # API implementation
-    │       │   ├── EnchantmentApiProvider.java   # Service locator
-    │       │   ├── EnchantmentBuilder.java       # Fluent builder for registering enchantments
-    │       │   ├── ScrollBuilder.java            # Builder for scroll definitions
-    │       │   ├── ScrollDefinition.java         # Scroll data record
-    │       │   ├── CraftingCategoryDefinition.java # Enchanting Table tab registration
-    │       │   ├── MultiplierDefinition.java     # Config multiplier metadata
-    │       │   ├── ScaleType.java                # Scaling curve types (linear, diminishing, etc.)
-    │       │   └── event/                        # Custom API events
-    │       │       ├── EnchantmentActivatedEvent.java
-    │       │       └── ItemEnchantedEvent.java
-    │       │
-    │       ├── command/                         # ── Chat Commands ──
-    │       │   ├── EnchantCommand.java           # /enchant — apply enchantments
-    │       │   ├── EnchantingCommand.java         # /enchanting — open enchanting UI
-    │       │   ├── EnchantConfigCommand.java      # /enchantconfig — in-game config editor
-    │       │   └── GiveEnchantedCommand.java      # /giveenchanted — give pre-enchanted items
-    │       │
-    │       ├── config/                          # ── Configuration ──
-    │       │   ├── ConfigManager.java            # Load/save/migrate JSON config
-    │       │   ├── SmartConfigManager.java        # Smart config with snapshots
-    │       │   ├── EnchantingConfig.java          # Config data class (multipliers, recipes, toggles)
-    │       │   ├── UserSettings.java              # Per-player settings
-    │       │   └── UserSettingsManager.java       # Per-player settings persistence
-    │       │
-    │       ├── crafting/                         # ── Crafting ──
-    │       │   └── WorkbenchRefreshSystem.java    # Fix for workbench recipe refresh on upgrade
-    │       │
-    │       ├── enchantment/                     # ── Core Enchantment Engine ──
-    │       │   ├── EnchantmentType.java           # Enchantment definitions (30 built-in)
-    │       │   ├── EnchantmentRegistry.java       # Central registry (built-in + addon)
-    │       │   ├── EnchantmentManager.java        # Core logic (apply, read, calculate)
-    │       │   ├── EnchantmentData.java           # BSON serialisation for item metadata
-    │       │   ├── EnchantmentApplicationResult.java # Result type for apply operations
-    │       │   ├── ItemCategory.java              # Item categorisation (weapon, armor, tool…)
-    │       │   ├── ItemCategoryManager.java       # Runtime item → category mapping with config
-    │       │   ├── EnchantmentEventHelper.java    # Common event utilities
-    │       │   ├── EnchantmentRecipeManager.java  # Runtime recipe filtering (disabled scrolls)
-    │       │   ├── ScrollItemGenerator.java       # Runtime scroll item generation (~70 items)
-    │       │   ├── ScrollDescriptionManager.java  # Scroll description localisation packets
-    │       │   ├── BuiltinScrolls.java            # Built-in scroll definitions
-    │       │   ├── EnchantmentGlowInjector.java   # Runtime glow injection via ItemAppearance
-    │       │   ├── EnchantmentVisualsListener.java # Event-driven visual updates
-    │       │   ├── EnchantmentSlotTracker.java    # Per-tick slot tracking for glow + banner
-    │       │   ├── EnchantmentDynamicEffects.java # Dynamic EntityEffect adjustments
-    │       │   ├── EnchantmentStateTransferSystem.java # Preserves enchantments on item state changes
-    │       │   ├── NativeTooltipManager.java      # Native ItemDisplay metadata merge/tooltip support
-    │       │   │
-    │       │   ├── AbstractRecipeRegistry.java    # Base for smelting/cooking recipe caches
-    │       │   ├── SmeltingRecipeRegistry.java    # Smelting recipe lookup (for Smelting enchant)
-    │       │   ├── CookingRecipeRegistry.java     # Cooking recipe lookup (for Burn Smelting)
-    │       │   ├── AbstractRefundSystem.java      # Base for refund/resource-saving systems
-    │       │   │
-    │       │   │  # ── ECS Systems (registered with Hytale's Entity Component System) ──
-    │       │   ├── EnchantmentDamageSystem.java        # Sharpness, Strength, Eagle's Eye
-    │       │   ├── EnchantmentBlockDamageSystem.java    # Efficiency (mining speed)
-    │       │   ├── EnchantmentDurabilitySystem.java     # Durability, Sturdy
-    │       │   ├── EnchantmentFortuneSystem.java        # Fortune (extra drops)
-    │       │   ├── EnchantmentSmeltingSystem.java       # Smelting (auto-smelt)
-    │       │   ├── EnchantmentBurnSmeltingSystem.java   # Auto-smelt drops from burn kills
-    │       │   ├── EnchantmentSilktouchSystem.java      # Pick Perfect (silk touch)
-    │       │   ├── EnchantmentLootingSystem.java        # Looting (bonus mob drops)
-    │       │   ├── EnchantmentStaminaSystem.java        # Dexterity (stamina reduction)
-    │       │   ├── EnchantmentAbilityStaminaSystem.java # Frenzy (ability charge rate)
-    │       │   ├── EnchantmentProjectileSpeedSystem.java # Strength (projectile speed)
-    │       │   ├── EnchantmentFeatherFallingSystem.java  # Feather Falling
-    │       │   ├── EnchantmentWaterbreathingSystem.java  # Waterbreathing
-    │       │   ├── EnchantmentNightVisionSystem.java     # Night Vision
-    │       │   ├── EnchantmentBurnSystem.java            # Burn (fire DoT)
-    │       │   ├── EnchantmentFreezeSystem.java          # Freeze (slow)
-    │       │   ├── EnchantmentPoisonSystem.java          # Poison (DoT)
-    │       │   ├── EnchantmentKnockbackSystem.java       # Knockback
-    │       │   ├── EnchantmentReflectionSystem.java      # Reflection (damage reflect)
-    │       │   ├── EnchantmentAbsorptionSystem.java      # Absorption (heal on block)
-    │       │   ├── EnchantmentFastSwimSystem.java        # Swift Swim
-    │       │   ├── EnchantmentThriftSystem.java          # Thrift (mana restore)
-    │       │   ├── EnchantmentElementalHeartSystem.java  # Elemental Heart (save essence)
-    │       │   ├── EnchantmentEternalShotSystem.java     # Eternal Shot (infinite arrows)
-    │       │   ├── EternalShotProjectileCleanupSystem.java # Cleanup for Eternal Shot
-    │       │   ├── SwitchActiveSlotSystem.java           # Slot switch handler
-    │       │   ├── EnchantmentSalvageSystem.java         # Salvager bench metadata strip
-    │       │   ├── SalvagerInteractionSystem.java        # Salvager interaction ECS
-    │       │   ├── DropItemEventSystem.java              # Manual drop tracking
-    │       │   └── ProjectileEnchantmentData.java        # Projectile enchantment cache
-    │       │
-    │       ├── interaction/                     # ── Custom Interactions ──
-    │       │   ├── ConsumeAmmoInteraction.java    # Custom ammo consumption
-    │       │   └── LaunchDynamicProjectileInteraction.java # Dynamic projectile launch
-    │       │
-    │       ├── lang/                            # ── Localisation ──
-    │       │   └── LanguageManager.java           # Multi-language string resolution
-    │       │
-    │       ├── listener/                        # ── Event Listeners ──
-    │       │   ├── EventLoggerListener.java       # Debug logging for enchantment events
-    │       │   └── WelcomeListener.java           # First-join tooltip notification
-    │       │
-    │       ├── ui/                              # ── UI Pages & Elements ──
-    │       │   ├── EnchantScrollPageSupplier.java        # Scroll application UI codec
-    │       │   ├── EnchantScrollPage.java                # Scroll UI page logic
-    │       │   ├── EnchantScrollElement.java             # Scroll UI element
-    │       │   ├── CleansingScrollPageSupplier.java      # Cleansing scroll UI codec
-    │       │   ├── CleansingScrollPage.java              # Cleansing UI page logic
-    │       │   ├── CleansingScrollElement.java           # Cleansing UI element
-    │       │   ├── CleansingEnchantmentPage.java         # Enchantment selection for cleansing
-    │       │   ├── CleansingEnchantmentElement.java      # Per-enchantment cleansing element
-    │       │   ├── CustomScrollPageSupplier.java         # Multi-enchant transfer UI codec
-    │       │   ├── CustomScrollEnchantmentPage.java      # Enchantment selection page
-    │       │   ├── CustomScrollEnchantmentElement.java   # Enchantment element
-    │       │   ├── CustomScrollItemPage.java             # Item selection page
-    │       │   ├── CustomScrollItemElement.java          # Item element
-    │       │   ├── CustomScrollApplyInteraction.java     # Apply interaction for transfers
-    │       │   ├── EnchantItemInteraction.java           # Main enchant interaction
-    │       │   ├── RemoveEnchantmentInteraction.java     # Remove enchantment interaction
-    │       │   ├── EnchantingPage.java                   # Settings/walkthrough page
-    │       │   ├── EnchantingPageEventData.java          # Settings page event data
-    │       │   ├── EnchantConfigPage.java                # Config editor page
-    │       │   └── EnchantConfigPageEventData.java       # Config page event data
-    │       │
-    │       └── util/                            # ── Utilities ──
-    │           ├── ProcessingGuard.java           # Reentrant event guard
-    │           └── ScrollIdHelper.java            # Scroll ID parsing utilities
-    │
-    └── resources/
-        ├── manifest.json                        # Plugin manifest (version, deps, main class)
-        │
-        ├── Common/                              # ── Shared Asset Pack ──
-        │   ├── Blocks/Benches/                   # Enchanting Table block model + animation
-        │   ├── Icons/                            # UI icons (crafting categories, items)
-        │   ├── Items/Scrolls/                    # Scroll item models + textures
-        │   └── UI/Custom/                        # Custom UI layouts, textures, and buttons
-        │
-        └── Server/                              # ── Server-Side Assets ──
-            ├── Entity/
-            │   ├── Effects/Status/               # Burn, Freeze, Poison entity effects
-            │   ├── ModelVFX/                      # Enchantment glow VFX definitions
-            │   └── Stats/                        # Glow stat definitions per armor slot
-            ├── Item/Items/                       # Enchanting Table + special scroll items
-            ├── Languages/                        # Translations (11 locales)
-            └── Particles/Enchantment/            # Enchantment particle effects
-```
 
 ---
 
@@ -453,8 +298,15 @@ Please do not add new features or enchantments without discussing it with the te
 But we are absolutely open to smaller contributions like bug fixes, performance improvements, and translations.
 Please open a pull request for that or write me up on [Discord](https://discord.com/users/herolias).
 
+### Before making a PR:
+- Check the dev branch: All development and testing happen here. All Pull Requests must be targeted to the dev branch.
+- Make sure your code compiles and also do in-game testing
+
 ### Contributors
 Huge thanks to Thanoz, Samu3k, and Ensō for helping improving the translations!
+
+Dimotai for fixing multiple bugs related to the Asset Map loading and the Effect System.
+Phyrian for implementing a block blacklist for the Pick Perfect Enchantment.
 
 
 ---
