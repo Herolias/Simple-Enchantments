@@ -5,11 +5,13 @@ published: true
 draft: false
 ---
 
-[![Discord](https://img.shields.io/badge/Discord-5865F2?style=for-the-badge&logo=discord&logoColor=white)](https://discord.com/invite/7XQAnUfQfM)
-[![CurseForge](https://img.shields.io/badge/CurseForge-F16436?style=for-the-badge&logo=curseforge&logoColor=white)](https://www.curseforge.com/hytale/mods/simple-enchantments)
-[![GitHub](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/Herolias/Simple-Enchantments)
-[![Creator Code: Herolias](https://img.shields.io/badge/Creator%20Code%3A%20Herolias-58B80F?style=for-the-badge)](https://store.hytale.com/)
-[![Bisect](https://img.shields.io/badge/Bisect-0078D7?style=for-the-badge)](https://www.bisecthosting.com/Herolias?r=Wiki)
+<div style="display: flex; flex-wrap: nowrap; align-items: center; gap: 8px; overflow-x: auto; margin: 0 0 20px; line-height: 0; white-space: nowrap;">
+  <a href="https://discord.com/invite/7XQAnUfQfM" style="display: inline-flex; flex: 0 0 auto;"><img src="https://img.shields.io/badge/Discord-5865F2?style=for-the-badge&amp;logo=discord&amp;logoColor=white" alt="Discord" style="display: block; margin: 0; max-width: none;"></a>
+  <a href="https://www.curseforge.com/hytale/mods/simple-enchantments" style="display: inline-flex; flex: 0 0 auto;"><img src="https://img.shields.io/badge/CurseForge-F16436?style=for-the-badge&amp;logo=curseforge&amp;logoColor=white" alt="CurseForge" style="display: block; margin: 0; max-width: none;"></a>
+  <a href="https://github.com/Herolias/Simple-Enchantments" style="display: inline-flex; flex: 0 0 auto;"><img src="https://img.shields.io/badge/GitHub-30363D?style=for-the-badge&amp;logo=github&amp;logoColor=white" alt="GitHub" style="display: block; margin: 0; max-width: none;"></a>
+  <a href="https://store.hytale.com/" style="display: inline-flex; flex: 0 0 auto;"><img src="https://img.shields.io/badge/Creator%20Code%3A%20Herolias-58B80F?style=for-the-badge" alt="Creator Code: Herolias" style="display: block; margin: 0; max-width: none;"></a>
+  <a href="https://www.bisecthosting.com/Herolias?r=WikiBadge" style="display: inline-flex; flex: 0 0 auto;"><img src="https://img.shields.io/badge/Bisect-0078D7?style=for-the-badge" alt="Bisect" style="display: block; margin: 0; max-width: none;"></a>
+</div>
 
 Simple Enchantments adds a complete enchanting system to the game. Currently, the mod includes an Enchanting Table, an Engraving Table, <!-- DOCSTAT:enchantments.count -->33<!-- /DOCSTAT --> unique enchantments, a detailed config to customize almost every part of the mod, 3 commands, and an API for developers to create their own enchantments or register custom weapons.
 
