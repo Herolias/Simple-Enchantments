@@ -9,6 +9,7 @@ import com.hypixel.hytale.protocol.FormattedMessage;
 import com.hypixel.hytale.assetstore.AssetPack;
 import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.asset.AssetModule;
+import com.hypixel.hytale.server.core.asset.type.item.config.Item;
 import com.hypixel.hytale.server.core.asset.type.item.config.metadata.ItemDisplayMetadata;
 import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hypixel.hytale.server.core.entity.entities.player.pages.InteractiveCustomUIPage;
@@ -317,7 +318,7 @@ public class EngravingTablePage extends InteractiveCustomUIPage<EngravingTablePa
             @Nonnull String placeholderSelector,
             @Nullable ItemStack itemStack,
             @Nonnull String placeholderText) {
-        boolean hasItem = !ItemStack.isEmpty(itemStack);
+        boolean hasItem = this.isRenderableItemStack(itemStack);
         commandBuilder.set(gridSelector + ".Slots", new ItemGridSlot[] { this.createGridSlot(itemStack) });
         commandBuilder.set(placeholderSelector + ".Visible", !hasItem);
         commandBuilder.set(placeholderSelector + ".TextSpans", Message.raw(placeholderText).color(COLOR_MUTED));
@@ -325,7 +326,7 @@ public class EngravingTablePage extends InteractiveCustomUIPage<EngravingTablePa
 
     @Nonnull
     private ItemGridSlot createGridSlot(@Nullable ItemStack itemStack) {
-        if (ItemStack.isEmpty(itemStack)) {
+        if (!this.isRenderableItemStack(itemStack)) {
             return new ItemGridSlot();
         }
         ItemStack displayStack = itemStack.getQuantity() > 1 ? itemStack.withQuantity(1) : itemStack;
@@ -503,7 +504,7 @@ public class EngravingTablePage extends InteractiveCustomUIPage<EngravingTablePa
             commandBuilder.append(rowSelector, INVENTORY_ENTRY_PATH);
             String selector = rowSelector + "[" + slotInRow + "]";
             ItemStack itemStack = container.getItemStack(slot);
-            boolean hasItem = !ItemStack.isEmpty(itemStack);
+            boolean hasItem = this.isRenderableItemStack(itemStack);
             hasAnyItem |= hasItem;
 
             commandBuilder.set(selector + " #SlotButton.Disabled", !hasItem);
@@ -520,7 +521,7 @@ public class EngravingTablePage extends InteractiveCustomUIPage<EngravingTablePa
                 continue;
             }
 
-            commandBuilder.set(selector + " #Icon.Slots", new ItemGridSlot[] { this.createGridSlot(itemStack) });
+            commandBuilder.set(selector + " #Icon.ItemId", itemStack.getItemId().toString());
             InventorySource source = new InventorySource(
                     this.buildInventoryKey(sectionId, slot, itemStack),
                     container,
@@ -576,25 +577,16 @@ public class EngravingTablePage extends InteractiveCustomUIPage<EngravingTablePa
                 : INVENTORY_SLOTS_PER_ROW;
         for (short slot = 0; slot < container.getCapacity(); slot++) {
             ItemStack itemStack = container.getItemStack(slot);
-            if (ItemStack.isEmpty(itemStack)) {
+            if (!this.isRenderableItemStack(itemStack)) {
                 continue;
             }
             int rowIndex = slot / slotsPerRow;
             int slotInRow = slot % slotsPerRow;
             String selector = slotsSelector + "[" + rowIndex + "][" + slotInRow + "] #SlotButton";
-            String innerSelector = slotsSelector + "[" + rowIndex + "][" + slotInRow + "] #SlotInner";
-            String overlaySelector = slotsSelector + "[" + rowIndex + "][" + slotInRow + "] #ClickOverlay";
-            String iconSelector = slotsSelector + "[" + rowIndex + "][" + slotInRow + "] #Icon";
             String key = this.buildInventoryKey(sectionId, slot, itemStack);
 
             EventData selectEvent = EventData.of("InventorySelect", key);
             eventBuilder.addEventBinding(CustomUIEventBindingType.Activating, selector,
-                    selectEvent, false);
-            eventBuilder.addEventBinding(CustomUIEventBindingType.Activating, innerSelector,
-                    selectEvent, false);
-            eventBuilder.addEventBinding(CustomUIEventBindingType.Activating, overlaySelector,
-                    selectEvent, false);
-            eventBuilder.addEventBinding(CustomUIEventBindingType.SlotClicking, iconSelector,
                     selectEvent, false);
         }
     }
@@ -1334,7 +1326,7 @@ public class EngravingTablePage extends InteractiveCustomUIPage<EngravingTablePa
         }
         for (short slot = 0; slot < container.getCapacity(); slot++) {
             ItemStack itemStack = container.getItemStack(slot);
-            if (ItemStack.isEmpty(itemStack)) {
+            if (!this.isRenderableItemStack(itemStack)) {
                 continue;
             }
             sources.add(new InventorySource(
@@ -1367,6 +1359,11 @@ public class EngravingTablePage extends InteractiveCustomUIPage<EngravingTablePa
     @Nonnull
     private String buildInventoryKey(int sectionId, short slot, @Nonnull ItemStack itemStack) {
         return sectionId + ":" + slot + ":" + Integer.toHexString(itemStack.hashCode());
+    }
+
+    private boolean isRenderableItemStack(@Nullable ItemStack itemStack) {
+        return !ItemStack.isEmpty(itemStack)
+                && Item.getAssetMap().getAsset(itemStack.getItemId()) != null;
     }
 
     private record FinalCustomization(
