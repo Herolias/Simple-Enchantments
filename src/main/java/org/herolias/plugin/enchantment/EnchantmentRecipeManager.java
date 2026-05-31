@@ -103,21 +103,19 @@ public class EnchantmentRecipeManager {
             }
         }
 
-        // Check if it's the Enchanting Table and it's disabled globally
+        // Check if table crafting is disabled by config.
         EnchantingConfig config = plugin.getConfigManager().getConfig();
-        if (config.disableEnchantmentCrafting) {
-            // If ID starts with Enchanting_Table (default bench id) or upgrades
-            // Actually, primary output for table is "Enchanting_Table_Item" usually?
-            // Or we check recipe ID.
-            // CraftingRecipe doesn't expose ID easily without reflection, but we can check
-            // output item.
-
-            if (recipe.getPrimaryOutput() != null) {
-                String outId = recipe.getPrimaryOutput().getItemId();
-                if ("Enchanting_Table".equals(outId) || "Enchanting_Table_Item".equals(outId) || "Engraving_Table".equals(outId) || "Engraving_Table_Item".equals(outId)) {
-                    event.setCancelled(true);
-                    return;
-                }
+        if (recipe.getPrimaryOutput() != null) {
+            String outId = recipe.getPrimaryOutput().getItemId();
+            if (!config.enableEnchantingTableCrafting
+                    && ("Enchanting_Table".equals(outId) || "Enchanting_Table_Item".equals(outId))) {
+                event.setCancelled(true);
+                return;
+            }
+            if (!config.enableEngravingTableCrafting
+                    && ("Engraving_Table".equals(outId) || "Engraving_Table_Item".equals(outId))) {
+                event.setCancelled(true);
+                return;
             }
         }
     }
@@ -238,16 +236,19 @@ public class EnchantmentRecipeManager {
 
         EnchantingConfig config = plugin.getConfigManager().getConfig();
 
-        // If all crafting is disabled, add ALL scrolls and return
-        if (config.disableEnchantmentCrafting) {
+        // If scroll crafting is disabled, add ALL scrolls and return
+        if (!config.enableScrollCrafting) {
             for (List<String> scrollIds : ENCHANTMENT_SCROLL_ITEMS.values()) {
                 DISABLED_SCROLL_ITEM_IDS.addAll(scrollIds);
+            }
+            if (config.scrollRecipes != null) {
+                DISABLED_SCROLL_ITEM_IDS.addAll(config.scrollRecipes.keySet());
             }
             // Explicitly disable the Cleansing scroll as well, since it's not a standard
             // enchantment type
             DISABLED_SCROLL_ITEM_IDS.add("Scroll_Cleansing");
 
-            LOGGER.atInfo().log("All enchantment crafting disabled by config. All scroll recipes will be removed.");
+            LOGGER.atInfo().log("Scroll crafting disabled by config. All scroll recipes will be removed.");
             return;
         }
 
@@ -311,10 +312,10 @@ public class EnchantmentRecipeManager {
 
             // Handle Enchanting Table recipe
             if (recipeId.startsWith("Enchanting_Table")) {
-                // If all enchanting crafting is disabled, remove the enchanting table recipe
-                if (config.disableEnchantmentCrafting) {
+                // If enchanting table crafting is disabled, remove the enchanting table recipe
+                if (!config.enableEnchantingTableCrafting) {
                     recipeIdsToRemove.add(recipeId);
-                    LOGGER.atInfo().log("Marking for removal (all enchanting crafting disabled): " + recipeId);
+                    LOGGER.atInfo().log("Marking for removal (enchanting table crafting disabled): " + recipeId);
                     continue; // Skip further processing for this recipe
                 }
 
@@ -345,10 +346,10 @@ public class EnchantmentRecipeManager {
 
             // Handle Engraving Table recipe
             if (recipeId.startsWith("Engraving_Table")) {
-                // If all enchanting crafting is disabled, remove the engraving table recipe
-                if (config.disableEnchantmentCrafting) {
+                // If engraving table crafting is disabled, remove the engraving table recipe.
+                if (!config.enableEngravingTableCrafting) {
                     recipeIdsToRemove.add(recipeId);
-                    LOGGER.atInfo().log("Marking for removal (all enchanting crafting disabled): " + recipeId);
+                    LOGGER.atInfo().log("Marking for removal (engraving table crafting disabled): " + recipeId);
                     continue; // Skip further processing for this recipe
                 }
 

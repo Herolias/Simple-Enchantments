@@ -45,18 +45,29 @@ public class SmartConfigManager {
         }
 
         // Scenario 2: Migration (Config exists, No snapshot)
-        // User Request: PROCEED -> Force update to new defaults to ensure everyone gets
-        // new balance changes.
         if (configFile.exists() && !snapshotFile.exists()) {
-            LOGGER.atInfo().log("Migration detected (No snapshot found). Force updating config to latest defaults.");
+            LOGGER.atInfo().log("Migration detected (No snapshot found). Merging existing config with latest defaults.");
+            JsonElement userConfigJson = readJson(configFile);
+
             // Backup old config just in case
             File backup = new File(configFile.getParentFile(), configFile.getName() + ".old");
-            configFile.renameTo(backup);
-            LOGGER.atInfo().log("Backed up old config to " + backup.getName());
+            if (configFile.renameTo(backup)) {
+                LOGGER.atInfo().log("Backed up old config to " + backup.getName());
+            } else {
+                LOGGER.atWarning().log("Could not back up old config before migration. Continuing with in-memory copy.");
+            }
 
-            saveConfig(configFile, newDefaults);
+            JsonElement newDefaultsJson = GSON.toJsonTree(newDefaults);
+            JsonElement mergedJson = userConfigJson == null
+                    ? newDefaultsJson.deepCopy()
+                    : merge(userConfigJson, new JsonObject(), newDefaultsJson);
+
+            mergedJson = applyMigrations(configClass, userConfigJson, mergedJson);
+            T mergedConfig = GSON.fromJson(mergedJson, configClass);
+
+            saveConfig(configFile, mergedConfig);
             saveConfig(snapshotFile, newDefaults);
-            return newDefaults;
+            return mergedConfig;
         }
 
         // Scenario 3: Regular Update (Config exists, Snapshot exists)
@@ -72,6 +83,7 @@ public class SmartConfigManager {
 
             // Perform Smart Merge
             JsonElement mergedJson = merge(userConfigJson, snapshotJson, newDefaultsJson);
+            mergedJson = applyMigrations(configClass, userConfigJson, mergedJson);
 
             // Deserialize result
             T mergedConfig = GSON.fromJson(mergedJson, configClass);
@@ -194,5 +206,46 @@ public class SmartConfigManager {
         if (a.isJsonNull() && b.isJsonNull())
             return true;
         return false;
+    }
+
+    private static JsonElement applyMigrations(Class<?> configClass, JsonElement userConfigJson,
+            JsonElement mergedJson) {
+        if (configClass == EnchantingConfig.class) {
+            migrateEnchantingConfig(userConfigJson, mergedJson);
+        }
+
+        return mergedJson;
+    }
+
+    private static void migrateEnchantingConfig(JsonElement userConfigJson, JsonElement mergedJson) {
+        if (userConfigJson == null || !userConfigJson.isJsonObject()
+                || mergedJson == null || !mergedJson.isJsonObject()) {
+            return;
+        }
+
+        JsonObject userObj = userConfigJson.getAsJsonObject();
+        JsonObject mergedObj = mergedJson.getAsJsonObject();
+
+        JsonElement oldDisableCrafting = userObj.get("disableEnchantmentCrafting");
+        if (!isBooleanTrue(oldDisableCrafting)) {
+            return;
+        }
+
+        if (!userObj.has("enableEnchantingTableCrafting")) {
+            mergedObj.addProperty("enableEnchantingTableCrafting", false);
+        }
+
+        if (!userObj.has("enableScrollCrafting")) {
+            mergedObj.addProperty("enableScrollCrafting", false);
+        }
+
+        LOGGER.atInfo().log("Migrated disableEnchantmentCrafting=true to disabled Enchanting Table and scroll crafting.");
+    }
+
+    private static boolean isBooleanTrue(JsonElement element) {
+        return element != null
+                && element.isJsonPrimitive()
+                && element.getAsJsonPrimitive().isBoolean()
+                && element.getAsBoolean();
     }
 }

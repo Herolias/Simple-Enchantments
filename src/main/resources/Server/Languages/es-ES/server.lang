@@ -420,11 +420,14 @@ config.button.reset_recipe = Restablecer Receta
 config.general.max_enchantments = Encantamientos máximos por objeto
 config.general.enable_glow = Activar brillo de encantamiento
 config.general.table_tier = Nivel de crafteo de la mesa
-config.general.disable_crafting = Desactivar crafteo de encantamientos
+config.general.enchanting_table_crafting = Crafteo de la mesa de encantamientos
+config.general.scroll_crafting = Crafteo de pergaminos
 config.general.return_cleanse = Devolver encantamiento al purificar
 config.general.table_recipe = Receta de la mesa de encantamiento
 config.general.engraving_table_tier = Nivel de crafteo de la mesa de grabado
 config.general.engraving_table_recipe = Receta de la mesa de grabado
+config.general.engraving_table_crafting = Crafteo de la mesa de grabado
+config.general.engraving_table_name_changes = Cambios de nombre de la mesa de grabado
 config.general.upgrade_1 = Costo de mejora 1 (Nivel 1 → 2)
 config.general.upgrade_2 = Costo de mejora 2 (Nivel 2 → 3)
 config.general.upgrade_3 = Costo de mejora 3 (Nivel 3 → 4)
@@ -478,6 +481,9 @@ customUI.walkthrough.enchantments.title = 5. Encantamientos
 customUI.walkthrough.enchantments.desc = Una lista completa de los encantamientos y sus efectos. Haz clic en cualquier entrada para saber más. En este servidor, cada objeto puede tener hasta {maxEnchantments} encantamientos.\n\nNota: Algunas páginas de encantamiento ya incluyen notas de juego más detalladas, mientras que otras todavía usan el resumen del tooltip. Las futuras actualizaciones seguirán añadiendo descripciones detalladas.
 
 config.general.allow_same_scroll_upgrades = Permitir Mejoras con Pergaminos Iguales (I+I = II)
+
+ui.itemcategory.simpleEnchantments = Encantamientos Simples
+ui.itemcategory.simpleEnchantments.scrolls = Pergaminos
 
 customUI.walkthrough.enabledOnServer = Activado en este servidor: 
 customUI.walkthrough.returnScroll.yes = podrás

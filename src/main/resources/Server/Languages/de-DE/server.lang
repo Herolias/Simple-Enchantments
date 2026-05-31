@@ -1084,11 +1084,14 @@ config.button.change = Ändern
 config.general.max_enchantments = Max. Verzauberungen pro Gegenstand
 config.general.enable_glow = Verzauberungsleuchten aktivieren
 config.general.table_tier = Verzauberungstisch Crafting Rang
-config.general.disable_crafting = Verzauberungshandwerk deaktivieren
+config.general.enchanting_table_crafting = Verzauberungstisch-Crafting
+config.general.scroll_crafting = Schriftrollen-Crafting
 config.general.return_cleanse = Verzauberung bei Reinigung zurückgeben
 config.general.table_recipe = Verzauberungstisch Rezept
 config.general.engraving_table_tier = Crafting-Rang des Gravurtischs
 config.general.engraving_table_recipe = Gravurtisch-Rezept
+config.general.engraving_table_crafting = Gravurtisch-Crafting
+config.general.engraving_table_name_changes = Namensänderungen am Gravurtisch
 config.general.upgrade_1 = Upgrade 1 Kosten (Rang 1 -> 2)
 config.general.upgrade_2 = Upgrade 2 Kosten (Rang 2 -> 3)
 config.general.upgrade_3 = Upgrade 3 Kosten (Rang 3 -> 4)
@@ -1140,6 +1143,9 @@ customUI.walkthrough.enchantments.title = 5. Verzauberungen
 customUI.walkthrough.enchantments.desc = Eine vollständige Liste der Verzauberungen und ihrer Effekte. Klicke auf einen Eintrag, um mehr zu erfahren. Auf diesem Server kann jeder Gegenstand bis zu {maxEnchantments} Verzauberungen haben.\n\nHinweis: Einige Verzauberungsseiten enthalten bereits ausführlichere Spielhinweise, während andere noch ihre Tooltip-Zusammenfassung verwenden. Zukünftige Updates werden weitere detaillierte Beschreibungen ergänzen.
 
 config.general.allow_same_scroll_upgrades = Gleiche Schriftrollen-Upgrades erlauben (I+I = II)
+
+ui.itemcategory.simpleEnchantments = Einfache Verzauberungen
+ui.itemcategory.simpleEnchantments.scrolls = Schriftrollen
 
 customUI.walkthrough.enabledOnServer = Auf diesem Server aktiviert: 
 customUI.walkthrough.returnScroll.yes =  

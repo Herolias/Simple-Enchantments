@@ -578,13 +578,16 @@ config.button.change = Змінити
 config.general.max_enchantments = Макс. Чар На Предмет
 config.general.enable_glow = Увімкнути Світіння
 config.general.table_tier = Рівень Крафту Столу Чар
-config.general.disable_crafting = Вимкнути Крафт Чар
+config.general.enchanting_table_crafting = Крафт Столу Чар
+config.general.scroll_crafting = Крафт Сувоїв
 config.general.return_cleanse = Повертати Чари При Очищенні
 config.general.salvager_yield = Переробник повертає сувій
 config.general.show_welcome = Показувати Вітальні Повідомлення
 config.general.table_recipe = Рецепт Столу Чар
 config.general.engraving_table_tier = Рівень Крафту Гравірувального Столу
 config.general.engraving_table_recipe = Рецепт Гравірувального Столу
+config.general.engraving_table_crafting = Крафт Гравірувального Столу
+config.general.engraving_table_name_changes = Зміни назв на Гравірувальному столі
 config.general.upgrade_1 = Вартість Покращення 1 (Рів. 1 -> 2)
 config.general.upgrade_2 = Вартість Покращення 2 (Рів. 2 -> 3)
 config.general.upgrade_3 = Вартість Покращення 3 (Рів. 3 -> 4)
@@ -633,6 +636,9 @@ customUI.walkthrough.enchantments.title = 5. Чари
 customUI.walkthrough.enchantments.desc = Повний список чар та їх ефектів. Натисніть на будь-який запис, щоб дізнатися більше. На цьому сервері кожен предмет може мати до {maxEnchantments} чар.\n\nПримітка: Деякі сторінки чар уже містять розширені ігрові пояснення, а інші все ще використовують короткий опис із підказки. Майбутні оновлення й надалі додаватимуть детальні описи.
 
 config.general.allow_same_scroll_upgrades = Дозволити Покращення Однаковими Сувоями (I+I = II)
+
+ui.itemcategory.simpleEnchantments = Прості чари
+ui.itemcategory.simpleEnchantments.scrolls = Сувої
 
 customUI.walkthrough.enabledOnServer = Увімкнено на цьому сервері: 
 customUI.walkthrough.returnScroll.yes = отримаєте

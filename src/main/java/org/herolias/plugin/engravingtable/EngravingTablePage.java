@@ -124,6 +124,10 @@ public class EngravingTablePage extends InteractiveCustomUIPage<EngravingTablePa
             return;
         }
         if (data.nameColor != null) {
+            if (!this.areNameChangesEnabled()) {
+                this.sendDynamicUpdate();
+                return;
+            }
             this.selectedNameColor = EngravingTableColorOption.fromIdOrDefault(data.nameColor,
                     EngravingTableColorOption.DEFAULT_NAME_COLOR);
             this.sendDynamicUpdate();
@@ -136,6 +140,10 @@ public class EngravingTablePage extends InteractiveCustomUIPage<EngravingTablePa
             return;
         }
         if (data.nameInput != null) {
+            if (!this.areNameChangesEnabled()) {
+                this.sendDynamicUpdate();
+                return;
+            }
             this.editableName = data.nameInput;
             this.sendDynamicUpdate();
         }
@@ -187,6 +195,7 @@ public class EngravingTablePage extends InteractiveCustomUIPage<EngravingTablePa
         ItemStack preview = this.getPreviewResultItem();
         boolean showSecondRow = this.isScrollMode();
         boolean showCustomization = this.isCustomizationMode();
+        boolean showName = showCustomization && this.areNameChangesEnabled();
         boolean showGlow = showCustomization && this.canEditGlow(primary);
         boolean canTake = this.canTakePreview();
 
@@ -210,17 +219,21 @@ public class EngravingTablePage extends InteractiveCustomUIPage<EngravingTablePa
         commandBuilder.set("#ClearSecondaryButton.Visible", showSecondRow && !ItemStack.isEmpty(secondary));
         commandBuilder.set("#ClearSecondaryButton.TextSpans", Message.raw("Clear"));
 
-        commandBuilder.set("#DetailsRow.Visible", showCustomization);
-        commandBuilder.set("#NameSection.Visible", showCustomization);
-        commandBuilder.set("#NamePreviewValue.TextSpans", this.buildNamePreviewMessage());
-        commandBuilder.set("#NameInput.Value", this.editableName);
-        commandBuilder.set("#NameHint.TextSpans",
-                Message.raw("Name color: 1 matching petal. Default is free."));
-        commandBuilder.set("#NamePreviewWarning.Visible",
-                showCustomization && !ItemStack.isEmpty(preview) && this.hasPendingNameColorChange(primary));
-        commandBuilder.set("#NamePreviewWarning.TextSpans",
-                Message.raw("Name color changes currently can't be previewed.").color(COLOR_ERROR));
-        this.updateColorButtons(commandBuilder, true);
+        commandBuilder.set("#DetailsRow.Visible", showName || showGlow);
+        commandBuilder.set("#NameSection.Visible", showName);
+        if (showName) {
+            commandBuilder.set("#NamePreviewValue.TextSpans", this.buildNamePreviewMessage());
+            commandBuilder.set("#NameInput.Value", this.editableName);
+            commandBuilder.set("#NameHint.TextSpans",
+                    Message.raw("Name color: 1 matching petal. Default is free."));
+            commandBuilder.set("#NamePreviewWarning.Visible",
+                    !ItemStack.isEmpty(preview) && this.hasPendingNameColorChange(primary));
+            commandBuilder.set("#NamePreviewWarning.TextSpans",
+                    Message.raw("Name color changes currently can't be previewed.").color(COLOR_ERROR));
+            this.updateColorButtons(commandBuilder, true);
+        } else {
+            commandBuilder.set("#NamePreviewWarning.Visible", false);
+        }
 
         commandBuilder.set("#GlowSection.Visible", showGlow);
         commandBuilder.set("#GlowPreviewValue.TextSpans", this.buildGlowPreviewMessage());
@@ -241,6 +254,7 @@ public class EngravingTablePage extends InteractiveCustomUIPage<EngravingTablePa
         ItemStack secondary = this.getSecondaryInput();
         ItemStack preview = this.getPreviewResultItem();
         boolean showCustomization = this.isCustomizationMode();
+        boolean showName = showCustomization && this.areNameChangesEnabled();
         boolean showGlow = showCustomization && this.canEditGlow(primary);
         boolean canTake = !ItemStack.isEmpty(preview) && this.canTakePreview();
 
@@ -262,7 +276,7 @@ public class EngravingTablePage extends InteractiveCustomUIPage<EngravingTablePa
                     EventData.of("ClearSecondary", "true"));
         }
 
-        if (showCustomization) {
+        if (showName) {
             eventBuilder.addEventBinding(CustomUIEventBindingType.ValueChanged, "#NameInput",
                     EventData.of("NameInput", "").append("@NameInput", "#NameInput.Value"),
                     false);
@@ -671,12 +685,16 @@ public class EngravingTablePage extends InteractiveCustomUIPage<EngravingTablePa
         }
 
         if (this.isCustomizationMode()) {
-            if (this.editableName.trim().isEmpty()) {
+            boolean nameChangesEnabled = this.areNameChangesEnabled();
+            if (nameChangesEnabled && this.editableName.trim().isEmpty()) {
                 return new StatusInfo("Name cannot be empty.", COLOR_ERROR);
             }
             boolean nameChanged = this.hasPendingNameChange(primary);
             boolean glowChanged = this.hasPendingGlowChange(primary);
             if (!nameChanged && !glowChanged) {
+                if (!nameChangesEnabled && !this.canEditGlow(primary)) {
+                    return new StatusInfo("Name changes are disabled for this server.", COLOR_MUTED);
+                }
                 if (ScrollMergeHelper.isScroll(primary)) {
                     return new StatusInfo("Scroll ready for rename or merge.", COLOR_MUTED);
                 }
@@ -712,7 +730,7 @@ public class EngravingTablePage extends InteractiveCustomUIPage<EngravingTablePa
         if (!nameChanged && !glowChanged) {
             return null;
         }
-        if (this.editableName.trim().isEmpty()) {
+        if (this.areNameChangesEnabled() && this.editableName.trim().isEmpty()) {
             return null;
         }
 
@@ -738,6 +756,15 @@ public class EngravingTablePage extends InteractiveCustomUIPage<EngravingTablePa
     @Nonnull
     private FinalCustomization buildFinalCustomization(@Nonnull ItemStack primary) {
         EngravingTableCustomizationData existing = EngravingTableCustomizationData.fromItemStack(primary);
+        EngravingTableColorOption finalGlowColor = this.canEditGlow(primary)
+                ? (this.selectedGlowColor == EngravingTableColorOption.DEFAULT_GLOW_COLOR ? null
+                        : this.selectedGlowColor)
+                : existing.getGlowColor();
+
+        if (!this.areNameChangesEnabled()) {
+            return new FinalCustomization(existing.getCustomName(), existing.getNameColor(), finalGlowColor);
+        }
+
         String defaultName = this.resolveBaseItemName(primary);
         String trimmedName = this.editableName.trim();
 
@@ -745,20 +772,19 @@ public class EngravingTablePage extends InteractiveCustomUIPage<EngravingTablePa
         EngravingTableColorOption finalNameColor = this.selectedNameColor == EngravingTableColorOption.DEFAULT_NAME_COLOR
                 ? null
                 : this.selectedNameColor;
-        EngravingTableColorOption finalGlowColor = this.canEditGlow(primary)
-                ? (this.selectedGlowColor == EngravingTableColorOption.DEFAULT_GLOW_COLOR ? null
-                        : this.selectedGlowColor)
-                : existing.getGlowColor();
 
         return new FinalCustomization(finalCustomName, finalNameColor, finalGlowColor);
     }
 
     private boolean hasPendingNameChange(@Nonnull ItemStack primary) {
+        if (!this.areNameChangesEnabled()) {
+            return false;
+        }
         return this.hasPendingNameTextChange(primary) || this.hasPendingNameColorChange(primary);
     }
 
     private boolean hasPendingNameTextChange(@Nonnull ItemStack primary) {
-        if (!this.isCustomizationMode() || ItemStack.isEmpty(primary)) {
+        if (!this.areNameChangesEnabled() || !this.isCustomizationMode() || ItemStack.isEmpty(primary)) {
             return false;
         }
         String trimmedName = this.editableName.trim();
@@ -772,7 +798,7 @@ public class EngravingTablePage extends InteractiveCustomUIPage<EngravingTablePa
     }
 
     private boolean hasPendingNameColorChange(@Nonnull ItemStack primary) {
-        if (!this.isCustomizationMode() || ItemStack.isEmpty(primary)) {
+        if (!this.areNameChangesEnabled() || !this.isCustomizationMode() || ItemStack.isEmpty(primary)) {
             return false;
         }
         EngravingTableColorOption currentColor = EngravingTableCustomizationData.fromItemStack(primary)
@@ -792,6 +818,10 @@ public class EngravingTablePage extends InteractiveCustomUIPage<EngravingTablePa
     private boolean canEditGlow(@Nullable ItemStack itemStack) {
         return this.isCustomizationMode()
                 && ScrollMergeHelper.hasStoredEnchantments(itemStack, this.enchantmentManager);
+    }
+
+    private boolean areNameChangesEnabled() {
+        return this.plugin.getConfigManager().getConfig().enableEngravingTableNameChanges;
     }
 
     @Nonnull

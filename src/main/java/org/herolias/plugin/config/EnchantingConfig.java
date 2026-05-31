@@ -14,7 +14,7 @@ import java.util.Set;
  * Legacy per-field config values are auto-migrated on load.
  */
 public class EnchantingConfig {
-        public double configVersion = 2.0; // Bumped for enchantment multipliers migration
+        public double configVersion = 2.1; // Bumped for crafting toggle migration
         public int maxEnchantmentsPerItem = 5;
         public boolean showEnchantmentBanner = true;
         public boolean hasAutoDisabledBanner = false;
@@ -66,20 +66,26 @@ public class EnchantingConfig {
         public Set<String> pickPerfectBlacklist = new HashSet<>(); // Item ID-s, allowing wildcards
 
         // ===== Other settings =====
-        public boolean disableEnchantmentCrafting = false;
+        public boolean enableEnchantingTableCrafting = true;
+        public boolean enableEngravingTableCrafting = true;
+        public boolean enableScrollCrafting = true;
+        public boolean enableEngravingTableNameChanges = true;
+        public int enchantingTableCraftingTier = 2;
+        public int engravingTableCraftingTier = 2;
         public boolean returnEnchantmentOnCleanse = false;
         public boolean salvagerYieldsScroll = true;
+        public boolean hasSkippedTooltipAnnouncement = false;
+        public boolean showWelcomeMessage = true;
+
+        // Track players who have seen the "Tooltips are here" welcome message
+        public List<String> notifiedPlayers = new ArrayList<>();
 
         public Map<String, Boolean> disabledEnchantments = new LinkedHashMap<>();
 
+        // ===== Recipes =====
         public Map<String, List<ConfigIngredient>> scrollRecipes = new LinkedHashMap<>();
-
-        public List<ConfigIngredient> engravingTableRecipe;
-        public int engravingTableCraftingTier = 2;
-
         public List<ConfigIngredient> enchantingTableRecipe;
-        public int enchantingTableCraftingTier = 2;
-
+        public List<ConfigIngredient> engravingTableRecipe;
         public Map<String, List<ConfigIngredient>> enchantingTableUpgrades;
 
         public EnchantingConfig() {
@@ -190,7 +196,7 @@ public class EnchantingConfig {
                         clearLegacyFields();
 
                         // Update config version
-                        this.configVersion = 2.0;
+                        this.configVersion = 2.1;
                 }
 
                 // Always ensure all registered enchantments have an entry
@@ -584,11 +590,4 @@ public class EnchantingConfig {
                         return resourceType != null && !resourceType.isEmpty();
                 }
         }
-
-        // Track players who have seen the "Tooltips are here" welcome message
-        public List<String> notifiedPlayers = new ArrayList<>();
-
-        public boolean hasSkippedTooltipAnnouncement = false;
-
-        public boolean showWelcomeMessage = true;
 }

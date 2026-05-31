@@ -52,6 +52,7 @@ public class ScrollItemGenerator {
     private static final String DEFAULT_TEXTURE = "Items/Scrolls/EnchScroll.png";
     private static final String DEFAULT_PLAYER_ANIMATIONS_ID = "Item";
     private static final int DEFAULT_MAX_STACK = 10;
+    private static final String CREATIVE_SCROLL_CATEGORY = "SimpleEnchantments.Scrolls";
     private static final String SOURCE_ID = "SimpleEnchanting:ScrollGen";
 
     private static SimpleEnchanting plugin;
@@ -435,7 +436,7 @@ public class ScrollItemGenerator {
             setField(Item.class, item, "translationProperties",
                     new ItemTranslationProperties(nameKey, descKey));
 
-            setField(Item.class, item, "categories", new String[] { "Items.Magic" });
+            setField(Item.class, item, "categories", new String[] { CREATIVE_SCROLL_CATEGORY });
 
             // Safe defaults — processConfig() will override in Phase 2
             setField(Item.class, item, "interactionConfig", InteractionConfiguration.DEFAULT);

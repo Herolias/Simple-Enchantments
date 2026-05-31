@@ -570,11 +570,14 @@ config.button.reset_recipe = Reimposta Ricetta
 config.general.max_enchantments = Max Incantesimi Per Oggetto
 config.general.enable_glow = Abilita Bagliore Incantesimi
 config.general.table_tier = Livello Creazione Tavolo Incantesimi
-config.general.disable_crafting = Disabilita Creazione Incantesimi
+config.general.enchanting_table_crafting = Creazione Tavolo Incantesimi
+config.general.scroll_crafting = Creazione Pergamene
 config.general.return_cleanse = Restituisci Incantesimo alla Pulizia
 config.general.table_recipe = Ricetta Tavolo Incantesimi
 config.general.engraving_table_tier = Livello Creazione Tavolo da Incisione
 config.general.engraving_table_recipe = Ricetta Tavolo da Incisione
+config.general.engraving_table_crafting = Creazione Tavolo da Incisione
+config.general.engraving_table_name_changes = Modifiche ai Nomi dal Tavolo da Incisione
 config.general.upgrade_1 = Costo Aggiornamento 1 (Livello 1 -> 2)
 config.general.upgrade_2 = Costo Aggiornamento 2 (Livello 2 -> 3)
 config.general.upgrade_3 = Costo Aggiornamento 3 (Livello 3 -> 4)
@@ -628,6 +631,9 @@ customUI.walkthrough.enchantments.title = 5. Incantesimi
 customUI.walkthrough.enchantments.desc = Una lista completa degli incantesimi e dei loro effetti. Clicca su una voce per saperne di più. Su questo server, ogni oggetto può avere fino a {maxEnchantments} incantesimi.\n\nNota: Alcune pagine degli incantesimi includono già note di gioco più dettagliate, mentre altre usano ancora il riassunto del tooltip. I futuri aggiornamenti continueranno ad aggiungere descrizioni dettagliate.
 
 config.general.allow_same_scroll_upgrades = Permetti Miglioramenti con Pergamene Uguali (I+I = II)
+
+ui.itemcategory.simpleEnchantments = Incantesimi Semplici
+ui.itemcategory.simpleEnchantments.scrolls = Pergamene
 
 customUI.walkthrough.enabledOnServer = Abilitato su questo server: 
 customUI.walkthrough.returnScroll.yes = potrai

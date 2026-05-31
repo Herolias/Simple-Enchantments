@@ -660,11 +660,14 @@ config.button.change = Change
 config.general.max_enchantments = Max Enchantments Per Item
 config.general.enable_glow = Enable Enchantment Glow
 config.general.table_tier = Enchanting Table Crafting Tier
-config.general.disable_crafting = Disable Enchantment Crafting
+config.general.enchanting_table_crafting = Enchanting Table Crafting
+config.general.scroll_crafting = Scroll Crafting
 config.general.return_cleanse = Return Enchantment On Cleanse
 config.general.table_recipe = Enchanting Table Recipe
 config.general.engraving_table_tier = Engraving Table Crafting Tier
 config.general.engraving_table_recipe = Engraving Table Recipe
+config.general.engraving_table_crafting = Engraving Table Crafting
+config.general.engraving_table_name_changes = Engraving Table Name Changes
 config.general.upgrade_1 = Upgrade 1 Cost (Tier 1 -> 2)
 config.general.upgrade_2 = Upgrade 2 Cost (Tier 2 -> 3)
 config.general.upgrade_3 = Upgrade 3 Cost (Tier 3 -> 4)
@@ -749,6 +752,9 @@ customUI.walkthrough.enchantments.title = 5. Enchantments
 customUI.walkthrough.enchantments.desc = A complete list of enchantments and their effects. Click any entry to learn more. On this server, each item can have up to {maxEnchantments} enchantments.\n\nNote: Some enchantment pages include expanded gameplay notes, while others still use their tooltip summary. Future updates will continue adding detailed descriptions.
 
 config.general.allow_same_scroll_upgrades = Allow Same Scroll Upgrades(I+I = II)
+
+ui.itemcategory.simpleEnchantments = Simple Enchantments
+ui.itemcategory.simpleEnchantments.scrolls = Scrolls
 
 customUI.walkthrough.enabledOnServer = Enabled on this Server: 
 customUI.walkthrough.returnScroll.yes = will

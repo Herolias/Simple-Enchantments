@@ -8,6 +8,7 @@ draft: false
 The Engraving Table lets you personalize items after enchanting. You can rename items, recolor custom item names, recolor the glow on enchanted items, and merge enchantment scrolls into custom scrolls.
 
 It unlocks at a Tier <!-- DOCSTAT:config.engravingTableCraftingTier -->2<!-- /DOCSTAT --> Workbench.
+Server owners can disable Engraving Table crafting or disable only item name changes in the config. Disabling name changes does not affect glow recoloring or scroll merging.
 
 ![](https://raw.githubusercontent.com/Herolias/Simple-Enchantments/refs/heads/dev/src/main/resources/Common/Icons/ItemsGenerated/Engraving_Table.png)
 

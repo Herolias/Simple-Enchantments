@@ -578,13 +578,16 @@ config.button.change = Изменить
 config.general.max_enchantments = Макс. Зачарований На Предмет
 config.general.enable_glow = Включить Свечение
 config.general.table_tier = Уровень Крафта Стола Зачарований
-config.general.disable_crafting = Отключить Крафт Зачарований
+config.general.enchanting_table_crafting = Крафт Стола Зачарований
+config.general.scroll_crafting = Крафт Свитков
 config.general.return_cleanse = Возвращать Зачарование При Очистке
 config.general.salvager_yield = Переработчик возвращает свиток
 config.general.show_welcome = Показывать Приветственные Сообщения
 config.general.table_recipe = Рецепт Стола Зачарований
 config.general.engraving_table_tier = Уровень Крафта Гравировального Стола
 config.general.engraving_table_recipe = Рецепт Гравировального Стола
+config.general.engraving_table_crafting = Крафт Гравировального Стола
+config.general.engraving_table_name_changes = Изменения названий на Гравировальном Столе
 config.general.upgrade_1 = Стоимость Улучшения 1 (Ур. 1 -> 2)
 config.general.upgrade_2 = Стоимость Улучшения 2 (Ур. 2 -> 3)
 config.general.upgrade_3 = Стоимость Улучшения 3 (Ур. 3 -> 4)
@@ -633,6 +636,9 @@ customUI.walkthrough.enchantments.title = 5. Зачарования
 customUI.walkthrough.enchantments.desc = Полный список зачарований и их эффектов. Нажмите на любую запись, чтобы узнать подробнее. На этом сервере каждый предмет может иметь до {maxEnchantments} зачарований.\n\nПримечание: Некоторые страницы зачарований уже содержат более подробные игровые заметки, а другие пока используют краткое описание из подсказки. Будущие обновления продолжат добавлять подробные описания.
 
 config.general.allow_same_scroll_upgrades = Разрешить Улучшение Одинаковыми Свитками (I+I = II)
+
+ui.itemcategory.simpleEnchantments = Простые зачарования
+ui.itemcategory.simpleEnchantments.scrolls = Свитки
 
 customUI.walkthrough.enabledOnServer = Включено на этом сервере: 
 customUI.walkthrough.returnScroll.yes = получите

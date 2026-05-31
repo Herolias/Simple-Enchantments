@@ -120,10 +120,13 @@ public class EnchantConfigPage extends InteractiveCustomUIPage<EnchantConfigPage
         // Clone enchantment multipliers map
         copy.enchantmentMultipliers = new LinkedHashMap<>(original.enchantmentMultipliers);
 
-        copy.disableEnchantmentCrafting = original.disableEnchantmentCrafting;
+        copy.enableEnchantingTableCrafting = original.enableEnchantingTableCrafting;
         copy.returnEnchantmentOnCleanse = original.returnEnchantmentOnCleanse;
         copy.salvagerYieldsScroll = original.salvagerYieldsScroll;
         copy.enchantingTableCraftingTier = original.enchantingTableCraftingTier;
+        copy.enableEngravingTableCrafting = original.enableEngravingTableCrafting;
+        copy.enableScrollCrafting = original.enableScrollCrafting;
+        copy.enableEngravingTableNameChanges = original.enableEngravingTableNameChanges;
         copy.showWelcomeMessage = original.showWelcomeMessage;
 
         copy.disabledEnchantments = new LinkedHashMap<>(original.disabledEnchantments);
@@ -517,6 +520,60 @@ public class EnchantConfigPage extends InteractiveCustomUIPage<EnchantConfigPage
                 EventData.of("SettingValue", "allowSameScrollUpgrades:" + !workingConfig.allowSameScrollUpgrades));
         index++;
 
+        // Engraving Table Name Changes
+        commandBuilder.append("#ContentArea", "Pages/EnchantConfigToggle.ui");
+        commandBuilder.set("#ContentArea[" + index + "] #SettingName.TextSpans", languageManager
+                .getMessage("config.general.engraving_table_name_changes", lang, this.playerRef.getLanguage()));
+        commandBuilder.set("#ContentArea[" + index + "] #ToggleButton.TextSpans",
+                languageManager.getMessage(
+                        workingConfig.enableEngravingTableNameChanges ? "config.common.enabled"
+                                : "config.common.disabled",
+                        lang, this.playerRef.getLanguage()));
+        eventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#ContentArea[" + index + "] #ToggleButton",
+                EventData.of("SettingValue",
+                        "enableEngravingTableNameChanges:" + !workingConfig.enableEngravingTableNameChanges));
+        index++;
+
+        // Engraving Table Crafting
+        commandBuilder.append("#ContentArea", "Pages/EnchantConfigToggle.ui");
+        commandBuilder.set("#ContentArea[" + index + "] #SettingName.TextSpans", languageManager
+                .getMessage("config.general.engraving_table_crafting", lang, this.playerRef.getLanguage()));
+        commandBuilder.set("#ContentArea[" + index + "] #ToggleButton.TextSpans",
+                languageManager.getMessage(
+                        workingConfig.enableEngravingTableCrafting ? "config.common.enabled"
+                                : "config.common.disabled",
+                        lang, this.playerRef.getLanguage()));
+        eventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#ContentArea[" + index + "] #ToggleButton",
+                EventData.of("SettingValue",
+                        "enableEngravingTableCrafting:" + !workingConfig.enableEngravingTableCrafting));
+        index++;
+
+        // Enchanting Table Crafting
+        commandBuilder.append("#ContentArea", "Pages/EnchantConfigToggle.ui");
+        commandBuilder.set("#ContentArea[" + index + "] #SettingName.TextSpans", languageManager
+                .getMessage("config.general.enchanting_table_crafting", lang, this.playerRef.getLanguage()));
+        commandBuilder.set("#ContentArea[" + index + "] #ToggleButton.TextSpans",
+                languageManager.getMessage(
+                        workingConfig.enableEnchantingTableCrafting ? "config.common.enabled"
+                                : "config.common.disabled",
+                        lang, this.playerRef.getLanguage()));
+        eventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#ContentArea[" + index + "] #ToggleButton",
+                EventData.of("SettingValue",
+                        "enableEnchantingTableCrafting:" + !workingConfig.enableEnchantingTableCrafting));
+        index++;
+
+        // Scroll Crafting
+        commandBuilder.append("#ContentArea", "Pages/EnchantConfigToggle.ui");
+        commandBuilder.set("#ContentArea[" + index + "] #SettingName.TextSpans", languageManager
+                .getMessage("config.general.scroll_crafting", lang, this.playerRef.getLanguage()));
+        commandBuilder.set("#ContentArea[" + index + "] #ToggleButton.TextSpans",
+                languageManager.getMessage(
+                        workingConfig.enableScrollCrafting ? "config.common.enabled" : "config.common.disabled",
+                        lang, this.playerRef.getLanguage()));
+        eventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#ContentArea[" + index + "] #ToggleButton",
+                EventData.of("SettingValue", "enableScrollCrafting:" + !workingConfig.enableScrollCrafting));
+        index++;
+
         // Engraving Table Crafting Tier
         int engravingCraftingTier = workingConfig.engravingTableCraftingTier;
         int craftingTierStep = 1; // Integer value, step by 1
@@ -558,19 +615,6 @@ public class EnchantConfigPage extends InteractiveCustomUIPage<EnchantConfigPage
                 EventData.of("SettingValue", "enchantingTableCraftingTier").append("@InputValue",
                         "#ContentArea[" + index + "] #SettingInput.Value"),
                 false);
-        index++;
-
-        // Disable Enchantment Crafting toggle
-        commandBuilder.append("#ContentArea", "Pages/EnchantConfigToggle.ui");
-        commandBuilder.set("#ContentArea[" + index + "] #SettingName.TextSpans",
-                languageManager.getMessage("config.general.disable_crafting", lang, this.playerRef.getLanguage()));
-        commandBuilder.set("#ContentArea[" + index + "] #ToggleButton.TextSpans",
-                languageManager.getMessage(
-                        workingConfig.disableEnchantmentCrafting ? "config.common.enabled" : "config.common.disabled",
-                        lang, this.playerRef.getLanguage()));
-        eventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#ContentArea[" + index + "] #ToggleButton",
-                EventData.of("SettingValue",
-                        "disableEnchantmentCrafting:" + !workingConfig.disableEnchantmentCrafting));
         index++;
 
         // Return Enchantment On Cleanse toggle
@@ -1625,8 +1669,14 @@ public class EnchantConfigPage extends InteractiveCustomUIPage<EnchantConfigPage
                     case "enableEnchantmentGlow" -> workingConfig.enableEnchantmentGlow = Boolean.parseBoolean(value);
                     case "allowSameScrollUpgrades" ->
                         workingConfig.allowSameScrollUpgrades = Boolean.parseBoolean(value);
-                    case "disableEnchantmentCrafting" ->
-                        workingConfig.disableEnchantmentCrafting = Boolean.parseBoolean(value);
+                    case "enableEnchantingTableCrafting" ->
+                        workingConfig.enableEnchantingTableCrafting = Boolean.parseBoolean(value);
+                    case "enableEngravingTableCrafting" ->
+                        workingConfig.enableEngravingTableCrafting = Boolean.parseBoolean(value);
+                    case "enableScrollCrafting" ->
+                        workingConfig.enableScrollCrafting = Boolean.parseBoolean(value);
+                    case "enableEngravingTableNameChanges" ->
+                        workingConfig.enableEngravingTableNameChanges = Boolean.parseBoolean(value);
                     case "returnEnchantmentOnCleanse" ->
                         workingConfig.returnEnchantmentOnCleanse = Boolean.parseBoolean(value);
                     case "enchantingTableCraftingTier" ->
@@ -1734,7 +1784,10 @@ public class EnchantConfigPage extends InteractiveCustomUIPage<EnchantConfigPage
             case "enchantingTableCraftingTier" -> String.valueOf(DEFAULT_CONFIG.enchantingTableCraftingTier);
             case "engravingTableCraftingTier" -> String.valueOf(DEFAULT_CONFIG.engravingTableCraftingTier);
             case "returnEnchantmentOnCleanse" -> String.valueOf(DEFAULT_CONFIG.returnEnchantmentOnCleanse);
-            case "disableEnchantmentCrafting" -> String.valueOf(DEFAULT_CONFIG.disableEnchantmentCrafting);
+            case "enableEnchantingTableCrafting" -> String.valueOf(DEFAULT_CONFIG.enableEnchantingTableCrafting);
+            case "enableEngravingTableCrafting" -> String.valueOf(DEFAULT_CONFIG.enableEngravingTableCrafting);
+            case "enableScrollCrafting" -> String.valueOf(DEFAULT_CONFIG.enableScrollCrafting);
+            case "enableEngravingTableNameChanges" -> String.valueOf(DEFAULT_CONFIG.enableEngravingTableNameChanges);
             case "salvagerYieldsScroll" -> String.valueOf(DEFAULT_CONFIG.salvagerYieldsScroll);
             case "showWelcomeMessage" -> String.valueOf(DEFAULT_CONFIG.showWelcomeMessage);
             default -> null;
@@ -1748,13 +1801,16 @@ public class EnchantConfigPage extends InteractiveCustomUIPage<EnchantConfigPage
         actualConfig.enableEnchantmentGlow = workingConfig.enableEnchantmentGlow;
         actualConfig.allowSameScrollUpgrades = workingConfig.allowSameScrollUpgrades;
         actualConfig.enchantingTableCraftingTier = workingConfig.enchantingTableCraftingTier;
+        actualConfig.enableEnchantingTableCrafting = workingConfig.enableEnchantingTableCrafting;
+        actualConfig.enableEngravingTableCrafting = workingConfig.enableEngravingTableCrafting;
+        actualConfig.enableScrollCrafting = workingConfig.enableScrollCrafting;
+        actualConfig.enableEngravingTableNameChanges = workingConfig.enableEngravingTableNameChanges;
         actualConfig.engravingTableCraftingTier = workingConfig.engravingTableCraftingTier;
 
         // Copy enchantment multipliers map
         actualConfig.enchantmentMultipliers = new LinkedHashMap<>(workingConfig.enchantmentMultipliers);
 
         actualConfig.returnEnchantmentOnCleanse = workingConfig.returnEnchantmentOnCleanse;
-        actualConfig.disableEnchantmentCrafting = workingConfig.disableEnchantmentCrafting;
         actualConfig.salvagerYieldsScroll = workingConfig.salvagerYieldsScroll;
         actualConfig.showWelcomeMessage = workingConfig.showWelcomeMessage;
         actualConfig.disabledEnchantments = new LinkedHashMap<>(workingConfig.disabledEnchantments);
@@ -1819,12 +1875,16 @@ public class EnchantConfigPage extends InteractiveCustomUIPage<EnchantConfigPage
 
         workingConfig.enableEnchantmentGlow = defaults.enableEnchantmentGlow;
         workingConfig.enchantingTableCraftingTier = defaults.enchantingTableCraftingTier;
+        workingConfig.enableEnchantingTableCrafting = defaults.enableEnchantingTableCrafting;
+        workingConfig.enableEngravingTableCrafting = defaults.enableEngravingTableCrafting;
+        workingConfig.enableScrollCrafting = defaults.enableScrollCrafting;
+        workingConfig.enableEngravingTableNameChanges = defaults.enableEngravingTableNameChanges;
+        workingConfig.engravingTableCraftingTier = defaults.engravingTableCraftingTier;
 
         // Reset enchantment multipliers map
         workingConfig.enchantmentMultipliers = new LinkedHashMap<>(defaults.enchantmentMultipliers);
 
         workingConfig.returnEnchantmentOnCleanse = defaults.returnEnchantmentOnCleanse;
-        workingConfig.disableEnchantmentCrafting = defaults.disableEnchantmentCrafting;
         workingConfig.salvagerYieldsScroll = defaults.salvagerYieldsScroll;
         workingConfig.showWelcomeMessage = defaults.showWelcomeMessage;
         workingConfig.allowSameScrollUpgrades = defaults.allowSameScrollUpgrades;
@@ -1839,6 +1899,9 @@ public class EnchantConfigPage extends InteractiveCustomUIPage<EnchantConfigPage
 
         if (defaults.enchantingTableRecipe != null) {
             workingConfig.enchantingTableRecipe = new java.util.ArrayList<>(defaults.enchantingTableRecipe);
+        }
+        if (defaults.engravingTableRecipe != null) {
+            workingConfig.engravingTableRecipe = new java.util.ArrayList<>(defaults.engravingTableRecipe);
         }
 
         workingConfig.enchantingTableUpgrades = new LinkedHashMap<>();

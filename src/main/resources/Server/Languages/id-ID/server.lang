@@ -578,13 +578,16 @@ config.button.change = Ubah
 config.general.max_enchantments = Maks Sihir Per Item
 config.general.enable_glow = Aktifkan Cahaya Sihir
 config.general.table_tier = Tingkat Kerajinan Meja Sihir
-config.general.disable_crafting = Nonaktifkan Kerajinan Sihir
+config.general.enchanting_table_crafting = Kerajinan Meja Sihir
+config.general.scroll_crafting = Kerajinan Gulungan
 config.general.return_cleanse = Kembalikan Sihir saat Pembersihan
 config.general.salvager_yield = Pendaur Ulang Mengembalikan Gulungan
 config.general.show_welcome = Tampilkan Pesan Selamat Datang
 config.general.table_recipe = Resep Meja Sihir
 config.general.engraving_table_tier = Tingkat Kerajinan Meja Pengukiran
 config.general.engraving_table_recipe = Resep Meja Pengukiran
+config.general.engraving_table_crafting = Kerajinan Meja Pengukiran
+config.general.engraving_table_name_changes = Perubahan Nama Meja Pengukiran
 config.general.upgrade_1 = Biaya Peningkatan 1 (Tingkat 1 -> 2)
 config.general.upgrade_2 = Biaya Peningkatan 2 (Tingkat 2 -> 3)
 config.general.upgrade_3 = Biaya Peningkatan 3 (Tingkat 3 -> 4)
@@ -633,6 +636,9 @@ customUI.walkthrough.enchantments.title = 5. Pesona
 customUI.walkthrough.enchantments.desc = Daftar lengkap pesona dan efeknya. Klik salah satu entri untuk mengetahui lebih lanjut. Di server ini, setiap item dapat memiliki hingga {maxEnchantments} pesona.\n\nCatatan: Beberapa halaman pesona kini berisi catatan gameplay yang lebih lengkap, sementara yang lain masih memakai ringkasan tooltip. Pembaruan mendatang akan terus menambahkan deskripsi terperinci.
 
 config.general.allow_same_scroll_upgrades = Izinkan Peningkatan Gulungan yang Sama (I+I = II)
+
+ui.itemcategory.simpleEnchantments = Sihir Sederhana
+ui.itemcategory.simpleEnchantments.scrolls = Gulungan
 
 customUI.walkthrough.enabledOnServer = Diaktifkan di server ini: 
 customUI.walkthrough.returnScroll.yes = akan

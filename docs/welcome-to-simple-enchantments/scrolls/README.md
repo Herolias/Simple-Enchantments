@@ -11,3 +11,7 @@ Scrolls are used to apply enchantments to your items. They come in different rar
 After successfully applying an enchantment from a scroll to an item, the scroll is consumed.
 
 You can also [combine](https://wiki.hytalemodding.dev/mod/simple-enchantments/combining-scrolls) scrolls at the [Engraving Table](https://wiki.hytalemodding.dev/mod/simple-enchantments/engraving-table) for better inventory management.
+
+In creative mode, scrolls are grouped in a new scroll tab.
+
+[Image]

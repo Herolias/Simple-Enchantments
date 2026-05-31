@@ -577,13 +577,16 @@ config.button.change = Changer
 config.general.max_enchantments = Max Enchantements Par Objet
 config.general.enable_glow = Activer Lueur d'Enchantement
 config.general.table_tier = Niveau de Craft Table d'Enchantement
-config.general.disable_crafting = Désactiver Craft d'Enchantement
+config.general.enchanting_table_crafting = Craft de la table d'enchantement
+config.general.scroll_crafting = Craft des parchemins
 config.general.return_cleanse = Rendre l'Enchantement au Désenchantement
 config.general.salvager_yield = Le Recycleur rend un Parchemin
 config.general.show_welcome = Afficher les Messages de Bienvenue
 config.general.table_recipe = Recette Table d'Enchantement
 config.general.engraving_table_tier = Niveau de craft de la table de gravure
 config.general.engraving_table_recipe = Recette de la table de gravure
+config.general.engraving_table_crafting = Craft de la table de gravure
+config.general.engraving_table_name_changes = Changements de nom de la table de gravure
 config.general.upgrade_1 = Coût Amélioration 1 (Niveau 1 -> 2)
 config.general.upgrade_2 = Coût Amélioration 2 (Niveau 2 -> 3)
 config.general.upgrade_3 = Coût Amélioration 3 (Niveau 3 -> 4)
@@ -632,6 +635,9 @@ customUI.walkthrough.enchantments.title = 5. Enchantements
 customUI.walkthrough.enchantments.desc = Une liste complète des enchantements et de leurs effets. Cliquez sur une entrée pour en savoir plus. Sur ce serveur, chaque objet peut avoir jusqu'à {maxEnchantments} enchantements.\n\nNote : Certaines pages d'enchantement contiennent déjà des notes de jeu plus détaillées, tandis que d'autres utilisent encore leur résumé d'infobulle. Les futures mises à jour continueront d'ajouter des descriptions détaillées.
 
 config.general.allow_same_scroll_upgrades = Autoriser les Améliorations de Parchemin Identique (I+I = II)
+
+ui.itemcategory.simpleEnchantments = Enchantements Simples
+ui.itemcategory.simpleEnchantments.scrolls = Parchemins
 
 customUI.walkthrough.enabledOnServer = Activé sur ce serveur : 
 customUI.walkthrough.returnScroll.yes = pourrez

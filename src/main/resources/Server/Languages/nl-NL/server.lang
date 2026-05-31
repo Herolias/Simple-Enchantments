@@ -578,13 +578,16 @@ config.button.change = Wijzigen
 config.general.max_enchantments = Max. Betoveringen Per Item
 config.general.enable_glow = Activeer Betoveringsgloed
 config.general.table_tier = Betoveringstafel Ambachtsniveau
-config.general.disable_crafting = Schakel Betoveringsambacht Uit
+config.general.enchanting_table_crafting = Betoveringstafel Crafting
+config.general.scroll_crafting = Scroll Crafting
 config.general.return_cleanse = Geef Betovering Terug Bij Reiniging
 config.general.salvager_yield = Recycler geeft Rol terug
 config.general.show_welcome = Welkomstberichten Tonen
 config.general.table_recipe = Betoveringstafel Recept
 config.general.engraving_table_tier = Craftniveau van de Graveertafel
 config.general.engraving_table_recipe = Recept voor de Graveertafel
+config.general.engraving_table_crafting = Graveertafel Crafting
+config.general.engraving_table_name_changes = Naamwijzigingen via de Graveertafel
 config.general.upgrade_1 = Upgrade 1 Kosten (Niveau 1 -> 2)
 config.general.upgrade_2 = Upgrade 2 Kosten (Niveau 2 -> 3)
 config.general.upgrade_3 = Upgrade 3 Kosten (Niveau 3 -> 4)
@@ -633,6 +636,9 @@ customUI.walkthrough.enchantments.title = 5. Betoveringen
 customUI.walkthrough.enchantments.desc = Een complete lijst van betoveringen en hun effecten. Klik op een item voor meer informatie. Op deze server kan elk item maximaal {maxEnchantments} betoveringen hebben.\n\nOpmerking: Sommige betoveringspagina's bevatten al uitgebreidere speeltips, terwijl andere nog hun tooltip-samenvatting gebruiken. Toekomstige updates blijven gedetailleerde beschrijvingen toevoegen.
 
 config.general.allow_same_scroll_upgrades = Dezelfde Rol Upgrades Toestaan (I+I = II)
+
+ui.itemcategory.simpleEnchantments = Eenvoudige Betoveringen
+ui.itemcategory.simpleEnchantments.scrolls = Rollen
 
 customUI.walkthrough.enabledOnServer = Ingeschakeld op deze server: 
 customUI.walkthrough.returnScroll.yes = zul
