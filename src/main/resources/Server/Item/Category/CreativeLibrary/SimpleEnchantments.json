@@ -1,12 +1,12 @@
 {
   "Name": "server.ui.itemcategory.simpleEnchantments",
-  "Icon": "Icons/ItemCategories/Items-Recipe.png",
+  "Icon": "Icons/ItemCategories/Scroll_Tab.png",
   "Order": 4,
   "Children": [
     {
       "Id": "Scrolls",
       "Name": "server.ui.itemcategory.simpleEnchantments.scrolls",
-      "Icon": "Icons/ItemCategories/Items-Recipe.png"
+      "Icon": "Icons/ItemCategories/Scroll_Tab_Small.png"
     }
   ]
 }

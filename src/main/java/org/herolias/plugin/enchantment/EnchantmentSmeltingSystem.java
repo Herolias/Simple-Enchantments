@@ -1,40 +1,32 @@
 package org.herolias.plugin.enchantment;
 
-import com.hypixel.hytale.component.AddReason;
 import com.hypixel.hytale.component.Archetype;
 import com.hypixel.hytale.component.ArchetypeChunk;
 import com.hypixel.hytale.component.CommandBuffer;
-import com.hypixel.hytale.component.Holder;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.component.query.Query;
 import com.hypixel.hytale.component.system.EntityEventSystem;
 import com.hypixel.hytale.logger.HytaleLogger;
-import com.hypixel.hytale.math.util.ChunkUtil;
-import com.hypixel.hytale.math.vector.Rotation3f;
-
-import org.joml.Vector3d;
-import org.joml.Vector3i;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockBreakingDropType;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockGathering;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType;
 import com.hypixel.hytale.server.core.event.events.ecs.BreakBlockEvent;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
-import com.hypixel.hytale.server.core.modules.entity.item.ItemComponent;
 import com.hypixel.hytale.server.core.modules.interaction.BlockHarvestUtils;
-import com.hypixel.hytale.server.core.modules.interaction.BlockInteractionUtils;
-import com.hypixel.hytale.server.core.universe.world.World;
-import com.hypixel.hytale.server.core.universe.world.chunk.BlockChunk;
-import com.hypixel.hytale.server.core.universe.world.chunk.section.BlockSection;
-import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
+import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 
+import org.joml.Vector3i;
+
 import javax.annotation.Nonnull;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
- * ECS system that applies Smelting enchantment to block break events.
+ * Marks block drops for Smelting conversion without cancelling BreakBlockEvent.
+ * Keeping the vanilla break event alive lets protection, quest, and leveling mods
+ * observe the mined ore while the paired drop conversion system rewrites the
+ * spawned item entity before it can be picked up or sent to clients.
  */
 public class EnchantmentSmeltingSystem extends EntityEventSystem<EntityStore, BreakBlockEvent> {
 
@@ -42,11 +34,14 @@ public class EnchantmentSmeltingSystem extends EntityEventSystem<EntityStore, Br
 
     private final EnchantmentManager enchantmentManager;
     private final SmeltingRecipeRegistry smeltingRecipeRegistry;
+    private final EnchantmentSmeltingDropConversionSystem dropConversionSystem;
 
-    public EnchantmentSmeltingSystem(EnchantmentManager enchantmentManager) {
+    public EnchantmentSmeltingSystem(EnchantmentManager enchantmentManager,
+            EnchantmentSmeltingDropConversionSystem dropConversionSystem) {
         super(BreakBlockEvent.class);
         this.enchantmentManager = enchantmentManager;
         this.smeltingRecipeRegistry = enchantmentManager.getSmeltingRecipeRegistry();
+        this.dropConversionSystem = dropConversionSystem;
         LOGGER.atInfo().log("EnchantmentSmeltingSystem initialized");
     }
 
@@ -62,7 +57,7 @@ public class EnchantmentSmeltingSystem extends EntityEventSystem<EntityStore, Br
             @Nonnull Store<EntityStore> store,
             @Nonnull CommandBuffer<EntityStore> commandBuffer,
             @Nonnull BreakBlockEvent event) {
-        if (event.isCancelled()) {
+        if (event.isCancelled() || dropConversionSystem == null) {
             return;
         }
 
@@ -71,7 +66,8 @@ public class EnchantmentSmeltingSystem extends EntityEventSystem<EntityStore, Br
             return;
         }
 
-        if (!enchantmentManager.hasEnchantment(tool, EnchantmentType.SMELTING)) {
+        if (!enchantmentManager.hasEnchantment(tool, EnchantmentType.SMELTING)
+                || enchantmentManager.hasEnchantment(tool, EnchantmentType.PICK_PERFECT)) {
             return;
         }
 
@@ -92,99 +88,36 @@ public class EnchantmentSmeltingSystem extends EntityEventSystem<EntityStore, Br
 
         List<ItemStack> baseDrops = BlockHarvestUtils.getDrops(blockType, breaking.getQuantity(), breaking.getItemId(),
                 breaking.getDropListId());
-        if (baseDrops.isEmpty()) {
+        if (!containsSmeltableDrop(baseDrops)) {
             return;
         }
 
-        List<ItemStack> smeltedDrops = new ArrayList<>();
-        boolean anySmelted = false;
-        for (ItemStack drop : baseDrops) {
+        PlayerRef playerRef = null;
+        Ref<EntityStore> breakerRef = archetypeChunk.getReferenceTo(index);
+        if (breakerRef != null && breakerRef.isValid()) {
+            playerRef = store.getComponent(breakerRef, PlayerRef.getComponentType());
+        }
+
+        Vector3i targetBlock = event.getTargetBlock();
+        dropConversionSystem.recordPending(store.getExternalData().getWorld(), targetBlock, playerRef, tool);
+    }
+
+    private boolean containsSmeltableDrop(@Nonnull List<ItemStack> drops) {
+        for (ItemStack drop : drops) {
             if (drop == null || drop.isEmpty()) {
                 continue;
             }
+
             SmeltingRecipeRegistry.SmeltingRecipe recipe = smeltingRecipeRegistry.getRecipe(drop);
             if (recipe == null) {
-                smeltedDrops.add(drop);
                 continue;
             }
 
             ItemStack output = recipe.createOutput(drop.getQuantity());
-            if (output == null || output.isEmpty() || output.getItemId().equals(drop.getItemId())) {
-                smeltedDrops.add(drop);
-                continue;
-            }
-
-            anySmelted = true;
-            smeltedDrops.add(output);
-        }
-
-        if (!anySmelted) {
-            return;
-        }
-
-        // Apply Fortune extra rolls on top of smelted drops (if applicable).
-        int fortuneLevel = enchantmentManager.getEnchantmentLevel(tool, EnchantmentType.FORTUNE);
-        if (fortuneLevel > 0) {
-            List<ItemStack> extraDrops = enchantmentManager.getFortuneDrops(blockType, breaking, fortuneLevel);
-            for (ItemStack drop : extraDrops) {
-                if (drop == null || drop.isEmpty()) {
-                    continue;
-                }
-                SmeltingRecipeRegistry.SmeltingRecipe recipe = smeltingRecipeRegistry.getRecipe(drop);
-                ItemStack output = recipe != null ? recipe.createOutput(drop.getQuantity()) : null;
-                smeltedDrops.add(output != null && !output.isEmpty() ? output : drop);
+            if (output != null && !output.isEmpty() && !output.getItemId().equals(drop.getItemId())) {
+                return true;
             }
         }
-
-        if (smeltedDrops.isEmpty()) {
-            return;
-        }
-
-        Vector3i targetBlock = event.getTargetBlock();
-        World world = store.getExternalData().getWorld();
-        Store<ChunkStore> chunkStore = world.getChunkStore().getStore();
-        Ref<ChunkStore> chunkRef = chunkStore.getExternalData().getChunkReference(
-                ChunkUtil.indexChunkFromBlock(targetBlock.x(), targetBlock.z()));
-        if (chunkRef == null || !chunkRef.isValid()) {
-            return;
-        }
-
-        BlockChunk blockChunk = chunkStore.getComponent(chunkRef, BlockChunk.getComponentType());
-        if (blockChunk == null) {
-            return;
-        }
-
-        BlockSection blockSection = blockChunk.getSectionAtBlockY(targetBlock.y());
-        int filler = blockSection.getFiller(targetBlock.x(), targetBlock.y(), targetBlock.z());
-
-        Ref<EntityStore> breakerRef = archetypeChunk.getReferenceTo(index);
-        boolean naturalAction = breakerRef != null && breakerRef.isValid()
-                ? BlockInteractionUtils.isNaturalAction(breakerRef, store)
-                : BlockInteractionUtils.isNaturalAction(null, store);
-
-        int setBlockSettings = 0;
-        setBlockSettings |= 0x100;
-        if (!naturalAction) {
-            setBlockSettings |= 0x800;
-        }
-
-        event.setCancelled(true);
-        BlockHarvestUtils.naturallyRemoveBlock(targetBlock, blockType, filler, 0, null, null, setBlockSettings,
-                chunkRef, store, chunkStore);
-
-        Vector3d dropPosition = new Vector3d(targetBlock.x() + 0.5, targetBlock.y(), targetBlock.z() + 0.5);
-        Holder<EntityStore>[] itemEntities = ItemComponent.generateItemDrops(commandBuffer, smeltedDrops, dropPosition,
-                new Rotation3f());
-        if (itemEntities.length > 0) {
-            commandBuffer.addEntities(itemEntities, AddReason.SPAWN);
-        }
-
-        com.hypixel.hytale.server.core.universe.PlayerRef playerRef = null;
-        if (breakerRef != null && breakerRef.isValid()) {
-            playerRef = store.getComponent(breakerRef,
-                    com.hypixel.hytale.server.core.universe.PlayerRef.getComponentType());
-        }
-        EnchantmentEventHelper.fireActivated(playerRef, tool, EnchantmentType.SMELTING,
-                enchantmentManager.getEnchantmentLevel(tool, EnchantmentType.SMELTING));
+        return false;
     }
 }

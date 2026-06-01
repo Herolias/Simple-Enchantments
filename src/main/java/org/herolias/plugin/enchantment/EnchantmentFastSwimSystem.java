@@ -7,11 +7,9 @@ import com.hypixel.hytale.component.query.Query;
 import com.hypixel.hytale.component.system.tick.EntityTickingSystem;
 import com.hypixel.hytale.logger.HytaleLogger;
 import com.hypixel.hytale.protocol.ItemArmorSlot;
-import com.hypixel.hytale.protocol.MovementSettings;
 import com.hypixel.hytale.server.core.entity.Entity;
 import com.hypixel.hytale.server.core.entity.EntityUtils;
 import com.hypixel.hytale.server.core.entity.entities.Player;
-import com.hypixel.hytale.server.core.entity.entities.player.movement.MovementManager;
 import com.hypixel.hytale.server.core.entity.movement.MovementStatesComponent;
 import com.hypixel.hytale.server.core.inventory.Inventory;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
@@ -20,13 +18,15 @@ import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 
 import javax.annotation.Nonnull;
+import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class EnchantmentFastSwimSystem extends EntityTickingSystem<EntityStore> {
 
     private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
     private final EnchantmentManager enchantmentManager;
-    private final it.unimi.dsi.fastutil.ints.Int2IntOpenHashMap playerLastLevels = new it.unimi.dsi.fastutil.ints.Int2IntOpenHashMap();
-    private final it.unimi.dsi.fastutil.ints.Int2BooleanOpenHashMap playerLastFluidState = new it.unimi.dsi.fastutil.ints.Int2BooleanOpenHashMap();
+    private final ConcurrentHashMap<UUID, Integer> playerLastLevels = new ConcurrentHashMap<>();
+    private final ConcurrentHashMap<UUID, Boolean> playerLastFluidState = new ConcurrentHashMap<>();
 
     // We keep MovementStatesComponent to check if in fluid
     private static final Query<EntityStore> QUERY = Query.and(
@@ -37,8 +37,6 @@ public class EnchantmentFastSwimSystem extends EntityTickingSystem<EntityStore> 
 
     public EnchantmentFastSwimSystem(EnchantmentManager enchantmentManager) {
         this.enchantmentManager = enchantmentManager;
-        this.playerLastLevels.defaultReturnValue(0);
-        this.playerLastFluidState.defaultReturnValue(false);
     }
 
     @Override
@@ -80,39 +78,32 @@ public class EnchantmentFastSwimSystem extends EntityTickingSystem<EntityStore> 
             inFluid = statesComp.getMovementStates().inFluid;
         }
 
-        // 2. Optimization: Check if level changed
-        com.hypixel.hytale.server.core.modules.entity.tracker.NetworkId netIdComp = store.getComponent(
-                archetypeChunk.getReferenceTo(index),
-                com.hypixel.hytale.server.core.modules.entity.tracker.NetworkId.getComponentType());
-        if (netIdComp == null)
+        PlayerRef playerRef = archetypeChunk.getComponent(index, PlayerRef.getComponentType());
+        if (playerRef == null) {
             return;
-        int entityId = netIdComp.getId();
-        int lastLevel = playerLastLevels.get(entityId);
-        boolean lastInFluid = playerLastFluidState.get(entityId);
+        }
+
+        UUID playerId = playerRef.getUuid();
+        int lastLevel = playerLastLevels.getOrDefault(playerId, 0);
+        boolean lastInFluid = playerLastFluidState.getOrDefault(playerId, false);
 
         // 3. Level changed, send update packet
         if (level != lastLevel) {
-            PlayerRef playerRef = archetypeChunk.getComponent(index, PlayerRef.getComponentType());
-            if (playerRef != null) {
-                sendFluidUpdate(playerRef, level);
-            }
+            sendFluidUpdate(playerRef, level);
             // Update cache
-            playerLastLevels.put(entityId, level);
+            playerLastLevels.put(playerId, level);
         }
 
         // 4. Fluid state changed, fire event if they have the enchantment and ENTERED
         // fluid
         if (level > 0 && inFluid && !lastInFluid) {
-            PlayerRef playerRef = archetypeChunk.getComponent(index, PlayerRef.getComponentType());
-            if (playerRef != null) {
-                ItemStack gloves = player.getInventory().getArmor()
-                        .getItemStack((short) com.hypixel.hytale.protocol.ItemArmorSlot.Hands.getValue());
-                EnchantmentEventHelper.fireActivated(playerRef, gloves, EnchantmentType.FAST_SWIM, level);
-            }
+            ItemStack gloves = player.getInventory().getArmor()
+                    .getItemStack((short) com.hypixel.hytale.protocol.ItemArmorSlot.Hands.getValue());
+            EnchantmentEventHelper.fireActivated(playerRef, gloves, EnchantmentType.FAST_SWIM, level);
         }
 
         if (inFluid != lastInFluid) {
-            playerLastFluidState.put(entityId, inFluid);
+            playerLastFluidState.put(playerId, inFluid);
         }
 
     }
@@ -166,10 +157,10 @@ public class EnchantmentFastSwimSystem extends EntityTickingSystem<EntityStore> 
      * Removes tracking data for a player who has disconnected (M-4: prevents memory
      * leak).
      * 
-     * @param networkId the network ID of the disconnected player
+     * @param playerId the UUID of the disconnected player
      */
-    public void cleanupPlayer(int networkId) {
-        playerLastLevels.remove(networkId);
-        playerLastFluidState.remove(networkId);
+    public void cleanupPlayer(@Nonnull UUID playerId) {
+        playerLastLevels.remove(playerId);
+        playerLastFluidState.remove(playerId);
     }
 }

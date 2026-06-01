@@ -11,28 +11,25 @@ import com.hypixel.hytale.logger.HytaleLogger;
 import com.hypixel.hytale.math.util.ChunkUtil;
 import org.joml.Vector3d;
 import org.joml.Vector3i;
-import com.hypixel.hytale.server.core.asset.type.blocksound.config.BlockSoundSet;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockBreakingDropType;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockGathering;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType;
 import com.hypixel.hytale.server.core.asset.type.item.config.Item;
 import com.hypixel.hytale.server.core.entity.LivingEntity;
 import com.hypixel.hytale.server.core.entity.ItemUtils;
+import com.hypixel.hytale.server.core.event.events.ecs.BreakBlockEvent;
 import com.hypixel.hytale.server.core.event.events.ecs.DamageBlockEvent;
 import com.hypixel.hytale.server.core.modules.interaction.BlockHarvestUtils;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
 import com.hypixel.hytale.server.core.modules.blockhealth.BlockHealthChunk;
 import com.hypixel.hytale.server.core.modules.blockhealth.BlockHealthModule;
 import com.hypixel.hytale.server.core.modules.interaction.BlockInteractionUtils;
-import com.hypixel.hytale.server.core.universe.world.SoundUtil;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.chunk.BlockChunk;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.chunk.section.BlockSection;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
-import com.hypixel.hytale.protocol.BlockSoundEvent;
-import com.hypixel.hytale.protocol.SoundCategory;
 
 import javax.annotation.Nonnull;
 import java.util.Collections;
@@ -162,9 +159,18 @@ public class EnchantmentSilktouchSystem extends EntityEventSystem<EntityStore, D
 
         Ref<EntityStore> breakerRef = archetypeChunk.getReferenceTo(index);
 
-        // IMPORTANT: Cancel the DamageBlockEvent so vanilla drops (and block breaking
-        // logic) don't trigger
-        event.setCancelled(true);
+        if (breakerRef != null && breakerRef.isValid()) {
+            BreakBlockEvent protectionEvent = new BreakBlockEvent(tool, targetBlock, blockType);
+            commandBuffer.invoke(breakerRef, protectionEvent);
+            if (protectionEvent.isCancelled()) {
+                event.setCancelled(true);
+                return;
+            }
+
+            if (!protectionEvent.getTargetBlock().equals(targetBlock)) {
+                return;
+            }
+        }
 
         BlockChunk blockChunk = chunkStore.getComponent(chunkRef, BlockChunk.getComponentType());
         if (blockChunk == null)
@@ -180,30 +186,21 @@ public class EnchantmentSilktouchSystem extends EntityEventSystem<EntityStore, D
             setBlockSettings |= 0x800; // Suppress entity drops if unnatural
         }
 
-        // Break the block manually
-        chunk.breakBlock(targetBlock.x(), targetBlock.y(), targetBlock.z(), setBlockSettings);
-        healthChunk.removeBlock(world, targetBlock);
+        BlockSection blockSection = blockChunk.getSectionAtBlockY(targetBlock.y());
+        int filler = blockSection.getFiller(targetBlock.x(), targetBlock.y(), targetBlock.z());
+
+        // IMPORTANT: Cancel the DamageBlockEvent so vanilla drops don't trigger after
+        // protection listeners have had their normal BreakBlockEvent chance to deny.
+        event.setCancelled(true);
 
         com.hypixel.hytale.server.core.universe.PlayerRef playerRef = null;
         if (breakerRef != null && breakerRef.isValid()) {
             playerRef = store.getComponent(breakerRef,
                     com.hypixel.hytale.server.core.universe.PlayerRef.getComponentType());
-
-            // Play the block break sound
-            BlockSoundSet soundSet = BlockSoundSet.getAssetMap().getAsset(blockType.getBlockSoundSetIndex());
-            if (soundSet != null) {
-                int soundEventIndex = soundSet.getSoundEventIndices().getOrDefault(BlockSoundEvent.Break, 0);
-                if (soundEventIndex != 0) {
-                    BlockSection section = blockChunk.getSectionAtBlockY(targetBlock.y());
-                    int rotationIndex = section.getRotationIndex(targetBlock.x(), targetBlock.y(),
-                            targetBlock.z());
-                    Vector3d centerPosition = new Vector3d();
-                    blockType.getBlockCenter(rotationIndex, centerPosition);
-                    centerPosition.add(targetBlock.x(), targetBlock.y(), targetBlock.z());
-                    SoundUtil.playSoundEvent3d(soundEventIndex, SoundCategory.SFX, centerPosition, store);
-                }
-            }
         }
+
+        BlockHarvestUtils.naturallyRemoveBlock(targetBlock, blockType, filler, 0, null, null, setBlockSettings,
+                chunkRef, store, chunkStore);
 
         // Spawn the Silk Touch drops
         Vector3d dropPosition = new Vector3d(targetBlock.x() + 0.5, targetBlock.y(), targetBlock.z() + 0.5);

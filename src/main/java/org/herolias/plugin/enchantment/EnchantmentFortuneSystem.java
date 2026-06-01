@@ -29,10 +29,12 @@ public class EnchantmentFortuneSystem extends EntityEventSystem<EntityStore, Bre
     private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
 
     private final EnchantmentManager enchantmentManager;
+    private final SmeltingRecipeRegistry smeltingRecipeRegistry;
 
     public EnchantmentFortuneSystem(EnchantmentManager enchantmentManager) {
         super(BreakBlockEvent.class);
         this.enchantmentManager = enchantmentManager;
+        this.smeltingRecipeRegistry = enchantmentManager.getSmeltingRecipeRegistry();
         LOGGER.atInfo().log("EnchantmentFortuneSystem initialized");
     }
 
@@ -57,7 +59,8 @@ public class EnchantmentFortuneSystem extends EntityEventSystem<EntityStore, Bre
             return;
         }
 
-        if (!enchantmentManager.hasEnchantment(tool, EnchantmentType.FORTUNE)) {
+        if (!enchantmentManager.hasEnchantment(tool, EnchantmentType.FORTUNE)
+                || enchantmentManager.hasEnchantment(tool, EnchantmentType.PICK_PERFECT)) {
             return;
         }
 
@@ -87,6 +90,10 @@ public class EnchantmentFortuneSystem extends EntityEventSystem<EntityStore, Bre
             return;
         }
 
+        if (enchantmentManager.hasEnchantment(tool, EnchantmentType.SMELTING)) {
+            extraDrops = smeltDrops(extraDrops);
+        }
+
         Vector3i targetBlock = event.getTargetBlock();
         Vector3d dropPosition = new Vector3d(targetBlock.x() + 0.5, targetBlock.y(), targetBlock.z() + 0.5);
 
@@ -96,6 +103,20 @@ public class EnchantmentFortuneSystem extends EntityEventSystem<EntityStore, Bre
                 com.hypixel.hytale.server.core.entity.EntityUtils.getEntity(index, archetypeChunk).getReference(),
                 com.hypixel.hytale.server.core.universe.PlayerRef.getComponentType());
         EnchantmentEventHelper.fireActivated(playerRef, tool, EnchantmentType.FORTUNE, fortuneLevel);
+    }
+
+    private List<ItemStack> smeltDrops(@Nonnull List<ItemStack> drops) {
+        List<ItemStack> smeltedDrops = new ArrayList<>(drops.size());
+        for (ItemStack drop : drops) {
+            if (drop == null || drop.isEmpty()) {
+                continue;
+            }
+
+            SmeltingRecipeRegistry.SmeltingRecipe recipe = smeltingRecipeRegistry.getRecipe(drop);
+            ItemStack output = recipe != null ? recipe.createOutput(drop.getQuantity()) : null;
+            smeltedDrops.add(output != null && !output.isEmpty() ? output : drop);
+        }
+        return smeltedDrops;
     }
 
 }

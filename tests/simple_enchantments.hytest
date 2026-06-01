@@ -1,0 +1,1016 @@
+# Standalone HyTest script for Simple-Enchantments.
+#
+# This file is intentionally not bundled with the HyTest mod jar and is not
+# copied into a server automatically. Copy it into the server's HyTest scripts
+# directory when you want to run it:
+#
+#   mods/org.hytest_HyTest/scripts/simple_enchantments.hytest
+#
+# Run from an in-game player with permission to use /enchant, /give,
+# /enchanting, and /enchantconfig:
+#
+#   /hytest script simple_enchantments
+#
+# HyTest cleanup is config-driven. Keep cleanupAfterRun enabled so the runner
+# restores touched blocks, player inventory slots, spawned NPCs, and new item
+# drops in touched test regions after the whole suite finishes.
+
+suite "Simple Enchantments Integration"
+
+test "setup player, event watchers, and isolated test volume" {
+  assert plugin_loaded SimpleEnchantments
+  player self self
+  clear_inventory self all
+  area sky simple_enchantments_lab at 20 210 20 size 40 10 40 floor Rock_Stone
+  teleport self 24 212 24
+  wait 20
+  event_watch activated org.herolias.plugin.api.event.EnchantmentActivatedEvent
+  event_watch enchanted org.herolias.plugin.api.event.ItemEnchantedEvent
+}
+
+test "table blocks and UI commands are registered" {
+  player self self
+  clear_inventory self all
+
+  set_block 25 211 25 Enchanting_Table
+  set_block 26 211 25 Engraving_Table
+  assert block 25 211 25 == Enchanting_Table
+  assert block 26 211 25 == Engraving_Table
+
+  use_block self 26 211 25 Use allow_cancelled
+  wait 5
+  assert last_event_cancelled == true "engraving table interaction should cancel vanilla block use after opening its page"
+  close_ui self
+  wait 2
+  assert ui_closed self
+
+  use_block self 25 211 25 Use
+  wait 5
+  assert last_event_cancelled == false "enchanting table block should be usable without a custom cancellation handler"
+  close_ui self
+  wait 2
+  assert ui_closed self
+
+  command self "/enchanting"
+  wait 5
+  close_ui self
+  wait 2
+  assert ui_closed self
+
+  command self "/enchantconfig"
+  wait 5
+  close_ui self
+  wait 2
+  assert ui_closed self
+}
+
+test "command applies enchantments and emits ItemEnchantedEvent" {
+  player self self
+  clear_inventory self all
+  equip self hotbar 0 Weapon_Sword_Iron 1
+  active self hotbar 0
+
+  event_clear enchanted
+  command self "/enchant sharpness 2"
+  wait 5
+  assert held_item self == Weapon_Sword_Iron
+  assert held_enchant self sharpness == 2
+  assert event_count enchanted == 1
+  assert event_last enchanted item.itemId == Weapon_Sword_Iron
+  assert event_last enchanted enchantment.id == sharpness
+  assert event_last enchanted level == 2
+
+  event_clear enchanted
+  command self "/enchant sharpness 3"
+  wait 5
+  assert held_enchant self sharpness == 3
+  assert event_count enchanted == 1
+  assert event_last enchanted item.itemId == Weapon_Sword_Iron
+  assert event_last enchanted enchantment.id == sharpness
+  assert event_last enchanted level == 3
+
+  event_clear enchanted
+  command self "/enchant sharpness 2"
+  wait 5
+  assert held_enchant self sharpness == 3
+  assert event_count enchanted == 0
+
+  event_clear enchanted
+  command self "/enchant burn 5"
+  wait 5
+  assert held_enchant self burn == 1
+  assert event_count enchanted == 1
+  assert event_last enchanted item.itemId == Weapon_Sword_Iron
+  assert event_last enchanted enchantment.id == burn
+  assert event_last enchanted level == 1
+}
+
+test "give command writes enchantment metadata with --enchants" {
+  player self self
+  clear_inventory self all
+
+  command self "/give Tool_Pickaxe_Iron --enchants efficiency:3;fortune:3;durability:3;smelting:1"
+  wait 10
+  active self hotbar 0
+  assert held_item self == Tool_Pickaxe_Iron
+  assert held_enchant self efficiency == 3
+  assert held_enchant self fortune == 3
+  assert held_enchant self durability == 3
+  assert held_enchant self smelting == 1
+}
+
+test "custom scroll accepts cross category and unsafe command levels" {
+  player self self
+  clear_inventory self all
+  equip self hotbar 0 Scroll_Custom 1
+  active self hotbar 0
+
+  event_clear enchanted
+  command self "/enchant sharpness 10"
+  wait 5
+  assert held_enchant self sharpness == 10
+  assert event_count enchanted == 1
+  assert event_last enchanted item.itemId == Scroll_Custom
+  assert event_last enchanted enchantment.id == sharpness
+  assert event_last enchanted level == 10
+
+  event_clear enchanted
+  command self "/enchant efficiency 4"
+  wait 5
+  assert held_enchant self efficiency == 4
+  assert event_count enchanted == 1
+  assert event_last enchanted item.itemId == Scroll_Custom
+  assert event_last enchanted enchantment.id == efficiency
+  assert event_last enchanted level == 4
+
+  event_clear enchanted
+  command self "/enchant sharpness 5"
+  wait 5
+  assert held_enchant self sharpness == 10
+  assert event_count enchanted == 0
+}
+
+test "command rejects conflicts, wrong items, disabled enchants, and max count without events" {
+  player self self
+  clear_inventory self all
+
+  equip self hotbar 0 Weapon_Sword_Iron 1
+  active self hotbar 0
+  command self "/enchant burn 1"
+  wait 5
+  assert held_enchant self burn == 1
+  event_clear enchanted
+  command self "/enchant freeze 1"
+  wait 5
+  assert held_enchant self freeze == 0
+  assert event_count enchanted == 0
+  command self "/enchant poison 1"
+  wait 5
+  assert held_enchant self poison == 0
+  assert event_count enchanted == 0
+
+  clear_slot self hotbar 0
+  equip self hotbar 0 Tool_Pickaxe_Iron 1
+  active self hotbar 0
+  command self "/enchant fortune 1"
+  wait 5
+  assert held_enchant self fortune == 1
+  event_clear enchanted
+  command self "/enchant pick_perfect 1"
+  wait 5
+  assert held_enchant self pick_perfect == 0
+  assert event_count enchanted == 0
+  command self "/enchant smelting 1"
+  wait 5
+  assert held_enchant self smelting == 1
+
+  clear_slot self hotbar 0
+  equip self hotbar 0 Armor_Iron_Head 1
+  active self hotbar 0
+  event_clear enchanted
+  command self "/enchant sharpness 1"
+  wait 5
+  assert held_enchant self sharpness == 0
+  assert event_count enchanted == 0
+  command self "/enchant night_vision 1"
+  wait 5
+  assert held_enchant self night_vision == 0
+  assert event_count enchanted == 0
+
+  clear_slot self hotbar 0
+  equip self hotbar 0 Weapon_Staff_Crystal_Flame 1
+  active self hotbar 0
+  event_clear enchanted
+  command self "/enchant thrift 1"
+  wait 5
+  assert held_enchant self thrift == 0
+  assert event_count enchanted == 0
+
+  clear_slot self hotbar 0
+  equip self hotbar 0 Weapon_Shield_Iron 1
+  active self hotbar 0
+  command self "/enchant reflection 1"
+  wait 5
+  assert held_enchant self reflection == 1
+  event_clear enchanted
+  command self "/enchant absorption 1"
+  wait 5
+  assert held_enchant self absorption == 0
+  assert event_count enchanted == 0
+
+  clear_slot self hotbar 0
+  equip self hotbar 0 Armor_Iron_Chest 1
+  active self hotbar 0
+  command self "/enchant regeneration 1"
+  wait 5
+  assert held_enchant self regeneration == 1
+  event_clear enchanted
+  command self "/enchant second_stomach 1"
+  wait 5
+  assert held_enchant self second_stomach == 0
+  assert event_count enchanted == 0
+
+  clear_slot self hotbar 0
+  event_clear enchanted
+  command self "/enchant sharpness 1"
+  wait 5
+  assert held_empty self
+  assert event_count enchanted == 0
+
+  clear_slot self hotbar 0
+  equip self hotbar 0 Weapon_Sword_Iron 1
+  active self hotbar 0
+  command self "/enchant sharpness 1"
+  wait 2
+  command self "/enchant life_leech 1"
+  wait 2
+  command self "/enchant durability 1"
+  wait 2
+  command self "/enchant dexterity 1"
+  wait 2
+  command self "/enchant looting 1"
+  wait 2
+  event_clear enchanted
+  command self "/enchant knockback 1"
+  wait 5
+  assert held_enchant self knockback == 0
+  assert event_count enchanted == 0
+}
+
+test "all built in enchantments can be represented in item metadata" {
+  player self self
+  clear_inventory self all
+
+  equip self hotbar 0 Weapon_Sword_Iron 1 enchants "sharpness:3,life_leech:1,durability:3,sturdy:1,dexterity:3,looting:3,knockback:3,frenzy:3,riposte:3,coup_de_grace:3,burn:1"
+  assert item_enchant self hotbar 0 sharpness == 3
+  assert item_enchant self hotbar 0 life_leech == 1
+  assert item_enchant self hotbar 0 durability == 3
+  assert item_enchant self hotbar 0 sturdy == 1
+  assert item_enchant self hotbar 0 dexterity == 3
+  assert item_enchant self hotbar 0 looting == 3
+  assert item_enchant self hotbar 0 knockback == 3
+  assert item_enchant self hotbar 0 frenzy == 3
+  assert item_enchant self hotbar 0 riposte == 3
+  assert item_enchant self hotbar 0 coup_de_grace == 3
+  assert item_enchant self hotbar 0 burn == 1
+
+  equip self hotbar 1 Weapon_Sword_Iron 1 enchants "freeze:1,poison:1"
+  assert item_enchant self hotbar 1 freeze == 1
+  assert item_enchant self hotbar 1 poison == 1
+
+  equip self hotbar 2 Tool_Pickaxe_Iron 1 enchants "efficiency:3,fortune:3,smelting:1,durability:3"
+  assert item_enchant self hotbar 2 efficiency == 3
+  assert item_enchant self hotbar 2 fortune == 3
+  assert item_enchant self hotbar 2 smelting == 1
+  assert item_enchant self hotbar 2 durability == 3
+
+  equip self hotbar 3 Tool_Pickaxe_Iron 1 enchants "pick_perfect:1,sturdy:1"
+  assert item_enchant self hotbar 3 pick_perfect == 1
+  assert item_enchant self hotbar 3 sturdy == 1
+
+  equip self hotbar 4 Weapon_Shortbow_Iron 1 enchants "strength:3,eagles_eye:3,eternal_shot:1,burn:1"
+  assert item_enchant self hotbar 4 strength == 3
+  assert item_enchant self hotbar 4 eagles_eye == 3
+  assert item_enchant self hotbar 4 eternal_shot == 1
+  assert item_enchant self hotbar 4 burn == 1
+
+  equip self hotbar 5 Weapon_Staff_Crystal_Flame 1 enchants "thrift:3,elemental_heart:1,frenzy:3"
+  assert item_enchant self hotbar 5 thrift == 3
+  assert item_enchant self hotbar 5 elemental_heart == 1
+  assert item_enchant self hotbar 5 frenzy == 3
+
+  equip self hotbar 6 Weapon_Shield_Iron 1 enchants "reflection:3,knockback:3,dexterity:3"
+  equip self hotbar 7 Weapon_Shield_Iron 1 enchants "absorption:3"
+  assert item_enchant self hotbar 6 reflection == 3
+  assert item_enchant self hotbar 6 knockback == 3
+  assert item_enchant self hotbar 6 dexterity == 3
+  assert item_enchant self hotbar 7 absorption == 3
+
+  equip self armor 0 Armor_Iron_Head 1 enchants "waterbreathing:3,night_vision:1,environmental_protection:3"
+  equip self armor 1 Armor_Iron_Chest 1 enchants "protection:3,ranged_protection:3,regeneration:1"
+  equip self armor 2 Armor_Iron_Hands 1 enchants "fast_swim:3"
+  equip self armor 3 Armor_Iron_Legs 1 enchants "feather_falling:3"
+  equip self storage 0 Armor_Iron_Chest 1 enchants "second_stomach:3"
+  assert item_enchant self armor 0 waterbreathing == 3
+  assert item_enchant self armor 0 night_vision == 1
+  assert item_enchant self armor 0 environmental_protection == 3
+  assert item_enchant self armor 1 protection == 3
+  assert item_enchant self armor 1 ranged_protection == 3
+  assert item_enchant self armor 1 regeneration == 1
+  assert item_enchant self armor 2 fast_swim == 3
+  assert item_enchant self armor 3 feather_falling == 3
+  assert item_enchant self storage 0 second_stomach == 3
+}
+
+test "efficiency compares block damage against an unenchanted pickaxe" {
+  player self self
+  clear_inventory self all
+  set_block 42 211 42 Rock_Stone
+
+  equip self hotbar 0 Tool_Pickaxe_Iron 1
+  active self hotbar 0
+  event_clear activated
+  mine self 42 211 42 1
+  remember efficiency_baseline last_block_damage
+  assert event_count activated == 0
+
+  equip self hotbar 0 Tool_Pickaxe_Iron 1 enchants "efficiency:3"
+  active self hotbar 0
+  event_clear activated
+  mine self 42 211 42 1
+  assert last_block_damage > $efficiency_baseline
+  assert event_count activated >= 1
+  assert event_seen activated enchantment.id == efficiency
+  assert event_seen activated level == 3
+}
+
+test "fortune samples break events against an unenchanted pickaxe baseline" {
+  player self self
+  clear_inventory self all
+  set_block 43 211 42 Ore_Copper_Stone
+  clear_drops at 36 207 36 size 16 10 16
+  wait 2
+
+  equip self hotbar 0 Tool_Pickaxe_Iron 1
+  active self hotbar 0
+  event_clear activated
+  repeat 250 "break_event self 43 211 42"
+  wait 10
+  remember fortune_baseline_events event_count activated
+  remember fortune_baseline_drops drop_quantity Ore_Copper at 36 207 36 size 16 10 16
+  assert event_count activated == 0
+  assert drop_quantity Ore_Copper at 36 207 36 size 16 10 16 == 0
+
+  clear_drops at 36 207 36 size 16 10 16
+  wait 2
+  equip self hotbar 0 Tool_Pickaxe_Iron 1 enchants "fortune:3"
+  active self hotbar 0
+  event_clear activated
+  repeat 250 "break_event self 43 211 42"
+  wait 10
+  assert event_count activated > $fortune_baseline_events
+  assert event_count activated > 15
+  assert drop_quantity Ore_Copper at 36 207 36 size 16 10 16 > $fortune_baseline_drops
+  assert drop_quantity Ore_Copper at 36 207 36 size 16 10 16 > 15
+  assert event_seen activated enchantment.id == fortune
+  assert event_seen activated level == 3
+}
+
+test "ore only mining enchantments ignore ordinary blocks" {
+  player self self
+  clear_inventory self all
+  set_block 44 211 42 Rock_Stone
+
+  equip self hotbar 0 Tool_Pickaxe_Iron 1 enchants "fortune:3"
+  active self hotbar 0
+  event_clear activated
+  repeat 40 "break_event self 44 211 42"
+  assert event_count activated == 0 "fortune should not activate on ordinary stone"
+
+  equip self hotbar 0 Tool_Pickaxe_Iron 1 enchants "smelting:1"
+  active self hotbar 0
+  event_clear activated
+  break_event self 44 211 42
+  wait 5
+  assert event_count activated == 0 "smelting should not activate when drops cannot be smelted"
+}
+
+test "smelting and pick perfect intentionally cancel vanilla block events" {
+  player self self
+  clear_inventory self all
+
+  set_block 45 211 42 Ore_Copper_Stone
+  clear_drops at 40 207 38 size 12 10 12
+  wait 2
+  equip self hotbar 0 Tool_Pickaxe_Iron 1 enchants "smelting:1"
+  active self hotbar 0
+  event_clear activated
+  break_event self 45 211 42 allow_cancelled
+  wait 10
+  assert last_event_cancelled == true "smelting should cancel BreakBlockEvent to replace vanilla drops"
+  assert event_count activated >= 1
+  assert drop_quantity Ingredient_Bar_Copper at 40 207 38 size 12 10 12 >= 1
+  assert drop_quantity Ore_Copper at 40 207 38 size 12 10 12 == 0 "smelting should replace raw ore drops with smelted output"
+  assert event_seen activated enchantment.id == smelting
+  assert event_seen activated level == 1
+
+  set_block 46 211 42 Rock_Stone
+  clear_drops at 40 207 38 size 12 10 12
+  wait 2
+  equip self hotbar 0 Tool_Pickaxe_Iron 1 enchants "pick_perfect:1"
+  active self hotbar 0
+  event_clear activated
+  mine self 46 211 42 1 allow_cancelled
+  wait 10
+  assert last_event_cancelled == true "pick_perfect should cancel DamageBlockEvent to drop the block itself"
+  assert event_count activated >= 1
+  assert drop_quantity Rock_Stone at 40 207 38 size 12 10 12 >= 1
+  assert drop_quantity Rock_Stone_Cobble at 40 207 38 size 12 10 12 == 0 "pick_perfect should suppress ordinary stone cobble drops"
+  assert event_seen activated enchantment.id == pick_perfect
+  assert event_seen activated level == 1
+}
+
+test "melee damage enchantments compare against an unenchanted sword baseline" {
+  player self self
+  clear_inventory self all
+
+  npc melee_base at 28 212 28
+  equip self hotbar 0 Weapon_Sword_Iron 1
+  active self hotbar 0
+  event_clear activated
+  attack self melee_base 4 Physical
+  wait 5
+  remember sword_baseline_damage last_damage
+  assert event_count activated == 0
+
+  npc sharpness_target at 30 212 28
+  equip self hotbar 0 Weapon_Sword_Iron 1 enchants "sharpness:3"
+  active self hotbar 0
+  event_clear activated
+  attack self sharpness_target 4 Physical
+  wait 5
+  assert last_damage > $sword_baseline_damage
+  assert event_count activated >= 1
+  assert event_seen activated enchantment.id == sharpness
+  assert event_seen activated level == 3
+
+  npc life_leech_target at 31 212 28
+  set_stat self health 10
+  equip self hotbar 0 Weapon_Sword_Iron 1 enchants "life_leech:1"
+  active self hotbar 0
+  event_clear activated
+  attack self life_leech_target 20 Physical
+  wait 5
+  assert stat self health > 10
+  assert event_count activated >= 1
+  assert event_seen activated enchantment.id == life_leech
+  assert event_seen activated level == 1
+
+  npc frenzy_target at 32 212 28
+  equip self hotbar 0 Weapon_Sword_Iron 1 enchants "frenzy:3"
+  active self hotbar 0
+  assert plugin_number SimpleEnchantments getEnchantmentManager.calculateFrenzySpeedMultiplier 3 > 0 "frenzy should calculate a positive charge-speed multiplier at level 3"
+  assert item_enchant self hotbar 0 frenzy == 3
+
+  npc knockback_target at 34 212 28
+  equip self hotbar 0 Weapon_Sword_Iron 1 enchants "knockback:3"
+  active self hotbar 0
+  event_clear activated
+  attack self knockback_target 4 Physical
+  wait 5
+  assert last_knockback_magnitude > 0 "knockback should write a knockback velocity onto the damage event"
+  assert event_count activated >= 1
+  assert event_seen activated enchantment.id == knockback
+  assert event_seen activated level == 3
+}
+
+test "status weapon enchantments sample activation events against baseline sword damage" {
+  player self self
+  clear_inventory self all
+
+  equip self hotbar 0 Weapon_Sword_Iron 1
+  active self hotbar 0
+  event_clear activated
+  attack_npc_samples self Rat 20 at 28 212 32 damage 1 Physical
+  wait 10
+  remember status_baseline_damage last_damage
+  assert event_count activated == 0 "unenchanted sword should not emit status EnchantmentActivatedEvent"
+
+  equip self hotbar 0 Weapon_Sword_Iron 1 enchants "burn:1"
+  active self hotbar 0
+  event_clear activated
+  attack_npc_samples self Rat 80 at 30 212 32 damage 1 Physical
+  wait 15
+  assert last_damage == $status_baseline_damage "burn should not change immediate melee damage"
+  assert event_count activated >= 1 "burn should emit EnchantmentActivatedEvent over sampled NPC hits"
+  assert event_seen activated enchantment.id == burn "burn activation event should name burn"
+
+  npc_role burn_status_target Rat at 30 212 33
+  event_clear activated
+  attack self burn_status_target 1 Physical
+  wait 10
+  assert effect burn_status_target BurnEnchantment == true "burn should apply its status effect to the target"
+  assert event_seen activated enchantment.id == burn
+
+  equip self hotbar 0 Weapon_Sword_Iron 1 enchants "freeze:1"
+  active self hotbar 0
+  event_clear activated
+  attack_npc_samples self Rat 80 at 32 212 32 damage 1 Physical
+  wait 15
+  assert last_damage == $status_baseline_damage "freeze should not change immediate melee damage"
+  assert event_count activated >= 1 "freeze should emit EnchantmentActivatedEvent over sampled NPC hits"
+  assert event_seen activated enchantment.id == freeze "freeze activation event should name freeze"
+
+  npc_role freeze_status_target Rat at 32 212 33
+  event_clear activated
+  attack self freeze_status_target 1 Physical
+  wait 10
+  assert effect freeze_status_target FreezeEnchantment == true "freeze should apply its status effect to the target"
+  assert event_seen activated enchantment.id == freeze
+
+  equip self hotbar 0 Weapon_Sword_Iron 1 enchants "poison:1"
+  active self hotbar 0
+  event_clear activated
+  attack_npc_samples self Rat 80 at 34 212 32 damage 1 Physical
+  wait 15
+  assert last_damage == $status_baseline_damage "poison should not change immediate melee damage"
+  assert event_count activated >= 1 "poison should emit EnchantmentActivatedEvent over sampled NPC hits"
+  assert event_seen activated enchantment.id == poison "poison activation event should name poison"
+
+  npc_role poison_status_target Rat at 34 212 33
+  event_clear activated
+  attack self poison_status_target 1 Physical
+  wait 10
+  assert effect poison_status_target PoisonEnchantment == true "poison should apply its status effect to the target"
+  assert event_seen activated enchantment.id == poison
+
+  npc_role ranged_burn_target Rat at 36 212 32
+  equip self hotbar 0 Weapon_Shortbow_Iron 1 enchants "burn:1"
+  active self hotbar 0
+  spawn_projectile burn_arrow source self at 24 214 24 type Arrow_FullCharge
+  event_clear activated
+  damage ranged_burn_target 1 Projectile source self projectile burn_arrow
+  wait 10
+  assert effect ranged_burn_target BurnEnchantment == true "burn should also apply from captured projectile enchantment data"
+  assert event_count activated >= 1 "burn should also activate from ranged projectile damage"
+  assert event_seen activated enchantment.id == burn "ranged burn activation event should name burn"
+
+  npc_role ranged_freeze_target Rat at 38 212 32
+  equip self hotbar 0 Weapon_Shortbow_Iron 1 enchants "freeze:1"
+  active self hotbar 0
+  spawn_projectile freeze_arrow source self at 24 214 25 type Arrow_FullCharge
+  event_clear activated
+  damage ranged_freeze_target 1 Projectile source self projectile freeze_arrow
+  wait 10
+  assert effect ranged_freeze_target FreezeEnchantment == true "freeze should apply from captured projectile enchantment data"
+  assert event_seen activated enchantment.id == freeze
+
+  npc_role ranged_poison_target Rat at 40 212 32
+  equip self hotbar 0 Weapon_Shortbow_Iron 1 enchants "poison:1"
+  active self hotbar 0
+  spawn_projectile poison_arrow source self at 24 214 26 type Arrow_FullCharge
+  event_clear activated
+  damage ranged_poison_target 1 Projectile source self projectile poison_arrow
+  wait 10
+  assert effect ranged_poison_target PoisonEnchantment == true "poison should apply from captured projectile enchantment data"
+  assert event_seen activated enchantment.id == poison
+}
+
+test "burn cooks NPC drops on death" {
+  player self self
+  clear_inventory self all
+  clear_drops at 32 206 32 size 32 16 32
+  wait 2
+
+  equip self hotbar 0 Weapon_Sword_Iron 1 enchants "burn:1"
+  active self hotbar 0
+  event_clear activated
+  kill_npc_samples self Rat 120 at 44 212 48 damage 100000 Physical
+  wait 20
+  assert drop_quantity Food_Wildmeat_Cooked at 32 206 32 size 32 16 32 > 0 "burn should cook raw meat drops"
+  assert drop_quantity Food_Wildmeat_Raw at 32 206 32 size 32 16 32 == 0 "burn cooking should suppress raw meat drops"
+  assert event_seen activated enchantment.id == burn
+}
+
+test "ranged enchantments compare projectile damage against an unenchanted bow" {
+  player self self
+  clear_inventory self all
+
+  npc bow_base at 28 212 36
+  equip self hotbar 0 Weapon_Shortbow_Iron 1
+  active self hotbar 0
+  event_clear activated
+  damage bow_base 4 Projectile source self
+  wait 5
+  remember bow_baseline_damage last_damage
+  assert event_count activated == 0
+
+  npc strength_target at 30 212 36
+  equip self hotbar 0 Weapon_Shortbow_Iron 1 enchants "strength:3"
+  active self hotbar 0
+  event_clear activated
+  damage strength_target 4 Projectile source self
+  wait 5
+  assert last_damage > $bow_baseline_damage
+  assert event_count activated >= 1
+  assert event_seen activated enchantment.id == strength
+  assert event_seen activated level == 3
+
+  npc eagles_eye_near at 25 212 24
+  equip self hotbar 0 Weapon_Shortbow_Iron 1 enchants "eagles_eye:3"
+  active self hotbar 0
+  event_clear activated
+  damage eagles_eye_near 4 Projectile source self
+  wait 5
+  remember eagles_near_damage last_damage
+  assert last_damage >= $bow_baseline_damage
+
+  npc eagles_eye_far at 56 212 56
+  event_clear activated
+  damage eagles_eye_far 4 Projectile source self
+  wait 5
+  assert last_damage > $eagles_near_damage "eagles_eye should scale projectile damage by shooter-target distance"
+  assert event_count activated >= 1
+  assert event_seen activated enchantment.id == eagles_eye
+  assert event_seen activated level == 3
+}
+
+test "projectile enchantment state and eternal shot use spawned projectile context" {
+  player self self
+  clear_inventory self all
+
+  npc projectile_base at 30 212 44
+  equip self hotbar 0 Weapon_Shortbow_Iron 1
+  active self hotbar 0
+  damage projectile_base 4 Projectile source self
+  wait 5
+  remember projectile_base_damage last_damage
+
+  equip self hotbar 0 Weapon_Shortbow_Iron 1 enchants "strength:3,eternal_shot:1"
+  equip self hotbar 1 Weapon_Arrow_Crude 5
+  active self hotbar 0
+  remove_quantity self hotbar 1 1 as_stack
+  wait 5
+  assert item_quantity self hotbar 1 == 4 "test setup should simulate one consumed arrow before projectile spawn"
+
+  event_clear activated
+  spawn_projectile eternal_strength_arrow source self at 24 214 24 type Arrow_FullCharge
+  wait 10
+  assert item_quantity self hotbar 1 == 5 "eternal_shot should refund the tracked consumed arrow when a projectile spawns"
+  assert event_count activated >= 1
+  assert event_seen activated enchantment.id == eternal_shot
+  assert event_seen activated level == 1
+
+  npc projectile_strength_target at 34 212 44
+  equip self hotbar 0 Weapon_Shortbow_Iron 1
+  active self hotbar 0
+  event_clear activated
+  damage projectile_strength_target 4 Projectile source self projectile eternal_strength_arrow
+  wait 5
+  assert last_damage > $projectile_base_damage "strength should be read from projectile enchantment data, not only current weapon fallback"
+  assert event_seen activated enchantment.id == strength
+}
+
+test "blocked damage enchantments activate from shield blocking context" {
+  player self self
+  clear_inventory self all
+  npc shield_source at 28 212 48
+
+  equip self hotbar 0 Weapon_Shield_Iron 1
+  active self hotbar 0
+  event_clear activated
+  damage self 10 Physical source shield_source blocked
+  wait 5
+  remember shield_baseline_stamina_multiplier last_stamina_multiplier
+  assert last_stamina_multiplier == 1 "unenchanted shield should not reduce blocked stamina drain"
+  assert event_count activated == 0
+  set_stat self health max
+
+  set_stat shield_source health 20
+  set_stat self health max
+  equip self hotbar 0 Weapon_Shield_Iron 1 enchants "dexterity:3,reflection:3"
+  active self hotbar 0
+  event_clear activated
+  damage self 10 Physical source shield_source blocked
+  wait 10
+  assert last_stamina_multiplier < $shield_baseline_stamina_multiplier "dexterity should reduce blocked stamina drain"
+  assert stat shield_source health < 20 "reflection should damage the blocked attacker"
+  assert event_count activated >= 2
+  assert event_seen activated enchantment.id == dexterity
+  assert event_seen activated enchantment.id == reflection
+  assert event_seen activated level == 3
+
+  set_stat self health 10
+  equip self hotbar 0 Weapon_Shield_Iron 1 enchants "absorption:3"
+  active self hotbar 0
+  event_clear activated
+  damage self 10 Physical source shield_source blocked
+  wait 10
+  assert stat self health > 10 "absorption should heal from blocked damage"
+  assert event_count activated >= 1
+  assert event_seen activated enchantment.id == absorption
+  assert event_seen activated level == 3
+}
+
+test "dexterity refunds predictable ability stamina spend" {
+  player self self
+  clear_inventory self all
+
+  set_stat self stamina 50
+  equip self hotbar 0 Weapon_Sword_Iron 1
+  active self hotbar 0
+  event_clear activated
+  add_stat self stamina -10 predictable
+  wait 10
+  remember stamina_without_dexterity stat self stamina
+  assert event_count activated == 0
+
+  set_stat self stamina 50
+  equip self hotbar 0 Weapon_Sword_Iron 1 enchants "dexterity:3"
+  active self hotbar 0
+  event_clear activated
+  add_stat self stamina -10 predictable
+  wait 20
+  assert stat self stamina > $stamina_without_dexterity "dexterity should refund part of predictable stamina costs"
+  assert event_count activated >= 1
+  assert event_seen activated enchantment.id == dexterity
+  assert event_seen activated level == 3
+}
+
+test "armor mitigation enchantments compare armor against the same unenchanted armor item" {
+  player self self
+  clear_inventory self all
+  npc armor_source at 28 212 40
+  npc armor_target at 30 212 40
+
+  set_stat armor_target health max
+  equip armor_target armor 1 Armor_Iron_Chest 1
+  assert plugin_number SimpleEnchantments getEnchantmentManager.calculateArmorProtectionMultiplier container:armor_target:armor static:org.herolias.plugin.enchantment.EnchantmentType:PROTECTION == 1 "unenchanted armor should not reduce protection damage"
+  set_stat armor_target health max
+
+  equip armor_target armor 1 Armor_Iron_Chest 1 enchants "protection:3"
+  assert plugin_number SimpleEnchantments getEnchantmentManager.calculateArmorProtectionMultiplier container:armor_target:armor static:org.herolias.plugin.enchantment.EnchantmentType:PROTECTION < 1 "protection should reduce physical damage on chest armor"
+  set_stat armor_target health max
+
+  equip armor_target armor 1 Armor_Iron_Chest 1
+  assert plugin_number SimpleEnchantments getEnchantmentManager.calculateArmorProtectionMultiplier container:armor_target:armor static:org.herolias.plugin.enchantment.EnchantmentType:RANGED_PROTECTION == 1 "unenchanted armor should not reduce ranged damage"
+  set_stat armor_target health max
+
+  equip armor_target armor 1 Armor_Iron_Chest 1 enchants "ranged_protection:3"
+  assert plugin_number SimpleEnchantments getEnchantmentManager.calculateArmorProtectionMultiplier container:armor_target:armor static:org.herolias.plugin.enchantment.EnchantmentType:RANGED_PROTECTION < 1 "ranged_protection should reduce projectile damage on chest armor"
+  set_stat armor_target health max
+
+  equip armor_target armor 1 Armor_Iron_Chest 1
+  assert plugin_number SimpleEnchantments getEnchantmentManager.calculateArmorProtectionMultiplier container:armor_target:armor static:org.herolias.plugin.enchantment.EnchantmentType:ENVIRONMENTAL_PROTECTION == 1 "unenchanted armor should not reduce environmental damage"
+  set_stat armor_target health max
+
+  equip armor_target armor 1 Armor_Iron_Chest 1 enchants "environmental_protection:3"
+  assert plugin_number SimpleEnchantments getEnchantmentManager.calculateArmorProtectionMultiplier container:armor_target:armor static:org.herolias.plugin.enchantment.EnchantmentType:ENVIRONMENTAL_PROTECTION < 1 "environmental_protection should reduce environment damage on chest armor"
+  set_stat armor_target health max
+
+  set_stat self health max
+  equip self armor 3 Armor_Iron_Legs 1
+  event_clear activated
+  damage self 4 Fall source armor_source
+  wait 5
+  remember feather_baseline_damage last_damage
+  assert event_count activated == 0 "unenchanted leg armor should not emit feather_falling activation"
+  set_stat self health max
+
+  equip self armor 3 Armor_Iron_Legs 1 enchants "feather_falling:3"
+  event_clear activated
+  damage self 4 Fall source armor_source
+  wait 5
+  assert last_damage < $feather_baseline_damage "feather_falling should reduce fall damage on player leg armor"
+  assert event_count activated >= 1 "feather_falling should emit EnchantmentActivatedEvent on player leg armor"
+  assert event_seen activated enchantment.id == feather_falling "feather falling activation event should name feather_falling"
+  set_stat self health max
+}
+
+test "disabled metadata does not activate disabled enchantments" {
+  player self self
+  clear_inventory self all
+
+  equip self armor 0 Armor_Iron_Head 1 enchants "night_vision:1"
+  event_clear activated
+  wait 30
+  assert item_enchant self armor 0 night_vision == 1
+  assert event_count activated == 0 "night_vision is disabled by default and should not activate from metadata"
+
+  clear_inventory self all
+  set_stat self mana 50
+  equip self hotbar 0 Weapon_Staff_Crystal_Flame 1 enchants "thrift:3"
+  active self hotbar 0
+  event_clear activated
+  add_stat self mana -10 predictable
+  wait 10
+  assert item_enchant self hotbar 0 thrift == 3
+  assert event_count activated == 0
+
+  clear_inventory self all
+  npc collab_target at 28 212 52
+  equip self hotbar 0 Weapon_Sword_Iron 1 enchants "riposte:3,coup_de_grace:3"
+  active self hotbar 0
+  event_clear activated
+  attack self collab_target 4 Physical
+  wait 10
+  assert item_enchant self hotbar 0 riposte == 3
+  assert item_enchant self hotbar 0 coup_de_grace == 3
+  assert event_count activated == 0 "collab enchantments are inactive without the Perfect Parries integration"
+}
+
+test "disabled-by-default enchantments work when temporarily enabled" {
+  player self self
+  clear_inventory self all
+
+  plugin_map_put SimpleEnchantments getConfigManager.getConfig.disabledEnchantments night_vision false
+  plugin_map_put SimpleEnchantments getConfigManager.getConfig.disabledEnchantments thrift false
+  plugin_call SimpleEnchantments getEnchantmentManager.invalidateEnabledCache
+
+  remember night_vision_entity_packets_before packet_sent self EntityUpdates
+  equip self armor 0 Armor_Iron_Head 1 enchants "night_vision:1"
+  event_clear activated
+  wait 40
+  assert packet_sent self EntityUpdates > $night_vision_entity_packets_before "night_vision should queue a dynamic light entity update when enabled"
+  assert event_count activated >= 1 "night_vision should activate when enabled in config"
+  assert event_seen activated enchantment.id == night_vision
+  assert event_seen activated level == 1
+
+  clear_inventory self all
+  stat_modifier self mana HyTestManaMax max additive 100
+  set_stat self mana 50
+  equip self hotbar 0 Weapon_Staff_Wood 1 enchants "thrift:3"
+  active self hotbar 0
+  event_clear activated
+  add_stat self mana -10 predictable
+  wait 30
+  assert stat self mana > 40 "thrift should refund part of predictable mana spend when enabled"
+  assert event_count activated >= 1
+  assert event_seen activated enchantment.id == thrift
+  assert event_seen activated level == 3
+
+  plugin_map_put SimpleEnchantments getConfigManager.getConfig.disabledEnchantments night_vision true
+  plugin_map_put SimpleEnchantments getConfigManager.getConfig.disabledEnchantments thrift true
+  plugin_call SimpleEnchantments getEnchantmentManager.invalidateEnabledCache
+}
+
+test "swift swim fast_swim activates when entering fluid" {
+  player self self
+  clear_inventory self all
+
+  set_movement_state self in_fluid false
+  remember fast_swim_fluid_packets_before packet_sent self UpdateFluidFX
+  equip self armor 2 Armor_Iron_Hands 1 enchants "fast_swim:3"
+  event_clear activated
+  wait 20
+  assert packet_sent self UpdateFluidFX > $fast_swim_fluid_packets_before "fast_swim should send updated fluid movement settings when equipped"
+  assert event_count activated == 0 "fast_swim should not activate until the player enters fluid"
+  set_movement_state self in_fluid true
+  wait 20
+  assert movement_state self in_fluid == true
+  assert event_count activated >= 1 "fast_swim should activate when entering fluid with enchanted gloves"
+  assert event_seen activated enchantment.id == fast_swim
+  assert event_seen activated level == 3
+  set_movement_state self in_fluid false
+}
+
+test "inventory durability and essence consumption enchantments react to item transactions" {
+  player self self
+  clear_inventory self all
+
+  equip self hotbar 0 Tool_Pickaxe_Iron 1 durability 100 max_durability 100
+  active self hotbar 0
+  event_clear activated
+  damage_item self hotbar 0 5
+  wait 10
+  assert item_durability self hotbar 0 == 95
+  assert item_max_durability self hotbar 0 == 100
+  assert event_count activated == 0
+
+  equip self hotbar 0 Tool_Pickaxe_Iron 1 enchants "durability:3" durability 100 max_durability 100
+  active self hotbar 0
+  event_clear activated
+  damage_item self hotbar 0 1
+  wait 3
+  damage_item self hotbar 0 1
+  wait 3
+  damage_item self hotbar 0 1
+  wait 3
+  damage_item self hotbar 0 1
+  wait 3
+  damage_item self hotbar 0 1
+  wait 3
+  damage_item self hotbar 0 1
+  wait 3
+  damage_item self hotbar 0 1
+  wait 3
+  damage_item self hotbar 0 1
+  wait 3
+  damage_item self hotbar 0 1
+  wait 3
+  damage_item self hotbar 0 1
+  wait 10
+  assert item_durability self hotbar 0 > 90 "durability should prevent at least one sampled durability loss"
+  assert event_count activated >= 1
+  assert event_seen activated enchantment.id == durability
+  assert event_seen activated level == 3
+
+  equip self hotbar 0 Tool_Pickaxe_Iron 1 enchants "sturdy:1" durability 100 max_durability 100
+  active self hotbar 0
+  event_clear activated
+  damage_item self hotbar 0 10 10 ecs_event
+  wait 10
+  assert item_durability self hotbar 0 == 100
+  assert item_max_durability self hotbar 0 == 100
+  assert event_count activated >= 1
+  assert event_seen activated enchantment.id == sturdy
+  assert event_seen activated level == 1
+
+  clear_inventory self all
+  equip self hotbar 0 Weapon_Staff_Crystal_Flame 1 enchants "elemental_heart:1"
+  equip self hotbar 1 Ingredient_Fire_Essence 5
+  active self hotbar 0
+  event_clear activated
+  remove_quantity self hotbar 1 1 as_stack
+  wait 20
+  assert item_quantity self hotbar 1 == 5
+  assert event_count activated >= 1
+  assert event_seen activated enchantment.id == elemental_heart
+  assert event_seen activated level == 1
+}
+
+test "ticking armor enchantments update player stats and emit activation events" {
+  player self self
+  clear_inventory self all
+
+  set_stat self oxygen max
+  equip self armor 0 Armor_Iron_Head 1 enchants "waterbreathing:3"
+  event_clear activated
+  wait 40
+  set_stat self oxygen max
+  assert stat self oxygen > 100
+  assert event_count activated >= 1
+  assert event_seen activated enchantment.id == waterbreathing
+  assert event_seen activated level == 3
+
+  clear_inventory self armor
+  set_stat self health 10
+  equip self armor 1 Armor_Iron_Chest 1 enchants "regeneration:1"
+  event_clear activated
+  wait 140
+  assert stat self health > 10
+  assert event_count activated >= 1
+  assert event_seen activated enchantment.id == regeneration
+  assert event_seen activated level == 1
+
+  clear_inventory self armor
+  equip self armor 1 Armor_Iron_Chest 1 enchants "second_stomach:3"
+  set_stat self health 10
+  wait 20
+  event_clear activated
+  set_stat self health 20
+  wait 20
+  assert stat self health > 20
+  assert event_count activated >= 1
+  assert event_seen activated enchantment.id == second_stomach
+  assert event_seen activated level == 3
+}
+
+test "looting samples NPC kills against an unenchanted sword baseline" {
+  player self self
+  clear_inventory self all
+  clear_drops at 32 206 32 size 32 16 32
+  wait 2
+
+  equip self hotbar 0 Weapon_Sword_Iron 1
+  active self hotbar 0
+  event_clear activated
+  kill_npc_samples self Rat 60 at 44 212 44 damage 100000 Physical
+  wait 20
+  remember looting_baseline_events event_count activated
+  remember looting_baseline_drops drop_quantity * at 32 206 32 size 32 16 32
+  assert event_count activated == 0
+
+  clear_drops at 32 206 32 size 32 16 32
+  wait 2
+  equip self hotbar 0 Weapon_Sword_Iron 1 enchants "looting:3"
+  active self hotbar 0
+  event_clear activated
+  kill_npc_samples self Rat 60 at 44 212 44 damage 100000 Physical
+  wait 20
+  assert event_count activated > $looting_baseline_events
+  assert event_count activated > 3
+  assert drop_count * at 32 206 32 size 32 16 32 > 0
+  assert drop_quantity * at 32 206 32 size 32 16 32 > $looting_baseline_drops
+  assert event_seen activated enchantment.id == looting
+  assert event_seen activated level == 3
+}
+
+after_all {
+  player self self
+  remove_stat_modifier self mana HyTestManaMax
+  remove_stat_modifier self signature_energy HyTestSignatureMax
+  plugin_map_put SimpleEnchantments getConfigManager.getConfig.disabledEnchantments night_vision true
+  plugin_map_put SimpleEnchantments getConfigManager.getConfig.disabledEnchantments thrift true
+  plugin_call SimpleEnchantments getEnchantmentManager.invalidateEnabledCache
+}

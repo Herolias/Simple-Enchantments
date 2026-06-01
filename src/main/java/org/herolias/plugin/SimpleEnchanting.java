@@ -15,6 +15,7 @@ import org.herolias.plugin.enchantment.EnchantmentFortuneSystem;
 import org.herolias.plugin.enchantment.EnchantmentLootingSystem;
 import org.herolias.plugin.enchantment.EnchantmentManager;
 import org.herolias.plugin.enchantment.EnchantmentProjectileSpeedSystem;
+import org.herolias.plugin.enchantment.EnchantmentSmeltingDropConversionSystem;
 import org.herolias.plugin.enchantment.EnchantmentSmeltingSystem;
 import org.herolias.plugin.enchantment.EnchantmentStaminaSystem;
 import org.herolias.plugin.enchantment.EnchantmentStateTransferSystem;
@@ -82,11 +83,13 @@ public class SimpleEnchanting extends JavaPlugin {
     private EnchantmentBlockDamageSystem enchantmentBlockDamageSystem;
     private EnchantmentFortuneSystem enchantmentFortuneSystem;
     private EnchantmentSmeltingSystem enchantmentSmeltingSystem;
+    private EnchantmentSmeltingDropConversionSystem enchantmentSmeltingDropConversionSystem;
     private EnchantmentLootingSystem enchantmentLootingSystem;
     private EnchantmentStaminaSystem enchantmentStaminaSystem;
     private EnchantmentAbilityStaminaSystem enchantmentAbilityStaminaSystem;
     private EnchantmentProjectileSpeedSystem enchantmentProjectileSpeedSystem;
     private EnchantmentEternalShotSystem eternalShotSystem;
+    private EnchantmentFastSwimSystem enchantmentFastSwimSystem;
 
     private org.herolias.plugin.config.ConfigManager configManager;
     private org.herolias.plugin.config.UserSettingsManager userSettingsManager;
@@ -243,12 +246,15 @@ public class SimpleEnchanting extends JavaPlugin {
         // Initialize the ECS damage system for applying enchantment effects
         this.enchantmentDamageSystem = new EnchantmentDamageSystem(enchantmentManager);
         this.enchantmentBlockDamageSystem = new EnchantmentBlockDamageSystem(enchantmentManager);
-        this.enchantmentSmeltingSystem = new EnchantmentSmeltingSystem(enchantmentManager);
+        this.enchantmentSmeltingDropConversionSystem = new EnchantmentSmeltingDropConversionSystem(enchantmentManager);
+        this.enchantmentSmeltingSystem = new EnchantmentSmeltingSystem(enchantmentManager,
+                enchantmentSmeltingDropConversionSystem);
         this.enchantmentFortuneSystem = new EnchantmentFortuneSystem(enchantmentManager);
         this.enchantmentLootingSystem = new EnchantmentLootingSystem(enchantmentManager);
         this.enchantmentStaminaSystem = new EnchantmentStaminaSystem(enchantmentManager);
         this.enchantmentAbilityStaminaSystem = new EnchantmentAbilityStaminaSystem(enchantmentManager);
         this.enchantmentProjectileSpeedSystem = new EnchantmentProjectileSpeedSystem(enchantmentManager);
+        this.enchantmentFastSwimSystem = new EnchantmentFastSwimSystem(enchantmentManager);
 
         // Initialize the Eternal Shot system early so it can be wired into the
         // projectile speed system (the two collaborate: tracking + refund on spawn)
@@ -284,6 +290,8 @@ public class SimpleEnchanting extends JavaPlugin {
             LOGGER.atInfo().log("Registered EnchantmentBlockDamageSystem with ECS");
             this.getEntityStoreRegistry().registerSystem(enchantmentSmeltingSystem);
             LOGGER.atInfo().log("Registered EnchantmentSmeltingSystem with ECS");
+            this.getEntityStoreRegistry().registerSystem(enchantmentSmeltingDropConversionSystem);
+            LOGGER.atInfo().log("Registered EnchantmentSmeltingDropConversionSystem with ECS");
             this.getEntityStoreRegistry().registerSystem(enchantmentFortuneSystem);
             LOGGER.atInfo().log("Registered EnchantmentFortuneSystem with ECS");
             this.getEntityStoreRegistry().registerSystem(enchantmentLootingSystem);
@@ -324,7 +332,7 @@ public class SimpleEnchanting extends JavaPlugin {
             LOGGER.atInfo().log("Registered EnchantmentReflectionSystem with ECS");
             this.getEntityStoreRegistry().registerSystem(new EnchantmentAbsorptionSystem(enchantmentManager));
             LOGGER.atInfo().log("Registered EnchantmentAbsorptionSystem with ECS");
-            this.getEntityStoreRegistry().registerSystem(new EnchantmentFastSwimSystem(enchantmentManager));
+            this.getEntityStoreRegistry().registerSystem(enchantmentFastSwimSystem);
             LOGGER.atInfo().log("Registered EnchantmentFastSwimSystem with ECS");
             this.getEntityStoreRegistry().registerSystem(new EnchantmentNightVisionSystem(enchantmentManager));
             LOGGER.atInfo().log("Registered EnchantmentNightVisionSystem with ECS");
@@ -420,6 +428,13 @@ public class SimpleEnchanting extends JavaPlugin {
             });
         });
         LOGGER.atInfo().log("Registered ScrollDescriptionManager and native tooltip migration listener");
+
+        this.getEventRegistry().registerGlobal(PlayerDisconnectEvent.class, event -> {
+            if (enchantmentFastSwimSystem != null) {
+                enchantmentFastSwimSystem.cleanupPlayer(event.getPlayerRef().getUuid());
+            }
+        });
+        LOGGER.atInfo().log("Registered Fast Swim cleanup listener");
 
         LOGGER.atInfo().log("Using native per-stack ItemDisplay metadata for enchantment tooltips");
 
