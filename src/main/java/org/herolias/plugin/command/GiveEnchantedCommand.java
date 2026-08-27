@@ -19,6 +19,7 @@ import com.hypixel.hytale.server.core.permissions.HytalePermissions;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
+import com.hypixel.hytale.server.core.util.BsonUtil;
 import org.bson.BsonDocument;
 import org.herolias.plugin.enchantment.EnchantmentData;
 import org.herolias.plugin.enchantment.EnchantmentType;
@@ -72,7 +73,7 @@ public class GiveEnchantedCommand extends AbstractPlayerCommand {
         if (this.metadataArg.provided(context)) {
             String metadataStr = (String) this.metadataArg.get(context);
             try {
-                metadata = BsonDocument.parse(metadataStr);
+                metadata = BsonUtil.parseWithMaxDepth(metadataStr);
             } catch (Exception e) {
                 context.sendMessage(
                         Message.translation("server.commands.give.invalidMetadata").param("error", e.getMessage()));
@@ -181,7 +182,7 @@ public class GiveEnchantedCommand extends AbstractPlayerCommand {
                         if (this.metadataArg.provided(context)) {
                             String metadataStr = (String) this.metadataArg.get(context);
                             try {
-                                metadata = BsonDocument.parse(metadataStr);
+                                metadata = BsonUtil.parseWithMaxDepth(metadataStr);
                             } catch (Exception e) {
                                 context.sendMessage(Message.translation("server.commands.give.invalidMetadata")
                                         .param("error", e.getMessage()));

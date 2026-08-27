@@ -146,7 +146,7 @@ public class EnchantmentManager {
             return EnchantmentData.EMPTY;
 
         try {
-            BsonDocument doc = BsonDocument.parse(metadata);
+            BsonDocument doc = com.hypixel.hytale.server.core.util.BsonUtil.parseWithMaxDepth(metadata);
             if (doc.containsKey(EnchantmentData.METADATA_KEY)) {
                 return EnchantmentData.fromBson(doc.getDocument(EnchantmentData.METADATA_KEY));
             }

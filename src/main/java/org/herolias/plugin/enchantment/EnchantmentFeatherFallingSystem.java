@@ -7,6 +7,7 @@ import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.component.dependency.Dependency;
 import com.hypixel.hytale.component.dependency.Order;
 import com.hypixel.hytale.component.dependency.SystemDependency;
+import com.hypixel.hytale.component.dependency.SystemGroupDependency;
 import com.hypixel.hytale.component.query.Query;
 import com.hypixel.hytale.logger.HytaleLogger;
 import com.hypixel.hytale.server.core.entity.Entity;
@@ -18,6 +19,7 @@ import com.hypixel.hytale.server.core.inventory.container.ItemContainer;
 import com.hypixel.hytale.server.core.modules.entity.damage.Damage;
 import com.hypixel.hytale.server.core.modules.entity.damage.DamageCause;
 import com.hypixel.hytale.server.core.modules.entity.damage.DamageEventSystem;
+import com.hypixel.hytale.server.core.modules.entity.damage.DamageModule;
 import com.hypixel.hytale.server.core.modules.entity.damage.DamageSystems;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 
@@ -41,6 +43,7 @@ public class EnchantmentFeatherFallingSystem extends DamageEventSystem {
     private final EnchantmentManager enchantmentManager;
 
     private final Set<Dependency<EntityStore>> dependencies = Set.of(
+            new SystemGroupDependency<>(Order.AFTER, DamageModule.get().getFilterDamageGroup()),
             new SystemDependency(Order.BEFORE, DamageSystems.ApplyDamage.class));
 
     public EnchantmentFeatherFallingSystem(EnchantmentManager enchantmentManager) {
@@ -67,8 +70,8 @@ public class EnchantmentFeatherFallingSystem extends DamageEventSystem {
             @Nonnull CommandBuffer<EntityStore> commandBuffer,
             @Nonnull Damage damage) {
 
-        // Skip if damage is already zero
-        if (damage.getAmount() <= 0) {
+        // Run only after Hytale's world/PvP/spawn-protection filters accepted the hit.
+        if (damage.isCancelled() || damage.getAmount() <= 0) {
             return;
         }
 

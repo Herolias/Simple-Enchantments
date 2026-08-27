@@ -6,6 +6,7 @@ import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.component.dependency.Dependency;
 import com.hypixel.hytale.component.dependency.Order;
 import com.hypixel.hytale.component.dependency.SystemDependency;
+import com.hypixel.hytale.component.dependency.SystemGroupDependency;
 import com.hypixel.hytale.component.query.Query;
 import com.hypixel.hytale.logger.HytaleLogger;
 import org.joml.Vector3d;
@@ -17,6 +18,7 @@ import com.hypixel.hytale.server.core.inventory.ItemStack;
 import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
 import com.hypixel.hytale.server.core.modules.entity.damage.Damage;
 import com.hypixel.hytale.server.core.modules.entity.damage.DamageEventSystem;
+import com.hypixel.hytale.server.core.modules.entity.damage.DamageModule;
 import com.hypixel.hytale.server.core.modules.entity.damage.DamageSystems;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 
@@ -38,6 +40,7 @@ public class EnchantmentKnockbackSystem extends DamageEventSystem {
     private static final float DEFAULT_KNOCKBACK_DURATION = 0.0f;
 
     private final Set<Dependency<EntityStore>> dependencies = Set.of(
+            new SystemGroupDependency<>(Order.AFTER, DamageModule.get().getFilterDamageGroup()),
             new SystemDependency(Order.BEFORE, DamageSystems.ApplyDamage.class));
 
     public EnchantmentKnockbackSystem(EnchantmentManager enchantmentManager) {
@@ -62,7 +65,9 @@ public class EnchantmentKnockbackSystem extends DamageEventSystem {
             @Nonnull Store<EntityStore> store,
             @Nonnull CommandBuffer<EntityStore> commandBuffer,
             @Nonnull Damage damage) {
-
+        if (damage.isCancelled() || damage.getAmount() <= 0) {
+            return;
+        }
 
         // Use centralized damage context extraction
         EnchantmentManager.DamageContext ctx = enchantmentManager.getDamageContext(damage, commandBuffer);

@@ -5,32 +5,35 @@ plugins {
 
 import org.gradle.internal.os.OperatingSystem
 
-ext {
-    if (project.hasProperty('hytale_home')) {
-        hytaleHome = project.findProperty('hytale_home')
-    }
-    else {
+def hytaleHome = project.hasProperty('hytale_home') ? project.findProperty('hytale_home') : null
+def hytaleGameDir
+if (project.hasProperty('hytale_game_dir')) {
+    hytaleGameDir = file(project.findProperty('hytale_game_dir'))
+} else {
+    if (hytaleHome == null) {
         def os = OperatingSystem.current()
         if (os.isWindows()) {
             hytaleHome = "${System.getProperty("user.home")}/AppData/Roaming/Hytale"
-        }
-        else if (os.isMacOsX()) {
+        } else if (os.isMacOsX()) {
             hytaleHome = "${System.getProperty("user.home")}/Library/Application Support/Hytale"
-        }
-        else if (os.isLinux()) {
+        } else if (os.isLinux()) {
             hytaleHome = "${System.getProperty("user.home")}/.var/app/com.hypixel.HytaleLauncher/data/Hytale"
             if (!file(hytaleHome).exists()) {
                 hytaleHome = "${System.getProperty("user.home")}/.local/share/Hytale"
             }
         }
     }
+
+    if (hytaleHome == null) {
+        throw new GradleException('Your Hytale install could not be detected automatically. Define hytale_home for a launcher install or hytale_game_dir for a directory containing Server/HytaleServer.jar and Assets.zip.')
+    }
+    hytaleGameDir = file("$hytaleHome/install/$patchline/package/game/latest")
 }
 
-if (!project.hasProperty('hytaleHome')) {
-    throw new GradleException('Your Hytale install could not be detected automatically. If you are on an unsupported platform or using a custom install location, please define the install location using the hytale_home property.');
-}
-else if (!file(project.findProperty('hytaleHome')).exists()) {
-    throw new GradleException("Failed to find Hytale at the expected location. Please make sure you have installed the game. The expected location can be changed using the hytale_home property. Currently looking in ${project.findProperty('hytaleHome')}")
+def hytaleServerJar = file("$hytaleGameDir/Server/HytaleServer.jar")
+def hytaleAssetsZip = file("$hytaleGameDir/Assets.zip")
+if (!hytaleServerJar.isFile() || !hytaleAssetsZip.isFile()) {
+    throw new GradleException("Failed to find a complete Hytale game package at $hytaleGameDir. Expected Server/HytaleServer.jar and Assets.zip.")
 }
 
 java {
@@ -44,17 +47,16 @@ javadoc {
     options.addStringOption('Xdoclint:-missing', '-quiet')
 }
 
-// Adds the Hytale server as a build dependency, allowing you to reference and
-// compile against their code. This requires you to have Hytale installed using
-// the official launcher for now.
+// Adds the Hytale server as a build dependency, allowing the mod to compile
+// against either a launcher install or a standalone/downloader game package.
 
 repositories {
-    maven { url "https://cursemaven.com" }
+    maven { url = "https://cursemaven.com" }
 }
 
 
 dependencies {
-    implementation(files("$hytaleHome/install/$patchline/package/game/latest/Server/HytaleServer.jar"))
+    implementation(files(hytaleServerJar))
 }
 
 // Create the working directory to run the server if it does not already exist.
@@ -90,12 +92,15 @@ idea.project.settings.runConfigurations {
     'HytaleServer'(org.jetbrains.gradle.ext.Application) {
         mainClass = 'com.hypixel.hytale.Main'
         moduleName = project.idea.module.name + '.main'
-        programParameters = "--allow-op --assets=$hytaleHome/install/$patchline/package/game/latest/Assets.zip"
+        programParameters = "--allow-op --assets=$hytaleAssetsZip"
         if (includes_pack.toBoolean()) {
             programParameters += " --mods=${sourceSets.main.java.srcDirs.first().parentFile.absolutePath}"
         }
         if (load_user_mods.toBoolean()) {
-            programParameters += " --mods=$hytaleHome/UserData/Mods"
+            def hytaleUserData = hytaleHome != null
+                    ? file("$hytaleHome/UserData/Mods")
+                    : file("$hytaleGameDir/mods")
+            programParameters += " --mods=$hytaleUserData"
         }
         workingDirectory = serverRunDir.absolutePath
     }

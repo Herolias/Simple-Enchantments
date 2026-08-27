@@ -7,6 +7,7 @@ import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.component.dependency.Dependency;
 import com.hypixel.hytale.component.dependency.Order;
 import com.hypixel.hytale.component.dependency.SystemDependency;
+import com.hypixel.hytale.component.dependency.SystemGroupDependency;
 import com.hypixel.hytale.component.query.Query;
 import com.hypixel.hytale.logger.HytaleLogger;
 import com.hypixel.hytale.server.core.entity.Entity;
@@ -17,6 +18,7 @@ import com.hypixel.hytale.server.core.inventory.ItemStack;
 import com.hypixel.hytale.server.core.modules.entity.damage.Damage;
 import com.hypixel.hytale.server.core.modules.entity.damage.DamageCause;
 import com.hypixel.hytale.server.core.modules.entity.damage.DamageEventSystem;
+import com.hypixel.hytale.server.core.modules.entity.damage.DamageModule;
 import com.hypixel.hytale.server.core.modules.entity.damage.DamageSystems;
 import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
 import com.hypixel.hytale.server.core.modules.entitystats.EntityStatMap;
@@ -40,6 +42,7 @@ public class EnchantmentDamageSystem extends DamageEventSystem {
     private final EnchantmentManager enchantmentManager;
 
     private final Set<Dependency<EntityStore>> dependencies = Set.of(
+            new SystemGroupDependency<>(Order.AFTER, DamageModule.get().getFilterDamageGroup()),
             new SystemDependency(Order.BEFORE, DamageSystems.ApplyDamage.class));
 
     public EnchantmentDamageSystem(EnchantmentManager enchantmentManager) {
@@ -66,8 +69,7 @@ public class EnchantmentDamageSystem extends DamageEventSystem {
             @Nonnull CommandBuffer<EntityStore> commandBuffer,
             @Nonnull Damage damage) {
 
-        float currentDamage = damage.getAmount();
-        if (currentDamage <= 0)
+        if (damage.isCancelled() || damage.getAmount() <= 0)
             return;
 
         // Use centralized damage context extraction

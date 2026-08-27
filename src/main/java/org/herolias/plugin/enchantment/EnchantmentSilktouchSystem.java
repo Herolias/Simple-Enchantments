@@ -15,18 +15,18 @@ import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockBreakingD
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockGathering;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType;
 import com.hypixel.hytale.server.core.asset.type.item.config.Item;
-import com.hypixel.hytale.server.core.entity.LivingEntity;
+import com.hypixel.hytale.server.core.asset.type.item.config.ItemTool;
 import com.hypixel.hytale.server.core.entity.ItemUtils;
 import com.hypixel.hytale.server.core.event.events.ecs.BreakBlockEvent;
 import com.hypixel.hytale.server.core.event.events.ecs.DamageBlockEvent;
 import com.hypixel.hytale.server.core.modules.interaction.BlockHarvestUtils;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
+import com.hypixel.hytale.server.core.inventory.InventoryComponent;
 import com.hypixel.hytale.server.core.modules.blockhealth.BlockHealthChunk;
 import com.hypixel.hytale.server.core.modules.blockhealth.BlockHealthModule;
+import com.hypixel.hytale.server.core.modules.blockset.BlockSetModule;
 import com.hypixel.hytale.server.core.modules.interaction.BlockInteractionUtils;
 import com.hypixel.hytale.server.core.universe.world.World;
-import com.hypixel.hytale.server.core.universe.world.chunk.BlockChunk;
-import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.chunk.section.BlockSection;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
@@ -106,21 +106,22 @@ public class EnchantmentSilktouchSystem extends EntityEventSystem<EntityStore, D
         // Only trigger Silk Touch if the block is going to break on this hit
         Vector3i targetBlock = event.getTargetBlock();
         World world = store.getExternalData().getWorld();
-        Store<ChunkStore> chunkStore = world.getChunkStore().getStore();
+        ChunkStore chunkStoreManager = world.getChunkStore();
+        Store<ChunkStore> chunkStore = chunkStoreManager.getStore();
+
+        Ref<ChunkStore> sectionRef = chunkStoreManager.getChunkSectionReferenceAtBlock(
+                targetBlock.x(), targetBlock.y(), targetBlock.z());
+        if (sectionRef == null || !sectionRef.isValid()) {
+            return;
+        }
 
         long chunkIndex = ChunkUtil.indexChunkFromBlock(targetBlock.x(), targetBlock.z());
-        WorldChunk chunk = world.getChunk(chunkIndex);
-
-        if (chunk == null) {
+        Ref<ChunkStore> columnRef = chunkStoreManager.getChunkReference(chunkIndex);
+        if (columnRef == null || !columnRef.isValid()) {
             return;
         }
 
-        Ref<ChunkStore> chunkRef = chunk.getReference();
-        if (chunkRef == null || !chunkRef.isValid()) {
-            return;
-        }
-
-        BlockHealthChunk healthChunk = chunkStore.getComponent(chunkRef,
+        BlockHealthChunk healthChunk = chunkStore.getComponent(columnRef,
                 BlockHealthModule.get().getBlockHealthChunkComponentType());
         if (healthChunk == null) {
             return;
@@ -172,8 +173,8 @@ public class EnchantmentSilktouchSystem extends EntityEventSystem<EntityStore, D
             }
         }
 
-        BlockChunk blockChunk = chunkStore.getComponent(chunkRef, BlockChunk.getComponentType());
-        if (blockChunk == null)
+        BlockSection blockSection = chunkStore.getComponent(sectionRef, BlockSection.getComponentType());
+        if (blockSection == null)
             return;
 
         int setBlockSettings = 0;
@@ -186,7 +187,6 @@ public class EnchantmentSilktouchSystem extends EntityEventSystem<EntityStore, D
             setBlockSettings |= 0x800; // Suppress entity drops if unnatural
         }
 
-        BlockSection blockSection = blockChunk.getSectionAtBlockY(targetBlock.y());
         int filler = blockSection.getFiller(targetBlock.x(), targetBlock.y(), targetBlock.z());
 
         // IMPORTANT: Cancel the DamageBlockEvent so vanilla drops don't trigger after
@@ -200,7 +200,7 @@ public class EnchantmentSilktouchSystem extends EntityEventSystem<EntityStore, D
         }
 
         BlockHarvestUtils.naturallyRemoveBlock(targetBlock, blockType, filler, 0, null, null, setBlockSettings,
-                chunkRef, store, chunkStore);
+                sectionRef, store, chunkStore);
 
         // Spawn the Silk Touch drops
         Vector3d dropPosition = new Vector3d(targetBlock.x() + 0.5, targetBlock.y(), targetBlock.z() + 0.5);
@@ -211,22 +211,66 @@ public class EnchantmentSilktouchSystem extends EntityEventSystem<EntityStore, D
 
         // Apply durability manually, since we cancelled DamageBlockEvent and bypassed
         // the vanilla BlockHarvestUtils.performBlockDamage durability path.
-        // Delegate to BlockHarvestUtils.calculateDurabilityUse to match vanilla exactly
-        // (soft block check, block set matching, etc.).
+        // Match vanilla's durability calculation exactly (soft block check, block
+        // type/set overrides, etc.). Update 6 made the engine helper private.
         if (breakerRef != null && breakerRef.isValid()) {
-            com.hypixel.hytale.server.core.entity.Entity rawEntity = com.hypixel.hytale.server.core.entity.EntityUtils
-                    .getEntity(breakerRef, store);
-            if (rawEntity instanceof LivingEntity entity) {
-                byte activeHotbarSlot = entity.getInventory().getActiveHotbarSlot();
-                if (activeHotbarSlot != -1 && ItemUtils.canDecreaseItemStackDurability(breakerRef, store)
-                        && !tool.isUnbreakable()) {
-                    double durabilityLoss = BlockHarvestUtils.calculateDurabilityUse(tool.getItem(), blockType);
-                    if (durabilityLoss > 0) {
-                        entity.updateItemStackDurability(breakerRef, tool, entity.getInventory().getHotbar(),
-                                activeHotbarSlot, -durabilityLoss, store);
+            InventoryComponent.Hotbar hotbar = commandBuffer.getComponent(breakerRef,
+                    InventoryComponent.Hotbar.getComponentType());
+            if (hotbar != null && hotbar.getActiveSlot() != -1
+                    && ItemUtils.canDecreaseItemStackDurability(breakerRef, store)
+                    && !tool.isUnbreakable()) {
+                double durabilityLoss = calculateDurabilityUse(tool.getItem(), blockType);
+                if (durabilityLoss > 0) {
+                    ItemUtils.updateItemStackDurability(breakerRef, tool, hotbar.getInventory(),
+                            hotbar.getActiveSlot(), -durabilityLoss, store);
+                }
+            }
+        }
+    }
+
+    /**
+     * Update 6 made Hytale's equivalent helper private. Keep the same calculation
+     * here so Silk Touch still consumes exactly the durability a normal break would.
+     */
+    private static double calculateDurabilityUse(@Nonnull Item item, @Nonnull BlockType blockType) {
+        BlockGathering gathering = blockType.getGathering();
+        if (gathering == null || gathering.isSoft() || item.getTool() == null) {
+            return 0.0;
+        }
+
+        ItemTool itemTool = item.getTool();
+        ItemTool.DurabilityLossBlockTypes[] overrides = itemTool.getDurabilityLossBlockTypes();
+        if (overrides == null) {
+            return item.getDurabilityLossOnHit();
+        }
+
+        String blockTypeId = blockType.getId();
+        int blockTypeIndex = BlockType.getAssetMap().getIndex(blockTypeId);
+        if (blockTypeIndex == Integer.MIN_VALUE) {
+            throw new IllegalArgumentException("Unknown block type: " + blockTypeId);
+        }
+
+        BlockSetModule blockSetModule = BlockSetModule.getInstance();
+        for (ItemTool.DurabilityLossBlockTypes override : overrides) {
+            int[] blockTypeIndexes = override.getBlockTypeIndexes();
+            if (blockTypeIndexes != null) {
+                for (int candidate : blockTypeIndexes) {
+                    if (candidate == blockTypeIndex) {
+                        return override.getDurabilityLossOnHit();
+                    }
+                }
+            }
+
+            int[] blockSetIndexes = override.getBlockSetIndexes();
+            if (blockSetIndexes != null) {
+                for (int blockSetIndex : blockSetIndexes) {
+                    if (blockSetModule.blockInSet(blockSetIndex, blockTypeId)) {
+                        return override.getDurabilityLossOnHit();
                     }
                 }
             }
         }
+
+        return item.getDurabilityLossOnHit();
     }
 }
