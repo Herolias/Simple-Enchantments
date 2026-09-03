@@ -5,6 +5,9 @@ import com.hypixel.hytale.component.ArchetypeChunk;
 import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
+import com.hypixel.hytale.component.dependency.Dependency;
+import com.hypixel.hytale.component.dependency.Order;
+import com.hypixel.hytale.component.dependency.SystemDependency;
 import com.hypixel.hytale.component.query.Query;
 import com.hypixel.hytale.component.system.EntityEventSystem;
 import com.hypixel.hytale.logger.HytaleLogger;
@@ -21,33 +24,43 @@ import com.hypixel.hytale.server.core.event.events.ecs.BreakBlockEvent;
 import com.hypixel.hytale.server.core.event.events.ecs.DamageBlockEvent;
 import com.hypixel.hytale.server.core.modules.interaction.BlockHarvestUtils;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
-import com.hypixel.hytale.server.core.inventory.InventoryComponent;
 import com.hypixel.hytale.server.core.modules.blockhealth.BlockHealthChunk;
 import com.hypixel.hytale.server.core.modules.blockhealth.BlockHealthModule;
 import com.hypixel.hytale.server.core.modules.blockset.BlockSetModule;
 import com.hypixel.hytale.server.core.modules.interaction.BlockInteractionUtils;
+import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.chunk.section.BlockSection;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
+import org.herolias.plugin.util.InventoryAccess;
 
 import javax.annotation.Nonnull;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 /**
  * ECS system that applies Silk Touch enchantment to block break events.
  * Drops the block itself instead of the usual drops.
- * 
+ *
  * We hook into DamageBlockEvent to detect when the block is about to be
  * destroyed.
  * This prevents the vanilla block dropping logic (which ignores BreakBlockEvent
  * cancellation
  * for things like gravel/rubble that have specific tool drops) from triggering.
+ *
+ * <p>
+ * Runs after {@link EnchantmentBlockDamageSystem} so the "will this hit break
+ * the block" check sees the Efficiency-boosted damage.
+ * </p>
  */
 public class EnchantmentSilktouchSystem extends EntityEventSystem<EntityStore, DamageBlockEvent> {
 
     private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
+
+    private final Set<Dependency<EntityStore>> dependencies = Set.of(
+            new SystemDependency<>(Order.AFTER, EnchantmentBlockDamageSystem.class));
 
     private final EnchantmentManager enchantmentManager;
 
@@ -61,6 +74,12 @@ public class EnchantmentSilktouchSystem extends EntityEventSystem<EntityStore, D
     @Nonnull
     public Query<EntityStore> getQuery() {
         return Archetype.empty();
+    }
+
+    @Override
+    @Nonnull
+    public Set<Dependency<EntityStore>> getDependencies() {
+        return dependencies;
     }
 
     @Override
@@ -78,7 +97,9 @@ public class EnchantmentSilktouchSystem extends EntityEventSystem<EntityStore, D
             return;
         }
 
-        if (!enchantmentManager.hasEnchantment(tool, EnchantmentType.PICK_PERFECT)) {
+        // Single metadata read; reused for the activation event below.
+        int pickPerfectLevel = enchantmentManager.getEnchantmentLevel(tool, EnchantmentType.PICK_PERFECT);
+        if (pickPerfectLevel <= 0) {
             return;
         }
 
@@ -193,10 +214,9 @@ public class EnchantmentSilktouchSystem extends EntityEventSystem<EntityStore, D
         // protection listeners have had their normal BreakBlockEvent chance to deny.
         event.setCancelled(true);
 
-        com.hypixel.hytale.server.core.universe.PlayerRef playerRef = null;
+        PlayerRef playerRef = null;
         if (breakerRef != null && breakerRef.isValid()) {
-            playerRef = store.getComponent(breakerRef,
-                    com.hypixel.hytale.server.core.universe.PlayerRef.getComponentType());
+            playerRef = store.getComponent(breakerRef, PlayerRef.getComponentType());
         }
 
         BlockHarvestUtils.naturallyRemoveBlock(targetBlock, blockType, filler, 0, null, null, setBlockSettings,
@@ -206,23 +226,21 @@ public class EnchantmentSilktouchSystem extends EntityEventSystem<EntityStore, D
         Vector3d dropPosition = new Vector3d(targetBlock.x() + 0.5, targetBlock.y(), targetBlock.z() + 0.5);
         enchantmentManager.spawnDrops(commandBuffer, silkTouchDrops, dropPosition);
 
-        EnchantmentEventHelper.fireActivated(playerRef, tool, EnchantmentType.PICK_PERFECT,
-                enchantmentManager.getEnchantmentLevel(tool, EnchantmentType.PICK_PERFECT));
+        EnchantmentEventHelper.fireActivated(playerRef, tool, EnchantmentType.PICK_PERFECT, pickPerfectLevel);
 
         // Apply durability manually, since we cancelled DamageBlockEvent and bypassed
         // the vanilla BlockHarvestUtils.performBlockDamage durability path.
         // Match vanilla's durability calculation exactly (soft block check, block
         // type/set overrides, etc.). Update 6 made the engine helper private.
         if (breakerRef != null && breakerRef.isValid()) {
-            InventoryComponent.Hotbar hotbar = commandBuffer.getComponent(breakerRef,
-                    InventoryComponent.Hotbar.getComponentType());
-            if (hotbar != null && hotbar.getActiveSlot() != -1
+            InventoryAccess.HeldSlot held = InventoryAccess.getHeldSlot(commandBuffer, breakerRef);
+            if (held != null
                     && ItemUtils.canDecreaseItemStackDurability(breakerRef, store)
                     && !tool.isUnbreakable()) {
                 double durabilityLoss = calculateDurabilityUse(tool.getItem(), blockType);
                 if (durabilityLoss > 0) {
-                    ItemUtils.updateItemStackDurability(breakerRef, tool, hotbar.getInventory(),
-                            hotbar.getActiveSlot(), -durabilityLoss, store);
+                    ItemUtils.updateItemStackDurability(breakerRef, tool, held.container(), held.slot(),
+                            -durabilityLoss, store);
                 }
             }
         }
@@ -250,7 +268,6 @@ public class EnchantmentSilktouchSystem extends EntityEventSystem<EntityStore, D
             throw new IllegalArgumentException("Unknown block type: " + blockTypeId);
         }
 
-        BlockSetModule blockSetModule = BlockSetModule.getInstance();
         for (ItemTool.DurabilityLossBlockTypes override : overrides) {
             int[] blockTypeIndexes = override.getBlockTypeIndexes();
             if (blockTypeIndexes != null) {
@@ -264,7 +281,7 @@ public class EnchantmentSilktouchSystem extends EntityEventSystem<EntityStore, D
             int[] blockSetIndexes = override.getBlockSetIndexes();
             if (blockSetIndexes != null) {
                 for (int blockSetIndex : blockSetIndexes) {
-                    if (blockSetModule.blockInSet(blockSetIndex, blockTypeId)) {
+                    if (blockInSet(blockSetIndex, blockTypeId)) {
                         return override.getDurabilityLossOnHit();
                     }
                 }
@@ -272,5 +289,17 @@ public class EnchantmentSilktouchSystem extends EntityEventSystem<EntityStore, D
         }
 
         return item.getDurabilityLossOnHit();
+    }
+
+    /**
+     * {@link BlockSetModule} is deprecated for removal, but vanilla
+     * {@code BlockHarvestUtils.calculateDurabilityUse} still resolves block-set
+     * durability overrides through it and the server offers no replacement yet.
+     * This is the single place the mod touches it, so the eventual migration is
+     * a one-line change.
+     */
+    @SuppressWarnings("removal")
+    private static boolean blockInSet(int blockSetIndex, @Nonnull String blockTypeId) {
+        return BlockSetModule.getInstance().blockInSet(blockSetIndex, blockTypeId);
     }
 }

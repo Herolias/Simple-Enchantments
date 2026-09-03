@@ -6,7 +6,7 @@ import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.asset.type.item.config.Item;
 import com.hypixel.hytale.server.core.asset.type.item.config.metadata.ItemDisplayMetadata;
 import com.hypixel.hytale.server.core.entity.entities.Player;
-import com.hypixel.hytale.server.core.inventory.Inventory;
+import org.herolias.plugin.util.InventoryAccess;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
 import com.hypixel.hytale.server.core.inventory.container.ItemContainer;
 import com.hypixel.hytale.server.core.modules.i18n.I18nModule;
@@ -39,7 +39,9 @@ public final class NativeTooltipManager {
 
     private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
     private static final String BASE_DESCRIPTION_KEY = "BaseDescription";
+    /** Legacy key: older versions stored the whole last description here. Read-only now. */
     private static final String LAST_DESCRIPTION_KEY = "LastDescription";
+    private static final String LAST_DESCRIPTION_HASH_KEY = "LastDescriptionHash";
     private static final String LAST_HASH_KEY = "LastHash";
     private static final String MANAGED_KEY = "Managed";
 
@@ -102,14 +104,22 @@ public final class NativeTooltipManager {
             return itemStack;
         }
 
-        Message baseDescription = getBaseDescription(state);
-        Message lastDescription = getLastDescription(state);
-        if (state == null) {
-            baseDescription = defaultBaseDescription(itemStack, currentDescription);
-        } else if (!messagesEqual(currentDescription, lastDescription)) {
+        // Did anyone else change the description since we last wrote it?
+        boolean lastMatches = state != null && lastDescriptionMatches(state, currentDescription);
+
+        // Fast path: our description is still in place and the enchantments
+        // have not changed, so there is nothing to rewrite.
+        if (state != null && lastMatches && !data.isEmpty()
+                && data.computeStableHash().equals(getString(state, LAST_HASH_KEY))
+                && state.containsKey(LAST_DESCRIPTION_HASH_KEY)) {
+            return itemStack;
+        }
+
+        Message baseDescription;
+        if (state == null || !lastMatches) {
             baseDescription = defaultBaseDescription(itemStack, currentDescription);
         } else {
-            baseDescription = normalizeBaseDescription(itemStack, baseDescription);
+            baseDescription = normalizeBaseDescription(itemStack, getBaseDescription(state));
         }
 
         Message enchantmentBlock = buildEnchantmentBlock(data, enchantmentManager);
@@ -118,12 +128,12 @@ public final class NativeTooltipManager {
             if (state == null) {
                 return itemStack;
             }
-            return removeManagedDescription(itemStack, currentName, currentDescription, baseDescription, lastDescription);
+            return removeManagedDescription(itemStack, currentName, currentDescription, baseDescription, lastMatches);
         }
 
         Message composedDescription = composeDescription(baseDescription, enchantmentBlock);
         ItemStack updated = writeDisplay(itemStack, currentName, composedDescription);
-        return writeState(updated, baseDescription, composedDescription, data.computeStableHash());
+        return writeState(itemStack, updated, baseDescription, composedDescription, data.computeStableHash());
     }
 
     public static void refreshAllPlayers() {
@@ -156,9 +166,11 @@ public final class NativeTooltipManager {
         Store<EntityStore> store = ref.getStore();
         World world = store.getExternalData().getWorld();
         Runnable refresh = () -> {
-            Player player = store.getComponent(ref, Player.getComponentType());
-            if (player != null) {
-                refreshInventory(player.getInventory(), enchantmentManager);
+            if (!ref.isValid()) {
+                return;
+            }
+            if (store.getComponent(ref, Player.getComponentType()) != null) {
+                refreshInventory(store, ref, enchantmentManager);
             }
         };
         if (world != null && world.isAlive() && !world.isInThread()) {
@@ -168,16 +180,14 @@ public final class NativeTooltipManager {
         }
     }
 
-    private static void refreshInventory(@Nullable Inventory inventory, @Nullable EnchantmentManager enchantmentManager) {
-        if (inventory == null) {
-            return;
-        }
-        refreshContainer(inventory.getHotbar(), enchantmentManager);
-        refreshContainer(inventory.getStorage(), enchantmentManager);
-        refreshContainer(inventory.getBackpack(), enchantmentManager);
-        refreshContainer(inventory.getArmor(), enchantmentManager);
-        refreshContainer(inventory.getUtility(), enchantmentManager);
-        refreshContainer(inventory.getTools(), enchantmentManager);
+    private static void refreshInventory(@Nonnull Store<EntityStore> store, @Nonnull Ref<EntityStore> ref,
+            @Nullable EnchantmentManager enchantmentManager) {
+        refreshContainer(InventoryAccess.getHotbar(store, ref), enchantmentManager);
+        refreshContainer(InventoryAccess.getStorage(store, ref), enchantmentManager);
+        refreshContainer(InventoryAccess.getBackpack(store, ref), enchantmentManager);
+        refreshContainer(InventoryAccess.getArmor(store, ref), enchantmentManager);
+        refreshContainer(InventoryAccess.getUtility(store, ref), enchantmentManager);
+        refreshContainer(InventoryAccess.getTools(store, ref), enchantmentManager);
     }
 
     private static void refreshContainer(
@@ -433,6 +443,10 @@ public final class NativeTooltipManager {
 
     @Nonnull
     private static EnchantmentData getEnchantmentData(@Nonnull ItemStack itemStack) {
+        EnchantmentManager manager = resolveEnchantmentManager();
+        if (manager != null) {
+            return manager.getEnchantmentsFromItem(itemStack);
+        }
         try {
             BsonDocument enchantments = itemStack.getFromMetadataOrNull(
                     EnchantmentData.METADATA_KEY,
@@ -440,11 +454,8 @@ public final class NativeTooltipManager {
             if (enchantments != null && !enchantments.isEmpty()) {
                 return EnchantmentData.fromBson(enchantments);
             }
-            String legacyData = itemStack.getFromMetadataOrNull(EnchantmentData.METADATA_KEY, Codec.STRING);
-            if (legacyData != null && !legacyData.isBlank()) {
-                return EnchantmentData.deserialize(legacyData);
-            }
         } catch (Exception ignored) {
+            // Legacy string form or unexpected type; handled by the manager path.
         }
         return EnchantmentData.EMPTY;
     }
@@ -566,12 +577,11 @@ public final class NativeTooltipManager {
             @Nullable Message currentName,
             @Nullable Message currentDescription,
             @Nullable Message baseDescription,
-            @Nullable Message lastDescription) {
-        Message restoredDescription;
-        if (messagesEqual(currentDescription, lastDescription)) {
-            restoredDescription = baseDescription;
-        } else {
-            restoredDescription = currentDescription;
+            boolean lastMatches) {
+        Message restoredDescription = lastMatches ? baseDescription : currentDescription;
+        // Restoring the item's own default description means "no override".
+        if (restoredDescription != null && isDefaultDescription(itemStack, restoredDescription)) {
+            restoredDescription = null;
         }
         return writeDisplay(itemStack, currentName, restoredDescription)
                 .withMetadata(METADATA_KEY, Codec.BSON_DOCUMENT, null);
@@ -589,24 +599,34 @@ public final class NativeTooltipManager {
                 new ItemDisplayMetadata(name, isMessageEmpty(description) ? null : description));
     }
 
+    /**
+     * Writes the bookkeeping the manager needs to recognise its own
+     * description later. Only a hash of the composed description is stored
+     * (not a second copy), and the base description is stored only when it is
+     * not simply the item's default translation, so the metadata that travels
+     * with every stack stays small.
+     */
     @Nonnull
     private static ItemStack writeState(
-            @Nonnull ItemStack itemStack,
+            @Nonnull ItemStack original,
+            @Nonnull ItemStack updated,
             @Nullable Message baseDescription,
             @Nonnull Message composedDescription,
             @Nonnull String hash) {
         BsonDocument state = new BsonDocument();
         state.put(MANAGED_KEY, BsonBoolean.TRUE);
         state.put(LAST_HASH_KEY, new BsonString(hash));
-        BsonValue encodedBase = encodeMessage(baseDescription);
-        if (encodedBase != null) {
-            state.put(BASE_DESCRIPTION_KEY, encodedBase);
+        if (baseDescription != null && !isDefaultDescription(original, baseDescription)) {
+            BsonValue encodedBase = encodeMessage(baseDescription);
+            if (encodedBase != null) {
+                state.put(BASE_DESCRIPTION_KEY, encodedBase);
+            }
         }
-        BsonValue encodedDescription = encodeMessage(composedDescription);
-        if (encodedDescription != null) {
-            state.put(LAST_DESCRIPTION_KEY, encodedDescription);
+        String descriptionHash = hashMessage(composedDescription);
+        if (descriptionHash != null) {
+            state.put(LAST_DESCRIPTION_HASH_KEY, new BsonString(descriptionHash));
         }
-        return itemStack.withMetadata(METADATA_KEY, Codec.BSON_DOCUMENT, state);
+        return updated.withMetadata(METADATA_KEY, Codec.BSON_DOCUMENT, state);
     }
 
     @Nullable
@@ -614,9 +634,51 @@ public final class NativeTooltipManager {
         return decodeMessage(state, BASE_DESCRIPTION_KEY);
     }
 
+    /**
+     * True when the description currently on the stack is the one this manager
+     * last wrote. Supports both the compact hash form and the older state that
+     * stored the whole message.
+     */
+    private static boolean lastDescriptionMatches(@Nonnull BsonDocument state, @Nullable Message currentDescription) {
+        String storedHash = getString(state, LAST_DESCRIPTION_HASH_KEY);
+        if (storedHash != null) {
+            String currentHash = hashMessage(currentDescription);
+            return currentHash != null && currentHash.equals(storedHash);
+        }
+        Message legacyLast = decodeMessage(state, LAST_DESCRIPTION_KEY);
+        return legacyLast != null && messagesEqual(currentDescription, legacyLast);
+    }
+
+    /** Whether the message is just the item's own default description translation. */
+    private static boolean isDefaultDescription(@Nonnull ItemStack itemStack, @Nonnull Message message) {
+        String messageId = message.getMessageId();
+        if (messageId == null || messageId.isBlank()) {
+            return false;
+        }
+        String rawText = message.getRawText();
+        if (rawText != null && !rawText.isEmpty()) {
+            return false;
+        }
+        return message.getChildren().isEmpty()
+                && messageId.equals(itemStack.getItem().getDescriptionTranslationKey());
+    }
+
     @Nullable
-    private static Message getLastDescription(@Nullable BsonDocument state) {
-        return decodeMessage(state, LAST_DESCRIPTION_KEY);
+    private static String getString(@Nullable BsonDocument state, @Nonnull String key) {
+        if (state == null) {
+            return null;
+        }
+        BsonValue value = state.get(key);
+        return value != null && value.isString() ? value.asString().getValue() : null;
+    }
+
+    @Nullable
+    private static String hashMessage(@Nullable Message message) {
+        BsonValue encoded = encodeMessage(message);
+        if (encoded == null) {
+            return null;
+        }
+        return String.format("%08x", encoded.hashCode());
     }
 
     @Nullable

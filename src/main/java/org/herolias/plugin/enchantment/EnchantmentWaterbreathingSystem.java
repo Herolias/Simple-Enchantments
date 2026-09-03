@@ -2,58 +2,59 @@ package org.herolias.plugin.enchantment;
 
 import com.hypixel.hytale.component.ArchetypeChunk;
 import com.hypixel.hytale.component.CommandBuffer;
+import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.component.query.Query;
 import com.hypixel.hytale.component.system.tick.EntityTickingSystem;
 import com.hypixel.hytale.logger.HytaleLogger;
-import com.hypixel.hytale.server.core.entity.Entity;
-import com.hypixel.hytale.server.core.entity.EntityUtils;
-import com.hypixel.hytale.server.core.entity.LivingEntity;
-import com.hypixel.hytale.server.core.inventory.Inventory;
+import com.hypixel.hytale.protocol.ItemArmorSlot;
+import com.hypixel.hytale.server.core.entity.UUIDComponent;
+import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
 import com.hypixel.hytale.server.core.inventory.container.ItemContainer;
-import com.hypixel.hytale.server.core.modules.entity.EntityModule;
 import com.hypixel.hytale.server.core.modules.entitystats.EntityStatMap;
 import com.hypixel.hytale.server.core.modules.entitystats.asset.DefaultEntityStatTypes;
 import com.hypixel.hytale.server.core.modules.entitystats.modifier.Modifier;
 import com.hypixel.hytale.server.core.modules.entitystats.modifier.StaticModifier;
+import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
+import org.herolias.plugin.util.InventoryAccess;
 
 import javax.annotation.Nonnull;
+import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.TimeUnit;
 
 /**
- * ECS system that increases max oxygen based on Waterbreathing enchantment on
- * helmet.
- * 
- * Effect: Extends oxygen capacity, functionally reducing oxygen drain.
- * Applicable to: Helmets only
- * 
- * Uses native Hytale StaticModifiers for seamless integration.
+ * Waterbreathing: raises max oxygen through a native StaticModifier while an
+ * enchanted helmet is worn.
+ * <p>
+ * The helmet level comes from {@link EquipmentLevelCache}; the modifier is only
+ * touched when the level changes, and the per-player level is forgotten on
+ * disconnect/removal ({@link #cleanupPlayer}).
  */
 public class EnchantmentWaterbreathingSystem extends EntityTickingSystem<EntityStore> {
 
     private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
 
-    // Helmet slot index in armor container (typically slot 0 for head)
-    private static final short HELMET_SLOT = 0;
-
-    // The key used to register the modifier in the EntityStatMap
+    /** Key of the modifier in the EntityStatMap. */
     private static final String MODIFIER_KEY = "Enchantment_Waterbreathing";
-
-    private final EnchantmentManager enchantmentManager;
-
-    // Track active level to prevent unnecessary modifier updates and to trigger
-    // events
-    private final ConcurrentHashMap<UUID, Integer> activeEnchantmentLevels = new ConcurrentHashMap<>();
+    /** Base oxygen is 100; this much times the scaled multiplier is added. */
+    private static final float ADDED_OXYGEN_BASE = 250.0f;
 
     @Nonnull
     private static final Query<EntityStore> QUERY = Query.and(
             EntityStatMap.getComponentType(),
-            EntityModule.get().getPlayerComponentType());
+            Player.getComponentType(),
+            UUIDComponent.getComponentType());
 
-    public EnchantmentWaterbreathingSystem(EnchantmentManager enchantmentManager) {
+    private final EnchantmentManager enchantmentManager;
+
+    /** Level the modifier currently reflects, per player. */
+    private final Map<UUID, Integer> activeEnchantmentLevels = new ConcurrentHashMap<>();
+
+    public EnchantmentWaterbreathingSystem(@Nonnull EnchantmentManager enchantmentManager) {
         this.enchantmentManager = enchantmentManager;
         LOGGER.atInfo().log("EnchantmentWaterbreathingSystem initialized");
     }
@@ -69,80 +70,53 @@ public class EnchantmentWaterbreathingSystem extends EntityTickingSystem<EntityS
             @Nonnull ArchetypeChunk<EntityStore> archetypeChunk,
             @Nonnull Store<EntityStore> store,
             @Nonnull CommandBuffer<EntityStore> commandBuffer) {
+        UUIDComponent uuidComponent = archetypeChunk.getComponent(index, UUIDComponent.getComponentType());
+        EntityStatMap statMap = archetypeChunk.getComponent(index, EntityStatMap.getComponentType());
+        if (uuidComponent == null || statMap == null) {
+            return;
+        }
+        UUID playerId = uuidComponent.getUuid();
+        Ref<EntityStore> ref = archetypeChunk.getReferenceTo(index);
+
+        int level = EquipmentLevelCache.get(playerId, store, ref, enchantmentManager).waterbreathing();
+        int activeLevel = activeEnchantmentLevels.getOrDefault(playerId, 0);
+        if (level == activeLevel) {
+            return;
+        }
 
         try {
-            Entity entity = EntityUtils.getEntity(index, archetypeChunk);
-            if (!(entity instanceof LivingEntity livingEntity)) {
-                return;
-            }
-
-            com.hypixel.hytale.server.core.entity.UUIDComponent uuidComp = store.getComponent(
-                    archetypeChunk.getReferenceTo(index),
-                    com.hypixel.hytale.server.core.entity.UUIDComponent.getComponentType());
-            if (uuidComp == null)
-                return;
-            UUID entityId = uuidComp.getUuid();
-
-            Inventory inventory = livingEntity.getInventory();
-            if (inventory == null) {
-                return;
-            }
-
-            ItemContainer armorContainer = inventory.getArmor();
-            if (armorContainer == null) {
-                return;
-            }
-
-            // Get helmet from armor slot
-            ItemStack helmet = armorContainer.getItemStack(HELMET_SLOT);
-            int waterbreathingLevel = 0;
-            if (helmet != null && !helmet.isEmpty()) {
-                waterbreathingLevel = enchantmentManager.getEnchantmentLevel(helmet, EnchantmentType.WATERBREATHING);
-            }
-
-            Integer activeLevelObj = activeEnchantmentLevels.get(entityId);
-            int activeLevel = activeLevelObj != null ? activeLevelObj : 0;
-
-            if (waterbreathingLevel == activeLevel) {
-                return; // Level hasn't changed, no need to update modifiers
-            }
-
-            EntityStatMap statMap = archetypeChunk.getComponent(index, EntityStatMap.getComponentType());
-            if (statMap == null) {
-                return;
-            }
-
-            if (waterbreathingLevel > 0) {
-                // Base oxygen is 100. Let's add 250 * multiplier (e.g. 50 at level 1, 150 at
-                // level 3)
-                float addedOxygen = 250.0f
-                        * (float) EnchantmentType.WATERBREATHING.getScaledMultiplier(waterbreathingLevel);
-
+            if (level > 0) {
+                float addedOxygen = ADDED_OXYGEN_BASE
+                        * (float) EnchantmentType.WATERBREATHING.getScaledMultiplier(level);
                 StaticModifier modifier = new StaticModifier(Modifier.ModifierTarget.MAX,
                         StaticModifier.CalculationType.ADDITIVE, addedOxygen);
                 statMap.putModifier(EntityStatMap.Predictable.NONE, DefaultEntityStatTypes.getOxygen(), MODIFIER_KEY,
                         modifier);
+                activeEnchantmentLevels.put(playerId, level);
 
-                activeEnchantmentLevels.put(entityId, waterbreathingLevel);
-
-                // Only fire "activated" event when the level increases from 0 (equipped)
-                if (activeLevel == 0 && entity instanceof com.hypixel.hytale.server.core.entity.entities.Player) {
-                    com.hypixel.hytale.server.core.universe.PlayerRef playerRef = store.getComponent(
-                            archetypeChunk.getReferenceTo(index),
-                            com.hypixel.hytale.server.core.universe.PlayerRef.getComponentType());
-                    EnchantmentEventHelper.fireActivated(playerRef, helmet, EnchantmentType.WATERBREATHING,
-                            waterbreathingLevel);
+                // Only fire the activation event when the helmet is put on (0 -> level).
+                if (activeLevel == 0) {
+                    ItemContainer armor = InventoryAccess.getArmor(store, ref);
+                    ItemStack helmet = armor != null ? armor.getItemStack((short) ItemArmorSlot.Head.getValue()) : null;
+                    if (!ItemStack.isEmpty(helmet)) {
+                        PlayerRef playerRef = archetypeChunk.getComponent(index, PlayerRef.getComponentType());
+                        EnchantmentEventHelper.fireActivated(playerRef, helmet, EnchantmentType.WATERBREATHING, level);
+                    }
                 }
             } else {
-                // Remove modifier if unequipped
                 statMap.removeModifier(EntityStatMap.Predictable.NONE, DefaultEntityStatTypes.getOxygen(),
                         MODIFIER_KEY);
-                activeEnchantmentLevels.remove(entityId);
+                activeEnchantmentLevels.remove(playerId);
             }
-
-        } catch (Exception e) {
-            LOGGER.atWarning().log("Error in Waterbreathing system: " + e.getMessage());
+        } catch (RuntimeException e) {
+            LOGGER.atWarning().atMostEvery(30, TimeUnit.SECONDS).withCause(e)
+                    .log("Failed to update the Waterbreathing oxygen modifier for %s", playerId);
         }
+    }
+
+    /** Forgets the modifier state of a player who disconnected or whose entity was removed. */
+    public void cleanupPlayer(@Nonnull UUID playerId) {
+        activeEnchantmentLevels.remove(playerId);
     }
 
     @Override

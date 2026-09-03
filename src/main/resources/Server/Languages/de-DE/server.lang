@@ -222,19 +222,15 @@ items.Scroll_Life_Leech_I.description = Heilt den Angreifer um 10% des verursach
 
 
 
-items.Scroll_Life_Leech_II.name = Schriftrolle des Lebensentzugs II
 
 
 
-items.Scroll_Life_Leech_II.description = Heilt den Angreifer um 20% des verursachten Schadens.
 
 
 
-items.Scroll_Life_Leech_III.name = Schriftrolle des Lebensentzugs III
 
 
 
-items.Scroll_Life_Leech_III.description = Heilt den Angreifer um 30% des verursachten Schadens.
 
 
 
@@ -1144,7 +1140,6 @@ customUI.walkthrough.enchantments.desc = Eine vollständige Liste der Verzauberu
 
 config.general.allow_same_scroll_upgrades = Gleiche Schriftrollen-Upgrades erlauben (I+I = II)
 
-ui.itemcategory.simpleEnchantments = Einfache Verzauberungen
 ui.itemcategory.simpleEnchantments.scrolls = Schriftrollen
 
 customUI.walkthrough.enabledOnServer = Auf diesem Server aktiviert: 

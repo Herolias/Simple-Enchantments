@@ -15,9 +15,10 @@ import com.hypixel.hytale.server.core.inventory.ItemStack;
 import com.hypixel.hytale.server.core.modules.entity.damage.Damage;
 import com.hypixel.hytale.server.core.modules.entity.damage.DamageEventSystem;
 import com.hypixel.hytale.server.core.modules.entity.damage.DamageSystems;
-import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.core.modules.entitystats.EntityStatMap;
 import com.hypixel.hytale.server.core.modules.entitystats.asset.DefaultEntityStatTypes;
+import com.hypixel.hytale.server.core.universe.PlayerRef;
+import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 
 import javax.annotation.Nonnull;
 import java.util.Set;
@@ -30,6 +31,9 @@ public class EnchantmentAbsorptionSystem extends DamageEventSystem {
 
     private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
     private final EnchantmentManager enchantmentManager;
+
+    /** The defender is healed through its stat map, so require it up front. */
+    private static final Query<EntityStore> QUERY = Query.and(EntityStatMap.getComponentType());
 
     private final Set<Dependency<EntityStore>> dependencies = Set.of(
             new SystemDependency(Order.AFTER, DamageSystems.DamageStamina.class));
@@ -48,7 +52,7 @@ public class EnchantmentAbsorptionSystem extends DamageEventSystem {
     @Override
     @Nonnull
     public Query<EntityStore> getQuery() {
-        return com.hypixel.hytale.component.Archetype.empty();
+        return QUERY;
     }
 
     @Override
@@ -66,7 +70,8 @@ public class EnchantmentAbsorptionSystem extends DamageEventSystem {
         if (blocked == null || !blocked)
             return;
 
-        // Get defender
+        // The active-blocker lookup inspects the InteractionManager and still needs
+        // the legacy entity handle.
         Entity defenderEntity = EntityUtils.getEntity(index, archetypeChunk);
         if (!(defenderEntity instanceof LivingEntity defender))
             return;
@@ -88,22 +93,12 @@ public class EnchantmentAbsorptionSystem extends DamageEventSystem {
         if (healAmount <= 0)
             return;
 
-        // Retrieve EntityStatMap to heal the defender
         EntityStatMap statMap = archetypeChunk.getComponent(index, EntityStatMap.getComponentType());
-        if (statMap == null) {
-            // Fallback to command buffer if not in chunk (unlikely for index access but
-            // safe)
-            statMap = commandBuffer.getComponent(archetypeChunk.getReferenceTo(index),
-                    EntityStatMap.getComponentType());
-        }
+        if (statMap == null)
+            return;
 
-        if (statMap != null) {
-            statMap.addStatValue(DefaultEntityStatTypes.getHealth(), healAmount);
-            com.hypixel.hytale.server.core.universe.PlayerRef playerRef = store.getComponent(
-                    archetypeChunk.getReferenceTo(index),
-                    com.hypixel.hytale.server.core.universe.PlayerRef.getComponentType());
-            EnchantmentEventHelper.fireActivated(playerRef, blocker, EnchantmentType.ABSORPTION, absorptionLevel);
-            // Visual feedback could be added here (particles etc.)
-        }
+        statMap.addStatValue(DefaultEntityStatTypes.getHealth(), healAmount);
+        PlayerRef playerRef = store.getComponent(archetypeChunk.getReferenceTo(index), PlayerRef.getComponentType());
+        EnchantmentEventHelper.fireActivated(playerRef, blocker, EnchantmentType.ABSORPTION, absorptionLevel);
     }
 }

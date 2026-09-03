@@ -114,13 +114,9 @@ items.Scroll_Life_Leech_I.name = Scroll of Life Leech
 
 items.Scroll_Life_Leech_I.description = Heals attacker for 10% of damage dealt.
 
-items.Scroll_Life_Leech_II.name = Scroll of Life Leech II
 
-items.Scroll_Life_Leech_II.description = Heals attacker for 20% of damage dealt.
 
-items.Scroll_Life_Leech_III.name = Scroll of Life Leech III
 
-items.Scroll_Life_Leech_III.description = Heals attacker for 30% of damage dealt.
 
 
 
@@ -753,7 +749,6 @@ customUI.walkthrough.enchantments.desc = A complete list of enchantments and the
 
 config.general.allow_same_scroll_upgrades = Allow Same Scroll Upgrades(I+I = II)
 
-ui.itemcategory.simpleEnchantments = Simple Enchantments
 ui.itemcategory.simpleEnchantments.scrolls = Scrolls
 
 customUI.walkthrough.enabledOnServer = Enabled on this Server: 

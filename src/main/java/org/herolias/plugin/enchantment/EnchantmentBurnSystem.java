@@ -9,12 +9,14 @@ import com.hypixel.hytale.component.dependency.Order;
 import com.hypixel.hytale.component.dependency.SystemDependency;
 import com.hypixel.hytale.component.query.Query;
 import com.hypixel.hytale.logger.HytaleLogger;
-import com.hypixel.hytale.server.core.entity.Entity;
-import com.hypixel.hytale.server.core.entity.EntityUtils;
+import com.hypixel.hytale.server.core.entity.UUIDComponent;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
 import com.hypixel.hytale.server.core.modules.entity.damage.Damage;
+import com.hypixel.hytale.server.core.modules.entity.damage.DamageCause;
 import com.hypixel.hytale.server.core.modules.entity.damage.DamageEventSystem;
 import com.hypixel.hytale.server.core.modules.entity.damage.DamageSystems;
+import com.hypixel.hytale.server.core.modules.entitystats.EntityStatMap;
+import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 
 import javax.annotation.Nonnull;
@@ -33,10 +35,19 @@ public class EnchantmentBurnSystem extends DamageEventSystem {
     private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
     private static final String BURN_EFFECT_ID = "BurnEnchantment";
 
+    /** Only entities with stats can be damaged (same scope as {@code DamageSystems.ApplyDamage}). */
+    private static final Query<EntityStore> QUERY = Query.and(EntityStatMap.getComponentType());
+
     private final EnchantmentManager enchantmentManager;
 
     private final Set<Dependency<EntityStore>> dependencies = Set.of(
             new SystemDependency(Order.AFTER, DamageSystems.ApplyDamage.class));
+
+    /**
+     * Asset index of the {@code Fire} damage cause, i.e. the Burn DoT's own ticks.
+     * Resolved lazily on the first hit; {@link Integer#MIN_VALUE} while unknown.
+     */
+    private volatile int fireCauseIndex = Integer.MIN_VALUE;
 
     public EnchantmentBurnSystem(EnchantmentManager enchantmentManager) {
         this.enchantmentManager = enchantmentManager;
@@ -52,7 +63,7 @@ public class EnchantmentBurnSystem extends DamageEventSystem {
     @Override
     @Nonnull
     public Query<EntityStore> getQuery() {
-        return com.hypixel.hytale.component.Archetype.empty();
+        return QUERY;
     }
 
     @Override
@@ -65,7 +76,9 @@ public class EnchantmentBurnSystem extends DamageEventSystem {
         if (damage.getAmount() <= 0 || damage.isCancelled())
             return;
 
-        if (damage.getCause() != null && "Fire".equalsIgnoreCase(damage.getCause().getId()))
+        // The burn DoT itself deals "Fire" damage; never re-apply burn from its own ticks.
+        int fireIndex = fireCauseIndex();
+        if (fireIndex != Integer.MIN_VALUE && damage.getDamageCauseIndex() == fireIndex)
             return;
 
         // Check if this is reflected damage - if so, don't apply burn/weapon effects
@@ -89,15 +102,15 @@ public class EnchantmentBurnSystem extends DamageEventSystem {
             }
         }
 
-        // 2. Check attacker's weapon (Melee or fallback for Ranged)
-        if (burnLevel <= 0 && ctx.hasAttacker()) {
-            Entity attackerEntity = EntityUtils.getEntity(ctx.attackerRef(), commandBuffer);
-            ItemStack weapon = enchantmentManager.getWeaponFromEntity(attackerEntity);
-
-            if (weapon != null) {
-                burnLevel = enchantmentManager.getEnchantmentLevel(weapon, EnchantmentType.BURN);
-                lootingLevel = enchantmentManager.getEnchantmentLevel(weapon, EnchantmentType.LOOTING);
-            }
+        // 2. Check attacker's weapon (Melee or fallback for Ranged) - one metadata read
+        ItemStack weapon = ctx.hasAttacker()
+                ? enchantmentManager.getWeaponFromEntity(ctx.attackerRef(), commandBuffer)
+                : null;
+        if (burnLevel <= 0 && weapon != null) {
+            int[] levels = enchantmentManager.getEnchantmentLevels(weapon, EnchantmentType.BURN,
+                    EnchantmentType.LOOTING);
+            burnLevel = levels[0];
+            lootingLevel = levels[1];
         }
 
         if (burnLevel <= 0)
@@ -107,28 +120,30 @@ public class EnchantmentBurnSystem extends DamageEventSystem {
         if (targetRef == null || !targetRef.isValid())
             return;
 
-        // Use centralized status effect application
-        if (!enchantmentManager.applyStatusEffect(targetRef, BURN_EFFECT_ID, store, commandBuffer)) {
-            LOGGER.atWarning().log("Burn effect not found in asset map");
+        // applyStatusEffect already logs when the asset is missing.
+        if (!enchantmentManager.applyStatusEffect(targetRef, BURN_EFFECT_ID, store, commandBuffer))
             return;
+
+        if (weapon != null) {
+            PlayerRef playerRef = store.getComponent(ctx.attackerRef(), PlayerRef.getComponentType());
+            EnchantmentEventHelper.fireActivated(playerRef, weapon, EnchantmentType.BURN, burnLevel);
         }
 
-        if (ctx.hasAttacker()) {
-            Entity shooterEntity = EntityUtils.getEntity(ctx.attackerRef(), commandBuffer);
-            ItemStack weapon = enchantmentManager.getWeaponFromEntity(shooterEntity);
-            if (weapon != null) {
-                com.hypixel.hytale.server.core.universe.PlayerRef playerRef = store.getComponent(ctx.attackerRef(),
-                        com.hypixel.hytale.server.core.universe.PlayerRef.getComponentType());
-                EnchantmentEventHelper.fireActivated(playerRef, weapon, EnchantmentType.BURN, burnLevel);
-            }
-        }
-
-        // Store enchantment data on the victim so we can attribute drops if they die
-        // from burn
-        com.hypixel.hytale.server.core.entity.UUIDComponent targetUuid = commandBuffer.getComponent(targetRef,
-                com.hypixel.hytale.server.core.entity.UUIDComponent.getComponentType());
+        // Remember the burn/looting levels on the victim so a death caused by the
+        // DoT can still be attributed (drop cooking / looting). Entries carry a
+        // creation timestamp so the manager can expire them.
+        UUIDComponent targetUuid = commandBuffer.getComponent(targetRef, UUIDComponent.getComponentType());
         if (targetUuid != null) {
             enchantmentManager.updateDoTEnchantments(targetUuid.getUuid(), burnLevel, lootingLevel);
         }
+    }
+
+    private int fireCauseIndex() {
+        int idx = fireCauseIndex;
+        if (idx == Integer.MIN_VALUE) {
+            idx = DamageCause.getAssetMap().getIndexOrDefault("Fire", Integer.MIN_VALUE);
+            fireCauseIndex = idx;
+        }
+        return idx;
     }
 }

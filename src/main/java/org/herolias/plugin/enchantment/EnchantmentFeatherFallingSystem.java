@@ -2,7 +2,6 @@ package org.herolias.plugin.enchantment;
 
 import com.hypixel.hytale.component.ArchetypeChunk;
 import com.hypixel.hytale.component.CommandBuffer;
-import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.component.dependency.Dependency;
 import com.hypixel.hytale.component.dependency.Order;
@@ -10,10 +9,8 @@ import com.hypixel.hytale.component.dependency.SystemDependency;
 import com.hypixel.hytale.component.dependency.SystemGroupDependency;
 import com.hypixel.hytale.component.query.Query;
 import com.hypixel.hytale.logger.HytaleLogger;
-import com.hypixel.hytale.server.core.entity.Entity;
-import com.hypixel.hytale.server.core.entity.EntityUtils;
-import com.hypixel.hytale.server.core.entity.LivingEntity;
-import com.hypixel.hytale.server.core.inventory.Inventory;
+import com.hypixel.hytale.server.core.entity.entities.Player;
+import com.hypixel.hytale.server.core.inventory.InventoryComponent;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
 import com.hypixel.hytale.server.core.inventory.container.ItemContainer;
 import com.hypixel.hytale.server.core.modules.entity.damage.Damage;
@@ -21,10 +18,13 @@ import com.hypixel.hytale.server.core.modules.entity.damage.DamageCause;
 import com.hypixel.hytale.server.core.modules.entity.damage.DamageEventSystem;
 import com.hypixel.hytale.server.core.modules.entity.damage.DamageModule;
 import com.hypixel.hytale.server.core.modules.entity.damage.DamageSystems;
+import com.hypixel.hytale.server.core.modules.entitystats.EntityStatMap;
+import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 
 import javax.annotation.Nonnull;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 /**
  * ECS system that reduces fall damage based on Feather Falling enchantment on
@@ -39,6 +39,11 @@ public class EnchantmentFeatherFallingSystem extends DamageEventSystem {
 
     // Hytale's armor slot index 3 is Legs.
     private static final short LEGS_SLOT = 3;
+
+    /** Damageable entities that actually wear armor. */
+    private static final Query<EntityStore> QUERY = Query.and(
+            EntityStatMap.getComponentType(),
+            InventoryComponent.Armor.getComponentType());
 
     private final EnchantmentManager enchantmentManager;
 
@@ -60,7 +65,7 @@ public class EnchantmentFeatherFallingSystem extends DamageEventSystem {
     @Override
     @Nonnull
     public Query<EntityStore> getQuery() {
-        return com.hypixel.hytale.component.Archetype.empty();
+        return QUERY;
     }
 
     @Override
@@ -76,24 +81,16 @@ public class EnchantmentFeatherFallingSystem extends DamageEventSystem {
         }
 
         // Only process fall damage
-        DamageCause damageCause = DamageCause.getAssetMap().getAsset(damage.getDamageCauseIndex());
+        DamageCause damageCause = enchantmentManager.getDamageCause(damage.getDamageCauseIndex());
         if (damageCause == null || !enchantmentManager.isFallDamage(damageCause)) {
             return;
         }
 
         try {
-            Entity targetEntity = EntityUtils.getEntity(index, archetypeChunk);
-            if (!(targetEntity instanceof LivingEntity targetLiving)) {
-                return;
-            }
-
-            Inventory inventory = targetLiving.getInventory();
-            if (inventory == null) {
-                return;
-            }
-
-            ItemContainer armorContainer = inventory.getArmor();
-            if (armorContainer == null) {
+            InventoryComponent.Armor armorComponent = archetypeChunk.getComponent(index,
+                    InventoryComponent.Armor.getComponentType());
+            ItemContainer armorContainer = armorComponent != null ? armorComponent.getInventory() : null;
+            if (armorContainer == null || armorContainer.getCapacity() <= LEGS_SLOT) {
                 return;
             }
 
@@ -117,19 +114,19 @@ public class EnchantmentFeatherFallingSystem extends DamageEventSystem {
             float reducedDamage = (float) (originalDamage * multiplier);
             damage.setAmount(reducedDamage);
 
-            if (targetEntity instanceof com.hypixel.hytale.server.core.entity.entities.Player) {
-                com.hypixel.hytale.server.core.universe.PlayerRef playerRef = store.getComponent(
-                        targetEntity.getReference(),
-                        com.hypixel.hytale.server.core.universe.PlayerRef.getComponentType());
+            if (archetypeChunk.getComponent(index, Player.getComponentType()) != null) {
+                PlayerRef playerRef = store.getComponent(archetypeChunk.getReferenceTo(index),
+                        PlayerRef.getComponentType());
                 EnchantmentEventHelper.fireActivated(playerRef, legArmor, EnchantmentType.FEATHER_FALLING,
                         featherFallingLevel);
             }
 
-            LOGGER.atFine().log("Feather Falling " + featherFallingLevel + " reduced fall damage: "
-                    + originalDamage + " -> " + reducedDamage);
+            LOGGER.atFine().log("Feather Falling %d reduced fall damage: %.2f -> %.2f",
+                    featherFallingLevel, originalDamage, reducedDamage);
 
         } catch (Exception e) {
-            LOGGER.atWarning().log("Error in Feather Falling system: " + e.getMessage());
+            LOGGER.atWarning().atMostEvery(30, TimeUnit.SECONDS).withCause(e)
+                    .log("Error in Feather Falling system");
         }
     }
 }

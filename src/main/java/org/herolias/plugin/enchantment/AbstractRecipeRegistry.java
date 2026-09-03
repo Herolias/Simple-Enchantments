@@ -1,6 +1,9 @@
 package org.herolias.plugin.enchantment;
 
+import com.hypixel.hytale.builtin.crafting.CraftingPlugin;
+import com.hypixel.hytale.logger.HytaleLogger;
 import com.hypixel.hytale.protocol.BenchRequirement;
+import com.hypixel.hytale.protocol.BenchType;
 import com.hypixel.hytale.protocol.ItemResourceType;
 import com.hypixel.hytale.server.core.asset.type.item.config.CraftingRecipe;
 import com.hypixel.hytale.server.core.asset.type.item.config.Item;
@@ -10,20 +13,35 @@ import com.hypixel.hytale.server.core.inventory.MaterialQuantity;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 /**
  * Base class for recipe registries that process single-input-single-output
- * recipes
- * (like Smelting or Campfire Cooking) from Hytale assets.
+ * recipes (like Smelting or Campfire Cooking).
+ *
+ * <p>
+ * Recipes are taken from the crafting plugin's per-bench registry
+ * ({@link CraftingPlugin#getBenchRecipes(BenchType, String)}), so recipes
+ * generated from item assets, standalone recipe assets under
+ * {@code Item/Recipes/**} and recipes added by other plugins are all
+ * included. The registry is built lazily once, into temporary maps that are
+ * published atomically; {@link #reload()} rebuilds it (wire it to
+ * {@code LoadedAssetsEvent<CraftingRecipe>} so asset reloads are picked up).
+ * </p>
  */
 public abstract class AbstractRecipeRegistry<T extends AbstractRecipeRegistry.Recipe> {
 
-    protected final Map<String, T> byItemId = new HashMap<>();
-    protected final Map<String, T> byResourceTypeId = new HashMap<>();
-    private volatile boolean initialized;
+    private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
+
+    /** Immutable, atomically published lookup tables. */
+    private record Snapshot<T>(Map<String, T> byItemId, Map<String, T> byResourceTypeId) {
+    }
+
+    private volatile Snapshot<T> snapshot;
+    private volatile int generation;
 
     /**
      * Gets a recipe for the given input item.
@@ -33,12 +51,13 @@ public abstract class AbstractRecipeRegistry<T extends AbstractRecipeRegistry.Re
         if (input == null || input.isEmpty()) {
             return null;
         }
-        if (!ensureInitialized()) {
-            // Asset map not yet stable — skip this tick instead of crashing the entity.
+        Snapshot<T> current = snapshot();
+        if (current == null) {
+            // No recipe assets are loaded yet; retry on the next call.
             return null;
         }
 
-        T recipe = byItemId.get(input.getItemId());
+        T recipe = current.byItemId().get(input.getItemId());
         if (recipe != null) {
             return recipe;
         }
@@ -57,7 +76,7 @@ public abstract class AbstractRecipeRegistry<T extends AbstractRecipeRegistry.Re
             if (resourceType == null || resourceType.id == null) {
                 continue;
             }
-            recipe = byResourceTypeId.get(resourceType.id);
+            recipe = current.byResourceTypeId().get(resourceType.id);
             if (recipe != null) {
                 return recipe;
             }
@@ -66,98 +85,136 @@ public abstract class AbstractRecipeRegistry<T extends AbstractRecipeRegistry.Re
         return null;
     }
 
-    protected boolean ensureInitialized() {
-        if (initialized) {
-            return true;
-        }
+    /**
+     * Forces the registry to be built if it is not yet.
+     *
+     * @return true if a snapshot is available
+     */
+    public boolean ensureBuilt() {
+        return snapshot() != null;
+    }
+
+    /**
+     * Monotonic counter incremented every time a new snapshot is published.
+     * Callers that cache results derived from this registry can compare it to
+     * detect a {@link #reload()}.
+     */
+    public int getGeneration() {
+        return generation;
+    }
+
+    /**
+     * Rebuilds the registry from the currently loaded recipes and publishes the
+     * result atomically. Intended to be called from
+     * {@code LoadedAssetsEvent<CraftingRecipe>}.
+     */
+    public void reload() {
         synchronized (this) {
-            if (initialized) {
-                return true;
+            Snapshot<T> built = build();
+            if (built != null) {
+                publish(built);
             }
-
-            // Snapshot the asset map defensively. The underlying fastutil map can be
-            // mutated by engine/plugin threads during startup, which corrupts
-            // iterators (NPE on Object2ObjectOpenCustomHashMap$MapIterator.wrapped).
-            // Retry a few times, then bail out and let the next caller try again.
-            List<Item> items = null;
-            for (int attempt = 0; attempt < 5; attempt++) {
-                try {
-                    items = new ArrayList<>(Item.getAssetMap().getAssetMap().values());
-                    break;
-                } catch (NullPointerException | java.util.ConcurrentModificationException e) {
-                    // Asset map is still being populated on another thread.
-                    try {
-                        Thread.sleep(20L);
-                    } catch (InterruptedException ie) {
-                        Thread.currentThread().interrupt();
-                        return false;
-                    }
-                }
-            }
-            if (items == null) {
-                // Still unstable — don't mark initialized; caller will retry later.
-                return false;
-            }
-
-            // Build into temporary maps so a mid-iteration failure leaves no partial state.
-            Map<String, T> tmpByItemId = new HashMap<>();
-            Map<String, T> tmpByResourceTypeId = new HashMap<>();
-
-            try {
-                for (Item item : items) {
-                    if (item == null) {
-                        continue;
-                    }
-
-                    List<CraftingRecipe> recipes = new ArrayList<>();
-                    item.collectRecipesToGenerate(recipes);
-                    if (recipes.isEmpty()) {
-                        continue;
-                    }
-
-                    for (CraftingRecipe recipe : recipes) {
-                        if (!isValidRecipe(recipe)) {
-                            continue;
-                        }
-
-                        MaterialQuantity[] inputs = recipe.getInput();
-                        if (inputs == null || inputs.length != 1) {
-                            continue;
-                        }
-
-                        MaterialQuantity input = inputs[0];
-                        MaterialQuantity output = recipe.getPrimaryOutput();
-                        if (input == null || output == null || output.getItemId() == null) {
-                            continue;
-                        }
-
-                        T registryRecipe = createRecipe(output, input.getQuantity(), input.getItemId(),
-                                input.getResourceTypeId());
-                        if (input.getItemId() != null) {
-                            tmpByItemId.putIfAbsent(input.getItemId(), registryRecipe);
-                        }
-                        if (input.getResourceTypeId() != null) {
-                            tmpByResourceTypeId.putIfAbsent(input.getResourceTypeId(), registryRecipe);
-                        }
-                    }
-                }
-            } catch (NullPointerException | java.util.ConcurrentModificationException e) {
-                // Something mutated underneath us mid-scan; don't commit, retry next call.
-                return false;
-            }
-
-            byItemId.putAll(tmpByItemId);
-            byResourceTypeId.putAll(tmpByResourceTypeId);
-            initialized = true;
-            return true;
         }
     }
+
+    @Nullable
+    private Snapshot<T> snapshot() {
+        Snapshot<T> current = snapshot;
+        if (current != null) {
+            return current;
+        }
+        synchronized (this) {
+            current = snapshot;
+            if (current != null) {
+                return current;
+            }
+            Snapshot<T> built = build();
+            if (built != null) {
+                publish(built);
+            }
+            return built;
+        }
+    }
+
+    private void publish(@Nonnull Snapshot<T> built) {
+        snapshot = built;
+        generation++;
+    }
+
+    /**
+     * Computes a new snapshot. Returns null when no crafting recipes are loaded
+     * at all (so nothing is cached and a later call retries) or when the scan
+     * failed.
+     */
+    @Nullable
+    private Snapshot<T> build() {
+        List<CraftingRecipe> candidates;
+        try {
+            candidates = CraftingPlugin.getBenchRecipes(BenchType.Processing, benchId());
+            if (candidates.isEmpty()) {
+                // Bench registry not populated (yet); fall back to the raw asset map.
+                candidates = new ArrayList<>(CraftingRecipe.getAssetMap().getAssetMap().values());
+            }
+        } catch (RuntimeException e) {
+            LOGGER.atWarning().withCause(e).log("Failed to collect %s recipes; will retry later", benchId());
+            return null;
+        }
+        if (candidates.isEmpty()) {
+            return null;
+        }
+
+        Map<String, T> byItemId = new HashMap<>();
+        Map<String, T> byResourceTypeId = new HashMap<>();
+        try {
+            for (CraftingRecipe recipe : candidates) {
+                if (recipe == null || !isValidRecipe(recipe)) {
+                    continue;
+                }
+
+                MaterialQuantity[] inputs = recipe.getInput();
+                if (inputs == null || inputs.length != 1) {
+                    continue;
+                }
+
+                MaterialQuantity input = inputs[0];
+                MaterialQuantity output = recipe.getPrimaryOutput();
+                if (input == null || output == null || output.getItemId() == null) {
+                    continue;
+                }
+
+                T registryRecipe = createRecipe(output, input.getQuantity(), input.getItemId(),
+                        input.getResourceTypeId());
+                if (input.getItemId() != null) {
+                    byItemId.putIfAbsent(input.getItemId(), registryRecipe);
+                }
+                if (input.getResourceTypeId() != null) {
+                    byResourceTypeId.putIfAbsent(input.getResourceTypeId(), registryRecipe);
+                }
+            }
+        } catch (RuntimeException e) {
+            LOGGER.atWarning().withCause(e).log("Failed to build %s recipe registry; will retry later", benchId());
+            return null;
+        }
+
+        LOGGER.atFine().log("Built %s recipe registry: %d item recipes, %d resource-type recipes", benchId(),
+                byItemId.size(), byResourceTypeId.size());
+        return new Snapshot<>(Collections.unmodifiableMap(byItemId), Collections.unmodifiableMap(byResourceTypeId));
+    }
+
+    /**
+     * The processing bench id whose recipes make up this registry (e.g.
+     * {@code "Furnace"}).
+     */
+    @Nonnull
+    protected abstract String benchId();
 
     /**
      * Checks if the crafting recipe belongs to this registry (e.g., checks bench
      * type).
      */
-    protected abstract boolean isValidRecipe(@Nonnull CraftingRecipe recipe);
+    protected boolean isValidRecipe(@Nonnull CraftingRecipe recipe) {
+        return checkBenchRequirement(recipe, benchId());
+    }
 
     /**
      * Creates an instance of the specific Recipe type.
@@ -174,8 +231,7 @@ public abstract class AbstractRecipeRegistry<T extends AbstractRecipeRegistry.Re
             if (requirement == null || requirement.id == null) {
                 continue;
             }
-            if (requirement.type == com.hypixel.hytale.protocol.BenchType.Processing
-                    && requiredBenchId.equalsIgnoreCase(requirement.id)) {
+            if (requirement.type == BenchType.Processing && requiredBenchId.equalsIgnoreCase(requirement.id)) {
                 return true;
             }
         }

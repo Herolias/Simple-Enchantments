@@ -2,35 +2,46 @@ package org.herolias.plugin.enchantment;
 
 import com.hypixel.hytale.assetstore.event.LoadedAssetsEvent;
 import com.hypixel.hytale.assetstore.map.DefaultAssetMap;
+import com.hypixel.hytale.codec.ExtraInfo;
 import com.hypixel.hytale.logger.HytaleLogger;
-import com.hypixel.hytale.math.range.FloatRange;
-import com.hypixel.hytale.protocol.ValueType;
+import com.hypixel.hytale.protocol.ItemArmorSlot;
 import com.hypixel.hytale.server.core.asset.type.item.config.Item;
 import com.hypixel.hytale.server.core.asset.type.item.config.ItemAppearanceCondition;
+import com.hypixel.hytale.server.core.asset.type.item.config.ItemArmor;
+import org.bson.BsonArray;
+import org.bson.BsonDocument;
+import org.bson.BsonDouble;
+import org.bson.BsonString;
 import org.herolias.plugin.SimpleEnchanting;
 import org.herolias.plugin.engravingtable.EngravingTableColorOption;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.lang.reflect.Field;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * Injects ItemAppearanceConditions for enchantment glow at runtime.
- * 
- * This replaces the previous approach of file-based item overrides,
- * which caused compatibility issues with other mods that also modified items.
- * 
- * By injecting at runtime via LoadedAssetsEvent, we:
- * - Preserve all vanilla item properties
- * - Merge with any other mod's changes (non-destructive)
- * - Automatically apply to all enchantable items
+ * Injects the enchantment glow {@link ItemAppearanceCondition}s into every
+ * enchantable item at load time.
+ * <p>
+ * Doing this at runtime via {@link LoadedAssetsEvent} instead of shipping item
+ * overrides preserves all vanilla item properties and merges with other mods'
+ * changes. Conditions are decoded through {@link ItemAppearanceCondition#CODEC}
+ * from the same document shape the JSON would use and shared between items
+ * (they are read-only). The only reflective access left is the write to
+ * {@code Item.itemAppearanceConditions}, which has no setter; the map is copied
+ * once per item because templates and their children share the instance.
  */
-public class EnchantmentGlowInjector {
+public final class EnchantmentGlowInjector {
 
     private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
 
-    // Stat keys that the condition is mapped to (must match EntityStatType assets)
+    // Stat keys the conditions are mapped to (must match the EntityStatType assets).
     private static final String STAT_GLOW_PRIMARY = "EnchantmentGlow_Primary";
     private static final String STAT_GLOW_HEAD = "EnchantmentGlow_Head";
     private static final String STAT_GLOW_CHEST = "EnchantmentGlow_Chest";
@@ -38,42 +49,33 @@ public class EnchantmentGlowInjector {
     private static final String STAT_GLOW_LEGS = "EnchantmentGlow_Legs";
     private static final String STAT_GLOW_SHIELD = "EnchantmentGlow_Shield";
 
-    // The VFX to apply when condition is met
-    private static final String MODEL_VFX_ID = "Enchantment_Glow";
-    private static final String MODEL_VFX_ID_SMALL = "Enchantment_Glow_Small";
-
-    // Keywords for identifying items that should use the small glow effect
-    private static final java.util.Set<String> SMALL_WEAPON_KEYWORDS = java.util.Set.of(
+    /** Keywords identifying items that use the small glow effect. */
+    private static final Set<String> SMALL_WEAPON_KEYWORDS = Set.of(
             "dagger", "mace", "shortbow", "short_bow", "shovel", "battleaxe", "longsword",
             "staff", "spellbook");
 
-    // Reflection field for accessing protected itemAppearanceConditions
-    private static Field itemAppearanceConditionsField;
-    private static Field conditionField;
-    private static Field conditionValueTypeField;
-    private static Field modelVFXIdField;
+    /** The one field without a setter. */
+    @Nullable
+    private static final Field ITEM_APPEARANCE_CONDITIONS_FIELD = resolveConditionsField();
 
-    static {
+    /** Decoded condition arrays per (smallGlow, includeSingleGlow); shared across items. */
+    private static final Map<Integer, ItemAppearanceCondition[]> CONDITION_CACHE = new ConcurrentHashMap<>();
+
+    private EnchantmentGlowInjector() {
+    }
+
+    @Nullable
+    private static Field resolveConditionsField() {
         try {
-            itemAppearanceConditionsField = Item.class.getDeclaredField("itemAppearanceConditions");
-            itemAppearanceConditionsField.setAccessible(true);
-
-            conditionField = ItemAppearanceCondition.class.getDeclaredField("condition");
-            conditionField.setAccessible(true);
-
-            conditionValueTypeField = ItemAppearanceCondition.class.getDeclaredField("conditionValueType");
-            conditionValueTypeField.setAccessible(true);
-
-            modelVFXIdField = ItemAppearanceCondition.class.getDeclaredField("modelVFXId");
-            modelVFXIdField.setAccessible(true);
-        } catch (NoSuchFieldException e) {
-            LOGGER.atSevere().log("Failed to find required fields for EnchantmentGlowInjector: " + e.getMessage());
+            Field field = Item.class.getDeclaredField("itemAppearanceConditions");
+            field.setAccessible(true);
+            return field;
+        } catch (NoSuchFieldException | RuntimeException e) {
+            LOGGER.atSevere().withCause(e).log("Item.itemAppearanceConditions is not accessible; enchantment glow disabled");
+            return null;
         }
     }
 
-    /**
-     * Registers the event listener for item loading.
-     */
     public static void registerEventListener(@Nonnull SimpleEnchanting plugin) {
         plugin.getEventRegistry().register(
                 LoadedAssetsEvent.class,
@@ -82,182 +84,194 @@ public class EnchantmentGlowInjector {
         LOGGER.atInfo().log("EnchantmentGlowInjector registered");
     }
 
-    private static void onItemsLoaded(LoadedAssetsEvent<String, Item, DefaultAssetMap<String, Item>> event) {
-        if (itemAppearanceConditionsField == null || conditionField == null) {
-            LOGGER.atWarning().log("EnchantmentGlowInjector skipped - reflection fields not available");
+    private static void onItemsLoaded(@Nonnull LoadedAssetsEvent<String, Item, DefaultAssetMap<String, Item>> event) {
+        if (ITEM_APPEARANCE_CONDITIONS_FIELD == null) {
             return;
         }
-
-        int weaponCount = 0;
-        int toolCount = 0;
-        int armorCount = 0;
+        int weapons = 0;
+        int tools = 0;
+        int shields = 0;
+        int armor = 0;
+        int failed = 0;
 
         ItemCategoryManager categoryManager = ItemCategoryManager.getInstance();
-
         for (Map.Entry<String, Item> entry : event.getLoadedAssets().entrySet()) {
             String itemId = entry.getKey();
             Item item = entry.getValue();
+            ItemCategory category = categoryManager.categorizeItem(itemId, item);
+            if (category == ItemCategory.UNKNOWN) {
+                continue;
+            }
+
+            String statKey;
+            boolean smallGlow;
+            boolean includeSingleGlow;
+            if (category.isShield()) {
+                statKey = STAT_GLOW_SHIELD;
+                smallGlow = true;
+                includeSingleGlow = false;
+            } else if (category.isWeapon() || category.isTool()) {
+                statKey = STAT_GLOW_PRIMARY;
+                smallGlow = usesSmallGlow(item, itemId);
+                includeSingleGlow = true;
+            } else if (category.isArmor()) {
+                statKey = armorGlowStat(item);
+                if (statKey == null) {
+                    continue;
+                }
+                smallGlow = usesSmallGlow(item, itemId);
+                includeSingleGlow = false;
+            } else {
+                continue;
+            }
 
             try {
-                ItemCategory category = categoryManager.categorizeItem(itemId, item);
-
-                if (category == ItemCategory.UNKNOWN)
-                    continue;
-
-                boolean smallGlow = usesSmallGlow(item, itemId);
-                boolean mutated = false;
-
-                // Check what type of item this is and inject appropriate glow conditions
-                if (category.isShield()) {
-                    injectAllGlowConditions(item, STAT_GLOW_SHIELD, true, false);
-                    mutated = true;
-                } else if (category.isWeapon()) {
-                    injectAllGlowConditions(item, STAT_GLOW_PRIMARY, smallGlow, true);
-                    weaponCount++;
-                    mutated = true;
-                } else if (category.isTool()) {
-                    injectAllGlowConditions(item, STAT_GLOW_PRIMARY, smallGlow, true);
-                    toolCount++;
-                    mutated = true;
-                } else if (category.isArmor()) {
-                    // Armor uses slot-specific glow stats
-                    String statKey = getArmorGlowStat(itemId);
-                    if (statKey != null) {
-                        injectAllGlowConditions(item, statKey, smallGlow, false);
-                        armorCount++;
-                        mutated = true;
+                if (inject(item, statKey, conditionsFor(smallGlow, includeSingleGlow))) {
+                    item.invalidatePacketCache();
+                    if (category.isShield()) {
+                        shields++;
+                    } else if (category.isWeapon()) {
+                        weapons++;
+                    } else if (category.isTool()) {
+                        tools++;
+                    } else {
+                        armor++;
                     }
                 }
-                if (mutated) {
-                    item.invalidatePacketCache();
-                }
-            } catch (Exception e) {
-                LOGGER.atWarning().log("Failed to inject glow for item " + itemId + ": " + e.getMessage());
+            } catch (IllegalAccessException | RuntimeException e) {
+                failed++;
+                LOGGER.atWarning().withCause(e).log("Failed to inject glow conditions into item %s", itemId);
             }
         }
 
-        LOGGER.atInfo().log("EnchantmentGlowInjector: Injected glow conditions for "
-                + weaponCount + " weapons, "
-                + toolCount + " tools, "
-                + armorCount + " armor pieces");
+        if (weapons + tools + shields + armor + failed > 0) {
+            LOGGER.atInfo().log("EnchantmentGlowInjector: glow conditions injected into %d weapons, %d tools, %d shields, %d armor pieces (%d failed)",
+                    weapons, tools, shields, armor, failed);
+        }
     }
 
-    /**
-     * Determines which glow VFX to use based on item type/category.
-     */
-    private static boolean usesSmallGlow(Item item, String itemId) {
-        String idLower = itemId.toLowerCase();
-
-        // Check Categories first
+    /** Small glow for items whose categories or id name a small weapon type. */
+    private static boolean usesSmallGlow(@Nonnull Item item, @Nonnull String itemId) {
         if (item.getCategories() != null) {
             for (String category : item.getCategories()) {
-                String catLower = category.toLowerCase();
+                String lower = category.toLowerCase();
                 for (String keyword : SMALL_WEAPON_KEYWORDS) {
-                    if (catLower.contains(keyword)) {
+                    if (lower.contains(keyword)) {
                         return true;
                     }
                 }
             }
         }
-
-        // Fallback checks on ID
+        String idLower = itemId.toLowerCase();
         for (String keyword : SMALL_WEAPON_KEYWORDS) {
             if (idLower.contains(keyword)) {
                 return true;
             }
         }
-
         return false;
     }
 
-    private static String getArmorGlowStat(String itemId) {
-        String id = itemId.toLowerCase();
-        if (id.contains("head") || id.contains("helmet") || id.contains("hood") || id.contains("cap")) {
-            return STAT_GLOW_HEAD;
-        } else if (id.contains("chest") || id.contains("torso") || id.contains("robe") || id.contains("tunic")) {
-            return STAT_GLOW_CHEST;
-        } else if (id.contains("hand") || id.contains("gauntlet") || id.contains("glove") || id.contains("bracer")) {
-            return STAT_GLOW_HANDS;
-        } else if (id.contains("leg") || id.contains("pants") || id.contains("greave") || id.contains("boots")) {
-            return STAT_GLOW_LEGS;
-        }
-        // Default to primary for unrecognized armor
-        return STAT_GLOW_PRIMARY;
-    }
-
-    private static void injectAllGlowConditions(
-            @Nonnull Item item,
-            @Nonnull String statKey,
-            boolean smallGlow,
-            boolean includeSingleGlow) throws IllegalAccessException {
-        for (EngravingTableColorOption colorOption : EngravingTableColorOption.values()) {
-            injectGlowCondition(
-                    item,
-                    statKey,
-                    colorOption.getGlowVfxId(smallGlow, false),
-                    colorOption.getGlowStatValue(false));
-            if (includeSingleGlow) {
-                injectGlowCondition(
-                        item,
-                        statKey,
-                        colorOption.getGlowVfxId(smallGlow, true),
-                        colorOption.getGlowStatValue(true));
-            }
-        }
-    }
-
-    private static void injectGlowCondition(Item item, String statKey, String vfxId, float targetValue)
-            throws IllegalAccessException {
-        // Get existing conditions map or create new one
-        Map<String, ItemAppearanceCondition[]> conditions = (Map<String, ItemAppearanceCondition[]>) itemAppearanceConditionsField
-                .get(item);
-
-        if (conditions == null) {
-            conditions = new HashMap<>();
-            itemAppearanceConditionsField.set(item, conditions);
-        } else {
-            // If map exists, we might need to APPEND to the array for this statKey if it
-            // exists
-            // But first ensure we have a mutable map
-            conditions = new HashMap<>(conditions);
-            itemAppearanceConditionsField.set(item, conditions);
-        }
-
-        ItemAppearanceCondition glowCondition = createGlowCondition(vfxId, targetValue);
-        if (glowCondition == null)
-            return;
-
-        if (conditions.containsKey(statKey)) {
-            // Append to existing array
-            ItemAppearanceCondition[] existing = conditions.get(statKey);
-            ItemAppearanceCondition[] newArray = new ItemAppearanceCondition[existing.length + 1];
-            System.arraycopy(existing, 0, newArray, 0, existing.length);
-            newArray[existing.length] = glowCondition;
-            conditions.put(statKey, newArray);
-        } else {
-            // New entry
-            conditions.put(statKey, new ItemAppearanceCondition[] { glowCondition });
-        }
-    }
-
-    private static ItemAppearanceCondition createGlowCondition(String vfxId, float targetValue) {
-        try {
-            ItemAppearanceCondition condition = new ItemAppearanceCondition();
-
-            // Set condition range: [X, X] means "when stat value equals X"
-            FloatRange range = new FloatRange(targetValue, targetValue);
-            conditionField.set(condition, range);
-
-            // Set value type to Absolute
-            conditionValueTypeField.set(condition, ValueType.Absolute);
-
-            // Set the VFX to apply
-            modelVFXIdField.set(condition, vfxId);
-
-            return condition;
-        } catch (Exception e) {
-            LOGGER.atSevere().log("Failed to create glow condition: " + e.getMessage());
+    /** Glow stat for the slot the armor piece is worn in, or null when the item is not wearable. */
+    @Nullable
+    private static String armorGlowStat(@Nonnull Item item) {
+        ItemArmor armor = item.getArmor();
+        if (armor == null || armor.getArmorSlot() == null) {
             return null;
         }
+        return switch (armor.getArmorSlot()) {
+            case Head -> STAT_GLOW_HEAD;
+            case Chest -> STAT_GLOW_CHEST;
+            case Hands -> STAT_GLOW_HANDS;
+            case Legs -> STAT_GLOW_LEGS;
+        };
+    }
+
+    /**
+     * Merges the glow conditions into the item's map under the stat key with a
+     * single reflective write. Returns false when the item already carries
+     * them (nothing changed).
+     */
+    @SuppressWarnings("unchecked")
+    private static boolean inject(@Nonnull Item item, @Nonnull String statKey,
+            @Nonnull ItemAppearanceCondition[] glowConditions) throws IllegalAccessException {
+        if (glowConditions.length == 0) {
+            return false;
+        }
+        Map<String, ItemAppearanceCondition[]> existing = (Map<String, ItemAppearanceCondition[]>) ITEM_APPEARANCE_CONDITIONS_FIELD
+                .get(item);
+        ItemAppearanceCondition[] current = existing != null ? existing.get(statKey) : null;
+        if (current != null && alreadyInjected(current, glowConditions)) {
+            return false;
+        }
+
+        ItemAppearanceCondition[] combined;
+        if (current == null || current.length == 0) {
+            combined = glowConditions;
+        } else {
+            combined = Arrays.copyOf(current, current.length + glowConditions.length);
+            System.arraycopy(glowConditions, 0, combined, current.length, glowConditions.length);
+        }
+
+        // Copy: templates and their children share the same map instance.
+        Map<String, ItemAppearanceCondition[]> merged = existing != null ? new HashMap<>(existing) : new HashMap<>();
+        merged.put(statKey, combined);
+        ITEM_APPEARANCE_CONDITIONS_FIELD.set(item, merged);
+        return true;
+    }
+
+    private static boolean alreadyInjected(@Nonnull ItemAppearanceCondition[] current,
+            @Nonnull ItemAppearanceCondition[] glowConditions) {
+        for (ItemAppearanceCondition condition : current) {
+            if (condition == glowConditions[0]) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /** Conditions for every engraving colour, decoded once per (small, single) combination. */
+    @Nonnull
+    private static ItemAppearanceCondition[] conditionsFor(boolean smallGlow, boolean includeSingleGlow) {
+        int key = (smallGlow ? 1 : 0) | (includeSingleGlow ? 2 : 0);
+        return CONDITION_CACHE.computeIfAbsent(key, k -> buildConditions(smallGlow, includeSingleGlow));
+    }
+
+    @Nonnull
+    private static ItemAppearanceCondition[] buildConditions(boolean smallGlow, boolean includeSingleGlow) {
+        EngravingTableColorOption[] colors = EngravingTableColorOption.values();
+        ItemAppearanceCondition[] conditions = new ItemAppearanceCondition[colors.length * (includeSingleGlow ? 2 : 1)];
+        int i = 0;
+        for (EngravingTableColorOption color : colors) {
+            conditions[i++] = createGlowCondition(color.getGlowVfxId(smallGlow, false), color.getGlowStatValue(false));
+            if (includeSingleGlow) {
+                conditions[i++] = createGlowCondition(color.getGlowVfxId(smallGlow, true), color.getGlowStatValue(true));
+            }
+        }
+        return conditions;
+    }
+
+    /**
+     * Decodes a condition that applies {@code vfxId} while the stat equals
+     * {@code targetValue}, from the same document an item JSON would contain:
+     * <pre>{ "Condition": [v, v], "ConditionValueType": "Absolute", "ModelVFXId": id }</pre>
+     */
+    @Nonnull
+    private static ItemAppearanceCondition createGlowCondition(@Nonnull String vfxId, float targetValue) {
+        BsonDocument document = new BsonDocument()
+                .append("Condition", new BsonArray(List.of(new BsonDouble(targetValue), new BsonDouble(targetValue))))
+                .append("ConditionValueType", new BsonString("Absolute"))
+                .append("ModelVFXId", new BsonString(vfxId));
+        // Items load before the ModelVFX assets they reference, so the codec's
+        // asset-existence validator must collect instead of throw. This is the same
+        // collecting ValidationResults the server's own AssetStore uses while loading
+        // (see AssetStore.decode); the referenced glow VFX ship in this mod's pack.
+        ExtraInfo extraInfo = new ExtraInfo(Integer.MAX_VALUE,
+                com.hypixel.hytale.codec.validation.ValidationResults::new);
+        ItemAppearanceCondition condition = ItemAppearanceCondition.CODEC.decode(document, extraInfo);
+        if (extraInfo.getValidationResults().hasFailed()) {
+            LOGGER.atFine().log("Deferred validation for glow condition %s: %s", vfxId,
+                    extraInfo.getValidationResults().getResults());
+        }
+        return condition;
     }
 }

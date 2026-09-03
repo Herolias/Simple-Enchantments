@@ -3,12 +3,14 @@ package org.herolias.plugin.enchantment;
 import com.hypixel.hytale.component.Archetype;
 import com.hypixel.hytale.component.ArchetypeChunk;
 import com.hypixel.hytale.component.CommandBuffer;
+import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.component.query.Query;
 import com.hypixel.hytale.component.system.EntityEventSystem;
 import com.hypixel.hytale.logger.HytaleLogger;
 import com.hypixel.hytale.server.core.event.events.ecs.DamageBlockEvent;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
+import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 
 import javax.annotation.Nonnull;
@@ -50,7 +52,9 @@ public class EnchantmentBlockDamageSystem extends EntityEventSystem<EntityStore,
             return;
         }
 
-        if (!enchantmentManager.hasEnchantment(tool, EnchantmentType.EFFICIENCY)) {
+        // Single metadata read; reused for the activation event below.
+        int effLevel = enchantmentManager.getEnchantmentLevel(tool, EnchantmentType.EFFICIENCY);
+        if (effLevel <= 0) {
             return;
         }
 
@@ -67,12 +71,11 @@ public class EnchantmentBlockDamageSystem extends EntityEventSystem<EntityStore,
         float newDamage = (float) (currentDamage * multiplier);
         event.setDamage(newDamage);
 
-        int effLevel = enchantmentManager.getEnchantmentLevel(tool, EnchantmentType.EFFICIENCY);
-        if (effLevel > 0) {
-            com.hypixel.hytale.server.core.universe.PlayerRef playerRef = store.getComponent(
-                    com.hypixel.hytale.server.core.entity.EntityUtils.getEntity(index, archetypeChunk).getReference(),
-                    com.hypixel.hytale.server.core.universe.PlayerRef.getComponentType());
-            EnchantmentEventHelper.fireActivated(playerRef, tool, EnchantmentType.EFFICIENCY, effLevel);
+        PlayerRef playerRef = null;
+        Ref<EntityStore> breakerRef = archetypeChunk.getReferenceTo(index);
+        if (breakerRef != null && breakerRef.isValid()) {
+            playerRef = store.getComponent(breakerRef, PlayerRef.getComponentType());
         }
+        EnchantmentEventHelper.fireActivated(playerRef, tool, EnchantmentType.EFFICIENCY, effLevel);
     }
 }

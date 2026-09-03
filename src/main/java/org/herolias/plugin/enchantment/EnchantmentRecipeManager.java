@@ -1,190 +1,92 @@
 package org.herolias.plugin.enchantment;
 
+import com.hypixel.hytale.assetstore.AssetExtraInfo;
+import com.hypixel.hytale.assetstore.AssetLoadResult;
+import com.hypixel.hytale.assetstore.AssetUpdateQuery;
+import com.hypixel.hytale.assetstore.RawAsset;
+import com.hypixel.hytale.assetstore.codec.ContainedAssetCodec;
 import com.hypixel.hytale.assetstore.event.LoadedAssetsEvent;
 import com.hypixel.hytale.assetstore.map.DefaultAssetMap;
-import com.hypixel.hytale.assetstore.AssetStore;
 import com.hypixel.hytale.logger.HytaleLogger;
-import com.hypixel.hytale.server.core.asset.type.item.config.CraftingRecipe;
-import com.hypixel.hytale.server.core.asset.type.item.config.Item;
+import com.hypixel.hytale.protocol.BenchRequirement;
+import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.bench.Bench;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.bench.BenchTierLevel;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.bench.BenchUpgradeRequirement;
-import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType;
-import com.hypixel.hytale.protocol.BenchRequirement;
-import java.lang.reflect.Field;
+import com.hypixel.hytale.server.core.asset.type.item.config.CraftingRecipe;
+import com.hypixel.hytale.server.core.inventory.MaterialQuantity;
+import org.bson.BsonDocument;
 import org.herolias.plugin.SimpleEnchanting;
 import org.herolias.plugin.config.EnchantingConfig;
+import org.herolias.plugin.config.EnchantingConfig.ConfigIngredient;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.lang.reflect.Field;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import com.hypixel.hytale.server.core.inventory.MaterialQuantity;
-import org.herolias.plugin.config.EnchantingConfig.ConfigIngredient;
-import java.util.stream.Collectors;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * Manages dynamic enabling/disabling of enchantment scroll recipes based on
- * config settings.
- * 
- * When an enchantment is disabled in the config, its scroll recipes are removed
- * from
- * the asset store, making them disappear from the Enchanting Table UI.
- * 
- * This uses event-based detection to intercept recipes as they are loaded.
+ * Manages dynamic enabling/disabling and config overrides of crafting recipes
+ * (enchantment scrolls, the Enchanting Table and the Engraving Table).
+ * <p>
+ * Three layers of protection:
+ * <ul>
+ * <li>When recipes are loaded, recipes for disabled scrolls / disabled table
+ * crafting are removed from the asset store (so they disappear from the bench
+ * UI) and recipes whose ingredients or tier differ from the config are replaced
+ * by a config-shaped copy loaded through the {@code CraftingRecipe} codec.</li>
+ * <li>{@link #reload()} re-applies the same logic to the live asset store after
+ * the config was changed in-game: newly disabled recipes are removed, recipes
+ * that were previously removed are restored, and overrides are refreshed.</li>
+ * <li>{@link CraftRecipeCancelSystem} (an ECS event system) calls
+ * {@link #shouldCancelCraft(CraftingRecipe)} to cancel any craft that still
+ * slips through (e.g. a client that cached the recipe list).</li>
+ * </ul>
+ * Everything this class loads into the asset store is registered under the
+ * plugin's own asset-pack key so it is removed with the plugin.
  */
 public class EnchantmentRecipeManager {
 
     private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
 
+    private static final String ENCHANTING_TABLE_RECIPE_PREFIX = "Enchanting_Table";
+    private static final String ENGRAVING_TABLE_RECIPE_PREFIX = "Engraving_Table";
+    private static final String WORKBENCH_ID = "Workbench";
+    private static final String ENCHANTING_BENCH_ID = "Enchantingbench";
+    private static final String GENERATED_RECIPE_INFIX = "_Recipe_Generated_";
+
     // Maps enchantment ID to list of scroll item IDs (not recipe IDs)
-    // e.g., "sharpness" -> ["Scroll_Sharpness_I", "Scroll_Sharpness_II",
-    // "Scroll_Sharpness_III"]
+    // e.g., "sharpness" -> ["Scroll_Sharpness_I", "Scroll_Sharpness_II", "Scroll_Sharpness_III"]
     private static final Map<String, List<String>> ENCHANTMENT_SCROLL_ITEMS = new HashMap<>();
 
     // Set of disabled scroll item IDs for quick lookup
-    private static final Set<String> DISABLED_SCROLL_ITEM_IDS = new HashSet<>();
+    private static final Set<String> DISABLED_SCROLL_ITEM_IDS = ConcurrentHashMap.newKeySet();
+
+    /**
+     * Recipes we removed from the asset store because they were disabled, kept so
+     * {@link #reload()} can restore them when they are enabled again.
+     */
+    private static final Map<String, CraftingRecipe> REMOVED_RECIPES = new ConcurrentHashMap<>();
 
     private static SimpleEnchanting plugin;
     private static boolean initialized = false;
+    private static boolean isApplyingOverrides = false;
 
-    public static void reload() {
-        if (plugin == null)
-            return;
-
-        if (!initialized) {
-            initializeScrollItemMap();
-            initialized = true;
-        }
-
-        // 1. Rebuild the disabled set based on new config
-        buildDisabledScrollSet();
-        LOGGER.atInfo().log("Reload: Updated disabled recipe set. Count: " + DISABLED_SCROLL_ITEM_IDS.size());
-
-        // No longer modifying AssetStore directly to avoid runtime crashes.
-        // Instead, we rely on onCraft event cancellation.
-    }
+    // ───────────────────── Lifecycle ─────────────────────
 
     /**
-     * Event handler called BEFORE a recipe is crafted.
-     * Cancels the event if the recipe produces a disabled item.
-     */
-    private static void onCraft(com.hypixel.hytale.server.core.event.events.ecs.CraftRecipeEvent.Pre event) {
-        if (plugin == null)
-            return;
-
-        CraftingRecipe recipe = event.getCraftedRecipe();
-        if (recipe == null)
-            return;
-
-        // Check if output is disabled
-        if (recipe.getPrimaryOutput() != null) {
-            String itemId = recipe.getPrimaryOutput().getItemId();
-            if (itemId != null) {
-                // Check exact ID match or Scroll logic
-                if (DISABLED_SCROLL_ITEM_IDS.contains(itemId)) {
-                    event.setCancelled(true);
-
-                    // Ideally notify player, but event doesn't give Player directly easily without
-                    // looking up entity
-                    // We can try to get entity from event if needed, but cancellation is
-                    // enough/safe.
-                    // If we want to notify:
-                    /*
-                     * if (event.getEntity().getType() == Player.getComponentType()) {
-                     * // Send message
-                     * }
-                     */
-                    return;
-                }
-            }
-        }
-
-        // Check if table crafting is disabled by config.
-        EnchantingConfig config = plugin.getConfigManager().getConfig();
-        if (recipe.getPrimaryOutput() != null) {
-            String outId = recipe.getPrimaryOutput().getItemId();
-            if (!config.enableEnchantingTableCrafting
-                    && ("Enchanting_Table".equals(outId) || "Enchanting_Table_Item".equals(outId))) {
-                event.setCancelled(true);
-                return;
-            }
-            if (!config.enableEngravingTableCrafting
-                    && ("Engraving_Table".equals(outId) || "Engraving_Table_Item".equals(outId))) {
-                event.setCancelled(true);
-                return;
-            }
-        }
-    }
-
-    /**
-     * Helper to identify if a recipe matches a known scroll.
-     */
-    private static String getScrollItemForRecipe(String recipeId, CraftingRecipe recipe) {
-        EnchantingConfig config = plugin.getConfigManager().getConfig();
-        Map<String, List<ConfigIngredient>> recipeOverrides = config.scrollRecipes;
-
-        // 1. Check overrides keys
-        for (String key : recipeOverrides.keySet()) {
-            if (recipeId.startsWith(key + "_Recipe_Generated_")) {
-                return key;
-            }
-        }
-
-        // 2. Check output
-        if (recipe.getPrimaryOutput() != null) {
-            String outId = recipe.getPrimaryOutput().getItemId();
-            if (outId != null && outId.startsWith("Scroll_")) {
-                return outId;
-            }
-        }
-
-        // 3. Fallback check against known scroll items
-        for (List<String> scrollIds : ENCHANTMENT_SCROLL_ITEMS.values()) {
-            for (String scrollId : scrollIds) {
-                if (recipeId.startsWith(scrollId + "_Recipe_Generated_")) {
-                    return scrollId;
-                }
-            }
-        }
-
-        return null;
-    }
-
-    /**
-     * Initializes the enchantment ID to scroll item ID mapping.
-     * Scroll items follow the pattern: Scroll_{EnchantmentName}_{Level}
-     */
-    private static void initializeScrollItemMap() {
-        ENCHANTMENT_SCROLL_ITEMS.clear();
-        for (EnchantmentType type : EnchantmentType.values()) {
-            List<String> scrollItemIds = new ArrayList<>();
-            String baseName = getScrollBaseName(type);
-
-            for (int level = 1; level <= type.getMaxLevel(); level++) {
-                String scrollItemId = baseName + "_" + EnchantmentType.toRoman(level);
-                scrollItemIds.add(scrollItemId);
-            }
-
-            ENCHANTMENT_SCROLL_ITEMS.put(type.getId(), scrollItemIds);
-        }
-    }
-
-    /**
-     * Gets the scroll base name for an enchantment type.
-     * Converts enchantment ID to scroll naming convention.
-     */
-    private static String getScrollBaseName(EnchantmentType type) {
-        return type.getScrollBaseName();
-    }
-
-    /**
-     * Registers the event listener for recipe loading.
-     * Should be called during plugin setup().
-     * 
+     * Registers the asset listeners. Should be called during plugin setup().
+     * The {@link CraftRecipeCancelSystem} must be registered separately on the
+     * entity store registry.
+     *
      * @param pluginInstance The SimpleEnchanting plugin instance
      */
     public static void registerEventListener(@Nonnull SimpleEnchanting pluginInstance) {
@@ -198,27 +100,133 @@ public class EnchantmentRecipeManager {
         // Build the set of disabled scroll item IDs based on config
         buildDisabledScrollSet();
 
-        // Register event listener for when recipes are loaded
+        // Recipes: remove disabled ones / apply config overrides as they are loaded
         plugin.getEventRegistry().register(
                 LoadedAssetsEvent.class,
                 CraftingRecipe.class,
                 EnchantmentRecipeManager::onRecipeLoad);
 
-        // Disabled logic is handled via hide-from-creative (ScrollItemGenerator), name
-        // prefix, and usage block.
-
+        // Block types: enchanting table upgrade overrides + addon bench categories
         plugin.getEventRegistry().register(
                 LoadedAssetsEvent.class,
                 BlockType.class,
                 EnchantmentRecipeManager::onBlockTypeLoad);
 
-        // Register CraftRecipeEvent to cancel disabled recipes
-        plugin.getEventRegistry().registerGlobal(
-                com.hypixel.hytale.server.core.event.events.ecs.CraftRecipeEvent.Pre.class,
-                EnchantmentRecipeManager::onCraft);
+        // NOTE: CraftRecipeEvent.Pre is an ECS event (CancellableEcsEvent dispatched
+        // via componentAccessor.invoke). It is handled by CraftRecipeCancelSystem,
+        // which must be registered with getEntityStoreRegistry().registerSystem(...).
 
-        LOGGER.atInfo().log("EnchantmentRecipeManager registered event listener");
-        LOGGER.atInfo().log("Disabled enchantment scroll items: " + DISABLED_SCROLL_ITEM_IDS);
+        LOGGER.atInfo().log("EnchantmentRecipeManager registered asset listeners");
+        LOGGER.atInfo().log("Disabled enchantment scroll items: %s", DISABLED_SCROLL_ITEM_IDS);
+    }
+
+    /**
+     * Resets all static state. Call from plugin {@code shutdown()}. Assets this
+     * class loaded are removed by the server together with the plugin's asset
+     * pack.
+     */
+    public static void unload() {
+        plugin = null;
+        initialized = false;
+        isApplyingOverrides = false;
+        ENCHANTMENT_SCROLL_ITEMS.clear();
+        DISABLED_SCROLL_ITEM_IDS.clear();
+        REMOVED_RECIPES.clear();
+    }
+
+    /**
+     * Re-applies the config to the live recipe store. Call after the config was
+     * changed (e.g. from the in-game config editor).
+     */
+    public static void reload() {
+        if (plugin == null)
+            return;
+
+        if (!initialized) {
+            initializeScrollItemMap();
+            initialized = true;
+        }
+
+        // 1. Rebuild the disabled set based on new config
+        buildDisabledScrollSet();
+        LOGGER.atInfo().log("Reload: updated disabled recipe set (%d scroll items)", DISABLED_SCROLL_ITEM_IDS.size());
+
+        // 2. Re-evaluate every recipe currently in the store plus the ones we removed
+        Map<String, CraftingRecipe> candidates = new LinkedHashMap<>();
+        try {
+            candidates.putAll(CraftingRecipe.getAssetMap().getAssetMap());
+        } catch (Exception e) {
+            LOGGER.atSevere().withCause(e).log("Reload: could not read the CraftingRecipe asset map");
+            return;
+        }
+        for (Map.Entry<String, CraftingRecipe> removed : REMOVED_RECIPES.entrySet()) {
+            candidates.putIfAbsent(removed.getKey(), removed.getValue());
+        }
+
+        processRecipes(candidates, true);
+    }
+
+    // ───────────────────── Craft cancellation (used by CraftRecipeCancelSystem) ─────────────────────
+
+    /**
+     * @return true if crafting the given recipe must be blocked by the current
+     *         config (disabled scroll, scroll crafting disabled, or table
+     *         crafting disabled).
+     */
+    public static boolean shouldCancelCraft(@Nullable CraftingRecipe recipe) {
+        if (plugin == null || recipe == null)
+            return false;
+
+        String outId = recipe.getPrimaryOutput() != null ? recipe.getPrimaryOutput().getItemId() : null;
+
+        if (outId != null && DISABLED_SCROLL_ITEM_IDS.contains(outId)) {
+            return true;
+        }
+
+        String recipeId = recipe.getId();
+        if (recipeId != null) {
+            for (String disabledScrollId : DISABLED_SCROLL_ITEM_IDS) {
+                if (recipeId.startsWith(disabledScrollId + GENERATED_RECIPE_INFIX)) {
+                    return true;
+                }
+            }
+        }
+
+        EnchantingConfig config = plugin.getConfigManager().getConfig();
+        if (!config.enableEnchantingTableCrafting && isTableRecipe(recipeId, outId, ENCHANTING_TABLE_RECIPE_PREFIX)) {
+            return true;
+        }
+        if (!config.enableEngravingTableCrafting && isTableRecipe(recipeId, outId, ENGRAVING_TABLE_RECIPE_PREFIX)) {
+            return true;
+        }
+        return false;
+    }
+
+    private static boolean isTableRecipe(@Nullable String recipeId, @Nullable String outId, String tablePrefix) {
+        if (outId != null && (tablePrefix.equals(outId) || (tablePrefix + "_Item").equals(outId))) {
+            return true;
+        }
+        return recipeId != null && recipeId.startsWith(tablePrefix);
+    }
+
+    // ───────────────────── Scroll bookkeeping ─────────────────────
+
+    /**
+     * Initializes the enchantment ID to scroll item ID mapping.
+     * Scroll items follow the pattern: Scroll_{EnchantmentName}_{Level}
+     */
+    private static void initializeScrollItemMap() {
+        ENCHANTMENT_SCROLL_ITEMS.clear();
+        for (EnchantmentType type : EnchantmentType.values()) {
+            List<String> scrollItemIds = new ArrayList<>();
+            String baseName = type.getScrollBaseName();
+
+            for (int level = 1; level <= type.getMaxLevel(); level++) {
+                scrollItemIds.add(baseName + "_" + EnchantmentType.toRoman(level));
+            }
+
+            ENCHANTMENT_SCROLL_ITEMS.put(type.getId(), scrollItemIds);
+        }
     }
 
     /**
@@ -254,7 +262,7 @@ public class EnchantmentRecipeManager {
 
         // Check for missing optional dependencies
         boolean hasPerfectParries = plugin.isPerfectParriesModPresent();
-        LOGGER.atInfo().log("Perfect Parries mod present: " + hasPerfectParries);
+        LOGGER.atInfo().log("Perfect Parries mod present: %s", hasPerfectParries);
         if (!hasPerfectParries) {
             LOGGER.atInfo().log("Perfect Parries mod not found. Disabling Riposte and Coup de Grâce scrolls.");
         }
@@ -271,18 +279,17 @@ public class EnchantmentRecipeManager {
                 List<String> scrollItemIds = ENCHANTMENT_SCROLL_ITEMS.get(type.getId());
                 if (scrollItemIds != null) {
                     DISABLED_SCROLL_ITEM_IDS.addAll(scrollItemIds);
-                    LOGGER.atInfo().log(
-                            "Enchantment '" + type.getId() + "' is disabled, will filter scrolls: " + scrollItemIds);
+                    LOGGER.atInfo().log("Enchantment '%s' is disabled, will filter scrolls: %s", type.getId(),
+                            scrollItemIds);
                 }
             }
         }
     }
 
-    private static boolean isApplyingOverrides = false;
+    // ───────────────────── Recipe processing ─────────────────────
 
     /**
      * Event handler called when recipes are loaded.
-     * Removes recipes for disabled enchantment scrolls.
      */
     private static void onRecipeLoad(
             LoadedAssetsEvent<String, CraftingRecipe, DefaultAssetMap<String, CraftingRecipe>> event) {
@@ -290,6 +297,7 @@ public class EnchantmentRecipeManager {
             return;
         }
         if (isApplyingOverrides) {
+            // Nested event fired by our own loadAssets/loadBuffersWithKeys call
             return;
         }
 
@@ -297,195 +305,278 @@ public class EnchantmentRecipeManager {
         // enchantments from Addon mods!
         buildDisabledScrollSet();
 
+        processRecipes(event.getLoadedAssets(), false);
+    }
+
+    private enum Action {
+        KEEP, REMOVE, OVERRIDE
+    }
+
+    private static final class Decision {
+        final Action action;
+        final CraftingRecipe replacement;
+        final String reason;
+
+        private Decision(Action action, CraftingRecipe replacement, String reason) {
+            this.action = action;
+            this.replacement = replacement;
+            this.reason = reason;
+        }
+
+        static Decision keep() {
+            return new Decision(Action.KEEP, null, null);
+        }
+
+        static Decision remove(String reason) {
+            return new Decision(Action.REMOVE, null, reason);
+        }
+
+        static Decision override(CraftingRecipe replacement, String reason) {
+            return new Decision(Action.OVERRIDE, replacement, reason);
+        }
+    }
+
+    /**
+     * Evaluates every candidate recipe against the config and applies the result
+     * to the asset store: removals, restores (reload only) and overrides.
+     *
+     * @param candidates recipe id to recipe (freshly loaded recipes, or on reload
+     *                   the whole store plus previously removed recipes)
+     * @param reload     true when called from {@link #reload()}
+     */
+    private static void processRecipes(Map<String, CraftingRecipe> candidates, boolean reload) {
         EnchantingConfig config = plugin.getConfigManager().getConfig();
-        Map<String, List<ConfigIngredient>> recipeOverrides = config.scrollRecipes;
+        DefaultAssetMap<String, CraftingRecipe> assetMap = CraftingRecipe.getAssetMap();
 
         List<String> recipeIdsToRemove = new ArrayList<>();
-        Map<String, CraftingRecipe> newRecipes = new HashMap<>();
+        List<CraftingRecipe> recipesToRestore = new ArrayList<>();
+        Map<String, CraftingRecipe> overrides = new LinkedHashMap<>();
 
-        for (Map.Entry<String, CraftingRecipe> entry : event.getLoadedAssets().entrySet()) {
+        for (Map.Entry<String, CraftingRecipe> entry : candidates.entrySet()) {
             String recipeId = entry.getKey();
             CraftingRecipe recipe = entry.getValue();
+            if (recipeId == null || recipe == null)
+                continue;
 
-            // Check if this recipe is for a disabled scroll
-            // Recipe IDs are like "Scroll_Sharpness_I_Recipe_Generated_0"
-
-            // Handle Enchanting Table recipe
-            if (recipeId.startsWith("Enchanting_Table")) {
-                // If enchanting table crafting is disabled, remove the enchanting table recipe
-                if (!config.enableEnchantingTableCrafting) {
-                    recipeIdsToRemove.add(recipeId);
-                    LOGGER.atInfo().log("Marking for removal (enchanting table crafting disabled): " + recipeId);
-                    continue; // Skip further processing for this recipe
-                }
-
-                List<ConfigIngredient> overrideIngredients = null;
-                Integer overrideTier = null;
-
-                // Check ingredients
-                if (config.enchantingTableRecipe != null && !config.enchantingTableRecipe.isEmpty()) {
-                    if (!doesRecipeMatch(recipe, config.enchantingTableRecipe)) {
-                        overrideIngredients = config.enchantingTableRecipe;
-                    }
-                }
-
-                // Check tier
-                int currentTier = getBenchTier(recipe, "Workbench");
-                if (currentTier != -1 && currentTier != config.enchantingTableCraftingTier) {
-                    overrideTier = config.enchantingTableCraftingTier;
-                }
-
-                if (overrideIngredients != null || overrideTier != null) {
-                    LOGGER.atInfo().log("Applying overrides for Enchanting Table (Asset ID: " + recipeId + ")");
-                    CraftingRecipe newRecipe = applyModifications(recipeId, recipe, overrideIngredients, overrideTier,
-                            "Workbench");
-                    newRecipes.put(recipeId, newRecipe);
-                    continue;
-                }
-            }
-
-            // Handle Engraving Table recipe
-            if (recipeId.startsWith("Engraving_Table")) {
-                // If engraving table crafting is disabled, remove the engraving table recipe.
-                if (!config.enableEngravingTableCrafting) {
-                    recipeIdsToRemove.add(recipeId);
-                    LOGGER.atInfo().log("Marking for removal (engraving table crafting disabled): " + recipeId);
-                    continue; // Skip further processing for this recipe
-                }
-
-                List<ConfigIngredient> overrideIngredients = null;
-                Integer overrideTier = null;
-
-                // Check ingredients
-                if (config.engravingTableRecipe != null && !config.engravingTableRecipe.isEmpty()) {
-                    if (!doesRecipeMatch(recipe, config.engravingTableRecipe)) {
-                        overrideIngredients = config.engravingTableRecipe;
-                    }
-                }
-
-                // Check tier
-                int currentTier = getBenchTier(recipe, "Workbench");
-                if (currentTier != -1 && currentTier != config.engravingTableCraftingTier) {
-                    overrideTier = config.engravingTableCraftingTier;
-                }
-
-                if (overrideIngredients != null || overrideTier != null) {
-                    LOGGER.atInfo().log("Applying overrides for Engraving Table (Asset ID: " + recipeId + ")");
-                    CraftingRecipe newRecipe = applyModifications(recipeId, recipe, overrideIngredients, overrideTier,
-                            "Workbench");
-                    newRecipes.put(recipeId, newRecipe);
-                    continue;
-                }
-            }
-
-            // Check overrides first (Scrolls)
-            String scrollItemId = null;
-            // Try to find if this recipe corresponds to a scroll
-            // 1. Check if configured in ingredients overrides
-            for (String key : recipeOverrides.keySet()) {
-                if (recipeId.startsWith(key + "_Recipe_Generated_")) {
-                    scrollItemId = key;
-                    break;
-                }
-            }
-            // 2. If not found, check output (more robust)
-            if (scrollItemId == null && recipe.getPrimaryOutput() != null) {
-                String outId = recipe.getPrimaryOutput().getItemId();
-                if (outId != null && outId.startsWith("Scroll_")) {
-                    scrollItemId = outId;
-                }
-            }
-
-            if (scrollItemId != null) {
-                // Check if disabled first
-                if (DISABLED_SCROLL_ITEM_IDS.contains(scrollItemId)) {
-                    recipeIdsToRemove.add(recipeId);
-                    LOGGER.atInfo().log("Marking for removal (disabled scroll): " + recipeId);
-                    continue; // Skip further processing
-                }
-
-                List<ConfigIngredient> overrideIngredients = null;
-                Integer overrideTier = null;
-
-                if (recipeOverrides.containsKey(scrollItemId)) {
-                    List<ConfigIngredient> rawList = recipeOverrides.get(scrollItemId);
-                    if (rawList != null && !rawList.isEmpty()) {
-                        List<ConfigIngredient> ingredientsOnly = new ArrayList<>();
-                        for (ConfigIngredient ci : rawList) {
-                            if (ci.UnlocksAtTier != null) {
-                                overrideTier = ci.UnlocksAtTier;
-                            } else {
-                                ingredientsOnly.add(ci);
-                            }
-                        }
-
-                        if (!ingredientsOnly.isEmpty() && !doesRecipeMatch(recipe, ingredientsOnly)) {
-                            overrideIngredients = ingredientsOnly;
-                        }
-                    }
-                }
-
-                // Check if current tier matches override tier from list
-                if (overrideTier != null) {
-                    int current = getBenchTier(recipe, "Enchantingbench");
-                    if (current != -1 && current == overrideTier) {
-                        overrideTier = null; // No change needed
-                    }
-                }
-
-                if (overrideIngredients != null || overrideTier != null) {
-                    LOGGER.atInfo().log("Applying overrides for " + scrollItemId + " on recipe " + recipeId);
-                    CraftingRecipe newRecipe = applyModifications(recipeId, recipe, overrideIngredients, overrideTier,
-                            "Enchantingbench");
-                    newRecipes.put(recipeId, newRecipe);
-                }
-
-                // If we found it was a scroll, we processed it (either removed or checked
-                // overrides).
-                // Continue to next recipe in main loop to avoid double processing
+            Decision decision;
+            try {
+                decision = decide(recipeId, recipe, config);
+            } catch (Exception e) {
+                LOGGER.atSevere().withCause(e).log("Failed to evaluate recipe %s against the config", recipeId);
                 continue;
             }
 
-            // Fallback for ID-based detection if output is somehow null or weird (legacy
-            // support for generated IDs)
-            if (recipeIdsToRemove.contains(recipeId))
-                continue; // Already marked
+            boolean inStore = assetMap.getAsset(recipeId) != null;
 
-            for (String disabledScrollId : DISABLED_SCROLL_ITEM_IDS) {
-                if (recipeId.startsWith(disabledScrollId + "_Recipe_Generated_")) {
+            if (decision.action == Action.REMOVE) {
+                if (inStore) {
+                    REMOVED_RECIPES.put(recipeId, recipe);
                     recipeIdsToRemove.add(recipeId);
-                    LOGGER.atInfo().log("Marking for removal (ID match): " + recipeId);
-                    break;
+                    LOGGER.atInfo().log("Marking for removal (%s): %s", decision.reason, recipeId);
                 }
+                // else: already removed earlier and still disabled - keep it cached
+                continue;
+            }
+
+            // Enabled: restore if we removed it earlier (reload only)
+            if (!inStore) {
+                CraftingRecipe removed = REMOVED_RECIPES.remove(recipeId);
+                if (removed != null && reload) {
+                    recipesToRestore.add(removed);
+                    LOGGER.atInfo().log("Restoring previously removed recipe: %s", recipeId);
+                }
+            }
+
+            if (decision.action == Action.OVERRIDE && decision.replacement != null) {
+                LOGGER.atInfo().log("Applying config override (%s) to recipe %s", decision.reason, recipeId);
+                overrides.put(recipeId, decision.replacement);
             }
         }
 
-        // Apply overrides
-        if (!newRecipes.isEmpty()) {
+        String packKey = getPackKey();
+
+        // Restore first so overrides layer on top of the restored original
+        if (!recipesToRestore.isEmpty()) {
             try {
                 isApplyingOverrides = true;
-                // Use loadAssets to properly register/overwrite the recipes in the store
-                CraftingRecipe.getAssetStore().loadAssets("SimpleEnchanting:ConfigOverrides",
-                        new ArrayList<>(newRecipes.values()));
-                LOGGER.atInfo().log("Applied " + newRecipes.size() + " recipe overrides");
+                AssetLoadResult<String, CraftingRecipe> result = CraftingRecipe.getAssetStore()
+                        .loadAssets(packKey, recipesToRestore);
+                LOGGER.atInfo().log("Restored %d recipe(s)", result.getLoadedAssets().size());
+                if (result.hasFailed()) {
+                    LOGGER.atSevere().log("Failed to restore recipes: %s", result.getFailedToLoadKeys());
+                }
             } catch (Exception e) {
-                LOGGER.atSevere().log("Failed to apply recipe overrides: " + e.toString());
-                e.printStackTrace();
+                LOGGER.atSevere().withCause(e).log("Failed to restore previously removed recipes");
+            } finally {
+                isApplyingOverrides = false;
+            }
+        }
+
+        if (!overrides.isEmpty()) {
+            try {
+                isApplyingOverrides = true;
+                List<RawAsset<String>> rawAssets = new ArrayList<>(overrides.size());
+                for (Map.Entry<String, CraftingRecipe> e : overrides.entrySet()) {
+                    RawAsset<String> raw = toRawAsset(e.getKey(), e.getValue());
+                    if (raw != null)
+                        rawAssets.add(raw);
+                }
+                if (!rawAssets.isEmpty()) {
+                    // Codec path: decodes, validates, runs processConfig and assigns the id
+                    AssetLoadResult<String, CraftingRecipe> result = CraftingRecipe.getAssetStore()
+                            .loadBuffersWithKeys(packKey, rawAssets, AssetUpdateQuery.DEFAULT, true);
+                    LOGGER.atInfo().log("Applied %d recipe override(s)", result.getLoadedAssets().size());
+                    if (result.hasFailed()) {
+                        LOGGER.atSevere().log("Failed to apply recipe overrides: %s", result.getFailedToLoadKeys());
+                    }
+                }
+            } catch (Exception e) {
+                LOGGER.atSevere().withCause(e).log("Failed to apply recipe overrides");
             } finally {
                 isApplyingOverrides = false;
             }
         }
 
         if (!recipeIdsToRemove.isEmpty()) {
-            // Remove the disabled recipes from the asset store
             try {
                 CraftingRecipe.getAssetStore().removeAssets(recipeIdsToRemove);
-                LOGGER.atInfo().log("Removed " + recipeIdsToRemove.size() + " disabled enchantment recipes");
+                LOGGER.atInfo().log("Removed %d disabled recipe(s)", recipeIdsToRemove.size());
             } catch (Exception e) {
-                LOGGER.atSevere().log("Failed to remove disabled recipes: " + e.getMessage());
-                e.printStackTrace();
+                LOGGER.atSevere().withCause(e).log("Failed to remove disabled recipes");
             }
         }
+    }
+
+    /**
+     * Decides what to do with a single recipe under the current config.
+     */
+    private static Decision decide(String recipeId, CraftingRecipe recipe, EnchantingConfig config) {
+        Map<String, List<ConfigIngredient>> recipeOverrides = config.scrollRecipes != null
+                ? config.scrollRecipes
+                : Map.of();
+
+        // Enchanting Table recipe
+        if (recipeId.startsWith(ENCHANTING_TABLE_RECIPE_PREFIX)) {
+            if (!config.enableEnchantingTableCrafting) {
+                return Decision.remove("enchanting table crafting disabled");
+            }
+            return decideTableOverride(recipe, config.enchantingTableRecipe, config.enchantingTableCraftingTier);
+        }
+
+        // Engraving Table recipe
+        if (recipeId.startsWith(ENGRAVING_TABLE_RECIPE_PREFIX)) {
+            if (!config.enableEngravingTableCrafting) {
+                return Decision.remove("engraving table crafting disabled");
+            }
+            return decideTableOverride(recipe, config.engravingTableRecipe, config.engravingTableCraftingTier);
+        }
+
+        // Scroll recipes
+        String scrollItemId = getScrollItemForRecipe(recipeId, recipe, recipeOverrides);
+        if (scrollItemId != null) {
+            if (DISABLED_SCROLL_ITEM_IDS.contains(scrollItemId)) {
+                return Decision.remove("disabled scroll");
+            }
+
+            List<ConfigIngredient> overrideIngredients = null;
+            Integer overrideTier = null;
+
+            List<ConfigIngredient> rawList = recipeOverrides.get(scrollItemId);
+            if (rawList != null && !rawList.isEmpty()) {
+                List<ConfigIngredient> ingredientsOnly = new ArrayList<>();
+                for (ConfigIngredient ci : rawList) {
+                    if (ci.UnlocksAtTier != null) {
+                        overrideTier = ci.UnlocksAtTier;
+                    } else {
+                        ingredientsOnly.add(ci);
+                    }
+                }
+
+                if (!ingredientsOnly.isEmpty() && !doesRecipeMatch(recipe, ingredientsOnly)) {
+                    overrideIngredients = ingredientsOnly;
+                }
+            }
+
+            // Tier already matches -> no change needed
+            if (overrideTier != null) {
+                int current = getBenchTier(recipe, ENCHANTING_BENCH_ID);
+                if (current != -1 && current == overrideTier) {
+                    overrideTier = null;
+                }
+            }
+
+            if (overrideIngredients != null || overrideTier != null) {
+                return Decision.override(
+                        applyModifications(recipe, overrideIngredients, overrideTier, ENCHANTING_BENCH_ID),
+                        "scroll recipe config");
+            }
+            return Decision.keep();
+        }
+
+        // Fallback for ID-based detection if output is somehow null or weird (legacy
+        // support for generated IDs)
+        for (String disabledScrollId : DISABLED_SCROLL_ITEM_IDS) {
+            if (recipeId.startsWith(disabledScrollId + GENERATED_RECIPE_INFIX)) {
+                return Decision.remove("disabled scroll (id match)");
+            }
+        }
+
+        return Decision.keep();
+    }
+
+    private static Decision decideTableOverride(CraftingRecipe recipe, List<ConfigIngredient> configuredIngredients,
+            int configuredTier) {
+        List<ConfigIngredient> overrideIngredients = null;
+        Integer overrideTier = null;
+
+        if (configuredIngredients != null && !configuredIngredients.isEmpty()
+                && !doesRecipeMatch(recipe, configuredIngredients)) {
+            overrideIngredients = configuredIngredients;
+        }
+
+        int currentTier = getBenchTier(recipe, WORKBENCH_ID);
+        if (currentTier != -1 && currentTier != configuredTier) {
+            overrideTier = configuredTier;
+        }
+
+        if (overrideIngredients != null || overrideTier != null) {
+            return Decision.override(applyModifications(recipe, overrideIngredients, overrideTier, WORKBENCH_ID),
+                    "table recipe config");
+        }
+        return Decision.keep();
+    }
+
+    /**
+     * Helper to identify if a recipe matches a known scroll.
+     */
+    @Nullable
+    private static String getScrollItemForRecipe(String recipeId, CraftingRecipe recipe,
+            Map<String, List<ConfigIngredient>> recipeOverrides) {
+        // 1. Check overrides keys
+        for (String key : recipeOverrides.keySet()) {
+            if (recipeId.startsWith(key + GENERATED_RECIPE_INFIX)) {
+                return key;
+            }
+        }
+
+        // 2. Check output (more robust)
+        if (recipe.getPrimaryOutput() != null) {
+            String outId = recipe.getPrimaryOutput().getItemId();
+            if (outId != null && outId.startsWith("Scroll_")) {
+                return outId;
+            }
+        }
+
+        // 3. Fallback check against known scroll items
+        for (List<String> scrollIds : ENCHANTMENT_SCROLL_ITEMS.values()) {
+            for (String scrollId : scrollIds) {
+                if (recipeId.startsWith(scrollId + GENERATED_RECIPE_INFIX)) {
+                    return scrollId;
+                }
+            }
+        }
+
+        return null;
     }
 
     private static int getBenchTier(CraftingRecipe recipe, String benchId) {
@@ -499,9 +590,12 @@ public class EnchantmentRecipeManager {
         return -1;
     }
 
-    // Replaces applyRecipeOverride
-    private static CraftingRecipe applyModifications(String recipeId, CraftingRecipe original,
-            List<ConfigIngredient> ingredients, Integer tier, String benchId) {
+    /**
+     * Creates a copy of {@code original} with the configured ingredients and/or
+     * bench tier. The id is assigned when the copy is loaded through the codec.
+     */
+    private static CraftingRecipe applyModifications(CraftingRecipe original,
+            @Nullable List<ConfigIngredient> ingredients, @Nullable Integer tier, String benchId) {
         MaterialQuantity[] newInputs = original.getInput();
 
         // Apply ingredient override if present
@@ -512,7 +606,8 @@ public class EnchantmentRecipeManager {
                     if (ci.item != null || ci.isResourceType()) {
                         actualIngredients.add(ci);
                     } else {
-                        LOGGER.atSevere().log("Invalid recipe ingredient found in config: both item and resourceType are null. Please check your config keys (e.g. use 'item' instead of 'itemId').");
+                        LOGGER.atSevere().log(
+                                "Invalid recipe ingredient found in config: both item and resourceType are null. Please check your config keys (e.g. use 'item' instead of 'itemId').");
                     }
                 }
             }
@@ -530,37 +625,58 @@ public class EnchantmentRecipeManager {
             }
         }
 
-        // Deep copy bench requirements to modify safe
+        // Deep copy bench requirements to modify safely
         BenchRequirement[] newRequirements = original.getBenchRequirement();
         if (tier != null && newRequirements != null) {
             newRequirements = new BenchRequirement[original.getBenchRequirement().length];
             for (int i = 0; i < original.getBenchRequirement().length; i++) {
                 BenchRequirement origReq = original.getBenchRequirement()[i];
-                newRequirements[i] = origReq.clone(); // Use clone method of BenchRequirement
+                newRequirements[i] = origReq.clone();
                 if (benchId.equals(newRequirements[i].id)) {
                     newRequirements[i].requiredTierLevel = tier;
                 }
             }
         }
 
-        // Create new recipe copying original properties but with new inputs
-        CraftingRecipe newRecipe = new CraftingRecipe(
+        int outputQuantity = original.getPrimaryOutput() != null ? original.getPrimaryOutput().getQuantity() : 1;
+
+        return new CraftingRecipe(
                 newInputs,
                 original.getPrimaryOutput(),
-                original.getOutputs(), // extra outputs
-                original.getPrimaryOutput().getQuantity(), // Assume primary output quantity is what matters
+                original.getOutputs(),
+                outputQuantity,
                 newRequirements,
                 original.getTimeSeconds(),
                 original.isKnowledgeRequired(),
                 original.getRequiredMemoriesLevel());
-
-        // Set the ID via reflection
-        setRecipeId(newRecipe, recipeId);
-
-        return newRecipe;
     }
 
-    /* Old applyRecipeOverride removed */
+    /**
+     * Encodes a recipe with the {@code CraftingRecipe} codec into an in-memory
+     * JSON buffer keyed by {@code recipeId}, ready for
+     * {@code AssetStore.loadBuffersWithKeys}. Decoding it assigns the id and runs
+     * {@code processConfig}, so no reflection is needed.
+     */
+    @Nullable
+    private static RawAsset<String> toRawAsset(String recipeId, CraftingRecipe recipe) {
+        try {
+            AssetExtraInfo<String> extraInfo = new AssetExtraInfo<>(
+                    new AssetExtraInfo.Data(CraftingRecipe.class, recipeId, null));
+            BsonDocument doc = CraftingRecipe.CODEC.encode(recipe, extraInfo);
+            // The key is supplied by the RawAsset; drop it from the body if the codec wrote it
+            String keyField = CraftingRecipe.CODEC.getKeyCodec() != null
+                    ? CraftingRecipe.CODEC.getKeyCodec().getKey()
+                    : null;
+            if (keyField != null) {
+                doc.remove(keyField);
+            }
+            return new RawAsset<>((Path) null, recipeId, null, 0, doc.toJson().toCharArray(), null,
+                    ContainedAssetCodec.Mode.NONE);
+        } catch (Exception e) {
+            LOGGER.atSevere().withCause(e).log("Failed to encode recipe override for %s", recipeId);
+            return null;
+        }
+    }
 
     private static boolean doesRecipeMatch(CraftingRecipe recipe, List<ConfigIngredient> configuredIngredients) {
         List<ConfigIngredient> actualIngredients = new ArrayList<>();
@@ -571,6 +687,9 @@ public class EnchantmentRecipeManager {
         }
 
         MaterialQuantity[] currentInputs = recipe.getInput();
+        if (currentInputs == null) {
+            return actualIngredients.isEmpty();
+        }
 
         if (currentInputs.length != actualIngredients.size()) {
             return false;
@@ -605,51 +724,27 @@ public class EnchantmentRecipeManager {
         return currentMap.equals(configMap);
     }
 
-    private static void setRecipeId(CraftingRecipe recipe, String id) {
-        try {
-            java.lang.reflect.Field idField = CraftingRecipe.class.getDeclaredField("id");
-            idField.setAccessible(true);
-            idField.set(recipe, id);
-        } catch (Exception e) {
-            LOGGER.atSevere().log("Failed to set recipe ID for " + id + ": " + e.getMessage());
-            e.printStackTrace();
-        }
+    @Nonnull
+    private static String getPackKey() {
+        return plugin.getIdentifier().toString();
     }
 
-    /**
-     * Gets the enchantment ID from a scroll item ID.
-     * e.g., "Scroll_Sharpness_I" -> "sharpness"
-     */
-    private static String getEnchantmentIdFromScrollItemId(String scrollItemId) {
-        for (Map.Entry<String, List<String>> entry : ENCHANTMENT_SCROLL_ITEMS.entrySet()) {
-            if (entry.getValue().contains(scrollItemId)) {
-                return entry.getKey();
-            }
-        }
-        return null;
-    }
+    // ───────────────────── Public queries ─────────────────────
 
     /**
      * Enables (re-adds) recipes for a specific enchantment.
-     * Only works if the recipes were previously disabled and cached.
-     * 
-     * @param enchantmentId The enchantment ID (e.g., "sharpness")
-     */
-    /**
-     * Enables (re-adds) recipes for a specific enchantment.
-     * With event cancellation strategy, this just requires updating the disabled
-     * set,
-     * which happens via reload/buildDisabledScrollSet.
-     * 
+     * With the reload strategy this is handled by {@link #reload()}; kept for API
+     * compatibility.
+     *
      * @param enchantmentId The enchantment ID (e.g., "sharpness")
      */
     public static void enableEnchantmentRecipes(@Nonnull String enchantmentId) {
-        // No-op for now, handled by state refresh in reload()
+        // No-op: handled by reload()
     }
 
     /**
      * Gets all scroll item IDs associated with an enchantment.
-     * 
+     *
      * @param enchantmentId The enchantment ID
      * @return List of scroll item IDs, or empty list if none found
      */
@@ -660,7 +755,7 @@ public class EnchantmentRecipeManager {
 
     /**
      * Checks if the recipes for an enchantment are currently disabled.
-     * 
+     *
      * @param enchantmentId The enchantment ID
      * @return True if recipes are disabled (removed from asset store)
      */
@@ -672,10 +767,13 @@ public class EnchantmentRecipeManager {
         return DISABLED_SCROLL_ITEM_IDS.containsAll(scrollItemIds);
     }
 
-    /*
-     * Removed redundant Item listener logic as CraftingRecipe interception handles
-     * it.
-     */
+    /** @return an unmodifiable view of the disabled scroll item IDs. */
+    @Nonnull
+    public static Set<String> getDisabledScrollItemIds() {
+        return java.util.Collections.unmodifiableSet(DISABLED_SCROLL_ITEM_IDS);
+    }
+
+    // ───────────────────── Block types (bench upgrades / addon categories) ─────────────────────
 
     private static void onBlockTypeLoad(
             LoadedAssetsEvent<String, BlockType, DefaultAssetMap<String, BlockType>> event) {
@@ -705,7 +803,7 @@ public class EnchantmentRecipeManager {
                     .values();
 
             // Filter to only addon (non-built-in) categories
-            java.util.List<org.herolias.plugin.api.CraftingCategoryDefinition> addonCategories = allDefs.stream()
+            List<org.herolias.plugin.api.CraftingCategoryDefinition> addonCategories = allDefs.stream()
                     .filter(d -> !d.isBuiltIn()).collect(java.util.stream.Collectors.toList());
 
             if (addonCategories.isEmpty())
@@ -727,14 +825,13 @@ public class EnchantmentRecipeManager {
                 existingCategories = new Object[0];
 
             // Check which addon categories aren't already present
-            java.util.Set<String> existingIds = new java.util.HashSet<>();
+            Set<String> existingIds = new HashSet<>();
             for (Object cat : existingCategories) {
                 java.lang.reflect.Method getId = cat.getClass().getMethod("getId");
                 existingIds.add((String) getId.invoke(cat));
             }
 
-            java.util.List<Object> newCategories = new java.util.ArrayList<>(
-                    java.util.Arrays.asList(existingCategories));
+            List<Object> newCategories = new ArrayList<>(java.util.Arrays.asList(existingCategories));
             Class<?> benchCategoryClass = Class.forName(
                     "com.hypixel.hytale.server.core.asset.type.blocktype.config.bench.CraftingBench$BenchCategory");
 
@@ -759,8 +856,8 @@ public class EnchantmentRecipeManager {
                 plugin.getLanguageManager().putTranslation(
                         "benchCategories." + def.getCategoryId(), def.getDisplayName());
 
-                LOGGER.atInfo().log("Injected addon crafting category tab: " + def.getCategoryId()
-                        + " (" + def.getDisplayName() + ")");
+                LOGGER.atInfo().log("Injected addon crafting category tab: %s (%s)", def.getCategoryId(),
+                        def.getDisplayName());
             }
 
             // Write back the expanded array
@@ -771,8 +868,7 @@ public class EnchantmentRecipeManager {
             categoriesField.set(bench, newArray);
 
         } catch (Exception e) {
-            LOGGER.atSevere().log("Failed to inject addon crafting categories: " + e.getMessage());
-            e.printStackTrace();
+            LOGGER.atSevere().withCause(e).log("Failed to inject addon crafting categories");
         }
     }
 
@@ -796,8 +892,7 @@ public class EnchantmentRecipeManager {
                 }
             }
         } catch (Exception e) {
-            LOGGER.atSevere().log("Failed to apply block upgrades: " + e.getMessage());
-            e.printStackTrace();
+            LOGGER.atSevere().withCause(e).log("Failed to apply block upgrades");
         }
     }
 
@@ -813,10 +908,11 @@ public class EnchantmentRecipeManager {
             MaterialQuantity[] materials = new MaterialQuantity[ingredients.size()];
             for (int i = 0; i < ingredients.size(); i++) {
                 ConfigIngredient ci = ingredients.get(i);
+                int amt = ci.amount != null ? ci.amount : 1;
                 if (ci.isResourceType()) {
-                    materials[i] = new MaterialQuantity(null, ci.resourceType, null, ci.amount, null);
+                    materials[i] = new MaterialQuantity(null, ci.resourceType, null, amt, null);
                 } else {
-                    materials[i] = new MaterialQuantity(ci.item, null, null, ci.amount, null);
+                    materials[i] = new MaterialQuantity(ci.item, null, null, amt, null);
                 }
             }
 
@@ -827,12 +923,7 @@ public class EnchantmentRecipeManager {
             reqField.set(tier, newReq);
 
         } catch (Exception e) {
-            LOGGER.atSevere().log("Failed to update tier " + index + ": " + e.getMessage());
+            LOGGER.atSevere().withCause(e).log("Failed to update bench tier %d", index);
         }
     }
-
-    /**
-     * Former onItemLoad logic removed to prevent disabled scrolls from becoming
-     * 'Invalid Items'.
-     */
 }

@@ -71,10 +71,6 @@ items.Scroll_Smelting_I.description = El calor arcano funde al instante lo que e
 
 items.Scroll_Life_Leech_I.name = Pergamino de Robo de Vida
 items.Scroll_Life_Leech_I.description = Cada herida que infliges te devuelve vitalidad. Cura el 10% del daño causado.
-items.Scroll_Life_Leech_II.name = Pergamino de Robo de Vida II
-items.Scroll_Life_Leech_II.description = Cada herida que infliges te devuelve vitalidad. Cura el 20% del daño causado.
-items.Scroll_Life_Leech_III.name = Pergamino de Robo de Vida III
-items.Scroll_Life_Leech_III.description = Cada herida que infliges te devuelve vitalidad. Cura el 30% del daño causado.
 
 
 
@@ -482,7 +478,6 @@ customUI.walkthrough.enchantments.desc = Una lista completa de los encantamiento
 
 config.general.allow_same_scroll_upgrades = Permitir Mejoras con Pergaminos Iguales (I+I = II)
 
-ui.itemcategory.simpleEnchantments = Encantamientos Simples
 ui.itemcategory.simpleEnchantments.scrolls = Pergaminos
 
 customUI.walkthrough.enabledOnServer = Activado en este servidor: 

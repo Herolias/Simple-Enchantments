@@ -8,16 +8,17 @@ import com.hypixel.hytale.server.core.command.system.CommandContext;
 import com.hypixel.hytale.server.core.command.system.CommandSender;
 import com.hypixel.hytale.server.core.command.system.basecommands.AbstractPlayerCommand;
 import com.hypixel.hytale.server.core.entity.entities.Player;
-import com.hypixel.hytale.server.core.inventory.Inventory;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
-import com.hypixel.hytale.server.core.inventory.container.ItemContainer;
+import com.hypixel.hytale.server.core.inventory.transaction.ItemStackSlotTransaction;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import org.herolias.plugin.SimpleEnchanting;
+import org.herolias.plugin.enchantment.EnchantmentApplicationResult;
 import org.herolias.plugin.enchantment.EnchantmentData;
 import org.herolias.plugin.enchantment.EnchantmentManager;
 import org.herolias.plugin.enchantment.EnchantmentType;
+import org.herolias.plugin.util.InventoryAccess;
 
 import javax.annotation.Nonnull;
 
@@ -37,6 +38,7 @@ import javax.annotation.Nonnull;
 public class EnchantCommand extends AbstractPlayerCommand {
 
     private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
+    private static final int MAX_LEVEL = 100;
 
     private final SimpleEnchanting plugin;
     private final EnchantmentManager enchantmentManager;
@@ -76,9 +78,11 @@ public class EnchantCommand extends AbstractPlayerCommand {
         for (String arg : args) {
             try {
                 int parsed = Integer.parseInt(arg);
-                if (parsed >= 1) {
-                    level = parsed;
+                if (parsed < 1) {
+                    sender.sendMessage(Message.raw("Level must be at least 1 (got " + parsed + ")."));
+                    return;
                 }
+                level = parsed;
             } catch (NumberFormatException e) {
                 if (enchantmentType == null) {
                     enchantmentType = parseEnchantmentType(arg);
@@ -92,27 +96,20 @@ public class EnchantCommand extends AbstractPlayerCommand {
         }
 
         // Clamp level
-        if (level > 100) {
-            sender.sendMessage(Message.raw("Level " + level + " is too high. Max level is 100."));
-            level = 100;
+        if (level > MAX_LEVEL) {
+            sender.sendMessage(Message.raw("Level " + level + " is too high. Max level is " + MAX_LEVEL + "."));
+            level = MAX_LEVEL;
         }
 
-        LOGGER.atInfo().log("Enchant request: " + enchantmentType.getDisplayName() + " " + level);
+        LOGGER.atInfo().log("Enchant request: %s %d", enchantmentType.getDisplayName(), level);
 
-        // Get item
-        Inventory inventory = player.getInventory();
-        ItemContainer hotbar = inventory.getHotbar();
-
-        if (hotbar == null) {
-            sender.sendMessage(Message.raw("Could not access your hotbar!"));
-            return;
-        }
-
-        ItemStack item = inventory.getItemInHand();
-        if (item == null || item.isEmpty()) {
+        // Resolve the exact container/slot of the held item (tools section or hotbar)
+        InventoryAccess.HeldSlot held = InventoryAccess.getHeldSlot(store, ref);
+        if (held == null) {
             sender.sendMessage(Message.raw("You must be holding an item!"));
             return;
         }
+        ItemStack item = held.item();
 
         // Check if upgrade is meaningful (optional, but good UX)
         EnchantmentData currentEnchants = enchantmentManager.getEnchantmentsFromItem(item);
@@ -125,7 +122,7 @@ public class EnchantCommand extends AbstractPlayerCommand {
 
         try {
             // Apply enchantment (Delegates checks to manager)
-            org.herolias.plugin.enchantment.EnchantmentApplicationResult result = enchantmentManager
+            EnchantmentApplicationResult result = enchantmentManager
                     .applyEnchantmentToItem(playerRef, item, enchantmentType, level, true);
 
             if (!result.success()) {
@@ -133,8 +130,16 @@ public class EnchantCommand extends AbstractPlayerCommand {
                 return;
             }
 
-            // Update inventory
-            hotbar.setItemStackForSlot((short) inventory.getActiveHotbarSlot(), result.item());
+            // Write back to the slot we read from; fails if the held stack changed meanwhile
+            ItemStackSlotTransaction transaction = held.container()
+                    .replaceItemStackInSlot(held.slot(), item, result.item());
+            if (!transaction.succeeded()) {
+                sender.sendMessage(Message.raw("The held item changed while enchanting. Nothing was applied."));
+                return;
+            }
+
+            // The item is committed; notify listeners
+            enchantmentManager.fireItemEnchanted(playerRef, result);
 
             // Success message
             EnchantmentData newEnchants = enchantmentManager.getEnchantmentsFromItem(result.item());
@@ -146,11 +151,11 @@ public class EnchantCommand extends AbstractPlayerCommand {
             }
 
             sender.sendMessage(Message.raw("Enchanted! [" + enchantList + "]"));
-            LOGGER.atInfo().log(sender.getUsername() + " enchanted " + item.getItemId() + " with "
-                    + enchantmentType.getFormattedName(level));
+            LOGGER.atInfo().log("%s enchanted %s with %s", sender.getUsername(), item.getItemId(),
+                    enchantmentType.getFormattedName(level));
 
         } catch (Exception e) {
-            LOGGER.atWarning().log("Failed to apply enchantment: " + e.getMessage());
+            LOGGER.atWarning().withCause(e).log("Failed to apply enchantment");
             sender.sendMessage(Message.raw("Failed to apply enchantment: " + e.getMessage()));
         }
     }

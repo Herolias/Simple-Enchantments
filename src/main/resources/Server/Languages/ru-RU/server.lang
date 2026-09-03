@@ -112,13 +112,9 @@ items.Scroll_Life_Leech_I.name = Свиток Вампиризма
 
 items.Scroll_Life_Leech_I.description = Исцеляет атакующего на 10% от нанесенного урона.
 
-items.Scroll_Life_Leech_II.name = Свиток Вампиризма II
 
-items.Scroll_Life_Leech_II.description = Исцеляет атакующего на 20% от нанесенного урона.
 
-items.Scroll_Life_Leech_III.name = Свиток Вампиризма III
 
-items.Scroll_Life_Leech_III.description = Исцеляет атакующего на 30% от нанесенного урона.
 
 
 
@@ -637,7 +633,6 @@ customUI.walkthrough.enchantments.desc = Полный список зачаро�
 
 config.general.allow_same_scroll_upgrades = Разрешить Улучшение Одинаковыми Свитками (I+I = II)
 
-ui.itemcategory.simpleEnchantments = Простые зачарования
 ui.itemcategory.simpleEnchantments.scrolls = Свитки
 
 customUI.walkthrough.enabledOnServer = Включено на этом сервере: 

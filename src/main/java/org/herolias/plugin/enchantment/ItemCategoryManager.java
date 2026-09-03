@@ -143,8 +143,9 @@ public class ItemCategoryManager {
         String lowerItemId = itemId.toLowerCase();
 
         // 1. Check Cache first
-        if (categoryCache.containsKey(lowerItemId)) {
-            return categoryCache.get(lowerItemId);
+        ItemCategory cached = categoryCache.get(lowerItemId);
+        if (cached != null) {
+            return cached;
         }
 
         // 2. Check Blacklist
@@ -207,10 +208,18 @@ public class ItemCategoryManager {
 
         // Check our comprehensive cache (includes Config, Families, Components, AND
         // Blacklisted items as UNKNOWN)
-        if (categoryCache.containsKey(lowerItemId)) {
-            return categoryCache.get(lowerItemId);
+        ItemCategory cached = categoryCache.get(lowerItemId);
+        if (cached != null) {
+            return cached;
         }
 
+        // Not seen during asset load (e.g. an addon item registered late):
+        // categorise it now from the asset so the answer is not permanently UNKNOWN.
+        com.hypixel.hytale.server.core.asset.type.item.config.Item item = com.hypixel.hytale.server.core.asset.type.item.config.Item
+                .getAssetMap().getAsset(itemTypeId);
+        if (item != null) {
+            return categorizeItem(itemTypeId, item);
+        }
         return ItemCategory.UNKNOWN;
     }
 
@@ -297,20 +306,31 @@ public class ItemCategoryManager {
      */
     public void onItemsLoaded(
             com.hypixel.hytale.assetstore.event.LoadedAssetsEvent<String, com.hypixel.hytale.server.core.asset.type.item.config.Item, com.hypixel.hytale.assetstore.map.DefaultAssetMap<String, com.hypixel.hytale.server.core.asset.type.item.config.Item>> event) {
-        LOGGER.atInfo().log("Populating ItemCategoryManager category cache...");
         int count = 0;
 
         for (Map.Entry<String, com.hypixel.hytale.server.core.asset.type.item.config.Item> entry : event
                 .getLoadedAssets().entrySet()) {
             String itemId = entry.getKey();
             com.hypixel.hytale.server.core.asset.type.item.config.Item item = entry.getValue();
+            if (itemId == null) {
+                continue;
+            }
 
-            // Use the new public method which handles caching etc.
+            // A (re)loaded item may have changed family/tool data: drop the stale
+            // entry so it is recomputed instead of served from the old cache.
+            categoryCache.remove(itemId.toLowerCase());
             if (categorizeItem(itemId, item) != ItemCategory.UNKNOWN) {
                 count++;
             }
         }
         LOGGER.atInfo().log("Cached categories for " + count + " items.");
+
+        // Asset-derived caches in the manager (state variants, ore lookups, ...)
+        // are keyed by item ids and must follow the reload as well.
+        SimpleEnchanting plugin = SimpleEnchanting.getInstance();
+        if (plugin != null && plugin.getEnchantmentManager() != null) {
+            plugin.getEnchantmentManager().invalidateAssetCaches();
+        }
     }
 
     private ItemCategory determineCategoryFromComponents(String itemId,

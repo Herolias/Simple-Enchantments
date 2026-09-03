@@ -2,6 +2,7 @@ package org.herolias.plugin.enchantment;
 
 import com.hypixel.hytale.component.ArchetypeChunk;
 import com.hypixel.hytale.component.CommandBuffer;
+import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.component.dependency.Dependency;
 import com.hypixel.hytale.component.dependency.Order;
@@ -9,10 +10,10 @@ import com.hypixel.hytale.component.dependency.SystemDependency;
 import com.hypixel.hytale.component.dependency.SystemGroupDependency;
 import com.hypixel.hytale.component.query.Query;
 import com.hypixel.hytale.logger.HytaleLogger;
-import org.joml.Vector3d;
 import com.hypixel.hytale.protocol.ChangeVelocityType;
 import com.hypixel.hytale.server.core.entity.Entity;
 import com.hypixel.hytale.server.core.entity.EntityUtils;
+import com.hypixel.hytale.server.core.entity.LivingEntity;
 import com.hypixel.hytale.server.core.entity.knockback.KnockbackComponent;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
 import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
@@ -20,7 +21,10 @@ import com.hypixel.hytale.server.core.modules.entity.damage.Damage;
 import com.hypixel.hytale.server.core.modules.entity.damage.DamageEventSystem;
 import com.hypixel.hytale.server.core.modules.entity.damage.DamageModule;
 import com.hypixel.hytale.server.core.modules.entity.damage.DamageSystems;
+import com.hypixel.hytale.server.core.modules.entitystats.EntityStatMap;
+import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
+import org.joml.Vector3d;
 
 import javax.annotation.Nonnull;
 import java.util.Set;
@@ -29,6 +33,15 @@ import java.util.Set;
  * ECS system that enhances knockback based on the Knockback enchantment level.
  * Uses hybrid approach: enhances existing knockback or creates new horizontal
  * knockback.
+ * <p>
+ * When the hit carries no knockback of its own, a {@link KnockbackComponent}
+ * is attached to the target exactly like
+ * {@code DamageEntityInteraction} does (reuse the component already on the
+ * entity, otherwise {@code commandBuffer.putComponent}), so that
+ * {@code KnockbackSystems.ApplyKnockback}/{@code ApplyPlayerKnockback} - which
+ * query for that component - actually consume it. The component is also
+ * published on the damage under {@link Damage#KNOCKBACK_COMPONENT} so later
+ * knockback-modifying systems see it.
  */
 public class EnchantmentKnockbackSystem extends DamageEventSystem {
 
@@ -38,6 +51,9 @@ public class EnchantmentKnockbackSystem extends DamageEventSystem {
     private static final double BASE_HORIZONTAL_KNOCKBACK = 0.7;
     private static final double VERTICAL_LIFT = 0.3;
     private static final float DEFAULT_KNOCKBACK_DURATION = 0.0f;
+
+    /** Only entities with stats can be damaged (same scope as {@code DamageSystems.ApplyDamage}). */
+    private static final Query<EntityStore> QUERY = Query.and(EntityStatMap.getComponentType());
 
     private final Set<Dependency<EntityStore>> dependencies = Set.of(
             new SystemGroupDependency<>(Order.AFTER, DamageModule.get().getFilterDamageGroup()),
@@ -56,7 +72,7 @@ public class EnchantmentKnockbackSystem extends DamageEventSystem {
     @Override
     @Nonnull
     public Query<EntityStore> getQuery() {
-        return com.hypixel.hytale.component.Archetype.empty();
+        return QUERY;
     }
 
     @Override
@@ -69,23 +85,32 @@ public class EnchantmentKnockbackSystem extends DamageEventSystem {
             return;
         }
 
+        // Reflected damage is dealt by the defender's shield, not by a weapon swing:
+        // the "attacker" here is the reflection victim, so their Knockback must not apply.
+        Boolean isReflection = damage.getIfPresentMetaObject(EnchantmentReflectionSystem.IS_REFLECTION);
+        if (isReflection != null && isReflection)
+            return;
+
         // Use centralized damage context extraction
         EnchantmentManager.DamageContext ctx = enchantmentManager.getDamageContext(damage, commandBuffer);
         if (!ctx.hasAttacker())
             return;
 
-        Entity attackerEntity = EntityUtils.getEntity(ctx.attackerRef(), commandBuffer);
-        if (attackerEntity == null)
-            return;
+        ItemStack weapon = enchantmentManager.getWeaponFromEntity(ctx.attackerRef(), commandBuffer);
 
-        ItemStack weapon = enchantmentManager.getWeaponFromEntity(attackerEntity);
+        // The active-blocker lookup inspects the InteractionManager and still needs
+        // the legacy entity handle; nothing else here does.
         ItemStack shield = null;
-        if (attackerEntity instanceof com.hypixel.hytale.server.core.entity.LivingEntity living) {
+        Entity attackerEntity = EntityUtils.getEntity(ctx.attackerRef(), commandBuffer);
+        if (attackerEntity instanceof LivingEntity living) {
             shield = enchantmentManager.getActiveBlocker(living);
         }
 
         int weaponKb = weapon != null ? enchantmentManager.getEnchantmentLevel(weapon, EnchantmentType.KNOCKBACK) : 0;
-        int shieldKb = shield != null ? enchantmentManager.getEnchantmentLevel(shield, EnchantmentType.KNOCKBACK) : 0;
+        // The blocker may be the held weapon itself (parrying weapons): one read per item.
+        int shieldKb = shield == null ? 0
+                : shield == weapon ? weaponKb
+                : enchantmentManager.getEnchantmentLevel(shield, EnchantmentType.KNOCKBACK);
 
         int knockbackLevel = Math.max(weaponKb, shieldKb);
         if (knockbackLevel <= 0)
@@ -113,25 +138,30 @@ public class EnchantmentKnockbackSystem extends DamageEventSystem {
 
         double dirX = dx / horizontalDistance;
         double dirZ = dz / horizontalDistance;
+        double horizontalStrength = BASE_HORIZONTAL_KNOCKBACK * knockbackLevel;
 
         // Get or create knockback component
         KnockbackComponent knockbackComponent = damage.getIfPresentMetaObject(Damage.KNOCKBACK_COMPONENT);
 
         if (knockbackComponent == null) {
-            knockbackComponent = new KnockbackComponent();
-            double horizontalStrength = BASE_HORIZONTAL_KNOCKBACK * knockbackLevel;
-            Vector3d velocity = new Vector3d(
+            Ref<EntityStore> targetRef = archetypeChunk.getReferenceTo(index);
+            // Mirror DamageEntityInteraction: reuse the component already on the target,
+            // otherwise attach a fresh one so the knockback systems pick it up.
+            knockbackComponent = commandBuffer.getComponent(targetRef, KnockbackComponent.getComponentType());
+            if (knockbackComponent == null) {
+                knockbackComponent = new KnockbackComponent();
+                commandBuffer.putComponent(targetRef, KnockbackComponent.getComponentType(), knockbackComponent);
+            }
+            knockbackComponent.setVelocity(new Vector3d(
                     dirX * horizontalStrength,
                     VERTICAL_LIFT * knockbackLevel,
-                    dirZ * horizontalStrength);
-            knockbackComponent.setVelocity(velocity);
+                    dirZ * horizontalStrength));
             knockbackComponent.setVelocityType(ChangeVelocityType.Add);
             knockbackComponent.setDuration(DEFAULT_KNOCKBACK_DURATION);
             damage.putMetaObject(Damage.KNOCKBACK_COMPONENT, knockbackComponent);
         } else {
             // Enhance existing knockback with additional velocity (horizontal + vertical
             // lift)
-            double horizontalStrength = BASE_HORIZONTAL_KNOCKBACK * knockbackLevel;
             Vector3d currentVelocity = knockbackComponent.getVelocity();
             currentVelocity.x += dirX * horizontalStrength;
             currentVelocity.y += VERTICAL_LIFT * knockbackLevel;
@@ -143,8 +173,7 @@ public class EnchantmentKnockbackSystem extends DamageEventSystem {
         double knockbackMultiplier = 1.0 + (knockbackLevel * multiplierPerLevel);
         knockbackComponent.addModifier(knockbackMultiplier);
 
-        com.hypixel.hytale.server.core.universe.PlayerRef playerRef = store.getComponent(ctx.attackerRef(),
-                com.hypixel.hytale.server.core.universe.PlayerRef.getComponentType());
+        PlayerRef playerRef = store.getComponent(ctx.attackerRef(), PlayerRef.getComponentType());
         EnchantmentEventHelper.fireActivated(playerRef, sourceItem, EnchantmentType.KNOCKBACK, knockbackLevel);
     }
 }

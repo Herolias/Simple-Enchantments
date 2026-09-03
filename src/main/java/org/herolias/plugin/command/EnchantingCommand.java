@@ -11,7 +11,6 @@ import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import org.herolias.plugin.SimpleEnchanting;
 import org.herolias.plugin.ui.EnchantingPage;
-import com.hypixel.hytale.protocol.GameMode;
 
 import javax.annotation.Nonnull;
 import java.util.concurrent.CompletableFuture;
@@ -25,6 +24,8 @@ import java.util.concurrent.CompletableFuture;
 public class EnchantingCommand extends AbstractAsyncCommand {
 
     private static final Message MESSAGE_NOT_A_PLAYER = Message.raw("Only players can use this command.");
+    private static final Message MESSAGE_PLAYER_NOT_IN_WORLD = Message
+            .translation("server.commands.errors.playerNotInWorld");
 
     private final SimpleEnchanting plugin;
 
@@ -44,13 +45,19 @@ public class EnchantingCommand extends AbstractAsyncCommand {
 
         Ref<EntityStore> playerRef = context.senderAsPlayerRef();
         if (playerRef == null || !playerRef.isValid()) {
+            context.sendMessage(MESSAGE_PLAYER_NOT_IN_WORLD);
             return CompletableFuture.completedFuture(null);
         }
 
         Store<EntityStore> store = playerRef.getStore();
         World world = store.getExternalData().getWorld();
 
-        return CompletableFuture.runAsync(() -> {
+        // runAsync reports exceptions to the sender and the log instead of swallowing them
+        return this.runAsync(context, () -> {
+            if (!playerRef.isValid()) {
+                context.sendMessage(MESSAGE_PLAYER_NOT_IN_WORLD);
+                return;
+            }
             Player playerComponent = store.getComponent(playerRef, Player.getComponentType());
             PlayerRef playerRefComponent = store.getComponent(playerRef, PlayerRef.getComponentType());
 

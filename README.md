@@ -4,7 +4,7 @@ A comprehensive enchanting system for **Hytale** — craft scrolls, enchant your
 
 Simple Enchantments adds an **Enchanting Table**, an **Engraving Table**, **33 built-in enchantments**, an **enchantment scroll system**, **useful commands**, in-game **configuration UI**, **localisation** for 11 languages, and a **public API** that lets other mods register their own enchantments, categories, and scrolls at runtime.
 
-> **Version:** 1.1.2 · **Java:** 25 · **License:** _see [LICENSE.md](LICENSE.md)_ · **Wiki/Documentation:** _see [Wiki](https://wiki.hytalemodding.dev/mod/simple-enchantments)_
+> **Version:** 1.2.0-beta · **Java:** 25 · **License:** _see [LICENSE.md](LICENSE.md)_ · **Wiki/Documentation:** _see [Wiki](https://wiki.hytalemodding.dev/mod/simple-enchantments)_
 
 #### If you are looking for a Hytale Server, consider using my code and link at BisectHosting. That way you get 25% off and we get a commission which helps with further development:
 [![https://www.bisecthosting.com/Herolias](https://www.bisecthosting.com/partners/custom-banners/87d24680-40cb-471d-b1a9-bc3c9eb9ce68.webp)](https://www.bisecthosting.com/Herolias?r=GitHub)
@@ -87,7 +87,7 @@ Simple Enchantments adds an **Enchanting Table**, an **Engraving Table**, **33 b
 
 | Property | Default | Description |
 |---|---|---|
-| `version` | `1.1.2` | Plugin version (semantic versioning) |
+| `version` | `1.2.0-beta` | Plugin version (semantic versioning) |
 | `java_version` | `25` | Java toolchain version |
 | `includes_pack` | `true` | Load the bundled asset pack alongside the plugin |
 | `patchline` | `pre-release` | Hytale release channel (`release` or `pre-release`) |
@@ -238,13 +238,13 @@ Translation keys follow the pattern `enchantment.{id}.{name|description|bonus|wa
 
 ### Commands
 
-| Command | Description |
-|---|---|
-| `/enchant <enchantment> [level]` | Apply an enchantment to the held item |
-| `/enchanting` | Open the enchanting settings/walkthrough UI |
-| `/enchantconfig` | Open the in-game configuration editor |
-| `/giveenchanted <item> [quantity] [durability] [metadata] [enchants]` | Give yourself a pre-enchanted item without replacing vanilla `/give` |
-| `/giveenchanted <player> <item> [quantity] [durability] [metadata] [enchants]` | Give another player a pre-enchanted item |
+| Command | Description | Permission (default group) |
+|---|---|---|
+| `/enchant <enchantment> [level]` | Apply an enchantment to the held item (level 1-100) | group `hytale:WorldEditor` |
+| `/enchanting` | Open the enchanting settings/walkthrough UI | group `hytale:Adventurer` (everyone) |
+| `/enchantconfig` | Open the in-game configuration editor | group `hytale:WorldEditor` |
+| `/giveenchanted <item> [quantity] [durability] [metadata] [enchants]` | Give yourself a pre-enchanted item without replacing vanilla `/give`. `enchants` is `id:level,id:level` (levels must be >= 1; namespaced addon ids work: `my_mod:lightning:2`) | `hytale.command.giveenchanted.self` (`hytale:Builder`) |
+| `/giveenchanted <player> <item> [quantity] [durability] [metadata] [enchants]` | Give another player a pre-enchanted item | `hytale.command.giveenchanted.other` (`hytale:WorldEditor`) |
 
 ---
 

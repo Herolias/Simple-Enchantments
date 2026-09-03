@@ -13,16 +13,49 @@ import javax.annotation.Nullable;
 public interface EnchantmentApi {
 
     /**
-     * Adds an enchantment to an item.
+     * Adds an enchantment to an item (safe mode).
+     * <p>
+     * Levels above the enchantment's max level are clamped to the max level.
+     * Normal application rules (item category, conflicts, max enchantments per
+     * item, disabled enchantments) still apply; if they fail the original item
+     * is returned unchanged.
+     * <p>
+     * The API has no inventory commit step, so on success an
+     * {@code ItemEnchantedEvent} (with a {@code null} player) is fired
+     * immediately. The caller is responsible for writing the returned stack back
+     * into an inventory.
      * 
      * @param item          The item to enchant
      * @param enchantmentId The ID of the enchantment (e.g., "sharpness")
-     * @param level         The level to apply
+     * @param level         The level to apply (>= 1)
      * @return A new ItemStack with the enchantment applied, or the original item if
      *         application failed
+     * @throws IllegalArgumentException if the enchantment ID is unknown or
+     *                                  {@code level < 1}
+     * @see #addEnchantmentUnsafe(ItemStack, String, int)
      */
     @Nonnull
     ItemStack addEnchantment(@Nonnull ItemStack item, @Nonnull String enchantmentId, int level);
+
+    /**
+     * Adds an enchantment to an item without clamping the level to the
+     * enchantment's max level (the same mode {@code /enchant} and custom scrolls
+     * use). Single-level enchantments (max level 1) always stay at level 1.
+     * <p>
+     * All other rules and the event behaviour are identical to
+     * {@link #addEnchantment(ItemStack, String, int)}. Prefer the safe variant
+     * unless you deliberately want over-levelled items.
+     *
+     * @param item          The item to enchant
+     * @param enchantmentId The ID of the enchantment (e.g., "sharpness")
+     * @param level         The level to apply (>= 1)
+     * @return A new ItemStack with the enchantment applied, or the original item if
+     *         application failed
+     * @throws IllegalArgumentException if the enchantment ID is unknown or
+     *                                  {@code level < 1}
+     */
+    @Nonnull
+    ItemStack addEnchantmentUnsafe(@Nonnull ItemStack item, @Nonnull String enchantmentId, int level);
 
     /**
      * Removes an enchantment from an item.

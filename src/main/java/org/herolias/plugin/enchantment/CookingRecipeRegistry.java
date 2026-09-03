@@ -1,19 +1,22 @@
 package org.herolias.plugin.enchantment;
 
-import com.hypixel.hytale.server.core.asset.type.item.config.CraftingRecipe;
 import com.hypixel.hytale.server.core.inventory.MaterialQuantity;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 /**
- * Builds and resolves campfire-cooking recipes from loaded item assets.
+ * Builds and resolves campfire-cooking recipes from the loaded crafting
+ * recipes.
  */
 public class CookingRecipeRegistry extends AbstractRecipeRegistry<CookingRecipeRegistry.CookingRecipe> {
 
+    public static final String BENCH_ID = "Campfire";
+
     @Override
-    protected boolean isValidRecipe(@Nonnull CraftingRecipe recipe) {
-        return checkBenchRequirement(recipe, "Campfire");
+    @Nonnull
+    protected String benchId() {
+        return BENCH_ID;
     }
 
     @Override

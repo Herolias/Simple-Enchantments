@@ -12,10 +12,7 @@ import com.hypixel.hytale.component.query.Query;
 import com.hypixel.hytale.component.system.tick.EntityTickingSystem;
 import com.hypixel.hytale.logger.HytaleLogger;
 import com.hypixel.hytale.protocol.EntityStatUpdate;
-import com.hypixel.hytale.server.core.entity.Entity;
-import com.hypixel.hytale.server.core.entity.EntityUtils;
-import com.hypixel.hytale.server.core.entity.LivingEntity;
-import com.hypixel.hytale.server.core.inventory.Inventory;
+import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
 import com.hypixel.hytale.server.core.modules.entity.AllLegacyLivingEntityTypesQuery;
 import com.hypixel.hytale.server.core.modules.entity.damage.DamageModule;
@@ -23,6 +20,7 @@ import com.hypixel.hytale.server.core.modules.entitystats.EntityStatMap;
 import com.hypixel.hytale.server.core.modules.entitystats.EntityStatsSystems;
 import com.hypixel.hytale.server.core.modules.entitystats.asset.DefaultEntityStatTypes;
 import com.hypixel.hytale.server.core.modules.interaction.system.InteractionSystems;
+import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import it.unimi.dsi.fastutil.floats.FloatList;
 
@@ -32,9 +30,13 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * Applies Thrift mana restoration to mana costs.
- * Uses predictable mana stat updates to refund a portion of mana spent
- * when the player is wielding a Thrift-enchanted staff.
+ * Thrift: refunds part of the mana spent by casting with an enchanted staff.
+ * <p>
+ * Mana drains from status effects and from interactions look identical in the
+ * stat map (both are flagged predictable), so a refund is only made while an
+ * item-use interaction chain is still running this tick, and the staff is the
+ * item that chain is using. The chain walk and the enchantment read happen once
+ * per tick in which mana actually changed.
  */
 public class EnchantmentThriftSystem extends EntityTickingSystem<EntityStore>
         implements EntityStatsSystems.StatModifyingSystem {
@@ -49,7 +51,7 @@ public class EnchantmentThriftSystem extends EntityTickingSystem<EntityStore>
                     Order.AFTER,
                     InteractionSystems.TickInteractionManagerSystem.class));
 
-    public EnchantmentThriftSystem(EnchantmentManager enchantmentManager) {
+    public EnchantmentThriftSystem(@Nonnull EnchantmentManager enchantmentManager) {
         this.enchantmentManager = enchantmentManager;
         LOGGER.atInfo().log("EnchantmentThriftSystem initialized");
     }
@@ -69,7 +71,7 @@ public class EnchantmentThriftSystem extends EntityTickingSystem<EntityStore>
     @Override
     @Nullable
     public SystemGroup<EntityStore> getGroup() {
-        // We can use the same group as damage/stats to ensure order
+        // Same group as the damage/stat systems so the refund lands in the same tick.
         return DamageModule.get().getGatherDamageGroup();
     }
 
@@ -84,66 +86,37 @@ public class EnchantmentThriftSystem extends EntityTickingSystem<EntityStore>
             return;
         }
 
-        // Monitor MANA (ID: Mana)
         int manaIndex = DefaultEntityStatTypes.getMana();
         List<EntityStatUpdate> updates = statMap.getSelfUpdates().get(manaIndex);
         if (updates == null || updates.isEmpty()) {
             return;
         }
-
         FloatList values = statMap.getSelfStatValues().get(manaIndex);
         if (values == null || values.isEmpty()) {
             return;
         }
 
-        Entity entity = EntityUtils.getEntity(index, archetypeChunk);
-        if (!(entity instanceof LivingEntity living)) {
+        float manaSpent = predictableDrain(updates, values);
+        if (manaSpent <= 0.0f) {
             return;
         }
 
-        Inventory inventory = living.getInventory();
-        if (inventory == null) {
+        // Only a running cast can be refunded; drains from effects are not.
+        Ref<EntityStore> ref = archetypeChunk.getReferenceTo(index);
+        ItemStack weapon = ActiveInteractionItems.heldItemOfActiveChain(ref, commandBuffer,
+                ActiveInteractionItems.ITEM_USE_TYPES);
+        if (weapon == null) {
             return;
         }
-
-        // Check for Thrift Enchantment
-        ItemStack weapon = inventory.getItemInHand();
-        int thriftLevel = getThriftLevel(weapon);
-
+        int thriftLevel = enchantmentManager.getEnchantmentLevel(weapon, EnchantmentType.THRIFT);
         if (thriftLevel <= 0) {
             return;
         }
 
-        // Calculate Refund Rate
-        float multiplierIndex = (float) EnchantmentType.THRIFT.getEffectMultiplier();
-        float refundPercentage = multiplierIndex * thriftLevel;
-
-        // Safety cap at 100% refund (free spells)
-        if (refundPercentage > 1.0f)
-            refundPercentage = 1.0f;
-        if (refundPercentage <= 0.0f)
-            return;
-
-        int maxPairs = Math.min(updates.size(), values.size() / 2);
-        float manaSpent = 0.0f;
-
-        for (int i = 0; i < maxPairs; i++) {
-            EntityStatUpdate update = updates.get(i);
-            if (update == null || !update.predictable) {
-                if (update == null)
-                    continue;
-                if (!update.predictable)
-                    continue;
-            }
-            float previous = values.getFloat(i * 2);
-            float current = values.getFloat(i * 2 + 1);
-            float delta = current - previous;
-            if (delta < 0.0f) {
-                manaSpent += -delta;
-            }
-        }
-
-        if (manaSpent <= 0.0f) {
+        float refundPercentage = (float) EnchantmentType.THRIFT.getScaledMultiplier(thriftLevel);
+        // Cap at 100% (free spells).
+        refundPercentage = Math.min(refundPercentage, 1.0f);
+        if (refundPercentage <= 0.0f) {
             return;
         }
 
@@ -151,26 +124,28 @@ public class EnchantmentThriftSystem extends EntityTickingSystem<EntityStore>
         if (refund <= 0.0f) {
             return;
         }
+        statMap.addStatValue(manaIndex, refund);
 
-        // Apply Refund
-        statMap.addStatValue(DefaultEntityStatTypes.getMana(), refund);
-
-        if (entity instanceof com.hypixel.hytale.server.core.entity.entities.Player player) {
-            com.hypixel.hytale.server.core.universe.PlayerRef playerRef = store.getComponent(
-                    EntityUtils.getEntity(index, archetypeChunk).getReference(),
-                    com.hypixel.hytale.server.core.universe.PlayerRef.getComponentType());
-            org.herolias.plugin.api.event.EnchantmentActivatedEvent ev = new org.herolias.plugin.api.event.EnchantmentActivatedEvent(
-                    playerRef, weapon, EnchantmentType.THRIFT, thriftLevel);
-            com.hypixel.hytale.server.core.HytaleServer.get().getEventBus()
-                    .dispatchFor(org.herolias.plugin.api.event.EnchantmentActivatedEvent.class).dispatch(ev);
+        if (archetypeChunk.getComponent(index, Player.getComponentType()) != null) {
+            PlayerRef playerRef = archetypeChunk.getComponent(index, PlayerRef.getComponentType());
+            EnchantmentEventHelper.fireActivated(playerRef, weapon, EnchantmentType.THRIFT, thriftLevel);
         }
-
     }
 
-    private int getThriftLevel(@Nullable ItemStack item) {
-        if (item == null || item.isEmpty()) {
-            return 0;
+    /** Sum of the predictable decreases recorded for the stat this tick. */
+    static float predictableDrain(@Nonnull List<EntityStatUpdate> updates, @Nonnull FloatList values) {
+        int pairs = Math.min(updates.size(), values.size() / 2);
+        float spent = 0.0f;
+        for (int i = 0; i < pairs; i++) {
+            EntityStatUpdate update = updates.get(i);
+            if (update == null || !update.predictable) {
+                continue;
+            }
+            float delta = values.getFloat(i * 2 + 1) - values.getFloat(i * 2);
+            if (delta < 0.0f) {
+                spent -= delta;
+            }
         }
-        return enchantmentManager.getEnchantmentLevel(item, EnchantmentType.THRIFT);
+        return spent;
     }
 }

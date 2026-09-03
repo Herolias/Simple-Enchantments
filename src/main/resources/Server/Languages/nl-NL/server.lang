@@ -112,13 +112,9 @@ items.Scroll_Life_Leech_I.name = Rol van Levensroof
 
 items.Scroll_Life_Leech_I.description = Geneest aanvaller voor 10% van toegebrachte schade.
 
-items.Scroll_Life_Leech_II.name = Rol van Levensroof II
 
-items.Scroll_Life_Leech_II.description = Geneest aanvaller voor 20% van toegebrachte schade.
 
-items.Scroll_Life_Leech_III.name = Rol van Levensroof III
 
-items.Scroll_Life_Leech_III.description = Geneest aanvaller voor 30% van toegebrachte schade.
 
 
 
@@ -637,7 +633,6 @@ customUI.walkthrough.enchantments.desc = Een complete lijst van betoveringen en 
 
 config.general.allow_same_scroll_upgrades = Dezelfde Rol Upgrades Toestaan (I+I = II)
 
-ui.itemcategory.simpleEnchantments = Eenvoudige Betoveringen
 ui.itemcategory.simpleEnchantments.scrolls = Rollen
 
 customUI.walkthrough.enabledOnServer = Ingeschakeld op deze server: 

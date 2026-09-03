@@ -2,9 +2,12 @@ package org.herolias.plugin.api;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.LinkedHashMap;
-import java.util.Map;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * Represents a crafting category (tab) in the Enchanting Table.
@@ -12,10 +15,15 @@ import java.util.Collection;
  * Built-in categories are pre-registered. Addon mods can register custom
  * categories
  * via {@link EnchantmentApi#registerCraftingCategory(String, String, String)}.
+ * <p>
+ * The registry is thread-safe: addons may register from their own setup while
+ * other plugins read it. {@link #values()} preserves registration order.
  */
 public class CraftingCategoryDefinition {
 
-    private static final Map<String, CraftingCategoryDefinition> REGISTRY = new LinkedHashMap<>();
+    private static final Map<String, CraftingCategoryDefinition> REGISTRY = new ConcurrentHashMap<>();
+    /** Registration order, since ConcurrentHashMap does not keep insertion order. */
+    private static final List<CraftingCategoryDefinition> ORDERED = new CopyOnWriteArrayList<>();
 
     // Pre-register built-in categories
     static {
@@ -40,22 +48,32 @@ public class CraftingCategoryDefinition {
     }
 
     private static void registerBuiltIn(String id, String name) {
-        REGISTRY.put(id, new CraftingCategoryDefinition(id, name, null, true));
+        put(new CraftingCategoryDefinition(id, name, null, true));
+    }
+
+    private static void put(@Nonnull CraftingCategoryDefinition def) {
+        if (REGISTRY.putIfAbsent(def.categoryId, def) != null) {
+            throw new IllegalArgumentException("Crafting category already registered: '" + def.categoryId + "'");
+        }
+        ORDERED.add(def);
     }
 
     /**
      * Registers a custom crafting category.
      *
-     * @throws IllegalArgumentException if the category ID is already registered
+     * @throws IllegalArgumentException if the category ID is blank or already registered
      */
     public static CraftingCategoryDefinition register(@Nonnull String categoryId,
             @Nonnull String displayName,
             @Nullable String iconPath) {
-        if (REGISTRY.containsKey(categoryId)) {
-            throw new IllegalArgumentException("Crafting category already registered: '" + categoryId + "'");
+        if (categoryId == null || categoryId.isBlank()) {
+            throw new IllegalArgumentException("Crafting category ID must not be blank");
+        }
+        if (displayName == null || displayName.isBlank()) {
+            throw new IllegalArgumentException("Crafting category display name must not be blank");
         }
         CraftingCategoryDefinition def = new CraftingCategoryDefinition(categoryId, displayName, iconPath, false);
-        REGISTRY.put(categoryId, def);
+        put(def);
         return def;
     }
 
@@ -70,9 +88,9 @@ public class CraftingCategoryDefinition {
         return REGISTRY.containsKey(categoryId);
     }
 
-    /** Returns all registered categories. */
+    /** Returns all registered categories in registration order (read-only snapshot). */
     public static Collection<CraftingCategoryDefinition> values() {
-        return REGISTRY.values();
+        return Collections.unmodifiableList(ORDERED);
     }
 
     public String getCategoryId() {

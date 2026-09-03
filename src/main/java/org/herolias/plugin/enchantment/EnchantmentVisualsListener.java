@@ -1,33 +1,34 @@
 package org.herolias.plugin.enchantment;
 
-import com.hypixel.hytale.server.core.event.events.ecs.InventoryChangeEvent;
-import com.hypixel.hytale.component.system.EntityEventSystem;
 import com.hypixel.hytale.component.ArchetypeChunk;
 import com.hypixel.hytale.component.CommandBuffer;
-import com.hypixel.hytale.component.query.Query;
-import com.hypixel.hytale.component.Archetype;
-import com.hypixel.hytale.server.core.entity.EntityUtils;
-import javax.annotation.Nonnull;
-import com.hypixel.hytale.server.core.entity.entities.Player;
-import com.hypixel.hytale.server.core.entity.LivingEntity;
 import com.hypixel.hytale.component.Ref;
-import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
-import com.hypixel.hytale.server.core.modules.entitystats.EntityStatMap;
-import com.hypixel.hytale.server.core.modules.entitystats.asset.EntityStatType;
 import com.hypixel.hytale.component.Store;
+import com.hypixel.hytale.component.query.Query;
+import com.hypixel.hytale.component.system.EntityEventSystem;
 import com.hypixel.hytale.logger.HytaleLogger;
-import org.herolias.plugin.SimpleEnchanting;
+import com.hypixel.hytale.server.core.entity.UUIDComponent;
+import com.hypixel.hytale.server.core.entity.entities.Player;
+import com.hypixel.hytale.server.core.event.events.ecs.InventoryChangeEvent;
+import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
+
+import javax.annotation.Nonnull;
+import java.util.concurrent.TimeUnit;
 
 /**
- * Event-driven listener for updating enchantment visuals (Glow).
- * Replaces the heavy polling mechanism for inventory content changes.
+ * Refreshes the enchantment glow when a player's inventory content changes
+ * (armor equip/unequip, pick-ups, drops, consumption) and invalidates the
+ * cached armor enchantment levels when the armor section changed. Active slot
+ * changes are handled by {@link EnchantmentActiveSlotSystem}.
  */
 public class EnchantmentVisualsListener extends EntityEventSystem<EntityStore, InventoryChangeEvent> {
 
     private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
-    private final EnchantmentManager enchantmentManager;
 
-    public EnchantmentVisualsListener(EnchantmentManager enchantmentManager) {
+    private final EnchantmentManager enchantmentManager;
+    private final Query<EntityStore> query = Query.and(Player.getComponentType(), UUIDComponent.getComponentType());
+
+    public EnchantmentVisualsListener(@Nonnull EnchantmentManager enchantmentManager) {
         super(InventoryChangeEvent.class);
         this.enchantmentManager = enchantmentManager;
     }
@@ -35,39 +36,33 @@ public class EnchantmentVisualsListener extends EntityEventSystem<EntityStore, I
     @Override
     @Nonnull
     public Query<EntityStore> getQuery() {
-        return Archetype.empty();
+        return query;
     }
 
     @Override
-    public void handle(int index, @Nonnull ArchetypeChunk<EntityStore> archetypeChunk, @Nonnull Store<EntityStore> store, @Nonnull CommandBuffer<EntityStore> commandBuffer, @Nonnull InventoryChangeEvent event) {
+    public void handle(int index,
+            @Nonnull ArchetypeChunk<EntityStore> archetypeChunk,
+            @Nonnull Store<EntityStore> store,
+            @Nonnull CommandBuffer<EntityStore> commandBuffer,
+            @Nonnull InventoryChangeEvent event) {
+        Player player = archetypeChunk.getComponent(index, Player.getComponentType());
+        if (player == null) {
+            return;
+        }
+        Ref<EntityStore> entityRef = archetypeChunk.getReferenceTo(index);
+
+        if (EquipmentLevelCache.isArmorChange(event)) {
+            UUIDComponent uuidComponent = archetypeChunk.getComponent(index, UUIDComponent.getComponentType());
+            if (uuidComponent != null) {
+                EquipmentLevelCache.invalidate(uuidComponent.getUuid());
+            }
+        }
+
         try {
-            LivingEntity entity = (LivingEntity) EntityUtils.getEntity(index, archetypeChunk);
-            if (!(entity instanceof Player player)) {
-                return;
-            }
-
-            if (player.getWorld() != null && !player.getWorld().isInThread()) {
-                player.getWorld().execute(() -> handle(index, archetypeChunk, store, commandBuffer, event));
-                return;
-            }
-
-            Ref<EntityStore> entityRef = player.getReference();
-            if (entityRef == null || !entityRef.isValid()) {
-                return;
-            }
-
-            if (player.getWorld() == null) {
-                return;
-            }
-
-            if (store != null) {
-                // Update glow stats when inventory content changes
-                // This covers: Armor equip/unequip, Picking up items, Dropping items, Consuming
-                // items
-                EnchantmentVisualsHelper.updateGlowStats(entityRef, store, player, enchantmentManager);
-            }
-        } catch (Exception e) {
-            LOGGER.atWarning().log("Error in EnchantmentVisualsListener: " + e.getMessage());
+            EnchantmentVisualsHelper.updateGlowStats(entityRef, store, enchantmentManager);
+        } catch (RuntimeException e) {
+            LOGGER.atWarning().atMostEvery(30, TimeUnit.SECONDS).withCause(e)
+                    .log("Failed to refresh enchantment glow after an inventory change");
         }
     }
 }

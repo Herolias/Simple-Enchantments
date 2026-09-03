@@ -79,7 +79,12 @@ public class ScrollDescriptionManager {
 
             for (EnchantmentType type : EnchantmentType.values()) {
                 String baseName = getScrollBaseName(type);
-                boolean isDisabled = config != null && config.disabledEnchantments.getOrDefault(type.getId(), false);
+                // isEnchantmentEnabled also accounts for enchantments whose companion mod
+                // (Perfect Parries) is absent, so the description matches the recipe state.
+                org.herolias.plugin.SimpleEnchanting pluginInstance = org.herolias.plugin.SimpleEnchanting.getInstance();
+                boolean isDisabled = pluginInstance != null && pluginInstance.getEnchantmentManager() != null
+                        ? !pluginInstance.getEnchantmentManager().isEnchantmentEnabled(type)
+                        : config != null && config.disabledEnchantments.getOrDefault(type.getId(), false);
 
                 for (int level = 1; level <= type.getMaxLevel(); level++) {
                     // Key format: items.Scroll_Name_Level.description

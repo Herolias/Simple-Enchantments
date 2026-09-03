@@ -17,6 +17,7 @@ import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import javax.annotation.Nonnull;
 import org.herolias.plugin.SimpleEnchanting;
 import org.herolias.plugin.enchantment.EnchantmentManager;
+import org.herolias.plugin.util.InventoryAccess;
 
 /**
  * Page supplier for the Scroll of Cleansing.
@@ -43,10 +44,7 @@ public class CleansingScrollPageSupplier implements OpenCustomUIInteraction.Cust
             return null;
         }
 
-        ItemContainer itemContainer = playerComponent.getInventory().getCombinedArmorHotbarUtilityStorage();
-        if (itemContainer == null) {
-            return null;
-        }
+        ItemContainer itemContainer = InventoryAccess.getCombinedArmorHotbarUtilityStorage(componentAccessor, ref);
 
         EnchantmentManager manager = SimpleEnchanting.getInstance().getEnchantmentManager();
         return new CleansingScrollPage(playerRef, itemContainer, manager, heldItemContext);

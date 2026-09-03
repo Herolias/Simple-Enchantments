@@ -3,6 +3,7 @@ package org.herolias.plugin.enchantment;
 import com.hypixel.hytale.component.Archetype;
 import com.hypixel.hytale.component.ArchetypeChunk;
 import com.hypixel.hytale.component.CommandBuffer;
+import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.component.query.Query;
 import com.hypixel.hytale.component.system.EntityEventSystem;
@@ -14,7 +15,7 @@ import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockGathering
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType;
 import com.hypixel.hytale.server.core.event.events.ecs.BreakBlockEvent;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
-import com.hypixel.hytale.server.core.modules.interaction.BlockHarvestUtils;
+import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 
 import javax.annotation.Nonnull;
@@ -59,10 +60,14 @@ public class EnchantmentFortuneSystem extends EntityEventSystem<EntityStore, Bre
             return;
         }
 
-        if (!enchantmentManager.hasEnchantment(tool, EnchantmentType.FORTUNE)
-                || enchantmentManager.hasEnchantment(tool, EnchantmentType.PICK_PERFECT)) {
+        // One metadata read for every enchantment this system consults.
+        int[] levels = enchantmentManager.getEnchantmentLevels(tool,
+                EnchantmentType.FORTUNE, EnchantmentType.PICK_PERFECT, EnchantmentType.SMELTING);
+        int fortuneLevel = levels[0];
+        if (fortuneLevel <= 0 || levels[1] > 0) {
             return;
         }
+        boolean smelting = levels[2] > 0;
 
         if (enchantmentManager.categorizeItem(tool) != ItemCategory.PICKAXE) {
             return;
@@ -83,14 +88,13 @@ public class EnchantmentFortuneSystem extends EntityEventSystem<EntityStore, Bre
             return;
         }
 
-        int fortuneLevel = enchantmentManager.getEnchantmentLevel(tool, EnchantmentType.FORTUNE);
         List<ItemStack> extraDrops = enchantmentManager.getFortuneDrops(blockType, breaking, fortuneLevel);
 
         if (extraDrops.isEmpty()) {
             return;
         }
 
-        if (enchantmentManager.hasEnchantment(tool, EnchantmentType.SMELTING)) {
+        if (smelting) {
             extraDrops = smeltDrops(extraDrops);
         }
 
@@ -99,9 +103,11 @@ public class EnchantmentFortuneSystem extends EntityEventSystem<EntityStore, Bre
 
         enchantmentManager.spawnDrops(commandBuffer, extraDrops, dropPosition);
 
-        com.hypixel.hytale.server.core.universe.PlayerRef playerRef = store.getComponent(
-                com.hypixel.hytale.server.core.entity.EntityUtils.getEntity(index, archetypeChunk).getReference(),
-                com.hypixel.hytale.server.core.universe.PlayerRef.getComponentType());
+        PlayerRef playerRef = null;
+        Ref<EntityStore> breakerRef = archetypeChunk.getReferenceTo(index);
+        if (breakerRef != null && breakerRef.isValid()) {
+            playerRef = store.getComponent(breakerRef, PlayerRef.getComponentType());
+        }
         EnchantmentEventHelper.fireActivated(playerRef, tool, EnchantmentType.FORTUNE, fortuneLevel);
     }
 

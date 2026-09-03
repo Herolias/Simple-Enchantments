@@ -6,6 +6,7 @@ import com.hypixel.hytale.server.core.entity.entities.player.pages.choices.Choic
 import com.hypixel.hytale.server.core.entity.entities.player.pages.choices.ChoiceElement;
 import com.hypixel.hytale.server.core.inventory.ItemContext;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
+import com.hypixel.hytale.server.core.inventory.container.CombinedItemContainer;
 import com.hypixel.hytale.server.core.inventory.container.ItemContainer;
 import com.hypixel.hytale.server.core.ui.builder.UICommandBuilder;
 import com.hypixel.hytale.server.core.ui.builder.UIEventBuilder;
@@ -93,14 +94,16 @@ public class EnchantScrollPage extends ChoiceBasePage {
                 continue;
             }
 
-            // Skip the held scroll itself
-            if (slot == heldItemContext.getSlot() && itemContainer == heldItemContext.getContainer()) {
+            // Skip the held scroll itself (the page iterates a combined container,
+            // so the held slot has to be mapped onto the section container it lives in)
+            if (isHeldSlot(itemContainer, slot, heldItemContext)) {
                 continue;
             }
 
             String itemId = itemStack.getItemId();
 
             // Scrolls can no longer be enchanted via the menu; use Engraving Table instead.
+            // This also guarantees the held scroll never shows up as a target.
             if (itemId != null && itemId.startsWith("Scroll_")) {
                 continue;
             }
@@ -158,5 +161,31 @@ public class EnchantScrollPage extends ChoiceBasePage {
         }
 
         return elements.toArray(ChoiceElement[]::new);
+    }
+
+    /**
+     * Returns true when {@code slot} of {@code container} is the slot the held
+     * item was read from. {@code container} is usually a
+     * {@link CombinedItemContainer} while the held context refers to one of its
+     * section containers, so the combined slot index is mapped to the matching
+     * inner container and slot before comparing.
+     */
+    static boolean isHeldSlot(@Nonnull ItemContainer container, short slot, @Nonnull ItemContext heldItemContext) {
+        ItemContainer heldContainer = heldItemContext.getContainer();
+        if (container == heldContainer) {
+            return slot == heldItemContext.getSlot();
+        }
+        if (container instanceof CombinedItemContainer combined) {
+            short remaining = slot;
+            for (int i = 0; i < combined.getContainersSize(); i++) {
+                ItemContainer inner = combined.getContainer(i);
+                short capacity = inner.getCapacity();
+                if (remaining < capacity) {
+                    return inner == heldContainer && remaining == heldItemContext.getSlot();
+                }
+                remaining = (short) (remaining - capacity);
+            }
+        }
+        return false;
     }
 }

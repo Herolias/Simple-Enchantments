@@ -8,21 +8,21 @@ import com.hypixel.hytale.component.query.Query;
 import com.hypixel.hytale.component.system.tick.EntityTickingSystem;
 import com.hypixel.hytale.logger.HytaleLogger;
 import com.hypixel.hytale.protocol.ItemArmorSlot;
-import com.hypixel.hytale.server.core.entity.Entity;
-import com.hypixel.hytale.server.core.entity.EntityUtils;
-import com.hypixel.hytale.server.core.entity.LivingEntity;
-import com.hypixel.hytale.server.core.inventory.Inventory;
+import com.hypixel.hytale.server.core.entity.entities.Player;
+import com.hypixel.hytale.server.core.inventory.InventoryComponent;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
 import com.hypixel.hytale.server.core.inventory.container.ItemContainer;
-import com.hypixel.hytale.server.core.modules.entity.EntityModule;
 import com.hypixel.hytale.server.core.modules.entitystats.EntityStatMap;
 import com.hypixel.hytale.server.core.modules.entitystats.asset.DefaultEntityStatTypes;
+import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * ECS ticking system that applies passive health regeneration to players
@@ -30,9 +30,6 @@ import java.util.Map;
  * <p>
  * Regeneration rate is configurable via the enchantment multiplier system.
  * Default rate: 0.5 HP/s.
- * <p>
- * Reports its healing amounts to {@link EnchantmentSecondStomachSystem} so
- * that Second Stomach can distinguish between passive regen and instant healing.
  */
 public class EnchantmentRegenerationSystem extends EntityTickingSystem<EntityStore> {
 
@@ -42,27 +39,40 @@ public class EnchantmentRegenerationSystem extends EntityTickingSystem<EntitySto
     /** Throttle event firing to avoid spam (fire every ~5 seconds). */
     private static final float EVENT_FIRE_INTERVAL = 5.0f;
 
+    /** How often stale (invalid-ref) event timers are evicted. */
+    private static final long SWEEP_INTERVAL_NANOS = TimeUnit.SECONDS.toNanos(30);
+
     @Nonnull
     private static final Query<EntityStore> QUERY = Query.and(
-            EntityModule.get().getPlayerComponentType());
+            Player.getComponentType(),
+            EntityStatMap.getComponentType(),
+            InventoryComponent.Armor.getComponentType());
 
     private final EnchantmentManager enchantmentManager;
 
     /**
-     * Reference to the Second Stomach system for reporting regen healing.
-     * May be null if Second Stomach is not registered.
+     * Time since last event fire per player, to throttle event spam. Shared by
+     * all world threads, hence concurrent; entries whose ref died are swept
+     * periodically (ticking systems get no entity-removal callback).
      */
-    @Nullable
-    private final EnchantmentSecondStomachSystem secondStomachSystem;
+    private final Map<Ref<EntityStore>, Float> eventTimers = new ConcurrentHashMap<>();
+    private final AtomicLong lastSweepNanos = new AtomicLong(System.nanoTime());
 
-    /** Track time since last event fire per player to throttle event spam. */
-    private final Map<Ref<EntityStore>, Float> eventTimers = new HashMap<>();
-
-    public EnchantmentRegenerationSystem(EnchantmentManager enchantmentManager,
-                                         @Nullable EnchantmentSecondStomachSystem secondStomachSystem) {
+    public EnchantmentRegenerationSystem(EnchantmentManager enchantmentManager) {
         this.enchantmentManager = enchantmentManager;
-        this.secondStomachSystem = secondStomachSystem;
         LOGGER.atInfo().log("EnchantmentRegenerationSystem initialized");
+    }
+
+    /**
+     * @deprecated The Regeneration → Second Stomach hand-off was removed: the two
+     *             enchantments conflict, so it could never run. Use
+     *             {@link #EnchantmentRegenerationSystem(EnchantmentManager)}; the
+     *             second argument is ignored.
+     */
+    @Deprecated
+    public EnchantmentRegenerationSystem(EnchantmentManager enchantmentManager,
+            @Nullable EnchantmentSecondStomachSystem ignored) {
+        this(enchantmentManager);
     }
 
     @Override
@@ -77,18 +87,10 @@ public class EnchantmentRegenerationSystem extends EntityTickingSystem<EntitySto
             @Nonnull Store<EntityStore> store,
             @Nonnull CommandBuffer<EntityStore> commandBuffer) {
         try {
-            Entity entity = EntityUtils.getEntity(index, archetypeChunk);
-            if (!(entity instanceof LivingEntity livingEntity)) {
-                return;
-            }
-
-            Inventory inventory = livingEntity.getInventory();
-            if (inventory == null) {
-                return;
-            }
-
-            ItemContainer armorContainer = inventory.getArmor();
-            if (armorContainer == null) {
+            InventoryComponent.Armor armorComponent = archetypeChunk.getComponent(index,
+                    InventoryComponent.Armor.getComponentType());
+            ItemContainer armorContainer = armorComponent != null ? armorComponent.getInventory() : null;
+            if (armorContainer == null || armorContainer.getCapacity() <= CHEST_SLOT) {
                 return;
             }
 
@@ -102,8 +104,6 @@ public class EnchantmentRegenerationSystem extends EntityTickingSystem<EntitySto
                 return;
             }
 
-            Ref<EntityStore> ref = archetypeChunk.getReferenceTo(index);
-
             // Get the configured regeneration rate (HP/s)
             double regenRate = EnchantmentType.REGENERATION.getEffectMultiplier();
             float healAmount = (float) (regenRate * dt);
@@ -112,33 +112,38 @@ public class EnchantmentRegenerationSystem extends EntityTickingSystem<EntitySto
                 return;
             }
 
-            EntityStatMap statMap = commandBuffer.getComponent(ref, EntityStatMap.getComponentType());
+            EntityStatMap statMap = archetypeChunk.getComponent(index, EntityStatMap.getComponentType());
             if (statMap == null) {
                 return;
             }
 
             statMap.addStatValue(DefaultEntityStatTypes.getHealth(), healAmount);
 
-            // Report healing to Second Stomach system so it can exclude regen
-            // from instant-heal detection
-            if (secondStomachSystem != null) {
-                secondStomachSystem.addExpectedRegeneration(ref, healAmount);
-            }
-
             // Throttle event firing
+            Ref<EntityStore> ref = archetypeChunk.getReferenceTo(index);
             float timer = eventTimers.getOrDefault(ref, 0.0f) + dt;
             if (timer >= EVENT_FIRE_INTERVAL) {
                 timer = 0.0f;
-                com.hypixel.hytale.server.core.universe.PlayerRef playerRef = store.getComponent(ref,
-                        com.hypixel.hytale.server.core.universe.PlayerRef.getComponentType());
-                EnchantmentEventHelper.fireActivated(playerRef, chestplate,
-                        EnchantmentType.REGENERATION, level);
+                PlayerRef playerRef = store.getComponent(ref, PlayerRef.getComponentType());
+                EnchantmentEventHelper.fireActivated(playerRef, chestplate, EnchantmentType.REGENERATION, level);
             }
             eventTimers.put(ref, timer);
 
+            sweepStaleTimers();
         } catch (Exception e) {
-            LOGGER.atWarning().log("Error in Regeneration system: " + e.getMessage());
+            LOGGER.atWarning().atMostEvery(30, TimeUnit.SECONDS).withCause(e)
+                    .log("Error in Regeneration system");
         }
+    }
+
+    /** Drops timers of entities that no longer exist so the map cannot grow unbounded. */
+    private void sweepStaleTimers() {
+        long now = System.nanoTime();
+        long last = lastSweepNanos.get();
+        if (now - last < SWEEP_INTERVAL_NANOS || !lastSweepNanos.compareAndSet(last, now)) {
+            return;
+        }
+        eventTimers.keySet().removeIf(ref -> !ref.isValid());
     }
 
     @Override
@@ -146,4 +151,3 @@ public class EnchantmentRegenerationSystem extends EntityTickingSystem<EntitySto
         return false;
     }
 }
-

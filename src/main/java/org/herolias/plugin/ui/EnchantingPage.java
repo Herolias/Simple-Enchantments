@@ -2,6 +2,7 @@ package org.herolias.plugin.ui;
 
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
+import com.hypixel.hytale.logger.HytaleLogger;
 import com.hypixel.hytale.protocol.packets.interface_.CustomPageLifetime;
 import com.hypixel.hytale.protocol.packets.interface_.CustomUIEventBindingType;
 import com.hypixel.hytale.server.core.Message;
@@ -21,12 +22,14 @@ import org.herolias.plugin.lang.LanguageManager;
 
 import javax.annotation.Nonnull;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Interactive UI page corresponding to the /enchanting command.
  * Provides a Walkthrough and User Settings (Glow toggle, Language selection).
  */
 public class EnchantingPage extends InteractiveCustomUIPage<EnchantingPageEventData> {
+    private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
     private static final Value<String> BUTTON_STYLE = Value.ref("Pages/BasicTextButton.ui", "LabelStyle");
     private static final Value<String> BUTTON_STYLE_SELECTED = Value.ref("Pages/BasicTextButton.ui",
             "SelectedLabelStyle");
@@ -52,6 +55,12 @@ public class EnchantingPage extends InteractiveCustomUIPage<EnchantingPageEventD
             "default", "en-US", "de-DE", "es-ES", "fr-FR", "id-ID", "it-IT",
             "nl-NL", "pt-BR", "ru-RU", "sv-SE", "uk-UA"
     };
+    private static final Set<String> SUPPORTED_LANGUAGES = Set.of(LANGUAGE_OPTIONS);
+
+    /** Whether {@code code} is one of the selectable language options (including {@code default}). */
+    public static boolean isSupportedLanguage(String code) {
+        return code != null && SUPPORTED_LANGUAGES.contains(code);
+    }
 
     private static final Map<String, String> NATIVE_LANGUAGE_NAMES = Map.ofEntries(
             Map.entry("default", "Default"),
@@ -129,11 +138,17 @@ public class EnchantingPage extends InteractiveCustomUIPage<EnchantingPageEventD
         } else if (data.toggleSetting != null) {
             if (data.toggleSetting.startsWith("lang:")) {
                 String nextLang = data.toggleSetting.substring(5);
-                userSettingsManager.setLanguage(this.playerRef.getUuid(), nextLang);
-                languageManager.sendUpdatePacket(this.playerRef, nextLang);
+                // Only persist codes we actually offer; the value comes from the client
+                if (!isSupportedLanguage(nextLang)) {
+                    LOGGER.atWarning().log("Ignoring unsupported language code '%s' from %s", nextLang,
+                            this.playerRef.getUsername());
+                } else {
+                    userSettingsManager.setLanguage(this.playerRef.getUuid(), nextLang);
+                    languageManager.sendUpdatePacket(this.playerRef, nextLang);
 
-                // Also trigger scroll descriptions
-                org.herolias.plugin.enchantment.ScrollDescriptionManager.sendUpdatePacket(this.playerRef);
+                    // Also trigger scroll descriptions
+                    org.herolias.plugin.enchantment.ScrollDescriptionManager.sendUpdatePacket(this.playerRef);
+                }
 
             } else if ("glow".equals(data.toggleSetting)) {
                 boolean current = userSettingsManager.getEnableEnchantmentGlow(this.playerRef.getUuid());

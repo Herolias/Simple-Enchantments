@@ -8,24 +8,24 @@ public class EngravingTablePageEventData {
     public static final BuilderCodec<EngravingTablePageEventData> CODEC = BuilderCodec.builder(
             EngravingTablePageEventData.class,
             EngravingTablePageEventData::new)
-            .addField(new KeyedCodec<>("Close", Codec.STRING),
-                    (entry, s) -> entry.close = s, entry -> entry.close)
-            .addField(new KeyedCodec<>("Take", Codec.STRING),
-                    (entry, s) -> entry.take = s, entry -> entry.take)
-            .addField(new KeyedCodec<>("InventorySelect", Codec.STRING),
-                    (entry, s) -> entry.inventorySelect = s, entry -> entry.inventorySelect)
-            .addField(new KeyedCodec<>("ClearPrimary", Codec.STRING),
-                    (entry, s) -> entry.clearPrimary = s, entry -> entry.clearPrimary)
-            .addField(new KeyedCodec<>("ClearSecondary", Codec.STRING),
-                    (entry, s) -> entry.clearSecondary = s, entry -> entry.clearSecondary)
-            .addField(new KeyedCodec<>("NameColor", Codec.STRING),
-                    (entry, s) -> entry.nameColor = s, entry -> entry.nameColor)
-            .addField(new KeyedCodec<>("GlowColor", Codec.STRING),
-                    (entry, s) -> entry.glowColor = s, entry -> entry.glowColor)
-            .addField(new KeyedCodec<>("NameInput", Codec.STRING),
-                    (entry, s) -> entry.nameInputTrigger = s, entry -> entry.nameInputTrigger)
-            .addField(new KeyedCodec<>("@NameInput", Codec.STRING),
-                    (entry, s) -> entry.nameInput = s, entry -> entry.nameInput)
+            .append(new KeyedCodec<>("Close", Codec.STRING),
+                    (entry, s) -> entry.close = s, entry -> entry.close).add()
+            .append(new KeyedCodec<>("Take", Codec.STRING),
+                    (entry, s) -> entry.take = s, entry -> entry.take).add()
+            .append(new KeyedCodec<>("InventorySelect", Codec.STRING),
+                    (entry, s) -> entry.inventorySelect = s, entry -> entry.inventorySelect).add()
+            .append(new KeyedCodec<>("ClearPrimary", Codec.STRING),
+                    (entry, s) -> entry.clearPrimary = s, entry -> entry.clearPrimary).add()
+            .append(new KeyedCodec<>("ClearSecondary", Codec.STRING),
+                    (entry, s) -> entry.clearSecondary = s, entry -> entry.clearSecondary).add()
+            .append(new KeyedCodec<>("NameColor", Codec.STRING),
+                    (entry, s) -> entry.nameColor = s, entry -> entry.nameColor).add()
+            .append(new KeyedCodec<>("GlowColor", Codec.STRING),
+                    (entry, s) -> entry.glowColor = s, entry -> entry.glowColor).add()
+            .append(new KeyedCodec<>("NameInput", Codec.STRING),
+                    (entry, s) -> entry.nameInputTrigger = s, entry -> entry.nameInputTrigger).add()
+            .append(new KeyedCodec<>("@NameInput", Codec.STRING),
+                    (entry, s) -> entry.nameInput = s, entry -> entry.nameInput).add()
             .build();
 
     public String close;

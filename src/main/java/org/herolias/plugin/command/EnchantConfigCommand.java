@@ -2,7 +2,6 @@ package org.herolias.plugin.command;
 
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
-import com.hypixel.hytale.protocol.GameMode;
 import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.command.system.CommandContext;
 import com.hypixel.hytale.server.core.command.system.basecommands.AbstractAsyncCommand;
@@ -53,7 +52,12 @@ public class EnchantConfigCommand extends AbstractAsyncCommand {
         Store<EntityStore> store = playerRef.getStore();
         World world = store.getExternalData().getWorld();
 
-        return CompletableFuture.runAsync(() -> {
+        // runAsync reports exceptions to the sender and the log instead of swallowing them
+        return this.runAsync(context, () -> {
+            if (!playerRef.isValid()) {
+                context.sendMessage(MESSAGE_PLAYER_NOT_IN_WORLD);
+                return;
+            }
             Player playerComponent = store.getComponent(playerRef, Player.getComponentType());
             PlayerRef playerRefComponent = store.getComponent(playerRef, PlayerRef.getComponentType());
 

@@ -17,6 +17,7 @@ import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import javax.annotation.Nonnull;
 import org.herolias.plugin.SimpleEnchanting;
 import org.herolias.plugin.enchantment.EnchantmentManager;
+import org.herolias.plugin.util.InventoryAccess;
 import org.herolias.plugin.enchantment.EnchantmentType;
 
 public class EnchantScrollPageSupplier implements OpenCustomUIInteraction.CustomPageSupplier {
@@ -67,10 +68,7 @@ public class EnchantScrollPageSupplier implements OpenCustomUIInteraction.Custom
             return null;
         }
 
-        ItemContainer itemContainer = playerComponent.getInventory().getCombinedArmorHotbarUtilityStorage();
-        if (itemContainer == null) {
-            return null;
-        }
+        ItemContainer itemContainer = InventoryAccess.getCombinedArmorHotbarUtilityStorage(componentAccessor, ref);
 
         EnchantmentManager manager = SimpleEnchanting.getInstance().getEnchantmentManager();
         return new EnchantScrollPage(playerRef, itemContainer, manager, type, targetLevel, heldItemContext);
