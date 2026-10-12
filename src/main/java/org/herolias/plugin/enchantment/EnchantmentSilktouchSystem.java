@@ -11,7 +11,6 @@ import com.hypixel.hytale.component.dependency.SystemDependency;
 import com.hypixel.hytale.component.query.Query;
 import com.hypixel.hytale.component.system.EntityEventSystem;
 import com.hypixel.hytale.logger.HytaleLogger;
-import com.hypixel.hytale.math.util.ChunkUtil;
 import org.joml.Vector3d;
 import org.joml.Vector3i;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockBreakingDropType;
@@ -24,8 +23,7 @@ import com.hypixel.hytale.server.core.event.events.ecs.BreakBlockEvent;
 import com.hypixel.hytale.server.core.event.events.ecs.DamageBlockEvent;
 import com.hypixel.hytale.server.core.modules.interaction.BlockHarvestUtils;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
-import com.hypixel.hytale.server.core.modules.blockhealth.BlockHealthChunk;
-import com.hypixel.hytale.server.core.modules.blockhealth.BlockHealthModule;
+import com.hypixel.hytale.server.core.modules.blockhealth.BlockHealthSection;
 import com.hypixel.hytale.server.core.modules.blockset.BlockSetModule;
 import com.hypixel.hytale.server.core.modules.interaction.BlockInteractionUtils;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
@@ -136,19 +134,13 @@ public class EnchantmentSilktouchSystem extends EntityEventSystem<EntityStore, D
             return;
         }
 
-        long chunkIndex = ChunkUtil.indexChunkFromBlock(targetBlock.x(), targetBlock.z());
-        Ref<ChunkStore> columnRef = chunkStoreManager.getChunkReference(chunkIndex);
-        if (columnRef == null || !columnRef.isValid()) {
+        BlockHealthSection healthSection = chunkStore.getComponent(sectionRef,
+                BlockHealthSection.getComponentType());
+        if (healthSection == null) {
             return;
         }
 
-        BlockHealthChunk healthChunk = chunkStore.getComponent(columnRef,
-                BlockHealthModule.get().getBlockHealthChunkComponentType());
-        if (healthChunk == null) {
-            return;
-        }
-
-        boolean willBreak = healthChunk.isBlockFragile(targetBlock)
+        boolean willBreak = healthSection.isFragile(targetBlock.x(), targetBlock.y(), targetBlock.z())
                 || (event.getCurrentDamage() - event.getDamage() <= 0.001f);
         if (!willBreak) {
             return;

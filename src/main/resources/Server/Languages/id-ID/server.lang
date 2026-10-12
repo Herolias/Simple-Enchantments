@@ -834,5 +834,6 @@ config.multiplier.poison:duration = Durasi (Detik)
 config.multiplier.environmental_protection = Pengurangan per Level
 config.multiplier.regeneration = HP Per Detik
 config.multiplier.second_stomach = Bonus per Tingkat
+config.multiplier.night_vision:radius = Radius Cahaya (1-255)
 items.EngravingTable.name = Meja Pengukiran
 items.EngravingTable.description = Meja pengukiran rune untuk mengganti nama item dan mewarnai ulang cahaya enchantment.

@@ -708,6 +708,7 @@ config.multiplier.poison:duration = Duration (Seconds)
 config.multiplier.environmental_protection = Reduction Per Level
 config.multiplier.regeneration = HP Per Second
 config.multiplier.second_stomach = Bonus Per Level
+config.multiplier.night_vision:radius = Light Radius (1-255)
 
 
 config.recipe.active_title = {0} - Ingredients

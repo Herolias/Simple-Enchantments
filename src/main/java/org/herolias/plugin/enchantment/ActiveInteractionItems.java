@@ -28,11 +28,16 @@ import java.util.Set;
  */
 final class ActiveInteractionItems {
 
-    /** Interaction types that represent an item being actively used by the player. */
+    /**
+     * Interaction types that represent an item being actively used by the player.
+     * Since server 0.7.0, Ability2/Ability3 run from the ability slots (their held item
+     * is the slotted ability item, not the weapon) and weapon actions such as the
+     * crossbow reload moved to Ability4.
+     */
     static final Set<InteractionType> ITEM_USE_TYPES = EnumSet.of(
             InteractionType.Primary, InteractionType.Secondary,
             InteractionType.Ability1, InteractionType.Ability2, InteractionType.Ability3,
-            InteractionType.Use, InteractionType.Pick);
+            InteractionType.Ability4, InteractionType.Use, InteractionType.Pick);
 
     private ActiveInteractionItems() {
     }

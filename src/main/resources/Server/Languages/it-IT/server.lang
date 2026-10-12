@@ -825,5 +825,6 @@ config.multiplier.poison:duration = Durata (Secondi)
 config.multiplier.environmental_protection = Riduzione per Livello
 config.multiplier.regeneration = HP Al Secondo
 config.multiplier.second_stomach = Bonus Per Livello
+config.multiplier.night_vision:radius = Raggio di Luce (1-255)
 items.EngravingTable.name = Tavolo da incisione
 items.EngravingTable.description = Un tavolo da incisione runica per rinominare gli oggetti e ricolorare i bagliori degli incantamenti.

@@ -834,5 +834,6 @@ config.multiplier.poison:duration = Длительность (Секунды)
 config.multiplier.environmental_protection = Снижение за Уровень
 config.multiplier.regeneration = HP В Секунду
 config.multiplier.second_stomach = Бонус За Уровень
+config.multiplier.night_vision:radius = Радиус Света (1-255)
 items.EngravingTable.name = Гравировальный стол
 items.EngravingTable.description = Рунический гравировальный стол для переименования предметов и изменения цвета свечения зачарований.

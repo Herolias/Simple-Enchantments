@@ -835,6 +835,7 @@ config.multiplier.poison:duration = Тривалість (Секунди)
 config.multiplier.environmental_protection = Зменшення за Рівень
 config.multiplier.regeneration = HP На Секунду
 config.multiplier.second_stomach = Бонус За Рівень
+config.multiplier.night_vision:radius = Радіус Світла (1-255)
 
 items.EngravingTable.name = Гравірувальний стіл
 items.EngravingTable.description = Рунічний гравірувальний стіл для перейменування предметів і зміни кольору сяйва зачарувань.

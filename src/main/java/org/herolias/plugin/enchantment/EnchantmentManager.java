@@ -30,6 +30,7 @@ import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.core.modules.entity.damage.Damage;
+import com.hypixel.hytale.server.core.modules.entity.damage.DamageCalculatorSystems;
 
 import java.lang.reflect.Field;
 import it.unimi.dsi.fastutil.ints.Int2FloatMap;
@@ -1292,6 +1293,10 @@ public class EnchantmentManager {
         Ref<EntityStore> attackerRef = null;
         Ref<EntityStore> projectileRef = null;
 
+        if (isOwnedEffectTick(damage)) {
+            return new DamageContext(null, null);
+        }
+
         if (damage.getSource() instanceof Damage.ProjectileSource projectileSource) {
             attackerRef = projectileSource.getRef();
             projectileRef = projectileSource.getProjectile();
@@ -1306,6 +1311,23 @@ public class EnchantmentManager {
         }
 
         return new DamageContext(attackerRef, projectileRef);
+    }
+
+    /**
+     * Whether this damage is a damage-over-time tick of an entity effect rather than a hit.
+     * Since server 0.7.0, effects applied through ApplyEffect interactions remember who
+     * applied them, and each of their ticks arrives as an EntitySource of that entity, so it
+     * looks like an attack. Weapon hits from DamageEntityInteraction always carry
+     * {@link Damage#INTERACTION_TYPE}; effect ticks never do but always carry a damage
+     * sequence. On-hit weapon enchantments must ignore these ticks, as they did before 0.7.0
+     * when the tick's source was the effect itself.
+     */
+    public static boolean isOwnedEffectTick(@Nonnull Damage damage) {
+        Damage.Source source = damage.getSource();
+        return source instanceof Damage.EntitySource
+                && !(source instanceof Damage.ProjectileSource)
+                && damage.getIfPresentMetaObject(Damage.INTERACTION_TYPE) == null
+                && damage.getIfPresentMetaObject(DamageCalculatorSystems.DAMAGE_SEQUENCE) != null;
     }
 
     /**
@@ -1729,7 +1751,8 @@ public class EnchantmentManager {
         com.hypixel.hytale.server.core.modules.entity.damage.Damage.Source source = deathInfo.getSource();
 
         // 1. Check standard source (Direct hit or Projectile)
-        if (source instanceof com.hypixel.hytale.server.core.modules.entity.damage.Damage.EntitySource) {
+        if (source instanceof com.hypixel.hytale.server.core.modules.entity.damage.Damage.EntitySource
+                && !isOwnedEffectTick(deathInfo)) {
             int lootingLevel = 0;
             int burnLevel = 0;
 

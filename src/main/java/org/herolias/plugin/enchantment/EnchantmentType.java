@@ -291,6 +291,10 @@ public final class EnchantmentType {
                 new MultiplierDefinition("regeneration", 0.5, "config.multiplier.regeneration")));
         SECOND_STOMACH.setMultiplierDefinitions(java.util.List.of(
                 new MultiplierDefinition("second_stomach", 0.15, "config.multiplier.second_stomach")));
+        // Radius of the wearer-only light (1-255). Lower values keep particles closer to
+        // their normal brightness but light less of the surroundings.
+        NIGHT_VISION.setMultiplierDefinitions(java.util.List.of(
+                new MultiplierDefinition("night_vision:radius", 255.0, "config.multiplier.night_vision:radius")));
     }
 
     // ============================== Constructors ==============================

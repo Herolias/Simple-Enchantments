@@ -61,6 +61,7 @@ public class EngravingTablePage extends InteractiveCustomUIPage<EngravingTablePa
     private static final String COLOR_NEUTRAL = "#d7cfbe";
     private static final String COLOR_SUCCESS = "#88d488";
     private static final String COLOR_ERROR = "#ff8a8a";
+    private static final String NAME_PREVIEW_WARNING = "Name color isn't shown in the item slot preview.";
     /** Server-side cap for custom names (the .ui TextField carries the same MaxLength). */
     static final int MAX_NAME_LENGTH = 40;
     /**
@@ -304,7 +305,7 @@ public class EngravingTablePage extends InteractiveCustomUIPage<EngravingTablePa
             commandBuilder.set("#NamePreviewWarning.Visible",
                     !ItemStack.isEmpty(preview) && this.hasPendingNameColorChange(primary));
             commandBuilder.set("#NamePreviewWarning.TextSpans",
-                    Message.raw("Name color changes currently can't be previewed.").color(COLOR_ERROR));
+                    Message.raw(NAME_PREVIEW_WARNING).color(COLOR_ERROR));
             this.updateColorButtons(commandBuilder, true);
         } else {
             commandBuilder.set("#NamePreviewWarning.Visible", false);
@@ -667,7 +668,12 @@ public class EngravingTablePage extends InteractiveCustomUIPage<EngravingTablePa
             EngravingTableCustomizationData customization = EngravingTableCustomizationData.fromItemStack(primary);
             name = this.resolveCurrentDisplayName(primary, customization);
         }
-        return Message.raw(name);
+        // Shown in the colour the item will get. The result slot cannot show it: its
+        // tooltip name is plain text and item metadata is stripped from grid slots.
+        Message preview = Message.raw(name);
+        return this.selectedNameColor == EngravingTableColorOption.DEFAULT_NAME_COLOR
+                ? preview
+                : preview.color(this.selectedNameColor.getHexColor());
     }
 
     @Nonnull

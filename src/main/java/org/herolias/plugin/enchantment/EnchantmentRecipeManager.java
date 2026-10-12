@@ -32,6 +32,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Manages dynamic enabling/disabling and config overrides of crafting recipes
@@ -76,9 +80,22 @@ public class EnchantmentRecipeManager {
      */
     private static final Map<String, CraftingRecipe> REMOVED_RECIPES = new ConcurrentHashMap<>();
 
-    private static SimpleEnchanting plugin;
+    /**
+     * Runs the asset-store part of {@link #reload()} one request at a time. Loading or
+     * removing assets takes the global asset write lock, while the world thread holds the
+     * read lock for its whole tick, so doing it from a world-thread caller (the config
+     * page) would block that world forever. The thread ends when idle.
+     */
+    private static final ExecutorService RELOAD_EXECUTOR = new ThreadPoolExecutor(0, 1, 30L, TimeUnit.SECONDS,
+            new LinkedBlockingQueue<>(), r -> {
+                Thread thread = new Thread(r, "SimpleEnchantments-RecipeReload");
+                thread.setDaemon(true);
+                return thread;
+            });
+
+    private static volatile SimpleEnchanting plugin;
     private static boolean initialized = false;
-    private static boolean isApplyingOverrides = false;
+    private static volatile boolean isApplyingOverrides = false;
 
     // ───────────────────── Lifecycle ─────────────────────
 
@@ -136,7 +153,9 @@ public class EnchantmentRecipeManager {
 
     /**
      * Re-applies the config to the live recipe store. Call after the config was
-     * changed (e.g. from the in-game config editor).
+     * changed (e.g. from the in-game config editor). The disabled set (which blocks
+     * crafting) updates immediately; the recipe store follows shortly after on
+     * {@link #RELOAD_EXECUTOR}, so this is safe to call from a world thread.
      */
     public static void reload() {
         if (plugin == null)
@@ -151,7 +170,21 @@ public class EnchantmentRecipeManager {
         buildDisabledScrollSet();
         LOGGER.atInfo().log("Reload: updated disabled recipe set (%d scroll items)", DISABLED_SCROLL_ITEM_IDS.size());
 
-        // 2. Re-evaluate every recipe currently in the store plus the ones we removed
+        // 2. Update the recipe store off the caller's thread
+        RELOAD_EXECUTOR.execute(() -> {
+            try {
+                reloadRecipeStore();
+            } catch (RuntimeException e) {
+                LOGGER.atSevere().withCause(e).log("Reload: failed to update the recipe store");
+            }
+        });
+    }
+
+    /** Re-evaluates every recipe currently in the store plus the ones we removed. */
+    private static void reloadRecipeStore() {
+        if (plugin == null)
+            return;
+
         Map<String, CraftingRecipe> candidates = new LinkedHashMap<>();
         try {
             candidates.putAll(CraftingRecipe.getAssetMap().getAssetMap());

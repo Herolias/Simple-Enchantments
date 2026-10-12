@@ -674,5 +674,6 @@ config.multiplier.poison:duration = Duración (Segundos)
 config.multiplier.environmental_protection = Reducción por Nivel
 config.multiplier.regeneration = HP Por Segundo
 config.multiplier.second_stomach = Bonus Por Nivel
+config.multiplier.night_vision:radius = Radio de Luz (1-255)
 items.EngravingTable.name = Mesa de grabado
 items.EngravingTable.description = Una mesa de grabado rúnico para renombrar objetos y cambiar el color del brillo de los encantamientos.

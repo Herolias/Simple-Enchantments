@@ -34,16 +34,21 @@ import java.util.concurrent.TimeUnit;
  * players), a ComponentUpdate with the light data is queued directly to the
  * wearing player's own EntityViewer, making the light visible only to them.
  * The helmet level comes from {@link EquipmentLevelCache}; the active state is
- * kept per player UUID together with the entity reference it was sent for, so
- * a new entity (world change) gets the light again and nothing is kept for
- * players that left ({@link #cleanupPlayer}).
+ * kept per player UUID together with the entity reference and radius it was
+ * sent for, so a new entity (world change) or a changed radius setting gets the
+ * light again and nothing is kept for players that left ({@link #cleanupPlayer}).
+ * <p>
+ * The light also lights particles, more strongly the larger its radius, so the
+ * radius is configurable ({@code night_vision:radius}, 1-255, default 255).
  */
 public class EnchantmentNightVisionSystem extends EntityTickingSystem<EntityStore> {
 
     private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
 
-    // Light config: full radius, minimal colour.
-    private static final byte LIGHT_RADIUS = -1;
+    // Light config: configurable radius, minimal colour.
+    private static final String RADIUS_KEY = "night_vision:radius";
+    private static final int MIN_RADIUS = 1;
+    private static final int MAX_RADIUS = 255;
     private static final byte LIGHT_RED = (byte) 1;
     private static final byte LIGHT_GREEN = (byte) 1;
     private static final byte LIGHT_BLUE = (byte) 1;
@@ -56,8 +61,12 @@ public class EnchantmentNightVisionSystem extends EntityTickingSystem<EntityStor
 
     private final EnchantmentManager enchantmentManager;
 
-    /** Players whose viewer currently has the light, with the entity it was sent for. */
-    private final Map<UUID, Ref<EntityStore>> activeNightVision = new ConcurrentHashMap<>();
+    /** The entity and radius a player's light was last sent for. */
+    private record ActiveLight(@Nonnull Ref<EntityStore> ref, byte radius) {
+    }
+
+    /** Players whose viewer currently has the light. */
+    private final Map<UUID, ActiveLight> activeNightVision = new ConcurrentHashMap<>();
 
     public EnchantmentNightVisionSystem(@Nonnull EnchantmentManager enchantmentManager) {
         this.enchantmentManager = enchantmentManager;
@@ -87,15 +96,22 @@ public class EnchantmentNightVisionSystem extends EntityTickingSystem<EntityStor
         int level = EquipmentLevelCache.get(playerId, store, ref, enchantmentManager).nightVision();
         boolean hasNightVision = level > 0;
 
-        Ref<EntityStore> activeFor = activeNightVision.get(playerId);
-        boolean wasActive = activeFor != null && activeFor.equals(ref);
+        ActiveLight active = activeNightVision.get(playerId);
+        boolean wasActive = active != null && active.ref().equals(ref);
 
         try {
-            if (hasNightVision && !wasActive) {
+            if (hasNightVision) {
+                byte radius = configuredRadius();
+                if (wasActive && active.radius() == radius) {
+                    return; // Nothing to do while the state is unchanged: no per-tick packets.
+                }
                 DynamicLightUpdate update = new DynamicLightUpdate();
-                update.dynamicLight = new ColorLight(LIGHT_RADIUS, LIGHT_RED, LIGHT_GREEN, LIGHT_BLUE);
+                update.dynamicLight = new ColorLight(radius, LIGHT_RED, LIGHT_GREEN, LIGHT_BLUE);
                 viewer.queueUpdate(ref, update);
-                activeNightVision.put(playerId, ref);
+                activeNightVision.put(playerId, new ActiveLight(ref, radius));
+                if (wasActive) {
+                    return; // Only the radius setting changed
+                }
 
                 ItemContainer armor = InventoryAccess.getArmor(store, ref);
                 ItemStack helmet = armor != null ? armor.getItemStack((short) ItemArmorSlot.Head.getValue()) : null;
@@ -103,15 +119,23 @@ public class EnchantmentNightVisionSystem extends EntityTickingSystem<EntityStor
                     PlayerRef playerRef = archetypeChunk.getComponent(index, PlayerRef.getComponentType());
                     EnchantmentEventHelper.fireActivated(playerRef, helmet, EnchantmentType.NIGHT_VISION, level);
                 }
-            } else if (!hasNightVision && wasActive) {
+            } else if (wasActive) {
                 viewer.queueRemove(ref, ComponentUpdateType.DynamicLight);
                 activeNightVision.remove(playerId);
             }
-            // Nothing to do while the state is unchanged: no per-tick packets.
         } catch (RuntimeException e) {
             LOGGER.atWarning().atMostEvery(30, TimeUnit.SECONDS).withCause(e)
                     .log("Failed to update the Night Vision light for %s", playerId);
         }
+    }
+
+    /**
+     * The configured light radius as the protocol's byte. 255 is sent as -1, which is
+     * the value this light used before the radius became configurable.
+     */
+    private static byte configuredRadius() {
+        long radius = Math.round(EnchantmentType.NIGHT_VISION.getMultiplierValue(RADIUS_KEY));
+        return (byte) Math.clamp(radius, MIN_RADIUS, MAX_RADIUS);
     }
 
     /** Forgets the light state of a player who disconnected or whose entity was removed. */

@@ -835,6 +835,7 @@ config.multiplier.poison:duration = Längd (Sekunder)
 config.multiplier.environmental_protection = Minskning per Nivå
 config.multiplier.regeneration = HP Per Sekund
 config.multiplier.second_stomach = Bonus Per Nivå
+config.multiplier.night_vision:radius = Ljusradie (1-255)
 
 items.EngravingTable.name = Graveringsbord
 items.EngravingTable.description = Ett rungraveringsbord för att byta namn på föremål och färga om förtrollningsglöd.

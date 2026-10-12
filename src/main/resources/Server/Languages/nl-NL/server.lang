@@ -834,5 +834,6 @@ config.multiplier.poison:duration = Duur (Seconden)
 config.multiplier.environmental_protection = Reductie per Niveau
 config.multiplier.regeneration = HP Per Seconde
 config.multiplier.second_stomach = Bonus Per Niveau
+config.multiplier.night_vision:radius = Lichtradius (1-255)
 items.EngravingTable.name = Graveertafel
 items.EngravingTable.description = Een runengraveertafel om voorwerpen te hernoemen en de gloed van betoveringen opnieuw te kleuren.

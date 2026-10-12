@@ -414,7 +414,7 @@ Group {
               ...@CaptionStyle,
               TextColor: #ff8a8a
             );
-            Text: "Name color changes currently can't be previewed.";
+            Text: "Name color isn't shown in the item slot preview.";
             Visible: false;
           }
 

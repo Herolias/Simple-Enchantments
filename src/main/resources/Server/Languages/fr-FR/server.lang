@@ -833,5 +833,6 @@ config.multiplier.poison:duration = Durée (Secondes)
 config.multiplier.environmental_protection = Réduction par Niveau
 config.multiplier.regeneration = HP Par Seconde
 config.multiplier.second_stomach = Bonus Par Niveau
+config.multiplier.night_vision:radius = Rayon de Lumière (1-255)
 items.EngravingTable.name = Table de gravure
 items.EngravingTable.description = Une table de gravure runique pour renommer les objets et recolorer les lueurs d'enchantement.

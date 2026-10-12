@@ -1336,5 +1336,6 @@ config.multiplier.poison:duration = Dauer (Sekunden)
 config.multiplier.environmental_protection = Reduktion pro Stufe
 config.multiplier.regeneration = HP Pro Sekunde
 config.multiplier.second_stomach = Bonus Pro Stufe
+config.multiplier.night_vision:radius = Lichtradius (1-255)
 items.EngravingTable.name = Gravurtisch
 items.EngravingTable.description = Ein Runen-Gravurtisch zum Umbenennen von Gegenständen und Umfärben von Verzauberungsglühen.
