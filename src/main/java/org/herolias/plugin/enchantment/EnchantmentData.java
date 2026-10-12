@@ -72,7 +72,14 @@ public class EnchantmentData {
         if (immutable) {
             throw new UnsupportedOperationException("Cannot modify immutable EnchantmentData");
         }
+        if (type == null) {
+            throw new IllegalArgumentException("Enchantment type cannot be null");
+        }
+        if (level < 1) {
+            throw new IllegalArgumentException("Enchantment level must be at least 1 (got " + level + ")");
+        }
         enchantments.put(type, level);
+        cachedHash = null;
     }
 
     /**
@@ -86,6 +93,7 @@ public class EnchantmentData {
             throw new UnsupportedOperationException("Cannot modify immutable EnchantmentData");
         }
         enchantments.remove(type);
+        cachedHash = null;
     }
 
     /**
@@ -198,29 +206,91 @@ public class EnchantmentData {
             return result;
         }
 
-        BsonDocument values = bson;
-        BsonValue version = bson.get(VERSION_KEY);
-        BsonValue nestedValues = bson.get(VALUES_KEY);
-        if (version != null && nestedValues != null && nestedValues.isDocument()) {
-            values = nestedValues.asDocument();
-        }
+        boolean versioned = isVersioned(bson);
+        BsonDocument values = valuesOf(bson);
 
         for (Map.Entry<String, BsonValue> entry : values.entrySet()) {
-            String enchantName = entry.getKey();
-            BsonValue value = entry.getValue();
-
-            // Find the enchantment type by display name
-            EnchantmentType type = findByDisplayName(enchantName);
-            if (type == null) {
-                type = EnchantmentType.fromId(enchantName.toLowerCase());
-            }
-            Integer level = parseLevel(value);
-            if (type != null && level != null) {
+            EnchantmentType type = resolveKey(entry.getKey(), versioned);
+            Integer level = parseLevel(entry.getValue());
+            if (type != null && level != null && level > 0) {
                 result.addEnchantment(type, level);
             }
         }
 
         return result;
+    }
+
+    /**
+     * Reads the level of a single enchantment straight from the stored
+     * document without building an {@link EnchantmentData}. This is the hot
+     * path used by every per-hit / per-tick system.
+     *
+     * @return the stored level, or 0 if absent
+     */
+    public static int levelOf(@Nullable BsonDocument bson, @Nonnull EnchantmentType type) {
+        if (bson == null || bson.isEmpty()) {
+            return 0;
+        }
+        BsonDocument values = valuesOf(bson);
+        BsonValue value = values.get(type.getId());
+        if (value == null && !isVersioned(bson)) {
+            // Legacy flat documents were keyed by display name.
+            value = values.get(type.getDisplayName());
+            if (value == null) {
+                for (Map.Entry<String, BsonValue> entry : values.entrySet()) {
+                    if (entry.getKey().equalsIgnoreCase(type.getId())
+                            || entry.getKey().equalsIgnoreCase(type.getDisplayName())) {
+                        value = entry.getValue();
+                        break;
+                    }
+                }
+            }
+        }
+        Integer level = parseLevel(value);
+        return level != null && level > 0 ? level : 0;
+    }
+
+    /** True if the document holds at least one recognised enchantment with a positive level. */
+    public static boolean hasAny(@Nullable BsonDocument bson) {
+        if (bson == null || bson.isEmpty()) {
+            return false;
+        }
+        boolean versioned = isVersioned(bson);
+        for (Map.Entry<String, BsonValue> entry : valuesOf(bson).entrySet()) {
+            Integer level = parseLevel(entry.getValue());
+            if (level != null && level > 0 && resolveKey(entry.getKey(), versioned) != null) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private static boolean isVersioned(@Nonnull BsonDocument bson) {
+        BsonValue nested = bson.get(VALUES_KEY);
+        return bson.containsKey(VERSION_KEY) && nested != null && nested.isDocument();
+    }
+
+    @Nonnull
+    private static BsonDocument valuesOf(@Nonnull BsonDocument bson) {
+        BsonValue nested = bson.get(VALUES_KEY);
+        if (bson.containsKey(VERSION_KEY) && nested != null && nested.isDocument()) {
+            return nested.asDocument();
+        }
+        return bson;
+    }
+
+    /**
+     * Versioned documents are written with enchantment ids, so they are
+     * resolved by id only. Legacy flat documents may be keyed by display name
+     * and fall back to that lookup.
+     */
+    @Nullable
+    private static EnchantmentType resolveKey(@Nonnull String key, boolean versioned) {
+        EnchantmentType type = EnchantmentType.fromId(key);
+        if (type == null && !versioned) {
+            type = findByDisplayName(key);
+        }
+        return type;
     }
 
     /**
@@ -270,10 +340,11 @@ public class EnchantmentData {
             if (part.isEmpty())
                 continue;
 
-            String[] keyValue = part.split(":");
-            if (keyValue.length == 2) {
-                String key = keyValue[0].trim();
-                String valueStr = keyValue[1].trim();
+            // Split on the LAST colon so namespaced addon ids ("my_mod:frost:2") parse.
+            int sep = part.lastIndexOf(':');
+            if (sep > 0 && sep < part.length() - 1) {
+                String key = part.substring(0, sep).trim();
+                String valueStr = part.substring(sep + 1).trim();
 
                 // Try ID first
                 EnchantmentType type = EnchantmentType.fromId(key);
@@ -285,7 +356,9 @@ public class EnchantmentData {
                 if (type != null) {
                     try {
                         int level = Integer.parseInt(valueStr);
-                        result.addEnchantment(type, level);
+                        if (level >= 1) {
+                            result.addEnchantment(type, level);
+                        }
                     } catch (NumberFormatException ignored) {
                         // Skip invalid levels
                     }

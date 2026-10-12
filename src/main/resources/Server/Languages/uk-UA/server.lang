@@ -112,13 +112,9 @@ items.Scroll_Life_Leech_I.name = Сувій Викрадення Життя
 
 items.Scroll_Life_Leech_I.description = Зцілює нападника на 10% від завданої шкоди.
 
-items.Scroll_Life_Leech_II.name = Сувій Викрадення Життя II
 
-items.Scroll_Life_Leech_II.description = Зцілює нападника на 20% від завданої шкоди.
 
-items.Scroll_Life_Leech_III.name = Сувій Викрадення Життя III
 
-items.Scroll_Life_Leech_III.description = Зцілює нападника на 30% від завданої шкоди.
 
 
 
@@ -637,7 +633,6 @@ customUI.walkthrough.enchantments.desc = Повний список чар та �
 
 config.general.allow_same_scroll_upgrades = Дозволити Покращення Однаковими Сувоями (I+I = II)
 
-ui.itemcategory.simpleEnchantments = Прості чари
 ui.itemcategory.simpleEnchantments.scrolls = Сувої
 
 customUI.walkthrough.enabledOnServer = Увімкнено на цьому сервері: 

@@ -100,8 +100,8 @@ public class CustomScrollItemPage extends ChoiceBasePage {
                 continue;
             }
 
-            // Don't show the held Custom Scroll itself as a target
-            if (slot == heldItemContext.getSlot() && itemContainer == heldItemContext.getContainer()) {
+            // Don't show the held Custom Scroll itself as a target (combined slot -> section slot)
+            if (EnchantScrollPage.isHeldSlot(itemContainer, slot, heldItemContext)) {
                 continue;
             }
 

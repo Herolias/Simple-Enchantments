@@ -1,19 +1,22 @@
 package org.herolias.plugin.enchantment;
 
-import com.hypixel.hytale.server.core.asset.type.item.config.CraftingRecipe;
 import com.hypixel.hytale.server.core.inventory.MaterialQuantity;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 /**
- * Builds and resolves furnace-smelting recipes from loaded item assets.
+ * Builds and resolves furnace-smelting recipes from the loaded crafting
+ * recipes.
  */
 public class SmeltingRecipeRegistry extends AbstractRecipeRegistry<SmeltingRecipeRegistry.SmeltingRecipe> {
 
+    public static final String BENCH_ID = "Furnace";
+
     @Override
-    protected boolean isValidRecipe(@Nonnull CraftingRecipe recipe) {
-        return checkBenchRequirement(recipe, "Furnace");
+    @Nonnull
+    protected String benchId() {
+        return BENCH_ID;
     }
 
     @Override

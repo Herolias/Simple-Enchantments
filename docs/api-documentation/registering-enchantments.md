@@ -126,7 +126,7 @@ api.registerEnchantment("my_mod:parry", "Parry")
     .build();
 ```
 
-Calling `.build()` without at least one category throws `IllegalStateException`.
+Calling `.build()` without at least one category throws `IllegalStateException`. Registering an ID or display name that already exists, or a scroll level above `maxLevel`, throws `IllegalArgumentException`.
 
 ## Conflicts
 

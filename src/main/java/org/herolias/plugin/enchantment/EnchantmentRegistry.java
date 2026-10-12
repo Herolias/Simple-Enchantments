@@ -17,7 +17,7 @@ public final class EnchantmentRegistry {
 
     private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
 
-    private static EnchantmentRegistry instance;
+    private static final EnchantmentRegistry INSTANCE = new EnchantmentRegistry();
 
     /** All registered enchantments keyed by their unique ID. */
     private final Map<String, EnchantmentType> byId = new ConcurrentHashMap<>();
@@ -39,10 +39,7 @@ public final class EnchantmentRegistry {
      */
     @Nonnull
     public static EnchantmentRegistry getInstance() {
-        if (instance == null) {
-            instance = new EnchantmentRegistry();
-        }
-        return instance;
+        return INSTANCE;
     }
 
     /**
@@ -54,19 +51,36 @@ public final class EnchantmentRegistry {
      * @throws IllegalArgumentException if the ID or display name is already
      *                                  registered
      */
-    public void register(@Nonnull EnchantmentType type) {
+    public synchronized void register(@Nonnull EnchantmentType type) {
         Objects.requireNonNull(type, "EnchantmentType cannot be null");
+        if (type.getId() == null || type.getId().isBlank()) {
+            throw new IllegalArgumentException("Enchantment ID cannot be blank");
+        }
+        if (type.getDisplayName() == null || type.getDisplayName().isBlank()) {
+            throw new IllegalArgumentException("Enchantment display name cannot be blank (id '" + type.getId() + "')");
+        }
         String id = type.getId().toLowerCase();
+        String displayKey = type.getDisplayName().toLowerCase();
 
         if (byId.containsKey(id)) {
             throw new IllegalArgumentException("Enchantment ID already registered: '" + id + "'");
         }
-
-        String displayKey = type.getDisplayName().toLowerCase();
         if (byDisplayName.containsKey(displayKey)) {
             throw new IllegalArgumentException(
                     "Enchantment display name already registered: '" + type.getDisplayName()
                             + "' (conflicts with '" + byDisplayName.get(displayKey).getId() + "')");
+        }
+        // Legacy item documents were keyed by display name, so a display name
+        // that equals another enchantment's id (or vice versa) would be ambiguous.
+        if (byId.containsKey(displayKey) && !displayKey.equals(id)) {
+            throw new IllegalArgumentException(
+                    "Enchantment display name '" + type.getDisplayName() + "' collides with the id of '"
+                            + byId.get(displayKey).getId() + "'");
+        }
+        if (byDisplayName.containsKey(id) && !displayKey.equals(id)) {
+            throw new IllegalArgumentException(
+                    "Enchantment id '" + id + "' collides with the display name of '"
+                            + byDisplayName.get(id).getId() + "'");
         }
 
         byId.put(id, type);
@@ -79,9 +93,18 @@ public final class EnchantmentRegistry {
     /**
      * Registers a conflict pair between two enchantment IDs.
      * Conflicts are bidirectional — if A conflicts with B, then B conflicts with A.
+     * Passing the same id twice is a no-op (an enchantment always "conflicts"
+     * with itself for upgrade purposes).
      */
     public void addConflict(@Nonnull String id1, @Nonnull String id2) {
-        conflictPairs.add(Set.of(id1.toLowerCase(), id2.toLowerCase()));
+        Objects.requireNonNull(id1, "id1");
+        Objects.requireNonNull(id2, "id2");
+        String a = id1.toLowerCase();
+        String b = id2.toLowerCase();
+        if (a.equals(b)) {
+            return;
+        }
+        conflictPairs.add(Set.of(a, b));
     }
 
     /**
@@ -90,6 +113,8 @@ public final class EnchantmentRegistry {
     public boolean areConflicting(@Nonnull String id1, @Nonnull String id2) {
         if (id1.equalsIgnoreCase(id2))
             return true;
+        if (conflictPairs.isEmpty())
+            return false;
         return conflictPairs.contains(Set.of(id1.toLowerCase(), id2.toLowerCase()));
     }
 

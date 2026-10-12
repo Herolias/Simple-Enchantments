@@ -1,9 +1,13 @@
 package org.herolias.plugin.api;
 
+import com.hypixel.hytale.logger.HytaleLogger;
+import com.hypixel.hytale.server.core.asset.type.item.config.ItemQuality;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Fluent builder for configuring a single scroll level.
@@ -39,6 +43,16 @@ import java.util.List;
  * }</pre>
  */
 public class ScrollBuilder {
+
+    private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
+
+    /**
+     * Quality ids shipped with the game (Assets/Server/Item/Qualities). Used as a
+     * fallback whitelist while the ItemQuality asset store is not loaded yet.
+     */
+    private static final Set<String> VANILLA_QUALITIES = Set.of(
+            "Common", "Uncommon", "Rare", "Epic", "Legendary",
+            "Junk", "Tool", "Debug", "Developer", "Technical", "Template");
 
     private final int level;
     private final EnchantmentBuilder parent; // null if standalone
@@ -77,13 +91,62 @@ public class ScrollBuilder {
     /**
      * Sets the rarity/quality of this scroll level.
      * <p>
-     * Valid values: "Common", "Uncommon", "Rare", "Epic", "Legendary"
+     * Valid values are ItemQuality asset ids: "Common", "Uncommon", "Rare",
+     * "Epic", "Legendary" (plus any quality added by other asset packs).
      *
-     * @param quality The quality string (maps to Hytale's Quality enum)
+     * @param quality The quality id (an {@code ItemQuality} asset)
+     * @throws IllegalArgumentException if the quality is blank, or is not a
+     *                                  registered ItemQuality while the asset
+     *                                  store is already loaded
      */
     public ScrollBuilder quality(@Nonnull String quality) {
-        this.quality = quality;
+        this.quality = validateQuality(quality);
         return this;
+    }
+
+    /**
+     * Validates a quality id against the server's ItemQuality assets. When the
+     * asset store is not loaded yet (addons usually register during setup), the
+     * id is checked against the vanilla list and unknown ids only produce a
+     * warning, since another asset pack may still add them.
+     */
+    @Nonnull
+    static String validateQuality(@Nullable String quality) {
+        if (quality == null || quality.isBlank()) {
+            throw new IllegalArgumentException("Scroll quality must not be blank");
+        }
+        String trimmed = quality.trim();
+        Boolean known = isLoadedQuality(trimmed);
+        if (known != null) {
+            if (!known) {
+                throw new IllegalArgumentException(
+                        "Unknown scroll quality '" + trimmed + "'. Expected an ItemQuality asset id such as "
+                                + "Common, Uncommon, Rare, Epic or Legendary.");
+            }
+        } else if (!VANILLA_QUALITIES.contains(trimmed)) {
+            LOGGER.atWarning().log(
+                    "Scroll quality '%s' is not a vanilla ItemQuality; make sure an asset pack defines it or the scroll will not load",
+                    trimmed);
+        }
+        return trimmed;
+    }
+
+    /**
+     * @return true/false when the ItemQuality asset store is loaded, null when it
+     *         is not available yet
+     */
+    @Nullable
+    private static Boolean isLoadedQuality(@Nonnull String quality) {
+        try {
+            var assetMap = ItemQuality.getAssetMap();
+            if (assetMap == null || assetMap.getAssetMap().isEmpty()) {
+                return null;
+            }
+            return assetMap.getAsset(quality) != null;
+        } catch (Exception e) {
+            // Asset registry not initialised yet
+            return null;
+        }
     }
 
     /**
@@ -115,12 +178,21 @@ public class ScrollBuilder {
 
     /**
      * Adds a crafting ingredient for this scroll level.
+     * <p>
+     * The item id is not required to exist yet (items from other packs may load
+     * later); {@link EnchantmentBuilder#build()} logs a warning for ids that are
+     * unknown at that point.
      *
      * @param itemId   The item ID (e.g. "Ingredient_Crystal_Blue")
-     * @param quantity The quantity required
+     * @param quantity The quantity required (>= 1)
+     * @throws IllegalArgumentException if the item id is blank or the quantity is
+     *                                  below 1
      */
     public ScrollBuilder ingredient(@Nonnull String itemId, int quantity) {
-        ingredients.add(new ScrollDefinition.Ingredient(itemId, quantity));
+        if (itemId == null || itemId.isBlank()) {
+            throw new IllegalArgumentException("Ingredient item id must not be blank (scroll level " + level + ")");
+        }
+        ingredients.add(new ScrollDefinition.Ingredient(itemId.trim(), quantity));
         return this;
     }
 

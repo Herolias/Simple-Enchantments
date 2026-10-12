@@ -9,18 +9,20 @@ import com.hypixel.hytale.component.dependency.Order;
 import com.hypixel.hytale.component.dependency.SystemDependency;
 import com.hypixel.hytale.component.query.Query;
 import com.hypixel.hytale.logger.HytaleLogger;
-import com.hypixel.hytale.server.core.entity.Entity;
-import com.hypixel.hytale.server.core.entity.EntityUtils;
-import com.hypixel.hytale.server.core.entity.LivingEntity;
-import com.hypixel.hytale.server.core.inventory.Inventory;
+import com.hypixel.hytale.server.core.asset.type.entityeffect.config.EntityEffect;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
+import com.hypixel.hytale.server.core.inventory.container.ItemContainer;
 import com.hypixel.hytale.server.core.modules.entity.damage.Damage;
 import com.hypixel.hytale.server.core.modules.entity.damage.DamageEventSystem;
 import com.hypixel.hytale.server.core.modules.entity.damage.DamageSystems;
+import com.hypixel.hytale.server.core.modules.entitystats.EntityStatMap;
+import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
+import org.herolias.plugin.util.InventoryAccess;
 
 import javax.annotation.Nonnull;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * ECS system that applies the Slow status effect when hitting with a
@@ -29,16 +31,50 @@ import java.util.Set;
  * Effect: Applies the in-game "Freeze" status effect to the target (speed
  * reduction)
  * Applicable to: Ranged weapons (bow, crossbow, slingshot) and melee weapons
+ * <p>
+ * <b>Environmental Protection mitigation.</b> A target wearing armor with
+ * Environmental Protection is slowed less. Instead of mutating the shared
+ * {@code FreezeEnchantment} asset per hit, one pre-built variant asset per
+ * mitigation level is shipped:
+ * <pre>
+ *   Server/Entity/Effects/Status/FreezeEnchantment_EnvProt_1.json  (HorizontalSpeedMultiplier 0.52)
+ *   Server/Entity/Effects/Status/FreezeEnchantment_EnvProt_2.json  (HorizontalSpeedMultiplier 0.54)
+ *   Server/Entity/Effects/Status/FreezeEnchantment_EnvProt_3.json  (HorizontalSpeedMultiplier 0.56)
+ * </pre>
+ * The values follow the formula previously computed at runtime:
+ * {@code slow = 1 - baseMultiplier} (base 0.5 → slow 0.5),
+ * {@code mitigation = min(1, level * ENVIRONMENTAL_PROTECTION multiplier)} (default 0.04/level),
+ * {@code newMultiplier = 1 - slow * (1 - mitigation)}. The JSON values assume the
+ * default {@code environmental_protection} multiplier (0.04) and the default
+ * freeze base slow (0.5); if an admin changes those in the config the variant
+ * is still selected by level but keeps the default-multiplier values baked into
+ * the JSON. The variants carry the same {@code Duration} field as the base
+ * effect so the dynamic-effects code can patch them the same way.
  */
 public class EnchantmentFreezeSystem extends DamageEventSystem {
 
     private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
     private static final String FREEZE_EFFECT_ID = "FreezeEnchantment";
 
+    /** Index = clamped total Environmental Protection level (0..3). */
+    private static final String[] FREEZE_EFFECT_IDS_BY_ENV_PROT = {
+            FREEZE_EFFECT_ID,
+            "FreezeEnchantment_EnvProt_1",
+            "FreezeEnchantment_EnvProt_2",
+            "FreezeEnchantment_EnvProt_3"
+    };
+    private static final int MAX_ENV_PROT_VARIANT = FREEZE_EFFECT_IDS_BY_ENV_PROT.length - 1;
+
+    /** Only entities with stats can be damaged (same scope as {@code DamageSystems.ApplyDamage}). */
+    private static final Query<EntityStore> QUERY = Query.and(EntityStatMap.getComponentType());
+
     private final EnchantmentManager enchantmentManager;
 
     private final Set<Dependency<EntityStore>> dependencies = Set.of(
             new SystemDependency(Order.AFTER, DamageSystems.ApplyDamage.class));
+
+    /** Logged once if a variant asset is missing and the base effect had to be used instead. */
+    private final AtomicBoolean variantMissingLogged = new AtomicBoolean();
 
     public EnchantmentFreezeSystem(EnchantmentManager enchantmentManager) {
         this.enchantmentManager = enchantmentManager;
@@ -54,7 +90,7 @@ public class EnchantmentFreezeSystem extends DamageEventSystem {
     @Override
     @Nonnull
     public Query<EntityStore> getQuery() {
-        return com.hypixel.hytale.component.Archetype.empty();
+        return QUERY;
     }
 
     @Override
@@ -67,11 +103,12 @@ public class EnchantmentFreezeSystem extends DamageEventSystem {
         if (damage.getAmount() <= 0 || damage.isCancelled())
             return;
 
-        // Use centralized damage context extraction
-        EnchantmentManager.DamageContext ctx = enchantmentManager.getDamageContext(damage, commandBuffer);
         Boolean isReflection = damage.getIfPresentMetaObject(EnchantmentReflectionSystem.IS_REFLECTION);
         if (isReflection != null && isReflection)
             return;
+
+        // Use centralized damage context extraction
+        EnchantmentManager.DamageContext ctx = enchantmentManager.getDamageContext(damage, commandBuffer);
 
         int freezeLevel = 0;
 
@@ -84,18 +121,12 @@ public class EnchantmentFreezeSystem extends DamageEventSystem {
             }
         }
 
-        // 2. Fallback / Melee: check shooter's weapon directly
-        if (freezeLevel <= 0 && ctx.hasAttacker()) {
-            Entity shooterEntity = EntityUtils.getEntity(ctx.attackerRef(), commandBuffer);
-            if (shooterEntity instanceof LivingEntity shooter) {
-                Inventory inventory = shooter.getInventory();
-                if (inventory != null) {
-                    ItemStack weapon = inventory.getItemInHand();
-                    if (weapon != null && !weapon.isEmpty()) {
-                        freezeLevel = enchantmentManager.getEnchantmentLevel(weapon, EnchantmentType.FREEZE);
-                    }
-                }
-            }
+        // 2. Fallback / Melee: check the attacker's held item directly
+        ItemStack weapon = ctx.hasAttacker()
+                ? enchantmentManager.getWeaponFromEntity(ctx.attackerRef(), commandBuffer)
+                : null;
+        if (freezeLevel <= 0 && weapon != null) {
+            freezeLevel = enchantmentManager.getEnchantmentLevel(weapon, EnchantmentType.FREEZE);
         }
 
         if (freezeLevel <= 0)
@@ -105,94 +136,45 @@ public class EnchantmentFreezeSystem extends DamageEventSystem {
         if (targetRef == null || !targetRef.isValid())
             return;
 
-        // Use centralized status effect application
-        // Check target's Environment Protection level to reduce freeze slow intensity
+        // Pick the variant matching the target's total Environmental Protection level
+        // (one metadata read per armor piece, no asset mutation).
         int totalEnvProtection = 0;
-        Entity targetEntity = EntityUtils.getEntity(index, archetypeChunk);
-        if (targetEntity instanceof LivingEntity targetLiving) {
-            Inventory targetInventory = targetLiving.getInventory();
-            if (targetInventory != null) {
-                com.hypixel.hytale.server.core.inventory.container.ItemContainer armorContainer = targetInventory
-                        .getArmor();
-                for (short i = 0; i < armorContainer.getCapacity(); i++) {
-                    ItemStack armorPiece = armorContainer.getItemStack(i);
-                    if (armorPiece != null && !armorPiece.isEmpty()) {
-                        totalEnvProtection += enchantmentManager.getEnchantmentLevel(armorPiece,
-                                EnchantmentType.ENVIRONMENTAL_PROTECTION);
-                    }
-                }
-            }
+        ItemContainer armor = InventoryAccess.getArmor(commandBuffer, targetRef);
+        if (armor != null) {
+            totalEnvProtection = enchantmentManager.sumArmorEnchantmentLevels(armor,
+                    EnchantmentType.ENVIRONMENTAL_PROTECTION)[0];
         }
+        String effectId = selectEffectId(totalEnvProtection);
 
-        // If the target has env protection, reduce the freeze slow intensity
-        float originalSpeedMult = Float.MIN_VALUE; // sentinel: not modified
-        com.hypixel.hytale.server.core.asset.type.entityeffect.config.EntityEffect freezeEffect = null;
-        if (totalEnvProtection > 0) {
-            freezeEffect = com.hypixel.hytale.server.core.asset.type.entityeffect.config.EntityEffect.getAssetMap()
-                    .getAsset(FREEZE_EFFECT_ID);
-            if (freezeEffect != null) {
-                try {
-                    java.lang.reflect.Field appEffectsField = com.hypixel.hytale.server.core.asset.type.entityeffect.config.EntityEffect.class
-                            .getDeclaredField("applicationEffects");
-                    appEffectsField.setAccessible(true);
-                    com.hypixel.hytale.server.core.asset.type.entityeffect.config.ApplicationEffects appEffects = (com.hypixel.hytale.server.core.asset.type.entityeffect.config.ApplicationEffects) appEffectsField
-                            .get(freezeEffect);
-                    if (appEffects != null) {
-                        java.lang.reflect.Field speedMultField = com.hypixel.hytale.server.core.asset.type.entityeffect.config.ApplicationEffects.class
-                                .getDeclaredField("horizontalSpeedMultiplier");
-                        speedMultField.setAccessible(true);
-                        originalSpeedMult = (float) speedMultField.get(appEffects);
+        // applyStatusEffect already logs when the asset is missing.
+        if (!enchantmentManager.applyStatusEffect(targetRef, effectId, store, commandBuffer))
+            return;
 
-                        // Calculate mitigated slow: reduce the slow amount by envProtLevel * multiplier
-                        double envProtMultiplier = EnchantmentType.ENVIRONMENTAL_PROTECTION.getEffectMultiplier();
-                        double mitigationFraction = Math.min(1.0, totalEnvProtection * envProtMultiplier);
-                        // slowAmount = 1.0 - originalSpeedMult (e.g., 0.5 means 50% slow)
-                        // Reduce the slow by the mitigation fraction
-                        double slowAmount = 1.0 - originalSpeedMult;
-                        double mitigatedSlow = slowAmount * (1.0 - mitigationFraction);
-                        float newSpeedMult = (float) (1.0 - mitigatedSlow);
-
-                        speedMultField.set(appEffects, newSpeedMult);
-                    }
-                } catch (Exception e) {
-                    LOGGER.atWarning().log("Failed to modify freeze slow for EnvProtection: " + e.getMessage());
-                }
-            }
+        if (weapon != null) {
+            PlayerRef playerRef = store.getComponent(ctx.attackerRef(), PlayerRef.getComponentType());
+            EnchantmentEventHelper.fireActivated(playerRef, weapon, EnchantmentType.FREEZE, freezeLevel);
         }
+    }
 
-        boolean applied = enchantmentManager.applyStatusEffect(targetRef, FREEZE_EFFECT_ID, store, commandBuffer);
-
-        // Restore the original freeze speed multiplier so other targets aren't affected
-        if (originalSpeedMult != Float.MIN_VALUE && freezeEffect != null) {
-            try {
-                java.lang.reflect.Field appEffectsField = com.hypixel.hytale.server.core.asset.type.entityeffect.config.EntityEffect.class
-                        .getDeclaredField("applicationEffects");
-                appEffectsField.setAccessible(true);
-                com.hypixel.hytale.server.core.asset.type.entityeffect.config.ApplicationEffects appEffects = (com.hypixel.hytale.server.core.asset.type.entityeffect.config.ApplicationEffects) appEffectsField
-                        .get(freezeEffect);
-                if (appEffects != null) {
-                    java.lang.reflect.Field speedMultField = com.hypixel.hytale.server.core.asset.type.entityeffect.config.ApplicationEffects.class
-                            .getDeclaredField("horizontalSpeedMultiplier");
-                    speedMultField.setAccessible(true);
-                    speedMultField.set(appEffects, originalSpeedMult);
-                }
-            } catch (Exception e) {
-                LOGGER.atWarning().log("Failed to restore freeze slow: " + e.getMessage());
-            }
+    /**
+     * Resolves the effect id for the given total Environmental Protection level,
+     * falling back to the base effect if the variant asset is not loaded.
+     */
+    @Nonnull
+    private String selectEffectId(int totalEnvProtection) {
+        int variant = Math.min(Math.max(totalEnvProtection, 0), MAX_ENV_PROT_VARIANT);
+        if (variant == 0) {
+            return FREEZE_EFFECT_ID;
         }
-
-        if (!applied) {
-            LOGGER.atWarning().log("Freeze effect " + FREEZE_EFFECT_ID + " not found in asset map");
-        } else {
-            if (ctx.hasAttacker()) {
-                Entity shooterEntity = EntityUtils.getEntity(ctx.attackerRef(), commandBuffer);
-                ItemStack weapon = enchantmentManager.getWeaponFromEntity(shooterEntity);
-                if (weapon != null) {
-                    com.hypixel.hytale.server.core.universe.PlayerRef playerRef = store.getComponent(ctx.attackerRef(),
-                            com.hypixel.hytale.server.core.universe.PlayerRef.getComponentType());
-                    EnchantmentEventHelper.fireActivated(playerRef, weapon, EnchantmentType.FREEZE, freezeLevel);
-                }
-            }
+        String variantId = FREEZE_EFFECT_IDS_BY_ENV_PROT[variant];
+        if (EntityEffect.getAssetMap().getAsset(variantId) != null) {
+            return variantId;
         }
+        if (variantMissingLogged.compareAndSet(false, true)) {
+            LOGGER.atWarning().log(
+                    "Freeze effect variant '%s' is not loaded; Environmental Protection will not mitigate freeze",
+                    variantId);
+        }
+        return FREEZE_EFFECT_ID;
     }
 }

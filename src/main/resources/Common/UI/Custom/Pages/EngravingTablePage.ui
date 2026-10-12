@@ -399,6 +399,7 @@ Group {
           $C.@TextField #NameInput {
             Anchor: (Height: 30, Bottom: 6);
             PlaceholderText: "Item name";
+            MaxLength: 40;
           }
 
           Label #NameHint {

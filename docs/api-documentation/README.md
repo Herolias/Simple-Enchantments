@@ -12,7 +12,7 @@ The API is useful for two kinds of projects:
 * **Enchantment add-ons:** Mods that exist specifically to add new enchantments and scroll recipes.
 * **Optional integrations:** Mods that work on their own, but can become enchantment-aware when Simple Enchantments is installed.
 
-The main entry point is `EnchantmentApiProvider.get()`, which returns an `EnchantmentApi` instance after Simple Enchantments has initialized.
+The main entry point is `EnchantmentApiProvider.get()`, which returns an `EnchantmentApi` instance after Simple Enchantments' `setup()` has run (`null` before that). Declare a dependency on Simple Enchantments in your plugin manifest so your plugin is loaded after it; `EnchantmentApiProvider.getOrThrow()` fails with a clear message if the API is not available yet.
 
 ```java
 import org.herolias.plugin.api.EnchantmentApi;

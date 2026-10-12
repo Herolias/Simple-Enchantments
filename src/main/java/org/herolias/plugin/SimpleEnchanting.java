@@ -7,6 +7,7 @@ import com.hypixel.hytale.server.core.plugin.JavaPluginInit;
 import org.herolias.plugin.engravingtable.EngravingTableInteractionSystem;
 import org.herolias.plugin.command.EnchantCommand;
 import org.herolias.plugin.config.EnchantingConfig;
+import org.herolias.plugin.enchantment.CreativeCategoryInjector;
 import org.herolias.plugin.enchantment.EnchantmentDamageSystem;
 import org.herolias.plugin.enchantment.EnchantmentAbilityStaminaSystem;
 import org.herolias.plugin.enchantment.EnchantmentBlockDamageSystem;
@@ -36,10 +37,8 @@ import org.herolias.plugin.enchantment.EnchantmentElementalHeartSystem;
 import org.herolias.plugin.enchantment.EnchantmentSilktouchSystem;
 import org.herolias.plugin.enchantment.EnchantmentVisualsListener;
 import org.herolias.plugin.enchantment.EnchantmentKnockbackSystem;
-import org.herolias.plugin.enchantment.EnchantmentSlotTracker;
 import org.herolias.plugin.enchantment.EnchantmentThriftSystem;
 import org.herolias.plugin.enchantment.ItemCategoryManager;
-import org.herolias.plugin.crafting.WorkbenchRefreshSystem;
 import org.herolias.plugin.enchantment.EnchantmentReflectionSystem;
 import org.herolias.plugin.enchantment.EnchantmentAbsorptionSystem;
 import org.herolias.plugin.enchantment.EnchantmentFastSwimSystem;
@@ -51,13 +50,10 @@ import com.al3x.HStats;
 
 import org.herolias.plugin.ui.EnchantScrollPageSupplier;
 
-import com.hypixel.hytale.server.core.event.events.ecs.InventoryActiveSlotRequestEvent;
 import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hypixel.hytale.server.core.event.events.player.PlayerReadyEvent;
 import com.hypixel.hytale.server.core.event.events.player.PlayerDisconnectEvent;
 import javax.annotation.Nonnull;
-import java.util.concurrent.ScheduledFuture;
-import java.util.concurrent.TimeUnit;
 
 /**
  * SimpleEnchanting Plugin - Adds an enchanting system to Hytale
@@ -90,11 +86,13 @@ public class SimpleEnchanting extends JavaPlugin {
     private EnchantmentProjectileSpeedSystem enchantmentProjectileSpeedSystem;
     private EnchantmentEternalShotSystem eternalShotSystem;
     private EnchantmentFastSwimSystem enchantmentFastSwimSystem;
+    private EnchantmentNightVisionSystem enchantmentNightVisionSystem;
+    private EnchantmentWaterbreathingSystem enchantmentWaterbreathingSystem;
+    private org.herolias.plugin.enchantment.EnchantmentPlayerLifecycleSystem playerLifecycleSystem;
 
     private org.herolias.plugin.config.ConfigManager configManager;
     private org.herolias.plugin.config.UserSettingsManager userSettingsManager;
     private org.herolias.plugin.lang.LanguageManager languageManager;
-    private ScheduledFuture<?> slotTrackerFuture;
     private HStats hStats;
 
     public SimpleEnchanting(@Nonnull JavaPluginInit init) {
@@ -107,49 +105,15 @@ public class SimpleEnchanting extends JavaPlugin {
     protected void setup() {
         LOGGER.atInfo().log("Setting up SimpleEnchanting...");
         super.setup();
-        this.hStats = new HStats("b04768bd-4189-4ecc-b29c-0f644d7c95cc",
-                this.getManifest().getVersion().toString());
+        // HStats (anonymous metrics) is constructed in start(); see there.
 
         // --- CONFIG MIGRATION ---
-        java.io.File oldConfigDir = new java.io.File("config");
-        java.io.File newConfigDir = new java.io.File("mods/Simple_Enchantments_Config");
-
-        if (oldConfigDir.exists() && oldConfigDir.isDirectory()) {
-            String[] filesToMigrate = {
-                    "simple_enchanting_config.json",
-                    ".simple_enchanting_config.json.snapshot",
-                    "simple_enchantments_user_config.json",
-                    "simple_enchanting_custom_items.json",
-                    ".simple_enchanting_custom_items.json.snapshot"
-            };
-
-            for (String fileName : filesToMigrate) {
-                java.io.File oldFile = new java.io.File(oldConfigDir, fileName);
-                if (oldFile.exists()) {
-                    if (!newConfigDir.exists()) {
-                        newConfigDir.mkdirs();
-                    }
-                    java.io.File newFile = new java.io.File(newConfigDir, fileName);
-                    if (!newFile.exists()) {
-                        boolean success = oldFile.renameTo(newFile);
-                        if (success) {
-                            LOGGER.atInfo().log("Migrated " + fileName + " to new config directory.");
-                        } else {
-                            LOGGER.atWarning().log("Failed to migrate " + fileName + " to new config directory.");
-                        }
-                    } else {
-                        // Ensure we cleanup the old file if it already exists in the new directory
-                        oldFile.delete();
-                        LOGGER.atInfo().log("Cleaned up old " + fileName + " as it already exists in new directory.");
-                    }
-                }
-            }
-            // Attempt to clean up old directory if it's now empty (requires it to be empty)
-            oldConfigDir.delete();
-            if (!oldConfigDir.exists()) {
-                LOGGER.atInfo().log("Deleted old empty 'config' directory.");
-            }
-        }
+        // Config lives in mods/Simple_Enchantments_Config (the server warns about any
+        // non-pack folder under mods/, including its own plugin data folders, so
+        // moving it would not silence that). Files from the pre-1.0 config/ folder
+        // are moved in on first run.
+        java.io.File newConfigDir = org.herolias.plugin.config.ConfigManager.DEFAULT_CONFIG_DIRECTORY;
+        org.herolias.plugin.config.ConfigManager.migrateLegacyConfigDirectories(newConfigDir);
         // ------------------------
 
         // Initialize Config
@@ -189,6 +153,9 @@ public class SimpleEnchanting extends JavaPlugin {
         // This replaces file-based overrides to ensure mod compatibility
         EnchantmentGlowInjector.registerEventListener(this);
 
+        // Add the scroll sub-tab to the vanilla "Items" creative-library tab
+        CreativeCategoryInjector.registerEventListener(this);
+
         // Register ItemCategoryManager to listen for asset loading (cache population)
         this.getEventRegistry().register(
                 com.hypixel.hytale.assetstore.event.LoadedAssetsEvent.class,
@@ -227,22 +194,6 @@ public class SimpleEnchanting extends JavaPlugin {
                 org.herolias.plugin.ui.CustomScrollPageSupplier.CODEC);
         LOGGER.atInfo().log("Registered CustomScroll UI page supplier");
 
-        // Register custom Ammo Consumption interaction
-        this.getCodecRegistry(com.hypixel.hytale.server.core.modules.interaction.interaction.config.Interaction.CODEC)
-                .register(
-                        "ConsumeAmmo",
-                        org.herolias.plugin.interaction.ConsumeAmmoInteraction.class,
-                        org.herolias.plugin.interaction.ConsumeAmmoInteraction.CODEC);
-        LOGGER.atInfo().log("Registered ConsumeAmmo interaction");
-
-        // Register Dynamic Projectile Launch interaction
-        this.getCodecRegistry(com.hypixel.hytale.server.core.modules.interaction.interaction.config.Interaction.CODEC)
-                .register(
-                        "LaunchDynamicProjectile",
-                        org.herolias.plugin.interaction.LaunchDynamicProjectileInteraction.class,
-                        org.herolias.plugin.interaction.LaunchDynamicProjectileInteraction.CODEC);
-        LOGGER.atInfo().log("Registered LaunchDynamicProjectile interaction");
-
         // Initialize the ECS damage system for applying enchantment effects
         this.enchantmentDamageSystem = new EnchantmentDamageSystem(enchantmentManager);
         this.enchantmentBlockDamageSystem = new EnchantmentBlockDamageSystem(enchantmentManager);
@@ -260,27 +211,6 @@ public class SimpleEnchanting extends JavaPlugin {
         // projectile speed system (the two collaborate: tracking + refund on spawn)
         eternalShotSystem = new EnchantmentEternalShotSystem(enchantmentManager);
         enchantmentProjectileSpeedSystem.setEternalShotSystem(eternalShotSystem);
-
-        // Register 'eternal_shot_active' stat for JSON conditions
-        // This allows us to conditionalize interactions based on whether the player has
-        // Eternal Shot active
-        try {
-            com.hypixel.hytale.server.core.modules.entitystats.asset.EntityStatType eternalShotStat = new com.hypixel.hytale.server.core.modules.entitystats.asset.EntityStatType(
-                    "eternal_shot_active",
-                    0, // Initial
-                    0, // Min
-                    1, // Max
-                    false, // Shared
-                    null, // Regenerating
-                    null, // MinEffects
-                    null, // MaxEffects
-                    com.hypixel.hytale.protocol.EntityStatResetBehavior.InitialValue);
-            com.hypixel.hytale.server.core.modules.entitystats.asset.EntityStatType.getAssetStore()
-                    .loadAssets("SimpleEnchanting:Runtime", java.util.List.of(eternalShotStat));
-            LOGGER.atInfo().log("Registered 'eternal_shot_active' stat");
-        } catch (Exception e) {
-            LOGGER.atSevere().log("Failed to register eternal_shot_active stat: " + e.getMessage());
-        }
 
         // Register the damage system with Hytale's ECS via EntityStoreRegistry
         try {
@@ -314,8 +244,14 @@ public class SimpleEnchanting extends JavaPlugin {
             // Register new enchantment systems (Feather Falling, Waterbreathing, Burn)
             this.getEntityStoreRegistry().registerSystem(new EnchantmentFeatherFallingSystem(enchantmentManager));
             LOGGER.atInfo().log("Registered EnchantmentFeatherFallingSystem with ECS");
-            this.getEntityStoreRegistry().registerSystem(new EnchantmentWaterbreathingSystem(enchantmentManager));
+            this.enchantmentWaterbreathingSystem = new EnchantmentWaterbreathingSystem(enchantmentManager);
+            this.getEntityStoreRegistry().registerSystem(enchantmentWaterbreathingSystem);
             LOGGER.atInfo().log("Registered EnchantmentWaterbreathingSystem with ECS");
+
+            // Recipe crafting guard: cancels crafts of disabled scrolls/tables at runtime.
+            // CraftRecipeEvent.Pre is an ECS event, so it must be an entity-store system.
+            this.getEntityStoreRegistry().registerSystem(new org.herolias.plugin.enchantment.CraftRecipeCancelSystem());
+            LOGGER.atInfo().log("Registered CraftRecipeCancelSystem with ECS");
             this.getEntityStoreRegistry().registerSystem(new EnchantmentBurnSystem(enchantmentManager));
             LOGGER.atInfo().log("Registered EnchantmentBurnSystem with ECS");
             this.getEntityStoreRegistry().registerSystem(new EnchantmentPoisonSystem(enchantmentManager));
@@ -334,24 +270,20 @@ public class SimpleEnchanting extends JavaPlugin {
             LOGGER.atInfo().log("Registered EnchantmentAbsorptionSystem with ECS");
             this.getEntityStoreRegistry().registerSystem(enchantmentFastSwimSystem);
             LOGGER.atInfo().log("Registered EnchantmentFastSwimSystem with ECS");
-            this.getEntityStoreRegistry().registerSystem(new EnchantmentNightVisionSystem(enchantmentManager));
+            this.enchantmentNightVisionSystem = new EnchantmentNightVisionSystem(enchantmentManager);
+            this.getEntityStoreRegistry().registerSystem(enchantmentNightVisionSystem);
             LOGGER.atInfo().log("Registered EnchantmentNightVisionSystem with ECS");
 
             // Create Second Stomach system first so Regeneration can report to it
             EnchantmentSecondStomachSystem secondStomachSystem = new EnchantmentSecondStomachSystem(enchantmentManager);
 
-            this.getEntityStoreRegistry().registerSystem(new EnchantmentRegenerationSystem(enchantmentManager, secondStomachSystem));
+            this.getEntityStoreRegistry().registerSystem(new EnchantmentRegenerationSystem(enchantmentManager));
             LOGGER.atInfo().log("Registered EnchantmentRegenerationSystem with ECS");
             this.getEntityStoreRegistry().registerSystem(secondStomachSystem);
             LOGGER.atInfo().log("Registered EnchantmentSecondStomachSystem with ECS");
 
-            // Workbench Refresh System (Bug fix for ExtraResources not rescanning on
-            // upgrade)
-            this.getEntityStoreRegistry().registerSystem(new WorkbenchRefreshSystem());
-            LOGGER.atInfo().log("Registered WorkbenchRefreshSystem with ECS");
-
         } catch (Exception e) {
-            LOGGER.atWarning().log("Could not register enchantment ECS systems: " + e.getMessage());
+            LOGGER.atSevere().withCause(e).log("Could not register enchantment ECS systems");
         }
 
         // Initialize and register the state transfer system (preserves enchantments on
@@ -370,14 +302,28 @@ public class SimpleEnchanting extends JavaPlugin {
         // projectile spawn
         this.getEntityStoreRegistry().registerSystem(eternalShotSystem);
 
-        this.getEntityStoreRegistry()
-                .registerSystem(new org.herolias.plugin.enchantment.SwitchActiveSlotSystem());
-        LOGGER.atInfo().log("Registered SwitchActiveSlotSystem");
+        // Active-slot changes (hotbar / off-hand / tools): glow refresh + Eternal Shot
+        // hand-off. Replaces the former 50 ms scheduler poll.
+        this.getEntityStoreRegistry().registerSystem(
+                new org.herolias.plugin.enchantment.EnchantmentActiveSlotSystem(enchantmentManager, eternalShotSystem));
+        LOGGER.atInfo().log("Registered EnchantmentActiveSlotSystem with ECS");
 
         // Initialize and register Elemental Heart System (Essence Saver)
         EnchantmentElementalHeartSystem elementalHeartSystem = new EnchantmentElementalHeartSystem(enchantmentManager);
         this.getEntityStoreRegistry().registerSystem(elementalHeartSystem);
         LOGGER.atInfo().log("Registered EnchantmentElementalHeartSystem listener");
+
+        // Player lifecycle: initial glow on add, and every per-player cleanup on remove.
+        this.playerLifecycleSystem = new org.herolias.plugin.enchantment.EnchantmentPlayerLifecycleSystem(
+                enchantmentManager,
+                eternalShotSystem::cleanupPlayer,
+                elementalHeartSystem::cleanupPlayer,
+                enchantmentFastSwimSystem::cleanupPlayer,
+                enchantmentNightVisionSystem::cleanupPlayer,
+                enchantmentWaterbreathingSystem::cleanupPlayer,
+                org.herolias.plugin.enchantment.EquipmentLevelCache::cleanupPlayer);
+        this.getEntityStoreRegistry().registerSystem(playerLifecycleSystem);
+        LOGGER.atInfo().log("Registered EnchantmentPlayerLifecycleSystem with ECS");
 
         // Register DropItemEventSystem to track manual drops for Eternal Shot fix
         // This prevents arrows from being duplicated when players manually drop them
@@ -430,21 +376,19 @@ public class SimpleEnchanting extends JavaPlugin {
         LOGGER.atInfo().log("Registered ScrollDescriptionManager and native tooltip migration listener");
 
         this.getEventRegistry().registerGlobal(PlayerDisconnectEvent.class, event -> {
-            if (enchantmentFastSwimSystem != null) {
-                enchantmentFastSwimSystem.cleanupPlayer(event.getPlayerRef().getUuid());
+            if (playerLifecycleSystem != null && event.getPlayerRef() != null) {
+                playerLifecycleSystem.cleanupPlayer(event.getPlayerRef().getUuid());
             }
         });
-        LOGGER.atInfo().log("Registered Fast Swim cleanup listener");
+        LOGGER.atInfo().log("Registered per-player cleanup listener");
+
+        // Smelting / cooking recipe registries follow crafting-recipe reloads
+        this.getEventRegistry().register(
+                com.hypixel.hytale.assetstore.event.LoadedAssetsEvent.class,
+                com.hypixel.hytale.server.core.asset.type.item.config.CraftingRecipe.class,
+                this::onRecipesLoaded);
 
         LOGGER.atInfo().log("Using native per-stack ItemDisplay metadata for enchantment tooltips");
-
-        // Register Event Logger Listener (Debug)
-        org.herolias.plugin.listener.EventLoggerListener debugListener = new org.herolias.plugin.listener.EventLoggerListener();
-        this.getEventRegistry().registerGlobal(org.herolias.plugin.api.event.EnchantmentActivatedEvent.class,
-                debugListener::onEnchantmentActivated);
-        this.getEventRegistry().registerGlobal(org.herolias.plugin.api.event.ItemEnchantedEvent.class,
-                debugListener::onItemEnchanted);
-        LOGGER.atInfo().log("Registered debug event logger");
 
         // Register Welcome Listener (One-time notification for tooltips)
         this.getEventRegistry().registerGlobal(
@@ -472,32 +416,56 @@ public class SimpleEnchanting extends JavaPlugin {
 
     @Override
     protected void start() {
-        // Register the slot tracker (handles glow updates on slot change)
+        // Anonymous usage metrics (HStats). The current upstream version performs
+        // its HTTP requests asynchronously on the server scheduler with connect/read
+        // timeouts, so constructing it here no longer blocks startup. The class itself
+        // may not be modified (see its license header).
         try {
-            EnchantmentSlotTracker slotTracker = new EnchantmentSlotTracker(enchantmentManager);
-            this.slotTrackerFuture = com.hypixel.hytale.server.core.HytaleServer.SCHEDULED_EXECUTOR.scheduleAtFixedRate(
-                    slotTracker,
-                    0,
-                    50, // 50ms = 1 tick
-                    TimeUnit.MILLISECONDS);
-            LOGGER.atInfo().log("Registered EnchantmentSlotTracker ticker in start()");
+            this.hStats = new HStats("b04768bd-4189-4ecc-b29c-0f644d7c95cc",
+                    this.getManifest().getVersion().toString());
+        } catch (Throwable t) {
+            LOGGER.atWarning().withCause(t).log("HStats metrics initialisation failed (ignored)");
+        }
+
+        try {
             org.herolias.plugin.enchantment.NativeTooltipManager.refreshAllPlayers();
         } catch (Exception e) {
-            LOGGER.atSevere().log("Failed to register Slot Tracker: " + e.getMessage());
-            e.printStackTrace();
+            LOGGER.atWarning().withCause(e).log("Failed to refresh native tooltips on start");
         }
     }
 
     @Override
     protected void shutdown() {
-        if (slotTrackerFuture != null) {
-            slotTrackerFuture.cancel(false);
-            slotTrackerFuture = null;
+        // Flush pending per-player settings and stop the save executor
+        if (userSettingsManager != null) {
+            try {
+                userSettingsManager.shutdown();
+            } catch (Exception e) {
+                LOGGER.atWarning().withCause(e).log("Failed to flush user settings on shutdown");
+            }
         }
-        if (hStats != null) {
-            hStats = null;
+        // Remove runtime-generated assets so a plugin reload starts clean
+        try {
+            EnchantmentRecipeManager.unload();
+            ScrollItemGenerator.unload();
+        } catch (Exception e) {
+            LOGGER.atWarning().withCause(e).log("Failed to unload runtime-generated assets");
         }
+        hStats = null;
         super.shutdown();
+    }
+
+    private void onRecipesLoaded(
+            com.hypixel.hytale.assetstore.event.LoadedAssetsEvent<String, com.hypixel.hytale.server.core.asset.type.item.config.CraftingRecipe, com.hypixel.hytale.assetstore.map.DefaultAssetMap<String, com.hypixel.hytale.server.core.asset.type.item.config.CraftingRecipe>> event) {
+        if (enchantmentManager == null) {
+            return;
+        }
+        try {
+            enchantmentManager.getSmeltingRecipeRegistry().reload();
+            enchantmentManager.getCookingRecipeRegistry().reload();
+        } catch (Exception e) {
+            LOGGER.atWarning().withCause(e).log("Failed to rebuild smelting/cooking recipe registries");
+        }
     }
 
     /**

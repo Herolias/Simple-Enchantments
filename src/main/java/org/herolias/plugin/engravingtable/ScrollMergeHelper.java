@@ -12,6 +12,8 @@ import javax.annotation.Nullable;
 import java.util.Map;
 
 public final class ScrollMergeHelper {
+    public static final String CLEANSING_SCROLL_ID = "Scroll_Cleansing";
+
     private ScrollMergeHelper() {
     }
 
@@ -105,10 +107,9 @@ public final class ScrollMergeHelper {
         return new MergeResult(createResultScroll(merged), null);
     }
 
-    private static boolean isCleansingScroll(ItemStack item) {
-        if (ItemStack.isEmpty(item)) return false;
-        ScrollIdHelper.ScrollEnchantment scrollEnch = ScrollIdHelper.getEnchantmentFromScrollId(item.getItemId());
-        return scrollEnch != null && "cleansing".equals(scrollEnch.type().getId());
+    /** The Scroll of Cleansing is a plain item, not an enchantment scroll, so compare its id directly. */
+    private static boolean isCleansingScroll(@Nullable ItemStack item) {
+        return !ItemStack.isEmpty(item) && CLEANSING_SCROLL_ID.equals(item.getItemId());
     }
 
     @Nonnull

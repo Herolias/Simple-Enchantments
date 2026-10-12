@@ -66,6 +66,10 @@ public class EngravingTableInteractionSystem extends EntityEventSystem<EntitySto
         }
 
         event.setCancelled(true);
+        // Same guard as vanilla OpenCustomUIInteraction: never open on top of another custom page
+        if (player.getPageManager().getCustomPage() != null) {
+            return;
+        }
         EngravingTablePage page = new EngravingTablePage(playerRef, this.plugin, this.enchantmentManager);
         player.getPageManager().openCustomPage(ref, store, page);
     }

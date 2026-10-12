@@ -1,7 +1,7 @@
 package org.herolias.plugin.enchantment;
 
 import com.hypixel.hytale.server.core.asset.type.item.config.Item;
-import com.hypixel.hytale.server.core.entity.LivingEntity;
+import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hypixel.hytale.server.core.event.events.ecs.InventoryChangeEvent;
 import com.hypixel.hytale.component.system.EntityEventSystem;
 import com.hypixel.hytale.component.ArchetypeChunk;
@@ -9,16 +9,15 @@ import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.component.query.Query;
-import com.hypixel.hytale.component.Archetype;
-import com.hypixel.hytale.server.core.entity.EntityUtils;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
 import com.hypixel.hytale.server.core.inventory.container.ItemContainer;
 import com.hypixel.hytale.server.core.inventory.transaction.SlotTransaction;
 import com.hypixel.hytale.server.core.inventory.transaction.Transaction;
 import org.bson.BsonDocument;
-import org.herolias.plugin.util.ProcessingGuard;
+import org.bson.BsonValue;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -51,6 +50,19 @@ import java.util.concurrent.ConcurrentHashMap;
  * maps in their {@link Item} definition (e.g. empty Watering Can → filled
  * Watering Can).
  * </p>
+ *
+ * <p>
+ * The system also migrates legacy items to the native tooltip format, but only
+ * when the item's tooltip state is missing or out of date (its stored hash
+ * differs from the hash of the current enchantments), so the common case is a
+ * couple of BSON key lookups per event.
+ * </p>
+ *
+ * <p>
+ * Event systems run on the owning world thread. Our own writes produce
+ * transactions that every branch below recognises as already handled, so no
+ * re-dispatch or recursion guard is needed.
+ * </p>
  */
 public class EnchantmentStateTransferSystem extends EntityEventSystem<EntityStore, InventoryChangeEvent> {
 
@@ -60,8 +72,13 @@ public class EnchantmentStateTransferSystem extends EntityEventSystem<EntityStor
     /** Lazy cleanup interval: purge stale entries every N events. */
     private static final int CLEANUP_INTERVAL = 50;
 
+    /**
+     * Key of the enchantment hash inside the native tooltip state document
+     * (mirrors {@code NativeTooltipManager}'s private {@code LAST_HASH_KEY}).
+     */
+    private static final String TOOLTIP_LAST_HASH_KEY = "LastHash";
+
     private final EnchantmentManager enchantmentManager;
-    private final ProcessingGuard guard = new ProcessingGuard();
 
     /**
      * Cache of recently removed enchantment data, keyed by (containerId + slot).
@@ -78,26 +95,17 @@ public class EnchantmentStateTransferSystem extends EntityEventSystem<EntityStor
     @Override
     @Nonnull
     public Query<EntityStore> getQuery() {
-        return Archetype.empty();
+        // Only player inventories are relevant.
+        return Player.getComponentType();
     }
 
     /**
-     * Handles inventory change events. Registered as a global listener.
+     * Handles inventory change events for players.
      */
     @Override
-    public void handle(int index, @Nonnull ArchetypeChunk<EntityStore> archetypeChunk, @Nonnull Store<EntityStore> store, @Nonnull CommandBuffer<EntityStore> commandBuffer, @Nonnull InventoryChangeEvent event) {
-        LivingEntity entity = (LivingEntity) EntityUtils.getEntity(index, archetypeChunk);
-        if (!(entity instanceof com.hypixel.hytale.server.core.entity.entities.Player player))
-            return;
-
-        if (player.getWorld() != null && !player.getWorld().isInThread()) {
-            player.getWorld().execute(() -> handle(index, archetypeChunk, store, commandBuffer, event));
-            return;
-        }
-
-        if (guard.isProcessing())
-            return;
-
+    public void handle(int index, @Nonnull ArchetypeChunk<EntityStore> archetypeChunk,
+            @Nonnull Store<EntityStore> store, @Nonnull CommandBuffer<EntityStore> commandBuffer,
+            @Nonnull InventoryChangeEvent event) {
         Transaction transaction = event.getTransaction();
         if (!(transaction instanceof SlotTransaction slotTransaction))
             return;
@@ -122,7 +130,7 @@ public class EnchantmentStateTransferSystem extends EntityEventSystem<EntityStor
 
         // ── Phase 1: Cache enchantments from removed items ──
         if (hasItem(before) && !hasItem(after)) {
-            BsonDocument enchBson = getEnchantmentBson(before);
+            BsonDocument enchBson = enchantmentManager.readEnchantmentDocument(before);
             if (enchBson != null && !enchBson.isEmpty()) {
                 cache.put(cacheKey, new CachedEnchantment(
                         before.getItemId(),
@@ -143,7 +151,7 @@ public class EnchantmentStateTransferSystem extends EntityEventSystem<EntityStor
                 return;
 
             // Skip if the new item already has enchantments
-            BsonDocument afterBson = getEnchantmentBson(after);
+            BsonDocument afterBson = enchantmentManager.readEnchantmentDocument(after);
             if (afterBson != null && !afterBson.isEmpty())
                 return;
 
@@ -152,11 +160,9 @@ public class EnchantmentStateTransferSystem extends EntityEventSystem<EntityStor
                 return;
 
             // Re-apply enchantments
-            guard.runGuarded(() -> {
-                ItemStack restoredItem = NativeTooltipManager.withEnchantments(after, cached.enchantmentBson,
-                        enchantmentManager);
-                container.replaceItemStackInSlot(slot, after, restoredItem);
-            });
+            ItemStack restoredItem = NativeTooltipManager.withEnchantments(after, cached.enchantmentBson,
+                    enchantmentManager);
+            container.replaceItemStackInSlot(slot, after, restoredItem);
             return;
         }
 
@@ -165,18 +171,16 @@ public class EnchantmentStateTransferSystem extends EntityEventSystem<EntityStor
         // event with both slotBefore and slotAfter populated.
         if (hasItem(before) && hasItem(after)
                 && !before.getItemId().equals(after.getItemId())) {
-            BsonDocument beforeBson = getEnchantmentBson(before);
-            BsonDocument afterBson = getEnchantmentBson(after);
+            BsonDocument beforeBson = enchantmentManager.readEnchantmentDocument(before);
+            BsonDocument afterBson = enchantmentManager.readEnchantmentDocument(after);
 
             if (beforeBson != null && !beforeBson.isEmpty()
                     && (afterBson == null || afterBson.isEmpty())
                     && areStateVariants(before.getItemId(), after.getItemId())) {
 
-                guard.runGuarded(() -> {
-                    ItemStack restoredItem = NativeTooltipManager.withEnchantments(after, beforeBson,
-                            enchantmentManager);
-                    container.replaceItemStackInSlot(slot, after, restoredItem);
-                });
+                ItemStack restoredItem = NativeTooltipManager.withEnchantments(after, beforeBson,
+                        enchantmentManager);
+                container.replaceItemStackInSlot(slot, after, restoredItem);
             }
         }
     }
@@ -190,45 +194,43 @@ public class EnchantmentStateTransferSystem extends EntityEventSystem<EntityStor
     }
 
     private void migrateNativeTooltip(@Nonnull ItemContainer container, short slot, @Nonnull ItemStack item) {
-        if (!hasTooltipMetadata(item)) {
+        if (!needsTooltipMigration(item)) {
             return;
         }
-        guard.runGuarded(() -> {
-            ItemStack updated = NativeTooltipManager.apply(item, enchantmentManager);
-            if (!updated.isEquivalentType(item)) {
-                container.replaceItemStackInSlot(slot, item, updated);
-            }
-        });
-    }
-
-    private static boolean hasTooltipMetadata(@Nonnull ItemStack item) {
-        BsonDocument enchantmentBson = getEnchantmentBson(item);
-        if (enchantmentBson != null && !enchantmentBson.isEmpty()) {
-            return true;
-        }
-        try {
-            BsonDocument nativeState = item.getFromMetadataOrNull(
-                    NativeTooltipManager.METADATA_KEY,
-                    com.hypixel.hytale.codec.Codec.BSON_DOCUMENT);
-            return nativeState != null && !nativeState.isEmpty();
-        } catch (Exception ignored) {
-            return false;
+        ItemStack updated = NativeTooltipManager.apply(item, enchantmentManager);
+        if (!updated.isEquivalentType(item)) {
+            container.replaceItemStackInSlot(slot, item, updated);
         }
     }
 
     /**
-     * Reads the enchantment BSON document from an item's metadata, or null.
+     * Cheap "already migrated" check: the item needs a tooltip pass only if it
+     * has enchantments but no tooltip state, if the state's stored hash differs
+     * from the hash of its current enchantments, or if it carries stale tooltip
+     * state without any enchantments.
      */
-    private static BsonDocument getEnchantmentBson(ItemStack item) {
-        if (item == null || item.isEmpty())
-            return null;
-        try {
-            return item.getFromMetadataOrNull(
-                    EnchantmentData.METADATA_KEY,
-                    com.hypixel.hytale.codec.Codec.BSON_DOCUMENT);
-        } catch (Exception e) {
-            return null;
+    private boolean needsTooltipMigration(@Nonnull ItemStack item) {
+        BsonDocument metadata = item.getMetadata();
+        if (metadata == null || metadata.isEmpty()) {
+            return false;
         }
+        BsonValue state = metadata.get(NativeTooltipManager.METADATA_KEY);
+        BsonDocument enchantments = enchantmentManager.readEnchantmentDocument(item);
+        boolean hasEnchantments = enchantments != null && !enchantments.isEmpty();
+
+        if (!hasEnchantments) {
+            // Stale managed description left behind after the last enchantment was removed.
+            return state != null && !state.isNull();
+        }
+        if (state == null || !state.isDocument()) {
+            return true;
+        }
+        BsonValue lastHash = state.asDocument().get(TOOLTIP_LAST_HASH_KEY);
+        if (lastHash == null || !lastHash.isString()) {
+            return true;
+        }
+        String currentHash = EnchantmentData.fromBson(enchantments).computeStableHash();
+        return !currentHash.equals(lastHash.asString().getValue());
     }
 
     /**
@@ -243,7 +245,7 @@ public class EnchantmentStateTransferSystem extends EntityEventSystem<EntityStor
      * in this item's blockToState map.
      * </p>
      */
-    private static boolean areStateVariants(String oldItemId, String newItemId) {
+    private static boolean areStateVariants(@Nullable String oldItemId, @Nullable String newItemId) {
         if (oldItemId == null || newItemId == null)
             return false;
         if (oldItemId.equals(newItemId))

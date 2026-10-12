@@ -112,13 +112,9 @@ items.Scroll_Life_Leech_I.name = Pergaminho de Roubo de Vida
 
 items.Scroll_Life_Leech_I.description = Cura o atacante em 10% do dano causado.
 
-items.Scroll_Life_Leech_II.name = Pergaminho de Roubo de Vida II
 
-items.Scroll_Life_Leech_II.description = Cura o atacante em 20% do dano causado.
 
-items.Scroll_Life_Leech_III.name = Pergaminho de Roubo de Vida III
 
-items.Scroll_Life_Leech_III.description = Cura o atacante em 30% do dano causado.
 
 
 
@@ -637,7 +633,6 @@ customUI.walkthrough.enchantments.desc = Uma lista completa dos encantamentos e 
 
 config.general.allow_same_scroll_upgrades = Permitir Melhorias de Pergaminho Iguais (I+I = II)
 
-ui.itemcategory.simpleEnchantments = Encantamentos Simples
 ui.itemcategory.simpleEnchantments.scrolls = Pergaminhos
 
 customUI.walkthrough.enabledOnServer = Ativado neste servidor: 

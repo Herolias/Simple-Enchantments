@@ -20,7 +20,7 @@
             },
             {
                 "ItemId": "Ingredient_Void_Essence",
-                "Quantity": 10
+                "Quantity": 15
             },
             {
                 "ItemId": "Wood_Azure_Trunk",
@@ -145,7 +145,7 @@
                     "UpgradeRequirement": {
                         "Material": [
                             {
-                                "ItemId": "Rock_Gem_Topaz",
+                                "ItemId": "Rock_Gem_Ruby",
                                 "Quantity": 1
                             },
                             {

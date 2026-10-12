@@ -20,10 +20,15 @@ import org.herolias.plugin.enchantment.EnchantmentData;
 import org.herolias.plugin.enchantment.EnchantmentManager;
 import org.herolias.plugin.enchantment.EnchantmentType;
 import org.herolias.plugin.enchantment.NativeTooltipManager;
+import org.herolias.plugin.util.InventoryAccess;
 
 /**
  * Interaction that removes an enchantment from an item and consumes the Scroll
  * of Cleansing.
+ * <p>
+ * The captured {@link ItemContext}s are snapshots; the live slots are re-read
+ * before anything is written so quantity changes while the page was open can
+ * never duplicate or destroy items.
  */
 public class RemoveEnchantmentInteraction extends ChoiceInteraction {
     private final ItemContext itemContext;
@@ -53,22 +58,27 @@ public class RemoveEnchantmentInteraction extends ChoiceInteraction {
 
         // Re-validate the held scroll is still in the expected slot (prevents drop-while-open exploit)
         ItemContainer heldContainer = this.heldItemContext.getContainer();
-        ItemStack currentHeldItem = heldContainer.getItemStack(this.heldItemContext.getSlot());
-        if (ItemStack.isEmpty(currentHeldItem)
-                || !currentHeldItem.isStackableWith(this.heldItemContext.getItemStack())) {
+        short heldItemSlot = this.heldItemContext.getSlot();
+        ItemStack heldSnapshot = this.heldItemContext.getItemStack();
+        ItemStack currentHeldItem = heldContainer.getItemStack(heldItemSlot);
+        if (ItemStack.isEmpty(heldSnapshot) || ItemStack.isEmpty(currentHeldItem)
+                || !currentHeldItem.isStackableWith(heldSnapshot)) {
             pageManager.setPage(ref, store, Page.None);
             return;
         }
 
-        // Validate item still exists and has the enchantment
-        ItemStack itemStack = this.itemContext.getItemStack();
-        if (ItemStack.isEmpty(itemStack)) {
+        // Validate the item still exists (live read) and has the enchantment
+        ItemContainer targetContainer = this.itemContext.getContainer();
+        short targetSlot = this.itemContext.getSlot();
+        ItemStack snapshot = this.itemContext.getItemStack();
+        ItemStack live = targetContainer.getItemStack(targetSlot);
+        if (ItemStack.isEmpty(snapshot) || ItemStack.isEmpty(live) || !live.isStackableWith(snapshot)) {
             playerRef.sendMessage(Message.raw("The item is no longer available."));
             pageManager.setPage(ref, store, Page.None);
             return;
         }
 
-        EnchantmentData data = enchantmentManager.getEnchantmentsFromItem(itemStack);
+        EnchantmentData data = enchantmentManager.getEnchantmentsFromItem(live);
         org.herolias.plugin.lang.LanguageManager languageManager = enchantmentManager.getPlugin().getLanguageManager();
         String lang = enchantmentManager.getPlugin().getUserSettingsManager().getLanguage(playerRef.getUuid());
         String clientLang = playerRef.getLanguage();
@@ -86,30 +96,26 @@ public class RemoveEnchantmentInteraction extends ChoiceInteraction {
         // Remove the enchantment
         data.removeEnchantment(enchantmentType);
 
-        // Write back to item metadata
+        // Write back to item metadata, derived from the live stack (keeps live quantity)
         org.bson.BsonDocument bson = data.isEmpty() ? null : data.toBson();
-        ItemStack cleanedItem = NativeTooltipManager.withEnchantments(itemStack, bson, enchantmentManager);
+        ItemStack cleanedItem = NativeTooltipManager.withEnchantments(live, bson, enchantmentManager);
 
         // Consume the scroll
-        ItemContainer heldItemContainer = this.heldItemContext.getContainer();
-        ItemStack heldItemStack = this.heldItemContext.getItemStack();
-        short heldItemSlot = this.heldItemContext.getSlot();
-
-        ItemStackSlotTransaction removeTransaction = heldItemContainer.removeItemStackFromSlot(heldItemSlot,
-                heldItemStack, 1);
+        ItemStackSlotTransaction removeTransaction = heldContainer.removeItemStackFromSlot(heldItemSlot,
+                currentHeldItem, 1);
         if (!removeTransaction.succeeded()) {
             playerRef.sendMessage(Message.raw("Failed to consume the scroll."));
             pageManager.setPage(ref, store, Page.None);
             return;
         }
 
-        // Replace the item with the cleaned version
-        ItemStackSlotTransaction replaceTransaction = this.itemContext.getContainer()
-                .replaceItemStackInSlot(this.itemContext.getSlot(), itemStack, cleanedItem);
+        // Compare-and-replace the item with the cleaned version
+        ItemStackSlotTransaction replaceTransaction = targetContainer
+                .replaceItemStackInSlot(targetSlot, live, cleanedItem);
         if (!replaceTransaction.succeeded()) {
             // Restore the scroll if item replacement failed
-            SimpleItemContainer.addOrDropItemStack(store, ref, heldItemContainer, heldItemSlot,
-                    heldItemStack.withQuantity(1));
+            SimpleItemContainer.addOrDropItemStack(store, ref, heldContainer, heldItemSlot,
+                    currentHeldItem.withQuantity(1));
             playerRef.sendMessage(Message.raw("Failed to update the item."));
             pageManager.setPage(ref, store, Page.None);
             return;
@@ -132,9 +138,8 @@ public class RemoveEnchantmentInteraction extends ChoiceInteraction {
                     scrollStack = new ItemStack(scrollId, 1);
                 }
                 if (scrollStack.isValid() && !scrollStack.isEmpty()) {
-                    ItemContainer playerInventory = playerComponent.getInventory()
-                            .getCombinedArmorHotbarUtilityStorage();
-                    SimpleItemContainer.addOrDropItemStack(store, ref, playerInventory, (short) 0, scrollStack);
+                    ItemContainer playerInventory = InventoryAccess.getCombinedArmorHotbarUtilityStorage(store, ref);
+                    SimpleItemContainer.addOrDropItemStack(store, ref, playerInventory, scrollStack);
                     String translatedName = languageManager.getRawMessage(enchantmentType.getNameKey(), lang,
                             clientLang) + " " + EnchantmentType.toRoman(removedLevel);
                     playerRef.sendMessage(Message.raw("Returned: " + translatedName));

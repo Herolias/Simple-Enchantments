@@ -16,6 +16,7 @@ import javax.annotation.Nonnull;
 import org.herolias.plugin.SimpleEnchanting;
 import org.herolias.plugin.enchantment.EnchantmentData;
 import org.herolias.plugin.enchantment.EnchantmentManager;
+import org.herolias.plugin.util.InventoryAccess;
 
 /**
  * Page supplier for the Custom Scroll.
@@ -50,10 +51,7 @@ public class CustomScrollPageSupplier implements OpenCustomUIInteraction.CustomP
             return null;
         }
 
-        ItemContainer itemContainer = playerComponent.getInventory().getCombinedArmorHotbarUtilityStorage();
-        if (itemContainer == null) {
-            return null;
-        }
+        ItemContainer itemContainer = InventoryAccess.getCombinedArmorHotbarUtilityStorage(componentAccessor, ref);
 
         return new CustomScrollEnchantmentPage(playerRef, scrollData, heldItemContext, itemContainer, manager);
     }

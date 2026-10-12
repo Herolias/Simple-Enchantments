@@ -1,4 +1,5 @@
 {
+    "Parent": "Burn_Template",
     "ApplicationEffects": {
         "EntityBottomTint": "#100600",
         "EntityTopTint": "#cf2302",

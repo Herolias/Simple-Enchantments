@@ -1,5 +1,6 @@
 package org.herolias.plugin.engravingtable;
 
+import com.hypixel.hytale.component.ComponentAccessor;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.protocol.packets.interface_.CustomPageLifetime;
@@ -13,7 +14,6 @@ import com.hypixel.hytale.server.core.asset.type.item.config.Item;
 import com.hypixel.hytale.server.core.asset.type.item.config.metadata.ItemDisplayMetadata;
 import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hypixel.hytale.server.core.entity.entities.player.pages.InteractiveCustomUIPage;
-import com.hypixel.hytale.server.core.inventory.Inventory;
 import com.hypixel.hytale.server.core.inventory.InventoryComponent;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
 import com.hypixel.hytale.server.core.inventory.container.ItemContainer;
@@ -30,6 +30,8 @@ import com.hypixel.hytale.server.core.util.MessageUtil;
 import org.herolias.plugin.SimpleEnchanting;
 import org.herolias.plugin.enchantment.EnchantmentManager;
 import org.herolias.plugin.enchantment.NativeTooltipManager;
+import org.herolias.plugin.lang.LanguageManager;
+import org.herolias.plugin.util.InventoryAccess;
 import org.bson.BsonDocument;
 
 import javax.annotation.Nonnull;
@@ -44,6 +46,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.StringJoiner;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -58,6 +61,15 @@ public class EngravingTablePage extends InteractiveCustomUIPage<EngravingTablePa
     private static final String COLOR_NEUTRAL = "#d7cfbe";
     private static final String COLOR_SUCCESS = "#88d488";
     private static final String COLOR_ERROR = "#ff8a8a";
+    /** Server-side cap for custom names (the .ui TextField carries the same MaxLength). */
+    static final int MAX_NAME_LENGTH = 40;
+    /**
+     * Language codes we are willing to read server.lang files for. The code
+     * comes from client/user settings and is used in a path, so it is
+     * whitelisted against the languages this mod ships.
+     */
+    private static final Set<String> SUPPORTED_ASSET_LANGUAGES = Set.of(LanguageManager.AVAILABLE_LANGUAGES);
+    /** Bounded by SUPPORTED_ASSET_LANGUAGES; only whitelisted codes are ever inserted. */
     private static final Map<String, Map<String, String>> ASSET_LANGUAGE_CACHE = new ConcurrentHashMap<>();
 
     private final SimpleEnchanting plugin;
@@ -89,8 +101,11 @@ public class EngravingTablePage extends InteractiveCustomUIPage<EngravingTablePa
             @Nonnull Store<EntityStore> store) {
         this.syncEditorState(true);
         commandBuilder.append(PAGE_PATH);
-        this.updateDynamicState(commandBuilder);
-        this.bindEvents(eventBuilder);
+        this.updatePreviewState(commandBuilder, true);
+        this.updateInventoryGrid(commandBuilder);
+        // Static controls are bound once; only the inventory grid is ever rebuilt/rebound.
+        this.bindStaticEvents(eventBuilder);
+        this.bindInventorySlotEvents(eventBuilder);
     }
 
     @Override
@@ -125,28 +140,67 @@ public class EngravingTablePage extends InteractiveCustomUIPage<EngravingTablePa
         }
         if (data.nameColor != null) {
             if (!this.areNameChangesEnabled()) {
-                this.sendDynamicUpdate();
+                this.sendPreviewUpdate(true);
                 return;
             }
             this.selectedNameColor = EngravingTableColorOption.fromIdOrDefault(data.nameColor,
                     EngravingTableColorOption.DEFAULT_NAME_COLOR);
-            this.sendDynamicUpdate();
+            this.sendPreviewUpdate(false);
             return;
         }
         if (data.glowColor != null) {
             this.selectedGlowColor = EngravingTableColorOption.fromIdOrDefault(data.glowColor,
                     EngravingTableColorOption.DEFAULT_GLOW_COLOR);
-            this.sendDynamicUpdate();
+            this.sendPreviewUpdate(false);
             return;
         }
         if (data.nameInput != null) {
             if (!this.areNameChangesEnabled()) {
-                this.sendDynamicUpdate();
+                this.sendPreviewUpdate(true);
                 return;
             }
-            this.editableName = data.nameInput;
-            this.sendDynamicUpdate();
+            // Server-side sanitising: strip control/format characters, trim, cap length
+            String sanitized = sanitizeName(data.nameInput);
+            this.editableName = sanitized;
+            // Only push the value back into the field when we actually changed it,
+            // so the client's caret is not disturbed on normal typing.
+            this.sendPreviewUpdate(!sanitized.equals(data.nameInput));
         }
+    }
+
+    /**
+     * Normalises a player supplied custom name: removes control, format and
+     * separator characters (newlines, RTL overrides, zero-width joiners...),
+     * trims whitespace and caps the length at {@link #MAX_NAME_LENGTH} code
+     * points. Returns an empty string when nothing usable remains.
+     */
+    @Nonnull
+    static String sanitizeName(@Nullable String raw) {
+        if (raw == null || raw.isEmpty()) {
+            return "";
+        }
+        StringBuilder builder = new StringBuilder(raw.length());
+        for (int i = 0; i < raw.length();) {
+            int codePoint = raw.codePointAt(i);
+            i += Character.charCount(codePoint);
+            int type = Character.getType(codePoint);
+            if (Character.isISOControl(codePoint)
+                    || type == Character.CONTROL
+                    || type == Character.FORMAT
+                    || type == Character.LINE_SEPARATOR
+                    || type == Character.PARAGRAPH_SEPARATOR
+                    || type == Character.PRIVATE_USE
+                    || type == Character.SURROGATE
+                    || type == Character.UNASSIGNED) {
+                continue;
+            }
+            builder.appendCodePoint(codePoint);
+        }
+        String cleaned = builder.toString().trim();
+        if (cleaned.codePointCount(0, cleaned.length()) > MAX_NAME_LENGTH) {
+            cleaned = cleaned.substring(0, cleaned.offsetByCodePoints(0, MAX_NAME_LENGTH)).trim();
+        }
+        return cleaned;
     }
 
     @Override
@@ -181,15 +235,34 @@ public class EngravingTablePage extends InteractiveCustomUIPage<EngravingTablePa
         this.selectedGlowColor = customization.getGlowColorOrDefault();
     }
 
+    /**
+     * Full refresh: preview panel plus the inventory grid (and its slot
+     * bindings). Used when the selection changes or after taking a result.
+     */
     private void sendDynamicUpdate() {
         UICommandBuilder commandBuilder = new UICommandBuilder();
         UIEventBuilder eventBuilder = new UIEventBuilder();
-        this.updateDynamicState(commandBuilder);
-        this.bindEvents(eventBuilder);
+        this.updatePreviewState(commandBuilder, true);
+        this.updateInventoryGrid(commandBuilder);
+        this.bindInventorySlotEvents(eventBuilder);
         this.sendUpdate(commandBuilder, eventBuilder, false);
     }
 
-    private void updateDynamicState(@Nonnull UICommandBuilder commandBuilder) {
+    /**
+     * Light refresh for per-keystroke / colour-button edits: only the preview
+     * selectors (name preview, result slot, take button, cost/status) are
+     * updated; the inventory grid and its event bindings are left untouched.
+     *
+     * @param syncNameInput whether to push {@code editableName} back into the
+     *                      text field
+     */
+    private void sendPreviewUpdate(boolean syncNameInput) {
+        UICommandBuilder commandBuilder = new UICommandBuilder();
+        this.updatePreviewState(commandBuilder, syncNameInput);
+        this.sendUpdate(commandBuilder, null, false);
+    }
+
+    private void updatePreviewState(@Nonnull UICommandBuilder commandBuilder, boolean syncNameInput) {
         ItemStack primary = this.getPrimaryInput();
         ItemStack secondary = this.getSecondaryInput();
         ItemStack preview = this.getPreviewResultItem();
@@ -223,7 +296,9 @@ public class EngravingTablePage extends InteractiveCustomUIPage<EngravingTablePa
         commandBuilder.set("#NameSection.Visible", showName);
         if (showName) {
             commandBuilder.set("#NamePreviewValue.TextSpans", this.buildNamePreviewMessage());
-            commandBuilder.set("#NameInput.Value", this.editableName);
+            if (syncNameInput) {
+                commandBuilder.set("#NameInput.Value", this.editableName);
+            }
             commandBuilder.set("#NameHint.TextSpans",
                     Message.raw("Name color: 1 matching petal. Default is free."));
             commandBuilder.set("#NamePreviewWarning.Visible",
@@ -245,67 +320,36 @@ public class EngravingTablePage extends InteractiveCustomUIPage<EngravingTablePa
         commandBuilder.set("#CostValue.TextSpans", this.buildCostMessage());
         commandBuilder.set("#StatusValue.TextSpans", this.buildStatusMessage());
         commandBuilder.set("#CloseButton.TextSpans", Message.raw("Close"));
-
-        this.updateInventoryGrid(commandBuilder);
     }
 
-    private void bindEvents(@Nonnull UIEventBuilder eventBuilder) {
-        ItemStack primary = this.getPrimaryInput();
-        ItemStack secondary = this.getSecondaryInput();
-        ItemStack preview = this.getPreviewResultItem();
-        boolean showCustomization = this.isCustomizationMode();
-        boolean showName = showCustomization && this.areNameChangesEnabled();
-        boolean showGlow = showCustomization && this.canEditGlow(primary);
-        boolean canTake = !ItemStack.isEmpty(preview) && this.canTakePreview();
-
-        if (canTake) {
-            eventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#PreviewTakeButton",
-                    EventData.of("Take", "true"));
-        }
-
+    /**
+     * Binds the controls that exist for the whole lifetime of the page. Bound
+     * exactly once in {@link #build}; every handler re-validates server-side
+     * (take/afford checks, name changes enabled, selection present), so the
+     * bindings do not need to follow the visible state.
+     */
+    private void bindStaticEvents(@Nonnull UIEventBuilder eventBuilder) {
+        eventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#PreviewTakeButton",
+                EventData.of("Take", "true"));
         eventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#CloseButton",
                 EventData.of("Close", "true"));
+        eventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#ClearPrimaryButton",
+                EventData.of("ClearPrimary", "true"));
+        eventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#ClearSecondaryButton",
+                EventData.of("ClearSecondary", "true"));
 
-        if (!ItemStack.isEmpty(primary)) {
-            eventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#ClearPrimaryButton",
-                    EventData.of("ClearPrimary", "true"));
+        eventBuilder.addEventBinding(CustomUIEventBindingType.ValueChanged, "#NameInput",
+                EventData.of("NameInput", "").append("@NameInput", "#NameInput.Value"),
+                false);
+
+        for (EngravingTableColorOption colorOption : EngravingTableColorOption.values()) {
+            eventBuilder.addEventBinding(CustomUIEventBindingType.Activating,
+                    "#NameColor" + colorOption.getAssetSuffix(),
+                    EventData.of("NameColor", colorOption.getId()));
+            eventBuilder.addEventBinding(CustomUIEventBindingType.Activating,
+                    "#GlowColor" + colorOption.getAssetSuffix(),
+                    EventData.of("GlowColor", colorOption.getId()));
         }
-
-        if (!ItemStack.isEmpty(secondary)) {
-            eventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#ClearSecondaryButton",
-                    EventData.of("ClearSecondary", "true"));
-        }
-
-        if (showName) {
-            eventBuilder.addEventBinding(CustomUIEventBindingType.ValueChanged, "#NameInput",
-                    EventData.of("NameInput", "").append("@NameInput", "#NameInput.Value"),
-                    false);
-
-            for (EngravingTableColorOption colorOption : EngravingTableColorOption.values()) {
-                eventBuilder.addEventBinding(CustomUIEventBindingType.Activating,
-                        "#NameColor" + colorOption.getAssetSuffix(),
-                        EventData.of("NameColor", colorOption.getId()));
-            }
-        }
-
-        if (showGlow) {
-            for (EngravingTableColorOption colorOption : EngravingTableColorOption.values()) {
-                eventBuilder.addEventBinding(CustomUIEventBindingType.Activating,
-                        "#GlowColor" + colorOption.getAssetSuffix(),
-                        EventData.of("GlowColor", colorOption.getId()));
-            }
-        }
-
-        Ref<EntityStore> ref = this.playerRef.getReference();
-        if (ref == null || !ref.isValid()) {
-            return;
-        }
-        Player player = ref.getStore().getComponent(ref, Player.getComponentType());
-        if (player == null) {
-            return;
-        }
-
-        this.bindInventorySlotEvents(eventBuilder, player);
     }
 
     private void updateColorButtons(@Nonnull UICommandBuilder commandBuilder, boolean nameButtons) {
@@ -474,18 +518,16 @@ public class EngravingTablePage extends InteractiveCustomUIPage<EngravingTablePa
             commandBuilder.set("#InventoryEmptyLabel.Visible", true);
             return;
         }
-        Player player = ref.getStore().getComponent(ref, Player.getComponentType());
-        if (player == null) {
-            commandBuilder.set("#InventoryEmptyLabel.Visible", true);
-            return;
-        }
+        Store<EntityStore> store = ref.getStore();
 
-        Inventory inventory = player.getInventory();
-        boolean hasHotbar = this.appendInventorySection(commandBuilder, inventory.getHotbar(),
+        boolean hasHotbar = this.appendInventorySection(commandBuilder,
+                InventoryAccess.getSectionById(store, ref, InventoryComponent.HOTBAR_SECTION_ID),
                 "#HotbarSection", "#HotbarSlots", "Hotbar", InventoryComponent.HOTBAR_SECTION_ID);
-        boolean hasStorage = this.appendInventorySection(commandBuilder, inventory.getStorage(),
+        boolean hasStorage = this.appendInventorySection(commandBuilder,
+                InventoryAccess.getSectionById(store, ref, InventoryComponent.STORAGE_SECTION_ID),
                 "#StorageSection", "#StorageSlots", "Storage", InventoryComponent.STORAGE_SECTION_ID);
-        boolean hasBackpack = this.appendInventorySection(commandBuilder, inventory.getBackpack(),
+        boolean hasBackpack = this.appendInventorySection(commandBuilder,
+                InventoryAccess.getSectionById(store, ref, InventoryComponent.BACKPACK_SECTION_ID),
                 "#BackpackSection", "#BackpackSlots", "Backpack", InventoryComponent.BACKPACK_SECTION_ID);
 
         commandBuilder.set("#InventoryEmptyLabel.Visible", !(hasHotbar || hasStorage || hasBackpack));
@@ -567,14 +609,22 @@ public class EngravingTablePage extends InteractiveCustomUIPage<EngravingTablePa
         return hasAnyItem;
     }
 
-    private void bindInventorySlotEvents(@Nonnull UIEventBuilder eventBuilder, @Nonnull Player player) {
-        Inventory inventory = player.getInventory();
-        this.bindInventorySectionEvents(eventBuilder, inventory.getHotbar(), "#HotbarSlots", "Hotbar",
-                InventoryComponent.HOTBAR_SECTION_ID);
-        this.bindInventorySectionEvents(eventBuilder, inventory.getStorage(), "#StorageSlots", "Storage",
-                InventoryComponent.STORAGE_SECTION_ID);
-        this.bindInventorySectionEvents(eventBuilder, inventory.getBackpack(), "#BackpackSlots", "Backpack",
-                InventoryComponent.BACKPACK_SECTION_ID);
+    /** Re-binds the slot buttons; must follow every {@link #updateInventoryGrid} since the grid is rebuilt. */
+    private void bindInventorySlotEvents(@Nonnull UIEventBuilder eventBuilder) {
+        Ref<EntityStore> ref = this.playerRef.getReference();
+        if (ref == null || !ref.isValid()) {
+            return;
+        }
+        Store<EntityStore> store = ref.getStore();
+        this.bindInventorySectionEvents(eventBuilder,
+                InventoryAccess.getSectionById(store, ref, InventoryComponent.HOTBAR_SECTION_ID),
+                "#HotbarSlots", "Hotbar", InventoryComponent.HOTBAR_SECTION_ID);
+        this.bindInventorySectionEvents(eventBuilder,
+                InventoryAccess.getSectionById(store, ref, InventoryComponent.STORAGE_SECTION_ID),
+                "#StorageSlots", "Storage", InventoryComponent.STORAGE_SECTION_ID);
+        this.bindInventorySectionEvents(eventBuilder,
+                InventoryAccess.getSectionById(store, ref, InventoryComponent.BACKPACK_SECTION_ID),
+                "#BackpackSlots", "Backpack", InventoryComponent.BACKPACK_SECTION_ID);
     }
 
     private void bindInventorySectionEvents(
@@ -768,7 +818,11 @@ public class EngravingTablePage extends InteractiveCustomUIPage<EngravingTablePa
         String defaultName = this.resolveBaseItemName(primary);
         String trimmedName = this.editableName.trim();
 
-        String finalCustomName = trimmedName.equals(defaultName) ? null : trimmedName;
+        // Compare before capping so an over-long *base* name never counts as a change
+        String finalCustomName = trimmedName.equals(defaultName) ? null : sanitizeName(trimmedName);
+        if (finalCustomName != null && finalCustomName.isEmpty()) {
+            finalCustomName = null;
+        }
         EngravingTableColorOption finalNameColor = this.selectedNameColor == EngravingTableColorOption.DEFAULT_NAME_COLOR
                 ? null
                 : this.selectedNameColor;
@@ -854,13 +908,8 @@ public class EngravingTablePage extends InteractiveCustomUIPage<EngravingTablePa
         if (ref == null || !ref.isValid()) {
             return false;
         }
-        Store<EntityStore> store = ref.getStore();
-        Player player = store.getComponent(ref, Player.getComponentType());
-        if (player == null) {
-            return false;
-        }
-        ItemContainer playerInventory = this.getPlayerInventoryContainer(player);
-        return playerInventory != null && playerInventory.canRemoveItemStacks(this.toCostItemStacks(costs), true, true);
+        ItemContainer playerInventory = this.getPlayerInventoryContainer(ref, ref.getStore());
+        return playerInventory.canRemoveItemStacks(this.toCostItemStacks(costs), true, true);
     }
 
     @Nullable
@@ -869,8 +918,7 @@ public class EngravingTablePage extends InteractiveCustomUIPage<EngravingTablePa
         if (ref == null || !ref.isValid()) {
             return null;
         }
-        Player player = ref.getStore().getComponent(ref, Player.getComponentType());
-        return player != null ? this.getPlayerInventoryContainer(player) : null;
+        return this.getPlayerInventoryContainer(ref, ref.getStore());
     }
 
     private int countMatchingItems(@Nullable ItemContainer inventory, @Nonnull ItemStack requiredItemStack) {
@@ -893,8 +941,8 @@ public class EngravingTablePage extends InteractiveCustomUIPage<EngravingTablePa
         }
 
         List<PendingCost> costs = this.buildRequiredCosts();
-        ItemContainer playerInventory = this.getPlayerInventoryContainer(player);
-        if (playerInventory == null || !this.canAfford(costs)) {
+        ItemContainer playerInventory = this.getPlayerInventoryContainer(ref, store);
+        if (!this.canAfford(costs)) {
             this.playerRef.sendMessage(Message.raw("You do not have the required materials."));
             this.sendDynamicUpdate();
             return;
@@ -917,7 +965,7 @@ public class EngravingTablePage extends InteractiveCustomUIPage<EngravingTablePa
             return;
         }
 
-        if (!this.consumePreviewInputs(player)) {
+        if (!this.consumePreviewInputs(ref, store)) {
             if (!costStacks.isEmpty()) {
                 SimpleItemContainer.addOrDropItemStacks(store, ref, playerInventory, costStacks);
             }
@@ -933,14 +981,14 @@ public class EngravingTablePage extends InteractiveCustomUIPage<EngravingTablePa
         player.getPageManager().setPage(ref, store, Page.None);
     }
 
-    private boolean consumePreviewInputs(@Nonnull Player player) {
-        InventorySource primary = this.resolveSelectedSource(player, this.selectedPrimaryKey);
+    private boolean consumePreviewInputs(@Nonnull Ref<EntityStore> ref, @Nonnull ComponentAccessor<EntityStore> accessor) {
+        InventorySource primary = this.resolveSelectedSource(ref, accessor, this.selectedPrimaryKey);
         if (primary == null || ItemStack.isEmpty(primary.itemStack())) {
             return false;
         }
 
         if (this.isMergeMode()) {
-            InventorySource secondary = this.resolveSelectedSource(player, this.selectedSecondaryKey);
+            InventorySource secondary = this.resolveSelectedSource(ref, accessor, this.selectedSecondaryKey);
             if (secondary == null || ItemStack.isEmpty(secondary.itemStack())) {
                 return false;
             }
@@ -981,13 +1029,11 @@ public class EngravingTablePage extends InteractiveCustomUIPage<EngravingTablePa
         return itemStacks;
     }
 
-    @Nullable
-    private ItemContainer getPlayerInventoryContainer(@Nonnull Player player) {
-        ItemContainer combined = player.getInventory().getCombinedBackpackStorageHotbarFirst();
-        if (combined != null) {
-            return combined;
-        }
-        return player.getInventory().getCombinedHotbarFirst();
+    /** Hotbar, storage and backpack combined (legacy getCombinedBackpackStorageHotbarFirst). */
+    @Nonnull
+    private ItemContainer getPlayerInventoryContainer(@Nonnull Ref<EntityStore> ref,
+            @Nonnull ComponentAccessor<EntityStore> accessor) {
+        return InventoryAccess.getCombinedHotbarStorageBackpack(accessor, ref);
     }
 
     @Nonnull
@@ -1072,7 +1118,8 @@ public class EngravingTablePage extends InteractiveCustomUIPage<EngravingTablePa
 
     @Nullable
     private String resolveAssetLanguageName(@Nullable String language, @Nonnull String itemNameKey) {
-        if (language == null || language.isBlank()) {
+        // The code is client/user supplied and ends up in a file path: whitelist it.
+        if (language == null || language.isBlank() || !SUPPORTED_ASSET_LANGUAGES.contains(language)) {
             return null;
         }
         Map<String, String> messages = ASSET_LANGUAGE_CACHE.computeIfAbsent(language,
@@ -1263,12 +1310,7 @@ public class EngravingTablePage extends InteractiveCustomUIPage<EngravingTablePa
             @Nonnull Ref<EntityStore> ref,
             @Nonnull Store<EntityStore> store,
             @Nonnull String selectionKey) {
-        Player player = store.getComponent(ref, Player.getComponentType());
-        if (player == null) {
-            return;
-        }
-
-        InventorySource selection = this.resolveSelectedSource(player, selectionKey);
+        InventorySource selection = this.resolveSelectedSource(ref, store, selectionKey);
         if (selection == null) {
             this.playerRef.sendMessage(Message.raw("That item is no longer in your inventory."));
             this.syncEditorState(true);
@@ -1314,20 +1356,17 @@ public class EngravingTablePage extends InteractiveCustomUIPage<EngravingTablePa
         if (selectionKey == null || ref == null || !ref.isValid()) {
             return null;
         }
-        Player player = ref.getStore().getComponent(ref, Player.getComponentType());
-        if (player == null) {
-            return null;
-        }
-        InventorySource source = this.resolveSelectedSource(player, selectionKey);
+        InventorySource source = this.resolveSelectedSource(ref, ref.getStore(), selectionKey);
         return source != null ? source.itemStack() : null;
     }
 
     @Nullable
-    private InventorySource resolveSelectedSource(@Nonnull Player player, @Nullable String selectionKey) {
+    private InventorySource resolveSelectedSource(@Nonnull Ref<EntityStore> ref,
+            @Nonnull ComponentAccessor<EntityStore> accessor, @Nullable String selectionKey) {
         if (selectionKey == null || selectionKey.isBlank()) {
             return null;
         }
-        for (InventorySource source : this.getInventorySources(player)) {
+        for (InventorySource source : this.getInventorySources(ref, accessor)) {
             if (selectionKey.equals(source.key())) {
                 return source;
             }
@@ -1336,13 +1375,18 @@ public class EngravingTablePage extends InteractiveCustomUIPage<EngravingTablePa
     }
 
     @Nonnull
-    private List<InventorySource> getInventorySources(@Nonnull Player player) {
+    private List<InventorySource> getInventorySources(@Nonnull Ref<EntityStore> ref,
+            @Nonnull ComponentAccessor<EntityStore> accessor) {
         List<InventorySource> sources = new ArrayList<>();
-        Inventory inventory = player.getInventory();
-        this.appendInventorySources(sources, inventory.getHotbar(), "Hotbar", InventoryComponent.HOTBAR_SECTION_ID);
-        this.appendInventorySources(sources, inventory.getStorage(), "Storage", InventoryComponent.STORAGE_SECTION_ID);
-        this.appendInventorySources(sources, inventory.getBackpack(), "Backpack",
-                InventoryComponent.BACKPACK_SECTION_ID);
+        this.appendInventorySources(sources,
+                InventoryAccess.getSectionById(accessor, ref, InventoryComponent.HOTBAR_SECTION_ID),
+                "Hotbar", InventoryComponent.HOTBAR_SECTION_ID);
+        this.appendInventorySources(sources,
+                InventoryAccess.getSectionById(accessor, ref, InventoryComponent.STORAGE_SECTION_ID),
+                "Storage", InventoryComponent.STORAGE_SECTION_ID);
+        this.appendInventorySources(sources,
+                InventoryAccess.getSectionById(accessor, ref, InventoryComponent.BACKPACK_SECTION_ID),
+                "Backpack", InventoryComponent.BACKPACK_SECTION_ID);
         return sources;
     }
 

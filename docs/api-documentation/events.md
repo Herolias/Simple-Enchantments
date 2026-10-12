@@ -11,7 +11,7 @@ Simple Enchantments exposes events for mods that want to observe enchanting acti
 
 | Event | Fired when | Important getters |
 |---|---|---|
-| `ItemEnchantedEvent` | An item is successfully enchanted. | `getPlayerRef()`, `getItem()`, `getEnchantment()`, `getLevel()` |
+| `ItemEnchantedEvent` | An item is successfully enchanted and written into an inventory (scroll UI, Engraving Table, `/enchant`, `/giveenchanted`). Calls through `EnchantmentApi.addEnchantment()` fire it immediately with a `null` player, because the API has no inventory commit step. Rolled-back enchantments never fire it. | `getPlayerRef()`, `getItem()`, `getEnchantment()`, `getLevel()` |
 | `EnchantmentActivatedEvent` | An enchantment effect successfully activates. | `getPlayerRef()`, `getItem()`, `getEnchantment()`, `getLevel()` |
 
 `getPlayerRef()` can be `null`. For example, an item may be enchanted through an API call without player context, or an activation may come from a non-player context.

@@ -12,6 +12,6 @@ After successfully applying an enchantment from a scroll to an item, the scroll 
 
 You can also [combine](https://wiki.hytalemodding.dev/mod/simple-enchantments/combining-scrolls) scrolls at the [Engraving Table](https://wiki.hytalemodding.dev/mod/simple-enchantments/engraving-table) for better inventory management.
 
-In creative mode, scrolls are grouped in a new scroll tab.
+In creative mode, scrolls have their own **Scrolls** sub-tab inside the vanilla **Items** tab.
 
 [Image]

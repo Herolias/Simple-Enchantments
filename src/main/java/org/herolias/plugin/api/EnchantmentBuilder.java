@@ -1,5 +1,7 @@
 package org.herolias.plugin.api;
 
+import com.hypixel.hytale.logger.HytaleLogger;
+import com.hypixel.hytale.server.core.asset.type.item.config.Item;
 import org.herolias.plugin.enchantment.EnchantmentType;
 import org.herolias.plugin.enchantment.EnchantmentRegistry;
 import org.herolias.plugin.enchantment.ItemCategory;
@@ -33,6 +35,8 @@ import java.util.Set;
  * {@link EnchantmentApi#registerEnchantment(String, String)}).
  */
 public class EnchantmentBuilder {
+
+    private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
 
     private final String id;
     private final String displayName;
@@ -317,22 +321,6 @@ public class EnchantmentBuilder {
     }
 
     /**
-     * Builds and registers the enchantment.
-     * <p>
-     * After calling this method, the enchantment is:
-     * <ul>
-     * <li>Registered in the global {@link EnchantmentRegistry}</li>
-     * <li>Available via {@code /enchant} command</li>
-     * <li>Visible in the config UI with enable/disable toggle</li>
-     * <li>Configurable multiplier slider (if {@code multiplierPerLevel > 0})</li>
-     * <li>Scroll items auto-generated</li>
-     * </ul>
-     *
-     * @return The registered {@link EnchantmentType} instance
-     * @throws IllegalStateException if no categories were specified
-     * @throws IllegalStateException if an enchantment with this ID already exists
-     */
-    /**
      * Gets the scroll definitions configured via {@link #scroll(int)}.
      */
     @Nonnull
@@ -348,12 +336,33 @@ public class EnchantmentBuilder {
         return craftingCategory;
     }
 
+    /**
+     * Builds and registers the enchantment.
+     * <p>
+     * After calling this method, the enchantment is:
+     * <ul>
+     * <li>Registered in the global {@link EnchantmentRegistry}</li>
+     * <li>Available via {@code /enchant} command</li>
+     * <li>Visible in the config UI with enable/disable toggle</li>
+     * <li>Configurable multiplier slider (if {@code multiplierPerLevel > 0})</li>
+     * <li>Scroll items auto-generated</li>
+     * </ul>
+     *
+     * @return The registered {@link EnchantmentType} instance
+     * @throws IllegalStateException    if no categories were specified
+     * @throws IllegalArgumentException if a scroll definition's level exceeds
+     *                                  {@link #maxLevel(int)}, or if the
+     *                                  enchantment ID or display name is already
+     *                                  registered (see
+     *                                  {@link EnchantmentRegistry#register})
+     */
     @Nonnull
     public EnchantmentType build() {
         if (categories.isEmpty()) {
             throw new IllegalStateException(
                     "At least one item category is required. Call appliesTo() before build().");
         }
+        validateScrollDefinitions();
 
         // Extract namespace as the owner mod ID
         String ownerModId = id.substring(0, id.indexOf(':'));
@@ -446,6 +455,49 @@ public class EnchantmentBuilder {
         }
 
         return type;
+    }
+
+    /**
+     * Scroll levels must not exceed the enchantment's max level (checked here
+     * because {@link #maxLevel(int)} may be called after {@link #scroll(int)}).
+     * Ingredient item ids that are unknown at this point only produce a warning:
+     * items from other packs may still be loaded later.
+     */
+    private void validateScrollDefinitions() {
+        java.util.Set<Integer> seenLevels = new java.util.HashSet<>();
+        for (ScrollDefinition def : scrollDefinitions) {
+            if (def.getLevel() > maxLevel) {
+                throw new IllegalArgumentException("Scroll level " + def.getLevel() + " of enchantment '" + id
+                        + "' exceeds maxLevel " + maxLevel);
+            }
+            if (!seenLevels.add(def.getLevel())) {
+                LOGGER.atWarning().log("Enchantment '%s' defines scroll level %d more than once; the last definition wins",
+                        id, def.getLevel());
+            }
+            for (ScrollDefinition.Ingredient ingredient : def.getRecipe()) {
+                if (!isKnownItemId(ingredient.getItemId())) {
+                    LOGGER.atWarning().log(
+                            "Enchantment '%s' scroll level %d uses unknown ingredient item '%s'; the recipe will be invalid unless another pack provides it",
+                            id, def.getLevel(), ingredient.getItemId());
+                }
+            }
+        }
+    }
+
+    /**
+     * @return true when the item exists, or when the Item asset store is not
+     *         loaded yet (so we cannot tell)
+     */
+    private static boolean isKnownItemId(String itemId) {
+        try {
+            var assetMap = Item.getAssetMap();
+            if (assetMap == null || assetMap.getAssetMap().isEmpty()) {
+                return true;
+            }
+            return assetMap.getAsset(itemId) != null;
+        } catch (Exception e) {
+            return true;
+        }
     }
 
     /**

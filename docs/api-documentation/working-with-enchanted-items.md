@@ -35,7 +35,9 @@ try {
 }
 ```
 
-`addEnchantment()` throws `IllegalArgumentException` when the enchantment ID is not registered. If the enchantment is known but cannot be applied because of normal Simple Enchantments rules, such as conflicts or max enchantment limits, the original item is returned.
+`addEnchantment()` throws `IllegalArgumentException` when the enchantment ID is not registered or the level is below 1. Levels above the enchantment's max level are clamped to the max level; use `addEnchantmentUnsafe()` if you deliberately want over-levelled items. If the enchantment is known but cannot be applied because of normal Simple Enchantments rules, such as conflicts or max enchantment limits, the original item is returned.
+
+On success an `ItemEnchantedEvent` is fired immediately (with a `null` player), because the API cannot know when you write the returned stack back into an inventory.
 
 ## Remove An Enchantment
 

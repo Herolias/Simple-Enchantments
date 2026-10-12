@@ -108,13 +108,9 @@ items.Scroll_Life_Leech_I.name = Pergamena del Risucchio Vitale
 
 items.Scroll_Life_Leech_I.description = Cura l'attaccante del 10% del danno inflitto.
 
-items.Scroll_Life_Leech_II.name = Pergamena del Risucchio Vitale II
 
-items.Scroll_Life_Leech_II.description = Cura l'attaccante del 20% del danno inflitto.
 
-items.Scroll_Life_Leech_III.name = Pergamena del Risucchio Vitale III
 
-items.Scroll_Life_Leech_III.description = Cura l'attaccante del 30% del danno inflitto.
 
 
 
@@ -632,7 +628,6 @@ customUI.walkthrough.enchantments.desc = Una lista completa degli incantesimi e 
 
 config.general.allow_same_scroll_upgrades = Permetti Miglioramenti con Pergamene Uguali (I+I = II)
 
-ui.itemcategory.simpleEnchantments = Incantesimi Semplici
 ui.itemcategory.simpleEnchantments.scrolls = Pergamene
 
 customUI.walkthrough.enabledOnServer = Abilitato su questo server: 

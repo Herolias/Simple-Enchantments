@@ -112,13 +112,9 @@ items.Scroll_Life_Leech_I.name = Parchemin de Vol de Vie
 
 items.Scroll_Life_Leech_I.description = Soigne l'attaquant pour 10% des dégâts infligés.
 
-items.Scroll_Life_Leech_II.name = Parchemin de Vol de Vie II
 
-items.Scroll_Life_Leech_II.description = Soigne l'attaquant pour 20% des dégâts infligés.
 
-items.Scroll_Life_Leech_III.name = Parchemin de Vol de Vie III
 
-items.Scroll_Life_Leech_III.description = Soigne l'attaquant pour 30% des dégâts infligés.
 
 
 
@@ -636,7 +632,6 @@ customUI.walkthrough.enchantments.desc = Une liste complète des enchantements e
 
 config.general.allow_same_scroll_upgrades = Autoriser les Améliorations de Parchemin Identique (I+I = II)
 
-ui.itemcategory.simpleEnchantments = Enchantements Simples
 ui.itemcategory.simpleEnchantments.scrolls = Parchemins
 
 customUI.walkthrough.enabledOnServer = Activé sur ce serveur : 

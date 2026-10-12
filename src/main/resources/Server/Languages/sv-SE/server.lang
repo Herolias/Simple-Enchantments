@@ -112,13 +112,9 @@ items.Scroll_Life_Leech_I.name = Livssugningsrulle
 
 items.Scroll_Life_Leech_I.description = Läker anfallaren för 10% av utdelad skada.
 
-items.Scroll_Life_Leech_II.name = Livssugningsrulle II
 
-items.Scroll_Life_Leech_II.description = Läker anfallaren för 20% av utdelad skada.
 
-items.Scroll_Life_Leech_III.name = Livssugningsrulle III
 
-items.Scroll_Life_Leech_III.description = Läker anfallaren för 30% av utdelad skada.
 
 
 
@@ -637,7 +633,6 @@ customUI.walkthrough.enchantments.desc = En komplett lista över förtrollningar
 
 config.general.allow_same_scroll_upgrades = Tillåt Uppgraderingar med Samma Rulle (I+I = II)
 
-ui.itemcategory.simpleEnchantments = Enkla Förtrollningar
 ui.itemcategory.simpleEnchantments.scrolls = Rullar
 
 customUI.walkthrough.enabledOnServer = Aktiverad på denna server: 

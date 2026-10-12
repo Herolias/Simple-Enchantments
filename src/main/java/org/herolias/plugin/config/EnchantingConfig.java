@@ -57,10 +57,9 @@ public class EnchantingConfig {
         public Double thriftRestoreAmountPerLevel;
         public Double elementalHeartSaveChancePerLevel;
 
-        // ===== Effect Duration Settings =====
-        public double burnDuration = 3.0; // In seconds
-        public double freezeDuration = 5.0; // In seconds
-        public double poisonDuration = 4.0; // In seconds
+        // Effect durations live in enchantmentMultipliers under "burn:duration",
+        // "freeze:duration" and "poison:duration" (seconds). The former dedicated
+        // fields are migrated into the map on load (see SmartConfigManager).
 
         // ===== Pick Perfect Settings =====
         public Set<String> pickPerfectBlacklist = new HashSet<>(); // Item ID-s, allowing wildcards
@@ -188,9 +187,9 @@ public class EnchantingConfig {
                                 enchantmentMultipliers.put("looting:quantity", lootingQuantityMultiplierPerLevel);
                         }
                         enchantmentMultipliers.putIfAbsent("looting:quantity", 0.25);
-                        enchantmentMultipliers.putIfAbsent("burn:duration", burnDuration);
-                        enchantmentMultipliers.putIfAbsent("freeze:duration", freezeDuration);
-                        enchantmentMultipliers.putIfAbsent("poison:duration", poisonDuration);
+                        enchantmentMultipliers.putIfAbsent("burn:duration", 3.0);
+                        enchantmentMultipliers.putIfAbsent("freeze:duration", 5.0);
+                        enchantmentMultipliers.putIfAbsent("poison:duration", 4.0);
 
                         // Null out legacy fields after migration
                         clearLegacyFields();

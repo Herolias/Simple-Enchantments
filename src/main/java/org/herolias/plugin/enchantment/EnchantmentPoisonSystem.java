@@ -9,12 +9,14 @@ import com.hypixel.hytale.component.dependency.Order;
 import com.hypixel.hytale.component.dependency.SystemDependency;
 import com.hypixel.hytale.component.query.Query;
 import com.hypixel.hytale.logger.HytaleLogger;
-import com.hypixel.hytale.server.core.entity.Entity;
-import com.hypixel.hytale.server.core.entity.EntityUtils;
+import com.hypixel.hytale.server.core.entity.UUIDComponent;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
 import com.hypixel.hytale.server.core.modules.entity.damage.Damage;
+import com.hypixel.hytale.server.core.modules.entity.damage.DamageCause;
 import com.hypixel.hytale.server.core.modules.entity.damage.DamageEventSystem;
 import com.hypixel.hytale.server.core.modules.entity.damage.DamageSystems;
+import com.hypixel.hytale.server.core.modules.entitystats.EntityStatMap;
+import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 
 import javax.annotation.Nonnull;
@@ -31,10 +33,19 @@ public class EnchantmentPoisonSystem extends DamageEventSystem {
     private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
     private static final String POISON_EFFECT_ID = "PoisonEnchantment";
 
+    /** Only entities with stats can be damaged (same scope as {@code DamageSystems.ApplyDamage}). */
+    private static final Query<EntityStore> QUERY = Query.and(EntityStatMap.getComponentType());
+
     private final EnchantmentManager enchantmentManager;
 
     private final Set<Dependency<EntityStore>> dependencies = Set.of(
             new SystemDependency(Order.AFTER, DamageSystems.ApplyDamage.class));
+
+    /**
+     * Asset index of the {@code Poison} damage cause, i.e. the poison DoT's own
+     * ticks. Resolved lazily; {@link Integer#MIN_VALUE} while unknown.
+     */
+    private volatile int poisonCauseIndex = Integer.MIN_VALUE;
 
     public EnchantmentPoisonSystem(EnchantmentManager enchantmentManager) {
         this.enchantmentManager = enchantmentManager;
@@ -50,7 +61,7 @@ public class EnchantmentPoisonSystem extends DamageEventSystem {
     @Override
     @Nonnull
     public Query<EntityStore> getQuery() {
-        return com.hypixel.hytale.component.Archetype.empty();
+        return QUERY;
     }
 
     @Override
@@ -63,7 +74,9 @@ public class EnchantmentPoisonSystem extends DamageEventSystem {
         if (damage.getAmount() <= 0 || damage.isCancelled())
             return;
 
-        if (damage.getCause() != null && "Poison".equalsIgnoreCase(damage.getCause().getId()))
+        // The poison DoT itself deals "Poison" damage; never re-apply poison from its own ticks.
+        int poisonIndex = poisonCauseIndex();
+        if (poisonIndex != Integer.MIN_VALUE && damage.getDamageCauseIndex() == poisonIndex)
             return;
 
         Boolean isReflection = damage.getIfPresentMetaObject(EnchantmentReflectionSystem.IS_REFLECTION);
@@ -85,22 +98,17 @@ public class EnchantmentPoisonSystem extends DamageEventSystem {
             }
         }
 
-        // 2. Check attacker's weapon
-        if (poisonLevel <= 0 && ctx.hasAttacker()) {
-            Entity attackerEntity = EntityUtils.getEntity(ctx.attackerRef(), commandBuffer);
-            ItemStack weapon = enchantmentManager.getWeaponFromEntity(attackerEntity);
-
-            if (weapon != null) {
-                poisonLevel = enchantmentManager.getEnchantmentLevel(weapon, EnchantmentType.POISON);
+        // 2. Check attacker's weapon - a single metadata read for both levels
+        ItemStack weapon = ctx.hasAttacker()
+                ? enchantmentManager.getWeaponFromEntity(ctx.attackerRef(), commandBuffer)
+                : null;
+        if (weapon != null) {
+            int[] levels = enchantmentManager.getEnchantmentLevels(weapon, EnchantmentType.POISON,
+                    EnchantmentType.LOOTING);
+            if (poisonLevel <= 0) {
+                poisonLevel = levels[0];
             }
-        }
-
-        if (ctx.hasAttacker()) {
-            Entity attackerEntity = EntityUtils.getEntity(ctx.attackerRef(), commandBuffer);
-            ItemStack weapon = enchantmentManager.getWeaponFromEntity(attackerEntity);
-            if (weapon != null) {
-                lootingLevel = Math.max(lootingLevel, enchantmentManager.getEnchantmentLevel(weapon, EnchantmentType.LOOTING));
-            }
+            lootingLevel = Math.max(lootingLevel, levels[1]);
         }
 
         if (poisonLevel <= 0)
@@ -110,27 +118,31 @@ public class EnchantmentPoisonSystem extends DamageEventSystem {
         if (targetRef == null || !targetRef.isValid())
             return;
 
-        if (!enchantmentManager.applyStatusEffect(targetRef, POISON_EFFECT_ID, store, commandBuffer)) {
-            LOGGER.atWarning().log("Poison effect not found in asset map");
+        // applyStatusEffect already logs when the asset is missing.
+        if (!enchantmentManager.applyStatusEffect(targetRef, POISON_EFFECT_ID, store, commandBuffer))
             return;
+
+        if (weapon != null) {
+            PlayerRef playerRef = store.getComponent(ctx.attackerRef(), PlayerRef.getComponentType());
+            EnchantmentEventHelper.fireActivated(playerRef, weapon, EnchantmentType.POISON, poisonLevel);
         }
 
-        if (ctx.hasAttacker()) {
-            Entity shooterEntity = EntityUtils.getEntity(ctx.attackerRef(), commandBuffer);
-            ItemStack weapon = enchantmentManager.getWeaponFromEntity(shooterEntity);
-            if (weapon != null) {
-                com.hypixel.hytale.server.core.universe.PlayerRef playerRef = store.getComponent(ctx.attackerRef(),
-                        com.hypixel.hytale.server.core.universe.PlayerRef.getComponentType());
-                EnchantmentEventHelper.fireActivated(playerRef, weapon, EnchantmentType.POISON, poisonLevel);
+        // Remember the looting level on the victim so a death caused by the DoT
+        // can still be attributed. Only written when there is something to keep.
+        if (lootingLevel > 0) {
+            UUIDComponent targetUuid = commandBuffer.getComponent(targetRef, UUIDComponent.getComponentType());
+            if (targetUuid != null) {
+                enchantmentManager.updateDoTEnchantments(targetUuid.getUuid(), 0, lootingLevel);
             }
         }
+    }
 
-        // Store enchantment data on the victim so we can attribute drops if they die
-        // from poison
-        com.hypixel.hytale.server.core.entity.UUIDComponent targetUuid = commandBuffer.getComponent(targetRef,
-                com.hypixel.hytale.server.core.entity.UUIDComponent.getComponentType());
-        if (targetUuid != null) {
-            enchantmentManager.updateDoTEnchantments(targetUuid.getUuid(), 0, lootingLevel);
+    private int poisonCauseIndex() {
+        int idx = poisonCauseIndex;
+        if (idx == Integer.MIN_VALUE) {
+            idx = DamageCause.getAssetMap().getIndexOrDefault("Poison", Integer.MIN_VALUE);
+            poisonCauseIndex = idx;
         }
+        return idx;
     }
 }

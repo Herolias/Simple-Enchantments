@@ -1,17 +1,20 @@
 package org.herolias.plugin.api;
 
 import com.hypixel.hytale.logger.HytaleLogger;
+import com.hypixel.hytale.component.Ref;
+import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.server.core.entity.entities.Player;
-import com.hypixel.hytale.server.core.inventory.Inventory;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
 import com.hypixel.hytale.server.core.inventory.container.ItemContainer;
-import org.herolias.plugin.SimpleEnchanting;
+import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
+import org.herolias.plugin.enchantment.EnchantmentApplicationResult;
 import org.herolias.plugin.enchantment.EnchantmentData;
 import org.herolias.plugin.enchantment.EnchantmentManager;
 import org.herolias.plugin.enchantment.EnchantmentType;
 import org.herolias.plugin.enchantment.ItemCategory;
 import org.herolias.plugin.enchantment.ItemCategoryManager;
 import org.herolias.plugin.enchantment.NativeTooltipManager;
+import org.herolias.plugin.util.InventoryAccess;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -30,26 +33,45 @@ public class EnchantmentApiImpl implements EnchantmentApi {
     @Override
     @Nonnull
     public ItemStack addEnchantment(@Nonnull ItemStack item, @Nonnull String enchantmentId, int level) {
-        if (item == null || item.isEmpty()) {
-            return item;
-        }
+        return addEnchantment(item, enchantmentId, level, false);
+    }
 
+    @Override
+    @Nonnull
+    public ItemStack addEnchantmentUnsafe(@Nonnull ItemStack item, @Nonnull String enchantmentId, int level) {
+        return addEnchantment(item, enchantmentId, level, true);
+    }
+
+    @Nonnull
+    private ItemStack addEnchantment(@Nonnull ItemStack item, @Nonnull String enchantmentId, int level,
+            boolean unsafe) {
+        if (enchantmentId == null) {
+            throw new IllegalArgumentException("Enchantment ID must not be null");
+        }
         EnchantmentType type = EnchantmentType.fromId(enchantmentId);
         if (type == null) {
             throw new IllegalArgumentException("Unknown enchantment ID: '" + enchantmentId + "'");
         }
+        if (level < 1) {
+            throw new IllegalArgumentException(
+                    "Enchantment level must be at least 1 (got " + level + " for '" + enchantmentId + "')");
+        }
+        if (item == null || item.isEmpty()) {
+            return item;
+        }
 
-        // Delegate to manager's logic (handles checks, application, metadata update)
-        // Note: manager.applyEnchantmentToItem returns a Result object with the new
-        // ItemStack
-        var result = manager.applyEnchantmentToItem(null, item, type, level, true);
-
-        if (result.success()) {
-            return result.item();
-        } else {
+        // Delegate to the manager (handles category/conflict/limit checks, metadata and
+        // tooltips). Safe mode clamps to the enchantment's max level.
+        EnchantmentApplicationResult result = manager.applyEnchantmentToItem(null, item, type, level, unsafe);
+        if (!result.success()) {
             // If failed (e.g. conflicts, max limit), return original item
             return item;
         }
+
+        // The API has no inventory commit step, so listeners are notified right away
+        // (documented on EnchantmentApi#addEnchantment).
+        manager.fireItemEnchanted(null, result);
+        return result.item();
     }
 
     @Override
@@ -186,7 +208,7 @@ public class EnchantmentApiImpl implements EnchantmentApi {
     public void registerCraftingCategory(@Nonnull String categoryId, @Nonnull String displayName,
             @javax.annotation.Nullable String iconPath) {
         CraftingCategoryDefinition.register(categoryId, displayName, iconPath);
-        LOGGER.atInfo().log("Registered crafting category: " + categoryId + " (" + displayName + ")");
+        LOGGER.atInfo().log("Registered crafting category: %s (%s)", categoryId, displayName);
     }
 
     @Override
@@ -196,18 +218,19 @@ public class EnchantmentApiImpl implements EnchantmentApi {
         if (player == null)
             return result;
 
-        Inventory inventory = player.getInventory();
-        if (inventory == null)
+        Ref<EntityStore> ref = InventoryAccess.refOf(player);
+        if (ref == null)
             return result;
+        Store<EntityStore> store = ref.getStore();
 
         // Main-hand
-        collectEnchantments(inventory.getItemInHand(), result);
+        collectEnchantments(InventoryAccess.getItemInHand(store, ref), result);
 
         // Utility / off-hand
-        collectEnchantments(inventory.getUtilityItem(), result);
+        collectEnchantments(InventoryAccess.getUtilityItem(store, ref), result);
 
         // Armor slots (helmet=0, chestplate=1, gloves=2, legs=3)
-        ItemContainer armorContainer = inventory.getArmor();
+        ItemContainer armorContainer = InventoryAccess.getArmor(store, ref);
         if (armorContainer != null) {
             for (short slot = 0; slot < armorContainer.getCapacity(); slot++) {
                 collectEnchantments(armorContainer.getItemStack(slot), result);

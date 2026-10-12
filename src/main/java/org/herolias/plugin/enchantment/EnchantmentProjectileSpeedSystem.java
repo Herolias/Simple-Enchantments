@@ -3,23 +3,24 @@ package org.herolias.plugin.enchantment;
 import com.hypixel.hytale.component.AddReason;
 import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.Ref;
+import com.hypixel.hytale.component.RemoveReason;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.component.query.Query;
+import com.hypixel.hytale.component.system.RefSystem;
 import com.hypixel.hytale.logger.HytaleLogger;
-import com.hypixel.hytale.server.core.entity.Entity;
-import com.hypixel.hytale.server.core.entity.EntityUtils;
+import com.hypixel.hytale.server.core.entity.ItemUtils;
 import com.hypixel.hytale.server.core.entity.UUIDComponent;
 import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hypixel.hytale.server.core.entity.entities.ProjectileComponent;
-import com.hypixel.hytale.server.core.inventory.Inventory;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
-import com.hypixel.hytale.server.core.inventory.container.SimpleItemContainer;
+import com.hypixel.hytale.server.core.inventory.container.CombinedItemContainer;
+import com.hypixel.hytale.server.core.inventory.transaction.ItemStackTransaction;
 import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
 import com.hypixel.hytale.server.core.modules.entity.tracker.NetworkId;
 import com.hypixel.hytale.server.core.modules.projectile.config.StandardPhysicsProvider;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
-import com.hypixel.hytale.component.system.RefSystem;
+import org.herolias.plugin.util.InventoryAccess;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -27,11 +28,12 @@ import java.util.UUID;
 
 /**
  * Captures enchantment levels from ranged weapons when a projectile is spawned.
- * 
- * When a projectile is added to the ECS, this system reads the shooter's weapon
- * enchantments and stores them on the projectile (by UUID and NetworkId) so
- * that
- * damage/effect systems can apply them on hit.
+ * <p>
+ * When a projectile is spawned into the ECS, this system reads the shooter's
+ * weapon enchantments once and stores them on the projectile (by UUID and
+ * NetworkId) so that damage/effect systems can apply them on hit. Projectiles
+ * that are merely loaded with a chunk are ignored: their shooter is long gone
+ * and their enchantments, if any, are already recorded.
  */
 public class EnchantmentProjectileSpeedSystem extends RefSystem<EntityStore> {
 
@@ -40,10 +42,16 @@ public class EnchantmentProjectileSpeedSystem extends RefSystem<EntityStore> {
             TransformComponent.getComponentType(),
             Query.or(ProjectileComponent.getComponentType(), StandardPhysicsProvider.getComponentType()));
 
-    private final EnchantmentManager enchantmentManager;
-    private @Nullable EnchantmentEternalShotSystem eternalShotSystem;
+    /** Order matters: indexes into the array returned by getEnchantmentLevels. */
+    private static final EnchantmentType[] PROJECTILE_ENCHANTMENTS = {
+            EnchantmentType.STRENGTH, EnchantmentType.EAGLES_EYE, EnchantmentType.LOOTING,
+            EnchantmentType.FREEZE, EnchantmentType.BURN, EnchantmentType.POISON, EnchantmentType.ETERNAL_SHOT };
 
-    public EnchantmentProjectileSpeedSystem(EnchantmentManager enchantmentManager) {
+    private final EnchantmentManager enchantmentManager;
+    @Nullable
+    private EnchantmentEternalShotSystem eternalShotSystem;
+
+    public EnchantmentProjectileSpeedSystem(@Nonnull EnchantmentManager enchantmentManager) {
         this.enchantmentManager = enchantmentManager;
         LOGGER.atInfo().log("EnchantmentProjectileSpeedSystem initialized");
     }
@@ -63,6 +71,9 @@ public class EnchantmentProjectileSpeedSystem extends RefSystem<EntityStore> {
             @Nonnull AddReason reason,
             @Nonnull Store<EntityStore> store,
             @Nonnull CommandBuffer<EntityStore> commandBuffer) {
+        if (reason != AddReason.SPAWN) {
+            return;
+        }
         if (!enchantmentManager.isProjectileEntity(ref, commandBuffer)) {
             return;
         }
@@ -72,23 +83,28 @@ public class EnchantmentProjectileSpeedSystem extends RefSystem<EntityStore> {
             return;
         }
 
-        Entity shooterEntity = EntityUtils.getEntity(shooterRef, commandBuffer);
-        ItemStack weapon = enchantmentManager.getWeaponFromEntity(shooterEntity);
+        ItemStack weapon = enchantmentManager.getWeaponFromEntity(shooterRef, commandBuffer);
         if (weapon == null || weapon.isEmpty()) {
             return;
         }
 
-        int strengthLevel = enchantmentManager.getEnchantmentLevel(weapon, EnchantmentType.STRENGTH);
-        int eaglesEyeLevel = enchantmentManager.getEnchantmentLevel(weapon, EnchantmentType.EAGLES_EYE);
-        int lootingLevel = enchantmentManager.getEnchantmentLevel(weapon, EnchantmentType.LOOTING);
-        int freezeLevel = enchantmentManager.getEnchantmentLevel(weapon, EnchantmentType.FREEZE);
-        int burnLevel = enchantmentManager.getEnchantmentLevel(weapon, EnchantmentType.BURN);
-        int poisonLevel = enchantmentManager.getEnchantmentLevel(weapon, EnchantmentType.POISON);
-        int eternalShotLevel = enchantmentManager.getEnchantmentLevel(weapon, EnchantmentType.ETERNAL_SHOT);
+        int[] levels = enchantmentManager.getEnchantmentLevels(weapon, PROJECTILE_ENCHANTMENTS);
+        int strengthLevel = levels[0];
+        int eaglesEyeLevel = levels[1];
+        int lootingLevel = levels[2];
+        int freezeLevel = levels[3];
+        int burnLevel = levels[4];
+        int poisonLevel = levels[5];
+        int eternalShotLevel = levels[6];
 
-        if (strengthLevel <= 0 && eaglesEyeLevel <= 0 && lootingLevel <= 0 && freezeLevel <= 0 && burnLevel <= 0
-                && poisonLevel <= 0
-                && eternalShotLevel <= 0) {
+        boolean anyLevel = false;
+        for (int level : levels) {
+            if (level > 0) {
+                anyLevel = true;
+                break;
+            }
+        }
+        if (!anyLevel) {
             return;
         }
 
@@ -104,43 +120,47 @@ public class EnchantmentProjectileSpeedSystem extends RefSystem<EntityStore> {
         }
 
         if (eternalShotLevel > 0) {
-            refundEternalShotAmmo(shooterRef, shooterEntity, weapon, eternalShotLevel, commandBuffer);
+            refundEternalShotAmmo(shooterRef, weapon, eternalShotLevel, commandBuffer);
         }
     }
 
     /**
-     * Refunds 1 ammo to the shooter's inventory when an Eternal Shot projectile
-     * is spawned. Uses the tracked consumed ammo from {@link EnchantmentEternalShotSystem},
-     * falling back to searching the inventory for any ammo item.
+     * Gives one unit of the ammunition tracked by
+     * {@link EnchantmentEternalShotSystem} back to the shooter. The unit is
+     * announced to the tracker first so the resulting inventory addition is not
+     * taken for a vanilla cancel refund; if the inventory is full the remainder
+     * is dropped and the announcement withdrawn, because a dropped item never
+     * produces an inventory addition.
      */
-    private void refundEternalShotAmmo(@Nonnull Ref<EntityStore> shooterRef, @Nonnull Entity shooterEntity,
-            @Nonnull ItemStack weapon, int level, @Nonnull CommandBuffer<EntityStore> commandBuffer) {
-        if (eternalShotSystem == null)
+    private void refundEternalShotAmmo(@Nonnull Ref<EntityStore> shooterRef,
+            @Nonnull ItemStack weapon,
+            int level,
+            @Nonnull CommandBuffer<EntityStore> commandBuffer) {
+        if (eternalShotSystem == null) {
             return;
-
-        if (!(shooterEntity instanceof Player player))
+        }
+        if (commandBuffer.getComponent(shooterRef, Player.getComponentType()) == null) {
             return;
-
-        UUIDComponent uuidComp = commandBuffer.getComponent(shooterRef, UUIDComponent.getComponentType());
-        if (uuidComp == null)
+        }
+        UUIDComponent uuidComponent = commandBuffer.getComponent(shooterRef, UUIDComponent.getComponentType());
+        if (uuidComponent == null) {
             return;
-        UUID playerUuid = uuidComp.getUuid();
+        }
+        UUID playerUuid = uuidComponent.getUuid();
 
         ItemStack ammo = eternalShotSystem.getAndClearConsumedAmmo(playerUuid);
-        if (ammo == null) {
-            ammo = eternalShotSystem.findAmmoFromWeapon(player);
+        if (ammo == null || ammo.isEmpty()) {
+            return;
         }
 
-        if (ammo == null)
-            return;
-
-        Inventory inventory = player.getInventory();
-        if (inventory == null)
-            return;
-
-        eternalShotSystem.markPendingRefund(playerUuid);
-        SimpleItemContainer.addOrDropItemStack(commandBuffer, shooterRef,
-                inventory.getCombinedHotbarFirst(), ammo);
+        CombinedItemContainer inventory = InventoryAccess.getCombinedHotbarFirst(commandBuffer, shooterRef);
+        eternalShotSystem.markPendingRefund(playerUuid, ammo.getQuantity());
+        ItemStackTransaction transaction = inventory.addItemStack(ammo);
+        ItemStack remainder = transaction.getRemainder();
+        if (!ItemStack.isEmpty(remainder)) {
+            eternalShotSystem.cancelPendingRefund(playerUuid, remainder.getQuantity());
+            ItemUtils.dropItem(shooterRef, remainder, commandBuffer);
+        }
 
         PlayerRef playerRef = commandBuffer.getComponent(shooterRef, PlayerRef.getComponentType());
         EnchantmentEventHelper.fireActivated(playerRef, weapon, EnchantmentType.ETERNAL_SHOT, level);
@@ -148,7 +168,7 @@ public class EnchantmentProjectileSpeedSystem extends RefSystem<EntityStore> {
 
     @Override
     public void onEntityRemove(@Nonnull Ref<EntityStore> ref,
-            @Nonnull com.hypixel.hytale.component.RemoveReason reason,
+            @Nonnull RemoveReason reason,
             @Nonnull Store<EntityStore> store,
             @Nonnull CommandBuffer<EntityStore> commandBuffer) {
         UUIDComponent uuidComponent = commandBuffer.getComponent(ref, UUIDComponent.getComponentType());

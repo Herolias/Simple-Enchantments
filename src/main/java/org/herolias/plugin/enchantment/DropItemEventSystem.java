@@ -1,6 +1,5 @@
 package org.herolias.plugin.enchantment;
 
-import com.hypixel.hytale.component.Archetype;
 import com.hypixel.hytale.component.ArchetypeChunk;
 import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.Ref;
@@ -8,25 +7,30 @@ import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.component.query.Query;
 import com.hypixel.hytale.component.system.EntityEventSystem;
 import com.hypixel.hytale.logger.HytaleLogger;
+import com.hypixel.hytale.server.core.entity.UUIDComponent;
+import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hypixel.hytale.server.core.event.events.ecs.DropItemEvent;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
- * ECS event system that listens for DropItemEvent.PlayerRequest events.
- * This is used by EnchantmentEternalShotSystem to track when players manually
- * drop items, so it can distinguish between dropped arrows and shot arrows.
+ * Forwards {@link DropItemEvent.PlayerRequest} to the refund systems so they
+ * can tell a manual drop apart from item consumption (see
+ * {@link AbstractRefundSystem#onDropItemRequest}).
  */
 public class DropItemEventSystem extends EntityEventSystem<EntityStore, DropItemEvent.PlayerRequest> {
 
     private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
 
     private final EnchantmentEternalShotSystem eternalShotSystem;
+    @Nullable
     private final EnchantmentElementalHeartSystem elementalHeartSystem;
+    private final Query<EntityStore> query = Query.and(Player.getComponentType(), UUIDComponent.getComponentType());
 
-    public DropItemEventSystem(EnchantmentEternalShotSystem eternalShotSystem,
-            EnchantmentElementalHeartSystem elementalHeartSystem) {
+    public DropItemEventSystem(@Nonnull EnchantmentEternalShotSystem eternalShotSystem,
+            @Nullable EnchantmentElementalHeartSystem elementalHeartSystem) {
         super(DropItemEvent.PlayerRequest.class);
         this.eternalShotSystem = eternalShotSystem;
         this.elementalHeartSystem = elementalHeartSystem;
@@ -36,8 +40,7 @@ public class DropItemEventSystem extends EntityEventSystem<EntityStore, DropItem
     @Override
     @Nonnull
     public Query<EntityStore> getQuery() {
-        // Handle all entities (we filter by Player in the handler)
-        return Archetype.empty();
+        return query;
     }
 
     @Override
@@ -46,12 +49,8 @@ public class DropItemEventSystem extends EntityEventSystem<EntityStore, DropItem
             @Nonnull Store<EntityStore> store,
             @Nonnull CommandBuffer<EntityStore> commandBuffer,
             @Nonnull DropItemEvent.PlayerRequest event) {
-        // Get the entity ref from the archetype chunk at the current index
         Ref<EntityStore> ref = archetypeChunk.getReferenceTo(index);
-
-        // Delegate to the EternalShot system to track this drop
         eternalShotSystem.onDropItemRequest(event, ref, store);
-        // Delegate to Elemental Heart system too
         if (elementalHeartSystem != null) {
             elementalHeartSystem.onDropItemRequest(event, ref, store);
         }

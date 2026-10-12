@@ -5,6 +5,12 @@ package org.herolias.plugin.enchantment;
  * 
  * When a projectile is fired from an enchanted weapon, the enchantment levels
  * are captured and stored with the projectile so they can be applied on hit.
+ * <p>
+ * The same class is reused by {@link EnchantmentManager#updateDoTEnchantments}
+ * to remember which Burn/Looting levels were applied to a victim that is
+ * suffering from damage-over-time. Every instance records its creation time
+ * ({@link #getCreatedAt()}) so those DoT entries can be expired once the
+ * longest possible DoT has run out instead of living until the victim dies.
  * 
  * Use the Builder for cleaner construction:
  * 
@@ -24,6 +30,8 @@ public class ProjectileEnchantmentData {
     private final int burnLevel;
     private final int poisonLevel;
     private final int eternalShotLevel;
+    /** Wall-clock creation time in milliseconds ({@link System#currentTimeMillis()}). */
+    private final long createdAt;
 
     public ProjectileEnchantmentData(int strengthLevel, int eaglesEyeLevel, int lootingLevel, int freezeLevel,
             int burnLevel, int poisonLevel, int eternalShotLevel) {
@@ -34,6 +42,7 @@ public class ProjectileEnchantmentData {
         this.burnLevel = burnLevel;
         this.poisonLevel = poisonLevel;
         this.eternalShotLevel = eternalShotLevel;
+        this.createdAt = System.currentTimeMillis();
     }
 
     // Builder pattern for cleaner construction
@@ -117,6 +126,28 @@ public class ProjectileEnchantmentData {
 
     public int getEternalShotLevel() {
         return eternalShotLevel;
+    }
+
+    /**
+     * Creation time of this record in milliseconds since the epoch.
+     */
+    public long getCreatedAt() {
+        return createdAt;
+    }
+
+    /**
+     * Milliseconds elapsed since this record was created.
+     */
+    public long getAgeMillis() {
+        return System.currentTimeMillis() - createdAt;
+    }
+
+    /**
+     * True when this record is older than {@code maxAgeMillis}. Used to expire
+     * DoT attribution entries whose status effect has certainly worn off.
+     */
+    public boolean isOlderThan(long maxAgeMillis) {
+        return getAgeMillis() > maxAgeMillis;
     }
 
     /**

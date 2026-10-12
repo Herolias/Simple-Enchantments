@@ -75,6 +75,13 @@ public class EnchantConfigPage extends InteractiveCustomUIPage<EnchantConfigPage
     private boolean hasUnsavedChanges = false;
     private boolean showSaveFeedback = false;
     private boolean showResetConfirmation = false;
+    @Nullable
+    private String saveErrorMessage = null;
+
+    private static final Set<String> VALID_TABS = Set.of(TAB_GENERAL, TAB_ENCHANTMENTS, TAB_RECIPES);
+    private static final Set<String> FIXED_RECIPE_TYPES = Set.of("table", "engraving_table");
+    /** Upper bound for integer settings typed into the UI (guards against absurd values). */
+    private static final int MAX_INT_SETTING = 1_000_000;
 
     // Default config instance for reset functionality - uses values from
     // EnchantingConfig.java
@@ -110,15 +117,57 @@ public class EnchantConfigPage extends InteractiveCustomUIPage<EnchantConfigPage
         this.workingConfig = cloneConfig(configManager.getConfig());
     }
 
+    /**
+     * Deep-copies a config, including the fields the UI never edits, so the copy
+     * can replace the live config wholesale on save.
+     */
     private EnchantingConfig cloneConfig(EnchantingConfig original) {
         EnchantingConfig copy = new EnchantingConfig();
         copy.configVersion = original.configVersion;
         copy.maxEnchantmentsPerItem = original.maxEnchantmentsPerItem;
+        copy.showEnchantmentBanner = original.showEnchantmentBanner;
+        copy.hasAutoDisabledBanner = original.hasAutoDisabledBanner;
         copy.enableEnchantmentGlow = original.enableEnchantmentGlow;
         copy.allowSameScrollUpgrades = original.allowSameScrollUpgrades;
 
         // Clone enchantment multipliers map
-        copy.enchantmentMultipliers = new LinkedHashMap<>(original.enchantmentMultipliers);
+        copy.enchantmentMultipliers = original.enchantmentMultipliers != null
+                ? new LinkedHashMap<>(original.enchantmentMultipliers)
+                : new LinkedHashMap<>();
+
+        // Legacy per-field multipliers are null after migration; carry them over verbatim
+        copy.sharpnessDamageMultiplierPerLevel = original.sharpnessDamageMultiplierPerLevel;
+        copy.lifeLeechPercentage = original.lifeLeechPercentage;
+        copy.durabilityReductionPerLevel = original.durabilityReductionPerLevel;
+        copy.dexterityStaminaReductionPerLevel = original.dexterityStaminaReductionPerLevel;
+        copy.protectionDamageReductionPerLevel = original.protectionDamageReductionPerLevel;
+        copy.efficiencyMiningSpeedPerLevel = original.efficiencyMiningSpeedPerLevel;
+        copy.fortuneRollChancePerLevel = original.fortuneRollChancePerLevel;
+        copy.strengthDamageMultiplierPerLevel = original.strengthDamageMultiplierPerLevel;
+        copy.strengthRangeMultiplierPerLevel = original.strengthRangeMultiplierPerLevel;
+        copy.eaglesEyeDistanceBonusPerLevel = original.eaglesEyeDistanceBonusPerLevel;
+        copy.lootingChanceMultiplierPerLevel = original.lootingChanceMultiplierPerLevel;
+        copy.lootingQuantityMultiplierPerLevel = original.lootingQuantityMultiplierPerLevel;
+        copy.featherFallingReductionPerLevel = original.featherFallingReductionPerLevel;
+        copy.waterBreathingReductionPerLevel = original.waterBreathingReductionPerLevel;
+        copy.knockbackStrengthPerLevel = original.knockbackStrengthPerLevel;
+        copy.reflectionDamagePercentagePerLevel = original.reflectionDamagePercentagePerLevel;
+        copy.absorptionHealPercentagePerLevel = original.absorptionHealPercentagePerLevel;
+        copy.fastSwimSpeedBonusPerLevel = original.fastSwimSpeedBonusPerLevel;
+        copy.rangedProtectionDamageReductionPerLevel = original.rangedProtectionDamageReductionPerLevel;
+        copy.frenzyChargeSpeedMultiplierPerLevel = original.frenzyChargeSpeedMultiplierPerLevel;
+        copy.riposteDamageMultiplierPerLevel = original.riposteDamageMultiplierPerLevel;
+        copy.coupDeGraceDamageMultiplierPerLevel = original.coupDeGraceDamageMultiplierPerLevel;
+        copy.thriftRestoreAmountPerLevel = original.thriftRestoreAmountPerLevel;
+        copy.elementalHeartSaveChancePerLevel = original.elementalHeartSaveChancePerLevel;
+
+        copy.pickPerfectBlacklist = original.pickPerfectBlacklist != null
+                ? new java.util.HashSet<>(original.pickPerfectBlacklist)
+                : new java.util.HashSet<>();
+        copy.hasSkippedTooltipAnnouncement = original.hasSkippedTooltipAnnouncement;
+        copy.notifiedPlayers = original.notifiedPlayers != null
+                ? new java.util.ArrayList<>(original.notifiedPlayers)
+                : new java.util.ArrayList<>();
 
         copy.enableEnchantingTableCrafting = original.enableEnchantingTableCrafting;
         copy.returnEnchantmentOnCleanse = original.returnEnchantmentOnCleanse;
@@ -129,10 +178,14 @@ public class EnchantConfigPage extends InteractiveCustomUIPage<EnchantConfigPage
         copy.enableEngravingTableNameChanges = original.enableEngravingTableNameChanges;
         copy.showWelcomeMessage = original.showWelcomeMessage;
 
-        copy.disabledEnchantments = new LinkedHashMap<>(original.disabledEnchantments);
+        copy.disabledEnchantments = original.disabledEnchantments != null
+                ? new LinkedHashMap<>(original.disabledEnchantments)
+                : new LinkedHashMap<>();
         copy.scrollRecipes = new LinkedHashMap<>();
-        for (var entry : original.scrollRecipes.entrySet()) {
-            copy.scrollRecipes.put(entry.getKey(), new java.util.ArrayList<>(entry.getValue()));
+        if (original.scrollRecipes != null) {
+            for (var entry : original.scrollRecipes.entrySet()) {
+                copy.scrollRecipes.put(entry.getKey(), new java.util.ArrayList<>(entry.getValue()));
+            }
         }
 
         // Copy enchanting table recipe (initialize from defaults if null)
@@ -205,6 +258,10 @@ public class EnchantConfigPage extends InteractiveCustomUIPage<EnchantConfigPage
         UIEventBuilder eventBuilder = new UIEventBuilder();
 
         if (data.tabSwitch != null) {
+            if (!VALID_TABS.contains(data.tabSwitch)) {
+                LOGGER.atWarning().log("Ignoring unknown config tab '%s'", data.tabSwitch);
+                return;
+            }
             this.currentTab = data.tabSwitch;
             this.selectedRecipe = null;
             buildTabContent(commandBuilder, eventBuilder);
@@ -257,14 +314,22 @@ public class EnchantConfigPage extends InteractiveCustomUIPage<EnchantConfigPage
                 this.sendUpdate(commandBuilder, eventBuilder, false);
             } else {
                 // Invalid format
-                LOGGER.atWarning().log("Invalid setting format: " + data.settingValue);
+                LOGGER.atWarning().log("Invalid setting format: %s", data.settingValue);
                 return;
             }
         } else if (data.toggleEnchantment != null) {
+            if (EnchantmentType.fromId(data.toggleEnchantment) == null) {
+                LOGGER.atWarning().log("Ignoring toggle for unknown enchantment '%s'", data.toggleEnchantment);
+                return;
+            }
             toggleEnchantment(data.toggleEnchantment);
             buildTabContent(commandBuilder, eventBuilder);
             this.sendUpdate(commandBuilder, eventBuilder, false);
         } else if (data.selectRecipe != null) {
+            if (!isKnownScrollRecipe(data.selectRecipe)) {
+                LOGGER.atWarning().log("Ignoring unknown recipe '%s'", data.selectRecipe);
+                return;
+            }
             this.selectedRecipe = data.selectRecipe;
             buildTabContent(commandBuilder, eventBuilder);
             this.sendUpdate(commandBuilder, eventBuilder, false);
@@ -289,7 +354,7 @@ public class EnchantConfigPage extends InteractiveCustomUIPage<EnchantConfigPage
                 buildTabContent(commandBuilder, eventBuilder);
                 this.sendUpdate(commandBuilder, eventBuilder, false);
             } catch (NumberFormatException e) {
-                LOGGER.atWarning().log("Invalid ingredient index: " + data.openSearch);
+                LOGGER.atWarning().log("Invalid ingredient index: %s", data.openSearch);
             }
         } else if (data.searchInput != null && this.searchingIngredientIndex >= 0) {
             // Update search filter - only update search results, not the entire overlay
@@ -298,6 +363,10 @@ public class EnchantConfigPage extends InteractiveCustomUIPage<EnchantConfigPage
             this.sendUpdate(commandBuilder, eventBuilder, false);
         } else if (data.selectItem != null && this.searchingIngredientIndex >= 0
                 && (this.selectedRecipe != null || this.editingRecipeType != null)) {
+            if (!isSelectableIngredient(data.selectItem)) {
+                LOGGER.atWarning().log("Ignoring unknown ingredient selection '%s'", data.selectItem);
+                return;
+            }
             // Replace ingredient with selected item
             updateIngredient(this.searchingIngredientIndex, data.selectItem);
             this.searchingIngredientIndex = -1;
@@ -322,7 +391,12 @@ public class EnchantConfigPage extends InteractiveCustomUIPage<EnchantConfigPage
                 // ValueChanged from NumberField - updateAmount is just the index, value comes
                 // from inputValue
                 indexStr = data.updateAmount;
-                amount = data.inputValue.intValue();
+                Integer parsedAmount = toBoundedInt(data.inputValue, 1, MAX_INT_SETTING);
+                if (parsedAmount == null) {
+                    LOGGER.atWarning().log("Ignoring invalid ingredient amount %s", data.inputValue);
+                    return;
+                }
+                amount = parsedAmount;
 
                 try {
                     int index = Integer.parseInt(indexStr);
@@ -331,25 +405,29 @@ public class EnchantConfigPage extends InteractiveCustomUIPage<EnchantConfigPage
                     updateActionBarIndicators(commandBuilder);
                     this.sendUpdate(commandBuilder, eventBuilder, false);
                 } catch (NumberFormatException e) {
-                    LOGGER.atWarning().log("Invalid index in amount update: " + indexStr);
+                    LOGGER.atWarning().log("Invalid index in amount update: %s", indexStr);
                 }
             } else if (data.updateAmount.contains(":")) {
                 // Button click - format is "index:amount"
                 String[] parts = data.updateAmount.split(":", 2);
                 indexStr = parts[0];
-                amount = Integer.parseInt(parts[1]);
 
                 try {
                     int index = Integer.parseInt(indexStr);
+                    amount = Integer.parseInt(parts[1]);
+                    if (amount < 1 || amount > MAX_INT_SETTING) {
+                        LOGGER.atWarning().log("Ignoring out-of-range ingredient amount %d", amount);
+                        return;
+                    }
                     updateIngredientAmount(index, amount);
                     buildTabContent(commandBuilder, eventBuilder);
                     updateActionBarIndicators(commandBuilder);
                     this.sendUpdate(commandBuilder, eventBuilder, false);
                 } catch (NumberFormatException e) {
-                    LOGGER.atWarning().log("Invalid index in amount update: " + indexStr);
+                    LOGGER.atWarning().log("Invalid amount update: %s", data.updateAmount);
                 }
             } else {
-                LOGGER.atWarning().log("Invalid amount format: " + data.updateAmount);
+                LOGGER.atWarning().log("Invalid amount format: %s", data.updateAmount);
                 return;
             }
         } else if (data.settingKey != null && data.settingKey.equals("AddIngredient")) {
@@ -359,6 +437,10 @@ public class EnchantConfigPage extends InteractiveCustomUIPage<EnchantConfigPage
             updateActionBarIndicators(commandBuilder);
             this.sendUpdate(commandBuilder, eventBuilder, false);
         } else if (data.editRecipeType != null) {
+            if (!isValidRecipeType(data.editRecipeType)) {
+                LOGGER.atWarning().log("Ignoring unknown recipe type '%s'", data.editRecipeType);
+                return;
+            }
             // Open table/upgrade recipe edit screen
             this.editingRecipeType = data.editRecipeType;
             this.searchingIngredientIndex = -1;
@@ -405,7 +487,7 @@ public class EnchantConfigPage extends InteractiveCustomUIPage<EnchantConfigPage
                 updateActionBarIndicators(commandBuilder);
                 this.sendUpdate(commandBuilder, eventBuilder, false);
             } catch (NumberFormatException e) {
-                LOGGER.atWarning().log("Invalid ingredient index for removal: " + data.removeIngredient);
+                LOGGER.atWarning().log("Invalid ingredient index for removal: %s", data.removeIngredient);
             }
         } else if (data.moveIngredientUp != null) {
             try {
@@ -415,7 +497,7 @@ public class EnchantConfigPage extends InteractiveCustomUIPage<EnchantConfigPage
                 updateActionBarIndicators(commandBuilder);
                 this.sendUpdate(commandBuilder, eventBuilder, false);
             } catch (NumberFormatException e) {
-                LOGGER.atWarning().log("Invalid ingredient index for move up: " + data.moveIngredientUp);
+                LOGGER.atWarning().log("Invalid ingredient index for move up: %s", data.moveIngredientUp);
             }
         } else if (data.moveIngredientDown != null) {
             try {
@@ -425,8 +507,85 @@ public class EnchantConfigPage extends InteractiveCustomUIPage<EnchantConfigPage
                 updateActionBarIndicators(commandBuilder);
                 this.sendUpdate(commandBuilder, eventBuilder, false);
             } catch (NumberFormatException e) {
-                LOGGER.atWarning().log("Invalid ingredient index for move down: " + data.moveIngredientDown);
+                LOGGER.atWarning().log("Invalid ingredient index for move down: %s", data.moveIngredientDown);
             }
+        }
+    }
+
+    // ------------------------------------------------------------------
+    // Input validation helpers (all event payloads come from the client)
+    // ------------------------------------------------------------------
+
+    /**
+     * Converts a client supplied number to an int in {@code [min, max]}, rounding
+     * to the nearest integer. Returns null for NaN, infinities and values below
+     * {@code min} (negative or zero where a positive value is required).
+     */
+    @Nullable
+    private static Integer toBoundedInt(@Nullable Double value, int min, int max) {
+        if (value == null || value.isNaN() || value.isInfinite()) {
+            return null;
+        }
+        double rounded = Math.rint(value);
+        if (rounded < min) {
+            return null;
+        }
+        return (int) Math.min(rounded, max);
+    }
+
+    /** Parses a numeric string as a double; null for garbage, NaN, infinities and negatives. */
+    @Nullable
+    private static Double parseNonNegativeFinite(@Nullable String value) {
+        if (value == null) {
+            return null;
+        }
+        try {
+            double parsed = Double.parseDouble(value.trim());
+            if (Double.isNaN(parsed) || Double.isInfinite(parsed) || parsed < 0) {
+                return null;
+            }
+            return parsed;
+        } catch (NumberFormatException e) {
+            return null;
+        }
+    }
+
+    /** Parses an integer setting typed as "5" or "5.0"; null when invalid, otherwise clamped to >= 1. */
+    @Nullable
+    private static Integer parsePositiveIntSetting(@Nullable String value) {
+        Double parsed = parseNonNegativeFinite(value);
+        if (parsed == null) {
+            return null;
+        }
+        Integer bounded = toBoundedInt(parsed, 0, MAX_INT_SETTING);
+        return bounded == null ? null : Math.max(1, bounded);
+    }
+
+    private boolean isKnownScrollRecipe(@Nonnull String recipeName) {
+        return workingConfig.scrollRecipes.containsKey(recipeName)
+                || DEFAULT_CONFIG.scrollRecipes.containsKey(recipeName)
+                || getDefaultAddonRecipe(recipeName) != null;
+    }
+
+    private boolean isValidRecipeType(@Nonnull String recipeType) {
+        if (FIXED_RECIPE_TYPES.contains(recipeType)) {
+            return true;
+        }
+        return recipeType.startsWith("Upgrade_")
+                && workingConfig.enchantingTableUpgrades != null
+                && workingConfig.enchantingTableUpgrades.containsKey(recipeType);
+    }
+
+    /** "RT:<ResourceType>" wildcard entries or existing item ids only. */
+    private static boolean isSelectableIngredient(@Nonnull String selection) {
+        try {
+            if (selection.startsWith("RT:")) {
+                String rtId = selection.substring(3);
+                return !rtId.isBlank() && ResourceType.getAssetMap().getAssetMap().get(rtId) != null;
+            }
+            return !selection.isBlank() && Item.getAssetMap().getAssetMap().get(selection) != null;
+        } catch (Exception e) {
+            return false;
         }
     }
 
@@ -1356,8 +1515,8 @@ public class EnchantConfigPage extends InteractiveCustomUIPage<EnchantConfigPage
         if (ingredients == null)
             return;
 
-        // Add a new ingredient with a default item
-        EnchantingConfig.ConfigIngredient newIngredient = new EnchantingConfig.ConfigIngredient("Resource_Iron_Ingot",
+        // Add a new ingredient with a default item (Ingredient_Bar_Iron exists in vanilla assets)
+        EnchantingConfig.ConfigIngredient newIngredient = new EnchantingConfig.ConfigIngredient("Ingredient_Bar_Iron",
                 1);
         ingredients.add(newIngredient);
         markUnsavedChange();
@@ -1607,7 +1766,7 @@ public class EnchantConfigPage extends InteractiveCustomUIPage<EnchantConfigPage
     }
 
     private String formatItemName(String itemId) {
-        // Convert Item IDs like "Resource_Iron_Ingot" to "Iron Ingot"
+        // Convert Item IDs like "Resource_Copper_Ore" to "Copper Ore"
         String name = itemId;
         // Remove common prefixes
         for (String prefix : new String[] { "Resource_", "Material_", "Item_", "Misc_" }) {
@@ -1640,8 +1799,13 @@ public class EnchantConfigPage extends InteractiveCustomUIPage<EnchantConfigPage
     }
 
     private void updateSetting(String key, String value) {
-        // Handle recipe tier updates (format: recipeTier:recipeName:newTier)
-        if (key.equals("recipeTier") && value.contains(":")) {
+        // Recipe tier typed into the NumberField (key "recipeTier:<recipe>", value from @InputValue)
+        if (key.startsWith("recipeTier:")) {
+            updateRecipeTier(key.substring("recipeTier:".length()), value);
+            return;
+        }
+        // Recipe tier +/- buttons (format: recipeTier:recipeName:newTier)
+        if (key.equals("recipeTier") && value != null && value.contains(":")) {
             String[] parts = value.split(":", 2);
             if (parts.length == 2) {
                 updateRecipeTier(parts[0], parts[1]);
@@ -1655,40 +1819,64 @@ public class EnchantConfigPage extends InteractiveCustomUIPage<EnchantConfigPage
             return;
         }
 
-        try {
-            // All multiplier keys (including composite ones like burn:duration) are in the
-            // map
-            if (workingConfig.enchantmentMultipliers.containsKey(key)) {
-                workingConfig.enchantmentMultipliers.put(key, Double.parseDouble(value));
-            } else {
-                // General settings
-                switch (key) {
-                    case "maxEnchantmentsPerItem" ->
-                        workingConfig.maxEnchantmentsPerItem = Math.max(1, Integer.parseInt(value));
-
-                    case "enableEnchantmentGlow" -> workingConfig.enableEnchantmentGlow = Boolean.parseBoolean(value);
-                    case "allowSameScrollUpgrades" ->
-                        workingConfig.allowSameScrollUpgrades = Boolean.parseBoolean(value);
-                    case "enableEnchantingTableCrafting" ->
-                        workingConfig.enableEnchantingTableCrafting = Boolean.parseBoolean(value);
-                    case "enableEngravingTableCrafting" ->
-                        workingConfig.enableEngravingTableCrafting = Boolean.parseBoolean(value);
-                    case "enableScrollCrafting" ->
-                        workingConfig.enableScrollCrafting = Boolean.parseBoolean(value);
-                    case "enableEngravingTableNameChanges" ->
-                        workingConfig.enableEngravingTableNameChanges = Boolean.parseBoolean(value);
-                    case "returnEnchantmentOnCleanse" ->
-                        workingConfig.returnEnchantmentOnCleanse = Boolean.parseBoolean(value);
-                    case "enchantingTableCraftingTier" ->
-                        workingConfig.enchantingTableCraftingTier = Math.max(1, Integer.parseInt(value));
-                    case "engravingTableCraftingTier" ->
-                        workingConfig.engravingTableCraftingTier = Math.max(1, Integer.parseInt(value));
-                    case "salvagerYieldsScroll" -> workingConfig.salvagerYieldsScroll = Boolean.parseBoolean(value);
-                    case "showWelcomeMessage" -> workingConfig.showWelcomeMessage = Boolean.parseBoolean(value);
-                }
+        // All multiplier keys (including composite ones like burn:duration) are in the map.
+        // Values arrive as doubles ("5.0") from the NumberField and as "%.3f" from the buttons.
+        if (workingConfig.enchantmentMultipliers.containsKey(key)) {
+            Double parsed = parseNonNegativeFinite(value);
+            if (parsed == null) {
+                LOGGER.atWarning().log("Rejected multiplier value for %s: %s", key, value);
+                return;
             }
-        } catch (NumberFormatException e) {
-            LOGGER.atWarning().log("Failed to parse setting value: " + key + " = " + value);
+            workingConfig.enchantmentMultipliers.put(key, parsed);
+            markUnsavedChange();
+            return;
+        }
+
+        // General settings
+        switch (key) {
+            case "maxEnchantmentsPerItem" -> {
+                Integer parsed = parsePositiveIntSetting(value);
+                if (parsed == null) {
+                    LOGGER.atWarning().log("Rejected value for %s: %s", key, value);
+                    return;
+                }
+                workingConfig.maxEnchantmentsPerItem = parsed;
+            }
+            case "enchantingTableCraftingTier" -> {
+                Integer parsed = parsePositiveIntSetting(value);
+                if (parsed == null) {
+                    LOGGER.atWarning().log("Rejected value for %s: %s", key, value);
+                    return;
+                }
+                workingConfig.enchantingTableCraftingTier = parsed;
+            }
+            case "engravingTableCraftingTier" -> {
+                Integer parsed = parsePositiveIntSetting(value);
+                if (parsed == null) {
+                    LOGGER.atWarning().log("Rejected value for %s: %s", key, value);
+                    return;
+                }
+                workingConfig.engravingTableCraftingTier = parsed;
+            }
+            case "enableEnchantmentGlow" -> workingConfig.enableEnchantmentGlow = Boolean.parseBoolean(value);
+            case "allowSameScrollUpgrades" ->
+                workingConfig.allowSameScrollUpgrades = Boolean.parseBoolean(value);
+            case "enableEnchantingTableCrafting" ->
+                workingConfig.enableEnchantingTableCrafting = Boolean.parseBoolean(value);
+            case "enableEngravingTableCrafting" ->
+                workingConfig.enableEngravingTableCrafting = Boolean.parseBoolean(value);
+            case "enableScrollCrafting" ->
+                workingConfig.enableScrollCrafting = Boolean.parseBoolean(value);
+            case "enableEngravingTableNameChanges" ->
+                workingConfig.enableEngravingTableNameChanges = Boolean.parseBoolean(value);
+            case "returnEnchantmentOnCleanse" ->
+                workingConfig.returnEnchantmentOnCleanse = Boolean.parseBoolean(value);
+            case "salvagerYieldsScroll" -> workingConfig.salvagerYieldsScroll = Boolean.parseBoolean(value);
+            case "showWelcomeMessage" -> workingConfig.showWelcomeMessage = Boolean.parseBoolean(value);
+            default -> {
+                LOGGER.atWarning().log("Ignoring unknown setting key '%s'", key);
+                return;
+            }
         }
         markUnsavedChange();
     }
@@ -1710,16 +1898,22 @@ public class EnchantConfigPage extends InteractiveCustomUIPage<EnchantConfigPage
         if (ingredients == null)
             return;
 
-        try {
-            int newTier = Integer.parseInt(tierValue);
-            for (EnchantingConfig.ConfigIngredient ing : ingredients) {
-                if (ing.UnlocksAtTier != null) {
-                    ing.UnlocksAtTier = newTier;
-                    break;
-                }
+        // Accepts "2" (buttons) and "2.0" (NumberField); rejects NaN/Infinity/negatives
+        Integer newTier = parsePositiveIntSetting(tierValue);
+        if (newTier == null) {
+            LOGGER.atWarning().log("Rejected tier value for %s: %s", recipeName, tierValue);
+            return;
+        }
+        boolean found = false;
+        for (EnchantingConfig.ConfigIngredient ing : ingredients) {
+            if (ing.UnlocksAtTier != null) {
+                ing.UnlocksAtTier = newTier;
+                found = true;
+                break;
             }
-        } catch (NumberFormatException e) {
-            LOGGER.atWarning().log("Failed to parse tier value: " + tierValue);
+        }
+        if (!found) {
+            ingredients.add(new EnchantingConfig.ConfigIngredient(newTier));
         }
         markUnsavedChange();
     }
@@ -1794,47 +1988,71 @@ public class EnchantConfigPage extends InteractiveCustomUIPage<EnchantConfigPage
         };
     }
 
-    private void saveConfig(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store) {
-        // Copy working config to actual config
-        EnchantingConfig actualConfig = configManager.getConfig();
-        actualConfig.maxEnchantmentsPerItem = workingConfig.maxEnchantmentsPerItem;
-        actualConfig.enableEnchantmentGlow = workingConfig.enableEnchantmentGlow;
-        actualConfig.allowSameScrollUpgrades = workingConfig.allowSameScrollUpgrades;
-        actualConfig.enchantingTableCraftingTier = workingConfig.enchantingTableCraftingTier;
-        actualConfig.enableEnchantingTableCrafting = workingConfig.enableEnchantingTableCrafting;
-        actualConfig.enableEngravingTableCrafting = workingConfig.enableEngravingTableCrafting;
-        actualConfig.enableScrollCrafting = workingConfig.enableScrollCrafting;
-        actualConfig.enableEngravingTableNameChanges = workingConfig.enableEngravingTableNameChanges;
-        actualConfig.engravingTableCraftingTier = workingConfig.engravingTableCraftingTier;
+    /**
+     * Copies the UI-editable values from {@link #workingConfig} into
+     * {@code target}, deep-copying collections. Fields the editor never touches
+     * (banner flags, notified players, blacklist...) are left as they are.
+     */
+    private void applyWorkingValues(@Nonnull EnchantingConfig target) {
+        target.maxEnchantmentsPerItem = workingConfig.maxEnchantmentsPerItem;
+        target.enableEnchantmentGlow = workingConfig.enableEnchantmentGlow;
+        target.allowSameScrollUpgrades = workingConfig.allowSameScrollUpgrades;
+        target.enchantingTableCraftingTier = workingConfig.enchantingTableCraftingTier;
+        target.enableEnchantingTableCrafting = workingConfig.enableEnchantingTableCrafting;
+        target.enableEngravingTableCrafting = workingConfig.enableEngravingTableCrafting;
+        target.enableScrollCrafting = workingConfig.enableScrollCrafting;
+        target.enableEngravingTableNameChanges = workingConfig.enableEngravingTableNameChanges;
+        target.engravingTableCraftingTier = workingConfig.engravingTableCraftingTier;
 
         // Copy enchantment multipliers map
-        actualConfig.enchantmentMultipliers = new LinkedHashMap<>(workingConfig.enchantmentMultipliers);
+        target.enchantmentMultipliers = new LinkedHashMap<>(workingConfig.enchantmentMultipliers);
 
-        actualConfig.returnEnchantmentOnCleanse = workingConfig.returnEnchantmentOnCleanse;
-        actualConfig.salvagerYieldsScroll = workingConfig.salvagerYieldsScroll;
-        actualConfig.showWelcomeMessage = workingConfig.showWelcomeMessage;
-        actualConfig.disabledEnchantments = new LinkedHashMap<>(workingConfig.disabledEnchantments);
-        actualConfig.scrollRecipes = new LinkedHashMap<>();
+        target.returnEnchantmentOnCleanse = workingConfig.returnEnchantmentOnCleanse;
+        target.salvagerYieldsScroll = workingConfig.salvagerYieldsScroll;
+        target.showWelcomeMessage = workingConfig.showWelcomeMessage;
+        target.disabledEnchantments = new LinkedHashMap<>(workingConfig.disabledEnchantments);
+        target.scrollRecipes = new LinkedHashMap<>();
         for (var entry : workingConfig.scrollRecipes.entrySet()) {
-            actualConfig.scrollRecipes.put(entry.getKey(), new java.util.ArrayList<>(entry.getValue()));
+            target.scrollRecipes.put(entry.getKey(), new java.util.ArrayList<>(entry.getValue()));
         }
 
         // Save enchanting table recipe and upgrades
         if (workingConfig.enchantingTableRecipe != null) {
-            actualConfig.enchantingTableRecipe = new java.util.ArrayList<>(workingConfig.enchantingTableRecipe);
+            target.enchantingTableRecipe = new java.util.ArrayList<>(workingConfig.enchantingTableRecipe);
         }
         if (workingConfig.engravingTableRecipe != null) {
-            actualConfig.engravingTableRecipe = new java.util.ArrayList<>(workingConfig.engravingTableRecipe);
+            target.engravingTableRecipe = new java.util.ArrayList<>(workingConfig.engravingTableRecipe);
         }
         if (workingConfig.enchantingTableUpgrades != null) {
-            actualConfig.enchantingTableUpgrades = new LinkedHashMap<>();
+            target.enchantingTableUpgrades = new LinkedHashMap<>();
             for (var entry : workingConfig.enchantingTableUpgrades.entrySet()) {
-                actualConfig.enchantingTableUpgrades.put(entry.getKey(), new java.util.ArrayList<>(entry.getValue()));
+                target.enchantingTableUpgrades.put(entry.getKey(), new java.util.ArrayList<>(entry.getValue()));
             }
         }
+    }
 
-        // Save to disk
-        configManager.saveConfig();
+    private void saveConfig(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store) {
+        saveErrorMessage = null;
+
+        if (configManager.isFallbackConfig()) {
+            saveErrorMessage = "Config file failed to load; fix or delete it and restart before saving.";
+            return;
+        }
+        // Publish the working values as a new config object and swap it in
+        // atomically, so systems on other world threads never read a half-applied
+        // configuration.
+        EnchantingConfig nextConfig = cloneConfig(configManager.getConfig());
+        applyWorkingValues(nextConfig);
+        configManager.setConfig(nextConfig);
+        // Persist. ConfigManager.saveConfig() writes synchronously on this (world) thread
+        // via AtomicJsonWriter; there is no async save available yet.
+        try {
+            configManager.saveConfig();
+        } catch (Exception e) {
+            LOGGER.atSevere().withCause(e).log("Failed to persist configuration from the in-game editor");
+            saveErrorMessage = "Failed to write the config file - see server log.";
+            return;
+        }
         LOGGER.atInfo().log("Configuration saved via in-game editor");
 
         // Invalidate enchantment cache FIRST so that refresh systems see the new state
@@ -1941,7 +2159,9 @@ public class EnchantConfigPage extends InteractiveCustomUIPage<EnchantConfigPage
     }
 
     private void moveIngredient(int ingredientIndex, int direction) {
-        List<EnchantingConfig.ConfigIngredient> ingredients = getCurrentEditingIngredients();
+        // createIfMissing: addon recipes not yet in the config must be materialised,
+        // otherwise the swap happens on a temporary list and is lost
+        List<EnchantingConfig.ConfigIngredient> ingredients = getCurrentEditingIngredients(true);
         if (ingredients == null)
             return;
 
@@ -1997,11 +2217,16 @@ public class EnchantConfigPage extends InteractiveCustomUIPage<EnchantConfigPage
                     languageManager.getMessage("config.message.unsaved", lang, this.playerRef.getLanguage()));
         }
 
-        // Update Save Feedback
-        commandBuilder.set("#SaveFeedback.Visible", showSaveFeedback);
-        if (showSaveFeedback) {
-            commandBuilder.set("#SaveFeedback.TextSpans",
-                    languageManager.getMessage("config.message.saved", lang, this.playerRef.getLanguage()));
+        // Update Save Feedback (success message, or the reason a save was refused/failed)
+        if (saveErrorMessage != null) {
+            commandBuilder.set("#SaveFeedback.Visible", true);
+            commandBuilder.set("#SaveFeedback.TextSpans", Message.raw(saveErrorMessage).color("#FF5555"));
+        } else {
+            commandBuilder.set("#SaveFeedback.Visible", showSaveFeedback);
+            if (showSaveFeedback) {
+                commandBuilder.set("#SaveFeedback.TextSpans",
+                        languageManager.getMessage("config.message.saved", lang, this.playerRef.getLanguage()));
+            }
         }
 
         // Update Reset All Button to show confirmation state
@@ -2019,6 +2244,7 @@ public class EnchantConfigPage extends InteractiveCustomUIPage<EnchantConfigPage
             hasUnsavedChanges = true;
             showSaveFeedback = false; // clear success message on new change
         }
+        saveErrorMessage = null;
     }
 
     private void closeWithoutSaving(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store) {

@@ -14,7 +14,7 @@ Server owners can disable Engraving Table crafting or disable only item name cha
 
 ## What It Can Do
 
-* Rename items. Changing only the text is free.
+* Rename items (up to 40 characters; line breaks and control characters are removed). Changing only the text is free.
 * Recolor item names with one matching petal. The default name color is free.
 * Recolor the enchantment glow on items with one matching crystal.
 * Merge two enchantment scrolls together (costs nothing). Cleansing scrolls cannot be merged, and scrolls with conflicting enchantments cannot be combined.

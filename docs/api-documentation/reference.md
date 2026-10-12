@@ -11,7 +11,9 @@ This is a compact reference for the public API classes most add-ons use.
 
 | Method | Returns | Notes |
 |---|---|---|
-| `EnchantmentApiProvider.get()` | `@Nullable EnchantmentApi` | Returns `null` if Simple Enchantments has not initialized. Optional integrations must guard this call. |
+| `EnchantmentApiProvider.get()` | `@Nullable EnchantmentApi` | Available after Simple Enchantments' `setup()` has run; returns `null` before that. Declare a dependency on Simple Enchantments so your plugin loads after it. Optional integrations must guard this call. |
+| `EnchantmentApiProvider.getOrThrow()` | `EnchantmentApi` | Same, but throws `IllegalStateException` with a clear message when the API is not available yet. |
+| `EnchantmentApiProvider.isAvailable()` | `boolean` | Whether the API has been registered. |
 
 `EnchantmentApiProvider.register(api)` is for Simple Enchantments itself. Add-ons should not call it.
 
@@ -19,7 +21,8 @@ This is a compact reference for the public API classes most add-ons use.
 
 | Method | Returns | Notes |
 |---|---|---|
-| `addEnchantment(ItemStack item, String enchantmentId, int level)` | `ItemStack` | Adds an enchantment and returns the updated item. Throws `IllegalArgumentException` for unknown IDs. Returns the original item if normal application rules fail. |
+| `addEnchantment(ItemStack item, String enchantmentId, int level)` | `ItemStack` | Adds an enchantment and returns the updated item. Levels above the enchantment's max level are clamped. Throws `IllegalArgumentException` for unknown IDs or `level < 1`. Returns the original item if normal application rules fail. Fires `ItemEnchantedEvent` (player `null`) immediately on success because the API has no inventory commit step. |
+| `addEnchantmentUnsafe(ItemStack item, String enchantmentId, int level)` | `ItemStack` | Same as `addEnchantment` but does not clamp to the max level (like `/enchant` and custom scrolls). Single-level enchantments stay at level 1. |
 | `removeEnchantment(ItemStack item, String enchantmentId)` | `ItemStack` | Removes an enchantment and returns the updated item. Returns the original item if missing or unknown. |
 | `getEnchantmentLevel(@Nullable ItemStack item, String enchantmentId)` | `int` | Returns `0` if the item is null, empty, unknown, or not enchanted with that ID. |
 | `hasEnchantment(@Nullable ItemStack item, String enchantmentId)` | `boolean` | Returns whether the item has that enchantment. |

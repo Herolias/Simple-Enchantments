@@ -13,10 +13,13 @@ import com.hypixel.hytale.server.core.entity.Entity;
 import com.hypixel.hytale.server.core.entity.EntityUtils;
 import com.hypixel.hytale.server.core.entity.LivingEntity;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
+import com.hypixel.hytale.server.core.meta.MetaKey;
 import com.hypixel.hytale.server.core.modules.entity.damage.Damage;
 import com.hypixel.hytale.server.core.modules.entity.damage.DamageCause;
 import com.hypixel.hytale.server.core.modules.entity.damage.DamageEventSystem;
 import com.hypixel.hytale.server.core.modules.entity.damage.DamageSystems;
+import com.hypixel.hytale.server.core.modules.entitystats.EntityStatMap;
+import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 
 import javax.annotation.Nonnull;
@@ -31,6 +34,9 @@ public class EnchantmentReflectionSystem extends DamageEventSystem {
     private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
     private final EnchantmentManager enchantmentManager;
 
+    /** Only entities with stats can be damaged (same scope as {@code DamageSystems.ApplyDamage}). */
+    private static final Query<EntityStore> QUERY = Query.and(EntityStatMap.getComponentType());
+
     private final Set<Dependency<EntityStore>> dependencies = Set.of(
             new SystemDependency(Order.AFTER, DamageSystems.DamageStamina.class));
 
@@ -39,10 +45,24 @@ public class EnchantmentReflectionSystem extends DamageEventSystem {
         LOGGER.atInfo().log("EnchantmentReflectionSystem initialized");
     }
 
-    public static final com.hypixel.hytale.server.core.meta.MetaKey<Boolean> IS_REFLECTION = Damage.META_REGISTRY
+    /**
+     * Marks damage produced by this system. Every attacker-side enchantment
+     * (Sharpness, Life Leech, Frenzy, Knockback, Burn, Poison, Freeze, ...)
+     * must ignore damage carrying this flag, because the "attacker" of a
+     * reflection is the player being punished, not someone swinging a weapon.
+     */
+    public static final MetaKey<Boolean> IS_REFLECTION = Damage.META_REGISTRY
             .registerMetaObject(data -> Boolean.FALSE);
 
+    /**
+     * Asset index of the {@code Physical} damage cause used for reflected hits.
+     * Resolved once from {@link DamageCause#PHYSICAL}; {@link Integer#MIN_VALUE}
+     * while unknown.
+     */
+    private volatile int physicalCauseIndex = Integer.MIN_VALUE;
+
     @Override
+    @Nonnull
     public Set<Dependency<EntityStore>> getDependencies() {
         return dependencies;
     }
@@ -50,7 +70,7 @@ public class EnchantmentReflectionSystem extends DamageEventSystem {
     @Override
     @Nonnull
     public Query<EntityStore> getQuery() {
-        return com.hypixel.hytale.component.Archetype.empty();
+        return QUERY;
     }
 
     @Override
@@ -72,7 +92,8 @@ public class EnchantmentReflectionSystem extends DamageEventSystem {
         if (blocked == null || !blocked)
             return;
 
-        // Get defender
+        // The active-blocker lookup inspects the InteractionManager and still needs
+        // the legacy entity handle.
         Entity defenderEntity = EntityUtils.getEntity(index, archetypeChunk);
         if (!(defenderEntity instanceof LivingEntity defender))
             return;
@@ -99,21 +120,30 @@ public class EnchantmentReflectionSystem extends DamageEventSystem {
         if (reflectedAmount <= 0)
             return;
 
-        DamageCause attackCause = DamageCause.getAssetMap().getAsset("EntityAttack");
-        if (attackCause == null) {
-            attackCause = DamageCause.getAssetMap().getAsset("Physical");
-        }
+        int causeIndex = physicalCauseIndex();
+        if (causeIndex == Integer.MIN_VALUE)
+            return;
 
-        if (attackCause != null) {
-            Damage.EntitySource source = new Damage.EntitySource(archetypeChunk.getReferenceTo(index));
-            Damage reflectionDamage = new Damage(source, attackCause, reflectedAmount);
-            reflectionDamage.putMetaObject(IS_REFLECTION, true);
-            DamageSystems.executeDamage(ctx.attackerRef(), commandBuffer, reflectionDamage);
+        Ref<EntityStore> defenderRef = archetypeChunk.getReferenceTo(index);
+        Damage reflectionDamage = new Damage(new Damage.EntitySource(defenderRef), causeIndex, reflectedAmount);
+        reflectionDamage.putMetaObject(IS_REFLECTION, true);
+        DamageSystems.executeDamage(ctx.attackerRef(), commandBuffer, reflectionDamage);
 
-            com.hypixel.hytale.server.core.universe.PlayerRef playerRef = store.getComponent(
-                    archetypeChunk.getReferenceTo(index),
-                    com.hypixel.hytale.server.core.universe.PlayerRef.getComponentType());
-            EnchantmentEventHelper.fireActivated(playerRef, blocker, EnchantmentType.REFLECTION, reflectionLevel);
+        PlayerRef playerRef = store.getComponent(defenderRef, PlayerRef.getComponentType());
+        EnchantmentEventHelper.fireActivated(playerRef, blocker, EnchantmentType.REFLECTION, reflectionLevel);
+    }
+
+    private int physicalCauseIndex() {
+        int idx = physicalCauseIndex;
+        if (idx != Integer.MIN_VALUE) {
+            return idx;
         }
+        // DamageCause.PHYSICAL is populated by EntityModule once damage causes are loaded.
+        DamageCause physical = DamageCause.PHYSICAL;
+        if (physical != null && physical.getId() != null) {
+            idx = DamageCause.getAssetMap().getIndexOrDefault(physical.getId(), Integer.MIN_VALUE);
+            physicalCauseIndex = idx;
+        }
+        return idx;
     }
 }

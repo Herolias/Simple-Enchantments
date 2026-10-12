@@ -112,13 +112,9 @@ items.Scroll_Life_Leech_I.name = Gulungan Penyerap Nyawa
 
 items.Scroll_Life_Leech_I.description = Menyembuhkan penyerang sebesar 10% dari kerusakan yang diberikan.
 
-items.Scroll_Life_Leech_II.name = Gulungan Penyerap Nyawa II
 
-items.Scroll_Life_Leech_II.description = Menyembuhkan penyerang sebesar 20% dari kerusakan yang diberikan.
 
-items.Scroll_Life_Leech_III.name = Gulungan Penyerap Nyawa III
 
-items.Scroll_Life_Leech_III.description = Menyembuhkan penyerang sebesar 30% dari kerusakan yang diberikan.
 
 
 
@@ -637,7 +633,6 @@ customUI.walkthrough.enchantments.desc = Daftar lengkap pesona dan efeknya. Klik
 
 config.general.allow_same_scroll_upgrades = Izinkan Peningkatan Gulungan yang Sama (I+I = II)
 
-ui.itemcategory.simpleEnchantments = Sihir Sederhana
 ui.itemcategory.simpleEnchantments.scrolls = Gulungan
 
 customUI.walkthrough.enabledOnServer = Diaktifkan di server ini: 
