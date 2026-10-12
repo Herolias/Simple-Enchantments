@@ -198,7 +198,7 @@ There are currently <!-- DOCSTAT:enchantments.count -->33<!-- /DOCSTAT --> Encha
 <tr>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><a href="https://wiki.hytalemodding.dev/mod/simple-enchantments/night-vision">Night Vision</a></td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;">I</td>
-<td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;">None</td>
+<td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;"><span class="se-inline-code" style="display: inline-block; border-radius: 6px; padding: 2px 6px; line-height: 1.2; background: rgba(148, 163, 184, 0.22); font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace; font-size: 0.92em;">25500%</span></td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top;">Helmets</td>
 <td style="padding: 10px 12px; border-top: 1px solid rgba(148, 163, 184, 0.14); vertical-align: top; white-space: nowrap;">No</td>
 </tr>
